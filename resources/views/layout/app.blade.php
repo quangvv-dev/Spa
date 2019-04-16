@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+@include('layout.assets_head')
+<body class="app">
+<div id="global-loader">
+    <div class="showbox">
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<div class="page">
+    <div class="page-main">
+        <!-- Navbar-->
+    @include('menu.navbar')
+    <!-- Horizantal menu-->
+    @include('menu.horizantal')
+    <!-- Horizantal menu-->
+        <div class="container">
+            <div class="side-app">
+                <div class="page-header">
+                    <h4 class="page-title">Dashboard</h4>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li>
+                    </ol>
+                </div>
+                <div class="row row-cards">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="page-title-box">
+                                <h4 class="page-title float-left">@yield('title')</h4>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    @if(Session::has('status'))
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            {{ Session::get('status') }}
+                            @php
+                                Session::forget('status');
+                            @endphp
+                        </div>
+                    @elseif(Session::has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            {{ Session::get('error') }}
+                            @php
+                                Session::forget('error');
+                            @endphp
+                        </div>
+                    @endif
+                    @yield('content')
+                </div>
+            </div>
+            <!--footer-->
+        </div>
+        <!--footer-->
+    @include('layout.footer')
+    <!-- End Footer-->
+    </div>
+</div>
+
+<!-- Back to top -->
+<a href="#top" id="back-to-top" style="display: inline;"><i class="fas fa-angle-up"></i></a>
+@include('layout.assets_script')
+</body>
+</html>
