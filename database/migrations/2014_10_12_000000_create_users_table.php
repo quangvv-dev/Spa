@@ -15,10 +15,16 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('full_name');
+            $table->string('avatar')->nullable();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->date('birthday');
+            $table->integer('role');
             $table->string('password');
+            $table->integer('gender');
+            $table->integer('mkt_id');//nguồn khach hàng
+            $table->integer('status');//mối quan hệ : mới, chua kết nối ...
+            $table->boolean('active');
             $table->rememberToken();
             $table->timestamps();
         });
