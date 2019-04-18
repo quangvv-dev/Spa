@@ -19,7 +19,7 @@
     <!-- Horizantal menu-->
     @include('menu.horizantal')
     <!-- Horizantal menu-->
-        <div class="container">
+        <div class="container content-custom">
             <div class="side-app">
                 <div class="page-header">
                     <h4 class="page-title">Dashboard</h4>
