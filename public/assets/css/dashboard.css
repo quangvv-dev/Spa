@@ -626,25 +626,25 @@ pre code {
 
 @media (min-width: 576px) {
     .container {
-        max-width: 100%;
+        max-width: 90%;
     }
 }
 
 @media (min-width: 768px) {
     .container {
-        max-width: 100%;
+        max-width: 90%;
     }
 }
 
 @media (min-width: 992px) {
     .container {
-        max-width: 100%;
+        max-width: 90%;
     }
 }
 
 @media (min-width: 1280px) {
     .container {
-        max-width: 100%;
+        max-width: 90%;
     }
 }
 
