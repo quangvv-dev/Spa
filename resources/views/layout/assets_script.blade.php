@@ -29,6 +29,8 @@
 <!--Counters -->
 <script src="{{asset('assets/plugins/counters/counterup.min.js')}}"></script>
 <script src="{{asset('assets/plugins/counters/waypoints.min.js')}}"></script>
+<script src="{{asset('assets/plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
 
 <!-- Custom js -->
 <script src="{{asset('assets/js/custom.js')}}"></script>
+@include('layout._script')

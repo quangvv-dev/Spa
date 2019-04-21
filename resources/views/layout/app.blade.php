@@ -2,6 +2,15 @@
 <html lang="en" dir="ltr">
 @include('layout.assets_head')
 <body class="app">
+<style>
+    .right {
+        float: right;
+    }
+
+    .pad {
+        margin-left: 1%;
+    }
+</style>
 <div id="global-loader">
     <div class="showbox">
         <div class="lds-ring">
@@ -72,5 +81,6 @@
 <!-- Back to top -->
 <a href="#top" id="back-to-top" style="display: inline;"><i class="fas fa-angle-up"></i></a>
 @include('layout.assets_script')
+@yield('_script')
 </body>
 </html>

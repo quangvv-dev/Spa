@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->integer('gender');
             $table->integer('mkt_id');//nguồn khach hàng
-            $table->integer('status');//mối quan hệ : mới, chua kết nối ...
+            $table->integer('status_id');//mối quan hệ : mới, chua kết nối ...
             $table->boolean('active');
             $table->rememberToken();
             $table->timestamps();
