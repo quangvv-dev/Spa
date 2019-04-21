@@ -31,7 +31,7 @@
                         <td class="text-center">$450,870</td>
                         <td class="text-center">
                             <a class="btn" href="#"><i class="fas fa-edit"></i></a>
-                            <a class="btn" href="#"><i class="fas fa-trash-alt"></i></a>
+                            <a class="btn delete" href="#"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                     </tbody>

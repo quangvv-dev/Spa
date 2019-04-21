@@ -20,3 +20,4 @@ Route::group(['middleware' => 'auth'], function () {
         return view('users.index');
     });
 });
+Route::resource('status', 'BE\StatusController');
