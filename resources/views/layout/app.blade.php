@@ -10,6 +10,10 @@
     .pad {
         margin-left: 1%;
     }
+
+    label {
+        font-weight: 600;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">
@@ -46,27 +50,29 @@
                             </div>
                         </div>
                     </div>
-                    @if(Session::has('status'))
-                        <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                            {{ Session::get('status') }}
-                            @php
-                                Session::forget('status');
-                            @endphp
-                        </div>
-                    @elseif(Session::has('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                            {{ Session::get('error') }}
-                            @php
-                                Session::forget('error');
-                            @endphp
-                        </div>
-                    @endif
+                    <div class="row">
+                        @if(Session::has('status'))
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>{{ Session::get('status') }}</strong>
+                                @php
+                                    Session::forget('status');
+                                @endphp
+                            </div>
+                        @elseif(Session::has('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>{{ Session::get('error') }}</strong>
+                                @php
+                                    Session::forget('error');
+                                @endphp
+                            </div>
+                        @endif
+                    </div>
                     @yield('content')
                 </div>
             </div>

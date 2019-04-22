@@ -3,7 +3,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Full color variations</h3></br>
+                <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('status.create') }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
@@ -18,9 +18,10 @@
                     <thead class="bg-primary text-white">
                     <tr>
                         <th class="text-white">ID</th>
-                        <th class="text-white text-center">Name</th>
-                        <th class="text-white text-center">Type</th>
-                        <th class="text-white text-center">Action</th>
+                        <th class="text-white text-center">Tên nhóm</th>
+                        <th class="text-white text-center">Mã nhóm</th>
+                        <th class="text-white text-center">Loại nhóm</th>
+                        <th class="text-white text-center">Thao tác</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -29,11 +30,18 @@
                             <tr>
                                 <th scope="row">{{$k}}</th>
                                 <td class="text-center">{{$s->name}}</td>
-                                <td class="text-center">{{$s->type}}</td>
+                                <td class="text-center">{{$s->code}}</td>
                                 <td class="text-center">
-                                    <a class="btn" href="{{ url('admin/status/' . $s->id . '/edit') }}"><i
+                                    @foreach($types_pluck as $k1 => $v)
+                                        @if($s->type == $k1)
+                                            @php echo $v @endphp
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn" href="{{ url('status/' . $s->id . '/edit') }}"><i
                                                 class="fas fa-edit"></i></a>
-                                    <a class="btn delete" href="#"><i class="fas fa-trash-alt"></i></a>
+                                    <a class="btn delete" href="javascript:void(0)" data-url="{{ url('status/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                     </tbody>
