@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::get();
+        return view('users.index', compact('users'));
     }
 
     /**
