@@ -137,7 +137,7 @@
                         <a class="nav-link pr-0 leading-none d-flex" data-toggle="dropdown" href="#">
                             <span class="avatar avatar-md brround" style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
                             <span class="ml-2 d-none d-lg-block">
-												<span class="text-white">Sindy Scribner</span>
+												<span class="text-white">{!! Auth::user()->full_name !!}</span>
 											</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
