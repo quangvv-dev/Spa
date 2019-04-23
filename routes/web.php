@@ -12,12 +12,13 @@
 */
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
         return view('dashboard.index');
     });
     Route::get('/users', function () {
         return view('users.index');
     });
+    Route::resource('status', 'StatusController');
+    Route::resource('category', 'CategoryController');
 });
-Route::resource('status', 'BE\StatusController');

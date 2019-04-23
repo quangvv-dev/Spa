@@ -11,6 +11,10 @@
         margin-left: 1%;
     }
 
+    .bot {
+        margin-bottom: 2%;
+    }
+
     label {
         font-weight: 600;
     }

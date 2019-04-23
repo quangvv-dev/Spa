@@ -17,9 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('code');
-            $table->string('image');
-            $table->integer('parent_id');
-            $table->integer('type');//dịch vụ hay sản phẩm
+            $table->string('image')->nullable();
+            $table->integer('parent_id')->default(0);
             $table->timestamps();
         });
     }
