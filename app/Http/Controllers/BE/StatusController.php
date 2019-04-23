@@ -5,9 +5,24 @@ namespace App\Http\Controllers\BE;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Status;
+use App\Constants\StatusCode;
 
 class StatusController extends Controller
 {
+    public function __construct()
+    {
+        $types_pluck = [
+            ''                          => '--Chọn kiểu setup--',
+            StatusCode::SOURCE_CUSTOMER => 'Nguồn khách hàng',
+            StatusCode::GROUP_CUSTOMER  => 'Nhóm khách hàng',
+            StatusCode::RELATIONSHIP    => 'Mối quan hệ',
+        ];
+
+        view()->share([
+            'types_pluck' => $types_pluck,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,8 +47,8 @@ class StatusController extends Controller
      */
     public function create()
     {
-        $title = 'Quản lý trạng thái';
-        return view('status._form',compact('title'));
+        $title = 'Thêm trạng thái';
+        return view('status._form', compact('title'));
 
     }
 
@@ -46,7 +61,9 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->merge(['code' => str_replace(' ', '_', strtolower(@$request->name))]);
+        Status::create($request->all());
+        return redirect(route('status.index'))->with('status', 'Tạo nhóm thành công');
     }
 
     /**
@@ -68,9 +85,11 @@ class StatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Status $status)
     {
-        //
+        $doc = $status;
+        $title = 'Quản lý trạng thái';
+        return view('status._form', compact('title', 'doc'));
     }
 
     /**
@@ -81,9 +100,11 @@ class StatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Status $status)
     {
-        //
+        $request->merge(['code' => str_replace(' ', '_', strtolower(@$request->name))]);
+        $status->update($request->all());
+        return redirect(route('status.index'))->with('status', 'Tạo nhóm thành công');
     }
 
     /**
@@ -93,8 +114,9 @@ class StatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Status $status)
     {
-        //
+        $status->delete();
+        $request->session()->flash('error', 'Xóa danh mục thành công!');
     }
 }
