@@ -31,6 +31,14 @@
 <script src="{{asset('assets/plugins/counters/waypoints.min.js')}}"></script>
 <script src="{{asset('assets/plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
 
+<!-- Datepicker js -->
+<script src="{{ asset('assets/plugins/date-picker/spectrum.js') }}"></script>
+<script src="{{ asset('assets/plugins/date-picker/jquery-ui.js') }}"></script>
+<script src="{{ asset('assets/plugins/input-mask/jquery.maskedinput.js') }}"></script>
+
 <!-- Custom js -->
 <script src="{{asset('assets/js/custom.js')}}"></script>
+<!-- User js -->
+
+<script src="{{asset('js/user.js')}}"></script>
 @include('layout._script')

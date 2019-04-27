@@ -37,5 +37,9 @@
     <!---Font icons-->
     <link href="{{asset('assets/plugins/iconfonts/plugin.css')}}" rel="stylesheet" />
     <link href="{{asset('assets/plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" />
+    
+    <!-- Date Picker Plugin -->
+    <link href="{{ asset('assets/plugins/date-picker/spectrum.css') }}" rel="stylesheet" />
+
 
 </head>

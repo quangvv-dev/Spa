@@ -16,8 +16,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return view('dashboard.index');
     });
-    Route::get('/users', function () {
-        return view('users.index');
-    });
+
+    Route::resource('users', 'BE\UserController');
+
+    Route::resource('status', 'BE\StatusController');
 });
-Route::resource('status', 'BE\StatusController');
