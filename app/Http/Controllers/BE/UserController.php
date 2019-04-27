@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,8 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get();
-        return view('users.index', compact('users'));
+        $title = 'Quản lý người dùng';
+        $users = User::paginate(10);
+        return view('users.index', compact('users', 'title'));
     }
 
     /**
@@ -26,18 +28,23 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Thêm người dùng';
+        $status = Status::pluck('name', 'id');
+        return view('users._form', compact('title', 'status'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     * @param User                      $user
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        //
+        $user->create($request->all());
+        return redirect('user')->with('status', 'Tạo người dùng thành công');
     }
 
     /**
