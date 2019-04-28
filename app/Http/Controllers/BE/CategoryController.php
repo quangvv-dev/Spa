@@ -6,6 +6,7 @@ use App\Constants\StatusCode;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Helpers\Functions;
 
 class CategoryController extends Controller
 {
@@ -15,11 +16,8 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->list[0] = ('category.parent');
-//        $categories = Category::where('parent_id', 0)->where('id', '<>', 0)->orderBy('name', 'asc')->get();
-        $categories = Category::orderBy('id', 'desc')->get()->pluck('name','id')->toArray();
-//        $this->getList($categories, 0);
+        $categories = Category::orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('Không có', 0)->toArray();
         view()->share([
-//            'category_pluck' => $this->list,
             'category_pluck' => $categories,
         ]);
     }
@@ -78,7 +76,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-
+        $text = Functions::vi_to_en(@$request->name);
+        $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
+        Category::create($request->all());
+        return redirect(route('category.create'))->with('status', 'Tạo danh mục thành công');
     }
 
     /**
@@ -100,9 +101,11 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        $doc = $category;
+        $title = 'Cập nhật danh mục';
+        return view('category._form', compact('title', 'doc'));
     }
 
     /**
@@ -113,9 +116,13 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        dd($request->all());
+        $text = Functions::vi_to_en(@$request->name);
+        $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
+        $category->update($request->all());
+        return redirect(route('category.index'))->with('status', 'Cập nhật danh mục thành công');
     }
 
     /**
@@ -125,8 +132,13 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Category $category)
     {
-        //
+        if (isset($category->categories)) {
+            $request->session()->flash('error', 'Không thể xóa vì danh mục đang chứa danh mục con!');
+        } else {
+            $category->delete();
+            $request->session()->flash('error', 'Xóa thành công danh mục!');
+        }
     }
 }

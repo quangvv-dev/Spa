@@ -32,17 +32,17 @@
                                 <td class="text-center">{{$s->name}}</td>
                                 <td class="text-center">{{$s->code}}</td>
                                 <td class="text-center">
-                                    @foreach($types_pluck as $k1 => $v)
-                                        @if($s->type == $k1)
+                                    @foreach($category_pluck as $k1 => $v)
+                                        @if($s->parent_id == $k1)
                                             @php echo $v @endphp
                                         @endif
                                     @endforeach
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn" href="{{ url('status/' . $s->id . '/edit') }}"><i
+                                    <a class="btn" href="{{ url('category/' . $s->id . '/edit') }}"><i
                                                 class="fas fa-edit"></i></a>
                                     <a class="btn delete" href="javascript:void(0)"
-                                       data-url="{{ url('status/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
+                                       data-url="{{ url('category/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                     </tbody>
