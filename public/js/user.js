@@ -1,1 +1,3 @@
-$('.fc-datepicker').datepicker();
+$('.fc-datepicker').datepicker({
+    dateFormat: "yy-mm-dd"
+});

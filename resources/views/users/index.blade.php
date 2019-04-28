@@ -32,25 +32,25 @@
                     </thead>
                     <tbody>
                     @if (count($users))
+                        @foreach($users as $user)
                         <tr>
-                            @foreach($users as $user)
-                                <th scope="row">{{ $user->id }}</th>
-                                <td class="text-center">{{ $user->full_name }}</td>
-                                <td class="text-center">{{ $user->phone }}</td>
-                                <td class="text-center">{{ $user->email }}</td>
-                                <td class="text-center">{{ $user->birthday }}</td>
-                                <td class="text-center">{{ $user->role }}</td>
-                                <td class="text-center">{{ $user->gender_text  }}</td>
-                                <td class="text-center">{{ $user->mkt_id }}</td>
-                                <td class="text-center">{{ $user->status }}</td>
-                                <td class="text-center">{{ $user->active_text}}</td>
-                                <td class="text-center">
-                                    <a class="btn" href="{{ route('users.edit', $user->id) }}"><i
-                                                class="fas fa-edit"></i></a>
-                                    <a class="btn delete" href="javascript:void(0)" data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
-                                </td>
-                            @endforeach
+                            <th scope="row">{{ $user->id }}</th>
+                            <td class="text-center">{{ $user->full_name }}</td>
+                            <td class="text-center">{{ $user->phone }}</td>
+                            <td class="text-center">{{ $user->email }}</td>
+                            <td class="text-center">{{ $user->birthday }}</td>
+                            <td class="text-center">{{ $user->role }}</td>
+                            <td class="text-center">{{ $user->gender_text  }}</td>
+                            <td class="text-center">{{ $user->mkt_id }}</td>
+                            <td class="text-center">{{ $user->status }}</td>
+                            <td class="text-center">{{ $user->active_text}}</td>
+                            <td class="text-center">
+                                <a class="btn" href="{{ route('users.edit', $user->id) }}"><i
+                                            class="fas fa-edit"></i></a>
+                                <a class="btn delete" href="javascript:void(0)" data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
+                            </td>
                         </tr>
+                        @endforeach
                     @else
                         <tr>
                             <td id="no-data" class="text-center" colspan="7">Không tồn tại dữ liệu</td>
