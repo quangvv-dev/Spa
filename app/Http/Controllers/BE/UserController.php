@@ -95,35 +95,51 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param User $user
+     *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        $title = 'Sửa người dùng';
+        $status = Status::pluck('name', 'id');
+        return view('users._form', compact('user', 'title', 'status'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param User                      $user
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, User $user)
     {
-        //
+        $input = $request->except('image');
+        $input['password'] = bcrypt($request->password);
+
+        if ($request->image) {
+            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
+        }
+
+        $user->update($input);
+
+        return redirect(route('users.index'))->with('status', 'Sửa người dùng thành công');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param User    $user
+     *
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(Request $request, User $user)
     {
-        //
+        $user->delete();
+        $request->session()->flash('error', 'Xóa người dùng thành công!');
     }
 
     public function checkUnique(Request $request)
@@ -133,5 +149,27 @@ class UserController extends Controller
             return $result->id == $request->id ? 'true' : 'false';
         }
         return 'true';
+    }
+
+    public function getEditProfile($id)
+    {
+        $title = 'Cập nhật thông tin';
+        $user = User::findOrFail($id);
+        return view('profiles._form', compact('user', 'title'));
+    }
+
+    public function postEditProfile($id, UserRequest $request)
+    {
+        $user = User::findOrFail($id);
+        $input = $request->except('image');
+        $input['password'] = bcrypt($request->password);
+
+        if ($request->image) {
+            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
+        }
+
+        $user->update($input);
+
+        return redirect('/')->with('status', 'Cập nhật thông tin thành công');
     }
 }
