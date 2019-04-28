@@ -2,15 +2,32 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Components\Filesystem\Filesystem;
 use App\Constants\UserConstant;
 use App\Http\Requests\UserRequest;
 use App\Models\Status;
+use App\Services\Upload\UploadService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
+    /**
+     * @var Filesystem
+     */
+    private $fileUpload;
+
+    /**
+     * UserController constructor.
+     *
+     * @param Filesystem $fileUpload
+     */
+    public function __construct(Filesystem $fileUpload)
+    {
+        $this->fileUpload = $fileUpload;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,12 +60,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(UserRequest $request, User $user)
     {
-        $input = $request->all();
+        $input = $request->except('image');
         $input['active'] = UserConstant::ACTIVE;
         $input['password'] = bcrypt($request->password);
+
+        if ($request->image) {
+            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
+        }
+
         $dataUser = $user->create($input);
+
         if ($request->mkt_id == null) {
             $dataUser->update([
                'mkt_id' => $dataUser->id

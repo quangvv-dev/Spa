@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 @include('layout.assets_head')
+@yield('_style')
+
 <body class="app">
 <style>
     .right {

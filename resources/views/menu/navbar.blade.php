@@ -8,7 +8,7 @@
         <!-- Navbar Right Menu-->
         <div class="container-fluid">
             <div class="d-flex">
-                <a class="header-brand" href="index.html">
+                <a class="header-brand" href="{{ route('users.index') }}">
                     <img alt="ren logo" class="header-brand-img" src="/assets/images/brand/logo.png">
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
@@ -135,7 +135,11 @@
                     </div>
                     <div class="dropdown">
                         <a class="nav-link pr-0 leading-none d-flex" data-toggle="dropdown" href="#">
-                            <span class="avatar avatar-md brround" style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
+                            @if(Auth::user()->avatar)
+                            <span class="avatar avatar-md brround " style="background-image: url({{ url(Auth::user()->avatar) }})"></span>
+                            @else
+                                <span class="avatar avatar-md brround" style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
+                            @endif
                             <span class="ml-2 d-none d-lg-block">
 												<span class="text-white">{!! Auth::user()->full_name !!}</span>
 											</span>
