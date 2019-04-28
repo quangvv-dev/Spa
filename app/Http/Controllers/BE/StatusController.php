@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Helpers\Functions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Status;
@@ -61,7 +62,8 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge(['code' => str_replace(' ', '_', strtolower(@$request->name))]);
+        $text = Functions::vi_to_en(@$request->name);
+        $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
         Status::create($request->all());
         return redirect(route('status.index'))->with('status', 'Tạo nhóm thành công');
     }
