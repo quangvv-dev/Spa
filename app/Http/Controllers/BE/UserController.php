@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\UserConstant;
+use App\Http\Requests\UserRequest;
+use App\Models\Status;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +18,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Quản lý người dùng';
+        $users = User::paginate(10);
+        return view('users.index', compact('users', 'title'));
     }
 
     /**
@@ -24,18 +30,32 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Thêm người dùng';
+        $status = Status::pluck('name', 'id');
+        return view('users._form', compact('title', 'status'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     * @param User                      $user
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        //
+        $input = $request->all();
+        $input['active'] = UserConstant::ACTIVE;
+        $input['password'] = bcrypt($request->password);
+        $dataUser = $user->create($input);
+        if ($request->mkt_id == null) {
+            $dataUser->update([
+               'mkt_id' => $dataUser->id
+            ]);
+        }
+
+        return redirect('users')->with('status', 'Tạo người dùng thành công');
     }
 
     /**
@@ -81,5 +101,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function checkUnique(Request $request)
+    {
+        $result = User::where('phone', $request->phone)->orWhere('email', $request->email)->first();
+        if ($result) {
+            return $result->id == $request->id ? 'true' : 'false';
+        }
+        return 'true';
     }
 }

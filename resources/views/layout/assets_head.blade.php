@@ -37,5 +37,13 @@
     <!---Font icons-->
     <link href="{{asset('assets/plugins/iconfonts/plugin.css')}}" rel="stylesheet" />
     <link href="{{asset('assets/plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" />
+    
+    <!-- Date Picker Plugin -->
+    <link href="{{ asset('assets/plugins/date-picker/spectrum.css') }}" rel="stylesheet" />
 
+    <!-- Select2 Plugin -->
+    <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap.css') }}" rel="stylesheet" />
+
+    <link href="{{ asset('css/common.css') }}" rel="stylesheet" />
 </head>

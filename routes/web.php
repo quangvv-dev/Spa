@@ -21,4 +21,5 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     });
     Route::resource('status', 'StatusController');
     Route::resource('category', 'CategoryController');
+    Route::resource('users', 'UserController');
 });

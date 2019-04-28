@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Constants\UserConstant;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,7 +18,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
         'full_name',
         'phone',
         'avatar',
@@ -26,7 +26,7 @@ class User extends Authenticatable
         'role',
         'gender',
         'mkt_id',
-        'status',
+        'status_id',
         'active',
         'password',
     ];
@@ -48,4 +48,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getGenderTextAttribute()
+    {
+        return $this->gender == UserConstant::MALE ? 'Nam' : 'Nữ';
+    }
+
+    public function getActiveTextAttribute()
+    {
+        return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
+    }
 }

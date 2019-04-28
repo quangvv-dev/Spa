@@ -17,12 +17,12 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('full_name');
             $table->string('avatar')->nullable();
-            $table->string('email')->unique();
-            $table->date('birthday');
+            $table->string('email')->unique()->nullable();
+            $table->date('birthday')->nullable();
             $table->integer('role');
             $table->string('password');
             $table->integer('gender');
-            $table->integer('mkt_id');//nguồn khach hàng
+            $table->integer('mkt_id')->nullable();//nguồn khach hàng
             $table->integer('status_id');//mối quan hệ : mới, chua kết nối ...
             $table->boolean('active');
             $table->rememberToken();
