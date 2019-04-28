@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\UserConstant;
+use App\Http\Requests\UserRequest;
 use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
@@ -43,8 +45,17 @@ class UserController extends Controller
      */
     public function store(Request $request, User $user)
     {
-        $user->create($request->all());
-        return redirect('user')->with('status', 'Tạo người dùng thành công');
+        $input = $request->all();
+        $input['active'] = UserConstant::ACTIVE;
+        $input['password'] = bcrypt($request->password);
+        $dataUser = $user->create($input);
+        if ($request->mkt_id == null) {
+            $dataUser->update([
+               'mkt_id' => $dataUser->id
+            ]);
+        }
+
+        return redirect('users')->with('status', 'Tạo người dùng thành công');
     }
 
     /**
@@ -90,5 +101,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function checkUnique(Request $request)
+    {
+        $result = User::where('phone', $request->phone)->orWhere('email', $request->email)->first();
+        if ($result) {
+            return $result->id == $request->id ? 'true' : 'false';
+        }
+        return 'true';
     }
 }

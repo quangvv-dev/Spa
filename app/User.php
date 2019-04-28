@@ -26,7 +26,7 @@ class User extends Authenticatable
         'role',
         'gender',
         'mkt_id',
-        'status',
+        'status_id',
         'active',
         'password',
     ];
