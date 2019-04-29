@@ -21,7 +21,7 @@ class StatusCode
     const GOLD      = 3;
     const PLATINUM  = 4;
     const DIAMOND   = 5;
-    const GROUP_CUSTOMER   = 1; // NHÓM KHÁCH HÀNG 
+    const GROUP_CUSTOMER   = 1; // NHÓM KHÁCH HÀNG
     const SOURCE_CUSTOMER   = 2;// NGUỒN KHÁCH HÀNG : fb, TOOL, GOOLE ...
     const RELATIONSHIP   = 3;// MÔI QUAN HỆ : MỚI, ĐÃ MUA sp ...
 }
