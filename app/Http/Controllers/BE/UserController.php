@@ -6,10 +6,10 @@ use App\Components\Filesystem\Filesystem;
 use App\Constants\UserConstant;
 use App\Http\Requests\UserRequest;
 use App\Models\Status;
-use App\Services\Upload\UploadService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -36,7 +36,7 @@ class UserController extends Controller
     public function index()
     {
         $title = 'Quản lý người dùng';
-        $users = User::paginate(10);
+        $users = User::with('status', 'marketing')->paginate(10);
         return view('users.index', compact('users', 'title'));
     }
 
@@ -49,7 +49,8 @@ class UserController extends Controller
     {
         $title = 'Thêm người dùng';
         $status = Status::pluck('name', 'id');
-        return view('users._form', compact('title', 'status'));
+        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id');
+        return view('users._form', compact('title', 'status', 'marketingUsers'));
     }
 
     /**
@@ -63,6 +64,7 @@ class UserController extends Controller
     public function store(UserRequest $request, User $user)
     {
         $input = $request->except('image');
+        $marketingUser = Auth::user()->id;
         $input['active'] = UserConstant::ACTIVE;
         $input['password'] = bcrypt($request->password);
 
@@ -70,11 +72,15 @@ class UserController extends Controller
             $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
         }
 
+        if ($request->role == null) {
+            $input['role'] = UserConstant::CUSTOMER;
+        }
+
         $dataUser = $user->create($input);
 
         if ($request->mkt_id == null) {
             $dataUser->update([
-               'mkt_id' => $dataUser->id
+               'mkt_id' => $marketingUser,
             ]);
         }
 
@@ -103,7 +109,8 @@ class UserController extends Controller
     {
         $title = 'Sửa người dùng';
         $status = Status::pluck('name', 'id');
-        return view('users._form', compact('user', 'title', 'status'));
+        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id');
+        return view('users._form', compact('user', 'title', 'status', 'marketingUsers'));
     }
 
     /**

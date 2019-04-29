@@ -20,7 +20,6 @@
                         <th class="text-white">ID</th>
                         <th class="text-white text-center">Họ tên</th>
                         <th class="text-white text-center">Số điện thoại</th>
-                        <th class="text-white text-center">Email</th>
                         <th class="text-white text-center">Ngày sinh</th>
                         <th class="text-white text-center">Role</th>
                         <th class="text-white text-center">Giới tính</th>
@@ -37,17 +36,17 @@
                             <th scope="row">{{ $user->id }}</th>
                             <td class="text-center">{{ $user->full_name }}</td>
                             <td class="text-center">{{ $user->phone }}</td>
-                            <td class="text-center">{{ $user->email }}</td>
                             <td class="text-center">{{ $user->birthday }}</td>
-                            <td class="text-center">{{ $user->role }}</td>
+                            <td class="text-center">{{ $user->role_text }}</td>
                             <td class="text-center">{{ $user->gender_text  }}</td>
-                            <td class="text-center">{{ $user->mkt_id }}</td>
-                            <td class="text-center">{{ $user->status }}</td>
+                            <td class="text-center">{{ $user->marketing ? $user->marketing->full_name: '' }}</td>
+                            <td class="text-center">{{ $user->status->name }}</td>
                             <td class="text-center">{{ $user->active_text}}</td>
                             <td class="text-center">
-                                <a class="btn" href="{{ route('users.edit', $user->id) }}"><i
-                                            class="fas fa-edit"></i></a>
-                                <a class="btn delete" href="javascript:void(0)" data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
+                                @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
+                                    <a class="btn" href="{{ route('users.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
+                                    <a class="btn delete" href="javascript:void(0)" data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
