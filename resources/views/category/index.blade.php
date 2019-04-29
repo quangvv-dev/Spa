@@ -17,7 +17,7 @@
                 <table class="table card-table table-vcenter text-nowrap table-primary">
                     <thead class="bg-primary text-white">
                     <tr>
-                        <th class="text-white">ID</th>
+                        <th class="text-white">STT</th>
                         <th class="text-white text-center">Tên nhóm</th>
                         <th class="text-white text-center">Mã nhóm</th>
                         <th class="text-white text-center">Nhóm cha</th>

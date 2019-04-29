@@ -50,7 +50,6 @@ class StatusController extends Controller
     {
         $title = 'Thêm trạng thái';
         return view('status._form', compact('title'));
-
     }
 
     /**
