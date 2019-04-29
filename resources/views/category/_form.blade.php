@@ -7,9 +7,9 @@
             </div>
 
             @if (isset($doc))
-                {!! Form::model($doc, array('url' => url('category/'.$doc->id), 'method' => 'put', 'files'=> true)) !!}
+                {!! Form::model($doc, array('url' => url('category/'.$doc->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
-                {!! Form::open(array('url' => route('category.store'), 'method' => 'post', 'files'=> true)) !!}
+                {!! Form::open(array('url' => route('category.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col row">
                 <div class="col-xs-12 col-md-6">
@@ -48,14 +48,12 @@
 @section('_script')
     <script>
         $(document).ready(function () {
-            $("#fvalidate").validate({
+            $('form#fvalidate').validate({
                 rules: {
-                    full_name: {
-                        required: true,
-                        normalizer: function (value) {
-                            return $.trim(value);
-                        }
-                    }
+                    name: 'required',
+                },
+                messages: {
+                    name: "vui lòng nhâp tên danh mục",
                 }
             });
         })

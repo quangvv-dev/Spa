@@ -7,9 +7,9 @@
             </div>
 
             @if (isset($doc))
-                {!! Form::model($doc, array('url' => url('status/'.$doc->id), 'method' => 'put', 'files'=> true,'class'=>'fvalidate')) !!}
+                {!! Form::model($doc, array('url' => url('status/'.$doc->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
-                {!! Form::open(array('url' => route('status.store'), 'method' => 'post', 'files'=> true,'class'=>'fvalidate')) !!}
+                {!! Form::open(array('url' => route('status.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col row">
                 <div class="col-xs-12 col-md-6">
@@ -30,7 +30,7 @@
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
-                        {!! Form::label('type','Danh mục', array('class' => 'required')) !!}
+                        {!! Form::label('type','Loại', array('class' => 'required')) !!}
                         {!! Form::select('type',$types_pluck, null, array('class' => 'form-control','required' => true)) !!}
                         <span class="help-block">{{ $errors->first('type', ':message') }}</span>
                     </div>
@@ -45,4 +45,20 @@
 
         </div>
     </div>
+@endsection
+@section('_script')
+    <script>
+        $(document).ready(function () {
+            $('form#fvalidate').validate({
+                rules: {
+                    name: 'required',
+                    type: 'required',
+                },
+                messages: {
+                    name: "vui lòng nhâp tên danh mục",
+                    type: "vui lòng chọn thể loại",
+                }
+            });
+        })
+    </script>
 @endsection

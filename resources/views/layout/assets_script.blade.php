@@ -113,10 +113,6 @@
             $(this).valid();
         });
 
-    }).ajaxStart(function () {
-        $('#loading').show();
-    }).ajaxStop(function () {
-        $('#loading').hide();
-    });
+    })
 </script>
 @include('layout._script')

@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
-                <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('category.create') }}"><i
+                <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('services.create') }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             {!! Form::open(array('url' => route('category.index'), 'method' => 'get','class'=>'card-header')) !!}
@@ -32,23 +32,21 @@
                     @if(@count($docs))
                         @foreach($docs as $k => $s)
                             <tr>
-                                <th scope="row">{{$k}}</th>
+                                <th scope="row">{{$k+1}}</th>
+                                <th scope="row">
+                                    <img src="{{App\Helpers\Functions::getImageModels($s,'services','images')}}" class="rounded-circle" height="60" width="60" />
+                                </th>
                                 <td class="text-center">{{$s->name}}</td>
                                 <td class="text-center">{{$s->code}}</td>
                                 <td class="text-center">{{$s->description}}</td>
-                                <td class="text-center">
-                                    @foreach($category_pluck as $k1 => $v)
-                                        @if($s->parent_id == $k1)
-                                            @php echo $v @endphp
-                                        @endif
-                                    @endforeach
-                                </td>
+                                <td class="text-center">{{$s->trademark}}</td>
+                                <td class="text-center">{{$s->category->name}}</td>
                                 <td class="text-center">{{$s->active_text}}</td>
                                 <td class="text-center">
-                                    <a class="btn" href="{{ url('category/' . $s->id . '/edit') }}"><i
+                                    <a class="btn" href="{{ url('services/' . $s->id . '/edit') }}"><i
                                                 class="fas fa-edit"></i></a>
                                     <a class="btn delete" href="javascript:void(0)"
-                                       data-url="{{ url('category/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
+                                       data-url="{{ url('services/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                     </tbody>

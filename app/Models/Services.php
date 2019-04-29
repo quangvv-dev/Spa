@@ -19,4 +19,9 @@ class Services extends Model
     {
         return $this->enable == UserConstant::ACTIVE ? 'Hoạt động' : 'Ngừng hoạt động';
     }
+
+    public function getImagesAttribute($images)
+    {
+        return @json_decode($images, true);
+    }
 }
