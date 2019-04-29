@@ -97,7 +97,7 @@ class StatusController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param Status                   $status
      *
      * @return \Illuminate\Http\Response
      */
@@ -105,7 +105,7 @@ class StatusController extends Controller
     {
         $request->merge(['code' => str_replace(' ', '_', strtolower(@$request->name))]);
         $status->update($request->all());
-        return redirect(route('status.index'))->with('status', 'Tạo nhóm thành công');
+        return redirect(route('status.index'))->with('status', 'Sửa nhóm thành công');
     }
 
     /**

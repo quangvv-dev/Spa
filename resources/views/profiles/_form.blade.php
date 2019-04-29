@@ -9,12 +9,7 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
             </div>
-
-            @if (isset($user))
-                {!! Form::model($user, array('url' => url('users/'.$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
-            @else
-                {!! Form::open(array('url' => route('users.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-            @endif
+                {!! Form::model($user, array('url' => url('profiles/'.$user->id. '/edit'), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             <div class="col row">
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
@@ -54,31 +49,10 @@
                     <span class="help-block">{{ $errors->first('birthday', ':message') }}</span>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
-                        {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                        {!! Form::text('role', null, array('class' => 'form-control')) !!}
-                        <span class="help-block">{{ $errors->first('role', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
                         {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
                         {!! Form::select('gender',[0 => 'Nữ', 1 => 'Nam'], null, array('class' => 'form-control select2', 'data-placeholder' => 'Chọn giới tính')) !!}
                         <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('mkt_id') ? 'has-error' : '' }}">
-                        {!! Form::label('mkt_id', 'Nhân viên MKT', array('class' => ' required')) !!}
-                        {!! Form::text('mkt_id', null, array('class' => 'form-control')) !!}
-                        <span class="help-block">{{ $errors->first('mkt_id', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
-                        {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
-                        {!! Form::select('status_id', $status, null, array('class' => 'form-control select2')) !!}
-                        <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
@@ -95,7 +69,7 @@
                         <span class="help-block">{{ $errors->first('confirm_password', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                         {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
                         <div class="fileupload fileupload-{{isset($user) ? 'exists' : 'new' }}" data-provides="fileupload">
@@ -117,7 +91,7 @@
             </div>
             <div class="col" style="margin-bottom: 10px;">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('users.index')}}" class="btn btn-danger">Trở lại</a>
+                <a href="{{url('/')}}" class="btn btn-danger">Trở lại</a>
             </div>
 
             {{ Form::close() }}
