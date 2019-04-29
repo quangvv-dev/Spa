@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Requests\UserRequest;
+use App\Models\Category;
 use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
@@ -26,6 +28,20 @@ class UserController extends Controller
     public function __construct(Filesystem $fileUpload)
     {
         $this->fileUpload = $fileUpload;
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
+        $group = Category::pluck('name', 'id')->toArray();//nhóm KH
+        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+        $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
+        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        view()->share([
+            'status'         => $status,
+            'group'          => $group,
+            'source'         => $source,
+            'branch'         => $branch,
+            'telesales'      => $telesales,
+            'marketingUsers' => $marketingUsers,
+        ]);
     }
 
     /**
@@ -35,8 +51,17 @@ class UserController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
+            $users = User::with('status', 'marketing')->where('role', UserConstant::CUSTOMER)
+                ->where('status_id', StatusCode::NEW);
+        } elseif (Auth::user()->role == UserConstant::WAITER) {
+            $users = User::with('status', 'marketing')->where('role', UserConstant::CUSTOMER);
+
+        } else {
+            $users = User::with('status', 'marketing')->where('role', '<>', UserConstant::ADMIN);
+        }
+        $users = $users->orderBy('id', 'desc')->paginate(10);
         $title = 'Quản lý người dùng';
-        $users = User::with('status', 'marketing')->paginate(10);
         return view('users.index', compact('users', 'title'));
     }
 
@@ -48,20 +73,18 @@ class UserController extends Controller
     public function create()
     {
         $title = 'Thêm người dùng';
-        $status = Status::pluck('name', 'id');
-        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id');
-        return view('users._form', compact('title', 'status', 'marketingUsers'));
+        return view('users._form', compact('title'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param User                      $user
+     * @param \Illuminate\Http\Request $request
+     * @param User                     $user
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request, User $user)
+    public function store(UserRequest $request)
     {
         $input = $request->except('image');
         $marketingUser = Auth::user()->id;
@@ -75,12 +98,10 @@ class UserController extends Controller
         if ($request->role == null) {
             $input['role'] = UserConstant::CUSTOMER;
         }
-
-        $dataUser = $user->create($input);
-
+        $dataUser = User::create($input);
         if ($request->mkt_id == null) {
             $dataUser->update([
-               'mkt_id' => $marketingUser,
+                'mkt_id' => $marketingUser,
             ]);
         }
 
@@ -90,7 +111,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -108,16 +130,14 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $title = 'Sửa người dùng';
-        $status = Status::pluck('name', 'id');
-        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id');
-        return view('users._form', compact('user', 'title', 'status', 'marketingUsers'));
+        return view('users._form', compact('user', 'title'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param User                      $user
+     * @param \Illuminate\Http\Request $request
+     * @param User                     $user
      *
      * @return \Illuminate\Http\Response
      */

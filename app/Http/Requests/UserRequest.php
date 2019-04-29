@@ -28,9 +28,9 @@ class UserRequest extends FormRequest
         return [
             'full_name' => 'required',
             'phone' => 'required|unique:users,phone,'. $id,
-            'password' => 'required|min:6',
+//            'password' => 'min:6',
             'email' => 'unique:users,email,'. $id,
-            'confirm_password' => 'required|same:password',
+            'confirm_password' => 'same:password',
         ];
     }
 }

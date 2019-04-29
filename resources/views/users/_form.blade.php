@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('_style')
     <!-- Bootstrap fileupload css -->
-    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet" />
+    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
@@ -54,13 +54,13 @@
                     <span class="help-block">{{ $errors->first('birthday', ':message') }}</span>
                 </div>
                 @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
-                        {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                        {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên', 6 => 'Khách hàng'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
-                        <span class="help-block">{{ $errors->first('role', ':message') }}</span>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
+                            {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
+                            {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên', 6 => 'Khách hàng'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
+                            <span class="help-block">{{ $errors->first('role', ':message') }}</span>
+                        </div>
                     </div>
-                </div>
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
@@ -72,21 +72,50 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('mkt_id') ? 'has-error' : '' }}">
                         {!! Form::label('mkt_id', 'Nhân viên MKT', array('class' => ' required')) !!}
-                        {!! Form::select('mkt_id', $marketingUsers, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên marketing')) !!}
+                        {!! Form::select('mkt_id', $marketingUsers,@$user->mkt_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên marketing')) !!}
                         <span class="help-block">{{ $errors->first('mkt_id', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
+                        {!! Form::label('telesales_id', 'Nhân viên Telesales', array('class' => ' required')) !!}
+                        {!! Form::select('telesales_id', $telesales,@$user->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên marketing')) !!}
+                        <span class="help-block">{{ $errors->first('telesales_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                         {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
-                        {!! Form::select('status_id', $status, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhóm')) !!}
+                        {!! Form::select('status_id', $status, @$user->status_id, array('class' => 'form-control select2', 'placeholder' => 'Mối quan hệ')) !!}
                         <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('group_id') ? 'has-error' : '' }}">
+                        {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => ' required')) !!}
+                        {!! Form::select('group_id', $group, @$user->group_id, array('class' => 'form-control select2', 'placeholder' => 'Nhóm khách hàng')) !!}
+                        <span class="help-block">{{ $errors->first('group_id', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('source_id') ? 'has-error' : '' }}">
+                        {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => ' required')) !!}
+                        {!! Form::select('source_id', $source, @$user->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
+                        <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
+                        {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
+                        {!! Form::select('branch_id', $branch, @$user->branch_id, array('class' => 'form-control select2', 'placeholder' => 'Chi nhánh')) !!}
+                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('password') ? 'has-error' : '' }}">
                         {!! Form::label('password', 'Mật khẩu', array('class' => ' required')) !!}
-                        <input type="password" name="password" id="password" autocomplete="new-password" class="form-control">
+                        <input type="password" name="password" id="password" autocomplete="new-password"
+                               class="form-control">
                         <span class="help-block">{{ $errors->first('password', ':message') }}</span>
                     </div>
                 </div>
@@ -100,17 +129,18 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                         {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
-                        <div class="fileupload fileupload-{{isset($user) ? 'exists' : 'new' }}" data-provides="fileupload">
+                        <div class="fileupload fileupload-{{isset($user) ? 'exists' : 'new' }}"
+                             data-provides="fileupload">
                             <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
                                 @if (isset($user))
-                                    <img src="{{ $user->avatar }}" alt="image" />
+                                    <img src="{{ $user->avatar }}" alt="image"/>
                                 @endif
                             </div>
                             <div>
                                 <button type="button" class="btn btn-default btn-file">
                                     <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
                                     <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
-                                    <input type="file" name="image" accept="image/*" class="btn-default upload" />
+                                    <input type="file" name="image" accept="image/*" class="btn-default upload"/>
                                 </button>
                             </div>
                         </div>
@@ -133,7 +163,7 @@
     <script>
         $(document).ready(function () {
             // validate phone
-            jQuery.validator.addMethod("phone_number", function(phone_number, element) {
+            jQuery.validator.addMethod("phone_number", function (phone_number, element) {
                 phone_number = phone_number.replace(/\s+/g, "");
                 return this.optional(element) || phone_number.length > 9 &&
                     phone_number.match(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
@@ -143,7 +173,7 @@
                 rules: {
                     full_name: {
                         required: true,
-                        normalizer: function(value) {
+                        normalizer: function (value) {
                             return $.trim(value);
                         }
                     },
@@ -153,8 +183,8 @@
                             url: "{{ url('api/check-unique-users') }}",
                             type: "post",
                             data: {
-                                phone: function() {
-                                    return $( "#phone" ).val();
+                                phone: function () {
+                                    return $("#phone").val();
                                 },
                                 id: {{ isset($user) ? $user->id : 0 }},
                             },
@@ -166,8 +196,8 @@
                             url: "{{ url('api/check-unique-users') }}",
                             type: "post",
                             data: {
-                                email: function() {
-                                    return $( "#email" ).val();
+                                email: function () {
+                                    return $("#email").val();
                                 },
                                 table: 'teacher',
                                 id: {{ isset($user) ? $user->id : 0 }},
@@ -183,14 +213,16 @@
                     status_id: {
                         required: true
                     },
+                    @if(empty($user))
                     password: {
                         required: true,
-                        minlength : 6
+                        minlength: 6
                     },
                     confirm_password: {
                         required: true,
                         equalTo: "#password"
                     },
+                    @endif
                     image: {
                         accept: "image/*"
                     }

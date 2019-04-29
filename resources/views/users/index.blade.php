@@ -8,10 +8,8 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
-                {{--                <h3 class="card-title">Full color variations</h3></br>--}}
                 <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
                        type="search">
-                {{--                <input class="form-control header-search col-2" placeholder="Search…" tabindex="1" type="search">--}}
             </div>
             <div class="table-responsive">
                 <table class="table card-table table-vcenter text-nowrap table-primary">
@@ -21,7 +19,7 @@
                         <th class="text-white text-center">Họ tên</th>
                         <th class="text-white text-center">Số điện thoại</th>
                         <th class="text-white text-center">Ngày sinh</th>
-                        <th class="text-white text-center">Role</th>
+                        <th class="text-white text-center">Quyền</th>
                         <th class="text-white text-center">Giới tính</th>
                         <th class="text-white text-center">MKT ID</th>
                         <th class="text-white text-center">Trạng thái</th>
@@ -40,7 +38,7 @@
                             <td class="text-center">{{ $user->role_text }}</td>
                             <td class="text-center">{{ $user->gender_text  }}</td>
                             <td class="text-center">{{ $user->marketing ? $user->marketing->full_name: '' }}</td>
-                            <td class="text-center">{{ $user->status->name }}</td>
+                            <td class="text-center">{{ @$user->status->name }}</td>
                             <td class="text-center">{{ $user->active_text}}</td>
                             <td class="text-center">
                                 @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
@@ -52,7 +50,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td id="no-data" class="text-center" colspan="7">Không tồn tại dữ liệu</td>
+                            <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>
                         </tr>
                     @endif
                     </tbody>

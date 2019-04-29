@@ -15,8 +15,8 @@ class StatusController extends Controller
         $types_pluck = [
             ''                          => '--Chọn kiểu setup--',
             StatusCode::SOURCE_CUSTOMER => 'Nguồn khách hàng',
-            StatusCode::GROUP_CUSTOMER  => 'Nhóm khách hàng',
             StatusCode::RELATIONSHIP    => 'Mối quan hệ',
+            StatusCode::BRANCH          => 'Chi nhánh',
         ];
 
         view()->share([
@@ -64,7 +64,7 @@ class StatusController extends Controller
         $text = Functions::vi_to_en(@$request->name);
         $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
         Status::create($request->all());
-        return redirect(route('status.index'))->with('status', 'Tạo nhóm thành công');
+        return redirect(route('status.create'))->with('status', 'Tạo nhóm thành công');
     }
 
     /**
