@@ -18,4 +18,5 @@ class UserConstant
     const TELESALES = 3;//ROLE TELESALE
     const WAITER = 4;//ROLE LỄ TÂN
     const TECHNICIANS = 5;//ROLE KỸ THUẬT VIÊN
+    const CUSTOMER = 6;//ROLE KHÁCH HÀNG
 }

@@ -63,7 +63,7 @@
                                 <input type="text" class="form-control" name="phone" value="{{ old('phone') }}" placeholder="Số điện thoại">
                             </div>
                             <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
-                                <label class="form-label">Mật <khẩu></khẩu>
+                                <label class="form-label">Mật khẩu
                                     {{--<a href="./forgot-password.html" class="float-right small">Quên mật khẩu</a>--}}
                                 </label>
                                 <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Mật khẩu">
