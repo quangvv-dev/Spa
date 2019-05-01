@@ -8,16 +8,14 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
-                {{--                <h3 class="card-title">Full color variations</h3></br>--}}
                 <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
                        type="search">
-                {{--                <input class="form-control header-search col-2" placeholder="Search…" tabindex="1" type="search">--}}
             </div>
             <div class="table-responsive">
                 <table class="table card-table table-vcenter text-nowrap table-primary">
                     <thead class="bg-primary text-white">
                     <tr>
-                        <th class="text-white">ID</th>
+                        <th class="text-white">STT</th>
                         <th class="text-white text-center">Tên nhóm</th>
                         <th class="text-white text-center">Mã nhóm</th>
                         <th class="text-white text-center">Loại nhóm</th>
@@ -41,7 +39,8 @@
                                 <td class="text-center">
                                     <a class="btn" href="{{ url('status/' . $s->id . '/edit') }}"><i
                                                 class="fas fa-edit"></i></a>
-                                    <a class="btn delete" href="javascript:void(0)" data-url="{{ url('status/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
+{{--                                    <a class="btn delete" href="javascript:void(0)"--}}
+{{--                                       data-url="{{ url('status/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
                                 </td>
                             </tr>
                     </tbody>

@@ -86,6 +86,9 @@
 
     $(document).ready(function() {
 
+        // $('.header-search').change(function () {
+        //     $('form.card-header').trigger();
+        // })
         // close alert
         window.setTimeout(function() {
             $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
@@ -110,10 +113,6 @@
             $(this).valid();
         });
 
-    }).ajaxStart(function () {
-        $('#loading').show();
-    }).ajaxStop(function () {
-        $('#loading').hide();
-    });
+    })
 </script>
 @include('layout._script')

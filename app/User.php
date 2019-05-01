@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Constants\UserConstant;
+use App\Models\Status;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,6 +30,9 @@ class User extends Authenticatable
         'status_id',
         'active',
         'password',
+        'group_id',
+        'source_id',
+        'branch_id',
     ];
 
     /**
@@ -37,7 +41,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -49,6 +54,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id', 'id');
+    }
+
+    public function marketing()
+    {
+        return $this->belongsTo(User::class, 'mkt_id');
+    }
+
     public function getGenderTextAttribute()
     {
         return $this->gender == UserConstant::MALE ? 'Nam' : 'Nữ';
@@ -57,5 +72,31 @@ class User extends Authenticatable
     public function getActiveTextAttribute()
     {
         return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
+    }
+
+    public function getRoleTextAttribute()
+    {
+        if ($this->role == UserConstant::ADMIN) {
+            return 'Admin';
+        }
+
+        if ($this->role == UserConstant::MARKETING) {
+            return 'Marketing';
+        }
+
+        if ($this->role == UserConstant::TELESALES) {
+            return 'Telesales';
+        }
+
+        if ($this->role == UserConstant::WAITER) {
+            return 'Lễ tân';
+        }
+
+        if ($this->role == UserConstant::TECHNICIANS) {
+            return 'Kỹ thuật viên';
+        }
+        if ($this->role == UserConstant::CUSTOMER) {
+            return 'Khách hàng';
+        }
     }
 }

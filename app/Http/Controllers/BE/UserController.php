@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Requests\UserRequest;
+use App\Models\Category;
 use App\Models\Status;
-use App\Services\Upload\UploadService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -26,17 +29,57 @@ class UserController extends Controller
     public function __construct(Filesystem $fileUpload)
     {
         $this->fileUpload = $fileUpload;
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
+        $group = Category::pluck('name', 'id')->toArray();//nhóm KH
+        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+        $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
+        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        view()->share([
+            'status'         => $status,
+            'group'          => $group,
+            'source'         => $source,
+            'branch'         => $branch,
+            'telesales'      => $telesales,
+            'marketingUsers' => $marketingUsers,
+        ]);
     }
 
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $users = User::with('status', 'marketing');
         $title = 'Quản lý người dùng';
-        $users = User::paginate(10);
+        if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
+            $users = $users->where('role', UserConstant::CUSTOMER)
+                ->where('status_id', StatusCode::NEW);
+        } elseif (Auth::user()->role == UserConstant::WAITER) {
+            $users = $users->where('role', UserConstant::CUSTOMER);
+        } else {
+            $users = $users->where('role', '<>', UserConstant::ADMIN);
+        }
+
+        $search = $request->search;
+        if ($search) {
+            $users = $users->where(function($query) use($search) {
+                $query->where('full_name', 'like', '%'. $search. '%')
+                    ->orWhere('phone', 'like', '%'. $search . '%');
+            });
+        }
+
+        $users = $users->latest('id')->paginate(10);
+
+        if ($request->ajax()) {
+            return Response::json(view('users.ajax', compact('users', 'title'))->render());
+        }
+
+
         return view('users.index', compact('users', 'title'));
     }
 
@@ -48,21 +91,21 @@ class UserController extends Controller
     public function create()
     {
         $title = 'Thêm người dùng';
-        $status = Status::pluck('name', 'id');
-        return view('users._form', compact('title', 'status'));
+        return view('users._form', compact('title'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param User                      $user
+     * @param \Illuminate\Http\Request $request
+     * @param User                     $user
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request, User $user)
+    public function store(UserRequest $request)
     {
         $input = $request->except('image');
+        $marketingUser = Auth::user()->id;
         $input['active'] = UserConstant::ACTIVE;
         $input['password'] = bcrypt($request->password);
 
@@ -70,11 +113,13 @@ class UserController extends Controller
             $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
         }
 
-        $dataUser = $user->create($input);
-
+        if ($request->role == null) {
+            $input['role'] = UserConstant::CUSTOMER;
+        }
+        $dataUser = User::create($input);
         if ($request->mkt_id == null) {
             $dataUser->update([
-               'mkt_id' => $dataUser->id
+                'mkt_id' => $marketingUser,
             ]);
         }
 
@@ -84,7 +129,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -102,15 +148,14 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $title = 'Sửa người dùng';
-        $status = Status::pluck('name', 'id');
-        return view('users._form', compact('user', 'title', 'status'));
+        return view('users._form', compact('user', 'title'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param User                      $user
+     * @param \Illuminate\Http\Request $request
+     * @param User                     $user
      *
      * @return \Illuminate\Http\Response
      */

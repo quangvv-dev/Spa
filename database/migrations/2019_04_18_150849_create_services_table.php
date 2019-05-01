@@ -20,7 +20,9 @@ class CreateServicesTable extends Migration
             $table->text('description')->nullable();
             $table->text('images')->nullable();
             $table->string('code')->nullable();
-            $table->integer('price');
+            $table->bigInteger('price_buy');
+            $table->bigInteger('price_sell');
+            $table->bigInteger('promotion_price');
             $table->string('trademark')->nullable();//thuong hieu dich vu
             $table->boolean('enable');//an hien
             $table->timestamps();
