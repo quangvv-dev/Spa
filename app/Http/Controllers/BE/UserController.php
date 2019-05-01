@@ -12,6 +12,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -47,21 +48,38 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $users = User::with('status', 'marketing');
+        $title = 'Quản lý người dùng';
         if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
-            $users = User::with('status', 'marketing')->where('role', UserConstant::CUSTOMER)
+            $users = $users->where('role', UserConstant::CUSTOMER)
                 ->where('status_id', StatusCode::NEW);
         } elseif (Auth::user()->role == UserConstant::WAITER) {
-            $users = User::with('status', 'marketing')->where('role', UserConstant::CUSTOMER);
-
+            $users = $users->where('role', UserConstant::CUSTOMER);
         } else {
-            $users = User::with('status', 'marketing')->where('role', '<>', UserConstant::ADMIN);
+            $users = $users->where('role', '<>', UserConstant::ADMIN);
         }
-        $users = $users->orderBy('id', 'desc')->paginate(10);
-        $title = 'Quản lý người dùng';
+
+        $search = $request->search;
+        if ($search) {
+            $users = $users->where(function($query) use($search) {
+                $query->where('full_name', 'like', '%'. $search. '%')
+                    ->orWhere('phone', 'like', '%'. $search . '%');
+            });
+        }
+
+        $users = $users->latest('id')->paginate(10);
+
+        if ($request->ajax()) {
+            return Response::json(view('users.ajax', compact('users', 'title'))->render());
+        }
+
+
         return view('users.index', compact('users', 'title'));
     }
 
