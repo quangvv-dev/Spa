@@ -15,7 +15,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 
     <!-- Title -->
-    <title>Ren - a responsive, flat and full featured admin template</title>
+    <title>Hệ Thống Spa Linh anh, chuyên nghiệp, uy tín...</title>
 
     <!--Font Awesome-->
     <link href="assets/plugins/fontawesome-free/css/all.css" rel="stylesheet">
@@ -45,9 +45,9 @@
         <div class="container">
             <div class="row">
                 <div class="col col-login mx-auto">
-                    <div class="text-center mb-6 ">
-                        <img src="assets/images/brand/logo.png" class="h-6" alt="">
-                    </div>
+{{--                    <div class="text-center mb-6 ">--}}
+{{--                        <img src="assets/images/brand/logo_login.png" class="h-6" alt="">--}}
+{{--                    </div>--}}
                     @if ($errors->has('phone') || $errors->has('password'))
                         <div class="alert alert-danger" role="alert" style="font-size: 14px">
                             {{ $errors->first() }}
@@ -56,6 +56,7 @@
                     <form class="card" method="POST" action="{{ url('login') }}">
                         {{ csrf_field() }}
                         <div class="card-body p-6">
+                            <img src="assets/images/brand/logo_login.png" class="h-6" alt="">
 
                             <div class="card-title text-center">Đăng nhập vào hệ thống</div>
                             <div class="form-group {{ $errors->has('phone') ? ' has-error' : '' }}">
