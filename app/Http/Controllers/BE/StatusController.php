@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Status;
 use App\Constants\StatusCode;
+use Illuminate\Support\Facades\Response;
 
 class StatusController extends Controller
 {
     public function __construct()
     {
         $types_pluck = [
-            ''                          => '--Chọn kiểu setup--',
+            ''                          => '-Chọn loại nhớm-',
             StatusCode::SOURCE_CUSTOMER => 'Nguồn khách hàng',
             StatusCode::RELATIONSHIP    => 'Mối quan hệ',
             StatusCode::BRANCH          => 'Chi nhánh',
@@ -33,11 +34,14 @@ class StatusController extends Controller
     {
         $docs = Status::orderBy('id', 'desc');
         if ($request->search) {
-            $user = $docs->where('name', 'like', '%' . $request->search . '%')
-                ->orwhere('type', 'like', '%' . $request->search . '%');
+            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
+                ->orwhere('type', 'like', '%' . $request->search. '%');
         }
         $docs = $docs->paginate(10);
         $title = 'Quản lý trạng thái';
+        if ($request->ajax()) {
+            return Response::json(view('status.ajax', compact('docs', 'title'))->render());
+        }
         return view('status.index', compact('title', 'docs'));
     }
 

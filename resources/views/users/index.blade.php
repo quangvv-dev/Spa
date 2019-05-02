@@ -8,10 +8,7 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
-                {!! Form::open(array('method' => 'get', 'route' => array('users.index', $users))) !!}
-                    <input class="form-control" name="search" value="{{request()->search ?: "" }}" placeholder="Search…" tabindex="1"
-                       type="text" id="search">
-                {!! Form::close() !!}
+                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1" type="text" id="search">
             </div>
             <div id="registration-form">
                 @include('users.ajax')

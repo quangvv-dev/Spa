@@ -67,9 +67,9 @@ class UserController extends Controller
 
         $search = $request->search;
         if ($search) {
-            $users = $users->where(function($query) use($search) {
-                $query->where('full_name', 'like', '%'. $search. '%')
-                    ->orWhere('phone', 'like', '%'. $search . '%');
+            $users = $users->where(function ($query) use ($search) {
+                $query->where('full_name', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
             });
         }
 
@@ -189,7 +189,13 @@ class UserController extends Controller
 
     public function checkUnique(Request $request)
     {
-        $result = User::where('phone', $request->phone)->orWhere('email', $request->email)->first();
+        $phone = $request->phone;
+        $email = $request->email;
+        $result = User::when($phone, function ($query, $phone) {
+            $query->where('phone', $phone);
+        })->when($email, function ($query, $email) {
+            $query->where('email', $email);
+        })->first();
         if ($result) {
             return $result->id == $request->id ? 'true' : 'false';
         }

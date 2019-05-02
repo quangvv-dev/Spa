@@ -20,13 +20,18 @@
                         <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                        {!! Form::label('code', 'Mã dịch vụ', array('class' => ' required')) !!}
-                        {!! Form::text('code',null, array('class' => 'form-control', 'required' => true)) !!}
-                        <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                @if(isset($doc))
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
+                            {!! Form::label('code', 'Mã dịch vụ', array('class' => ' required')) !!}
+                            {!! Form::text('code',null, array('class' => 'form-control','readonly'=>true, 'required' => true)) !!}
+                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="col-xs-12 col-md-6">
+                    </div>
+                @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('price_buy') ? 'has-error' : '' }}">
                         {!! Form::label('price_buy', 'Giá nhập', array('class' => ' required')) !!}

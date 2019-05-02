@@ -10,58 +10,42 @@
             <div class="card-header">
                 <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
                        type="search">
+                <div class="col-md-2">
+                    {!! Form::select('type',$types_pluck, null, array('class' => 'form-control header-search','required' => true)) !!}
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table card-table table-vcenter text-nowrap table-primary">
-                    <thead class="bg-primary text-white">
-                    <tr>
-                        <th class="text-white">STT</th>
-                        <th class="text-white text-center">Tên nhóm</th>
-                        <th class="text-white text-center">Mã nhóm</th>
-                        <th class="text-white text-center">Loại nhóm</th>
-                        <th class="text-white text-center">Thao tác</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if(count(@$docs))
-                        @foreach($docs as $k => $s)
-                            <tr>
-                                <th scope="row">{{$k}}</th>
-                                <td class="text-center">{{$s->name}}</td>
-                                <td class="text-center">{{$s->code}}</td>
-                                <td class="text-center">
-                                    @foreach($types_pluck as $k1 => $v)
-                                        @if($s->type == $k1)
-                                            @php echo $v @endphp
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td class="text-center">
-                                    <a class="btn" href="{{ url('status/' . $s->id . '/edit') }}"><i
-                                                class="fas fa-edit"></i></a>
-{{--                                    <a class="btn delete" href="javascript:void(0)"--}}
-{{--                                       data-url="{{ url('status/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
-                                </td>
-                            </tr>
-                    </tbody>
-                    @endforeach
-                    @else
-                        <tr>
-                            <td id="no-data" class="text-center" colspan="7">Không tồn tại dữ liệu</td>
-                        </tr>
-                    @endif
-                </table>
-                <div class="pull-left">
-                    <div class="page-info">
-                        {{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
-                    </div>
-                </div>
-                <div class="pull-right">
-                    {{ $docs->appends(['search' => request()->search ])->links() }}
-                </div>
+
+            <div id="registration-form">
+                @include('status.ajax')
             </div>
             <!-- table-responsive -->
         </div>
-        {{--        @include('status._form')--}}
     </div>
+@endsection
+@section('_script')
+    <script type="text/javascript">
+        $(document).on('keyup','.header-search',function(e) {
+            e.preventDefault();
+            var search = $(this).val();
+            $.ajax({
+                url: "{{ Url('status/') }}",
+                method: "get",
+                data:{search: search}
+            }).done(function (data) {
+                $('#registration-form').html(data);
+
+            });
+        });
+        $(document).on('change','.header-search',function() {
+            var search = $(this).val();
+            $.ajax({
+                url: "{{ Url('status/') }}",
+                method: "get",
+                data:{search: search}
+            }).done(function (data) {
+                $('#registration-form').html(data);
+
+            });
+        });
+    </script>
 @endsection
