@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="msapplication-TileColor" content="#0061da">
     <meta name="theme-color" content="#1643a3">
+    <meta name="google-site-verification" content="pW_9z8rjLjVBk5bXJK9HFG0SXZFXXn_fElFSY5v1_dw" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
