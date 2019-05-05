@@ -25,9 +25,9 @@ class CreateUsersTable extends Migration
             $table->integer('gender');
             $table->integer('mkt_id')->nullable();//nhân viên marketing
             $table->integer('telesales_id')->nullable();// id nhân viên telesales
-            $table->integer('group_id')->default(0);// Nhóm khách hàng (khách hàng thuộc danh mục dịch vụ)
-            $table->integer('source_id')->default(0);// id nguồn khách hàng : facebook, zalo, google
-            $table->integer('status_id')->default(0);//mối quan hệ : mới, chua kết nối ...
+            $table->integer('group_id')->nullable()->default(0);// Nhóm khách hàng (khách hàng thuộc danh mục dịch vụ)
+            $table->integer('source_id')->nullable()->default(0);// id nguồn khách hàng : facebook, zalo, google
+            $table->integer('status_id')->nullable()->default(0);//mối quan hệ : mới, chua kết nối ...
             $table->integer('branch_id')->nullable()->default(0);// id chi nhánh
             $table->boolean('active');
             $table->rememberToken();
