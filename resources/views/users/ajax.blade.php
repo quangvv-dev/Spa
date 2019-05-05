@@ -24,13 +24,14 @@
                     <td class="text-center">{{ $user->birthday }}</td>
                     <td class="text-center">{{ $user->role_text }}</td>
                     <td class="text-center">{{ $user->gender_text  }}</td>
-                    <td class="text-center">{{ $user->marketing ? $user->marketing->full_name: '' }}</td>
+                    <td class="text-center">{{ @$user->marketing ? @$user->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$user->status->name }}</td>
                     <td class="text-center">{{ $user->active_text}}</td>
                     <td class="text-center">
                         @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
-                            <a class="btn" href="{{ route('users.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
-                            <a class="btn delete" href="javascript:void(0)" data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
+                            <a title="Tạo đơn hàng" class="btn" href="{{ url('order/'.$user->id) }}"><i class="fas fa-file-invoice-dollar"></i></a>
+                            <a title="sửa tài khoản" class="btn" href="{{ route('users.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
+                            <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
                     </td>
                 </tr>
