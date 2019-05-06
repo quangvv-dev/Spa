@@ -8,7 +8,7 @@
             <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Giới tính</th>
-            <th class="text-white text-center">MKT ID</th>
+            <th class="text-white text-center">Nhân viên MKT</th>
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Trạng thái đăng nhập</th>
             <th class="text-white text-center">Thao tác</th>
