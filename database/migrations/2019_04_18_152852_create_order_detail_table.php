@@ -16,12 +16,11 @@ class CreateOrderDetailTable extends Migration
         Schema::create('order_detail', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('order_id');
-            $table->integer('booking_id');// id dịch vụ hoặc id sản phẩm
-            $table->integer('type');// dịch vụ hoặc id sản phẩm (1-0)
+            $table->integer('booking_id');// id dịch vụ
             $table->integer('quantity');// số lượng
             $table->bigInteger('total_price');// Tổng tiền
-            $table->integer('bill_type');// hóa đơn thu tiền làm dịch vụ hoặc thu tiền trả góp combo
-            $table->integer('user_id');//id người giới thieuj - để ng giới thiệu hưởng 5%
+            $table->integer('bill_type')->nullable();// hóa đơn thu tiền làm dịch vụ hoặc thu tiền trả góp combo
+            $table->integer('user_id');//id người giới thieu - để ng giới thiệu hưởng 5%
             $table->timestamps();
         });
     }
