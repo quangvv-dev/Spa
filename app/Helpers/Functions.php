@@ -175,4 +175,14 @@ class Functions
         }
     }
 
+    public static function dayMonthYear($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('d-m-Y');
+    }
+
+    public static function yearMonthDay($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
+
 }

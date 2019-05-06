@@ -20,11 +20,25 @@
                         </li>
                     </ul>
                 </div>
+            </li>
             <li class="nav-item">
                 <a href="{!! route('status.index') !!}" class="nav-link {{ Request::is('status*') ? 'active' : '' }}">
                     <i class="fa fa-users"></i>
                     <span>Quản Lý Trạng Thái</span>
                 </a>
+            </li>
+            <li class="nav-item with-sub" {{ Request::is('statistics*') ? 'active' : '' }}>
+                <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
+                <div class="sub-item">
+                    <ul>
+                        <li>
+                            <a href="{!! url('statistics')!!}">Marketing</a>
+                        </li>
+{{--                        <li>--}}
+{{--                            <a href="{!! route('services.index') !!}">Quản lý dịch vụ</a>--}}
+{{--                        </li>--}}
+                    </ul>
+                </div>
             </li>
         </ul>
     </div>

@@ -99,4 +99,14 @@ class User extends Authenticatable
             return 'Khách hàng';
         }
     }
+
+//    public function getDateAttribute()
+//    {
+//        return \Carbon\Carbon::parse($this->birthday)->format('d-m-y');
+//    }
+//
+//    public function setDateAttribute()
+//    {
+//        return \Carbon\Carbon::parse($this->birthday)->format('Y-m-d');
+//    }
 }
