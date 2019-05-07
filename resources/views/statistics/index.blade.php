@@ -27,27 +27,15 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('keyup change','#from-date',function(e) {
+        $(document).on('keyup change', '#from-date,#to-date', function (e) {
             e.preventDefault();
-            var from_date = $(this).val();
-            $.ajax({
-                url: "{{ Url('statistics/') }}",
-                method: "get",
-                data:{from_date: from_date}
-            }).done(function (data) {
-                $('#registration-form').html(data);
-
-            });
-        });
-        $(document).on('keyup change','#to-date',function() {
             var from_date = $('#from-date').val();
-            var to_date = $(this).val();
+            var to_date = $('#to-date').val();
 
-            console.log(from_date, to_date);
             $.ajax({
                 url: "{{ Url('statistics/') }}",
                 method: "get",
-                data:{
+                data: {
                     from_date: from_date,
                     to_date: to_date
                 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Components\Filesystem\Filesystem;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Http\Requests\UserRequest;
 use App\Models\Category;
 use App\Models\Status;
@@ -57,8 +58,8 @@ class UserController extends Controller
         $users = User::with('status', 'marketing');
         $title = 'Quản lý người dùng';
         if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
-            $users = $users->where('role', UserConstant::CUSTOMER)
-                ->where('status_id', StatusCode::NEW);
+            $users = $users->where('role', UserConstant::CUSTOMER)->where('mkt_id',Auth::user()->id);
+            $title = "Tạo khách hàng mới";
         } elseif (Auth::user()->role == UserConstant::WAITER) {
             $users = $users->where('role', UserConstant::CUSTOMER);
         } else {
@@ -71,6 +72,10 @@ class UserController extends Controller
                 $query->where('full_name', 'like', '%' . $search . '%')
                     ->orWhere('phone', 'like', '%' . $search . '%');
             });
+        }
+        $status = $request->status;
+        if ($status) {
+            $users->where('status_id', $status);
         }
 
         $users = $users->latest('id')->paginate(10);
@@ -104,9 +109,11 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        @$date = Functions::yearMonthDay($request->birthday);
         $input = $request->except('image');
         $marketingUser = Auth::user()->id;
         $input['active'] = UserConstant::ACTIVE;
+        $input['birthday'] = isset($date) && $date ? $date : '';
         $input['password'] = bcrypt($request->password);
 
         if ($request->image) {
@@ -147,6 +154,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $user['birthday'] = Functions::dayMonthYear($user->birthday);
         $title = 'Sửa người dùng';
         return view('users._form', compact('user', 'title'));
     }
@@ -162,6 +170,8 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         $input = $request->except('image');
+        @$date = Functions::yearMonthDay($request->birthday);
+        $input['birthday'] = isset($date) && $date ? $date : '';
         $input['password'] = bcrypt($request->password);
 
         if ($request->image) {
@@ -170,7 +180,7 @@ class UserController extends Controller
 
         $user->update($input);
 
-        return redirect(route('users.index'))->with('status', 'Sửa người dùng thành công');
+        return redirect(route('users.index'))->with('status', 'Cập nhật người dùng thành công');
     }
 
     /**
