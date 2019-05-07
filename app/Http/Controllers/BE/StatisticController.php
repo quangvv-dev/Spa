@@ -34,4 +34,12 @@ class StatisticController extends Controller
 
         return view('statistics.index', compact('statisticUsers', 'title'));
     }
+
+    public function show($id)
+    {
+        $title = 'Chi tiết thống kê';
+        $user = User::findOrFail($id);
+
+        return view('statistics.detail', compact('user', 'title'));
+    }
 }
