@@ -6,14 +6,14 @@
             <th class="text-white text-center">Tên nhân viên</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Số lượng khách hàng</th>
-{{--            <th class="text-white text-center">Thao tác</th>--}}
+            <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
         <tbody>
         @if(count(@$statisticUsers))
             @foreach($statisticUsers as $k => $statisticUser)
                 <tr>
-                    {{--<th scope="row">{{$k}}</th>--}}
+                    <th scope="row">{{$k}}</th>
                     <td class="text-center">{{ $statisticUser->marketing->full_name }}</td>
                     <td class="text-center">{{ $statisticUser->marketing->role_text }}</td>
                     <td class="text-center">{{ $statisticUser->count }}</td>
