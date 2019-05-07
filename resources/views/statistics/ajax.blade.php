@@ -6,20 +6,20 @@
             <th class="text-white text-center">Tên nhân viên</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Số lượng khách hàng</th>
-{{--            <th class="text-white text-center">Thao tác</th>--}}
+            <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
         <tbody>
         @if(count(@$statisticUsers))
             @foreach($statisticUsers as $k => $statisticUser)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
-                    <td class="text-center">{{$statisticUser->marketing->full_name}}</td>
-                    <td class="text-center">{{$statisticUser->marketing->role_text}}</td>
+                    <th scope="row">{{$k}}</th>
+                    <td class="text-center">{{ $statisticUser->marketing->full_name }}</td>
+                    <td class="text-center">{{ $statisticUser->marketing->role_text }}</td>
                     <td class="text-center">{{ $statisticUser->count }}</td>
-{{--                    <td class="text-center">--}}
-{{--                        <a class="btn" href="{{ url('status/' . $statisticUser->id . '/edit') }}"><i class="zmdi zmdi-eye"></i></a>--}}
-{{--                    </td>--}}
+                    <td class="text-center">
+                        <a class="btn" href="{{ url('statistics/' . $statisticUser->marketing->id . '/detail') }}"><i class="far fa-eye"></i></a>
+                    </td>
                 </tr>
         </tbody>
         @endforeach

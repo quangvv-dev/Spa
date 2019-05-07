@@ -11,20 +11,28 @@ use Illuminate\Support\Facades\Auth;
 
 class StatisticController extends Controller
 {
+    private $user;
+
+    /**
+     * StatisticController constructor.
+     *
+     * @param User $user
+     */
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     public function index(Request $request)
     {
         $title = 'Thống kê';
         $fromDate = $request->from_date;
         $toDate = $request->to_date;
         if (Auth::user()->role == UserConstant::MARKETING) {
-            $statisticUsers = User::with('marketing')->select('mkt_id', \DB::raw('count(id) as count'))
-                ->whereNotNull('mkt_id')
-                ->where('mkt_id', Auth::user()->id)
-                ->groupBy('mkt_id');
+            $statisticUsers = $this->user->getStatisticsUsers()
+                ->where('mkt_id', Auth::user()->id);
         } else {
-            $statisticUsers = User::with('marketing')->select('mkt_id', \DB::raw('count(id) as count'))
-                ->whereNotNull('mkt_id')
-                ->groupBy('mkt_id');
+            $statisticUsers = $this->user->getStatisticsUsers();
         }
         if ($fromDate && $toDate == null) {
             $statisticUsers = $statisticUsers->whereDate('created_at', $fromDate);
@@ -42,5 +50,14 @@ class StatisticController extends Controller
         }
 
         return view('statistics.index', compact('statisticUsers', 'title'));
+    }
+
+    public function show($id)
+    {
+        $title = 'Chi tiết thống kê';
+        $total = $this->user->getStatisticsUsers()->get()->sum('count');
+        $detail = $this->user->getStatisticsUsers()->where('mkt_id', $id)->first();
+
+        return view('statistics.detail', compact('detail', 'title', 'total'));
     }
 }

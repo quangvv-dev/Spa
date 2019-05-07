@@ -4,8 +4,6 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
-                <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('status.create') }}"><i
-                                class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
                 <div class="wd-200 mg-b-30">
