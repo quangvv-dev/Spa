@@ -147,6 +147,7 @@
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             {{--<a class="dropdown-item" href="#"><i class="dropdown-icon mdi mdi-account-outline"></i> Tài khoản</a>--}}
                             <a class="dropdown-item" href="{{ url('profiles/' .  Auth::user()->id . '/edit') }}"><i class="dropdown-icon mdi mdi-settings"></i> Cài đặt tài khoản</a>
+                            <a class="dropdown-item" href="{!! route('users.index') !!}"><i class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
                             {{--<a class="dropdown-item" href="#"><span class="float-right"><span class="badge badge-primary">6</span></span> <i class="dropdown-icon mdi mdi-message-outline"></i> Inbox</a>--}}
                             {{--<a class="dropdown-item" href="#"><i class="dropdown-icon mdi mdi-comment-check-outline"></i> Message</a>--}}
                             <div class="dropdown-divider"></div>
