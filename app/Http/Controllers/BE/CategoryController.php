@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
+use Illuminate\Support\Facades\Response;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,7 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->list[0] = ('category.parent');
-        $categories = Category::orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('Không có', 0)->toArray();
+        $categories = Category::orderBy('parent_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('Danh mục cha ...', 0)->toArray();
         view()->share([
             'category_pluck' => $categories,
         ]);
@@ -53,6 +54,9 @@ class CategoryController extends Controller
         }
         $docs = $docs->paginate(10);
         $title = 'Quản lý danh mục';
+        if ($request->ajax()) {
+            return Response::json(view('category.ajax', compact('docs', 'title'))->render());
+        }
         return view('category.index', compact('title', 'docs'));
     }
 
@@ -118,7 +122,6 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        dd($request->all());
         $text = Functions::vi_to_en(@$request->name);
         $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
         $category->update($request->all());

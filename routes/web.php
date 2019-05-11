@@ -25,4 +25,13 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('users', 'UserController');
     Route::get('profiles/{id}/edit', 'UserController@getEditProfile');
     Route::put('profiles/{id}/edit', 'UserController@postEditProfile');
+
+    Route::get('/statistics/', 'StatisticController@index')->name('statistics.index');
+    Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
+    //Order
+    Route::get('order/{id}', 'OrderController@index');
+    Route::group(['prefix' => 'ajax',], function () {
+        Route::get('info-service', 'OrderController@getInfoService');
+
+    });
 });

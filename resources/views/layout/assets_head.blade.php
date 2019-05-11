@@ -14,7 +14,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 
     <!-- Title -->
-    <title>Ren - a responsive, flat and full featured admin template</title>
+    <title>Hệ Thống Spa Linh anh, chuyên nghiệp, uy tín...</title>
 
     <!--Font Awesome-->
     <link href="{{asset('assets/plugins/fontawesome-free/css/all.css')}}" rel="stylesheet">

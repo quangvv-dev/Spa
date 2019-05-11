@@ -32,7 +32,9 @@ class ServiceController extends Controller
         $docs = Service::orderBy('id', 'desc');
         if ($request->search) {
             $user = $docs->where('name', 'like', '%' . $request->search . '%')
-                ->orwhere('type', 'like', '%' . $request->search . '%');
+                ->orwhere('code', 'like', '%' . $request->search . '%')
+                ->orwhere('trademark', 'like', '%' . $request->search . '%')
+                ->orwhere('enable', 'like', '%' . $request->search . '%');
         }
         $docs = $docs->paginate(10);
         $title = 'Quản lý dịch vụ';
@@ -69,15 +71,14 @@ class ServiceController extends Controller
                 }
             }
             $input['images'] = @json_encode($imgs);
-//            $request->merge(['images' => @json_encode($imgs)]);
         }
-//        $request->merge([
-            $input['price_buy'] = $request->price_buy ? str_replace(',', '', $request->price_buy) : 0;
-            $input['price_sell'] = $request->price_sell ? str_replace(',', '', $request->price_sell) : 0;
-            $input['promotion_price'] = $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0;
-//        ]);
-//        dd($request->all());
+        $input['price_buy'] = $request->price_buy ? str_replace(',', '', $request->price_buy) : 0;
+        $input['price_sell'] = $request->price_sell ? str_replace(',', '', $request->price_sell) : 0;
+        $input['promotion_price'] = $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0;
         $data = Service::create($input);
+        $data->update([
+            'code' => $data->id,
+        ]);
         return redirect(route('services.create'))->with('status', 'Tạo dịch vụ thành công');
 
     }

@@ -99,4 +99,21 @@ class User extends Authenticatable
             return 'Khách hàng';
         }
     }
+
+    public function getStatisticsUsers()
+    {
+        return $this->with('marketing')->select('mkt_id', \DB::raw('count(id) as count'))
+            ->whereNotNull('mkt_id')
+            ->groupBy('mkt_id');
+    }
+
+//    public function getDateAttribute()
+//    {
+//        return \Carbon\Carbon::parse($this->birthday)->format('d-m-y');
+//    }
+//
+//    public function setDateAttribute()
+//    {
+//        return \Carbon\Carbon::parse($this->birthday)->format('Y-m-d');
+//    }
 }

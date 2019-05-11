@@ -31,7 +31,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                         {!! Form::label('type','Loại', array('class' => 'required')) !!}
-                        {!! Form::select('type',$types_pluck, null, array('class' => 'form-control','required' => true)) !!}
+                        {!! Form::select('type',$types_pluck, null, array('class' => 'form-control','data-placeholder'=>'Danh mục cha')) !!}
                         <span class="help-block">{{ $errors->first('type', ':message') }}</span>
                     </div>
                 </div>
