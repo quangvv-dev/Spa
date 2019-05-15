@@ -16,13 +16,12 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
         return view('dashboard.index');
     });
-    Route::get('/users', function () {
-        return view('users.index');
-    });
+
     Route::resource('status', 'StatusController');
     Route::resource('category', 'CategoryController');
     Route::resource('services', 'ServiceController');
     Route::resource('users', 'UserController');
+    Route::resource('customers', 'CustomerController');
     Route::get('profiles/{id}/edit', 'UserController@getEditProfile');
     Route::put('profiles/{id}/edit', 'UserController@postEditProfile');
 

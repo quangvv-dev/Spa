@@ -1,0 +1,14 @@
+/*css index*/
+div.scrollmenu {
+    width: 30%;
+    overflow: auto;
+    white-space: nowrap;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.scrollmenu button {
+    display: inline-block;
+    height: 40px;
+    text-decoration: none;
+}

@@ -55,17 +55,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with('status', 'marketing');
+        $users = User::with('status', 'marketing')->where('role', '<>', UserConstant::CUSTOMER);
         $title = 'Quản lý người dùng';
-        if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
-            $users = $users->where('role', UserConstant::CUSTOMER)->where('mkt_id',Auth::user()->id);
-            $title = "Tạo khách hàng mới";
-        } elseif (Auth::user()->role == UserConstant::WAITER) {
-            $users = $users->where('role', UserConstant::CUSTOMER);
-        } else {
-            $users = $users->where('role', '<>', UserConstant::ADMIN);
-        }
-
         $search = $request->search;
         if ($search) {
             $users = $users->where(function ($query) use ($search) {
@@ -83,7 +74,6 @@ class UserController extends Controller
         if ($request->ajax()) {
             return Response::json(view('users.ajax', compact('users', 'title'))->render());
         }
-
 
         return view('users.index', compact('users', 'title'));
     }

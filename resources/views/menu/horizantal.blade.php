@@ -4,6 +4,25 @@
         <ul class="nav">
             @if(Auth::user()->role == App\Constants\UserConstant::ADMIN)
                 <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
+                    <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
+                    <div class="sub-item">
+                        <ul>
+                            <li>
+                                <a href="#">Nhóm khách hàng </a>
+                            </li>
+                            <li>
+                                <a href="{!! route('customers.index') !!}">Danh sách khách hàng</a>
+                            </li>
+                            <li>
+                                <a href="#">Nhân viên phụ trách </a>
+                            </li>
+                            <li>
+                                <a href="#">Quản lý trạng thái</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
                     <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Marketing</span></a>
                     <div class="sub-item">
                         <ul>
@@ -24,25 +43,6 @@
                             </li>
                             <li>
                                 <a href="#">Landing Page</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
-                    <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
-                    <div class="sub-item">
-                        <ul>
-                            <li>
-                                <a href="#">Nhóm khách hàng </a>
-                            </li>
-                            <li>
-                                <a href="#">Danh sách khách hàng</a>
-                            </li>
-                            <li>
-                                <a href="#">Nhân viên phụ trách </a>
-                            </li>
-                            <li>
-                                <a href="#">Quản lý trạng thái</a>
                             </li>
                         </ul>
                     </div>
