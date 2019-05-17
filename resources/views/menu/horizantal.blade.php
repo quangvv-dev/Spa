@@ -2,7 +2,6 @@
 <div class="ren-navbar fixed-header" id="headerMenuCollapse">
     <div class="container">
         <ul class="nav">
-            @if(Auth::user()->role == App\Constants\UserConstant::ADMIN)
                 <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
                     <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
                     <div class="sub-item">
@@ -66,7 +65,6 @@
                         {{--<span>Quản Lý Trạng Thái</span>--}}
                     {{--</a>--}}
                 {{--</li>--}}
-            @endif
             <li class="nav-item with-sub" {{ Request::is('statistics*') ? 'active' : '' }}>
                 <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
                 <div class="sub-item">
