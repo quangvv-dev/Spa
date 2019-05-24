@@ -10,10 +10,10 @@
                 <h3 class="card-title">{{$title}}</h3></br>
             </div>
 
-            @if (isset($user))
-                {!! Form::model($user, array('url' => url('users/'.$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+            @if (isset($customer))
+                {!! Form::model($customer, array('url' => url('customers/'.$customer->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
-                {!! Form::open(array('url' => route('users.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::open(array('url' => route('customers.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col row">
                 <div class="col-xs-12 col-md-6">
@@ -26,7 +26,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
                         {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                        {!! Form::number('phone', null, array('id' => 'phone','class' => 'form-control')) !!}
+                        {!! Form::text('phone', null, array('id' => 'phone','class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                     </div>
                 </div>
@@ -53,15 +53,6 @@
                     </div>
                     <span class="help-block">{{ $errors->first('birthday', ':message') }}</span>
                 </div>
-                @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
-                            {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                            {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên', 6 => 'Khách hàng'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
-                            <span class="help-block">{{ $errors->first('role', ':message') }}</span>
-                        </div>
-                    </div>
-                @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
                         {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
@@ -73,7 +64,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('mkt_id') ? 'has-error' : '' }}">
                         {!! Form::label('mkt_id', 'Nhân viên MKT', array('class' => ' required')) !!}
-                        {!! Form::select('mkt_id', $marketingUsers,@$user->mkt_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên marketing')) !!}
+                        {!! Form::select('mkt_id', $marketingUsers,@$customer->mkt_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên marketing')) !!}
                         <span class="help-block">{{ $errors->first('mkt_id', ':message') }}</span>
                     </div>
                 </div>
@@ -81,35 +72,35 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
                         {!! Form::label('telesales_id', 'Nhân viên Telesales', array('class' => ' required')) !!}
-                        {!! Form::select('telesales_id', $telesales,@$user->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên telesale')) !!}
+                        {!! Form::select('telesales_id', $telesales,@$customer->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên telesale')) !!}
                         <span class="help-block">{{ $errors->first('telesales_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                         {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
-                        {!! Form::select('status_id', $status, @$user->status_id, array('class' => 'form-control select2', 'placeholder' => 'Mối quan hệ')) !!}
+                        {!! Form::select('status_id', $status, @$customer->status_id, array('class' => 'form-control select2', 'placeholder' => 'Mối quan hệ')) !!}
                         <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('group_id') ? 'has-error' : '' }}">
                         {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => ' required')) !!}
-                        {!! Form::select('group_id', $group, @$user->group_id, array('class' => 'form-control select2', 'placeholder' => 'Nhóm khách hàng')) !!}
+                        {!! Form::select('group_id', $group, @$customer->group_id, array('class' => 'form-control select2', 'placeholder' => 'Nhóm khách hàng')) !!}
                         <span class="help-block">{{ $errors->first('group_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('source_id') ? 'has-error' : '' }}">
                         {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => ' required')) !!}
-                        {!! Form::select('source_id', $source, @$user->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
+                        {!! Form::select('source_id', $source, @$customer->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
                         <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
                         {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
-                        {!! Form::select('branch_id', $branch, @$user->branch_id, array('class' => 'form-control select2', 'placeholder' => 'Chi nhánh')) !!}
+                        {!! Form::select('branch_id', $branch, @$customer->branch_id, array('class' => 'form-control select2', 'placeholder' => 'Chi nhánh')) !!}
                         <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                     </div>
                 </div>
@@ -133,11 +124,11 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                         {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
-                        <div class="fileupload fileupload-{{isset($user) ? 'exists' : 'new' }}"
+                        <div class="fileupload fileupload-{{isset($customer) ? 'exists' : 'new' }}"
                              data-provides="fileupload">
                             <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
-                                @if (isset($user))
-                                    <img src="{{ $user->avatar }}" alt="image"/>
+                                @if (isset($customer))
+                                    <img src="{{ $customer->avatar }}" alt="image"/>
                                 @endif
                             </div>
                             <div>
@@ -153,7 +144,7 @@
             </div>
             <div class="col" style="margin-bottom: 10px;">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('users.index')}}" class="btn btn-danger">Trở lại</a>
+                <a href="{{route('customers.index')}}" class="btn btn-danger">Trở lại</a>
             </div>
 
             {{ Form::close() }}
@@ -190,7 +181,7 @@
                                 phone: function () {
                                     return $("#phone").val();
                                 },
-                                id: {{ isset($user) ? $user->id : 0 }},
+                                id: {{ isset($customer) ? $customer->id : 0 }},
                             },
                         }
                     },
@@ -204,7 +195,7 @@
                                     return $("#email").val();
                                 },
                                 table: 'teacher',
-                                id: {{ isset($user) ? $user->id : 0 }},
+                                id: {{ isset($customer) ? $customer->id : 0 }},
                             },
                         }
                     },
@@ -217,7 +208,7 @@
                     status_id: {
                         required: true
                     },
-                    @if(empty($user))
+                    @if(empty($customer))
                     password: {
                         required: true,
                         minlength: 6

@@ -20,7 +20,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('status', 'StatusController');
     Route::resource('category', 'CategoryController');
     Route::resource('services', 'ServiceController');
-    Route::resource('users', 'UserController');
+    Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::get('profiles/{id}/edit', 'UserController@getEditProfile');
     Route::put('profiles/{id}/edit', 'UserController@postEditProfile');
