@@ -14,7 +14,7 @@
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
                        type="text" id="search">
                 <div class="scrollmenu">
-                    @foreach(@$status as $item)
+                    @foreach(@$statuses as $item)
                         <button class="status">{{ $item->name }}</button>
                     @endforeach
                 </div>
@@ -48,7 +48,6 @@
         });
         $(document).on('click', '.status', function () {
             var status = $(this).html();
-            console.log(status);
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",

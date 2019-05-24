@@ -53,57 +53,18 @@
                     </div>
                     <span class="help-block">{{ $errors->first('birthday', ':message') }}</span>
                 </div>
-                @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
-                            {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                            {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên', 6 => 'Khách hàng'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
-                            <span class="help-block">{{ $errors->first('role', ':message') }}</span>
-                        </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
+                        {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
+                        {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên', 6 => 'Khách hàng'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
+                        <span class="help-block">{{ $errors->first('role', ':message') }}</span>
                     </div>
-                @endif
+                </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
                         {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
                         {!! Form::select('gender',[0 => 'Nữ', 1 => 'Nam'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn giới tính')) !!}
                         <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
-                    </div>
-                </div>
-                @if(\Auth::user()->role == App\Constants\UserConstant::ADMIN)
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('mkt_id') ? 'has-error' : '' }}">
-                        {!! Form::label('mkt_id', 'Nhân viên MKT', array('class' => ' required')) !!}
-                        {!! Form::select('mkt_id', $marketingUsers,@$user->mkt_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên marketing')) !!}
-                        <span class="help-block">{{ $errors->first('mkt_id', ':message') }}</span>
-                    </div>
-                </div>
-                @endif
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
-                        {!! Form::label('telesales_id', 'Nhân viên Telesales', array('class' => ' required')) !!}
-                        {!! Form::select('telesales_id', $telesales,@$user->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên telesale')) !!}
-                        <span class="help-block">{{ $errors->first('telesales_id', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
-                        {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
-                        {!! Form::select('status_id', $status, @$user->status_id, array('class' => 'form-control select2', 'placeholder' => 'Mối quan hệ')) !!}
-                        <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('group_id') ? 'has-error' : '' }}">
-                        {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => ' required')) !!}
-                        {!! Form::select('group_id', $group, @$user->group_id, array('class' => 'form-control select2', 'placeholder' => 'Nhóm khách hàng')) !!}
-                        <span class="help-block">{{ $errors->first('group_id', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('source_id') ? 'has-error' : '' }}">
-                        {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => ' required')) !!}
-                        {!! Form::select('source_id', $source, @$user->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
-                        <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
@@ -113,7 +74,6 @@
                         <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                     </div>
                 </div>
-                @if(\Auth::user()->role == App\Constants\UserConstant::ADMIN)
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('password') ? 'has-error' : '' }}">
                         {!! Form::label('password', 'Mật khẩu', array('class' => ' required')) !!}
@@ -129,7 +89,6 @@
                         <span class="help-block">{{ $errors->first('confirm_password', ':message') }}</span>
                     </div>
                 </div>
-                @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                         {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
