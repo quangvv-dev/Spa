@@ -107,7 +107,8 @@ class StatusController extends Controller
      */
     public function update(Request $request, Status $status)
     {
-        $request->merge(['code' => str_replace(' ', '_', strtolower(@$request->name))]);
+        $text = Functions::vi_to_en(@$request->name);
+        $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
         $status->update($request->all());
         return redirect(route('status.index'))->with('status', 'Sửa nhóm thành công');
     }

@@ -30,8 +30,8 @@
             })
         });
     }).ajaxStart(function () {
-        $('#loading').show();
+        $('.load').show();
     }).ajaxStop(function () {
-        $('#loading').hide();
+        $('.load').hide();
     });
 </script>

@@ -55,7 +55,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $users = User::with('status', 'marketing');
-        $statuses = Status::get();
+        $statuses = Status::where('type', StatusCode::RELATIONSHIP)->get();
         $title = 'Quản lý khách hàng';
         $search = $request->search;
         $searchStatus = $request->status;
@@ -81,10 +81,10 @@ class CustomerController extends Controller
             ->paginate(10);
 
         if ($request->ajax()) {
-            return Response::json(view('customers.ajax', compact('users','statuses', 'title'))->render());
+            return Response::json(view('customers.ajax', compact('users', 'statuses','title'))->render());
         }
 
-        return view('customers.index', compact('users', 'statuses', 'title'));
+        return view('customers.index', compact('users','statuses', 'title'));
     }
 
     /**
