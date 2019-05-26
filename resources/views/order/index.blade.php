@@ -7,29 +7,36 @@
             </div>
 
             @if (isset($doc))
-                {!! Form::model($doc, array('url' => url('category/'.$doc->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::model($doc, array('url' => url('order-detail/'.$doc->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
-                {!! Form::open(array('url' => route('category.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::open(array('url' => route('order-detail.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col row">
-                <div class="col-xs-12 col-md-4">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
-                        {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
-                        {!! Form::text('full_name',null, array('class' => 'form-control', 'required' => true)) !!}
+                        {!! Form::label('user_id', 'Tìm kiếm khách hàng có trên hệ thống', array('class' => ' required')) !!}
+                        {!! Form::select('user_id', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn khách hàng')) !!}
                         <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4">
+                <div class="col-xs-12 col-md-3">
+                    <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
+                        {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
+                        {!! Form::text('full_name',null, array('class' => 'form-control full_name', 'required' => true)) !!}
+                        <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
                         {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                        {!! Form::text('phone',null, array('class' => 'form-control', 'required' => true)) !!}
+                        {!! Form::text('phone',null, array('class' => 'form-control phone', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
-                        {!! Form::text('address',null, array('class' => 'form-control', 'required' => true)) !!}
+                        {!! Form::text('address',null, array('class' => 'form-control address', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
@@ -60,13 +67,13 @@
                                 {!! Form::text('price',null, array('class' => 'form-control price', 'required' => true)) !!}
                             </td>
                             <td class="text-center">
-                                {!! Form::text('VAT',0, array('class' => 'form-control VAT')) !!}
+                                {!! Form::text('vat',0, array('class' => 'form-control VAT')) !!}
                             </td>
                             <td class="text-center">
-                                {!! Form::text('CK1',0, array('class' => 'form-control CK1')) !!}
+                                {!! Form::text('percent_discount',0, array('class' => 'form-control CK1')) !!}
                             </td>
                             <td class="text-center">
-                                {!! Form::text('CK2',0, array('class' => 'form-control CK2')) !!}
+                                {!! Form::text('number_discount',0, array('class' => 'form-control CK2')) !!}
                             </td>
                             <td class="text-center">
                                 {!! Form::text('total_price',null, array('class' => 'form-control total','readonly'=>true)) !!}
@@ -123,6 +130,20 @@
 
                 })
 
+            });
+        })
+
+        $('.user').change(function () {
+            var id = $(this).val();
+            $.ajax({
+                url: "{{ Url('ajax/info-customer') }}",
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+                console.log(data);
+                $('.full_name').val(data['full_name']);
+                $('.phone').val(data['phone']);
+                $('.address').val(data['address']);
             });
         })
     </script>
