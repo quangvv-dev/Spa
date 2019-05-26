@@ -51,37 +51,37 @@
                         </address>
                     </div>
                 </div>
-                <div class="text-center" style="padding: 20px;"><strong style="font-size: 20px">ĐƠN HÀNG BÁN - DH002</strong></div>
+                <div class="text-center" style="padding: 20px;"><strong style="font-size: 20px">ĐƠN HÀNG BÁN</strong></div>
                 <div class="row">
                     <table class="table table-bordered">
                         <tbody>
                         <tr class="trfirst">
                             <td style="width:50%">
-                                <b>Tên khách hàng:</b>&nbsp; Chị Chinh
+                                <b>Tên khách hàng:</b>&nbsp; {{ $orderDetail->user->full_name }}
                             </td>
                             <td style="width:50%">
-                                <b>Người thực hiện:</b>&nbsp;Phạm Kim Anh
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width:50%">
-                                <b>Địa chỉ:</b>&nbsp;
-                            </td>
-                            <td style="width:50%">
-                                <b>Phòng ban:</b>&nbsp;Ban giám đốc
+                                <b>Người thực hiện:</b>&nbsp;{{ $orderDetail->user->marketing->full_name }}
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;0932148915 - <span>Email</span>:
+                                <b>Địa chỉ:</b>&nbsp;{{ $orderDetail->user->address }}
                             </td>
                             <td style="width:50%">
-                                <b>Ngày đặt hàng:</b>&nbsp;24/05/2019
+                                <b>Phòng ban:</b>&nbsp;{{ $orderDetail->user->phone }}
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Người nhận:</b>&nbsp;Tuyết Chinh - Điện thoại: 0932148915
+                                <b>Điện thoại:</b>&nbsp;{{ $orderDetail->user->phone }} - <span>Email</span>: {{ $orderDetail->user->email }}
+                            </td>
+                            <td style="width:50%">
+                                <b>Ngày đặt hàng:</b>&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%">
+                                <b>Người nhận:</b>&nbsp;{{ $orderDetail->user->full_name }} - Điện thoại: { $orderDetail->user->phone }}
                             </td>
                             <td style="width:50%">
                                 <b>Phương thức thanh toán:</b>&nbsp;
@@ -105,47 +105,47 @@
                         </tr>
                         <tr><input type="hidden" class="product_id" value="16">
                             <td class="tc">1</td>
-                            <td class="tc">012</td>
-                            <td class="tl position">Phun Mày Vi Chạm</td>
                             <td class="tc"></td>
-                            <td class="tc">1.00</td>
-                            <td class="tc">800,000</td>
-                            <td class="tc">0</td>
-                            <td class="tc">0</td>
-                            <td class="tc">0</td>
-                            <td class="tr">800,000</td>
+                            <td class="tl position">{{ $orderDetail->service->name }}</td>
+                            <td class="tc"></td>
+                            <td class="tc">{{ $orderDetail->quantity }}</td>
+                            <td class="tc">{{ number_format($orderDetail->price) }}</td>
+                            <td class="tc">{{ $orderDetail->vat }}</td>
+                            <td class="tc">{{ $orderDetail->percent_discount }}</td>
+                            <td class="tc">{{ $orderDetail->number_discount }}</td>
+                            <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Tổng</td>
-                            <td class="tr bold">800,000</td>
+                            <td class="tr bold">{{ number_format($orderDetail->total_price) }}</td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Chiết khấu trước thuế %</td>
-                            <td class="tr">0</td>
+                            <td class="tr"></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Thuế VAT %</td>
-                            <td class="tr">0</td>
+                            <td class="tr">{{ $orderDetail->vat }}</td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Phí vận chuyển %</td>
-                            <td class="tr">0</td>
+                            <td class="tr"></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Phí lắp đặt %</td>
-                            <td class="tr">0</td>
+                            <td class="tr"></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Tổng cộng</td>
-                            <td class="tr bold"> <strong>800,000</strong></td>
+                            <td class="tr bold"> <strong>{{ number_format($orderDetail->total_price) }}</strong></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Đã thanh toán</td>
-                            <td class="tr bold"> <strong>800,000</strong></td>
+                            <td class="tr bold"> <strong></strong></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Còn lại</td>
-                            <td class="tr bold"> <strong>0</strong></td>
+                            <td class="tr bold"> <strong></strong></td>
                         </tr>
                         </tbody>
                     </table>
