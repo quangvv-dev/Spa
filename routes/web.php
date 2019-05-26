@@ -31,6 +31,16 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('order/{id}', 'OrderController@index');
     Route::group(['prefix' => 'ajax',], function () {
         Route::get('info-service', 'OrderController@getInfoService');
+        Route::get('info-customer', 'OrderController@getInfoCustomer');
 
+    });
+    Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
+    Route::get('list-order-detail', 'OrderDetailController@index')->name('order-detail.index');
+    Route::get('order-detail/{id}/show', 'OrderDetailController@show')->name('order-detail.show');
+
+    Route::get('print', function (){
+//       return view('order.order-pdf');
+        $pdf = PDF::loadView('order.order-pdf');
+        return $pdf->download('order.pdf');
     });
 });
