@@ -88,4 +88,11 @@ class OrderDetailController extends Controller
     {
         //
     }
+
+    public function orderDetailPdf($id)
+    {
+        $orderDetail = OrderDetail::findOrFail($id);
+        $pdf = \PDF::loadView('order.order-pdf', compact('orderDetail'));
+        return $pdf->download('order.pdf');
+    }
 }
