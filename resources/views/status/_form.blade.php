@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
-                        {!! Form::label('color','Loại', array('class' => 'required')) !!}
+                        {!! Form::label('color','Màu nền', array('class' => 'required')) !!}
                         {{--                        {!! Form::color('color',$types_pluck, null, array('class' => 'form-control','data-placeholder'=>'Danh mục cha')) !!}--}}
                         <input type="color" name="color" value="{{isset($doc) && $doc->color ?$doc->color:''}}">
                         <span class="help-block">{{ $errors->first('type', ':message') }}</span>
