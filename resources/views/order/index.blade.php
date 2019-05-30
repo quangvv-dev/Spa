@@ -55,31 +55,31 @@
                             <th class="text-white text-center">Thành tiền</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <th width="250" scope="row">
-                                {!! Form::select('service_id',$service,isset($doc) ?$doc->servicce_id:'' ,array('class' => 'select2 form-control service', 'required' => true)) !!}
-                            </th>
-                            <td class="text-center">
-                                {!! Form::text('quantity',1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('price',null, array('class' => 'form-control price', 'required' => true)) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('vat',0, array('class' => 'form-control VAT')) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('percent_discount',0, array('class' => 'form-control CK1')) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('number_discount',0, array('class' => 'form-control CK2')) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('total_price',null, array('class' => 'form-control total','readonly'=>true)) !!}
-                            </td>
-                            <td class="text-center"></td>
-                        </tr>
+                        <tbody class="order">
+                        {{--<tr>--}}
+                            {{--<td width="250" scope="row">--}}
+                                {{--{!! Form::select('service_id[]', $service, null ,array('class' => 'select2 form-control service', 'required' => true)) !!}--}}
+                            {{--</td>--}}
+                            {{--<td class="text-center">--}}
+                                {{--{!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}--}}
+                            {{--</td>--}}
+                            {{--<td class="text-center">--}}
+                                {{--{!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}--}}
+                            {{--</td>--}}
+                            {{--<td class="text-center">--}}
+                                {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
+                            {{--</td>--}}
+                            {{--<td class="text-center">--}}
+                                {{--{!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}--}}
+                            {{--</td>--}}
+                            {{--<td class="text-center">--}}
+                                {{--{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}--}}
+                            {{--</td>--}}
+                            {{--<td class="text-center">--}}
+                                {{--{!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}--}}
+                            {{--</td>--}}
+                            {{--<td class="text-center"></td>--}}
+                        {{--</tr>--}}
                         </tbody>
                     </table>
                     <div class="col bot">
@@ -99,10 +99,39 @@
 @endsection
 @section('_script')
     <script>
+        $(document).on('click', '#add_row', function() {
+            $('.order').append(`
+                <tr>
+                    <td width="250" scope="row">
+                        {!! Form::select('service_id[]', $service, null, array('class' => 'select2 form-control service', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('price', null, array('class' => 'form-control price', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                    </td>
+                    <td class="text-center"></td>
+                </tr>
+            `)
+        });
+
         // document.getElementById('myForm').onsubmit = function () {
         //     var valInDecimals = document.getElementsByClassName('VAT').value * 100;
         // }
-        $('.service').change(function () {
+        $(document).on('change', '.service', function () {
             var id = $(this).val();
             $.ajax({
                 url: "{{ Url('ajax/info-service') }}",
@@ -111,19 +140,20 @@
             }).done(function (data) {
                 $('.price').val(data['price_sell']);
                 $('.total').val(data['price_sell']);
-                $('.price,.VAT,.CK1,CK2,.quantity').change(function () {
+                $('body').on('change', `.price,.VAT,.CK1,.CK2,.quantity`, function () {
                     var price = $('.price').val();
                     var quantity = $('.quantity').val();
                     var VAT = $('.VAT').val();
                     var CK1 = $('.CK1').val();
                     var CK2 = $('.CK2').val();
-                    if (CK1>0) {
-                        var CK2 = $('.CK2').val(0)
-                    }
-                    if (CK2>0) {
-                        var CK1 = $('.CK1').val(0)
-                    }
-                    console.log(price, quantity, VAT, CK1, CK2);
+                    // if (CK1 > 0) {
+                    //     CK2 = $('.CK2').val(0)
+                    // }
+                    // if (CK2 > 0) {
+                    //     CK1 = $('.CK1').val(0)
+                    // }
+                    console.log(CK1, CK2);
+                    // console.log(price, quantity, VAT, CK1, CK2);
                     var total_service = price * quantity + price * quantity * (VAT / 100) - price * quantity * (CK1 / 100) - CK2;
                     console.log(total_service);
                     $('.total').val(total_service);
