@@ -54,13 +54,44 @@ class OrderController extends Controller
 
         $order = new Order;
         $order->member_id = $request->user_id;
-        $order->all_total = $request->total_price;
+        $order->all_total = array_sum($request->total_price);
         $order->save();
 
-        $input = $request->except('full_name', 'phone', 'service_id');
-        $input['order_id'] = $order->id;
-        $input['booking_id'] = $request->service_id;
-        $dataOrderDetail = OrderDetail::create($input);
+//        dd(1);
+        $orderDetail = new OrderDetail;
+//        $orderDetail->order_id         = $order->id;
+//        $orderDetail->user_id          = $request->user_id;
+//        $orderDetail->booking_id       = $request->service_id;
+//        $orderDetail->quantity         = $request->quantity;
+//        $orderDetail->price            = $request->price;
+//        $orderDetail->vat              = $request->vat;
+//        $orderDetail->address          = $request->address;
+//        $orderDetail->percent_discount = $request->percent_discount;
+//        $orderDetail->number_discount  = $request->number_discount;
+//        $orderDetail->total_price      = $request->total_price;
+
+        foreach ($request->service_id as $key => $value) {
+            $data = [
+                'order_id' => $order->id,
+                'user_id'  => $request->user_id,
+                'booking_id' => $request->service_id[$key],
+                'quantity' => $request->quantity[$key],
+                'price' => $request->price[$key],
+                'vat' => $request->vat[$key],
+                'address' => $request->address,
+                'percent_discount' => $request->percent_discount[$key],
+                'number_discount' => $request->number_discount[$key],
+                'total_price' => $request->total_price[$key],
+            ];
+            OrderDetail::create($data);
+        }
+////        $input = $request->except('full_name', 'phone', 'service_id');
+//
+//        $input['order_id'] = $order->id;
+////        $serviceId =
+//        $input['booking_id'] = $request->service_id;
+//
+//        $dataOrderDetail = OrderDetail::create($input);
 
         return redirect('/')->with('status', 'Tạo đơn hàng thành công');
     }
