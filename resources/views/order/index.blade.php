@@ -109,7 +109,7 @@
                         {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
                     </td>
                     <td class="text-center">
-                        {!! Form::text('price', null, array('class' => 'form-control price', 'required' => true)) !!}
+                        {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
                     </td>
                     <td class="text-center">
                         {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
@@ -138,25 +138,26 @@
             }).done(function (data) {
                 $(target).find('.price').val(data['price_sell']);
                 $(target).find('.total').val(data['price_sell']);
-
                 $('body').on('keyup', '.price, .VAT, .CK1, .CK2, .quantity', function (e) {
                     let target = $(e.target).parent().parent();
                     var quantity = $(target).find('.quantity').val();
-                    var price = $(target).find('.price').val();
                     var VAT = $(target).find('.VAT').val();
+                    var price = $(target).find('.price').val();
                     var CK1 = $(target).find('.CK1').val();
                     var CK2 = $(target).find('.CK2').val();
 
                     if (CK1 > 0 && CK2 == 0) {
-                        $(target).find('.CK2').prop('disabled', true);
-                        $(target).find('.CK1').prop('disabled', false);
+                        $(target).find('.CK2').prop('readonly', true);
+                        $(target).find('.CK1').prop('readonly', false);
                     } else if (CK2 > 0 && CK1 == 0) {
-                        $(target).find('.CK2').prop('disabled', false);
-                        $(target).find('.CK1').prop('disabled', true);
+                        $(target).find('.CK2').prop('readonly', false);
+                        $(target).find('.CK1').prop('readonly', true);
                     } else {
-                        $(target).find('.CK2').prop('disabled', false);
-                        $(target).find('.CK1').prop('disabled', false);
+                        $(target).find('.CK2').prop('readonly', false);
+                        $(target).find('.CK1').prop('readonly', false);
                     }
+
+                    console.log(price);
 
                     var total_service = price * quantity + price * quantity * (VAT / 100) - price * quantity * (CK1 / 100) - CK2;
                     $(target).find('.total').val(total_service);

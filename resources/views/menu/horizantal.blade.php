@@ -57,7 +57,7 @@
                                 <a href="{!! route('services.index') !!}">Danh sách dịch vụ</a>
                             </li>
                             <li>
-                                <a href="{!! route('order-detail.index') !!}">Danh sách đơn hàng</a>
+                                <a href="{!! route('order.list') !!}">Danh sách đơn hàng</a>
                             </li>
                         </ul>
                     </div>
