@@ -15,10 +15,11 @@ class OrderDetailController extends Controller
      */
     public function index()
     {
-        $title = 'Danh sách đơn hàng chi tiết';
-        $orderDetails = OrderDetail::with('user', 'service')->latest()->paginate(10);
 
-        return view('order-details.index', compact('orderDetails', 'title'));
+//        $title = 'Danh sách đơn hàng chi tiết';
+//        $orderDetails = OrderDetail::with('user', 'service')->latest()->paginate(10);
+//
+//        return view('order-details.index', compact('orderDetails', 'title'));
     }
 
     /**
@@ -87,12 +88,5 @@ class OrderDetailController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function orderDetailPdf($id)
-    {
-        $orderDetail = OrderDetail::findOrFail($id);
-        $pdf = \PDF::loadView('order.order-pdf', compact('orderDetail'));
-        return $pdf->download('order.pdf');
     }
 }

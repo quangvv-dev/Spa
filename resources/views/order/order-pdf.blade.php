@@ -57,31 +57,31 @@
                         <tbody>
                         <tr class="trfirst">
                             <td style="width:50%">
-                                <b>Tên khách hàng:</b>&nbsp; {{ $orderDetail->user->full_name }}
+                                <b>Tên khách hàng:</b>&nbsp; {{ $order->user->full_name }}
                             </td>
                             <td style="width:50%">
-                                <b>Người thực hiện:</b>&nbsp;{{ $orderDetail->user->marketing->full_name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width:50%">
-                                <b>Địa chỉ:</b>&nbsp;{{ $orderDetail->user->address }}
-                            </td>
-                            <td style="width:50%">
-                                <b>Phòng ban:</b>&nbsp;{{ $orderDetail->user->phone }}
+                                <b>Người thực hiện:</b>&nbsp;{{ $order->user->marketing->full_name }}
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;{{ $orderDetail->user->phone }} - <span>Email</span>: {{ $orderDetail->user->email }}
+                                <b>Địa chỉ:</b>&nbsp;{{ $order->user->address }}
                             </td>
                             <td style="width:50%">
-                                <b>Ngày đặt hàng:</b>&nbsp;
+                                <b>Phòng ban:</b>&nbsp;{{ $order->user->phone }}
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Người nhận:</b>&nbsp;{{ $orderDetail->user->full_name }} - Điện thoại: { $orderDetail->user->phone }}
+                                <b>Điện thoại:</b>&nbsp;{{ $order->user->phone }} - <span>Email</span>: {{ $order->user->email }}
+                            </td>
+                            <td style="width:50%">
+                                <b>Ngày đặt hàng:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%">
+                                <b>Người nhận:</b>&nbsp;{{ $order->user->full_name }} - Điện thoại: {{ $order->user->phone }}
                             </td>
                             <td style="width:50%">
                                 <b>Phương thức thanh toán:</b>&nbsp;
@@ -103,21 +103,23 @@
                             <td class="padding5 text-center">CK (đ)</td>
                             <td class="padding5 text-center">Thành tiền</td>
                         </tr>
+                        @foreach($order->orderDetails as $key => $orderDetail)
                         <tr><input type="hidden" class="product_id" value="16">
-                            <td class="tc">1</td>
+                            <td class="tc">{{ $key + 1 }}</td>
                             <td class="tc"></td>
                             <td class="tl position">{{ $orderDetail->service->name }}</td>
                             <td class="tc"></td>
                             <td class="tc">{{ $orderDetail->quantity }}</td>
-                            <td class="tc">{{ number_format($orderDetail->price) }}</td>
+                            <td class="tc">{{ number_format($orderDetail->service->price_sell) }}</td>
                             <td class="tc">{{ $orderDetail->vat }}</td>
                             <td class="tc">{{ $orderDetail->percent_discount }}</td>
-                            <td class="tc">{{ $orderDetail->number_discount }}</td>
+                            <td class="tc">{{ number_format($orderDetail->number_discount) }}</td>
                             <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
                         </tr>
+                        @endforeach
                         <tr>
                             <td class="font-bold" colspan="9">Tổng</td>
-                            <td class="tr bold">{{ number_format($orderDetail->total_price) }}</td>
+                            <td class="tr bold">{{ number_format($order->all_total) }}</td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Chiết khấu trước thuế %</td>
@@ -125,7 +127,7 @@
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Thuế VAT %</td>
-                            <td class="tr">{{ $orderDetail->vat }}</td>
+                            <td class="tr"></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Phí vận chuyển %</td>
@@ -137,7 +139,7 @@
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Tổng cộng</td>
-                            <td class="tr bold"> <strong>{{ number_format($orderDetail->total_price) }}</strong></td>
+                            <td class="tr bold"> <strong>{{ number_format($order->all_total) }}</strong></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Đã thanh toán</td>

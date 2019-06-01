@@ -54,15 +54,49 @@ class OrderController extends Controller
 
         $order = new Order;
         $order->member_id = $request->user_id;
-        $order->all_total = $request->total_price;
+        $order->all_total = array_sum($request->total_price);
         $order->save();
 
-        $input = $request->except('full_name', 'phone', 'service_id');
-        $input['order_id'] = $order->id;
-        $input['booking_id'] = $request->service_id;
-        $dataOrderDetail = OrderDetail::create($input);
+        foreach ($request->service_id as $key => $value) {
+            $data = [
+                'order_id' => $order->id,
+                'user_id'  => $request->user_id,
+                'booking_id' => $request->service_id[$key],
+                'quantity' => $request->quantity[$key],
+                'price' => $request->price[$key],
+                'vat' => $request->vat[$key],
+                'address' => $request->address,
+                'percent_discount' => $request->percent_discount ? $request->percent_discount[$key]: 0,
+                'number_discount' => $request->number_discount ? $request->number_discount[$key]: 0,
+                'total_price' => $request->total_price[$key],
+            ];
 
-        return redirect('/')->with('status', 'Tạo đơn hàng thành công');
+            OrderDetail::create($data);
+        }
+
+        return redirect('/list-orders')->with('status', 'Tạo đơn hàng thành công');
+    }
+
+    public function listOrder()
+    {
+        $title = 'Danh sách đơn hàng chi tiết';
+        $orders = Order::with('user')->paginate(10);
+
+        return view('order-details.index', compact('orders', 'title'));
+    }
+
+    public function show($id)
+    {
+        $order = Order::with('user', 'orderDetails')->findOrFail($id);
+
+        return view('order.order', compact('order'));
+    }
+
+    public function orderDetailPdf($id)
+    {
+        $order = Order::with('user', 'orderDetails')->findOrFail($id);
+        $pdf = \PDF::loadView('order.order-pdf', compact('order'));
+        return $pdf->download('order.pdf');
     }
 
 }

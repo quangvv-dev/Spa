@@ -35,7 +35,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
-    Route::get('list-order-detail', 'OrderDetailController@index')->name('order-detail.index');
-    Route::get('order-detail/{id}/show', 'OrderDetailController@show')->name('order-detail.show');
-    Route::get('order-detail-pdf/{id}', 'OrderDetailController@orderDetailPdf');
+    Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
+//    Route::get('list-order-detail', 'OrderDetailController@index')->name('order-detail.index');
+    Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
+    Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
 });

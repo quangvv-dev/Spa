@@ -57,7 +57,7 @@
         <div class="row">
             <div class="col-lg-10 col-lg-offset-1" style="margin-top:20px; text-align: right">
                 <div class="btn-group mb-4">
-                    <a href="/order-detail-pdf/{{$orderDetail->id}}" class="btn btn-success">Lưu File PDF</a>
+                    <a href="/order-pdf/{{$order->id}}" class="btn btn-success">Lưu File PDF</a>
                 </div>
             </div>
         </div>
@@ -81,15 +81,15 @@
                             <tbody>
                             <tr class="trfirst">
                                 <td style="width:50%">
-                                    <b>Tên khách hàng:</b>&nbsp; <a class="blue" href="#/crm/view_account/877">{{ $orderDetail->user->full_name }}</a>
+                                    <b>Tên khách hàng:</b>&nbsp; <a class="blue" href="#/crm/view_account/877">{{ $order->user->full_name }}</a>
                                 </td>
                                 <td style="width:50%">
-                                    <b>Người thực hiện:</b>&nbsp;{{ $orderDetail->user->marketing->full_name }}
+                                    <b>Người thực hiện:</b>&nbsp;{{ $order->user->marketing->full_name }}
                                 </td>
                             </tr>
                             <tr>
                                 <td style="width:50%">
-                                    <b>Địa chỉ:</b>&nbsp;{{ $orderDetail->user->address }}
+                                    <b>Địa chỉ:</b>&nbsp;{{ $order->user->address }}
                                 </td>
                                 <td style="width:50%">
                                     <b>Phòng ban:</b>&nbsp;
@@ -97,17 +97,17 @@
                             </tr>
                             <tr>
                                 <td style="width:50%">
-                                    <b>Điện thoại:</b>&nbsp;{{ $orderDetail->user->phone }} - <span>Email</span>: {{ $orderDetail->user->email }}
+                                    <b>Điện thoại:</b>&nbsp;{{ $order->user->phone }} - <span>Email</span>: {{ $order->user->email }}
                                 </td>
                                 <td style="width:50%">
-                                    <b>Ngày đặt hàng:</b>&nbsp;
+                                    <b>Ngày đặt hàng:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}
                                 </td>
                             </tr>
                             <tr>
                                 <td style="width:50%">
-                                    <b>Người nhận:</b>&nbsp;{{ $orderDetail->user->full_name }} - Điện thoại:
+                                    <b>Người nhận:</b>&nbsp;{{ $order->user->full_name }} - Điện thoại:
                                     <a class="__clickToCall blue" data-phone="0932148915" data-type="crm"
-                                       data-call="order_222" data-contact-id="896">{{ $orderDetail->user->phone }}</a>
+                                       data-call="order_222" data-contact-id="896">{{ $order->user->phone }}</a>
                                 </td>
                                 <td style="width:50%">
                                     <b>Phương thức thanh toán:</b>&nbsp;
@@ -129,22 +129,24 @@
                                 <td class="padding5">CK (đ)</td>
                                 <td class="padding5">Thành tiền</td>
                             </tr>
+                            @foreach($order->orderDetails as $key => $orderDetail)
                             <tr><input type="hidden" class="product_id" value="16">
-                                <td class="tc">1</td>
+                                <td class="tc">{{ $key + 1 }}</td>
                                 <td class="tc"></td>
                                 <td class="tl position"><a class="blue" href="#/crm/product/16/detail">{{ $orderDetail->service->name }}</a>
                                 </td>
                                 <td class="tc"></td>
                                 <td class="tc">{{ $orderDetail->quantity }}</td>
-                                <td class="tc">{{ number_format($orderDetail->price) }}</td>
+                                <td class="tc">{{ number_format($orderDetail->service->price_sell) }}</td>
                                 <td class="tc">{{ $orderDetail->vat }}</td>
                                 <td class="tc">{{ $orderDetail->percent_discount }}</td>
-                                <td class="tc">{{ $orderDetail->number_discount }}</td>
+                                <td class="tc">{{ number_format($orderDetail->number_discount) }}</td>
                                 <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
                             </tr>
+                            @endforeach
                             <tr>
                                 <td class="font-bold" colspan="9">Tổng</td>
-                                <td class="tr bold">{{ number_format($orderDetail->total_price) }}</td>
+                                <td class="tr bold">{{ number_format($order->all_total) }}</td>
                             </tr>
                             <tr>
                                 <td class="font-bold" colspan="9">Chiết khấu trước thuế %</td>
@@ -152,7 +154,7 @@
                             </tr>
                             <tr>
                                 <td class="font-bold" colspan="9">Thuế VAT %</td>
-                                <td class="tr">{{ $orderDetail->vat }}</td>
+                                <td class="tr"></td>
                             </tr>
                             <tr>
                                 <td class="font-bold" colspan="9">Phí vận chuyển %</td>
@@ -164,7 +166,7 @@
                             </tr>
                             <tr>
                                 <td class="font-bold" colspan="9">Tổng cộng</td>
-                                <td class="tr bold"> {{ number_format($orderDetail->total_price) }}</td>
+                                <td class="tr bold"> {{ number_format($order->all_total) }}</td>
                             </tr>
                             </tbody>
                         </table>
