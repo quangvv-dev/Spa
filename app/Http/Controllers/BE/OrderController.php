@@ -80,7 +80,7 @@ class OrderController extends Controller
     public function listOrder()
     {
         $title = 'Danh sách đơn hàng chi tiết';
-        $orders = Order::with('user')->paginate(10);
+        $orders = Order::with('user', 'orderDetails')->paginate(10);
 
         return view('order-details.index', compact('orders', 'title'));
     }
