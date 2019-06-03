@@ -13,17 +13,17 @@
             <div class="card-header">
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
                        type="text" id="search">
-                <div class="scrollmenu">
-                    @foreach(@$statuses as $k => $item)
-                        <button class="status" style="background: {{$item->color ?:''}}">{{ $item->name }}</button>
-                    @endforeach
-                </div>
-                <div>
+                <div style="margin-left: 10px">
                     <button class="btn btn-default" style="height: 40px;">
                         <a href="{{ route('status.create') }}">
                             <i class="fa fa-plus font16"></i>
                         </a>
                     </button>
+                </div>
+                <div class="scrollmenu col-md-6">
+                    @foreach(@$statuses as $k => $item)
+                        <button class="status" style="background: {{$item->color ?:''}}">{{ $item->name }}</button>
+                    @endforeach
                 </div>
             </div>
             <div id="registration-form">

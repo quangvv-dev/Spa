@@ -44,6 +44,7 @@ class CustomerController extends Controller
             'marketingUsers' => $marketingUsers,
         ]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -81,10 +82,10 @@ class CustomerController extends Controller
             ->paginate(10);
 
         if ($request->ajax()) {
-            return Response::json(view('customers.ajax', compact('users', 'statuses','title'))->render());
+            return Response::json(view('customers.ajax', compact('users', 'statuses', 'title'))->render());
         }
 
-        return view('customers.index', compact('users','statuses', 'title'));
+        return view('customers.index', compact('users', 'statuses', 'title'));
     }
 
     /**
@@ -101,7 +102,8 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -113,6 +115,7 @@ class CustomerController extends Controller
         $input['birthday'] = isset($date) && $date ? $date : '';
         $input['password'] = bcrypt($request->password);
         $input['role'] = UserConstant::CUSTOMER;
+        $input['telesales_id'] = $request->telesales_id;
 
         if ($request->image) {
             $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
@@ -131,7 +134,8 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -142,7 +146,8 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(User $customer)
@@ -155,8 +160,9 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $customer)
@@ -165,11 +171,12 @@ class CustomerController extends Controller
         @$date = Functions::yearMonthDay($request->birthday);
         $input['birthday'] = isset($date) && $date ? $date : '';
         $input['password'] = bcrypt($request->password);
+        $input['telesales_id'] = $request->telesales_id;
+//        dd($input['telesales_id']);
 
         if ($request->image) {
             $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
         }
-
         $customer->update($input);
 
         return redirect(route('customers.index'))->with('status', 'Cập nhật khách hàng thành công');
@@ -178,7 +185,8 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, User $customer)

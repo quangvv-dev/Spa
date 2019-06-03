@@ -6,11 +6,11 @@
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">Số điện thoại</th>
             <th class="text-white text-center">Ngày sinh</th>
-            <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Giới tính</th>
-            <th class="text-white text-center">Nhân viên MKT</th>
+            <th class="text-white text-center">Người phụ trách(MKT)</th>
             <th class="text-white text-center">Trạng thái</th>
-            <th class="text-white text-center">Trạng thái đăng nhập</th>
+            <th class="text-white text-center">Nhân viên telesale</th>
+            <th class="text-white text-center">Nguồn KH</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -22,11 +22,12 @@
                     <td class="text-center">{{ $user->full_name }}</td>
                     <td class="text-center">{{ $user->phone }}</td>
                     <td class="text-center">{{ $user->birthday }}</td>
-                    <td class="text-center">{{ $user->role_text }}</td>
+{{--                    <td class="text-center">{{ $user->role_text }}</td>--}}
                     <td class="text-center">{{ $user->gender_text  }}</td>
                     <td class="text-center">{{ @$user->marketing ? @$user->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$user->status->name }}</td>
-                    <td class="text-center">{{ $user->active_text}}</td>
+                    <td class="text-center">{{ @$user->telesale->full_name}}</td>
+                    <td class="text-center">{{ @$user->source->name}}</td>
                     <td class="text-center">
                         <a title="sửa tài khoản" class="btn" href="{{ route('customers.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
                             <a title="Tạo đơn hàng" class="btn" href="{{ url('order/'.$user->id) }}"><i class="fas fa-file-invoice-dollar"></i></a>

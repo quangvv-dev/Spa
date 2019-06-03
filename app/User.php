@@ -32,6 +32,7 @@ class User extends Authenticatable
         'password',
         'group_id',
         'source_id',
+        'telesales_id',
         'branch_id',
         'address',
     ];
@@ -108,6 +109,15 @@ class User extends Authenticatable
             ->groupBy('mkt_id');
     }
 
+    public function telesale()
+    {
+        return $this->belongsTo(User::class, 'telesales_id', 'id');
+    }
+
+    public function source_customer()//nhóm KH
+    {
+        return $this->belongsTo(Status::class, 'source_id', 'id');
+    }
 //    public function getDateAttribute()
 //    {
 //        return \Carbon\Carbon::parse($this->birthday)->format('d-m-y');
