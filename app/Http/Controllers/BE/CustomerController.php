@@ -60,6 +60,8 @@ class CustomerController extends Controller
         $title = 'Danh sách khách hàng';
         $search = $request->search;
         $searchStatus = $request->status;
+        $searchGroup = $request->group;
+        $searchTelesales = $request->telesales;
 
         if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
             $users = $users->where('role', UserConstant::CUSTOMER)->where('mkt_id', Auth::user()->id);
@@ -76,6 +78,14 @@ class CustomerController extends Controller
             $users->whereHas('status', function ($query) use ($searchStatus) {
                 $query->where('status.name', $searchStatus);
             });
+        }
+
+        if ($searchGroup) {
+            $users->where('group_id', $searchGroup);
+        }
+
+        if ($searchTelesales) {
+            $users->where('telesales_id', $searchTelesales);
         }
 
         $users = $users->where('role', UserConstant::CUSTOMER)
