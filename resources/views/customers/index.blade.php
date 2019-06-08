@@ -27,7 +27,7 @@
                         </a>
                     </button>
                 </div>
-                <div class="scrollmenu col-md-6">
+                <div class="scrollmenu col-md-4">
                     @foreach(@$statuses as $k => $item)
                         <button class="status" style="background: {{$item->color ?:''}}">{{ $item->name }}</button>
                     @endforeach
