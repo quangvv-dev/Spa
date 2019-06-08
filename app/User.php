@@ -37,6 +37,9 @@ class User extends Authenticatable
         'telesales_id',
         'branch_id',
         'address',
+        'account_code',
+        'description',
+        'facebook',
     ];
 
     /**

@@ -60,7 +60,7 @@
                                 <b>Tên khách hàng:</b>&nbsp; {{ $order->user->full_name }}
                             </td>
                             <td style="width:50%">
-                                <b>Người thực hiện:</b>&nbsp;{{ $order->user->marketing->full_name }}
+                                <b>Người thực hiện:</b>&nbsp;{{ @$order->user->marketing->full_name }}
                             </td>
                         </tr>
                         <tr>

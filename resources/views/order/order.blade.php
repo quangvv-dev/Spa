@@ -84,7 +84,7 @@
                                     <b>Tên khách hàng:</b>&nbsp; <a class="blue" href="#/crm/view_account/877">{{ $order->user->full_name }}</a>
                                 </td>
                                 <td style="width:50%">
-                                    <b>Người thực hiện:</b>&nbsp;{{ $order->user->marketing->full_name }}
+                                    <b>Người thực hiện:</b>&nbsp;{{ @$order->user->marketing->full_name }}
                                 </td>
                             </tr>
                             <tr>
