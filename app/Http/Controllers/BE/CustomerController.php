@@ -55,9 +55,9 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with('status', 'marketing');
+        $users = User::with('status', 'marketing', 'category');
         $statuses = Status::where('type', StatusCode::RELATIONSHIP)->get();
-        $title = 'Quản lý khách hàng';
+        $title = 'Danh sách khách hàng';
         $search = $request->search;
         $searchStatus = $request->status;
 

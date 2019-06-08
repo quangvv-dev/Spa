@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Constants\UserConstant;
+use App\Models\Category;
+use App\Models\Order;
 use App\Models\Status;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -66,6 +68,16 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'mkt_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'group_id', 'id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'member_id', 'id');
+    }
+
     public function getGenderTextAttribute()
     {
         return $this->gender == UserConstant::MALE ? 'Nam' : 'Nữ';
@@ -118,13 +130,4 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Status::class, 'source_id', 'id');
     }
-//    public function getDateAttribute()
-//    {
-//        return \Carbon\Carbon::parse($this->birthday)->format('d-m-y');
-//    }
-//
-//    public function setDateAttribute()
-//    {
-//        return \Carbon\Carbon::parse($this->birthday)->format('Y-m-d');
-//    }
 }

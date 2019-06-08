@@ -35,10 +35,7 @@
                                 <a href="#">Automation </a>
                             </li>
                             <li>
-                                <a href="#">Chiến dịch</a>
-                            </li>
-                            <li>
-                                <a href="#">From </a>
+                                <a href="#">Optin Form</a>
                             </li>
                             <li>
                                 <a href="#">Landing Page</a>
@@ -59,15 +56,12 @@
                             <li>
                                 <a href="{!! route('order.list') !!}">Danh sách đơn hàng</a>
                             </li>
+                            <li>
+                                <a href="{!! route('order.list') !!}">Kho</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
-                {{--<li class="nav-item">--}}
-                    {{--<a href="{!! route('status.index') !!}" class="nav-link {{ Request::is('status*') ? 'active' : '' }}">--}}
-                        {{--<i class="fa fa-users"></i>--}}
-                        {{--<span>Quản Lý Trạng Thái</span>--}}
-                    {{--</a>--}}
-                {{--</li>--}}
             <li class="nav-item with-sub" {{ Request::is('statistics*') ? 'active' : '' }}>
                 <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
                 <div class="sub-item">
@@ -78,19 +72,34 @@
                         <li>
                             <a href="{!! url('statistics')!!}">Nhân viên</a>
                         </li>
-                        <li class="sub-with-sub">
-                            <a href="#">KPI </a>
-                            <ul>
-                                <li>
-                                    <a href="#">KPI chi nhánh</a>
-                                </li>
-                                <li>
-                                    <a href="#html">KPI nhân viên</a>
-                                </li>
-                            </ul>
+                        <li>
+                            <a href="#">Chiến dịch</a>
                         </li>
-                        {{--<li>--}}
-                            {{--<a href="{!! url('statistics')!!}">Marketing</a>--}}
+                        <li>
+                            <a href="#">Sản phẩm</a>
+                        </li>
+                        <li>
+                            <a href="#">Công việc</a>
+                        </li>
+                        <li>
+                            <a href="#">Báo cáo Telesale</a>
+                        </li>
+                        <li>
+                            <a href="#">Người bán hàng Xuất sắc</a>
+                        </li>
+                        <li>
+                            <a href="#">Quà tặng</a>
+                        </li>
+                        {{--<li class="sub-with-sub">--}}
+                            {{--<a href="#">KPI </a>--}}
+                            {{--<ul>--}}
+                                {{--<li>--}}
+                                    {{--<a href="#">KPI chi nhánh</a>--}}
+                                {{--</li>--}}
+                                {{--<li>--}}
+                                    {{--<a href="#html">KPI nhân viên</a>--}}
+                                {{--</li>--}}
+                            {{--</ul>--}}
                         {{--</li>--}}
                     </ul>
                 </div>
