@@ -3,14 +3,21 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">ID</th>
+            <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
-            <th class="text-white text-center">Số điện thoại</th>
-            <th class="text-white text-center">Ngày sinh</th>
-            <th class="text-white text-center">Giới tính</th>
-            <th class="text-white text-center">Người phụ trách(MKT)</th>
+            <th class="text-white text-center">SĐT</th>
+            <th class="text-white text-center">Nhóm KH</th>
             <th class="text-white text-center">Trạng thái</th>
-            <th class="text-white text-center">Nhân viên telesale</th>
+            <th class="text-white text-center">Người phụ trách</th>
+            <th class="text-white text-center">Mô tả</th>
+            <th class="text-white text-center">Người tạo KH</th>
             <th class="text-white text-center">Nguồn KH</th>
+            <th class="text-white text-center">Giới tính</th>
+            <th class="text-white text-center">Ngày sinh</th>
+            <th class="text-white text-center">Mã KH</th>
+            <th class="text-white text-center">Số đơn</th>
+            <th class="text-white text-center">Tổng doanh thu</th>
+            <th class="text-white text-center">Giá trị đơn</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -19,15 +26,21 @@
             @foreach($users as $user)
                 <tr>
                     <th scope="row">{{ $user->id }}</th>
+                    <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($user->created_at)) }}</td>
                     <td class="text-center">{{ $user->full_name }}</td>
                     <td class="text-center">{{ $user->phone }}</td>
-                    <td class="text-center">{{ $user->birthday }}</td>
-{{--                    <td class="text-center">{{ $user->role_text }}</td>--}}
-                    <td class="text-center">{{ $user->gender_text  }}</td>
-                    <td class="text-center">{{ @$user->marketing ? @$user->marketing->full_name: '' }}</td>
+                    <td class="text-center">{{ @$user->category->name }}</td>
                     <td class="text-center">{{ @$user->status->name }}</td>
-                    <td class="text-center">{{ @$user->telesale->full_name}}</td>
+                    <td class="text-center">{{ @$user->telesale->full_name }}</td>
+                    <td class="text-center">{{ $user->description }}</td>
+                    <td class="text-center">{{ @$user->marketing ? @$user->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$user->source->name}}</td>
+                    <td class="text-center">{{ $user->gender_text  }}</td>
+                    <td class="text-center">{{ date('d-m-Y', strtotime($user->birthday)) }}</td>
+                    <td class="text-center">{{ $user->account_code }}</td>
+                    <td class="text-center">{{ $user->orders->count() }}</td>
+                    <td class="text-center">{{ number_format($user->orders->sum('all_total')) }}</td>
+                    <td class="text-center"></td>
                     <td class="text-center">
                         <a title="sửa tài khoản" class="btn" href="{{ route('customers.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
                             <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>
