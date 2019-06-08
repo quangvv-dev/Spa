@@ -19,14 +19,14 @@
                         <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-3">
+                <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
                         {!! Form::text('full_name',null, array('class' => 'form-control full_name', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-3">
+                <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
                         {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
                         {!! Form::text('phone',null, array('class' => 'form-control phone', 'required' => true)) !!}
@@ -40,6 +40,12 @@
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
+                <div class="col-xs-12 col-md-2">
+                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                        {!! Form::label('gross_revenue', 'Doanh thu', array('class' => ' required')) !!}
+                        {!! Form::number('gross_revenue', null, array('class' => 'form-control gross_revenue')) !!}
+                    </div>
+                </div>
             </div>
             <div class="col">
                 <div class="table-responsive">
@@ -49,6 +55,7 @@
                             <th class="text-white text-center">Dịch vụ</th>
                             <th class="text-white text-center">Số lượng</th>
                             <th class="text-white text-center">Đơn giá</th>
+                            <th class="text-white text-center">Số buổi</th>
                             <th class="text-white text-center">VAT (%)</th>
                             <th class="text-white text-center">CK (%)</th>
                             <th class="text-white text-center">CK (đ)</th>
@@ -65,6 +72,9 @@
                                 </td>
                                 <td class="text-center">
                                     {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::number('count_day[]', null, array('class' => 'form-control')) !!}
                                 </td>
                                 <td class="text-center">
                                     {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}

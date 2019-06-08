@@ -143,11 +143,11 @@
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Đã thanh toán</td>
-                            <td class="tr bold"> <strong></strong></td>
+                            <td class="tr bold"> <strong>{{ number_format($order->gross_revenue) }}</strong></td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Còn lại</td>
-                            <td class="tr bold"> <strong></strong></td>
+                            <td class="tr bold"> <strong>{{ number_format($order->the_rest) }}</strong></td>
                         </tr>
                         </tbody>
                     </table>
