@@ -132,7 +132,7 @@ class CustomerController extends Controller
         }
 
         $dataUser = User::create($input);
-        if ($request->mkt_id == null && Auth::user()->role == UserConstant::MARKETING) {
+        if ($request->mkt_id == null) {
             $dataUser->update([
                 'mkt_id' => $marketingUser,
             ]);
