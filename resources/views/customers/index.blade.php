@@ -13,6 +13,13 @@
             <div class="card-header">
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
                        type="text" id="search">
+                <div class="col-md-2 col-xs-12">
+                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm KH')) !!}
+                </div>
+                <div class="col-md-2 col-xs-12">
+                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
+                </div>
+
                 <div style="margin-left: 10px">
                     <button class="btn btn-default" style="height: 40px;">
                         <a href="{{ route('status.create') }}">
@@ -39,7 +46,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.load').hide();
-        })
+        });
+
         $(document).on('keyup', '#search', function (e) {
             $('.load').show();
             e.preventDefault();
@@ -53,6 +61,7 @@
                 $('#registration-form').html(data);
             });
         });
+
         $(document).on('click', '.status', function () {
             $('.load').show();
             var status = $(this).html();
@@ -63,6 +72,22 @@
             }).done(function (data) {
                 $('.load').hide();
                 $('#registration-form').html(data);
+            });
+        });
+
+        $(document).on('change', '.group, .telesales', function () {
+            var group = $('.group').val();
+            var telesales = $('.telesales').val();
+            $.ajax({
+                url: "{{ Url('customers/') }}",
+                method: "get",
+                data: {
+                    group: group,
+                    telesales: telesales
+                }
+            }).done(function (data) {
+                $('#registration-form').html(data);
+
             });
         });
     </script>
