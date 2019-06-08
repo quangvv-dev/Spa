@@ -6,6 +6,8 @@ use App\Constants\UserConstant;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Services;
+use App\Services\OrderDetailService;
+use App\Services\OrderService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,8 +15,14 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function __construct()
+    private $orderService;
+    private $orderDetailService;
+
+    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService)
     {
+        $this->orderService       = $orderService;
+        $this->orderDetailService = $orderDetailService;
+
         $service = Services::orderBy('category_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
             'id')->prepend('-Chọn-', '');
         view()->share([
@@ -50,29 +58,11 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $customer = User::find($request->user_id);
-        $customer->update($request->all());
+        $param = $request->all();
+        $customer->update($param);
 
-        $order = new Order;
-        $order->member_id = $request->user_id;
-        $order->all_total = array_sum($request->total_price);
-        $order->save();
-
-        foreach ($request->service_id as $key => $value) {
-            $data = [
-                'order_id' => $order->id,
-                'user_id'  => $request->user_id,
-                'booking_id' => $request->service_id[$key],
-                'quantity' => $request->quantity[$key],
-                'price' => $request->price[$key],
-                'vat' => $request->vat[$key],
-                'address' => $request->address,
-                'percent_discount' => $request->percent_discount ? $request->percent_discount[$key]: 0,
-                'number_discount' => $request->number_discount ? $request->number_discount[$key]: 0,
-                'total_price' => $request->total_price[$key],
-            ];
-
-            OrderDetail::create($data);
-        }
+        $order = $this->orderService->create($param);
+        $this->orderDetailService->create($param, $order->id);
 
         return redirect('/list-orders')->with('status', 'Tạo đơn hàng thành công');
     }
