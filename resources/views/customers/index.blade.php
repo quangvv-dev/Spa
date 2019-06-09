@@ -48,20 +48,6 @@
             $('.load').hide();
         });
 
-        $(document).on('keyup', '#search', function (e) {
-            $('.load').show();
-            e.preventDefault();
-            var search = $(this).val();
-            $.ajax({
-                url: "{{ Url('customers/') }}",
-                method: "get",
-                data: {search: search}
-            }).done(function (data) {
-                $('.load').hide();
-                $('#registration-form').html(data);
-            });
-        });
-
         $(document).on('click', '.status', function () {
             $('.load').show();
             var status = $(this).html();
@@ -75,19 +61,23 @@
             });
         });
 
-        $(document).on('change', '.group, .telesales', function () {
+        $(document).on('change keyup', '.group, .telesales, #search', function () {
+            $('.load').show();
             var group = $('.group').val();
             var telesales = $('.telesales').val();
+            var search = $('#search').val();
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
                 data: {
                     group: group,
-                    telesales: telesales
+                    telesales: telesales,
+                    search: search,
+                    status: status
                 }
             }).done(function (data) {
+                $('.load').hide();
                 $('#registration-form').html(data);
-
             });
         });
     </script>
