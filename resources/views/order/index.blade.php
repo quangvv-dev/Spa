@@ -40,12 +40,12 @@
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-2">
-                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('gross_revenue', 'Doanh thu', array('class' => ' required')) !!}
-                        {!! Form::number('gross_revenue', null, array('class' => 'form-control gross_revenue')) !!}
-                    </div>
-                </div>
+                {{--<div class="col-xs-12 col-md-2">--}}
+                    {{--<div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('gross_revenue', 'Doanh thu', array('class' => ' required')) !!}--}}
+                        {{--{!! Form::number('gross_revenue', null, array('class' => 'form-control gross_revenue')) !!}--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             </div>
             <div class="col">
                 <div class="table-responsive">
