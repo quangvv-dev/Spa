@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Services;
+use App\Models\Status;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class OrderController extends Controller
 {
@@ -23,10 +27,10 @@ class OrderController extends Controller
         $this->orderService       = $orderService;
         $this->orderDetailService = $orderDetailService;
 
-        $service = Services::orderBy('category_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
-            'id')->prepend('-Chọn-', '');
+        $services = Services::orderBy('category_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
+            'id')->prepend('-Chọn sản phẩm-', '');
         view()->share([
-            'service' => $service,
+            'services' => $services,
         ]);
     }
 
@@ -67,12 +71,20 @@ class OrderController extends Controller
         return redirect('/list-orders')->with('status', 'Tạo đơn hàng thành công');
     }
 
-    public function listOrder()
+    public function listOrder(Request $request)
     {
-        $title = 'Danh sách đơn hàng chi tiết';
-        $orders = Order::with('user', 'orderDetails')->paginate(10);
+        $title = 'ĐƠN HÀNG BÁN';
+        $group = Category::pluck('name', 'id')->toArray();
+        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+        $orders = Order::search($request->all());
 
-        return view('order-details.index', compact('orders', 'title'));
+        if ($request->ajax()) {
+            return Response::json(view('order-details.ajax', compact('orders', 'title'))->render());
+        }
+
+        return view('order-details.index', compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source'));
     }
 
     public function show($id)
