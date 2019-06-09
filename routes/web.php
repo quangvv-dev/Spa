@@ -39,4 +39,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 //    Route::get('list-order-detail', 'OrderDetailController@index')->name('order-detail.index');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
+    Route::get('commission/{id}', 'CommissionController@index')->name('commission.index');
+    Route::post('commission/{id}', 'CommissionController@store')->name('commission.store');
+    Route::put('commission/{id}', 'CommissionController@update')->name('commission.update');
 });

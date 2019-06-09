@@ -167,8 +167,6 @@
                         $(target).find('.CK1').prop('readonly', false);
                     }
 
-                    console.log(price);
-
                     var total_service = price * quantity + price * quantity * (VAT / 100) - price * quantity * (CK1 / 100) - CK2;
                     $(target).find('.total').val(total_service);
                 })
@@ -182,7 +180,6 @@
                 method: "get",
                 data: {id: id}
             }).done(function (data) {
-                console.log(data);
                 $('.full_name').val(data['full_name']);
                 $('.phone').val(data['phone']);
                 $('.address').val(data['address']);

@@ -24,8 +24,9 @@
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">
-                        <a class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
+                        <a title="In hóa đơn" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
                                     class="fas fa-file-invoice-dollar"></i></a>
+                        <a title="Chia hoa hồng" class="btn" href="{{ url('commission/' . $order->id) }}"><i class="fas fa-dollar-sign"></i></a>
                     </td>
                 </tr>
             @endforeach
