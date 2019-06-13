@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::group(['prefix' => 'ajax',], function () {
         Route::get('info-service', 'OrderController@getInfoService');
         Route::get('info-customer', 'OrderController@getInfoCustomer');
-
+        Route::get('info-order-payment/{id}', 'OrderController@infoPayment');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
@@ -42,4 +42,5 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('commission/{id}', 'CommissionController@index')->name('commission.index');
     Route::post('commission/{id}', 'CommissionController@store')->name('commission.store');
     Route::put('commission/{id}', 'CommissionController@update')->name('commission.update');
+    Route::put('order/{id}/show', 'OrderController@payment')->name('order.payment');
 });

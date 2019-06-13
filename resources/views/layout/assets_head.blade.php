@@ -46,4 +46,5 @@
     <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap.css') }}" rel="stylesheet" />
 
     <link href="{{ asset('css/common.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet" />
 </head>

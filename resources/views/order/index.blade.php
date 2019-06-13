@@ -65,7 +65,7 @@
                         <tbody class="order">
                             <tr>
                                 <td width="250" scope="row">
-                                    {!! Form::select('service_id[]', $service, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
+                                    {!! Form::select('service_id[]', $services, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
                                 </td>
                                 <td class="text-center">
                                     {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
@@ -113,7 +113,7 @@
             $('.order').append(`
                 <tr>
                     <td width="250" scope="row">
-                        {!! Form::select('service_id[]', $service, null, array('id' => "service",'class' => 'select2 form-control service', 'required' => true)) !!}
+                        {!! Form::select('service_id[]', $services, null, array('id' => "service",'class' => 'select2 form-control service', 'required' => true)) !!}
                     </td>
                     <td class="text-center">
                         {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}

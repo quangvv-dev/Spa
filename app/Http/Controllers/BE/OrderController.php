@@ -101,4 +101,14 @@ class OrderController extends Controller
         return $pdf->download('order.pdf');
     }
 
+    public function payment(Request $request, $id)
+    {
+        $this->orderService->updatePayment($request->all(), $id);
+    }
+
+    public function infoPayment(Request $request, $id)
+    {
+        return $this->orderService->getPayment($request->all(), $id);
+    }
+
 }
