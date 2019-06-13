@@ -21,6 +21,7 @@
 
 <!-- Index Scripts -->
 <script src="{{asset('assets/js/index.js')}}"></script>
+<script src="{{asset('assets/js/jquery.number.min.js')}}"></script>
 
 <!-- Animation -->
 <script src="{{asset('assets/plugins/particles/particles.js')}}"></script>
