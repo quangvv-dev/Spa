@@ -11,15 +11,6 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
-                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
-                       type="text" id="search">
-                <div class="col-md-2 col-xs-12">
-                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm KH')) !!}
-                </div>
-                <div class="col-md-2 col-xs-12">
-                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
-                </div>
-
                 <div style="margin-left: 10px">
                     <button class="btn btn-default" style="height: 40px;">
                         <a href="{{ route('status.create') }}">
@@ -31,6 +22,15 @@
                     @foreach(@$statuses as $k => $item)
                         <button class="status" style="background: {{$item->color ?:''}}">{{ $item->name }}</button>
                     @endforeach
+                </div>
+
+                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
+                       type="text" id="search">
+                <div class="col-md-2 col-xs-12">
+                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm KH')) !!}
+                </div>
+                <div class="col-md-2 col-xs-12">
+                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
                 </div>
             </div>
             <div id="registration-form">

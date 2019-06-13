@@ -32,11 +32,12 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::group(['prefix' => 'ajax',], function () {
         Route::get('info-service', 'OrderController@getInfoService');
         Route::get('info-customer', 'OrderController@getInfoCustomer');
-
+        Route::get('info-order-payment/{id}', 'OrderController@infoPayment');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
 //    Route::get('list-order-detail', 'OrderDetailController@index')->name('order-detail.index');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
+    Route::put('order/{id}/show', 'OrderController@payment')->name('order.payment');
 });

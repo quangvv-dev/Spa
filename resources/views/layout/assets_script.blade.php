@@ -48,6 +48,7 @@
 <!-- User js -->
 
 <script src="{{asset('js/user.js')}}"></script>
+<script src="{{asset('js/datepicker.js')}}"></script>
 
 <script>
     $.ajaxSetup({
