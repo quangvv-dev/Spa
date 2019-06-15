@@ -1,13 +1,12 @@
 .row {
     color: black;
+    background: white;
 }
 
 .invoice {
-    background: white;
     border: 1px solid #CCC;
     font-size: 14px;
     padding: 48px;
-    margin: 20px 0;
 }
 
 .logo {
@@ -43,4 +42,8 @@
 
 .fr {
     float: right!important;
+}
+
+.bor-r {
+    border: 1px solid #d0d0d0!important;
 }

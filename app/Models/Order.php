@@ -20,6 +20,11 @@ class Order extends Model
         return $this->belongsTo(User::class, 'member_id', 'id');
     }
 
+    public function paymentHistories()
+    {
+        return $this->hasMany(PaymentHistory::class, 'order_id', 'id');
+    }
+
     public static function search($input)
     {
         $data = self::with('user', 'orderDetails');
