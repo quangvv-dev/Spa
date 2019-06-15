@@ -11,6 +11,7 @@ use App\Models\Services;
 use App\Models\Status;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
+use App\Services\PaymentHistoryService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -103,6 +104,7 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
+        PaymentHistoryService::create($request->all(), $id);
         $this->orderService->updatePayment($request->all(), $id);
     }
 

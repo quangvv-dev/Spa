@@ -1,4 +1,4 @@
-<div style="z-index: 111 !important; display: block;" id="paymentModal" class="modal fade mt30 bs-example-modal-sm in"
+<div id="paymentModal" class="modal fade mt30 bs-example-modal-sm in"
      tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -44,6 +44,10 @@
                         <p>Tiền trả lại
                             <span class="return_cash fr"></span>
                         </p>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        {!! Form::label('description', 'Ghi chú', array('class' => ' required')) !!}
+                        <textarea row="2" class="form-control description" name="description"></textarea>
                     </div>
                 </div>
             </div>

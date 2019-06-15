@@ -3,8 +3,8 @@
     <link href="{{ asset(('css/order.css')) }}" rel="stylesheet"/>
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-lg-10 col-lg-offset-1">
+    <div class="row" style="">
+        <div class="col-lg-9 col-lg-offset-1">
             <div class="invoice">
                 <div class="text-center"><strong style="font-size: 20px">ĐƠN HÀNG BÁN</strong></div>
                 <div class="row">
@@ -118,6 +118,54 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-3 no-padd bor-r" id="right_panel">
+            <div>
+                <div class="col-md-12 no-padd box-cont">
+                    <div id="attachments" class="files padding">
+                        <div>
+                            <div id="progress" class="progress" style="display:none">
+                                <div class="progress-bar progress-bar-success" role="progressbar"></div>
+                            </div>
+                            <div id="files" class="files"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-cont col-md-12 no-padd content-pay"><h3
+                            class="bor-bot uppercase font12 mg0 bold padding5">Thanh toán</h3>
+                    <div class="padding col-md-12">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th width="56%"></th>
+                                <th width="44%"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="mb5">Doanh số:</td>
+                                <td class="tr mb5">{{ number_format($order->all_total) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="mb5">Doanh thu:</td>
+                                <td class="tr mb5">{{ number_format($order->gross_revenue) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="mb5">Thực tế phải thanh toán:</td>
+                                <td class="tr mb5">{{ number_format($order->all_total) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="mb5">Đã thanh toán:</td>
+                                <td class="tr mb5">{{ number_format($order->gross_revenue) }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <div class="detail-pay-dvh position col-md-12 no-padd">
+                @include('order.payment-history')
+            </div>
+        </div>
     </div>
 
     <div class="fixed-bottom">
@@ -130,7 +178,8 @@
                             class="white">Thanh toán</a></button>
             </div>
             <div class="btn-group dropup fl task_footer_box">
-                <button class="btn btn-default ml5 printOrder" data-number="2"><a href="/order-pdf/{{$order->id}}"><i class="fa fa-print"></i>&nbsp;In</a>
+                <button class="btn btn-default ml5 printOrder" data-number="2"><a href="/order-pdf/{{$order->id}}"><i
+                                class="fa fa-print"></i>&nbsp;In</a>
                 </button>
             </div>
             <div class="fl task_footer_box cancel_order">
@@ -156,6 +205,7 @@
             let paymentDate = $('.payment-date').val();
             let paymentType = $('.payment-type').val();
             let grossRevenue = $('.gross-revenue').val();
+            let description = $('.description').val();
 
             $.ajax({
                 url: "{{ Url('order/'.$order->id. '/show') }}",
@@ -163,7 +213,8 @@
                 data: {
                     payment_date: paymentDate,
                     payment_type: paymentType,
-                    gross_revenue: grossRevenue
+                    gross_revenue: grossRevenue,
+                    description: description
                 }
             }).done(function () {
 
