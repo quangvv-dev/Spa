@@ -90,9 +90,10 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::with('user', 'orderDetails')->findOrFail($id);
+        $order = Order::with('user', 'orderDetails', 'paymentHistories')->findOrFail($id);
+        $data = $order->paymentHistories;
 
-        return view('order.order', compact('order'));
+        return view('order.order', compact('order', 'data'));
     }
 
     public function orderDetailPdf($id)
@@ -105,7 +106,7 @@ class OrderController extends Controller
     public function payment(Request $request, $id)
     {
         PaymentHistoryService::create($request->all(), $id);
-        $this->orderService->updatePayment($request->all(), $id);
+        return $this->orderService->updatePayment($request->all(), $id);
     }
 
     public function infoPayment(Request $request, $id)

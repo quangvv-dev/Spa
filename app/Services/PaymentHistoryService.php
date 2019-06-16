@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Helpers\Functions;
+use App\Models\Order;
 use App\Models\PaymentHistory;
 
 class PaymentHistoryService
@@ -15,6 +16,12 @@ class PaymentHistoryService
 
     public static function create($data, $id)
     {
+        $order = Order::where('id', $id)->first();
+
+        if ($data['gross_revenue'] > $order->all_total) {
+            $data['gross_revenue'] = $order->all_total;
+        }
+
         if (empty($data) && is_array($data) == false)
             return false;
 

@@ -53,7 +53,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button type="button" id="finish" data-dismiss="modal" class="btn btn-info" style="">Thanh toán</button>
+                <button type="button" id="finish" data-dismiss="modal" class="btn btn-info" style="">
+                    <a>Thanh toán</a></button>
                 <button type="button" class="btn btn-info" data-dismiss="modal" id="btn_repaid" style="display: none;">
                     Hoàn tiền
                 </button>
