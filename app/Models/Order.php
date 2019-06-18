@@ -62,4 +62,9 @@ class Order extends Model
 
         return $data->paginate(10);
     }
+
+    public function getNamePaymentTypeAttribute()
+    {
+        return $this->payment_type == 0 ? "Tiền mặt": "Thẻ";
+    }
 }
