@@ -6,6 +6,8 @@
 <script src="{{asset('assets/js/vendors/jquery.tablesorter.min.js')}}"></script>
 <script src="{{asset('assets/js/vendors/circle-progress.min.js')}}"></script>
 <script src="{{asset('assets/plugins/rating/jquery.rating-stars.js')}}"></script>
+<script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
+
 <!-- Side menu js -->
 <script src="{{asset('assets/plugins/toggle-sidebar/js/sidemenu.js')}}"></script>
 
@@ -60,16 +62,16 @@
 
     // validate error
     $.validator.setDefaults({
-        highlight: function(element) {
+        highlight: function (element) {
             $(element).closest('.form-group').addClass('has-error');
         },
-        unhighlight: function(element) {
+        unhighlight: function (element) {
             $(element).closest('.form-group').removeClass('has-error');
         },
         errorElement: 'span',
         errorClass: 'help-block',
-        errorPlacement: function(error, element) {
-            if(element.parent('.input-group').length) {
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
                 error.insertAfter(element.parent());
             } else if (element.hasClass('select2-hidden-accessible')) {
                 error.insertAfter(element.next('span'));
@@ -82,18 +84,18 @@
     });
 
     // validate form
-    $('#fvalidate').submit(function() {
+    $('#fvalidate').submit(function () {
         $(this).validate();
     })
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         // $('.header-search').change(function () {
         //     $('form.card-header').trigger();
         // })
         // close alert
-        window.setTimeout(function() {
-            $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+        window.setTimeout(function () {
+            $(".alert").fadeTo(1000, 0).slideUp(1000, function () {
                 $(this).remove();
             });
         }, 2000);
@@ -106,14 +108,15 @@
             width: '100%',
             theme: 'bootstrap',
             allowClear: true,
-            placeholder: function() {
+            placeholder: function () {
                 $(this).data('placeholder');
             }
         });
 
-        $('.select2-hidden-accessible').on('change', function() {
+        $('.select2-hidden-accessible').on('change', function () {
             $(this).valid();
         });
+        $('.clockpicker').clockpicker();
 
     })
 </script>
