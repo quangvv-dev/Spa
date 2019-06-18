@@ -45,7 +45,15 @@ class OrderService
             $data['the_rest'] = 0;
         }
 
+        if ($data['gross_revenue'] > $model->all_total) {
+            $data['gross_revenue'] = $model->all_total;
+        }
+
         $model->update($data);
+
+        $model->gross_revenue = number_format($model->gross_revenue);
+        $model->all_total = number_format($model->all_total);
+        $model->payment_histories = $model->paymentHistories;
 
         return $model;
     }

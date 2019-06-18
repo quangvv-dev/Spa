@@ -144,19 +144,19 @@
                             <tbody>
                             <tr>
                                 <td class="mb5">Doanh số:</td>
-                                <td class="tr mb5">{{ number_format($order->all_total) }}</td>
+                                <td class="tr mb5" id="all_total">{{ number_format($order->all_total) }}</td>
                             </tr>
                             <tr>
                                 <td class="mb5">Doanh thu:</td>
-                                <td class="tr mb5">{{ number_format($order->gross_revenue) }}</td>
+                                <td class="tr mb5" id="gross_revenue">{{ number_format($order->gross_revenue) }}</td>
                             </tr>
                             <tr>
                                 <td class="mb5">Thực tế phải thanh toán:</td>
-                                <td class="tr mb5">{{ number_format($order->all_total) }}</td>
+                                <td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>
                             </tr>
                             <tr>
                                 <td class="mb5">Đã thanh toán:</td>
-                                <td class="tr mb5">{{ number_format($order->gross_revenue) }}</td>
+                                <td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -170,9 +170,9 @@
 
     <div class="fixed-bottom">
         <div class="list_task_footer col-md-12 padding menu-footer">
-            <div class="fl task_footer_box change_order" style="margin-left: 46px">
-                <button class="btn btn-info fr ml5"><a class="white">Thay đổi</a></button>
-            </div>
+            {{--<div class="fl task_footer_box change_order" style="margin-left: 46px">--}}
+                {{--<button class="btn btn-info fr ml5"><a class="white">Thay đổi</a></button>--}}
+            {{--</div>--}}
             <div class="fl task_footer_box">
                 <button class="btn btn-info ml5 fr paymentOrder" data-toggle="modal" data-target="#paymentModal"><a
                             class="white">Thanh toán</a></button>
@@ -206,6 +206,7 @@
             let paymentType = $('.payment-type').val();
             let grossRevenue = $('.gross-revenue').val();
             let description = $('.description').val();
+            // var html = '';
 
             $.ajax({
                 url: "{{ Url('order/'.$order->id. '/show') }}",
@@ -216,8 +217,20 @@
                     gross_revenue: grossRevenue,
                     description: description
                 }
-            }).done(function () {
+            }).done(function (data) {
+                $('#all_total').text(data.all_total);
+                $('#all_total1').text(data.all_total);
+                $('#gross_revenue').text(data.gross_revenue);
+                $('#gross_revenue1').text(data.gross_revenue);
 
+                // $.each(data.payment_histories , function(index, val) {
+                //     html += '<tr>' + '<td class="tc pl10">' + val.payment_date + '</td>' +
+                //             '<td class="tc">' + val.price + '</td>' +
+                //             '<td>' + val.description + '</td>' +
+                //             '</tr>'
+                // });
+                //
+                // $("#payment-history").append(html);
             });
         });
 
