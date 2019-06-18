@@ -3,6 +3,7 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">ID</th>
+            <th class="text-white text-center">Thao tác</th>
             <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
@@ -18,7 +19,6 @@
             <th class="text-white text-center">Số đơn</th>
             <th class="text-white text-center">Tổng doanh thu</th>
             <th class="text-white text-center">Giá trị đơn</th>
-            <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
         <tbody>
@@ -26,6 +26,12 @@
             @foreach($users as $user)
                 <tr>
                     <th scope="row">{{ $user->id }}</th>
+                    <td class="text-center">
+                        <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $user->id) }}"><i class="fas fa-calendar-alt"></i></a>
+                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
+                        <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>
+                        <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
+                    </td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($user->created_at)) }}</td>
                     <td class="text-center">{{ $user->full_name }}</td>
                     <td class="text-center">{{ $user->phone }}</td>
@@ -41,12 +47,6 @@
                     <td class="text-center">{{ $user->orders->count() }}</td>
                     <td class="text-center">{{ number_format($user->orders->sum('all_total')) }}</td>
                     <td class="text-center"></td>
-                    <td class="text-center">
-                        <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $user->id) }}"><i class="fas fa-calendar-alt"></i></a>
-                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
-                            <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>
-                            <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
-                    </td>
                 </tr>
             @endforeach
         @else
