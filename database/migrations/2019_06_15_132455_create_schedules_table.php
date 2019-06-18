@@ -21,6 +21,7 @@ class CreateSchedulesTable extends Migration
             $table->string('time_from')->comment('khoang gio som nhat');
             $table->string('time_to')->comment('khoang gio som nhat');
             $table->integer('creator_id')->comment('Nhân viên tạo');
+            $table->integer('status')->comment('trạng thái lịch hẹn');
             $table->text('note')->comment('ghi chu');
             $table->timestamps();
         });
