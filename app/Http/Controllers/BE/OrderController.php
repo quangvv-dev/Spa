@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use DB;
 
 class OrderController extends Controller
 {
@@ -105,9 +106,24 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
-        PaymentHistoryService::create($request->all(), $id);
-        return $this->orderService->updatePayment($request->all(), $id);
+        DB::beginTransaction();
+        try {
+            $paymentHistory = PaymentHistoryService::create($request->all(), $id);
+            $order = $this->orderService->updatePayment($request->all(), $id);
+
+            if (!$paymentHistory || !$order) {
+                DB::rollBack();
+            }
+
+            DB::commit();
+            return $order;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            throw new \Exception($e->getMessage());
+        }
     }
+
 
     public function infoPayment(Request $request, $id)
     {
