@@ -218,19 +218,11 @@
                     description: description
                 }
             }).done(function (data) {
+                window.location.reload();
                 $('#all_total').text(data.all_total);
                 $('#all_total1').text(data.all_total);
                 $('#gross_revenue').text(data.gross_revenue);
                 $('#gross_revenue1').text(data.gross_revenue);
-
-                // $.each(data.payment_histories , function(index, val) {
-                //     html += '<tr>' + '<td class="tc pl10">' + val.payment_date + '</td>' +
-                //             '<td class="tc">' + val.price + '</td>' +
-                //             '<td>' + val.description + '</td>' +
-                //             '</tr>'
-                // });
-                //
-                // $("#payment-history").append(html);
             });
         });
 
