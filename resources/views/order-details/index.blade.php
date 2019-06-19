@@ -21,13 +21,14 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('change keyup', '.group, .telesale, .marketing, .customer, .service', function () {
+        $(document).on('change keyup', '.group, .telesale, .marketing, .customer, .service, .payment-type', function () {
             var group = $('.group').val();
             var telesale = $('.telesale').val();
             var marketing = $('.marketing').val();
             var customer = $('.customer').val();
             var service = $('.service').val();
-            console.log(telesale, marketing, customer);
+            var payment_type = $('.payment-type').val();
+            console.log(payment_type);
             $.ajax({
                 url: "{{ Url('list-orders/') }}",
                 method: "get",
@@ -36,7 +37,8 @@
                     telesale: telesale,
                     marketing: marketing,
                     customer: customer,
-                    service: service
+                    service: service,
+                    payment_type: payment_type
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);

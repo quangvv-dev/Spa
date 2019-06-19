@@ -55,11 +55,23 @@ class Order extends Model
                    $q->where('full_name', 'like', '%'. $input['customer']. '%')
                    ->orWhere('phone', 'like', '%'. $input['customer']. '%');
                 });
+            })
+            ->when($input['payment_type'], function ($query) use ($input) {
+                $query->where('payment_type', $input['payment_type'])->whereNotNull('payment_type');
             });
-
-
         }
 
         return $data->paginate(10);
+    }
+
+    public function getNamePaymentTypeAttribute()
+    {
+        if ($this->payment_type === 0) {
+            return "Tiền mặt";
+        }
+
+        if ($this->payment_type === 1) {
+            return "Thẻ";
+        }
     }
 }

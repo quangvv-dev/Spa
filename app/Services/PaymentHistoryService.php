@@ -16,23 +16,33 @@ class PaymentHistoryService
 
     public static function create($data, $id)
     {
-        $order = Order::where('id', $id)->first();
-
-        if ($data['gross_revenue'] > $order->all_total) {
-            $data['gross_revenue'] = $order->all_total;
-        }
+        $grossRevenue = self::checkGrossRevenue($id, $data['gross_revenue']);
 
         if (empty($data) && is_array($data) == false)
             return false;
 
         $input = [
             'order_id'     => $id,
-            'price'        => $data['gross_revenue'],
+            'price'        => $grossRevenue,
             'payment_date' => Functions::yearMonthDay($data['payment_date']),
             'description'  => $data['description']
         ];
 
-        PaymentHistory::create($input);
+        return PaymentHistory::create($input);
 
+    }
+
+    private static function checkGrossRevenue($id, $grossRevenue)
+    {
+        $order = Order::where('id', $id)->first();
+        $price = $order->paymentHistories->sum('price');
+        $total = $price + $grossRevenue;
+        if ($total > $order->all_total) {
+            $grossRevenue = $order->all_total - $price;
+
+            return $grossRevenue;
+        }
+
+        return $grossRevenue;
     }
 }

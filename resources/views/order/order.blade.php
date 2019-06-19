@@ -43,7 +43,7 @@
                                    data-call="order_222" data-contact-id="896">{{ $order->user->phone }}</a>
                             </td>
                             <td style="width:50%">
-                                <b>Phương thức thanh toán:</b>&nbsp;
+                                <b>Phương thức thanh toán:</b>&nbsp;{{$order->name_payment_type}}
                             </td>
                         </tr>
                         </tbody>

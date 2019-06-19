@@ -15,6 +15,7 @@
             <th class="text-white text-center">Doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Còn lại</th>
+            <th class="text-white text-center">Phương thức thanh toán</th>
             <th class="text-white text-center">Người lên đơn</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
@@ -36,6 +37,7 @@
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
+                    <td class="text-center">{{ $order->name_payment_type }}</td>
                     <td class="text-center">{{ @$order->user->marketing->full_name }}</td>
                     <td class="text-center">
                         <a title="In hóa đơn" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i

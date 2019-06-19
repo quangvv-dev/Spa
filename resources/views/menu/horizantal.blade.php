@@ -2,24 +2,8 @@
 <div class="ren-navbar fixed-header" id="headerMenuCollapse">
     <div class="container">
         <ul class="nav">
-                <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
-                    <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
-                    <div class="sub-item">
-                        <ul>
-                            <li>
-                                <a href="#">Nhóm khách hàng </a>
-                            </li>
-                            <li>
-                                <a href="{!! route('customers.index') !!}">Danh sách khách hàng</a>
-                            </li>
-                            <li>
-                                <a href="#">Nhân viên phụ trách </a>
-                            </li>
-                            <li>
-                                <a href="#">Quản lý trạng thái</a>
-                            </li>
-                        </ul>
-                    </div>
+                <li class="nav-item" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
+                    <a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
                 </li>
                 <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
                     <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Marketing</span></a>
