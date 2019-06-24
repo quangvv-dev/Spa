@@ -48,4 +48,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('commission/{id}', 'CommissionController@store')->name('commission.store');
     Route::put('commission/{id}', 'CommissionController@update')->name('commission.update');
     Route::put('order/{id}/show', 'OrderController@payment')->name('order.payment');
+    //Customer import & export
+    Route::get('customer-export', 'CustomerController@exportCustomer');
+
 });

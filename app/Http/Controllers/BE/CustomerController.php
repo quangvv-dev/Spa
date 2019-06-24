@@ -9,11 +9,13 @@ use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Status;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Excel;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {
@@ -206,34 +208,41 @@ class CustomerController extends Controller
         $request->session()->flash('error', 'Xóa người dùng thành công!');
     }
 
-    public function exportUser()
+    public function exportCustomer()
     {
-        $rq = $request->all();
-        $data = User::orderBy('id', 'desc');
-        if ($rq['search']) {
-            $data = $data->where('name', 'like', '%' . $rq['search'] . '%')
-                ->orWhere('email', 'like', '%' . $rq['search'] . '%')
-                ->orWhere('phone', 'like', '%' . $rq['search'] . '%');
-        }
-
+        $now = Carbon::now()->format('d/m/Y');
+        $data = Customer::orderBy('id', 'desc')->with('orders');
+        //        $rq = $request->all();
+//        if ($rq['search']) {
+//            $data = $data->where('name', 'like', '%' . $rq['search'] . '%')
+//                ->orWhere('email', 'like', '%' . $rq['search'] . '%')
+//                ->orWhere('phone', 'like', '%' . $rq['search'] . '%');
+//        }
         $data = $data->get();
-        Excel::create('Danh sách User', function ($excel) use ($data) {
+        Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
-                $sheet->cell('A1:J1', function ($row) {
+                $sheet->cell('A1:Q1', function ($row) {
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
                 $sheet->row(1, [
                     'ID',
-                    'Name',
-                    'Email',
-                    'SĐT',
-                    'Type',
-                    'Address',
-                    'Birth Day',
+                    'Tên khách hàng',
+                    'Mã khách hàng',
+                    'Số điện thoại',
+                    'Sinh nhật',
                     'Giới tính',
-                    'Company',
-                    'MST',
+                    'Link Facebook',
+                    'Địa chỉ',
+                    'Ngày tạo',
+                    'Số đơn',
+                    'Tổng doanh thu',
+                    'ID người phụ trách',
+                    'ID người tư vấn',
+                    'ID nhóm KH',
+                    'ID nguồn KH',
+                    'ID Mối quan hệ',
+                    'Mô tả',
                 ]);
                 $i = 1;
                 if ($data) {
@@ -241,15 +250,23 @@ class CustomerController extends Controller
                         $i++;
                         $sheet->row($i, [
                             @$ex->id,
-                            @$ex->name,
-                            @$ex->email,
+                            @$ex->full_name,
+                            @$ex->account_code,
                             @$ex->phone,
-                            (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
+                            @$ex->birthday,
+                            @$ex->GenderText,
+                            @$ex->facebook,
                             @$ex->address,
-                            @$ex->birth_day,
-                            (@$ex->gender == 0) ? 'Nam' : 'Nữ',
-                            @$ex->company,
-                            @$ex->tax_code,
+                            @$ex->created_at,
+                            @$ex->orders->count(),
+                            @(int)$ex->orders->sum('all_total'),
+                            @$ex->marketing->full_name,
+                            @$ex->telesale->full_name,
+                            @$ex->category->name,
+                            @$ex->source_customer->name,
+                            @$ex->status->name,
+                            @$ex->description,
+                            // (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
                         ]);
                     }
                 }
