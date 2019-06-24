@@ -50,5 +50,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::put('order/{id}/show', 'OrderController@payment')->name('order.payment');
     //Customer import & export
     Route::get('customer-export', 'CustomerController@exportCustomer');
+    Route::get('customer-import', 'CustomerController@importCustomer');
 
 });
