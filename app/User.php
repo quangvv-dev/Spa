@@ -61,6 +61,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function search($param)
+    {
+        $data = self::when($param['search'], function ($query) use ($param) {
+            $query->where('full_name', 'like', '%' . $param['search'] . '%')
+                ->orWhere('phone', 'like', '%'. $param['search'] . '%');
+        })->latest('id')->paginate(10);
+
+        return $data;
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id', 'id');

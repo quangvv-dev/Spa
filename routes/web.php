@@ -27,8 +27,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');
     Route::get('schedules/edit/{id}', 'ScheduleController@edit')->name('schedules.edit');
-    Route::get('profiles/{id}/edit', 'UserController@getEditProfile');
-    Route::put('profiles/{id}/edit', 'UserController@postEditProfile');
 
     Route::get('/statistics/', 'StatisticController@index')->name('statistics.index');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');

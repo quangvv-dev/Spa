@@ -9,6 +9,7 @@ use App\Helpers\Functions;
 use App\Http\Requests\UserRequest;
 use App\Models\Category;
 use App\Models\Status;
+use App\Services\UserService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,33 +18,16 @@ use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
-    /**
-     * @var Filesystem
-     */
-    private $fileUpload;
+    private $userService;
 
     /**
      * UserController constructor.
      *
      * @param Filesystem $fileUpload
      */
-    public function __construct(Filesystem $fileUpload)
+    public function __construct(UserService $userService)
     {
-        $this->fileUpload = $fileUpload;
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
-        $group = Category::pluck('name', 'id')->toArray();//nhóm KH
-        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-        $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
-        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
-        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
-        view()->share([
-            'status'         => $status,
-            'group'          => $group,
-            'source'         => $source,
-            'branch'         => $branch,
-            'telesales'      => $telesales,
-            'marketingUsers' => $marketingUsers,
-        ]);
+        $this->userService = $userService;
     }
 
     /**
@@ -55,21 +39,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with('status', 'marketing')->where('role', '<>', UserConstant::CUSTOMER);
+        $users = User::search($request);
         $title = 'Quản lý người dùng';
-        $search = $request->search;
-        if ($search) {
-            $users = $users->where(function ($query) use ($search) {
-                $query->where('full_name', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%');
-            });
-        }
-        $status = $request->status;
-        if ($status) {
-            $users->where('status_id', $status);
-        }
-
-        $users = $users->latest('id')->paginate(10);
 
         if ($request->ajax()) {
             return Response::json(view('users.ajax', compact('users', 'title'))->render());
@@ -99,27 +70,10 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        @$date = Functions::yearMonthDay($request->birthday);
         $input = $request->except('image');
-        $marketingUser = Auth::user()->id;
-        $input['active'] = UserConstant::ACTIVE;
-        $input['birthday'] = isset($date) && $date ? $date : '';
-        $input['password'] = bcrypt($request->password);
+        $input['image'] = $request->image;
 
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
-
-        if ($request->role == null) {
-            $input['role'] = UserConstant::CUSTOMER;
-        }
-        $dataUser = User::create($input);
-        if ($request->mkt_id == null && Auth::user()->role == UserConstant::MARKETING) {
-            $dataUser->update([
-                'mkt_id' => $marketingUser,
-            ]);
-        }
-
+        $this->userService->create($input);
         return redirect('users')->with('status', 'Tạo người dùng thành công');
     }
 
@@ -144,7 +98,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $user['birthday'] = Functions::dayMonthYear($user->birthday);
         $title = 'Sửa người dùng';
         return view('users._form', compact('user', 'title'));
     }
@@ -157,18 +110,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, $id)
     {
         $input = $request->except('image');
-        @$date = Functions::yearMonthDay($request->birthday);
-        $input['birthday'] = isset($date) && $date ? $date : '';
-        $input['password'] = bcrypt($request->password);
+        $input['image'] = $request->image;
 
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
-
-        $user->update($input);
+        $this->userService->update($input, $id);
 
         return redirect(route('users.index'))->with('status', 'Cập nhật người dùng thành công');
     }
@@ -200,27 +147,5 @@ class UserController extends Controller
             return $result->id == $request->id ? 'true' : 'false';
         }
         return 'true';
-    }
-
-    public function getEditProfile($id)
-    {
-        $title = 'Cập nhật thông tin';
-        $user = User::findOrFail($id);
-        return view('profiles._form', compact('user', 'title'));
-    }
-
-    public function postEditProfile($id, UserRequest $request)
-    {
-        $user = User::findOrFail($id);
-        $input = $request->except('image');
-        $input['password'] = bcrypt($request->password);
-
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
-
-        $user->update($input);
-
-        return redirect('/')->with('status', 'Cập nhật thông tin thành công');
     }
 }
