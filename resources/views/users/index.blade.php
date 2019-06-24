@@ -10,9 +10,6 @@
             <div class="card-header">
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
                        type="text" id="search">
-                <div class="col-md-2 col-xs-12">
-                    {!! Form::select('status',$status, null, array('class' => 'form-control header-search','placeholder'=>'Mối quan hệ ...')) !!}
-                </div>
             </div>
             <div id="registration-form">
                 @include('users.ajax')

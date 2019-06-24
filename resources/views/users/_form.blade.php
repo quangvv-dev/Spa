@@ -38,22 +38,6 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
-                        {!! Form::label('birthday', 'Ngày sinh', array('class' => ' required')) !!}
-                        <div class="wd-200 mg-b-30">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
-                                    </div>
-                                </div>
-                                {!! Form::text('birthday', null, array('class' => 'form-control fc-datepicker')) !!}
-                            </div>
-                        </div>
-                    </div>
-                    <span class="help-block">{{ $errors->first('birthday', ':message') }}</span>
-                </div>
-                <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
                         {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
                         {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên', 6 => 'Khách hàng'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
@@ -68,9 +52,9 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-                        {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
-                        {!! Form::select('branch_id', $branch, @$user->branch_id, array('class' => 'form-control select2', 'placeholder' => 'Chi nhánh')) !!}
+                    <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
+                        {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}
+{{--                        {!! Form::select('department_id', null, null, array('class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}--}}
                         <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                     </div>
                 </div>

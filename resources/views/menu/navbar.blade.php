@@ -145,7 +145,7 @@
 											</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a class="dropdown-item" href="{{ url('profiles/' .  Auth::user()->id . '/edit') }}"><i class="dropdown-icon mdi mdi-settings"></i> Cài đặt tài khoản</a>
+                            <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i class="dropdown-icon mdi mdi-settings"></i> Cài đặt tài khoản</a>
                             @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
                             <a class="dropdown-item" href="{!! route('users.index') !!}"><i class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
                             @endif
