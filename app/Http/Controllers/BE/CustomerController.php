@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Excel;
 
 class CustomerController extends Controller
 {
@@ -203,5 +204,56 @@ class CustomerController extends Controller
     {
         $customer->delete();
         $request->session()->flash('error', 'Xóa người dùng thành công!');
+    }
+
+    public function exportUser()
+    {
+        $rq = $request->all();
+        $data = User::orderBy('id', 'desc');
+        if ($rq['search']) {
+            $data = $data->where('name', 'like', '%' . $rq['search'] . '%')
+                ->orWhere('email', 'like', '%' . $rq['search'] . '%')
+                ->orWhere('phone', 'like', '%' . $rq['search'] . '%');
+        }
+
+        $data = $data->get();
+        Excel::create('Danh sách User', function ($excel) use ($data) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($data) {
+                $sheet->cell('A1:J1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->row(1, [
+                    'ID',
+                    'Name',
+                    'Email',
+                    'SĐT',
+                    'Type',
+                    'Address',
+                    'Birth Day',
+                    'Giới tính',
+                    'Company',
+                    'MST',
+                ]);
+                $i = 1;
+                if ($data) {
+                    foreach ($data as $k => $ex) {
+                        $i++;
+                        $sheet->row($i, [
+                            @$ex->id,
+                            @$ex->name,
+                            @$ex->email,
+                            @$ex->phone,
+                            (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
+                            @$ex->address,
+                            @$ex->birth_day,
+                            (@$ex->gender == 0) ? 'Nam' : 'Nữ',
+                            @$ex->company,
+                            @$ex->tax_code,
+                        ]);
+                    }
+                }
+            });
+        })->export('xlsx');
     }
 }
