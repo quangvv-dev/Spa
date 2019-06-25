@@ -11,10 +11,12 @@ use App\Models\Customer;
 use App\Models\Status;
 use App\Services\CustomerService;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Excel;
 
 class CustomerController extends Controller
 {
@@ -165,5 +167,96 @@ class CustomerController extends Controller
             return false;
 
         return true;
+    }
+
+    public function exportCustomer()
+    {
+        $now = Carbon::now()->format('d/m/Y');
+        $data = Customer::orderBy('id', 'desc')->with('orders');
+        //        $rq = $request->all();
+//        if ($rq['search']) {
+//            $data = $data->where('name', 'like', '%' . $rq['search'] . '%')
+//                ->orWhere('email', 'like', '%' . $rq['search'] . '%')
+//                ->orWhere('phone', 'like', '%' . $rq['search'] . '%');
+//        }
+        $data = $data->get();
+        Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($data) {
+                $sheet->cell('A1:Q1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->row(1, [
+                    'ID',
+                    'Tên khách hàng',
+                    'Mã khách hàng',
+                    'Số điện thoại',
+                    'Sinh nhật',
+                    'Giới tính',
+                    'Link Facebook',
+                    'Địa chỉ',
+                    'Ngày tạo',
+                    'Số đơn',
+                    'Tổng doanh thu',
+                    'ID người phụ trách',
+                    'ID người tư vấn',
+                    'ID nhóm KH',
+                    'ID nguồn KH',
+                    'ID Mối quan hệ',
+                    'Mô tả',
+                ]);
+                $i = 1;
+                if ($data) {
+                    foreach ($data as $k => $ex) {
+                        $i++;
+                        $sheet->row($i, [
+                            @$ex->id,
+                            @$ex->full_name,
+                            @$ex->account_code,
+                            @$ex->phone,
+                            @$ex->birthday,
+                            @$ex->GenderText,
+                            @$ex->facebook,
+                            @$ex->address,
+                            @$ex->created_at,
+                            @$ex->orders->count(),
+                            @(int)$ex->orders->sum('all_total'),
+                            @$ex->marketing->full_name,
+                            @$ex->telesale->full_name,
+                            @$ex->category->name,
+                            @$ex->source_customer->name,
+                            @$ex->status->name,
+                            @$ex->description,
+                            // (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
+                        ]);
+                    }
+                }
+            });
+        })->export('xlsx');
+    }
+
+    public function importCustomer(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            Excel::load($request->file('file')->getRealPath(), function ($render) {
+                $result = $render->toArray();
+                foreach ($result as $k => $row) {
+                    User::create([
+                        'full_name'    => $row['name'],
+                        'account_code' => \bcrypt('123456'),
+                        'email'        => $row['email'],
+                        'phone'        => $row['sdt'],
+                        'birthday'     => 1,
+                        'gender'       => $row['type'] == 'Tài khoản VIP' ? 1 : 0,
+                        'address'      => $row['address'],
+                        'facebook'     => $row['birth_day'],
+                        'created_at'   => Carbon::now()->format('Y-m-d H:s'),
+                        'updated_at'   => $row['birth_day'],
+                        'description'  => $row['gioi_tinh'] == 'Nam' ? 0 : 1,
+                    ]);
+                }
+            });
+        }
+        return redirect('admin/customers');
     }
 }

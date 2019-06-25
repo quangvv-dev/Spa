@@ -53,6 +53,16 @@ class Customer extends Model
         return $this->hasMany(Order::class, 'member_id', 'id');
     }
 
+    public function getGenderTextAttribute()
+    {
+        return $this->gender == UserConstant::MALE ? 'Nam' : 'Nữ';
+    }
+
+    public function getActiveTextAttribute()
+    {
+        return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
+    }
+
     public function telesale()
     {
         return $this->belongsTo(User::class, 'telesales_id', 'id');
@@ -61,10 +71,5 @@ class Customer extends Model
     public function source_customer()//nhóm KH
     {
         return $this->belongsTo(Status::class, 'source_id', 'id');
-    }
-
-    public function getGenderTextAttribute()
-    {
-        return $this->gender == UserConstant::MALE ? 'Nam' : 'Nữ';
     }
 }
