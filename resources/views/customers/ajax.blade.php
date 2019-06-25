@@ -22,30 +22,30 @@
         </tr>
         </thead>
         <tbody>
-        @if (count($users))
-            @foreach($users as $user)
+        @if (count($customers))
+            @foreach($customers as $customer)
                 <tr>
-                    <th scope="row">{{ $user->id }}</th>
+                    <th scope="row">{{ $customer->id }}</th>
                     <td class="text-center">
-                        <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $user->id) }}"><i class="fas fa-calendar-alt"></i></a>
-                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
+                        <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>
+                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a>
                         <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>
-                        <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
+                        <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
-                    <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($user->created_at)) }}</td>
-                    <td class="text-center">{{ $user->full_name }}</td>
-                    <td class="text-center">{{ $user->phone }}</td>
-                    <td class="text-center">{{ @$user->category->name }}</td>
-                    <td class="text-center">{{ @$user->status->name }}</td>
-                    <td class="text-center">{{ @$user->telesale->full_name }}</td>
-                    <td class="text-center">{{ $user->description }}</td>
-                    <td class="text-center">{{ @$user->marketing ? @$user->marketing->full_name: '' }}</td>
-                    <td class="text-center">{{ @$user->source->name}}</td>
-                    <td class="text-center">{{ $user->gender_text  }}</td>
-                    <td class="text-center">{{ date('d-m-Y', strtotime($user->birthday)) }}</td>
-                    <td class="text-center">{{ $user->account_code }}</td>
-                    <td class="text-center">{{ $user->orders->count() }}</td>
-                    <td class="text-center">{{ number_format($user->orders->sum('all_total')) }}</td>
+                    <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
+                    <td class="text-center">{{ $customer->full_name }}</td>
+                    <td class="text-center">{{ $customer->phone }}</td>
+                    <td class="text-center">{{ @$customer->category->name }}</td>
+                    <td class="text-center">{{ @$customer->status->name }}</td>
+                    <td class="text-center">{{ @$customer->telesale->full_name }}</td>
+                    <td class="text-center">{{ $customer->description }}</td>
+                    <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
+                    <td class="text-center">{{ @$customer->source->name}}</td>
+                    <td class="text-center">{{ $customer->gender_text  }}</td>
+                    <td class="text-center">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
+                    <td class="text-center">{{ $customer->account_code }}</td>
+                    <td class="text-center">{{ $customer->orders->count() }}</td>
+                    <td class="text-center">{{ number_format($customer->orders->sum('all_total')) }}</td>
                     <td class="text-center"></td>
                 </tr>
             @endforeach
@@ -58,11 +58,11 @@
     </table>
     <div class="pull-left">
         <div class="page-info">
-            {{ 'Tổng số ' . $users->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+            {{ 'Tổng số ' . $customers->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
         </div>
     </div>
     <div class="pull-right">
-        {{ $users->appends(['search' => request()->search ])->links() }}
+        {{ $customers->appends(['search' => request()->search ])->links() }}
     </div>
 </div>
 <!-- table-responsive -->

@@ -71,25 +71,25 @@ class User extends Authenticatable
         return $data;
     }
 
-    public function status()
-    {
-        return $this->belongsTo(Status::class, 'status_id', 'id');
-    }
-
-    public function marketing()
-    {
-        return $this->belongsTo(User::class, 'mkt_id');
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'group_id', 'id');
-    }
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class, 'member_id', 'id');
-    }
+//    public function status()
+//    {
+//        return $this->belongsTo(Status::class, 'status_id', 'id');
+//    }
+//
+//    public function marketing()
+//    {
+//        return $this->belongsTo(User::class, 'mkt_id');
+//    }
+//
+//    public function category()
+//    {
+//        return $this->belongsTo(Category::class, 'group_id', 'id');
+//    }
+//
+//    public function orders()
+//    {
+//        return $this->hasMany(Order::class, 'member_id', 'id');
+//    }
 
     public function getGenderTextAttribute()
     {
@@ -134,13 +134,13 @@ class User extends Authenticatable
             ->groupBy('mkt_id');
     }
 
-    public function telesale()
-    {
-        return $this->belongsTo(User::class, 'telesales_id', 'id');
-    }
-
-    public function source_customer()//nhóm KH
-    {
-        return $this->belongsTo(Status::class, 'source_id', 'id');
-    }
+//    public function telesale()
+//    {
+//        return $this->belongsTo(User::class, 'telesales_id', 'id');
+//    }
+//
+//    public function source_customer()//nhóm KH
+//    {
+//        return $this->belongsTo(Status::class, 'source_id', 'id');
+//    }
 }

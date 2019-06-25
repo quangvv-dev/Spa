@@ -10,6 +10,39 @@ class Customer extends Model
 {
     protected $guarded = ['id'];
 
+    public static function search($param)
+    {
+        $data = self::with('status', 'marketing', 'category')
+            ->when($param['search'], function ($query) use ($param) {
+                $query->where('full_name', 'like', '%' . $param['search'] . '%')
+                    ->orWhere('phone', 'like', '%' . $param['search'] . '%');
+            })
+            ->when($param['status'], function ($query) use ($param) {
+                $query->whereHas('status', function ($q) use ($param) {
+                    $q->where('status.name', $param['status']);
+                });
+            })
+            ->when($param['group_id'], function ($query) use ($param) {
+                $query->where('group_id', $param['status']);
+            })
+            ->when($param['telesales_id'], function ($query) use ($param) {
+                $query->where('telesales_id', $param['telesales_id']);
+            })
+            ->latest()->paginate(10);
+
+        return $data;
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id', 'id');
+    }
+
+    public function marketing()
+    {
+        return $this->belongsTo(User::class, 'mkt_id', 'id');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'group_id', 'id');
@@ -28,16 +61,6 @@ class Customer extends Model
     public function getActiveTextAttribute()
     {
         return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
-    }
-
-    public function status()
-    {
-        return $this->belongsTo(Status::class, 'status_id', 'id');
-    }
-
-    public function marketing()
-    {
-        return $this->belongsTo(User::class, 'mkt_id');
     }
 
     public function telesale()

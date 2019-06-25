@@ -1,8 +1,4 @@
 @extends('layout.app')
-@section('_style')
-    <!-- Bootstrap fileupload css -->
-    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
-@endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -11,29 +7,29 @@
             </div>
 
             @if (isset($customer))
-                {!! Form::model($customer, array('url' => url('customers/'.$customer->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::model($customer, array('url' => url('customers/'.$customer->id), 'method' => 'put', 'files'=> true, 'id'=>'fvalidate')) !!}
             @else
-                {!! Form::open(array('url' => route('customers.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::open(array('url' => route('customers.store'), 'method' => 'post', 'files'=> true, 'id'=>'fvalidate')) !!}
             @endif
             <div class="row col-md-12">
                 <div class="col-md-6">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
-                            {!! Form::label('full_name', 'Tên KH', array('class' => ' required')) !!}
+                            {!! Form::label('full_name', 'Tên KH', array('class' => 'control-label')) !!}
                             {!! Form::text('full_name', null, array('class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
-                            {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
+                            {!! Form::label('phone', 'Số điện thoại', array('class' => 'control-label')) !!}
                             {!! Form::text('phone', null, array('id' => 'phone','class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('facebook', 'Link Facebook', array('class' => ' required')) !!}
+                            {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
                             {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
                         </div>
@@ -63,7 +59,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
-                            {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
+                            {!! Form::label('gender', 'Giới tính', array('class' => 'control-label')) !!}
                             {!! Form::select('gender',[0 => 'Nữ', 1 => 'Nam'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn giới tính')) !!}
                             <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
                         </div>
@@ -86,14 +82,14 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
-                            {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
+                            {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}
                             {!! Form::select('status_id', $status, @$customer->status_id, array('class' => 'form-control select2', 'placeholder' => 'Mối quan hệ')) !!}
                             <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('group_id') ? 'has-error' : '' }}">
-                            {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => ' required')) !!}
+                            {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => 'required')) !!}
                             {!! Form::select('group_id', $group, @$customer->group_id, array('class' => 'form-control select2', 'placeholder' => 'Nhóm khách hàng')) !!}
                             <span class="help-block">{{ $errors->first('group_id', ':message') }}</span>
                         </div>
@@ -103,13 +99,6 @@
                             {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => ' required')) !!}
                             {!! Form::select('source_id', $source, @$customer->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
                             <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-                            {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
-                            {!! Form::select('branch_id', $branch, @$customer->branch_id, array('class' => 'form-control select2', 'placeholder' => 'Chi nhánh')) !!}
-                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                         </div>
                     </div>
                 </div>
@@ -126,8 +115,6 @@
     </div>
 @endsection
 @section('_script')
-    <!-- Bootstrap fileupload js -->
-    <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script>
         $(document).ready(function () {
             // validate phone
@@ -148,26 +135,12 @@
                     phone: {
                         required: true,
                         remote: {
-                            url: "{{ url('api/check-unique-users') }}",
+                            url: "{{ url('api/check-unique-customers') }}",
                             type: "post",
                             data: {
                                 phone: function () {
                                     return $("#phone").val();
                                 },
-                                id: {{ isset($customer) ? $customer->id : 0 }},
-                            },
-                        }
-                    },
-                    email: {
-                        email: true,
-                        remote: {
-                            url: "{{ url('api/check-unique-users') }}",
-                            type: "post",
-                            data: {
-                                email: function () {
-                                    return $("#email").val();
-                                },
-                                table: 'teacher',
                                 id: {{ isset($customer) ? $customer->id : 0 }},
                             },
                         }
@@ -181,9 +154,6 @@
                     status_id: {
                         required: true
                     },
-                    image: {
-                        accept: "image/*"
-                    }
                 },
                 messages: {
                     full_name: "Chưa nhập tên",
@@ -191,12 +161,7 @@
                         required: "Chưa nhập số điện thoại",
                         remote: "Số điện thoại đã tồn tại trong hệ thống",
                     },
-                    email: {
-                        email: "Email không đúng định dạng",
-                        remote: "Email đã tồn tại trong hệ thống",
-                    },
                     gender: "Chưa chọn giới tính",
-                    role: "Chưa nhập quyền",
                     status_id: "Chưa chọn trạng thái",
                 },
             });
