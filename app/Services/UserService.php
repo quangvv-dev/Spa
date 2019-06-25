@@ -48,7 +48,11 @@ class UserService
     {
         $data = $this->find($id);
 
-        $input['password'] = bcrypt($input['password']);
+        if ($input['password'] == null) {
+            $input['password'] = $data->password;
+        } else {
+            $input['password'] = bcrypt($input['password']);
+        }
 
         if ($input['image']) {
             $input['avatar'] = $this->fileUpload->uploadUserImage($input['image']);

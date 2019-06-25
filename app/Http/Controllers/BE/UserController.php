@@ -114,6 +114,7 @@ class UserController extends Controller
     {
         $input = $request->except('image');
         $input['image'] = $request->image;
+        $input['password'] = $request->password;
 
         $this->userService->update($input, $id);
 
