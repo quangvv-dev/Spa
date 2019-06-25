@@ -144,13 +144,16 @@
                                 id: {{ isset($customer) ? $customer->id : 0 }},
                             },
                         }
-                    }
+                    },
                     gender: {
+                        required: true
+                    },
+                    role: {
                         required: true
                     },
                     status_id: {
                         required: true
-                    }
+                    },
                 },
                 messages: {
                     full_name: "Chưa nhập tên",

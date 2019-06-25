@@ -143,6 +143,7 @@ class UserController extends Controller
         })->when($email, function ($query, $email) {
             $query->where('email', $email);
         })->first();
+
         if ($result) {
             return $result->id == $request->id ? 'true' : 'false';
         }

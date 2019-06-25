@@ -114,7 +114,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $customer)
+    public function edit(Customer $customer)
     {
         $user['birthday'] = Functions::dayMonthYear($customer->birthday);
         $title = 'Sửa khách hàng';
@@ -129,19 +129,12 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $customer)
+    public function update(Request $request, $id)
     {
-        $input = $request->except('image');
-        @$date = Functions::yearMonthDay($request->birthday);
-        $input['birthday'] = isset($date) && $date ? $date : '';
-        $input['password'] = bcrypt($request->password);
-        $input['telesales_id'] = $request->telesales_id;
-//        dd($input['telesales_id']);
+        $input = $request->all();
+        $input['mkt_id'] = $request->mkt_id;
 
-//        if ($request->image) {
-//            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-//        }
-        $customer->update($input);
+        $this->customerService->update($input, $id);
 
         return redirect(route('customers.index'))->with('status', 'Cập nhật khách hàng thành công');
     }
@@ -163,10 +156,10 @@ class CustomerController extends Controller
     {
         $customer = Customer::where('phone', $request->phone)->first();
 
-        if (!$customer)
-            return false;
+        if ($customer)
+            return $customer->id == $request->id ? 'true': 'false';
 
-        return true;
+        return 'true';
     }
 
     public function exportCustomer()

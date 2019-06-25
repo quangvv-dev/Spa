@@ -21,6 +21,13 @@ class CustomerService
         $this->customer = $customer;
     }
 
+    public function find($id)
+    {
+        $customer = $this->customer->where('id', $id)->first();
+
+        return $customer;
+    }
+
     public function create($input)
     {
         $data = $this->data($input);
@@ -42,6 +49,18 @@ class CustomerService
         }
 
         return $input;
+
+    }
+
+    public function update($input, $id)
+    {
+        $data = $this->data($input);
+
+        $customer = $this->find($id);
+
+        $customer->fill($data)->save();
+
+        return $customer;
 
     }
 }
