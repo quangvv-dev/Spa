@@ -7,7 +7,9 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Status;
+use App\Services\CustomerService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,19 +18,16 @@ use Illuminate\Support\Facades\Response;
 
 class CustomerController extends Controller
 {
-    /**
-     * @var Filesystem
-     */
-    private $fileUpload;
+    private $customerService;
 
     /**
      * UserController constructor.
      *
      * @param Filesystem $fileUpload
      */
-    public function __construct(Filesystem $fileUpload)
+    public function __construct(CustomerService $customerService)
     {
-        $this->fileUpload = $fileUpload;
+        $this->customerService = $customerService;
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
@@ -55,47 +54,15 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with('status', 'marketing', 'category');
-        $statuses = Status::where('type', StatusCode::RELATIONSHIP)->get();
+        $statuses = Status::get();
         $title = 'Danh sách khách hàng';
-        $search = $request->search;
-        $searchStatus = $request->status;
-        $searchGroup = $request->group;
-        $searchTelesales = $request->telesales;
-
-        if (Auth::user()->role == UserConstant::MARKETING || Auth::user()->role == UserConstant::TELESALES) {
-            $users = $users->where('role', UserConstant::CUSTOMER)->where('mkt_id', Auth::user()->id);
-            $title = "Tạo khách hàng mới";
-        }
-        if ($search) {
-            $users = $users->where(function ($query) use ($search) {
-                $query->where('full_name', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%');
-            });
-        }
-
-        if ($searchStatus) {
-            $users->whereHas('status', function ($query) use ($searchStatus) {
-                $query->where('status.name', $searchStatus);
-            });
-        }
-
-        if ($searchGroup) {
-            $users->where('group_id', $searchGroup);
-        }
-
-        if ($searchTelesales) {
-            $users->where('telesales_id', $searchTelesales);
-        }
-
-        $users = $users->where('role', UserConstant::CUSTOMER)
-            ->paginate(10);
+        $customers = Customer::search($request);
 
         if ($request->ajax()) {
-            return Response::json(view('customers.ajax', compact('users', 'statuses', 'title'))->render());
+            return Response::json(view('customers.ajax', compact('customers', 'statuses', 'title'))->render());
         }
 
-        return view('customers.index', compact('users', 'statuses', 'title'));
+        return view('customers.index', compact('customers', 'statuses', 'title'));
     }
 
     /**
@@ -118,25 +85,10 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        @$date = Functions::yearMonthDay($request->birthday);
-        $input = $request->except('image');
-        $marketingUser = Auth::user()->id;
-        $input['active'] = UserConstant::ACTIVE;
-        $input['birthday'] = isset($date) && $date ? $date : '';
-        $input['password'] = bcrypt($request->password);
-        $input['role'] = UserConstant::CUSTOMER;
-        $input['telesales_id'] = $request->telesales_id;
+        $input = $request->all();
+        $input['mkt_id'] = $request->mkt_id;
 
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
-
-        $dataUser = User::create($input);
-        if ($request->mkt_id == null) {
-            $dataUser->update([
-                'mkt_id' => $marketingUser,
-            ]);
-        }
+        $this->customerService->create($input);
 
         return redirect('customers')->with('status', 'Tạo người dùng thành công');
     }
@@ -184,9 +136,9 @@ class CustomerController extends Controller
         $input['telesales_id'] = $request->telesales_id;
 //        dd($input['telesales_id']);
 
-        if ($request->image) {
-            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
-        }
+//        if ($request->image) {
+//            $input['avatar'] = $this->fileUpload->uploadUserImage($request->image);
+//        }
         $customer->update($input);
 
         return redirect(route('customers.index'))->with('status', 'Cập nhật khách hàng thành công');
@@ -203,5 +155,15 @@ class CustomerController extends Controller
     {
         $customer->delete();
         $request->session()->flash('error', 'Xóa người dùng thành công!');
+    }
+
+    public function checkUniquePhone(Request $request)
+    {
+        $customer = Customer::where('phone', $request->phone)->first();
+
+        if (!$customer)
+            return false;
+
+        return true;
     }
 }

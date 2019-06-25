@@ -1,8 +1,4 @@
 @extends('layout.app')
-@section('_style')
-    <!-- Bootstrap fileupload css -->
-    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
-@endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -11,9 +7,9 @@
             </div>
 
             @if (isset($customer))
-                {!! Form::model($customer, array('url' => url('customers/'.$customer->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::model($customer, array('url' => url('customers/'.$customer->id), 'method' => 'put', 'files'=> true, 'id'=>'fvalidate')) !!}
             @else
-                {!! Form::open(array('url' => route('customers.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::open(array('url' => route('customers.store'), 'method' => 'post', 'files'=> true, 'id'=>'fvalidate')) !!}
             @endif
             <div class="row col-md-12">
                 <div class="col-md-6">
@@ -105,13 +101,6 @@
                             <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-                            {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
-                            {!! Form::select('branch_id', $branch, @$customer->branch_id, array('class' => 'form-control select2', 'placeholder' => 'Chi nhánh')) !!}
-                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -126,8 +115,6 @@
     </div>
 @endsection
 @section('_script')
-    <!-- Bootstrap fileupload js -->
-    <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script>
         $(document).ready(function () {
             // validate phone
@@ -148,7 +135,7 @@
                     phone: {
                         required: true,
                         remote: {
-                            url: "{{ url('api/check-unique-users') }}",
+                            url: "{{ url('api/check-unique-customers') }}",
                             type: "post",
                             data: {
                                 phone: function () {
@@ -157,32 +144,12 @@
                                 id: {{ isset($customer) ? $customer->id : 0 }},
                             },
                         }
-                    },
-                    email: {
-                        email: true,
-                        remote: {
-                            url: "{{ url('api/check-unique-users') }}",
-                            type: "post",
-                            data: {
-                                email: function () {
-                                    return $("#email").val();
-                                },
-                                table: 'teacher',
-                                id: {{ isset($customer) ? $customer->id : 0 }},
-                            },
-                        }
-                    },
+                    }
                     gender: {
-                        required: true
-                    },
-                    role: {
                         required: true
                     },
                     status_id: {
                         required: true
-                    },
-                    image: {
-                        accept: "image/*"
                     }
                 },
                 messages: {
@@ -191,12 +158,7 @@
                         required: "Chưa nhập số điện thoại",
                         remote: "Số điện thoại đã tồn tại trong hệ thống",
                     },
-                    email: {
-                        email: "Email không đúng định dạng",
-                        remote: "Email đã tồn tại trong hệ thống",
-                    },
                     gender: "Chưa chọn giới tính",
-                    role: "Chưa nhập quyền",
                     status_id: "Chưa chọn trạng thái",
                 },
             });

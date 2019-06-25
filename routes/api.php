@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/check-unique-users', 'BE\UserController@checkUnique');
+Route::post('/check-unique-customers', 'BE\CustomerController@checkUniquePhone');
