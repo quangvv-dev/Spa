@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Department;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,6 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        Model::unguard();
+        Department::truncate();
+        Department::create(
+            [
+                'name'      => 'Ban giám đốc',
+                'parent_id' => 0,
+            ]
+        );
+        Model::reguard();
     }
 }

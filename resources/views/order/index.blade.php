@@ -100,7 +100,7 @@
             </div>
             <div class="col bot">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('category.index')}}" class="btn btn-danger">Về danh sách</a>
+                <a href="{{route('customers.index')}}" class="btn btn-danger">Về danh sách</a>
             </div>
             {{ Form::close() }}
 
