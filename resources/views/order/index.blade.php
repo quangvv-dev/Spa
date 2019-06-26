@@ -57,7 +57,7 @@
                             <th class="text-white text-center">Đơn giá</th>
                             <th class="text-white text-center">Số buổi</th>
                             <th class="text-white text-center">VAT (%)</th>
-                            <th class="text-white text-center">CK (%)</th>
+{{--                            <th class="text-white text-center">CK (%)</th>--}}
                             <th class="text-white text-center">CK (đ)</th>
                             <th class="text-white text-center">Thành tiền</th>
                         </tr>
@@ -79,9 +79,9 @@
                                 <td class="text-center">
                                     {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                                 </td>
-                                <td class="text-center">
-                                    {!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}
-                                </td>
+{{--                                <td class="text-center">--}}
+{{--                                    {!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}--}}
+{{--                                </td>--}}
                                 <td class="text-center">
                                     {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                                 </td>
@@ -124,9 +124,9 @@
                     <td class="text-center">
                         {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                     </td>
-                    <td class="text-center">
-                        {!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}
-                    </td>
+                    {{--<td class="text-center">--}}
+                    {{--    {!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}--}}
+                    {{--</td>--}}
                     <td class="text-center">
                         {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                     </td>
@@ -167,7 +167,7 @@
                         $(target).find('.CK1').prop('readonly', false);
                     }
 
-                    var total_service = price * quantity + price * quantity * (VAT / 100) - price * quantity * (CK1 / 100) - CK2;
+                    var total_service = price * quantity + price * quantity * (VAT / 100) - CK2;
                     $(target).find('.total').val(total_service);
                 })
             });
