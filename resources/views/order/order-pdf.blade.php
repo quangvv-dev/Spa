@@ -57,23 +57,23 @@
                         <tbody>
                         <tr class="trfirst">
                             <td style="width:50%">
-                                <b>Tên khách hàng:</b>&nbsp; {{ $order->user->full_name }}
+                                <b>Tên khách hàng:</b>&nbsp; {{ $order->customer->full_name }}
                             </td>
                             <td style="width:50%">
-                                <b>Người thực hiện:</b>&nbsp;{{ @$order->user->marketing->full_name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width:50%">
-                                <b>Địa chỉ:</b>&nbsp;{{ $order->user->address }}
-                            </td>
-                            <td style="width:50%">
-                                <b>Phòng ban:</b>&nbsp;{{ $order->user->phone }}
+                                <b>Người thực hiện:</b>&nbsp;{{ @$order->customer->marketing->full_name }}
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;{{ $order->user->phone }} - <span>Email</span>: {{ $order->user->email }}
+                                <b>Địa chỉ:</b>&nbsp;{{ $order->customer->address }}
+                            </td>
+                            <td style="width:50%">
+                                <b>Phòng ban:</b>&nbsp;{{ $order->customer->phone }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:50%">
+                                <b>Điện thoại:</b>&nbsp;{{ $order->customer->phone }}
                             </td>
                             <td style="width:50%">
                                 <b>Ngày đặt hàng:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}
@@ -81,7 +81,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Người nhận:</b>&nbsp;{{ $order->user->full_name }} - Điện thoại: {{ $order->user->phone }}
+                                <b>Người nhận:</b>&nbsp;{{ $order->customer->full_name }} - Điện thoại: {{ $order->customer->phone }}
                             </td>
                             <td style="width:50%">
                                 <b>Phương thức thanh toán:</b>&nbsp;{{$order->name_payment_type}}

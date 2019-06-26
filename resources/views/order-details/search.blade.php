@@ -33,7 +33,7 @@
     </div>
     <div class="col-md-12 col-xs-12">
         <div class="form-group">
-            {!! Form::select('payment_type',[0 => "Tiền mặt", 1 => 'Thẻ'], null, array('class' => 'form-control payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
+            {!! Form::select('payment_type',[1 => "Tiền mặt", 2 => 'Thẻ'], null, array('class' => 'form-control payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
         </div>
     </div>
     <div class="col-md-12 col-xs-12">

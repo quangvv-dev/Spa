@@ -15,7 +15,7 @@ class OrderService
 
     public function create($data)
     {
-        $theRest = array_sum($data['total_price']) - $data['gross_revenue'];
+        $theRest = array_sum($data['total_price']);
         if (empty($data) && is_array($data) == false)
             return false;
 
@@ -23,8 +23,7 @@ class OrderService
             'member_id'     => $data['user_id'],
             'the_rest'      => $theRest,
             'count_day'     => array_sum($data['count_day']),
-            'all_total'     => array_sum($data['total_price']),
-            'gross_revenue' => $data['gross_revenue']
+            'all_total'     => array_sum($data['total_price'])
         ];
 
         $model = $this->order->fill($input);

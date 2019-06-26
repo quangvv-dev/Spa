@@ -22,7 +22,7 @@
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required">
                             {!! Form::label('phone', 'Số tiền', array('class' => ' required')) !!}
-                            {!! Form::select('payment_type',[0 => "Tiền mặt", 1 => 'Thẻ'], null, array('id' => 'phone','class' => 'form-control select2 payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
+                            {!! Form::select('payment_type',[1 => "Tiền mặt", 2 => 'Thẻ'], null, array('id' => 'phone','class' => 'form-control select2 payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-6">

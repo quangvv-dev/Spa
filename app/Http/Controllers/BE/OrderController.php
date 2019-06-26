@@ -5,8 +5,8 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\Services;
 use App\Models\Status;
 use App\Services\OrderDetailService;
@@ -15,7 +15,6 @@ use App\Services\PaymentHistoryService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use DB;
 
@@ -39,7 +38,7 @@ class OrderController extends Controller
     public function index()
     {
         $title = 'Tạo đơn hàng';
-        $customers = User::where('role', UserConstant::CUSTOMER)->pluck('full_name', 'id');
+        $customers = Customer::pluck('full_name', 'id');
         return view('order.index', compact('title', 'customers'));
     }
 
@@ -56,16 +55,16 @@ class OrderController extends Controller
     {
         $id = $request->id ? $request->id : '';
         if (isset($id) && $id) {
-            $data = User::find($id);
+            $data = Customer::find($id);
             return $data;
         }
     }
 
     public function store(Request $request)
     {
-        $customer = User::find($request->user_id);
+        $customer = Customer::find($request->user_id);
         $param = $request->all();
-        $customer->update($param);
+        $customer->update($request->only('full_name', 'phone', 'address'));
 
         $order = $this->orderService->create($param);
         $this->orderDetailService->create($param, $order->id);
@@ -91,7 +90,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::with('user', 'orderDetails', 'paymentHistories')->findOrFail($id);
+        $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
         $data = $order->paymentHistories;
 
         return view('order.order', compact('order', 'data'));
@@ -99,7 +98,7 @@ class OrderController extends Controller
 
     public function orderDetailPdf($id)
     {
-        $order = Order::with('user', 'orderDetails')->findOrFail($id);
+        $order = Order::with('customer', 'orderDetails')->findOrFail($id);
         $pdf = \PDF::loadView('order.order-pdf', compact('order'));
         return $pdf->download('order.pdf');
     }
