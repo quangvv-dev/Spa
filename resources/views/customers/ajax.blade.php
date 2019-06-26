@@ -30,7 +30,7 @@
                         <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>
                         <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a>
                         <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>
-                        <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>
+{{--                        <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
                     </td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center">{{ $customer->full_name }}</td>

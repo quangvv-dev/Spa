@@ -7,7 +7,10 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
-                <div class="col"><a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
+                <div class="col relative">
+                    <a style="position: absolute;right: 10%" class="btn" href="{{url('customer-export')}}">
+                        <i class="fas fa-download"></i></a>
+                    <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">

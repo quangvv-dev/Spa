@@ -25,7 +25,7 @@ class ScheduleController extends Controller
      */
     public function index(Request $request, $id)
     {
-        $docs = Schedule::orderBy('id', 'desc');
+        $docs = Schedule::orderBy('id', 'desc')->where('user_id',$id);
         if ($request->search) {
             $docs = $docs->where('name', 'like', '%' . $request->search . '%')
                 ->orwhere('code', 'like', '%' . $request->search . '%')

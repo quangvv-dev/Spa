@@ -12,3 +12,12 @@ div.scrollmenu button {
     height: 40px;
     text-decoration: none;
 }
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+    right: 10%;
+}
