@@ -28,7 +28,6 @@ class OrderDetailService
                 'price'            => $data['price'][$key],
                 'vat'              => $data['vat'][$key],
                 'address'          => $data['address'],
-                'percent_discount' => $data['percent_discount'][$key],
                 'number_discount'  => $data['number_discount'][$key],
                 'total_price'      => $data['total_price'][$key],
             ];

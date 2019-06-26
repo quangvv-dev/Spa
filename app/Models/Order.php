@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Constants\UserConstant;
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -15,9 +13,9 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'order_id', 'id');
     }
 
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(User::class, 'member_id', 'id');
+        return $this->belongsTo(Customer::class, 'member_id', 'id');
     }
 
     public function paymentHistories()
@@ -27,21 +25,22 @@ class Order extends Model
 
     public static function search($input)
     {
-        $data = self::with('user', 'orderDetails');
+        $data = self::with( 'orderDetails');
 
         if ($input) {
-            $data = $data->when($input['group'], function ($query) use ($input) {
-                $query->whereHas('user', function ($q) use ($input) {
+            $data = $data
+            ->when($input['group'], function ($query) use ($input) {
+                $query->whereHas('customer', function ($q) use ($input) {
                     $q->where('group_id', $input['group']);
                 });
             })
             ->when($input['telesale'], function ($query) use ($input) {
-                $query->whereHas('user', function ($q) use ($input) {
+                $query->whereHas('customer', function ($q) use ($input) {
                    $q->where('telesales_id', $input['telesale']);
                 });
             })
             ->when($input['marketing'], function ($query) use ($input) {
-                $query->whereHas('user', function ($q) use ($input) {
+                $query->whereHas('customer', function ($q) use ($input) {
                    $q->where('mkt_id', $input['marketing']);
                 });
             })
@@ -51,13 +50,13 @@ class Order extends Model
                 });
             })
             ->when($input['customer'], function ($query) use ($input) {
-                $query->whereHas('user', function ($q) use ($input) {
+                $query->whereHas('customer', function ($q) use ($input) {
                    $q->where('full_name', 'like', '%'. $input['customer']. '%')
                    ->orWhere('phone', 'like', '%'. $input['customer']. '%');
                 });
             })
             ->when($input['payment_type'], function ($query) use ($input) {
-                $query->where('payment_type', $input['payment_type'])->whereNotNull('payment_type');
+                $query->whereNotNull('payment_type')->where('payment_type', $input['payment_type']);
             });
         }
 

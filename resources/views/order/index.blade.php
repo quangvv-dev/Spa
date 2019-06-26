@@ -57,7 +57,7 @@
                             <th class="text-white text-center">Đơn giá</th>
                             <th class="text-white text-center">Số buổi</th>
                             <th class="text-white text-center">VAT (%)</th>
-{{--                            <th class="text-white text-center">CK (%)</th>--}}
+                            {{--<th class="text-white text-center">CK (%)</th>--}}
                             <th class="text-white text-center">CK (đ)</th>
                             <th class="text-white text-center">Thành tiền</th>
                         </tr>
@@ -153,21 +153,21 @@
                     var quantity = $(target).find('.quantity').val();
                     var VAT = $(target).find('.VAT').val();
                     var price = $(target).find('.price').val();
-                    var CK1 = $(target).find('.CK1').val();
+                    // var CK1 = $(target).find('.CK1').val();
                     var CK2 = $(target).find('.CK2').val();
 
-                    if (CK1 > 0 && CK2 == 0) {
-                        $(target).find('.CK2').prop('readonly', true);
-                        $(target).find('.CK1').prop('readonly', false);
-                    } else if (CK2 > 0 && CK1 == 0) {
-                        $(target).find('.CK2').prop('readonly', false);
-                        $(target).find('.CK1').prop('readonly', true);
-                    } else {
-                        $(target).find('.CK2').prop('readonly', false);
-                        $(target).find('.CK1').prop('readonly', false);
-                    }
+                    // if (CK1 > 0 && CK2 == 0) {
+                    //     $(target).find('.CK2').prop('readonly', true);
+                    //     $(target).find('.CK1').prop('readonly', false);
+                    // } else if (CK2 > 0 && CK1 == 0) {
+                    //     $(target).find('.CK2').prop('readonly', false);
+                    //     $(target).find('.CK1').prop('readonly', true);
+                    // } else {
+                    //     $(target).find('.CK2').prop('readonly', false);
+                    //     $(target).find('.CK1').prop('readonly', false);
+                    // }
 
-                    var total_service = price * quantity + price * quantity * (VAT / 100) - CK2;
+                    var total_service = price * quantity + price * quantity * (VAT / 100) - price * quantity * (CK1 / 100) - CK2;
                     $(target).find('.total').val(total_service);
                 })
             });
