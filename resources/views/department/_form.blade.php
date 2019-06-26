@@ -19,10 +19,21 @@
                         <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                     </div>
                 </div>
+                @if(isset($doc) && @$doc->parent_id != 0)
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group {{ $errors->has('parent_id') ? 'has-error' : '' }}">
+                            {!! Form::label('parent_id','Trực thuộc', array('class' => 'required')) !!}
+                            {!! Form::select('parent_id',$category_pluck, @$doc->parent_id, array('class' => 'form-control select2')) !!}
+                            <span class="help-block">{{ $errors->first('parent_id', ':message') }}</span>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            <div class="col row">
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('parent_id') ? 'has-error' : '' }}">
-                        {!! Form::label('parent_id','Trực thuộc', array('class' => 'required')) !!}
-                        {!! Form::select('parent_id',$category_pluck, @$doc->parent_id, array('class' => 'form-control select2')) !!}
+                        {!! Form::label('description','Mô tả', array('class' => 'required')) !!}
+                        {!! Form::textArea('description',null, array('class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('parent_id', ':message') }}</span>
                     </div>
                 </div>

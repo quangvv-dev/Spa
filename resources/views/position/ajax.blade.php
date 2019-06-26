@@ -3,10 +3,7 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
-            <th class="text-white text-center">Ngày đặt lịch</th>
-            <th class="text-white text-center">Giờ đặt từ</th>
-            <th class="text-white text-center">Giờ đặt tới</th>
-            <th class="text-white text-center">Người tạo</th>
+            <th class="text-white text-center">Chức vụ</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -15,10 +12,7 @@
             @foreach($docs as $k => $s)
                 <tr>
                     <th scope="row">{{$k}}</th>
-                    <td class="text-center">{{$s->date}}</td>
-                    <td class="text-center">{{$s->time_from}}</td>
-                    <td class="text-center">{{@$s->time_to}}
-                    <td class="text-center">{{@$s->creator->full_name}}
+                    <td class="text-center">{{$s->name}}</td>
                     </td>
                     <td class="text-center">
                         <a class="btn update" href="#" data-id="{{$s->id}}" title="Chỉnh sửa lịch hẹn"
@@ -42,6 +36,6 @@
         {{ $docs->appends(['search' => request()->search ])->links() }}
     </div>
     {{--    Modal thêm --}}
-    @include('schedules.modal')
+    @include('position.modal')
     {{--    END Modal thêm --}}
 </div>

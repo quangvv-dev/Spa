@@ -22,7 +22,13 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('services', 'ServiceController');
     Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
+
     Route::resource('department', 'DepartmentController');
+    Route::get('position/{id}', 'PositionController@index')->name('position.index');
+    Route::post('position/{id}', 'PositionController@store')->name('position.store');
+    Route::put('position/{id}', 'PositionController@update')->name('position.update');
+    Route::get('position/edit/{id}', 'PositionController@edit')->name('position.edit');
+
     Route::get('schedules/{id}', 'ScheduleController@index')->name('schedules.index');
     Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');

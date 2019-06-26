@@ -17,6 +17,7 @@ class CreateDepartmentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->comment('Tên phòng ban');
             $table->integer('parent_id')->default(1)->comment('trực thuộc phòng ban');
+            $table->text('description')->nullable()->comment('Mô tả');
             $table->timestamps();
         });
     }
