@@ -10,7 +10,6 @@
             <th class="text-white text-center">Sản phẩm</th>
             <th class="text-white text-center">Số lượng</th>
             <th class="text-white text-center">Doanh số</th>
-            <th class="text-white text-center">CK(%)</th>
             <th class="text-white text-center">CK(Đ)</th>
             <th class="text-white text-center">Doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
@@ -26,19 +25,18 @@
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                    <td class="text-center">{{ $order->user->account_code }}</td>
-                    <td class="text-center">{{ $order->user->full_name }}</td>
-                    <td class="text-center">{{ $order->user->phone }}</td>
+                    <td class="text-center">{{ $order->customer->account_code }}</td>
+                    <td class="text-center">{{ $order->customer->full_name }}</td>
+                    <td class="text-center">{{ $order->customer->phone }}</td>
                     <td class="text-center"></td>
                     <td class="text-center">{{ $order->orderDetails->sum('quantity') }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
-                    <td class="text-center">{{ $order->orderDetails->sum('percent_discount') }}</td>
                     <td class="text-center">{{ number_format($order->orderDetails->sum('number_discount')) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
                     <td class="text-center">{{ $order->name_payment_type }}</td>
-                    <td class="text-center">{{ @$order->user->marketing->full_name }}</td>
+                    <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
                     <td class="text-center">
                         <a title="In hóa đơn" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
                                     class="fas fa-file-invoice-dollar"></i></a>

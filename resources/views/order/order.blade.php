@@ -13,15 +13,15 @@
                         <tr class="trfirst">
                             <td style="width:50%">
                                 <b>Tên khách hàng:</b>&nbsp; <a class="blue"
-                                                                href="#/crm/view_account/877">{{ $order->user->full_name }}</a>
+                                                                href="#/crm/view_account/877">{{ $order->customer->full_name }}</a>
                             </td>
                             <td style="width:50%">
-                                <b>Người thực hiện:</b>&nbsp;{{ @$order->user->marketing->full_name }}
+                                <b>Người thực hiện:</b>&nbsp;{{ @$order->customer->marketing->full_name }}
                             </td>
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Địa chỉ:</b>&nbsp;{{ $order->user->address }}
+                                <b>Địa chỉ:</b>&nbsp;{{ $order->customer->address }}
                             </td>
                             <td style="width:50%">
                                 <b>Phòng ban:</b>&nbsp;
@@ -29,8 +29,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;{{ $order->user->phone }} -
-                                <span>Email</span>: {{ $order->user->email }}
+                                <b>Điện thoại:</b>&nbsp;{{ $order->customer->phone }} -
                             </td>
                             <td style="width:50%">
                                 <b>Ngày đặt hàng:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}
@@ -38,9 +37,9 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Người nhận:</b>&nbsp;{{ $order->user->full_name }} - Điện thoại:
+                                <b>Người nhận:</b>&nbsp;{{ $order->customer->full_name }} - Điện thoại:
                                 <a class="__clickToCall blue" data-phone="0932148915" data-type="crm"
-                                   data-call="order_222" data-contact-id="896">{{ $order->user->phone }}</a>
+                                   data-call="order_222" data-contact-id="896">{{ $order->customer->phone }}</a>
                             </td>
                             <td style="width:50%">
                                 <b>Phương thức thanh toán:</b>&nbsp;{{$order->name_payment_type}}
