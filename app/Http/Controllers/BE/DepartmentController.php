@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Department as Model;
 use Illuminate\Support\Facades\Response;
 
 class DepartmentController extends Controller
 {
+    protected $list;
 
     public function __construct()
     {
-        $categories = Model::orderBy('id', 'asc')->get()->pluck('name', 'id')->toArray();
+        $categories = Department::orderBy('id', 'asc')->get()->pluck('name', 'id')->toArray();
         view()->share([
             'category_pluck' => $categories,
         ]);
@@ -25,7 +26,7 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $docs = Model::orderBy('id', 'asc');
+        $docs = Department::orderBy('id', 'asc');
         if ($request->search) {
             $docs = $docs->where('name', 'like', '%' . $request->search . '%')
                 ->orwhere('parent_id', 'like', '%' . $request->search . '%');
@@ -46,7 +47,10 @@ class DepartmentController extends Controller
     public function create()
     {
         $title = 'Thêm mới phòng ban';
-        return view('department._form', compact('title'));
+        $this->recursive(Department::all());
+        $departments = $this->list;
+
+        return view('department._form', compact('title', 'departments'));
     }
 
     /**
@@ -58,7 +62,11 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        Model::create($request->except('_token'));
+        if(!$request->parent_id){
+            $request->merge(['parent_id' => 0]);
+        }
+
+        Department::create($request->except('_token'));
         return redirect(route('department.create'))->with('status', 'Tạo danh mục phòng ban');
     }
 
@@ -81,11 +89,14 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Model $department)
+    public function edit(Department $department)
     {
         $doc = $department;
         $title = 'Cập nhật phòng ban';
-        return view('department._form', compact('title', 'doc'));
+
+        $this->recursive(Department::where('id', '<>', $department->id)->get(), $department->parent_id);
+        $departments = $this->list;
+        return view('department._form', compact('title', 'doc', 'departments'));
     }
 
     /**
@@ -96,9 +107,13 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Model $department)
+    public function update(Request $request, Department $department)
     {
         $doc = $department;
+        if(!$request->parent_id){
+            $request->merge(['parent_id' => 0]);
+        }
+
         $doc->update($request->except('_token'));
         return redirect(route('department.index'))->with('status', 'Cập nhật danh mục phòng ban');
     }
@@ -110,7 +125,7 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Model $department)
+    public function destroy(Request $request, Department $department)
     {
         $doc = $department;
         if (count($doc->child())) {
@@ -118,6 +133,19 @@ class DepartmentController extends Controller
         } else {
             $doc->delete();
             $request->session()->flash('error', 'Xóa thành công danh mục!');
+        }
+    }
+
+    public function recursive($data = array(), $current = 0, $parent = 0, $string = "") {
+        foreach ($data as $val) {
+            if ($val->parent_id == $parent) {
+                $this->list .= "<option value=" . $val->id;
+                if ($val->id == $current) {
+                    $this->list .= " selected";
+                }
+                $this->list .= ">" . $string . $val->name . "</option>";
+                $this->recursive($data, $current, $val->id, $string . "|--");
+            }
         }
     }
 }
