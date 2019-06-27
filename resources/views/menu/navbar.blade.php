@@ -148,6 +148,7 @@
                             <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i class="dropdown-icon mdi mdi-settings"></i> Cài đặt tài khoản</a>
                             @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
                             <a class="dropdown-item" href="{!! route('users.index') !!}"><i class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
+                            <a class="dropdown-item" href="{!! route('department.index') !!}"><i class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
                             @endif
                             <div class="dropdown-divider"></div>
                             <a href="{!! url('/logout') !!}" class="dropdown-item"
