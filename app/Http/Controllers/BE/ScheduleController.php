@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use App\Models\Schedule;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use function MongoDB\BSON\toJSON;
 
@@ -25,7 +26,7 @@ class ScheduleController extends Controller
      */
     public function index(Request $request, $id)
     {
-        $docs = Schedule::orderBy('id', 'desc')->where('user_id',$id);
+        $docs = Schedule::orderBy('id', 'desc')->where('user_id', $id);
         if ($request->search) {
             $docs = $docs->where('name', 'like', '%' . $request->search . '%')
                 ->orwhere('code', 'like', '%' . $request->search . '%')
@@ -118,5 +119,21 @@ class ScheduleController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function homePage(Request $request)
+    {
+        $now = Carbon::now()->format('Y-m-d');
+        $docs = Schedule::orderBy('id', 'desc')->where('date', $now)->get();
+        if ($request->search) {
+            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
+                ->orwhere('code', 'like', '%' . $request->search . '%')
+                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
+        }
+        if ($request->ajax()) {
+            return Response::json(view('schedules.ajax', compact('docs', 'title'))->render());
+        }
+        $title = 'Danh sách lịch hẹn';
+        return view('schedules.home', compact('title', 'docs'));
     }
 }

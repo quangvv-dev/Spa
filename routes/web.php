@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::put('position/{id}', 'PositionController@update')->name('position.update');
     Route::get('position/edit/{id}', 'PositionController@edit')->name('position.edit');
 
+    Route::get('schedules', 'ScheduleController@homePage');
     Route::get('schedules/{id}', 'ScheduleController@index')->name('schedules.index');
     Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');
