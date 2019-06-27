@@ -17,4 +17,9 @@ class Department extends Model
     {
         return Department::where('parent_id', $this->id)->get();
     }
+
+    public function childRelation()
+    {
+        return $this->hasMany(Department::class, 'parent_id');
+    }
 }
