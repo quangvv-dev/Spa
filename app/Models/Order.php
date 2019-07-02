@@ -65,11 +65,11 @@ class Order extends Model
 
     public function getNamePaymentTypeAttribute()
     {
-        if ($this->payment_type === 0) {
+        if ($this->payment_type === 1) {
             return "Tiền mặt";
         }
 
-        if ($this->payment_type === 1) {
+        if ($this->payment_type === 2) {
             return "Thẻ";
         }
     }
