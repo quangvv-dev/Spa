@@ -11,7 +11,7 @@
                 <input class="form-control header-search col-md-2" name="search" placeholder="Search…" tabindex="1"
                        type="search">
                 <div class="col-md-2">
-                    {!! Form::select('type',$category_pluck, null, array('class' => 'form-control header-search','placeholder'=>'Trực thuộc')) !!}
+                    {!! Form::select('type',$departments, null, array('class' => 'form-control header-search','placeholder'=>'Trực thuộc')) !!}
                 </div>
             </div>
             <div id="registration-form">
