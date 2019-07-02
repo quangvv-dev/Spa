@@ -41,6 +41,9 @@
                         <a title="In hóa đơn" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
                                     class="fas fa-file-invoice-dollar"></i></a>
                         <a title="Chia hoa hồng" class="btn" href="{{ url('commission/' . $order->id) }}"><i class="fas fa-dollar-sign"></i></a>
+                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
+                            <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

@@ -82,4 +82,11 @@ class OrderService
 
         return $order;
     }
+
+    public function delete($id)
+    {
+        $order = $this->find($id);
+
+        return $order->delete();
+    }
 }

@@ -146,7 +146,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, User $customer)
+    public function destroy(Request $request, Customer $customer)
     {
         $customer->delete();
         $request->session()->flash('error', 'Xóa người dùng thành công!');

@@ -96,6 +96,13 @@ class OrderController extends Controller
         return view('order.order', compact('order', 'data'));
     }
 
+    public function destroy(Request $request, $id)
+    {
+        $order = $this->orderService->delete($id);
+
+        $request->session()->flash('error', 'Xóa đơn hàng thành công!');
+    }
+
     public function orderDetailPdf($id)
     {
         $order = Order::with('customer', 'orderDetails')->findOrFail($id);
