@@ -16,6 +16,7 @@ class PaymentHistoryService
 
     public static function create($data, $id)
     {
+        $data['gross_revenue'] = str_replace(',', '', $data['gross_revenue']);
         $grossRevenue = self::checkGrossRevenue($id, $data['gross_revenue']);
 
         if (empty($data) && is_array($data) == false)

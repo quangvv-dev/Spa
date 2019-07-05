@@ -191,6 +191,7 @@
     @include('order.modal')
 @endsection
 @section('_script')
+    <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
         $(document).ready(function () {
             $('[data-toggle="datepicker"]').datepicker({
@@ -205,7 +206,6 @@
             let paymentType = $('.payment-type').val();
             let grossRevenue = $('.gross-revenue').val();
             let description = $('.description').val();
-            // var html = '';
 
             $.ajax({
                 url: "{{ Url('order/'.$order->id. '/show') }}",
@@ -216,12 +216,8 @@
                     gross_revenue: grossRevenue,
                     description: description
                 }
-            }).done(function (data) {
+            }).done(function () {
                 window.location.reload();
-                $('#all_total').text(data.all_total);
-                $('#all_total1').text(data.all_total);
-                $('#gross_revenue').text(data.gross_revenue);
-                $('#gross_revenue1').text(data.gross_revenue);
             });
         });
 
@@ -235,9 +231,9 @@
                     gross_revenue: grossRevenue
                 }
             }).done(function (data) {
-                $('.cash').text(data.cash);
-                $('.remain_cash').text(data.remain_cash);
-                $('.return_cash').text(data.return_cash);
+                $(".cash").text(data.cash.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('.remain_cash').text((data.remain_cash).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('.return_cash').text((data.return_cash).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             });
         });
     </script>
