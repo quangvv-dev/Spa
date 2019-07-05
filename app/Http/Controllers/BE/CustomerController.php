@@ -156,8 +156,9 @@ class CustomerController extends Controller
     {
         $customer = Customer::where('phone', $request->phone)->first();
 
-        if ($customer)
-            return $customer->id == $request->id ? 'true': 'false';
+        if ($customer) {
+            return $customer->id == $request->id ? 'true' : 'false';
+        }
 
         return 'true';
     }
@@ -233,23 +234,22 @@ class CustomerController extends Controller
         if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
+//                dd(Auth::user());
                 foreach ($result as $k => $row) {
-                    User::create([
-                        'full_name'    => $row['name'],
-                        'account_code' => \bcrypt('123456'),
-                        'email'        => $row['email'],
-                        'phone'        => $row['sdt'],
-                        'birthday'     => 1,
-                        'gender'       => $row['type'] == 'Tài khoản VIP' ? 1 : 0,
-                        'address'      => $row['address'],
-                        'facebook'     => $row['birth_day'],
-                        'created_at'   => Carbon::now()->format('Y-m-d H:s'),
-                        'updated_at'   => $row['birth_day'],
-                        'description'  => $row['gioi_tinh'] == 'Nam' ? 0 : 1,
+                    Customer::create([
+                        'full_name'    => $row['ten_khach_hang'],
+                        'account_code' => $row['ma_khach_hang'],
+                        'mkt_id'       => @Auth::user()->id,
+                        'phone'        => $row['so_dien_thoai'],
+                        'birthday'     => $row['sinh_nhat'],
+                        'gender'       => $row['gioi_tinh'] == 'Nữ' ? 0 : 1,
+                        'address'      => $row['dia_chi'] ?: '',
+                        'facebook'     => $row['link_facebook'] ?: '',
+                        'description'  => $row['mo_ta'],
                     ]);
                 }
             });
+            return redirect()->back()->with('status', 'Tải khách hàng thành công');
         }
-        return redirect('admin/customers');
     }
 }

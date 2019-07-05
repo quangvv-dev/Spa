@@ -8,6 +8,8 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col relative">
+                    <a style="position: absolute;right: 13%" class="btn" href="#" data-toggle="modal" data-target="#myModal">
+                        <i class="fas fa-upload"></i></a>
                     <a style="position: absolute;right: 10%" class="btn" href="{{url('customer-export')}}">
                         <i class="fas fa-download"></i></a>
                     <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
@@ -36,6 +38,7 @@
                     {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
                 </div>
             </div>
+            @include('customers.modal')
             <div id="registration-form">
                 <div class="load" style="text-align: center">
                     <i class="fa fa-spinner fa-spin " style="font-size:46px"></i>
