@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required" style="margin-top: 29px">
-                            {!! Form::number('gross_revenue', null, array('class' => 'form-control gross-revenue')) !!}
+                            {!! Form::text('gross_revenue', null, array('class' => 'form-control gross-revenue', "data-type"=>"currency")) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
