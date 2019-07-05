@@ -36,6 +36,7 @@ class OrderService
     public function updatePayment($data, $id)
     {
         $model = $this->find($id);
+        $data['gross_revenue'] = str_replace(',', '', $data['gross_revenue']);
         $data['gross_revenue'] = $model->gross_revenue + $data['gross_revenue'];
         $data['payment_date'] = Functions::yearMonthDay($data['payment_date']);
         $data['the_rest'] = $model->all_total - $data['gross_revenue'];
@@ -66,6 +67,7 @@ class OrderService
 
     public function getPayment($data, $id)
     {
+        $data['gross_revenue'] = str_replace(',', '', $data['gross_revenue']);
         if (empty($data['gross_revenue']) && is_array($data) == false)
             return false;
 
@@ -81,5 +83,12 @@ class OrderService
             $order['remain_cash'] = 0;
 
         return $order;
+    }
+
+    public function delete($id)
+    {
+        $order = $this->find($id);
+
+        return $order->delete();
     }
 }

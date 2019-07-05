@@ -11,6 +11,10 @@
                 <input class="form-control header-search col-md-2" name="search" placeholder="Search…" tabindex="1"
                        type="search">
                 <div class="col-md-2">
+                    {{--<select class="form-control header-search" name="parent_id">--}}
+                        {{--<option value="" disabled selected>Trực thuộc</option>--}}
+                        {{--{!! $departments !!}--}}
+                    {{--</select>--}}
                     {!! Form::select('type',$category_pluck, null, array('class' => 'form-control header-search','placeholder'=>'Trực thuộc')) !!}
                 </div>
             </div>

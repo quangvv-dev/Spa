@@ -25,7 +25,7 @@
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
-                    <td class="text-center">{{ $order->customer->account_code }}</td>
+                    <td class="text-center">{{ @$order->customer->account_code }}</td>
                     <td class="text-center">{{ $order->customer->full_name }}</td>
                     <td class="text-center">{{ $order->customer->phone }}</td>
                     <td class="text-center"></td>
@@ -41,6 +41,9 @@
                         <a title="In hóa đơn" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
                                     class="fas fa-file-invoice-dollar"></i></a>
                         <a title="Chia hoa hồng" class="btn" href="{{ url('commission/' . $order->id) }}"><i class="fas fa-dollar-sign"></i></a>
+                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
+                            <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

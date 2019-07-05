@@ -40,12 +40,6 @@
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
-                {{--<div class="col-xs-12 col-md-2">--}}
-                    {{--<div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('gross_revenue', 'Doanh thu', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::number('gross_revenue', null, array('class' => 'form-control gross_revenue')) !!}--}}
-                    {{--</div>--}}
-                {{--</div>--}}
             </div>
             <div class="col">
                 <div class="table-responsive">
@@ -57,7 +51,6 @@
                             <th class="text-white text-center">Đơn giá</th>
                             <th class="text-white text-center">Số buổi</th>
                             <th class="text-white text-center">VAT (%)</th>
-                            {{--<th class="text-white text-center">CK (%)</th>--}}
                             <th class="text-white text-center">CK (đ)</th>
                             <th class="text-white text-center">Thành tiền</th>
                         </tr>
@@ -79,9 +72,6 @@
                                 <td class="text-center">
                                     {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                                 </td>
-{{--                                <td class="text-center">--}}
-{{--                                    {!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}--}}
-{{--                                </td>--}}
                                 <td class="text-center">
                                     {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                                 </td>
@@ -124,9 +114,6 @@
                     <td class="text-center">
                         {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                     </td>
-                    {{--<td class="text-center">--}}
-                    {{--    {!! Form::text('percent_discount[]', 0, array('class' => 'form-control CK1')) !!}--}}
-                    {{--</td>--}}
                     <td class="text-center">
                         {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                     </td>
@@ -153,21 +140,9 @@
                     var quantity = $(target).find('.quantity').val();
                     var VAT = $(target).find('.VAT').val();
                     var price = $(target).find('.price').val();
-                    // var CK1 = $(target).find('.CK1').val();
                     var CK2 = $(target).find('.CK2').val();
 
-                    // if (CK1 > 0 && CK2 == 0) {
-                    //     $(target).find('.CK2').prop('readonly', true);
-                    //     $(target).find('.CK1').prop('readonly', false);
-                    // } else if (CK2 > 0 && CK1 == 0) {
-                    //     $(target).find('.CK2').prop('readonly', false);
-                    //     $(target).find('.CK1').prop('readonly', true);
-                    // } else {
-                    //     $(target).find('.CK2').prop('readonly', false);
-                    //     $(target).find('.CK1').prop('readonly', false);
-                    // }
-
-                    var total_service = price * quantity + price * quantity * (VAT / 100) - price * quantity * (CK1 / 100) - CK2;
+                    var total_service = price * quantity + price * quantity * (VAT / 100) - CK2;
                     $(target).find('.total').val(total_service);
                 })
             });
