@@ -30,6 +30,11 @@ class CustomerService
 
     public function create($input)
     {
+        $userLogin = Auth::user()->id;
+
+        if ($input['mkt_id'] === null) {
+            $input['mkt_id'] = $userLogin;
+        }
         $data = $this->data($input);
 
         $customer = $this->customer->fill($data);
@@ -41,12 +46,7 @@ class CustomerService
     public function data($input)
     {
         @$date = Functions::yearMonthDay($input['birthday']);
-        $userLogin = Auth::user()->id;
         $input['birthday'] = isset($date) && $date ? $date : '';
-
-        if ($input['mkt_id'] === null) {
-            $input['mkt_id'] = $userLogin;
-        }
 
         return $input;
 
@@ -58,7 +58,7 @@ class CustomerService
 
         $customer = $this->find($id);
 
-        $customer->fill($data)->save();
+        $customer->update([$data]);
 
         return $customer;
 

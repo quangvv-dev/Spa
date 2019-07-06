@@ -40,7 +40,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
                         {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                        {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên', 6 => 'Khách hàng'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
+                        {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
                         <span class="help-block">{{ $errors->first('role', ':message') }}</span>
                     </div>
                 </div>

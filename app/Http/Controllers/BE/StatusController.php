@@ -125,4 +125,15 @@ class StatusController extends Controller
         $status->delete();
         $request->session()->flash('error', 'Xóa danh mục thành công!');
     }
+
+    public function getList(Request $request)
+    {
+        $customerId = $request->id;
+        $statuses = Status::get();
+
+        return $data = [
+                'customer_id' => $customerId,
+                'data' => $statuses
+            ];
+    }
 }
