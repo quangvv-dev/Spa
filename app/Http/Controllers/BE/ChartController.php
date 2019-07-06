@@ -56,7 +56,7 @@ class ChartController extends Controller
 //                ->orwhere('code', 'like', '%' . $request->search . '%')
 //                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
 //        }
-        $title = 'Quản lý danh mục';
+        $title = 'Thống kê doanh thu';
 //        if ($request->ajax()) {
 //            return Response::json(view('chart_revenue.ajax', compact('title', 'tmp'))->render());
 //        }
