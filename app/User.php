@@ -110,11 +110,4 @@ class User extends Authenticatable
         }
     }
 
-    public function getStatisticsUsers()
-    {
-        return $this->with('marketing')->select('mkt_id', \DB::raw('count(id) as count'))
-            ->whereNotNull('mkt_id')
-            ->groupBy('mkt_id');
-    }
-
 }

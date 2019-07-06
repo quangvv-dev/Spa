@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\UserConstant;
-use App\User;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -11,16 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 class StatisticController extends Controller
 {
-    private $user;
+    private $customer;
 
     /**
      * StatisticController constructor.
      *
-     * @param User $user
+     * @param Customer $customer
      */
-    public function __construct(User $user)
+    public function __construct(Customer $customer)
     {
-        $this->user = $user;
+        $this->customer = $customer;
     }
 
     public function index(Request $request)
@@ -29,10 +29,10 @@ class StatisticController extends Controller
         $fromDate = $request->from_date;
         $toDate = $request->to_date;
         if (Auth::user()->role == UserConstant::MARKETING) {
-            $statisticUsers = $this->user->getStatisticsUsers()
+            $statisticUsers = $this->customer->getStatisticsUsers()
                 ->where('mkt_id', Auth::user()->id);
         } else {
-            $statisticUsers = $this->user->getStatisticsUsers();
+            $statisticUsers = $this->customer->getStatisticsUsers();
         }
         if ($fromDate && $toDate == null) {
             $statisticUsers = $statisticUsers->whereDate('created_at', $fromDate);
@@ -55,8 +55,8 @@ class StatisticController extends Controller
     public function show($id)
     {
         $title = 'Chi tiết thống kê';
-        $total = $this->user->getStatisticsUsers()->get()->sum('count');
-        $detail = $this->user->getStatisticsUsers()->where('mkt_id', $id)->first();
+        $total = $this->customer->getStatisticsUsers()->get()->sum('count');
+        $detail = $this->customer->getStatisticsUsers()->where('mkt_id', $id)->first();
 
         return view('statistics.detail', compact('detail', 'title', 'total'));
     }
