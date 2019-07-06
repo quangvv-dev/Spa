@@ -101,8 +101,7 @@
                 data: {id: id}
             }).done(function (data) {
                 html +=
-                    '<textarea class="description-result form-control" data-id="'+data.id+'" name="description">' + data.description +
-                '</textarea>'
+                    '<input class="description-result form-control" data-id="'+data.id+'" name="description" value="'+ data.description +'">'
                 ;
                 $(target).find(".description").append(html);
             });

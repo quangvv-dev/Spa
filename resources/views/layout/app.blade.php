@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 @include('layout.assets_head')
 @yield('_style')
+<link href="{{ asset('css/menu-left.css') }}" rel="stylesheet"/>
 
 <body class="app">
 <style>
@@ -37,6 +38,8 @@
     @include('menu.navbar')
     <!-- Horizantal menu-->
     @include('menu.horizantal')
+    <!-- Menu left-->
+    @include('menu.menu_left')
     <!-- Horizantal menu-->
         <div class="container content-custom">
             <div class="side-app">
