@@ -252,4 +252,20 @@ class CustomerController extends Controller
             return redirect()->back()->with('status', 'Tải khách hàng thành công');
         }
     }
+
+    public function getCustomerById($id)
+    {
+        $customer = $this->customerService->find($id);
+
+        return $customer;
+    }
+
+    public function ajaxUpdate(Request $request, $id)
+    {
+        $input = $request->all();
+        $customer = $this->customerService->find($id);
+        $customer->update($input);
+
+        return $customer;
+    }
 }

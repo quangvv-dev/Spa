@@ -36,9 +36,9 @@
                     <td class="text-center">{{ $customer->full_name }}</td>
                     <td class="text-center">{{ $customer->phone }}</td>
                     <td class="text-center">{{ @$customer->category->name }}</td>
-                    <td class="text-center">{{ @$customer->status->name }}</td>
+                    <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     <td class="text-center">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center">{{ $customer->description }}</td>
+                    <td class="text-center description" data-id="{{$customer->id}}" width="250">{{ $customer->description }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source->name}}</td>
                     <td class="text-center">{{ $customer->gender_text  }}</td>

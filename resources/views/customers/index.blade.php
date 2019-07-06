@@ -88,5 +88,66 @@
                 $('#registration-form').html(data);
             });
         });
+
+        $(document).on('dblclick', '.description', function (e) {
+            var target = $(e.target).parent();
+            $(target).find('.description').empty();
+            var id = $(this).data('id');
+            var html = '';
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+                html +=
+                    '<textarea class="description-result form-control" data-id="'+data.id+'" name="description">' + data.description +
+                '</textarea>'
+                ;
+                $(target).find(".description").append(html);
+            });
+        });
+
+        $(document).on('dblclick', '.status-db', function (e) {
+            var target = $(e.target).parent();
+            $(target).find('.status-db').empty();
+            var id = $(this).data('id');
+            var html = '';
+
+            $.ajax({
+                url: "ajax/statuses/",
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+                console.log(data.customer_id);
+                html +=
+                    '<select class="status-result form-control" data-id="'+data.customer_id+'" name="status_id">';
+                data.data.forEach(function(item) {
+                    html += '<option value="'+ item.id +'">' + item.name + '</option>';
+                });
+
+                html += '</select>';
+                $(target).find(".status-db").append(html);
+            });
+        });
+
+        $(document).on('focusout, change', '.description-result, .status-result', function (e) {
+            var target = $(e.target).parent();
+            var description = $(target).find('.description-result').val();
+            var status_id = $(target).find('.status-result').val();
+            var id = $(this).data('id');
+            console.log(id);
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    description: description,
+                    status_id: status_id
+                }
+            }).done(function () {
+                window.location.reload();
+            });
+        });
     </script>
 @endsection

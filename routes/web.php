@@ -43,6 +43,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('info-service', 'OrderController@getInfoService');
         Route::get('info-customer', 'OrderController@getInfoCustomer');
         Route::get('info-order-payment/{id}', 'OrderController@infoPayment');
+        Route::get('customers/{id}', 'CustomerController@getCustomerById');
+        route::put('customers/{id}', 'CustomerController@ajaxUpdate');
+        route::get('statuses', 'StatusController@getList');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
