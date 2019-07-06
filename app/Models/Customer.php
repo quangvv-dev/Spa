@@ -72,4 +72,11 @@ class Customer extends Model
     {
         return $this->belongsTo(Status::class, 'source_id', 'id');
     }
+
+    public function getStatisticsUsers()
+    {
+        return $this->with('marketing')->select('mkt_id', \DB::raw('count(id) as count'))
+            ->whereNotNull('mkt_id')
+            ->groupBy('mkt_id');
+    }
 }
