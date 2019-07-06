@@ -43,9 +43,9 @@ class Customer extends Model
         return $this->belongsTo(User::class, 'mkt_id', 'id');
     }
 
-    public function category()
+    public function group()
     {
-        return $this->belongsTo(Category::class, 'group_id', 'id');
+        return $this->belongsTo(Status::class, 'group_id', 'id');
     }
 
     public function orders()
@@ -68,7 +68,7 @@ class Customer extends Model
         return $this->belongsTo(User::class, 'telesales_id', 'id');
     }
 
-    public function source_customer()//nhóm KH
+    public function source_customer()//nguồn KH
     {
         return $this->belongsTo(Status::class, 'source_id', 'id');
     }
