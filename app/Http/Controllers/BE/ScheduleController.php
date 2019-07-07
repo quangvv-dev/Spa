@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\User;
+use DateTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -123,17 +124,48 @@ class ScheduleController extends Controller
 
     public function homePage(Request $request)
     {
+//        $year = Carbon::now()->format('Y');
+//        $date = new DateTime($now);
+//        $week = $date->format("W");
+//        $week_array = self::getStartAndEndDate($week, $year);
+//        $docs = Schedule::orderBy('id', 'desc')->where('date', '>=', $week_array['week_start'])
+//            ->where('date', '<=', $week_array['week_end'])->get();
+//        if ($request->search) {
+//            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
+//                ->orwhere('code', 'like', '%' . $request->search . '%')
+//                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
+//        }
         $now = Carbon::now()->format('Y-m-d');
-        $docs = Schedule::orderBy('id', 'desc')->where('date', $now)->get();
-        if ($request->search) {
-            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
-                ->orwhere('code', 'like', '%' . $request->search . '%')
-                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
-        }
-        if ($request->ajax()) {
-            return Response::json(view('schedules.ajax', compact('docs', 'title'))->render());
-        }
+        $docs = Schedule::orderBy('id', 'desc')->where('date', $now)->get()->map(function ($item) use ($now) {
+            $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
+            $check = Schedule::orderBy('id', 'desc')->where('date', $now)
+                ->where('time_from', $item->time_from)->orWhere('time_to',$item->time_to)->get();
+//            dd(strtotime($item->time_to));
+//            1562488200
+//            1562490000
+            $item->count = count($check);
+            return $item;
+        });
         $title = 'Danh sách lịch hẹn';
-        return view('schedules.home', compact('title', 'docs'));
+        return view('schedules.home', compact('title', 'docs', 'now'));
+    }
+
+    /**
+     * Tính ra số ngày trong tuần từ số tuần và năm
+     *
+     * @param $week
+     * @param $year
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getStartAndEndDate($week, $year)
+    {
+        $dto = new DateTime();
+        $dto->setISODate($year, $week);
+        $ret['week_start'] = $dto->format('Y-m-d');
+        $dto->modify('+6 days');
+        $ret['week_end'] = $dto->format('Y-m-d');
+        return $ret;
     }
 }

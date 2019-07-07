@@ -3,6 +3,13 @@
 <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style>
+    .cd-schedule-modal__event-info {
+        font-size: 16px;
+        padding-top: 31px;
+        padding-left: 5px;
+    }
+</style>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -18,6 +25,8 @@
                 <div class="cd-schedule cd-schedule--loading margin-top-lg margin-bottom-lg js-cd-schedule">
                     <div class="cd-schedule__timeline">
                         <ul>
+                            <li><span>07:00</span></li>
+                            <li><span>07:30</span></li>
                             <li><span>08:00</span></li>
                             <li><span>08:30</span></li>
                             <li><span>09:00</span></li>
@@ -44,21 +53,22 @@
 
                     <div class="cd-schedule__events">
                         <ul>
-                            <li class="cd-schedule__group">
-                                <div class="cd-schedule__top-info"><span>Hôm nay</span></div>
+                            <li class="cd-schedule__group" data-date="{{$now}}">
+                                <div class="cd-schedule__top-info"><span>Hôm Nay ( {{$now}} )</span></div>
 
                                 <ul>
-                                    @if(count($docs))
-                                        @foreach($docs as $item)
-                                            <li class="cd-schedule__event">
-                                                <a data-start="{{$item->time_from}}" data-end="{{$item->time_to}}"
-                                                   data-event="event-1">
-                                                    <em class="cd-schedule__name">{{$item->creator->full_name}}</em>
-                                                    {{$item->note}}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    @endif
+                                    @foreach($docs as $item)
+                                        <li class="cd-schedule__event" style="max-width: 30% !important;" data-event-id="{{$item->id}}">
+                                            <a data-start="{{$item->time_from}}" data-end="{{$item->time_to}}"
+                                               data-content="event-rowing-workout"
+                                               data-event="event-{{$item->status}}" href="#0">
+                                                <em class="cd-schedule__name">{{$item->creator->full_name}}</em>
+                                                <em class="cd-schedule__name">{{$item->short_des}}</em>
+
+                                                <textarea class="hidden" style="display:none">{{$item->note}}</textarea>
+                                            </a>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </li>
                         </ul>

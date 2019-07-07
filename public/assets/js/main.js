@@ -64,20 +64,85 @@
 	};
 
 	ScheduleTemplate.prototype.placeEvents = function() {
-		// on big devices - place events in the template according to their time/day
+        // on big devices - place events in the template according to their time/day
 		var self = this,
-			slotHeight = this.topInfoElement.offsetHeight;
+            slotHeight = this.topInfoElement.offsetHeight;
+            listEvents = [],listIntersectEvent = [],arrIntersectEvents = []
 		for(var i = 0; i < this.singleEvents.length; i++) {
 			var anchor = this.singleEvents[i].getElementsByTagName('a')[0];
 			var start = getScheduleTimestamp(anchor.getAttribute('data-start')),
 				duration = getScheduleTimestamp(anchor.getAttribute('data-end')) - start;
-
+            
 			var eventTop = slotHeight*(start - self.timelineStart)/self.timelineUnitDuration,
-				eventHeight = slotHeight*duration/self.timelineUnitDuration;
-
-			this.singleEvents[i].setAttribute('style', 'top: '+(eventTop-1)+'px; height: '+(eventHeight +1)+'px');
-		}
-
+                eventHeight = slotHeight*duration/self.timelineUnitDuration;
+            
+            this.singleEvents[i].setAttribute('style', 'top: '+(eventTop-1)+'px; height: '+(eventHeight +1)+'px');
+            
+            var date = closest(this.singleEvents[i],'.cd-schedule__group').getAttribute('data-date')
+            var event_id = this.singleEvents[i].getAttribute('data-event-id')
+            listEvents[date] = typeof listEvents[date] !== 'undefined' ? listEvents[date] : [] 
+            listEvents[date].push({event_id : event_id,top:eventTop,height:eventHeight})
+        }
+        
+        
+        var listOverride = []
+        for(var i=0;i<Object.keys(listEvents).length;i++){
+            for(var j=0;j<listEvents[Object.keys(listEvents)[i]].length;j++){
+                var a = listEvents[Object.keys(listEvents)[i]][j]
+                for(var k=0;k<listEvents[Object.keys(listEvents)[i]].length;k++){
+                    if(j!=k){
+                        var b = listEvents[Object.keys(listEvents)[i]][k]
+                        var isIntersect = checkIntersec(a,b)
+                        if(isIntersect){
+                            listEvents[Object.keys(listEvents)[i]][j].intersect = true
+                            listEvents[Object.keys(listEvents)[i]][k].intersect = true
+                            if(listIntersectEvent.indexOf(listEvents[Object.keys(listEvents)[i]][j]) === -1){
+                                listIntersectEvent.push(listEvents[Object.keys(listEvents)[i]][j])
+                            }
+                            if(listIntersectEvent.indexOf(listEvents[Object.keys(listEvents)[i]][k]) === -1){
+                                listIntersectEvent.push(listEvents[Object.keys(listEvents)[i]][k])
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+        
+        for(var i = 0 ; i < listIntersectEvent.length ; i++){
+            for(var j = 0 ; j < listIntersectEvent.length ; j++){
+                if(i!=j){
+                    var isIntersect = checkIntersec(listIntersectEvent[i],listIntersectEvent[j])
+                    if(isIntersect){
+                        var isOnExistingGroup = false
+                        for(var k = 0 ; k < listOverride.length ; k++){
+                            if(listOverride[k].indexOf(listIntersectEvent[i]) !== -1 || listOverride[k].indexOf(listIntersectEvent[j]) !== -1){
+                                listOverride[k].push(listIntersectEvent[i])
+                                listOverride[k].push(listIntersectEvent[j])
+                                listOverride[k] = listOverride[k].filter( onlyUnique );
+                                isOnExistingGroup = true
+                            }
+                        }
+                        if(listOverride.length == 0 || !isOnExistingGroup){
+                            listOverride.push([listIntersectEvent[i],listIntersectEvent[j]])
+                        }
+                    }
+                }
+                
+            }
+        }
+        // Bind data
+        for (var i = 0; i < listOverride.length; i++) {
+            const group = listOverride[i];
+            const width_ratio = 100/group.length
+            for (var j = 0; j < group.length; j++) {
+                const item = group[j];
+                document.querySelector('.cd-schedule__event[data-event-id="'+item.event_id+'"]').setAttribute('style', 'top: '+(item.top-1)+'px; height: '+(item.height +1)+'px;width:'+width_ratio+'%;left:calc('+width_ratio+'% * '+j+');')
+            }
+            
+        }
+        
+        
 		Util.removeClass(this.element, 'cd-schedule--loading');
 	};
 
@@ -112,7 +177,8 @@
 		this.modal.setAttribute('data-event', target.getAttribute('data-event'));
 
 		//update event content
-		this.loadEventContent(target.getAttribute('data-content'));
+		self.modal.getElementsByClassName('cd-schedule-modal__event-info')[0].innerHTML = target.getElementsByTagName('textarea').length ? target.getElementsByTagName('textarea')[0].textContent : ''; 
+        Util.addClass(self.modal, 'cd-schedule-modal--content-loaded');
 
 		Util.addClass(this.modal, 'cd-schedule-modal--open');
 		
@@ -332,7 +398,50 @@
 		var timeArray = time.split(':');
 		var timeStamp = parseInt(timeArray[0])*60 + parseInt(timeArray[1]);
 		return timeStamp;
-	};
+    };
+    function closest(el, selector) {
+        var matchesFn;
+    
+        // find vendor prefix
+        ['matches','webkitMatchesSelector','mozMatchesSelector','msMatchesSelector','oMatchesSelector'].some(function(fn) {
+            if (typeof document.body[fn] == 'function') {
+                matchesFn = fn;
+                return true;
+            }
+            return false;
+        })
+    
+        var parent;
+    
+        // traverse parents
+        while (el) {
+            parent = el.parentElement;
+            if (parent && parent[matchesFn](selector)) {
+                return parent;
+            }
+            el = parent;
+        }
+    
+        return null;
+    }
+    function onlyUnique(value, index, self) { 
+        return self.indexOf(value) === index;
+    }
+    function checkIntersec(a,b){
+        var intersect =(a.top - b.top)*((a.top+a.height)-(b.top+b.height))
+        var isIntersect = false;
+        if(intersect < 0){
+            isIntersect = true
+        }else{
+            if((a.top == b.top) || ((a.top+a.height) == (b.top+b.height))){
+                isIntersect = true
+            }
+            if( (a.top < b.top && b.top < (a.top+a.height)) || a.top < (b.top+b.height) && (b.top+b.height) < (a.top+a.height)  ){
+                isIntersect = true
+            }
+        }
+        return isIntersect
+    }
 
 	var scheduleTemplate = document.getElementsByClassName('js-cd-schedule'),	
 		scheduleTemplateArray = [],
