@@ -60,5 +60,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //Customer import & export
     Route::get('customer-export', 'CustomerController@exportCustomer');
     Route::post('customer-import', 'CustomerController@importCustomer');
-
+    //Chart doanh số
+    Route::get('chart-revenue', 'ChartController@index');
 });

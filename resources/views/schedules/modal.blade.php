@@ -90,3 +90,6 @@
     </div>
 
 </div>
+{{--<script>--}}
+{{--    $('.clockpicker').clockpicker();--}}
+{{--</script>--}}

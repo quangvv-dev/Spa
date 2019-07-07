@@ -64,6 +64,9 @@
                 <div class="sub-item">
                     <ul>
                         <li>
+                            <a href="{{url('chart-revenue')}}">Doanh thu</a>
+                        </li>
+                        <li>
                             <a href="#">Khách hàng</a>
                         </li>
                         <li>
