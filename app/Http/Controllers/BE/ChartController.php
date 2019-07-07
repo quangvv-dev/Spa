@@ -22,16 +22,16 @@ class ChartController extends Controller
         $tmp = [];
         $total2 = [];
         $tmp2 = [];
-        $docs = Customer::orderBy('id', 'desc')->with('group')->with('orders')->get();
+        $docs = Customer::orderBy('id', 'desc')->with('category')->with('orders')->get();
         if (count($docs)) {
             foreach ($docs as $item) {
                 $num = count($item->orders);
-                if (!empty($item->group) && (int)$num >= 1) {
+                if (!empty($item->category) && (int)$num >= 1) {
                     foreach ($item->orders as $order) {
-                        $total[$item->group->name] = $order->all_total;
+                        $total[$item->category->name] = $order->all_total;
                     };
-                    $tmp[$item->group->name] = [
-                        $item->group->name => array_sum($total),
+                    $tmp[$item->category->name] = [
+                        $item->category->name => array_sum($total),
                     ];
                 }
             }

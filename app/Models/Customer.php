@@ -43,9 +43,9 @@ class Customer extends Model
         return $this->belongsTo(User::class, 'mkt_id', 'id');
     }
 
-    public function group()
+    public function category()
     {
-        return $this->belongsTo(Status::class, 'group_id', 'id');
+        return $this->belongsTo(Category::class, 'group_id', 'id');
     }
 
     public function orders()
