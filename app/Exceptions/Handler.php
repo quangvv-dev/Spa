@@ -29,7 +29,8 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
+     *
      * @return void
      */
     public function report(Exception $exception)
@@ -40,20 +41,15 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception               $exception
+     *
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
         $data['title'] = '404';
-        if($exception->getCode() ==0)
-        {
-            return response()->view('errors.404', ['data' => $data], 404);
-        }
-
-        if($this->isHttpException($exception))
-        {
+        if ($this->isHttpException($exception)) {
             return response()->view('errors.404', ['data' => $data], 404);
         }
 
