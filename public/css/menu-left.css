@@ -6,6 +6,7 @@
     background: #454e59;
     z-index: 1110;
     float: left;
+    height: 60px;
 }
 .wah-menu {
     height: 100%;
@@ -45,7 +46,7 @@ li:hover .submenuleft {
     background: #ebe9e9;
     bottom: 0;
     color: #494f5b;
-    height: 100%;
+    height: 300px;
     left: 50px;
     margin-left: 0;
     box-shadow: 0 0 3px #707070;
