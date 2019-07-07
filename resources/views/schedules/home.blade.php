@@ -62,8 +62,8 @@
                                             <a data-start="{{$item->time_from}}" data-end="{{$item->time_to}}"
                                                data-content="event-rowing-workout"
                                                data-event="event-{{$item->status}}" href="#0">
-                                                <em class="cd-schedule__name">{{$item->creator->full_name}}</em>
-                                                <em class="cd-schedule__name">{{$item->short_des}}</em>
+                                                <em class="cd-schedule__name">{{$item->customer->full_name}}</em>
+{{--                                                <em class="cd-schedule__name">Người tạo: {{$item->creator->full_name}}</em>--}}
 
                                                 <textarea class="hidden" style="display:none">{{$item->note}}</textarea>
                                             </a>
