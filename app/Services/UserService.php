@@ -58,7 +58,7 @@ class UserService
             $input['avatar'] = $this->fileUpload->uploadUserImage($input['image']);
         }
 
-        $data->update($data);
+        $data->update($input);
 
         return $data;
     }
