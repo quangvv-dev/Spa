@@ -2,7 +2,7 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-white">ID</th>
+            <th style="width:3%"><input type="checkbox" class="selectall myCheck" onchange="myFunction()"/></th>
             <th class="text-white text-center">Thao tác</th>
             <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
@@ -25,7 +25,8 @@
         @if (count($customers))
             @foreach($customers as $customer)
                 <tr>
-                    <th scope="row">{{ $customer->id }}</th>
+                    <td class="text-center" style="background: {{$customer->status->color ?:''}}"><input type="checkbox" name="delid[]" class="myCheck"
+                                                   onchange="myFunction()" data-id="{{$customer->id}}"/></td>
                     <td class="text-center">
                         <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>
                         <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a>
