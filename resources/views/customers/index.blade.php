@@ -148,5 +148,72 @@
                 window.location.reload();
             });
         });
+
+        function myFunction() {
+            var button = document.getElementById("button");
+            if ($('td .myCheck:checked').length) {
+                button.style.display = "block";
+                selectall.style.display = "block";
+            } else {
+                button.style.display = "none";
+                selectall.style.display = "none";
+            }
+        };
+
+        $('.selectall').click(function(){
+            if($(this).hasClass('active')) {
+                $(':checkbox').each(function() {
+                    this.checked = false;
+                });
+                $(this).html('Chọn tất cả');
+                $(this).removeClass('active');
+
+            } else {
+                $(this).addClass('active');
+                $(':checkbox').each(function() {
+                    this.checked = true;
+                });
+                $(this).html('Bỏ chọn tất cả');
+            }
+        });
+
+        $('.deleteall').click(function () {
+            var idss = $('td .myCheck:checked');
+            var ids = [];
+            $.each(idss, function(){
+                ids.push($(this).data('id'));
+            });
+            swal({
+                title: 'Bạn có chắc chắn xóa',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#4fa7f3',
+                cancelButtonColor: '#d57171',
+                confirmButtonText: 'OK'
+            }).then(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: 'user/del',
+                    dataType: "JSON",
+                    data: {
+                        "ids": ids,
+                        "_token": '{{csrf_token()}}',
+                    },
+                    success:function (data) {
+                        if(data){
+                            location.href = "user";
+                        }else{
+                            swal(
+                                'Cancelled',
+                                "{{ __('message.cant_delete_item') }}",
+                                'error'
+                            )
+                        }
+                    },
+                    error: (jqXHR, textStatus, errorThrown)=>alert(errorThrown)
+                })
+            })
+        });
     </script>
 @endsection
