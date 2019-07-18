@@ -27,7 +27,7 @@
                 </div>
                 <div class="scrollmenu col-md-4">
                     @foreach(@$statuses as $k => $item)
-                        <button class="status" style="background: {{$item->color ?:''}}">{{ $item->name }}</button>
+                        <button class="status btn white account_relation position" style="background: {{$item->color ?:''}}">{{ $item->name }}<span class="not-number-account white">{{ $item->customers->count() }}</span></button>
                     @endforeach
                 </div>
 

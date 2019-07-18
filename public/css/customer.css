@@ -21,3 +21,20 @@ div.scrollmenu button {
     position: absolute;
     right: 10%;
 }
+.not-number-account {
+    color: #333;
+    top: -1px;
+    right: -2px;
+}
+.not-number-account, .not-number-customer {
+    font-size: 11px;
+    position: absolute;
+    font-weight: 700;
+    padding: 0 4px;
+    display: block;
+    line-height: 13px;
+}
+.position {
+    position:relative;
+}
+

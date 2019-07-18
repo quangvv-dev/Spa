@@ -56,7 +56,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $statuses = Status::get();
+        $statuses = Status::with('customers')->get();
         $title = 'Danh sách khách hàng';
         $customers = Customer::search($request);
 
