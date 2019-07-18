@@ -100,9 +100,9 @@
                 method: "get",
                 data: {id: id}
             }).done(function (data) {
+
                 html +=
-                    '<input class="description-result form-control" data-id="'+data.id+'" name="description" value="'+ data.description +'">'
-                ;
+                    '<textarea name="description" data-id="'+data.id+'" class="handsontableInput description-result" style="width: 291px; height: 59px; font-size: 14px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">'+ data.description +'</textarea>';
                 $(target).find(".description").append(html);
             });
         });
