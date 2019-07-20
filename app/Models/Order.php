@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\Functions;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -29,34 +31,50 @@ class Order extends Model
 
         if ($input) {
             $data = $data
-            ->when($input['group'], function ($query) use ($input) {
+            ->when(isset($input['group']), function ($query) use ($input) {
                 $query->whereHas('customer', function ($q) use ($input) {
                     $q->where('group_id', $input['group']);
                 });
             })
-            ->when($input['telesale'], function ($query) use ($input) {
+            ->when(isset($input['telesales']), function ($query) use ($input) {
                 $query->whereHas('customer', function ($q) use ($input) {
-                   $q->where('telesales_id', $input['telesale']);
+                   $q->where('telesales_id', $input['telesales']);
                 });
             })
-            ->when($input['marketing'], function ($query) use ($input) {
+            ->when(isset($input['marketing']), function ($query) use ($input) {
                 $query->whereHas('customer', function ($q) use ($input) {
                    $q->where('mkt_id', $input['marketing']);
                 });
             })
-            ->when($input['service'], function ($query) use ($input) {
+            ->when(isset($input['service']), function ($query) use ($input) {
                 $query->whereHas('orderDetails', function ($q) use ($input) {
                    $q->where('booking_id', $input['service']);
                 });
             })
-            ->when($input['customer'], function ($query) use ($input) {
+            ->when(isset($input['customer']), function ($query) use ($input) {
                 $query->whereHas('customer', function ($q) use ($input) {
                    $q->where('full_name', 'like', '%'. $input['customer']. '%')
                    ->orWhere('phone', 'like', '%'. $input['customer']. '%');
                 });
             })
-            ->when($input['payment_type'], function ($query) use ($input) {
+            ->when(isset($input['payment_type']), function ($query) use ($input) {
                 $query->whereNotNull('payment_type')->where('payment_type', $input['payment_type']);
+            })
+            ->when(isset($input['data_time']), function ($query) use ($input) {
+                $query->when($input['data_time'] == 'TODAY' ||
+                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                    $q->whereDate('created_at', self::getTime(($input['data_time'])));
+                })
+                ->when($input['data_time'] == 'THIS_WEEK' ||
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'THIS_MONTH' ||
+                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                    $q->whereBetween('created_at', self::getTime(($input['data_time'])));
+                });
+            })
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']), Functions::yearMonthDay($input['end_date'])]);
             });
         }
 
@@ -81,5 +99,37 @@ class Order extends Model
         static::deleting(function($order) {
             $order->orderDetails()->delete();
         });
+    }
+
+    public static function getTime($dataTime)
+    {
+        $today = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
+
+        if ($dataTime == 'TODAY') {
+            return $today;
+        }
+
+        if ($dataTime == 'YESTERDAY') {
+            return Carbon::yesterday()->format('Y-m-d');
+        }
+
+        if ($dataTime == 'THIS_WEEK') {
+            return [Carbon::now()->startOfWeek()->format('Y-m-d'), Carbon::now()->endOfWeek()->format('Y-m-d')];
+        }
+
+        if ($dataTime == 'LAST_WEEK') {
+            return ([Carbon::today()->dayOfWeek === 0 ?
+                         Carbon::today()->previous(0) :
+                         Carbon::today()->previous(0)->previous()->format('Y-m-d'), Carbon::today()->previous(6)->addDay()->format('Y-m-d')]);
+        }
+
+        if ($dataTime == 'THIS_MONTH') {
+            return ([Carbon::today()->startOfMonth()->format('Y-m-d'),
+                     Carbon::tomorrow()->format('Y-m-d')]);
+        }
+
+        if ($dataTime == 'LAST_MONTH') {
+             return ([Carbon::today()->subMonth()->startOfMonth(), Carbon::today()->subMonth()->endOfMonth()]);
+        }
     }
 }

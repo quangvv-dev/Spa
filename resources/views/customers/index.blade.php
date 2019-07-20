@@ -120,9 +120,11 @@
             }).done(function (data) {
                 console.log(data.customer_id);
                 html +=
-                    '<select class="status-result form-control" data-id="'+data.customer_id+'" name="status_id">';
+                    '<select class="status-result form-control" data-id="'+data.customer_id+'" name="status_id">'+
+                '<option value="">' + "Chọn trạng thái" + '</option>';
                 data.data.forEach(function(item) {
-                    html += '<option value="'+ item.id +'">' + item.name + '</option>';
+                    html +=
+                        '<option value="'+ item.id +'">' + item.name + '</option>';
                 });
 
                 html += '</select>';
