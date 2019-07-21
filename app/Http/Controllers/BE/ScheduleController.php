@@ -153,7 +153,7 @@ class ScheduleController extends Controller
             return $item;
         });
         $title = 'Danh sách lịch hẹn';
-        return view('schedules.home', compact('title', 'docs', 'now'));
+        return view('schedules.home2', compact('title', 'docs', 'now'));
     }
 
     /**
