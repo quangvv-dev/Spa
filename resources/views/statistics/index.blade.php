@@ -27,6 +27,9 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
+        $(document).ready(function () {
+            $(".fc-datepicker").datepicker({dateFormat: 'dd-mm-yy'});
+        })
         $(document).on('keyup change', '#from-date,#to-date', function (e) {
             e.preventDefault();
             var from_date = $('#from-date').val();
