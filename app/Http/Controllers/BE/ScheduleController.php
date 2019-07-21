@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
+use App\Constants\UserConstant;
 use App\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -17,7 +19,10 @@ class ScheduleController extends Controller
 
     public function __construct()
     {
-        //
+        $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+        view()->share([
+            'staff' => $staff,
+        ]);
     }
 
     /**
@@ -61,8 +66,9 @@ class ScheduleController extends Controller
     public function store(Request $request, $id)
     {
         $request->merge([
-            'user_id'    => $id,
-            'creator_id' => Auth::user()->id,
+            'user_id'       => $id,
+            'person_action' => $request->person_action,
+            'creator_id'    => Auth::user()->id,
         ]);
         Schedule::create($request->all());
         return redirect()->back();
@@ -139,7 +145,7 @@ class ScheduleController extends Controller
         $docs = Schedule::orderBy('id', 'desc')->where('date', $now)->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
             $check = Schedule::orderBy('id', 'desc')->where('date', $now)
-                ->where('time_from', $item->time_from)->orWhere('time_to',$item->time_to)->get();
+                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to)->get();
 //            dd(strtotime($item->time_to));
 //            1562488200
 //            1562490000

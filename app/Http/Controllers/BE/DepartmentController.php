@@ -36,7 +36,7 @@ class DepartmentController extends Controller
         if ($request->ajax()) {
             return Response::json(view('department.ajax', compact('docs', 'title'))->render());
         }
-        return view('department.index', compact('title', 'docs', 'departments'));
+        return view('department.index', compact('title', 'docs'));
     }
 
     /**

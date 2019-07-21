@@ -7,9 +7,9 @@
             </div>
 
             @if (isset($customer))
-                {!! Form::model($customer, array('url' => url('customers/'.$customer->id), 'method' => 'put', 'files'=> true, 'id'=>'fvalidate')) !!}
+                {!! Form::model($customer, array('url' => url('customers/'.$customer->id), 'method' => 'put', 'files'=> true, 'id'=>'fvalidate','autocomplete'=>'off')) !!}
             @else
-                {!! Form::open(array('url' => route('customers.store'), 'method' => 'post', 'files'=> true, 'id'=>'fvalidate')) !!}
+                {!! Form::open(array('url' => route('customers.store'), 'method' => 'post', 'files'=> true, 'id'=>'fvalidate','autocomplete'=>'off')) !!}
             @endif
             <div class="row col-md-12">
                 <div class="col-md-6">

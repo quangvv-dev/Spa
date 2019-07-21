@@ -51,6 +51,33 @@
                     $('#update_note').val(data['note']);
                 });
             })
+            $('[data-toggle="datepicker"]').datepicker({
+                format: 'yyyy-mm-dd',
+                autoHide: true,
+                zIndex: 2048,
+            });
+            $("#fvalidate").validate({
+                rules: {
+                    note: {
+                        required: true
+                    },
+                    // date: {
+                    //     required: true
+                    // },
+                    time_from: {
+                        required: true
+                    },
+                    time_to: {
+                        required: true
+                    },
+                },
+                messages: {
+                    note: "Không được để trống !!!",
+                    // date: "Không được để trống !!!",
+                    time_from: "Không được để trống !!!",
+                    time_to: "Không được để trống !!!",
+                },
+            });
         })
     </script>
 @endsection
