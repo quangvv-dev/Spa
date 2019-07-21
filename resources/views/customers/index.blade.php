@@ -18,6 +18,25 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
+                <div class="display btn-group" id="btn_tool_group" style="display: none;">
+                    <button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown_action"><a id="send_email">Gửi Email</a></li>
+                        <li class="dropdown_action"><a id="send_sms">Gửi SMS</a></li>
+                        <li class="dropdown_action"><a id="mark_as_potential">Tạo cơ hội</a></li>
+                        <li class="dropdown_action"><a id="show_popup_task">Tạo công việc</a></li>
+                        <li class="dropdown_action"><a id="show_group_type_account">Nhóm khách hàng</a></li>
+                        <li class="dropdown_action"><a id="show_manager_account">Người phụ trách</a></li>
+                        <li class="dropdown_action"><a data-toggle="modal" href="#change-account-viewers">Người xem</a>
+                        </li>
+                        <li class="dropdown_action"><a id="remove_selected_account">Xóa nhiều</a></li>
+                        <li class="dropdown_action" id="restore_account" style="display: none;"><a>Khôi phục</a></li>
+                        <li class="dropdown_action" id="permanently_delete_account" style="display: none;"><a>Xóa
+                                hẳn</a></li>
+                        <li class="dropdown_action"><a id="change_relations">Mối quan hệ</a></li>
+                    </ul>
+                </div>
                 <div style="margin-left: 10px">
                     <button class="btn btn-default" style="height: 40px;">
                         <a href="{{ route('status.create') }}">
@@ -27,7 +46,9 @@
                 </div>
                 <div class="scrollmenu col-md-4">
                     @foreach(@$statuses as $k => $item)
-                        <button class="status btn white account_relation position" style="background: {{$item->color ?:''}}">{{ $item->name }}<span class="not-number-account white">{{ $item->customers->count() }}</span></button>
+                        <button class="status btn white account_relation position"
+                                style="background: {{$item->color ?:''}}">{{ $item->name }}<span
+                                    class="not-number-account white">{{ $item->customers->count() }}</span></button>
                     @endforeach
                 </div>
 
@@ -102,7 +123,7 @@
             }).done(function (data) {
 
                 html +=
-                    '<textarea name="description" data-id="'+data.id+'" class="handsontableInput description-result" style="width: 291px; height: 59px; font-size: 14px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">'+ data.description +'</textarea>';
+                    '<textarea name="description" data-id="' + data.id + '" class="handsontableInput description-result" style="width: 291px; height: 59px; font-size: 14px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">' + data.description + '</textarea>';
                 $(target).find(".description").append(html);
             });
         });
@@ -120,11 +141,11 @@
             }).done(function (data) {
                 console.log(data.customer_id);
                 html +=
-                    '<select class="status-result form-control" data-id="'+data.customer_id+'" name="status_id">'+
-                '<option value="">' + "Chọn trạng thái" + '</option>';
-                data.data.forEach(function(item) {
+                    '<select class="status-result form-control" data-id="' + data.customer_id + '" name="status_id">' +
+                    '<option value="">' + "Chọn trạng thái" + '</option>';
+                data.data.forEach(function (item) {
                     html +=
-                        '<option value="'+ item.id +'">' + item.name + '</option>';
+                        '<option value="' + item.id + '">' + item.name + '</option>';
                 });
 
                 html += '</select>';
@@ -162,9 +183,9 @@
             }
         };
 
-        $('.selectall').click(function(){
-            if($(this).hasClass('active')) {
-                $(':checkbox').each(function() {
+        $('.selectall').click(function () {
+            if ($(this).hasClass('active')) {
+                $(':checkbox').each(function () {
                     this.checked = false;
                 });
                 $(this).html('Chọn tất cả');
@@ -172,7 +193,7 @@
 
             } else {
                 $(this).addClass('active');
-                $(':checkbox').each(function() {
+                $(':checkbox').each(function () {
                     this.checked = true;
                 });
                 $(this).html('Bỏ chọn tất cả');
@@ -182,7 +203,7 @@
         $('.deleteall').click(function () {
             var idss = $('td .myCheck:checked');
             var ids = [];
-            $.each(idss, function(){
+            $.each(idss, function () {
                 ids.push($(this).data('id'));
             });
             swal({
@@ -193,7 +214,7 @@
                 confirmButtonColor: '#4fa7f3',
                 cancelButtonColor: '#d57171',
                 confirmButtonText: 'OK'
-            }).then(function(){
+            }).then(function () {
                 $.ajax({
                     type: 'POST',
                     url: 'user/del',
@@ -202,10 +223,10 @@
                         "ids": ids,
                         "_token": '{{csrf_token()}}',
                     },
-                    success:function (data) {
-                        if(data){
+                    success: function (data) {
+                        if (data) {
                             location.href = "user";
-                        }else{
+                        } else {
                             swal(
                                 'Cancelled',
                                 "{{ __('message.cant_delete_item') }}",
@@ -213,9 +234,16 @@
                             )
                         }
                     },
-                    error: (jqXHR, textStatus, errorThrown)=>alert(errorThrown)
+                    error: (jqXHR, textStatus, errorThrown) => alert(errorThrown)
                 })
             })
+        });
+
+        $(document).on('click', '.myCheck' ,function () {
+            if($(this).is(':checked'))
+                $("#btn_tool_group").css({ 'display' : 'block'});
+            else
+                $("#btn_tool_group").css({ 'display' : 'none'});
         });
     </script>
 @endsection

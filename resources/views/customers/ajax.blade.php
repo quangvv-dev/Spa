@@ -16,9 +16,9 @@
             <th class="text-white text-center">Giới tính</th>
             <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Mã KH</th>
-            <th class="text-white text-center">Số đơn</th>
             <th class="text-white text-center">Tổng doanh thu</th>
-            <th class="text-white text-center">Giá trị đơn</th>
+            <th class="text-white text-center">Đã thanh toán</th>
+            <th class="text-white text-center">Còn lại</th>
         </tr>
         </thead>
         <tbody>
@@ -46,9 +46,9 @@
                     <td class="text-center">{{ $customer->gender_text  }}</td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ $customer->account_code }}</td>
-                    <td class="text-center">{{ $customer->orders->count() }}</td>
-                    <td class="text-center">{{ number_format($customer->orders->sum('all_total')) }}</td>
-                    <td class="text-center"></td>
+                    <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
+                    <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
+                    <td class="text-center">{{ number_format($customer->orders->sum('the_rest')) }}</td>
                 </tr>
             @endforeach
         @else
