@@ -46,7 +46,7 @@
                 </div>
                 <div class="scrollmenu col-md-4">
                     @foreach(@$statuses as $k => $item)
-                        <button class="status btn white account_relation position"
+                        <button class="status btn white account_relation position" data-name="{{$item->name}}"
                                 style="background: {{$item->color ?:''}}">{{ $item->name }}<span
                                     class="not-number-account white">{{ $item->customers->count() }}</span></button>
                     @endforeach
@@ -79,7 +79,7 @@
 
         $(document).on('click', '.status', function () {
             $('.load').show();
-            var status = $(this).html();
+            const status = $(this).data('name');
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
