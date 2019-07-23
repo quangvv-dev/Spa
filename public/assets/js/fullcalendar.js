@@ -27,63 +27,15 @@ $(document).ready(function () {
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         events: [
-            {
-                title: 'All Day Event',
-                start: '2018-08-01'
-            },
-            {
-                title: 'Long Event',
-                start: '2018-08-07',
-                end: '2018-08-10'
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: '2018-08-09T16:00:00'
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: '2018-08-16T16:00:00'
-            },
-            {
-                id: 1,
-                title: 'Conference',
-                start: '2018-08-11',
-                end: '2018-08-13'
-            },
+            @foreach($docs as $item)
+            @endforech
             {
                 title: 'Meeting',
                 description: 'Anh quang đến triệt lông',
+                url: 'http://google.com/',
                 start: '2018-08-12T10:30:00',
                 end: '2018-08-12T12:30:00'
             },
-            {
-                title: 'Lunch',
-                start: '2018-08-12T12:00:00',
-                description: 'description for All Day Event',
-            },
-            {
-                title: 'Meeting',
-                start: '2018-08-12T14:30:00'
-            },
-            {
-                title: 'Happy Hour',
-                start: '2018-08-12T17:30:00'
-            },
-            {
-                title: 'Dinner',
-                start: '2018-08-12T20:00:00'
-            },
-            {
-                title: 'Birthday Party',
-                start: '2018-08-13T07:00:00'
-            },
-            {
-                title: 'Click for Google',
-                url: 'http://google.com/',
-                start: '2018-08-28'
-            }
         ]
     });
     $("body").delegate(".fc-content", "click", function () {

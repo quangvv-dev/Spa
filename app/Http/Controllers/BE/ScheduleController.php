@@ -20,8 +20,17 @@ class ScheduleController extends Controller
     public function __construct()
     {
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+        $color = [
+            1 => 'Hẹn gọi lại',
+            2 => 'Đặt lịch',
+            3 => 'Đã đến',
+            4 => 'Không đến',
+            5 => 'Hủy',
+            6 => 'Tất cả',
+        ];
         view()->share([
             'staff' => $staff,
+            'color' => $color,
         ]);
     }
 
@@ -142,17 +151,24 @@ class ScheduleController extends Controller
 //                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
 //        }
         $now = Carbon::now()->format('Y-m-d');
-        $docs = Schedule::orderBy('id', 'desc')->where('date', $now)->get()->map(function ($item) use ($now) {
+        $docs = Schedule::orderBy('id', 'desc')->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
             $check = Schedule::orderBy('id', 'desc')->where('date', $now)
                 ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to)->get();
-//            dd(strtotime($item->time_to));
-//            1562488200
-//            1562490000
             $item->count = count($check);
             return $item;
         });
+        if ($request->search) {
+            $docs = $docs->where('status', $request->search);
+        }
+        if ($request->date) {
+            $docs = $docs->where('date', $request->date);
+            $now = $request->date;
+        }
         $title = 'Danh sách lịch hẹn';
+        if ($request->ajax()) {
+            return Response::json(view('schedules.ajax2', compact('docs', 'title', 'now'))->render());
+        }
         return view('schedules.home2', compact('title', 'docs', 'now'));
     }
 
