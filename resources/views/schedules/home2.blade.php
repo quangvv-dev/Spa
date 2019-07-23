@@ -100,7 +100,7 @@
                         @foreach($docs as $item)
                     {
                         id: '{{$item->user_id}}',
-                        title: '{{$item->customer->full_name .' '.$item->note}}',
+                        title: '{{@$item->customer->full_name .' '.$item->note}}',
                         description: '{{$item->note}}',
                         @switch($item->status)
                                 @case(1)
