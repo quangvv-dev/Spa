@@ -82,17 +82,17 @@
                 selectable: true,
                 selectHelper: true,
                 select: function (start, end) {
-                    var title = prompt('Tạo lịch đi nào:');
-                    var eventData;
-                    if (title) {
-                        eventData = {
-                            title: title,
-                            start: start,
-                            end: end
-                        };
-                        $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    }
-                    $('#calendar1').fullCalendar('unselect');
+                    // var title = prompt('Tạo lịch đi nào:');
+                    // var eventData;
+                    // if (title) {
+                    //     eventData = {
+                    //         title: title,
+                    //         start: start,
+                    //         end: end
+                    //     };
+                    //     $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    // }
+                    // $('#calendar1').fullCalendar('unselect');
                 },
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
