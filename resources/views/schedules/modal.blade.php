@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}
-                        {!! Form::select('person_action',@$staff, @$doc->person_action, array('class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                        {!! Form::select('person_action',@$staff, @$doc->person_action, array('class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
