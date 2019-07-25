@@ -38,17 +38,17 @@
                 var id = $(this).attr("data-id");
                 var link = 'schedules/edit/' + id;
                 $.ajax({
-                    url: window.location.origin + '/' + link,
-                    // url: "http://localhost/Spa/public/" + link,
+                    // url: window.location.origin + '/' + link,
+                    url: "http://localhost/Spa/public/" + link,
                     method: "get",
                 }).done(function (data) {
-                    // console.log(data, data['date'])
                     $('#update_id').val(data['id']);
                     $('#update_date').val(data['date']);
                     $('#update_time1').val(data['time_from']);
                     $('#update_time2').val(data['time_to']);
                     $('#update_status').val(data['status']);
                     $('#update_note').val(data['note']);
+                    $('#update_action').val(data['person_action']).change();;
                 });
             })
             $('[data-toggle="datepicker"]').datepicker({
