@@ -19,9 +19,7 @@
                     <th scope="row">{{$k}}</th>
                     <td class="text-center">{{$s->date}}</td>
                     <td class="text-center">{{$s->time_from}}</td>
-                    <td class="text-center">{{@$s->time_to}}
-                    <td class="text-center">{{@$s->creator->full_name}}</td>
-                    <td class="text-center">{{@$s->staff->full_name}}</td>
+                    <td class="text-center">{{@$s->time_to}}</td>
                     <td class="text-center">
                         @switch($s->status)
                             @case(1)
@@ -41,6 +39,8 @@
                             @break
                         @endswitch
                     </td>
+                    <td class="text-center">{{@$s->creator->full_name}}</td>
+                    <td class="text-center">{{@$s->staff->full_name}}</td>
                     <td class="text-center">
                         <a class="btn update" href="#" data-id="{{$s->id}}" title="Chỉnh sửa lịch hẹn"
                            data-toggle="modal" data-target="#updateModal"><i class="fas fa-edit"></i></a>
