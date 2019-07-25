@@ -38,8 +38,8 @@
                 var id = $(this).attr("data-id");
                 var link = 'schedules/edit/' + id;
                 $.ajax({
-                    // url: window.location.origin + '/' + link,
-                    url: "http://localhost/Spa/public/" + link,
+                    url: window.location.origin + '/' + link,
+                    // url: "http://localhost/Spa/public/" + link,
                     method: "get",
                 }).done(function (data) {
                     $('#update_id').val(data['id']);
