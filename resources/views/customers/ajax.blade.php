@@ -19,6 +19,7 @@
             <th class="text-white text-center">Tổng doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Còn lại</th>
+            <th class="text-white text-center">Chỉnh sửa</th>
         </tr>
         </thead>
         <tbody>
@@ -28,9 +29,10 @@
                     <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}"><input type="checkbox" name="delid[]" class="myCheck"
                                                    onchange="myFunction()" data-id="{{$customer->id}}"/></td>
                     <td class="text-center">
-                        <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>
-                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a>
-                        <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>
+                        @if(\Illuminate\Support\Facades\Auth::user()->role != \App\Constants\UserConstant::TELESALES)
+                            <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>
+{{--                            <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>--}}
+                        @endif
                         <a title="Trao đổi" class="btn" href="{{ url('group_comments/'. $customer->id) }}"><i class="fas fa-users"></i></a>
                         {{--<a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
                     </td>
@@ -49,6 +51,9 @@
                     <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('the_rest')) }}</td>
+                    <td class="text-center">
+                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a>
+                    </td>
                 </tr>
             @endforeach
         @else
