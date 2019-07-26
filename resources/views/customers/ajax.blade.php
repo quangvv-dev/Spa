@@ -42,7 +42,7 @@
                     <td class="text-center">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description" data-id="{{$customer->id}}" width="250">{{ $customer->description }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
-                    <td class="text-center">{{ @$customer->source->name}}</td>
+                    <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ $customer->gender_text  }}</td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ $customer->account_code }}</td>
