@@ -85,9 +85,10 @@
         });
 
         $(document).on('change keyup', '.group, .telesales, #search', function () {
-            var group = $('.group').val();
-            var telesales = $('.telesales').val();
-            var search = $('#search').val();
+            $('.load').show();
+            const group = $('.group').val();
+            const telesales = $('.telesales').val();
+            const search = $('#search').val();
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",

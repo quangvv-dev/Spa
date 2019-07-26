@@ -12,23 +12,27 @@ class Customer extends Model
 
     public static function search($param)
     {
-        $data = self::with('status', 'marketing', 'category')
-            ->when($param['search'], function ($query) use ($param) {
-                $query->where('full_name', 'like', '%' . $param['search'] . '%')
-                    ->orWhere('phone', 'like', '%' . $param['search'] . '%');
-            })
-            ->when($param['status'], function ($query) use ($param) {
-                $query->whereHas('status', function ($q) use ($param) {
-                    $q->where('status.name', $param['status']);
-                });
-            })
-            ->when($param['group_id'], function ($query) use ($param) {
-                $query->where('group_id', $param['status']);
-            })
-            ->when($param['telesales_id'], function ($query) use ($param) {
-                $query->where('telesales_id', $param['telesales_id']);
-            })
-            ->latest()->paginate(10);
+        $data = self::with('status', 'marketing', 'category');
+        if (isset($param)) {
+            $data = $data->when(isset($param['search']), function ($query) use ($param) {
+                    $query->where(function ($q) use ($param) {
+                        $q->where('full_name', 'like', '%' . $param['search'] . '%')
+                            ->orWhere('phone', 'like', '%' . $param['search'] . '%');
+                    });
+                })
+                ->when(isset($param['status']), function ($query) use ($param) {
+                    $query->whereHas('status', function ($q) use ($param) {
+                        $q->where('status.name', $param['status']);
+                    });
+                })
+                ->when(isset($param['group']), function ($query) use ($param) {
+                    $query->where('group_id', $param['group']);
+                })
+                ->when(isset($param['telesales']), function ($query) use ($param) {
+                    $query->where('telesales_id', $param['telesales']);
+                })
+                ->latest()->paginate(10);
+        }
 
         return $data;
     }
@@ -78,5 +82,10 @@ class Customer extends Model
         return $this->with('marketing')->select('mkt_id', \DB::raw('count(id) as count'))
             ->whereNotNull('mkt_id')
             ->groupBy('mkt_id');
+    }
+
+    public static function getAll()
+    {
+        return self::with('status')->get();
     }
 }
