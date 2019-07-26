@@ -56,7 +56,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $statuses = Status::with('customers')->get();
+        $statuses = Status::with('customers')->where('type', StatusCode::RELATIONSHIP)->get();
         $title = 'Danh sách khách hàng';
         $customers = Customer::search($request);
 
@@ -132,7 +132,6 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        $input['mkt_id'] = $request->mkt_id;
 
         $this->customerService->update($input, $id);
 

@@ -58,7 +58,7 @@ class CustomerService
 
         $customer = $this->find($id);
 
-        $customer->update([$data]);
+        $customer->update($data);
 
         return $customer;
 
