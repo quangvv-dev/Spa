@@ -63,9 +63,6 @@
             </div>
             @include('customers.modal')
             <div id="registration-form">
-                <div class="load" style="text-align: center">
-                    <i class="fa fa-spinner fa-spin " style="font-size:46px"></i>
-                </div>
                 @include('customers.ajax')
             </div>
         </div>
@@ -73,12 +70,9 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('.load').hide();
-        });
+
 
         $(document).on('click', '.status', function () {
-            $('.load').show();
             const status = $(this).data('name');
             $.ajax({
                 url: "{{ Url('customers/') }}",
@@ -105,7 +99,6 @@
                     status: status
                 }
             }).done(function (data) {
-                $('.load').hide();
                 $('#registration-form').html(data);
             });
         });
@@ -239,11 +232,11 @@
             })
         });
 
-        $(document).on('click', '.myCheck' ,function () {
-            if($(this).is(':checked'))
-                $("#btn_tool_group").css({ 'display' : 'block'});
+        $(document).on('click', '.myCheck', function () {
+            if ($(this).is(':checked'))
+                $("#btn_tool_group").css({'display': 'block'});
             else
-                $("#btn_tool_group").css({ 'display' : 'none'});
+                $("#btn_tool_group").css({'display': 'none'});
         });
     </script>
 @endsection
