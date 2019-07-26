@@ -58,7 +58,7 @@ class CustomerController extends Controller
     {
         $statuses = Status::with('customers')->where('type', StatusCode::RELATIONSHIP)->get();
         $title = 'Danh sách khách hàng';
-        $customers = Customer::search($request);
+        $customers = Customer::where('role', '<>', UserConstant::ADMIN)->search($request);
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'title'))->render());
