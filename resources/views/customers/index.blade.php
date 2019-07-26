@@ -92,9 +92,9 @@
 
         $(document).on('change keyup', '.group, .telesales, #search', function () {
             $('.load').show();
-            var group = $('.group').val();
-            var telesales = $('.telesales').val();
-            var search = $('#search').val();
+            const group = $('.group').val();
+            const telesales = $('.telesales').val();
+            const search = $('#search').val();
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",

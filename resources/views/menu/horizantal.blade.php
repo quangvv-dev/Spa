@@ -67,7 +67,7 @@
                             <a href="#">Doanh thu</a>
                         </li>
                         <li>
-                            <a href="{{url('chart-revenue')}}">Khách hàng</a>
+                            <a href="{{url('report/customers')}}">Khách hàng</a>
                         </li>
                         <li>
                             <a href="{!! url('statistics')!!}">Nhân viên</a>

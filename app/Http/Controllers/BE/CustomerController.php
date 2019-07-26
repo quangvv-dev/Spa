@@ -56,9 +56,9 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $statuses = Status::with('customers')->where('type', StatusCode::RELATIONSHIP)->get();
+        $statuses = Status::getRelationship();
         $title = 'Danh sách khách hàng';
-        $customers = Customer::search($request);
+        $customers = Customer::search($request->all());
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'title'))->render());
@@ -266,5 +266,14 @@ class CustomerController extends Controller
         $customer->update($input);
 
         return $customer;
+    }
+
+    public function reportCustomer()
+    {
+        $title = 'THỐNG KÊ KHÁCH HÀNG';
+
+        $statuses = Status::getRelationship();
+
+        return view('customers.chart', compact('title', 'statuses'));
     }
 }
