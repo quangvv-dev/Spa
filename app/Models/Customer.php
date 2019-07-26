@@ -15,9 +15,11 @@ class Customer extends Model
         $data = self::with('status', 'marketing', 'category');
         if (isset($param)) {
             $data = $data->when(isset($param['search']), function ($query) use ($param) {
-                $query->where('full_name', 'like', '%' . $param['search'] . '%')
-                    ->orWhere('phone', 'like', '%' . $param['search'] . '%');
-            })
+                    $query->where(function ($q) use ($param) {
+                        $q->where('full_name', 'like', '%' . $param['search'] . '%')
+                            ->orWhere('phone', 'like', '%' . $param['search'] . '%');
+                    });
+                })
                 ->when(isset($param['status']), function ($query) use ($param) {
                     $query->whereHas('status', function ($q) use ($param) {
                         $q->where('status.name', $param['status']);
