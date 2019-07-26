@@ -49,7 +49,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
-//    Route::get('list-order-detail', 'OrderDetailController@index')->name('order-detail.index');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
@@ -65,4 +64,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //Trao đổi với khách hàng
     Route::get('group_comments/{id}', 'GroupCommentController@index');
     Route::post('group_comments/{id}', 'GroupCommentController@store');
+    Route::group(['prefix' => 'report'], function () {
+        Route::get('customers', 'CustomerController@reportCustomer');
+    });
 });
