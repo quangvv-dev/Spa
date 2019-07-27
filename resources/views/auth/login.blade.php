@@ -16,7 +16,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 
     <!-- Title -->
-    <title>Hệ Thống Spa Linh anh, chuyên nghiệp, uy tín...</title>
+    <title>Hệ Thống Spa Royal</title>
 
     <!--Font Awesome-->
     <link href="assets/plugins/fontawesome-free/css/all.css" rel="stylesheet">
