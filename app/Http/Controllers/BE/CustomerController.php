@@ -272,8 +272,10 @@ class CustomerController extends Controller
     {
         $title = 'THỐNG KÊ KHÁCH HÀNG';
 
+        $customer = Customer::getDataOfYears();
+
         $statuses = Status::getRelationship();
 
-        return view('customers.chart', compact('title', 'statuses'));
+        return view('customers.chart', compact('title', 'statuses', 'customer'));
     }
 }
