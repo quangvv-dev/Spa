@@ -92,7 +92,7 @@ class Customer extends Model
 
     public static function getDataOfYears()
     {
-        return self::selectRaw("COUNT(*) as totalCustomer, YEAR(created_at) year, DATE_FORMAT(created_at,'%M') as monthNum")
+        return self::select("COUNT(*) as totalCustomer, YEAR(created_at) year, DATE_FORMAT(created_at,'%M') as monthNum")
             ->groupBy('year', 'monthNum')
             ->orderBy('created_at', 'ASC')
             ->get();
