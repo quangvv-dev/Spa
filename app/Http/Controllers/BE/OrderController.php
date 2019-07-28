@@ -98,6 +98,7 @@ class OrderController extends Controller
 
     public function destroy(Request $request, $id)
     {
+
         $order = $this->orderService->delete($id);
 
         $request->session()->flash('error', 'Xóa đơn hàng thành công!');
