@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Constants\UserConstant;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
@@ -87,5 +88,14 @@ class Customer extends Model
     public static function getAll()
     {
         return self::with('status')->get();
+    }
+
+    public static function getDataOfYears()
+    {
+        return self::select(DB::raw("DATE_FORMAT(created_at,'%M') as monthNum"),
+            DB::raw('IFNULL(count(id),0) as totalCustomer'))
+            ->groupBy('monthNum')
+            ->orderBy('created_at', 'ASC')
+            ->get();
     }
 }
