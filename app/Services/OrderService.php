@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Services;
 
+use App\Models\GroupComment;
 use App\Models\Order;
 use App\Helpers\Functions;
+use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
@@ -16,14 +19,15 @@ class OrderService
     public function create($data)
     {
         $theRest = array_sum($data['total_price']);
-        if (empty($data) && is_array($data) == false)
+        if (empty($data) && is_array($data) == false) {
             return false;
+        }
 
         $input = [
-            'member_id'     => $data['user_id'],
-            'the_rest'      => $theRest,
-            'count_day'     => array_sum($data['count_day']),
-            'all_total'     => array_sum($data['total_price'])
+            'member_id' => $data['user_id'],
+            'the_rest'  => $theRest,
+            'count_day' => array_sum($data['count_day']),
+            'all_total' => array_sum($data['total_price']),
         ];
 
         $model = $this->order->fill($input);
@@ -68,19 +72,21 @@ class OrderService
     public function getPayment($data, $id)
     {
         $data['gross_revenue'] = str_replace(',', '', $data['gross_revenue']);
-        if (empty($data['gross_revenue']) && is_array($data) == false)
+        if (empty($data['gross_revenue']) && is_array($data) == false) {
             return false;
+        }
 
         $model = $this->find($id);
 
         $order = [
             'cash'        => $data['gross_revenue'] ?: 0,
             'remain_cash' => $model->the_rest - $data['gross_revenue'],
-            'return_cash' => $data['gross_revenue'] > $model->the_rest ? $data['gross_revenue'] - $model->the_rest: 0
+            'return_cash' => $data['gross_revenue'] > $model->the_rest ? $data['gross_revenue'] - $model->the_rest : 0,
         ];
 
-        if ($order['remain_cash'] < 0)
+        if ($order['remain_cash'] < 0) {
             $order['remain_cash'] = 0;
+        }
 
         return $order;
     }
@@ -88,7 +94,11 @@ class OrderService
     public function delete($id)
     {
         $order = $this->find($id);
-
+        GroupComment::create([
+            'customer_id' => $order->member_id,
+            'user_id'     => Auth::user()->id,
+            'messages'    => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . $order->all_total,
+        ]);
         return $order->delete();
     }
 }

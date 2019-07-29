@@ -10,7 +10,8 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col">
-                    @if(\Illuminate\Support\Facades\Auth::user()->role != \App\Constants\UserConstant::TELESALES)
+                    @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN
+                        ||\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::WAITER)
                         <a style="margin-left: 0.5%;" class="right btn btn-primary btn-flat" href="{{ url('orders') }}"><i
                                     class="fa fa-arrow-right"></i>Tới tạo đơn hàng</a>
                     @endif
