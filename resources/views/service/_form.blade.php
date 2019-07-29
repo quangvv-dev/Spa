@@ -133,7 +133,7 @@
                 initialPreview: [
                     @php
                         $domain     = request()->root();
-                        if(isset($doc)){
+                        if(isset($doc) && !empty($doc->images)){
                             foreach (@$doc->images as $item){
                                 @$path = $domain.'/uploads/services/'.@$item;
                                 echo '"'. "<img width=213px height=200px src='$path'> <input type='hidden' name='image[]' value='$item'>".'",';
@@ -148,7 +148,7 @@
                 initialPreviewConfig: [
                     @php
                         $domain     = request()->root();
-                        if(isset($doc)){
+                        if(isset($doc) && !empty($doc->images)){
                             foreach (@$doc->images as $item){
                                 echo '{caption: "'.$item.'"},';
                             }

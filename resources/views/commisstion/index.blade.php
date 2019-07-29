@@ -24,6 +24,7 @@
                             <div class="col-xs-12 col-md-3">
                                 {!! Form::label('customer_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
                                 {!! Form::select('customer_id[]', $customers, $value1, array('class' => 'form-control select2 user', 'required' => true,'disabled'=>true, 'placeholder' => 'Chọn nhân viên')) !!}
+                                {!! Form::hidden('customer_id[]', $value1, array('class' => 'form-control','readonly'=>true,'required'=>true)) !!}
                             </div>
                             @foreach(\json_decode($doc->rose_price) as $k2 =>$value2)
                                 @if($k1==$k2)
