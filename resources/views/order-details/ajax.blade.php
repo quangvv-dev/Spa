@@ -28,7 +28,11 @@
                     <td class="text-center">{{ @$order->customer->account_code }}</td>
                     <td class="text-center">{{ $order->customer->full_name }}</td>
                     <td class="text-center">{{ $order->customer->phone }}</td>
-                    <td class="text-center"></td>
+                    <td class="text-center">
+                        @foreach($order->orderDetails as $orderDetail)
+                            {{ @$orderDetail->service->name }},
+                        @endforeach
+                    </td>
                     <td class="text-center">{{ $order->orderDetails->sum('quantity') }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
                     <td class="text-center">{{ number_format($order->orderDetails->sum('number_discount')) }}</td>
