@@ -53,12 +53,13 @@ class CommissionController extends Controller
                 $price[] = str_replace(',', '', $item);
             }
         }
+
         $request->merge([
             'customer_id' => json_encode($request->customer_id),
             'rose_price'  => json_encode($price),
             'order_id'    => $id,
         ]);
-        $id->update($request->except('_token','order_id'));
+        $id->update($request->except('_token', 'order_id'));
         return back();
     }
 }

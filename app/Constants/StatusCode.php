@@ -26,4 +26,10 @@ class StatusCode
     const RELATIONSHIP = 3;// MÔI QUAN HỆ : MỚI, ĐÃ MUA sp ...
     const BRANCH = 4;// chi nhánh
     const NEW = 1;// mới
+
+    const CALL = 1;// HẸN GỌI LẠI
+    const BOOK = 2;// ĐẶT LỊCH
+    const RECEIVE = 3;// ĐÃ ĐẾN
+    const UN_RECEIVE = 4;// KHÔNG ĐẾN
+    const CANCEL = 5;// HỦY
 }

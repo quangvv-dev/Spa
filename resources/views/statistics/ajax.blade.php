@@ -14,8 +14,8 @@
             @foreach($statisticUsers as $k => $statisticUser)
                 <tr>
                     <th scope="row">{{$k}}</th>
-                    <td class="text-center">{{ $statisticUser->marketing->full_name }}</td>
-                    <td class="text-center">{{ $statisticUser->marketing->role_text }}</td>
+                    <td class="text-center">{{ @$statisticUser->marketing->full_name }}</td>
+                    <td class="text-center">{{ @$statisticUser->marketing->role_text }}</td>
                     <td class="text-center">{{ $statisticUser->count }}</td>
                     <td class="text-center">
                         <a class="btn" href="{{ url('statistics/' . $statisticUser->marketing->id . '/detail') }}"><i class="far fa-eye"></i></a>
