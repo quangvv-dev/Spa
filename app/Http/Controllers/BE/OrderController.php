@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Services;
 use App\Models\Status;
 use App\Services\OrderDetailService;
@@ -135,6 +136,13 @@ class OrderController extends Controller
     public function infoPayment(Request $request, $id)
     {
         return $this->orderService->getPayment($request->all(), $id);
+    }
+
+    public function reportProduct()
+    {
+        $title = "THỐNG KÊ SẢN PHẨM";
+        $services = Services::handleChart();
+        return view('report_products.chart', compact('title', 'services'));
     }
 
 }

@@ -76,7 +76,7 @@
                             <a href="#">Chiến dịch</a>
                         </li>
                         <li>
-                            <a href="#">Sản phẩm</a>
+                            <a href="{{url('report/products')}}">Sản phẩm</a>
                         </li>
                         <li>
                             <a href="#">Công việc</a>
