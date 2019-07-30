@@ -20,8 +20,20 @@ class Services extends Model
         return $this->enable == UserConstant::ACTIVE ? 'Hoạt động' : 'Ngừng hoạt động';
     }
 
+    public function orders()
+    {
+        return $this->hasMany(OrderDetail::class, 'booking_id', 'id');
+    }
+
     public function getImagesAttribute($images)
     {
         return @json_decode($images, true);
+    }
+
+    public static function handleChart()
+    {
+        $data = self::with('orders')
+            ->get();
+        return $data;
     }
 }

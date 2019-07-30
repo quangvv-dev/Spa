@@ -66,5 +66,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('group_comments/{id}', 'GroupCommentController@store');
     Route::group(['prefix' => 'report'], function () {
         Route::get('customers', 'CustomerController@reportCustomer');
+        Route::get('products', 'OrderController@reportProduct');
     });
 });

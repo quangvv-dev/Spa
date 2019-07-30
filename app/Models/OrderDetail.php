@@ -20,4 +20,9 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Services::class, 'booking_id', 'id');
     }
+
+    public static function getAll()
+    {
+        return self::get();
+    }
 }
