@@ -21,7 +21,7 @@
             <td class="text-center"><h2>{{$books + $receive +$comment}}</h2></td>
 {{--            <td class="text-center"><h2>0</h2></td>--}}
             <td class="text-center"><h2>{{$orders}}</h2></td>
-            <td class="text-center"><h2>{{number_format($commision+($price_customer * 20000))}}</h2></td>
+            <td class="text-center"><h2>{{number_format((int)$commision+($price_customer?:0 * 20000))}}</h2></td>
         </tr>
         <tr>
             <td class="text-center">
@@ -117,7 +117,7 @@
                         Hoa hồng :
                     </div>
                     <div class="col-md-4 col-xs-6 title">
-                        {{number_format($commision)}}
+                        {{number_format((int)$commision)}}
                     </div>
                 </div>
             </td>
