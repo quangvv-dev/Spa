@@ -2,6 +2,7 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
+            <th class="text-white text-center">Thao tác</th>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Ngày lên đơn</th>
             <th class="text-white text-center">Mã KH</th>
@@ -16,13 +17,20 @@
             <th class="text-white text-center">Còn lại</th>
             <th class="text-white text-center">Phương thức thanh toán</th>
             <th class="text-white text-center">Người lên đơn</th>
-            <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
         <tbody>
         @if (count($orders))
             @foreach($orders as $order)
                 <tr>
+                    <td class="text-center">
+                        <a title="In hóa đơn" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
+                                    class="fas fa-file-invoice-dollar"></i></a>
+                        <a title="Chia hoa hồng" class="btn" href="{{ url('commission/' . $order->id) }}"><i class="fas fa-dollar-sign"></i></a>
+                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
+                            <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
+                        @endif
+                    </td>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">{{ @$order->customer->account_code }}</td>
@@ -41,14 +49,6 @@
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
                     <td class="text-center">{{ $order->name_payment_type }}</td>
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
-                    <td class="text-center">
-                        <a title="In hóa đơn" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
-                                    class="fas fa-file-invoice-dollar"></i></a>
-                        <a title="Chia hoa hồng" class="btn" href="{{ url('commission/' . $order->id) }}"><i class="fas fa-dollar-sign"></i></a>
-                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
-                            <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
-                        @endif
-                    </td>
                 </tr>
             @endforeach
         @else
