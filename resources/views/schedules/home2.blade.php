@@ -53,7 +53,8 @@
     <script src='{{asset('assets/plugins/fullcalendar/fullcalendar.min.js')}}'></script>
     <script>
         $(document).ready(function () {
-            // $('.page-header').hide();
+            $('.page-title').hide();
+            $('.breadcrumb').hide();
             $('body').delegate('.status', 'click', function () {
                 // $('.spin').show();
                 var val = $(this).find('.status-val').val();
