@@ -2,6 +2,11 @@
 
 <link href='{{asset('assets/plugins/fullcalendar/fullcalendar.min.css')}}' rel='stylesheet'/>
 <link href='{{asset('assets/plugins/fullcalendar/fullcalendar.print.min.css')}}' rel='stylesheet' media='print'/>
+<style>
+    .container{
+        max-width: 90% !important;
+    }
+</style>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -34,7 +39,7 @@
                 <div class="col-md-2">
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
-{{--                <a class="btn btn-primary date"><i class="fas fa-search" style="font-size: 20px;color: #e0dede"></i></a>--}}
+                <a class="btn btn-primary date"><i class="fas fa-search" style="font-size: 20px;color: #e0dede"></i></a>
             </div>
             <div class="side-app">
                 @include('schedules.ajax2')
@@ -48,47 +53,47 @@
     <script src='{{asset('assets/plugins/fullcalendar/fullcalendar.min.js')}}'></script>
     <script>
         $(document).ready(function () {
-            $('.spin').hide();
+            // $('.page-header').hide();
             $('body').delegate('.status', 'click', function () {
-                $('.spin').show();
+                // $('.spin').show();
                 var val = $(this).find('.status-val').val();
-                // if (val != 6) {
-                //     var url = window.location.origin + '/schedules/?search=' + val;
-                //     location.replace(url)
-                // } else {
-                //     var url = window.location.origin + '/schedules/';
-                //     location.replace(url)
-                // }
-                $.ajax({
-                    url: window.location.origin + '/' + 'schedules',
-                    method: "get",
-                    data: {
-                        search: val,
-                    }
-                }).done(function (data) {
-                    $('#calendar1').html(data);
-                    $('.spin').hide();
-                });
+                if (val != 6) {
+                    var url = window.location.origin + '/schedules/?search=' + val;
+                    location.replace(url)
+                } else {
+                    var url = window.location.origin + '/schedules/';
+                    location.replace(url)
+                }
+                // $.ajax({
+                //     url: window.location.origin + '/' + 'schedules',
+                //     method: "get",
+                //     data: {
+                //         search: val,
+                //     }
+                // }).done(function (data) {
+                //     $('#calendar1').html(data);
+                //     $('.spin').hide();
+                // });
             });
             $(document).on('change', '#search', function () {
                 $('.spin').show();
                 var val = $(this).val();
-                // if (val) {
-                //     var url = window.location.origin + '/schedules/?date=' + val;
-                // } else {
-                //     var url = window.location.origin + '/schedules/';
-                // }
-                // location.replace(url)
-                $.ajax({
-                    url: window.location.origin + '/' + 'schedules',
-                    method: "get",
-                    data: {
-                        date: val,
-                    }
-                }).done(function (data) {
-                    $('#calendar1').html(data);
-                    $('.spin').hide();
-                });
+                if (val) {
+                    var url = window.location.origin + '/schedules/?date=' + val;
+                } else {
+                    var url = window.location.origin + '/schedules/';
+                }
+                location.replace(url)
+                // $.ajax({
+                //     url: window.location.origin + '/' + 'schedules',
+                //     method: "get",
+                //     data: {
+                //         date: val,
+                //     }
+                // }).done(function (data) {
+                //     $('#calendar1').html(data);
+                //     $('.spin').hide();
+                // });
             });
 
             $('#calendar1').fullCalendar({
