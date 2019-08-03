@@ -35,10 +35,24 @@ class StatisticController extends Controller
 
     public function index(Request $request)
     {
+        $input = $request->all();
         $title = 'Nhân viên';
         $price_commision = [];
         $customer = Customer::orderBy('id', 'desc');
         $books = Schedule::where('status', StatusCode::BOOK);
+        $books->when(isset($input['data_time']), function ($query) use ($input) {
+            $query->when($input['data_time'] == 'TODAY' ||
+                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                $q->whereDate('created_at', getTime(($input['data_time'])));
+            })
+                ->when($input['data_time'] == 'THIS_WEEK' ||
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'THIS_MONTH' ||
+                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                    $q->whereBetween('created_at', getTime(($input['data_time'])));
+                });
+        });
         $receive = Schedule::where('status', StatusCode::RECEIVE);
         $comment = Schedule::orderBy('id', 'desc');
         $orders = OrderDetail::orderBy('id', 'desc');
