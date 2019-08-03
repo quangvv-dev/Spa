@@ -3,7 +3,7 @@
 <link href='{{asset('assets/plugins/fullcalendar/fullcalendar.min.css')}}' rel='stylesheet'/>
 <link href='{{asset('assets/plugins/fullcalendar/fullcalendar.print.min.css')}}' rel='stylesheet' media='print'/>
 <style>
-    .container{
+    .container {
         max-width: 90% !important;
     }
 </style>
@@ -32,6 +32,9 @@
                             @case(5)
                             {{'#d03636'}}
                             @break
+                            @case(6)
+                            {{'#63cff9'}}
+                            @break
                             @endswitch;margin-left: 3px">{{ $item }}
                         <input type="hidden" class="status-val" value="{{$k}}">
                     </button>
@@ -40,6 +43,9 @@
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
                 <a class="btn btn-primary date"><i class="fas fa-search" style="font-size: 20px;color: #e0dede"></i></a>
+                <div class="col-md-2">
+                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                </div>
             </div>
             <div class="side-app">
                 @include('schedules.ajax2')
@@ -96,6 +102,15 @@
                 //     $('.spin').hide();
                 // });
             });
+            $(document).on('change', '#person_action', function () {
+                var val = $(this).val();
+                if (val != 0) {
+                    var url = window.location.origin + '/schedules/?user=' + val;
+                } else {
+                    var url = window.location.origin + '/schedules/';
+                }
+                location.replace(url)
+            });
 
             $('#calendar1').fullCalendar({
                 header: {
@@ -145,11 +160,11 @@
                         color: '#d03636',
                         @break
                                 @endswitch
-                        {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
+                                {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
                         start: '{{$item->date.'T'.$item->time_from.':00'}}',
                         end: '{{$item->date.'T'.$item->time_to.':00'}}'
                     },
-                        @endforeach
+                    @endforeach
                 ],
                 eventClick: function (info) {
                     let id = info.id;
