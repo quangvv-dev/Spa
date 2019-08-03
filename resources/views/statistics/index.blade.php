@@ -67,6 +67,7 @@
         $(document).ready(function () {
             $(".fc-datepicker").datepicker({dateFormat: 'dd-mm-yy'});
         })
+
         $(document).on('keyup change', '#from-date,#to-date', function (e) {
             e.preventDefault();
             var from_date = $('#from-date').val();
@@ -78,6 +79,23 @@
                 data: {
                     from_date: from_date,
                     to_date: to_date
+                }
+            }).done(function (data) {
+                $('#registration-form').html(data);
+
+            });
+        });
+
+        $(document).on('click', '.choose_time', function (e) {
+            e.preventDefault();
+            let target = $(e.target).parent();
+            const data_time = $(target).find('.choose_time').data('time');
+
+            $.ajax({
+                url: "{{ Url('statistics/') }}",
+                method: "get",
+                data: {
+                    data_time: data_time
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
