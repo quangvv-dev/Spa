@@ -20,6 +20,8 @@ class ScheduleController extends Controller
     public function __construct()
     {
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+        $staff2 = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')
+            ->prepend('Tất cả nhân viên', 0)->toArray();
         $color = [
             1 => 'Hẹn gọi lại',
             2 => 'Đặt lịch',
@@ -29,8 +31,9 @@ class ScheduleController extends Controller
             6 => 'Tất cả',
         ];
         view()->share([
-            'staff' => $staff,
-            'color' => $color,
+            'staff'  => $staff,
+            'staff2' => $staff2,
+            'color'  => $color,
         ]);
     }
 
@@ -159,17 +162,25 @@ class ScheduleController extends Controller
             return $item;
         });
         if ($request->search) {
-            $docs = $docs->where('status', $request->search);
+            if ($request->search != 6) {
+                $docs = $docs->where('status', $request->search);
+            }
         }
         if ($request->date) {
             $docs = $docs->where('date', $request->date);
             $now = $request->date;
         }
-        $title = 'Danh sách lịch hẹn';
-        if ($request->ajax()) {
-            return Response::json(view('schedules.ajax2', compact('docs', 'title', 'now'))->render());
+        if ($request->user) {
+            $docs = $docs->where('user_id', $request->user);
         }
-        return view('schedules.home2', compact('title', 'docs', 'now'));
+        $title = 'Danh sách lịch hẹn';
+        $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+        $user = $request->user ?: 0;
+        if ($request->ajax()) {
+            return Response::json(view('schedules.ajax2',
+                compact('docs', 'title', 'now', 'staff', 'user'))->render());
+        }
+        return view('schedules.home2', compact('title', 'docs', 'now', 'user'));
     }
 
     /**

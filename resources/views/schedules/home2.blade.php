@@ -2,6 +2,11 @@
 
 <link href='{{asset('assets/plugins/fullcalendar/fullcalendar.min.css')}}' rel='stylesheet'/>
 <link href='{{asset('assets/plugins/fullcalendar/fullcalendar.print.min.css')}}' rel='stylesheet' media='print'/>
+<style>
+    .container {
+        max-width: 90% !important;
+    }
+</style>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -27,6 +32,9 @@
                             @case(5)
                             {{'#d03636'}}
                             @break
+                            @case(6)
+                            {{'#63cff9'}}
+                            @break
                             @endswitch;margin-left: 3px">{{ $item }}
                         <input type="hidden" class="status-val" value="{{$k}}">
                     </button>
@@ -35,6 +43,9 @@
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
                 <a class="btn btn-primary date"><i class="fas fa-search" style="font-size: 20px;color: #e0dede"></i></a>
+                <div class="col-md-2">
+                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                </div>
             </div>
             <div class="side-app">
                 @include('schedules.ajax2')
@@ -43,30 +54,60 @@
     </div>
 @endsection
 @section('_script')
+    {{--    <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>--}}
     <script src='{{asset('assets/plugins/fullcalendar/moment.min.js')}}'></script>
     <script src='{{asset('assets/plugins/fullcalendar/fullcalendar.min.js')}}'></script>
     <script>
         $(document).ready(function () {
+            $('.page-title').hide();
+            $('.breadcrumb').hide();
             $('body').delegate('.status', 'click', function () {
+                // $('.spin').show();
                 var val = $(this).find('.status-val').val();
                 if (val != 6) {
                     var url = window.location.origin + '/schedules/?search=' + val;
-                    // var url = "http://localhost/Spa/public/schedules/?search=" + val;
                     location.replace(url)
                 } else {
                     var url = window.location.origin + '/schedules/';
-                    // var url = "http://localhost/Spa/public/schedules/";
                     location.replace(url)
                 }
+                // $.ajax({
+                //     url: window.location.origin + '/' + 'schedules',
+                //     method: "get",
+                //     data: {
+                //         search: val,
+                //     }
+                // }).done(function (data) {
+                //     $('#calendar1').html(data);
+                //     $('.spin').hide();
+                // });
             });
-            $(document).on('click', '.date', function () {
-                var val = $('#search').val();
+            $(document).on('change', '#search', function () {
+                $('.spin').show();
+                var val = $(this).val();
                 if (val) {
                     var url = window.location.origin + '/schedules/?date=' + val;
-                    // var url = "http://localhost/Spa/public/schedules/?date=" + val;
                 } else {
                     var url = window.location.origin + '/schedules/';
-                    // var url = "http://localhost/Spa/public/schedules/";
+                }
+                location.replace(url)
+                // $.ajax({
+                //     url: window.location.origin + '/' + 'schedules',
+                //     method: "get",
+                //     data: {
+                //         date: val,
+                //     }
+                // }).done(function (data) {
+                //     $('#calendar1').html(data);
+                //     $('.spin').hide();
+                // });
+            });
+            $(document).on('change', '#person_action', function () {
+                var val = $(this).val();
+                if (val != 0) {
+                    var url = window.location.origin + '/schedules/?user=' + val;
+                } else {
+                    var url = window.location.origin + '/schedules/';
                 }
                 location.replace(url)
             });
@@ -119,19 +160,16 @@
                         color: '#d03636',
                         @break
                                 @endswitch
-                        url: '{{url('schedules/'.$item->user_id)}}',
+                                {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
                         start: '{{$item->date.'T'.$item->time_from.':00'}}',
                         end: '{{$item->date.'T'.$item->time_to.':00'}}'
                     },
-                        @endforeach
-                    {
-                        title: 'Meeting',
-                        description: 'Anh quang đến triệt lông',
-                        // url: 'http://google.com/',
-                        start: '2018-08-12T10:30:00',
-                        end: '2018-08-12T12:30:00'
-                    },
-                ]
+                    @endforeach
+                ],
+                eventClick: function (info) {
+                    let id = info.id;
+                    $('#modal_' + id).modal('show');
+                }
             });
             $("body").delegate(".fc-content", "click", function () {
                 // alert('test');
