@@ -159,15 +159,19 @@ class ScheduleController extends Controller
             return $item;
         });
         if ($request->search) {
-            $docs = $docs->where('status', $request->search);
+            if ($request->search != 6) {
+                $docs = $docs->where('status', $request->search);
+            }
         }
         if ($request->date) {
             $docs = $docs->where('date', $request->date);
             $now = $request->date;
         }
         $title = 'Danh sách lịch hẹn';
+        $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+
         if ($request->ajax()) {
-            return Response::json(view('schedules.ajax2', compact('docs', 'title', 'now'))->render());
+            return Response::json(view('schedules.ajax2', compact('docs', 'title', 'now', 'staff'))->render());
         }
         return view('schedules.home2', compact('title', 'docs', 'now'));
     }

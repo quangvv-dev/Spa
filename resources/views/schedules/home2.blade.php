@@ -34,7 +34,7 @@
                 <div class="col-md-2">
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
-                <a class="btn btn-primary date"><i class="fas fa-search" style="font-size: 20px;color: #e0dede"></i></a>
+{{--                <a class="btn btn-primary date"><i class="fas fa-search" style="font-size: 20px;color: #e0dede"></i></a>--}}
             </div>
             <div class="side-app">
                 @include('schedules.ajax2')
@@ -43,32 +43,52 @@
     </div>
 @endsection
 @section('_script')
+    {{--    <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>--}}
     <script src='{{asset('assets/plugins/fullcalendar/moment.min.js')}}'></script>
     <script src='{{asset('assets/plugins/fullcalendar/fullcalendar.min.js')}}'></script>
     <script>
         $(document).ready(function () {
+            $('.spin').hide();
             $('body').delegate('.status', 'click', function () {
+                $('.spin').show();
                 var val = $(this).find('.status-val').val();
-                if (val != 6) {
-                    var url = window.location.origin + '/schedules/?search=' + val;
-                    // var url = "http://localhost/Spa/public/schedules/?search=" + val;
-                    location.replace(url)
-                } else {
-                    var url = window.location.origin + '/schedules/';
-                    // var url = "http://localhost/Spa/public/schedules/";
-                    location.replace(url)
-                }
+                // if (val != 6) {
+                //     var url = window.location.origin + '/schedules/?search=' + val;
+                //     location.replace(url)
+                // } else {
+                //     var url = window.location.origin + '/schedules/';
+                //     location.replace(url)
+                // }
+                $.ajax({
+                    url: window.location.origin + '/' + 'schedules',
+                    method: "get",
+                    data: {
+                        search: val,
+                    }
+                }).done(function (data) {
+                    $('#calendar1').html(data);
+                    $('.spin').hide();
+                });
             });
-            $(document).on('click', '.date', function () {
-                var val = $('#search').val();
-                if (val) {
-                    var url = window.location.origin + '/schedules/?date=' + val;
-                    // var url = "http://localhost/Spa/public/schedules/?date=" + val;
-                } else {
-                    var url = window.location.origin + '/schedules/';
-                    // var url = "http://localhost/Spa/public/schedules/";
-                }
-                location.replace(url)
+            $(document).on('change', '#search', function () {
+                $('.spin').show();
+                var val = $(this).val();
+                // if (val) {
+                //     var url = window.location.origin + '/schedules/?date=' + val;
+                // } else {
+                //     var url = window.location.origin + '/schedules/';
+                // }
+                // location.replace(url)
+                $.ajax({
+                    url: window.location.origin + '/' + 'schedules',
+                    method: "get",
+                    data: {
+                        date: val,
+                    }
+                }).done(function (data) {
+                    $('#calendar1').html(data);
+                    $('.spin').hide();
+                });
             });
 
             $('#calendar1').fullCalendar({
@@ -119,19 +139,16 @@
                         color: '#d03636',
                         @break
                                 @endswitch
-                        url: '{{url('schedules/'.$item->user_id)}}',
+                        {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
                         start: '{{$item->date.'T'.$item->time_from.':00'}}',
                         end: '{{$item->date.'T'.$item->time_to.':00'}}'
                     },
                         @endforeach
-                    {
-                        title: 'Meeting',
-                        description: 'Anh quang đến triệt lông',
-                        // url: 'http://google.com/',
-                        start: '2018-08-12T10:30:00',
-                        end: '2018-08-12T12:30:00'
-                    },
-                ]
+                ],
+                eventClick: function (info) {
+                    let id = info.id;
+                    $('#modal_' + id).modal('show');
+                }
             });
             $("body").delegate(".fc-content", "click", function () {
                 // alert('test');
