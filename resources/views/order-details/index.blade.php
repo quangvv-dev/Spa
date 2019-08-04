@@ -58,12 +58,10 @@
             const service = $('.service').val();
             const payment_type = $('.payment-type').val();
             const data_time = $(target).find('.choose_time').data('time');
-            console.log(data_time);
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
             $(".other_time_panel").css({ 'display' : 'none'});
             $("#boxSearch").css({ 'display' : 'none'});
-            console.log(telesales);
 
             $.ajax({
                 url: "{{ Url('list-orders/') }}",
