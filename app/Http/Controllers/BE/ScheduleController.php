@@ -201,4 +201,25 @@ class ScheduleController extends Controller
         $ret['week_end'] = $dto->format('Y-m-d');
         return $ret;
     }
+
+    public function getList(Request $request)
+    {
+        $status = Schedule::SCHEDULE_STATUS;
+        $scheduleId = $request->id;
+
+        return $data = [
+            'schedule_id' => $scheduleId,
+            'data' => $status
+        ];;
+    }
+
+    public function ajaxUpdate(Request $request, $id)
+    {
+        $input = $request->all();
+
+        $schedule = Schedule::find($id);
+        $schedule->update($input);
+
+        return $schedule;
+    }
 }

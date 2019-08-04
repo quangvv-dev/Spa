@@ -44,8 +44,10 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('info-customer', 'OrderController@getInfoCustomer');
         Route::get('info-order-payment/{id}', 'OrderController@infoPayment');
         Route::get('customers/{id}', 'CustomerController@getCustomerById');
-        route::put('customers/{id}', 'CustomerController@ajaxUpdate');
-        route::get('statuses', 'StatusController@getList');
+        Route::put('customers/{id}', 'CustomerController@ajaxUpdate');
+        Route::put('schedules/{id}', 'ScheduleController@ajaxUpdate');
+        Route::get('statuses', 'StatusController@getList');
+        Route::get('/status-schedules', 'ScheduleController@getList');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
