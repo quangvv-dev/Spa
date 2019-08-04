@@ -1,6 +1,11 @@
 @extends('layout.app')
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
+    <style>
+        .dropdown-toggle::after {
+            display:none;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
@@ -54,12 +59,35 @@
                         </a>
                     </button>
                 </div>
-                <div class="scrollmenu col-md-4">
+                <div class="scrollmenu col-md-6">
                     @foreach(@$statuses as $k => $item)
                         <button class="status btn white account_relation position" data-name="{{$item->name}}"
                                 style="background: {{$item->color ?:''}}">{{ $item->name }}<span
                                     class="not-number-account white">{{ $item->customers->count() }}</span></button>
                     @endforeach
+                </div>
+                <div class="col-md-5">
+                    <div id="div_created_at_dropdown" style="float: right !important;" class="display position pointer mt5 open" rel="tooltip"
+                         data-placement="left" data-original-title="Thời gian tạo khách hàng"
+                         style="padding-top:2px;padding-left:2px"><a class="dropdown-toggle" data-toggle="dropdown"
+                                                                     aria-expanded="true"><i id="created_at_icon"
+                                                                                             class="far fa-clock"
+                                                                                             style="font-size:22px"></i></a>
+                        <ul class="dropdown-menu pull-right tr">
+                            <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm nay</a>
+                            </li>
+                            <li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm
+                                    qua</a></li>
+                            <li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần
+                                    này</a></li>
+                            <li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần
+                                    trước</a></li>
+                            <li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng
+                                    này</a></li>
+                            <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
+                                    trước</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             @include('customers.modal')
@@ -71,8 +99,6 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-
-
         $(document).on('click', '.status', function () {
             const status = $(this).data('name');
             $.ajax({
@@ -85,11 +111,13 @@
             });
         });
 
-        $(document).on('change keyup', '.group, .telesales, #search', function () {
+        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time', function (e) {
             $('.load').show();
+            let target = $(e.target).parent();
             const group = $('.group').val();
             const telesales = $('.telesales').val();
             const search = $('#search').val();
+            const data_time = $(target).find('.btn_choose_time').data('time');
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
@@ -97,7 +125,8 @@
                     group: group,
                     telesales: telesales,
                     search: search,
-                    status: status
+                    status: status,
+                    data_time: data_time
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);

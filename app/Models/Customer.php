@@ -32,6 +32,18 @@ class Customer extends Model
                 ->when(isset($param['telesales']), function ($query) use ($param) {
                     $query->where('telesales_id', $param['telesales']);
                 })
+                ->when(isset($param['data_time']), function ($query) use ($param) {
+                    $query->when($param['data_time'] == 'TODAY' ||
+                        $param['data_time'] == 'YESTERDAY', function ($q) use ($param) {
+                        $q->whereDate('created_at', getTime(($param['data_time'])));
+                    })
+                    ->when($param['data_time'] == 'THIS_WEEK' ||
+                        $param['data_time'] == 'LAST_WEEK' ||
+                        $param['data_time'] == 'THIS_MONTH' ||
+                        $param['data_time'] == 'LAST_MONTH', function ($q) use ($param) {
+                        $q->whereBetween('created_at', getTime(($param['data_time'])));
+                    });
+                })
                 ->latest()->paginate(10);
         }
 
