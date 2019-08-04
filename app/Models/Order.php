@@ -75,6 +75,14 @@ class Order extends Model
             })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']), Functions::yearMonthDay($input['end_date'])]);
+            })
+            ->when(isset($input['bor_none']), function ($query) use ($input) {
+                $query->when($input['bor_none'] == 'advanced', function ($q) use ($input) {
+                    $q->where('the_rest', '>', 0);
+                    })
+                    ->when($input['bor_none'] == 'paid', function ($q) use ($input) {
+                        $q->where('the_rest', 0);
+                    });
             });
         }
 

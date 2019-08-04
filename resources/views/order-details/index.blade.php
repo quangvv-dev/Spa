@@ -24,14 +24,17 @@
                             này</a>
                     </li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                    <li class="display position"><a class="other_time choose_time  border b-gray" data-time="OTHER_TIME">Khác</a>
+                    <li class="display position"><a class="other_time choose_time  border b-gray"
+                                                    data-time="OTHER_TIME">Khác</a>
                         <div class="add-drop add-d-right other_time_panel"
                              style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>
                             <div class="padding tl"><p>Ngày bắt đầu</p>
-                                <input type="text" class="form-control filter_start_date" id="datepicker" data-toggle="datepicker" name="payment_date">
+                                <input type="text" class="form-control filter_start_date" id="datepicker"
+                                       data-toggle="datepicker" name="payment_date">
                             </div>
                             <div class="padding tl"><p>Ngày kết thúc</p>
-                                <input type="text" class="form-control filter_end_date" id="datepicker" data-toggle="datepicker" name="payment_date">
+                                <input type="text" class="form-control filter_end_date" id="datepicker"
+                                       data-toggle="datepicker" name="payment_date">
                             </div>
                             <div class="padding5-10 tl mb5">
                                 <button class="btn btn-info submit_other_time">Tìm kiếm</button>
@@ -41,6 +44,18 @@
                     </li>
                 </ul>
             </div>
+            <div class="card-header col-md-12">
+                <div class="col-md-12">
+                    <div class="btn-group ml5" id="more_filters">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span
+                                    class="filter_name">Lọc bổ sung</span> <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a class="tl filter_advanced bor-none" data-filter="advanced">Chưa thanh toán</a></li>
+                            <li><a class="tl filter_paid bor-none" data-filter="paid">Đã thanh toán</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div id="registration-form">
                 @include('order-details.ajax')
             </div>
@@ -49,17 +64,18 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time', function (e) {
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
             let target = $(e.target).parent();
-            const group= $('.group').val();
-            const telesales = $('.telesales').val();
-            const marketing = $('.marketing').val();
-            const customer = $('.customer').val();
-            const service = $('.service').val();
-            const payment_type = $('.payment-type').val();
+            const group = $(target).find('.group').val();
+            const telesales = $(target).find('.telesales').val();
+            const marketing = $(target).find('.marketing').val();
+            const customer = $(target).find('.customer').val();
+            const service = $(target).find('.service').val();
+            const payment_type = $(target).find('.payment-type').val();
             const data_time = $(target).find('.choose_time').data('time');
-            const start_date = $('.filter_start_date').val();
-            const end_date = $('.filter_end_date').val();
+            const start_date = $(target).find('.filter_start_date').val();
+            const end_date = $(target).find('.filter_end_date').val();
+            const bor_none = $(target).find('.bor-none').data('filter');
             $(".other_time_panel").css({ 'display' : 'none'});
             $("#boxSearch").css({ 'display' : 'none'});
 
@@ -75,25 +91,26 @@
                     payment_type: payment_type,
                     data_time: data_time,
                     start_date: start_date,
-                    end_date: end_date
+                    end_date: end_date,
+                    bor_none: bor_none
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
             });
         });
-        
-        $(document).on('click', '.other_time' ,function () {
-            $(".other_time_panel").css({ 'display' : ''});
+
+        $(document).on('click', '.other_time', function () {
+            $(".other_time_panel").css({'display': ''});
         })
 
-        $(document).on('click', '.cancel_other_time' ,function () {
-            $(".other_time_panel").css({ 'display' : 'none'});
+        $(document).on('click', '.cancel_other_time', function () {
+            $(".other_time_panel").css({'display': 'none'});
         });
-        $(document).on('click', '#showBoxSearch' ,function () {
-            $("#boxSearch").css({ 'display' : ''});
+        $(document).on('click', '#showBoxSearch', function () {
+            $("#boxSearch").css({'display': ''});
         });
-        $(document).on('click', '#closeBoxSearch' ,function () {
-            $("#boxSearch").css({ 'display' : 'none'});
+        $(document).on('click', '#closeBoxSearch', function () {
+            $("#boxSearch").css({'display': 'none'});
         });
 
         $(document).ready(function () {
