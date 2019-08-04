@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Requests\UserRequest;
 use App\Models\Category;
+use App\Models\Department;
 use App\Models\Status;
 use App\Services\UserService;
 use App\User;
@@ -57,7 +58,8 @@ class UserController extends Controller
     public function create()
     {
         $title = 'Thêm người dùng';
-        return view('users._form', compact('title'));
+        $departments = Department::pluck('name', 'id');
+        return view('users._form', compact('title', 'departments'));
     }
 
     /**
@@ -99,7 +101,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $title = 'Sửa người dùng';
-        return view('users._form', compact('user', 'title'));
+        $departments = Department::pluck('name', 'id');
+        return view('users._form', compact('user', 'title', 'departments'));
     }
 
     /**

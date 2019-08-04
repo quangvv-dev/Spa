@@ -62,7 +62,6 @@
             const end_date = $('.filter_end_date').val();
             $(".other_time_panel").css({ 'display' : 'none'});
             $("#boxSearch").css({ 'display' : 'none'});
-            console.log(telesales);
 
             $.ajax({
                 url: "{{ Url('list-orders/') }}",
