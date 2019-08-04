@@ -25,7 +25,7 @@
                     </li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
                     <li class="display position"><a class="other_time choose_time  border b-gray"
-                                                    data-time="OTHER_TIME">Khác</a>
+                                                    >Khác</a>
                         <div class="add-drop add-d-right other_time_panel"
                              style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>
                             <div class="padding tl"><p>Ngày bắt đầu</p>
@@ -66,15 +66,15 @@
     <script type="text/javascript">
         $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
             let target = $(e.target).parent();
-            const group = $(target).find('.group').val();
-            const telesales = $(target).find('.telesales').val();
-            const marketing = $(target).find('.marketing').val();
-            const customer = $(target).find('.customer').val();
-            const service = $(target).find('.service').val();
-            const payment_type = $(target).find('.payment-type').val();
+            const group= $('.group').val();
+            const telesales = $('.telesales').val();
+            const marketing = $('.marketing').val();
+            const customer = $('.customer').val();
+            const service = $('.service').val();
+            const payment_type = $('.payment-type').val();
             const data_time = $(target).find('.choose_time').data('time');
-            const start_date = $(target).find('.filter_start_date').val();
-            const end_date = $(target).find('.filter_end_date').val();
+            const start_date = $('.filter_start_date').val();
+            const end_date = $('.filter_end_date').val();
             const bor_none = $(target).find('.bor-none').data('filter');
             $(".other_time_panel").css({ 'display' : 'none'});
             $("#boxSearch").css({ 'display' : 'none'});

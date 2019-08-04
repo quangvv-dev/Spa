@@ -74,7 +74,7 @@ class Order extends Model
                 });
             })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']), Functions::yearMonthDay($input['end_date'])]);
+                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
             })
             ->when(isset($input['bor_none']), function ($query) use ($input) {
                 $query->when($input['bor_none'] == 'advanced', function ($q) use ($input) {
