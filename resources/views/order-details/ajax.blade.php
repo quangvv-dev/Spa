@@ -60,11 +60,11 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center bold">Tổng</td>
-                <td class="text-center bold"> {{ number_format($order->sum('all_total')) }} </td>
+                <td class="text-center bold"> {{ number_format($orders->sum('all_total')) }} </td>
                 <td class="text-center"></td>
-                <td class="text-center bold"> {{ number_format($order->sum('gross_revenue')) }} </td>
-                <td class="text-center bold"> {{ number_format($order->sum('gross_revenue')) }}</td>
-                <td class="text-center bold">{{ number_format($order->sum('the_rest')) }}</td>
+                <td class="text-center bold"> {{ number_format($orders->sum('gross_revenue')) }} </td>
+                <td class="text-center bold"> {{ number_format($orders->sum('gross_revenue')) }}</td>
+                <td class="text-center bold">{{ number_format($orders->sum('the_rest')) }}</td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
             </tr>
