@@ -20,25 +20,7 @@
                     <td class="text-center">{{$s->date}}</td>
                     <td class="text-center">{{$s->time_from}}</td>
                     <td class="text-center">{{@$s->time_to}}</td>
-                    <td class="text-center">
-                        @switch($s->status)
-                            @case(1)
-                            <span class="label label-default">Hẹn gọi lại</span>
-                            @break
-                            @case(2)
-                            <span class="label label-primary">Đặt lịch</span>
-                            @break
-                            @case(3)
-                            <span class="label label-success">Đã đến</span>
-                            @break
-                            @case(4)
-                            <span class="label label-danger">Không đến</span>
-                            @break
-                            @case(5)
-                            <span class="label label-warning">Hủy</span>
-                            @break
-                        @endswitch
-                    </td>
+                    <td class="text-center status" data-id="{{ $s->id }}"> {{ @$s->name_status }}</td>
                     <td class="text-center">{{@$s->creator->full_name}}</td>
                     <td class="text-center">{{@$s->staff->full_name}}</td>
                     <td class="text-center">

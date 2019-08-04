@@ -18,6 +18,16 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
+                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
+                       type="text" id="search">
+                <div class="col-md-2 col-xs-12">
+                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm KH')) !!}
+                </div>
+                <div class="col-md-2 col-xs-12">
+                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
+                </div>
+            </div>
+            <div class="card-header">
                 <div class="display btn-group" id="btn_tool_group" style="display: none;">
                     <button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
@@ -50,15 +60,6 @@
                                 style="background: {{$item->color ?:''}}">{{ $item->name }}<span
                                     class="not-number-account white">{{ $item->customers->count() }}</span></button>
                     @endforeach
-                </div>
-
-                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
-                       type="text" id="search">
-                <div class="col-md-2 col-xs-12">
-                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm KH')) !!}
-                </div>
-                <div class="col-md-2 col-xs-12">
-                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
                 </div>
             </div>
             @include('customers.modal')
@@ -132,7 +133,6 @@
                 method: "get",
                 data: {id: id}
             }).done(function (data) {
-                console.log(data.customer_id);
                 html +=
                     '<select class="status-result form-control" data-id="' + data.customer_id + '" name="status_id">' +
                     '<option value="">' + "Chọn trạng thái" + '</option>';

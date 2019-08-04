@@ -40,6 +40,46 @@
     <script src="{{asset('assets/js/main.js')}}"></script>
     <script>
         $(document).ready(function () {
+            $(document).on('dblclick', '.status', function (e) {
+                let target = $(e.target).parent();
+                $(target).find('.status').empty();
+                let id = $(this).data('id');
+                let html = '';
+
+                $.ajax({
+                    url: "{{ Url('ajax/status-schedules/') }}",
+                    method: "get",
+                    data: {id: id}
+                }).done(function (data) {
+                    html +=
+                        '<select class="status-result form-control" data-id="' + data.schedule_id+ '" name="status">' +
+                        '<option value="">' + "Chọn trạng thái" + '</option>';
+                    data.data.forEach(function (item) {
+                        html +=
+                            '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+
+                    html += '</select>';
+                    $(target).find(".status").append(html);
+                });
+            });
+
+            $(document).on('change', '.status-result', function (e) {
+                let target = $(e.target).parent();
+                let status = $(target).find('.status-result').val();
+                let id = $(this).data('id');
+
+                $.ajax({
+                    url: "{{ Url('ajax/schedules/') }}" + '/' + id,
+                    method: "put",
+                    data: {
+                        status: status
+                    }
+                }).done(function () {
+                    window.location.reload();
+                });
+            });
+
             $('.update').on('click', function () {
                 var id = $(this).attr("data-id");
                 var link = 'schedules/edit/' + id;
