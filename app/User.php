@@ -4,6 +4,7 @@ namespace App;
 
 use App\Constants\UserConstant;
 use App\Models\Category;
+use App\Models\Department;
 use App\Models\Order;
 use App\Models\Status;
 use Illuminate\Notifications\Notifiable;
@@ -35,6 +36,7 @@ class User extends Authenticatable
         'group_id',
         'source_id',
         'telesales_id',
+        'department_id',
         'branch_id',
         'address',
         'account_code',
@@ -84,6 +86,11 @@ class User extends Authenticatable
         return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
     public function getRoleTextAttribute()
     {
         if ($this->role == UserConstant::ADMIN) {
@@ -104,9 +111,6 @@ class User extends Authenticatable
 
         if ($this->role == UserConstant::TECHNICIANS) {
             return 'Kỹ thuật viên';
-        }
-        if ($this->role == UserConstant::CUSTOMER) {
-            return 'Khách hàng';
         }
     }
 

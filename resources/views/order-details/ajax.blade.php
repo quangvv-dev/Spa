@@ -51,6 +51,23 @@
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
                 </tr>
             @endforeach
+            <tr>
+                <td class="text-center"></td>
+                <th scope="row"></th>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center bold">Tổng</td>
+                <td class="text-center bold"> {{ number_format($order->sum('all_total')) }} </td>
+                <td class="text-center"></td>
+                <td class="text-center bold"> {{ number_format($order->sum('gross_revenue')) }} </td>
+                <td class="text-center bold"> {{ number_format($order->sum('gross_revenue')) }}</td>
+                <td class="text-center bold">{{ number_format($order->sum('the_rest')) }}</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+            </tr>
         @else
             <tr>
                 <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>

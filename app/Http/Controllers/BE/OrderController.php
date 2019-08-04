@@ -77,7 +77,7 @@ class OrderController extends Controller
     {
         $title = 'ĐƠN HÀNG BÁN';
         $group = Category::pluck('name', 'id')->toArray();
-        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::pluck('full_name', 'id')->toArray();
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $orders = Order::search($request->all());

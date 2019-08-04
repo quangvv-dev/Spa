@@ -54,7 +54,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
                         {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}
-{{--                        {!! Form::select('department_id', null, null, array('class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}--}}
+                        {!! Form::select('department_id', $departments, null, array('class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}
                         <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                     </div>
                 </div>

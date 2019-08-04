@@ -21,7 +21,7 @@
                     <td class="text-center">{{ $user->phone }}</td>
                     <td class="text-center">{{ $user->email }}</td>
                     <td class="text-center">{{ $user->role_text }}</td>
-                    <td class="text-center">{{ $user->department_id  }}</td>
+                    <td class="text-center">{{ @$user->department->name  }}</td>
                     <td class="text-center">{{ $user->active_text}}</td>
                     <td class="text-center">
                         <a title="sửa tài khoản" class="btn" href="{{ route('users.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
