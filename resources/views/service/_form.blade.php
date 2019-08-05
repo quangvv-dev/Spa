@@ -42,7 +42,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('price_sell') ? 'has-error' : '' }}">
                         {!! Form::label('price_sell', 'Giá bán', array('class' => ' required')) !!}
-                        {!! Form::text('price_sell',null, array('class' => 'form-control number', 'required' => true)) !!}
+                        {!! Form::text('price_sell',null, array('class' => 'form-control number')) !!}
                         <span class="help-block">{{ $errors->first('price_sell', ':message') }}</span>
                     </div>
                 </div>
@@ -105,13 +105,13 @@
                 rules: {
                     name: 'required',
                     code: 'required',
-                    price_sell: 'required',
+                    // price_sell: 'required',
                     category_id: 'required',
                 },
                 messages: {
                     name: "vui lòng nhâp tên dịch vụ",
                     code: "vui lòng nhâp mã dịch vụ",
-                    price_sell: "vui lòng nhâp giá bán",
+                    // price_sell: "vui lòng nhâp giá bán",
                     category_id: "vui lòng chọn danh mục dịch vụ",
                 }
             });
