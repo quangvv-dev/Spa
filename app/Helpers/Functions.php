@@ -129,10 +129,13 @@ class Functions
     public static function checkUploadImage($request, $doc, $path)
     {
         $khac = [];
-        @$khop = array_intersect($doc->images, $request->image);
-        foreach ($doc->images as $k => $v) {
-            if (!in_array($v, $khop)) {
-                $khac[] = $v;
+        @$khop = array_intersect($doc->images, !empty($request->image) ? $request->image : []);
+        $khop = empty($khop) ? [] : $khop;
+        if (!empty($doc->images)) {
+            foreach ($doc->images as $k => $v) {
+                if (!in_array($v, $khop)) {
+                    $khac[] = $v;
+                }
             }
         }
         //trường hợp xóa ảnh và upload thêm ảnh mới
