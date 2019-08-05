@@ -18,8 +18,7 @@ class CommissionController extends Controller
     public function index($id)
     {
         $title = 'Hoa hồng upsale';
-        $customers = User::where('role', '<>', UserConstant::CUSTOMER)->where('role', '<>',
-            UserConstant::ADMIN)->pluck('full_name', 'id');
+        $customers = User::where('role', '<>', UserConstant::MARKETING)->pluck('full_name', 'id');
         $doc = Commission::where('order_id', $id)->first();
         if (isset($doc) && $doc) {
             return view('commisstion.index', compact('title', 'customers', 'doc'));
@@ -42,7 +41,7 @@ class CommissionController extends Controller
             'order_id'    => $id,
         ]);
         Commission::create($request->except('_token'));
-        return redirect(url('commission/' . $id));
+        return redirect(url('order/' . $id . '/show'));
     }
 
     public function update(Request $request, Commission $id)
@@ -53,13 +52,12 @@ class CommissionController extends Controller
                 $price[] = str_replace(',', '', $item);
             }
         }
-
         $request->merge([
             'customer_id' => json_encode($request->customer_id),
             'rose_price'  => json_encode($price),
-            'order_id'    => $id,
+            'order_id'    => $id->id,
         ]);
         $id->update($request->except('_token', 'order_id'));
-        return back();
+        return redirect('order/' . $id->id . '/show');
     }
 }

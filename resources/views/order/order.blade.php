@@ -1,6 +1,11 @@
 @extends('layout.app')
 @section('_style')
     <link href="{{ asset(('css/order.css')) }}" rel="stylesheet"/>
+    <style>
+        a.white {
+            color: #fff;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="row" style="">
@@ -169,16 +174,18 @@
 
     <div class="fixed-bottom">
         <div class="list_task_footer col-md-12 padding menu-footer">
-            {{--<div class="fl task_footer_box change_order" style="margin-left: 46px">--}}
-                {{--<button class="btn btn-info fr ml5"><a class="white">Thay đổi</a></button>--}}
-            {{--</div>--}}
             <div class="fl task_footer_box">
                 <button class="btn btn-info ml5 fr paymentOrder" data-toggle="modal" data-target="#paymentModal"><a
                             class="white">Thanh toán</a></button>
             </div>
             <div class="btn-group dropup fl task_footer_box">
-                <button class="btn btn-default ml5 printOrder" data-number="2"><a href="/order-pdf/{{$order->id}}"><i
+                <button class="btn btn-success ml5 printOrder" data-number="2"><a class="white" href="/order-pdf/{{$order->id}}"><i
                                 class="fa fa-print"></i>&nbsp;In</a>
+                </button>
+            </div>
+            <div class="btn-group dropup fl task_footer_box">
+                <button class="btn btn-warning ml5" data-number="2"><a class="white" href="/commission/{{$order->id}}"><i
+                                class="fas fa-dollar-sign"></i>&nbsp;Hoa hồng</a>
                 </button>
             </div>
             <div class="fl task_footer_box cancel_order">
