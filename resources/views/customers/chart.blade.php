@@ -56,6 +56,35 @@
                                 <div id="chart-pie2" class="chartsh"></div>
                             </div>
                         </div>
+                        <div class="table-responsive">
+                            <table class="table card-table table-vcenter text-nowrap table-primary">
+                                <thead class="bg-primary text-white">
+                                <tr>
+                                    <th class="text-white text-center">Khách hàng mới</th>
+                                    <th class="text-white text-center">Đơn hàng</th>
+                                    <th class="text-white text-center">Doanh thu</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="text-center"><h2>{{ @$statuses[0]->customers->count() }}</h2></td>
+                                    <td class="text-center"><h2>{{ count($orders) }}</h2></td>
+                                    <td class="text-center"><h2>{{ number_format($orderTotal) }}</h2></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            {{--<div class="col-md-6">--}}
+                                {{--<div id="piechart_relation_account" class="row tc">--}}
+                                {{--</div>--}}
+                                {{--<div class="ct-tooltip" style="display: none; left: 252px; top: -33px;"></div>--}}
+                            {{--</div>--}}
+                            <div class="col-md-6">
+                                <div id="piechart"></div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -63,6 +92,30 @@
     </div>
 @endsection
 @section('_script')
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- Index Scripts -->
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                    @foreach($customerBases as $customerBase)
+                ['{{ $customerBase->name }}', {{ $customerBase->customers->count() }}],
+                @endforeach
+            ]);
+
+            var options = {
+                title: 'SỐ LƯỢNG THEO NGUỒN'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+    </script>
     <!-- Index Scripts -->
     <script>
         /*chart-area-spline-sracked*/

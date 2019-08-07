@@ -99,7 +99,8 @@ class Customer extends Model
 
     public static function getAll()
     {
-        return self::with('status')->get();
+        return self::with('status', 'marketing', 'category', 'orders', 'telesale', 'source_customer')
+            ->get();
     }
 
     public static function getDataOfYears()

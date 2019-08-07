@@ -20,4 +20,9 @@ class Status extends Model
     {
         return self::with('customers')->where('type', StatusCode::RELATIONSHIP)->get();
     }
+
+    public static function getSource()
+    {
+        return self::with('customers')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
+    }
 }

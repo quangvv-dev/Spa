@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\Status;
 use App\Services\CustomerService;
 use App\User;
@@ -273,9 +274,22 @@ class CustomerController extends Controller
         $title = 'THỐNG KÊ KHÁCH HÀNG';
 
         $customer = Customer::getDataOfYears();
+        $customerBases = Status::getSource();
 
         $statuses = Status::getRelationship();
 
-        return view('customers.chart', compact('title', 'statuses', 'customer'));
+        $orders = Order::getAll();
+        $orderTotal = Order::sum('gross_revenue');
+
+
+        return view('customers.chart', compact(
+                'title',
+                'statuses',
+                'customer',
+                'orders',
+                'orderTotal',
+                'customerBases'
+            )
+        );
     }
 }
