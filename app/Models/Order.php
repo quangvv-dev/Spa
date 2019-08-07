@@ -108,4 +108,10 @@ class Order extends Model
             $order->orderDetails()->delete();
         });
     }
+
+    public static function getAll()
+    {
+        return self::with('orderDetails', 'customer', 'paymentHistories')
+            ->get();
+    }
 }
