@@ -101,4 +101,20 @@ class OrderService
         ]);
         return $order->delete();
     }
+
+    public static function handleData($data)
+    {
+        $status = [];
+
+        foreach ($data as $item) {
+            if (isset($item->customers)) {
+                foreach ($item->customers as $customer) {
+                    $status[$item->id]['name'] = $item->name;
+                    $status[$item->id]['revenue'] = $customer->orders->sum('all_total');
+                }
+            }
+        }
+
+        return $status;
+    }
 }

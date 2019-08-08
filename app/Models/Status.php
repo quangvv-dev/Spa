@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\StatusCode;
+use App\Services\OrderService;
 use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
@@ -18,11 +19,23 @@ class Status extends Model
 
     public static function getRelationship()
     {
-        return self::with('customers')->where('type', StatusCode::RELATIONSHIP)->get();
+        return self::with('customers.orders')->where('type', StatusCode::RELATIONSHIP)->get();
     }
 
-    public static function getSource()
+
+    public static function getRevennueSource()
     {
-        return self::with('customers')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
+        $data = self::with('customers.orders')
+            ->where('type', StatusCode::SOURCE_CUSTOMER)
+            ->get();
+
+        return OrderService::handleData($data);
+    }
+
+    public static function getRevennueSourceByRelation()
+    {
+        $data = self::getRelationship();
+
+        return OrderService::handleData($data);
     }
 }
