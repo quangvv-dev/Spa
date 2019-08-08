@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Status;
 use App\Services\CustomerService;
+use App\Services\OrderService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -274,9 +275,10 @@ class CustomerController extends Controller
         $title = 'THỐNG KÊ KHÁCH HÀNG';
 
         $customer = Customer::getDataOfYears();
-        $customerBases = Status::getSource();
+        $statusRevenues = Status::getRevennueSource();
 
         $statuses = Status::getRelationship();
+        $statusRevenueByRelations = Status::getRevennueSourceByRelation();
 
         $orders = Order::getAll();
         $orderTotal = Order::sum('gross_revenue');
@@ -288,7 +290,8 @@ class CustomerController extends Controller
                 'customer',
                 'orders',
                 'orderTotal',
-                'customerBases'
+                'statusRevenues',
+                'statusRevenueByRelations'
             )
         );
     }

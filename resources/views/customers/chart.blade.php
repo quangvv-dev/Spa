@@ -81,7 +81,10 @@
                                 {{--<div class="ct-tooltip" style="display: none; left: 252px; top: -33px;"></div>--}}
                             {{--</div>--}}
                             <div class="col-md-6">
-                                <div id="piechart"></div>
+                                <div id="piechart-1"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="piechart-2"></div>
                             </div>
                         </div>
                     </div>
@@ -93,7 +96,6 @@
 @endsection
 @section('_script')
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <!-- Index Scripts -->
     <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
@@ -102,16 +104,38 @@
 
             var data = google.visualization.arrayToDataTable([
                 ['Task', 'Hours per Day'],
-                    @foreach($customerBases as $customerBase)
-                ['{{ $customerBase->name }}', {{ $customerBase->customers->count() }}],
+                    @foreach($statusRevenues as $statusRevenue)
+                ['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],
                 @endforeach
             ]);
 
             var options = {
-                title: 'SỐ LƯỢNG THEO NGUỒN'
+                title: 'DOANH THU THEO NGUỒN'
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
+
+            chart.draw(data, options);
+        }
+    </script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                    @foreach($statusRevenueByRelations as $statusRevenueByRelation)
+                ['{{ $statusRevenueByRelation['name'] }}', {{ $statusRevenueByRelation['revenue'] }}],
+                @endforeach
+            ]);
+
+            var options = {
+                title: 'DOANH THU THEO MỐI QUAN HỆ'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));
 
             chart.draw(data, options);
         }
