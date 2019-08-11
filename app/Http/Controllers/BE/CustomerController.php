@@ -275,10 +275,12 @@ class CustomerController extends Controller
         $title = 'THỐNG KÊ KHÁCH HÀNG';
 
         $customer = Customer::getDataOfYears();
-        $statusRevenues = Status::getRevennueSource();
+        $statusRevenues = Status::getRevenueSource();
+        $statusRevenueByRelations = Status::getRevenueSourceByRelation();
 
         $statuses = Status::getRelationship();
-        $statusRevenueByRelations = Status::getRevennueSourceByRelation();
+
+        $categoryRevenues = Category::getRevenue();
 
         $orders = Order::getAll();
         $orderTotal = Order::sum('gross_revenue');
@@ -291,7 +293,8 @@ class CustomerController extends Controller
                 'orders',
                 'orderTotal',
                 'statusRevenues',
-                'statusRevenueByRelations'
+                'statusRevenueByRelations',
+                'categoryRevenues'
             )
         );
     }
