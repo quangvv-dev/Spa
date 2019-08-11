@@ -111,4 +111,34 @@ class Customer extends Model
             ->orderBy('created_at', 'ASC')
             ->get();
     }
+
+    public static function getRevenueByGender()
+    {
+        $data = self::with('orders');
+
+        $dataMale = $data->where('gender', UserConstant::MALE)->get();
+        $dataFemale = $data->where('gender', UserConstant::FEMALE)->get();
+
+        $revenueMale = 0;
+        $revenueFemale = 0;
+
+        foreach($dataMale as $item) {
+            $revenueMale += $item->orders->sum('all_total');
+        }
+
+        foreach($dataFemale as $item) {
+            $revenueFemale += $item->orders->sum('all_total');
+        }
+
+        return $result = [
+            [
+                'name' => 'Nam',
+                'revenue' => $revenueMale
+            ],
+            [
+                'name' => 'Nữ',
+                'revenue' => $revenueFemale
+            ]
+        ];
+    }
 }
