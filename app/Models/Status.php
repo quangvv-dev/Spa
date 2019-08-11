@@ -23,19 +23,37 @@ class Status extends Model
     }
 
 
-    public static function getRevennueSource()
+    public static function getRevenueSource()
     {
         $data = self::with('customers.orders')
+            ->has('customers.orders')
             ->where('type', StatusCode::SOURCE_CUSTOMER)
             ->get();
 
         return OrderService::handleData($data);
     }
 
-    public static function getRevennueSourceByRelation()
+    public static function getRevenueSourceByRelation()
     {
-        $data = self::getRelationship();
+        $data = self::with('customers.orders')->has('customers.orders')
+            ->where('type', StatusCode::RELATIONSHIP)
+            ->get();
 
-        return OrderService::handleData($data);
+        $status = [];
+        $revenue = 0;
+
+        foreach ($data as $item) {
+            if (!empty($item->customers)) {
+                $status[$item->id]['name'] = $item->name;
+                foreach ($item->customers as $customer) {
+                    if (!empty($customer->orders)) {
+                        $revenue += $customer->orders->sum('all_total');
+                    }
+                }
+                $status[$item->id]['revenue'] = $revenue;
+            }
+        }
+
+        return $status;
     }
 }
