@@ -8,7 +8,9 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\GroupComment;
 use App\Models\Order;
+use App\Models\Schedule;
 use App\Models\Status;
 use App\Services\CustomerService;
 use App\Services\OrderService;
@@ -284,6 +286,8 @@ class CustomerController extends Controller
         $customerRevenueByGenders = Customer::getRevenueByGender();
 
         $orders = Order::getAll();
+        $groupComments = GroupComment::get();
+        $books = Schedule::where('status', StatusCode::BOOK)->get();
         $orderTotal = Order::sum('gross_revenue');
 
 
@@ -296,7 +300,9 @@ class CustomerController extends Controller
                 'statusRevenues',
                 'statusRevenueByRelations',
                 'categoryRevenues',
-                'customerRevenueByGenders'
+                'customerRevenueByGenders',
+                'groupComments',
+                'books'
             )
         );
     }

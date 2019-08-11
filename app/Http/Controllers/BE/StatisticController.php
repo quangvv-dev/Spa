@@ -4,11 +4,13 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Schedule;
+use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -37,6 +39,12 @@ class StatisticController extends Controller
     {
         $input = $request->all();
         $title = 'Nhân viên';
+
+        $statusRevenues = Status::getRevenueSource();
+        $statusRevenueByRelations = Status::getRevenueSourceByRelation();
+
+        $categoryRevenues = Category::getRevenue();
+        $customerRevenueByGenders = Customer::getRevenueByGender();
         $price_commision = [];
         $customer = Customer::orderBy('id', 'desc');
         $books = Schedule::where('status', StatusCode::BOOK);
@@ -94,10 +102,10 @@ class StatisticController extends Controller
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_home',
                 compact('customer', 'books', 'receive', 'comment', 'orders', 'price_customer', 'commision',
-                    'title'))->render());
+                    'title', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders'))->render());
         }
         return view('statistics.index',
-            compact('customer', 'books', 'receive', 'comment', 'orders', 'price_customer', 'commision', 'title'));
+            compact('customer', 'books', 'receive', 'comment', 'orders', 'price_customer', 'commision', 'title', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders'));
     }
 
     public function show($id)
