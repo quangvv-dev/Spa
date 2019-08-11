@@ -60,20 +60,20 @@
                             <table class="table card-table table-vcenter text-nowrap table-primary">
                                 <thead class="bg-primary text-white">
                                 <tr>
-                                    <th class="text-white text-center">Khách hàng mới</th>
+                                    <th class="text-white text-center">SĐT mới</th>
                                     <th class="text-white text-center">Số lần trao đổi</th>
+                                    <th class="text-white text-center">Lịch hẹn</th>
                                     <th class="text-white text-center">Đơn hàng</th>
                                     <th class="text-white text-center">Doanh thu</th>
-                                    <th class="text-white text-center">Lịch hẹn</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td class="text-center"><h2>{{ @$statuses[0]->customers->count() }}</h2></td>
                                     <td class="text-center"><h2>{{ count($groupComments) }}</h2></td>
+                                    <td class="text-center"><h2>{{ count($books) }}</h2></td>
                                     <td class="text-center"><h2>{{ count($orders) }}</h2></td>
                                     <td class="text-center"><h2>{{ number_format($orderTotal) }}</h2></td>
-                                    <td class="text-center"><h2>{{ count($books) }}</h2></td>
                                 </tr>
                                 </tbody>
                             </table>
