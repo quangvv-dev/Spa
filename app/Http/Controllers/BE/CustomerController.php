@@ -281,6 +281,7 @@ class CustomerController extends Controller
         $statuses = Status::getRelationship();
 
         $categoryRevenues = Category::getRevenue();
+        $customerRevenueByGenders = Customer::getRevenueByGender();
 
         $orders = Order::getAll();
         $orderTotal = Order::sum('gross_revenue');
@@ -294,7 +295,8 @@ class CustomerController extends Controller
                 'orderTotal',
                 'statusRevenues',
                 'statusRevenueByRelations',
-                'categoryRevenues'
+                'categoryRevenues',
+                'customerRevenueByGenders'
             )
         );
     }
