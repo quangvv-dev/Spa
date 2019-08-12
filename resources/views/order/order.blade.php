@@ -18,7 +18,7 @@
                         <tr class="trfirst">
                             <td style="width:50%">
                                 <b>Tên khách hàng:</b>&nbsp; <a class="blue"
-                                                                href="#/crm/view_account/877">{{ $order->customer->full_name }}</a>
+                                                                href="#/crm/view_account/877">{{ @$order->customer->full_name }}</a>
                             </td>
                             <td style="width:50%">
                                 <b>Người thực hiện:</b>&nbsp;{{ @$order->customer->marketing->full_name }}
@@ -26,7 +26,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Địa chỉ:</b>&nbsp;{{ $order->customer->address }}
+                                <b>Địa chỉ:</b>&nbsp;{{ @$order->customer->address }}
                             </td>
                             <td style="width:50%">
                                 <b>Phòng ban:</b>&nbsp;
@@ -34,7 +34,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;{{ $order->customer->phone }} -
+                                <b>Điện thoại:</b>&nbsp;{{ @$order->customer->phone }} -
                             </td>
                             <td style="width:50%">
                                 <b>Ngày đặt hàng:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}
@@ -42,12 +42,12 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Người nhận:</b>&nbsp;{{ $order->customer->full_name }} - Điện thoại:
+                                <b>Người nhận:</b>&nbsp;{{ @$order->customer->full_name }} - Điện thoại:
                                 <a class="__clickToCall blue" data-phone="0932148915" data-type="crm"
-                                   data-call="order_222" data-contact-id="896">{{ $order->customer->phone }}</a>
+                                   data-call="order_222" data-contact-id="896">{{ @$order->customer->phone }}</a>
                             </td>
                             <td style="width:50%">
-                                <b>Phương thức thanh toán:</b>&nbsp;{{$order->name_payment_type}}
+                                <b>Phương thức thanh toán:</b>&nbsp;{{@$order->name_payment_type}}
                             </td>
                         </tr>
                         </tbody>
@@ -71,11 +71,11 @@
                                 <td class="tc">{{ $key + 1 }}</td>
                                 <td class="tc"></td>
                                 <td class="tl position"><a class="blue"
-                                                           href="#/crm/product/16/detail">{{ $orderDetail->service->name }}</a>
+                                                           href="#/crm/product/16/detail">{{ @$orderDetail->service->name }}</a>
                                 </td>
                                 <td class="tc"></td>
                                 <td class="tc">{{ $orderDetail->quantity }}</td>
-                                <td class="tc">{{ number_format($orderDetail->service->price_sell) }}</td>
+                                <td class="tc">{{ number_format(@$orderDetail->service->price_sell) }}</td>
                                 <td class="tc">{{ $orderDetail->vat }}</td>
                                 <td class="tc">{{ $orderDetail->percent_discount }}</td>
                                 <td class="tc">{{ number_format($orderDetail->number_discount) }}</td>
