@@ -11,283 +11,55 @@
                         <div class="card-header">
                             <h3 class="card-title">{{ $title }}</h3>
                         </div>
-                        {{--<div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow" style="width: 100%;">--}}
-                            {{--<div class="col-md-4 no-padd">--}}
-                            {{--</div>--}}
-                            {{--<div class="col-md-8 no-padd">--}}
-                                {{--<ul class="fr mg0 pt10 no-padd">--}}
-                                    {{--<li class="display pl5"><a data-time="TODAY" class="btn_choose_time">Hôm nay</a>--}}
-                                    {{--</li>--}}
-                                    {{--<li class="display pl5"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần--}}
-                                            {{--này</a></li>--}}
-                                    {{--<li class="display pl5"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần--}}
-                                            {{--trước</a></li>--}}
-                                    {{--<li class="display pl5"><a data-time="THIS_MONTH"--}}
-                                                               {{--class="btn_choose_time border b-gray active padding0-5">Tháng--}}
-                                            {{--này</a></li>--}}
-                                    {{--<li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng--}}
-                                            {{--trước</a></li>--}}
-                                    {{--<li class="display pl5"><a data-time="THIS_YEAR" class="btn_choose_time">Năm nay</a>--}}
-                                    {{--</li>--}}
-                                {{--</ul>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="uppercase bold tc mb10">Tăng trưởng số lượng khách hàng</div>
-                                <div id="chart-sracked" class="chartsh c3"
-                                     style="max-height: 256px; position: relative;"></div>
+                        <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow"
+                             style="width: 100%; padding: 10px;">
+                            <div class="col-md-4 no-padd">
                             </div>
-                            <div class="col-md-6">
-                                <div id="piechart_relation_account" class="row tc">
-                                    <ul class="ct-legend ct-legend-inside" style="margin: 0px auto;">
-                                        @foreach($statuses as $status)
-                                            <li class="ct-series-0 color-picker-cl-3" data-legend="{{ $status->id }}">
-                                                <span class="color-picker-chart"
-                                                      style="background-color: {{$status->color}} !important;"></span>
-                                                {{ $status->name }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                    <div class="uppercase bold tc mb10" style="width: 100%">Số lượng theo mối quan hệ
-                                    </div>
-                                    <div class="ct-tooltip" style="display: none; left: 252px; top: -33px;"></div>
-                                </div>
-                                <div id="chart-pie2" class="chartsh"></div>
+                            <div class="col-md-8 no-padd">
+                                <ul class="fr mg0 pt10 no-padd">
+                                    <li class="display pl5"><a data-time="TODAY" class="btn_choose_time">Hôm nay</a>
+                                    </li>
+                                    <li class="display pl5"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần
+                                            này</a></li>
+                                    <li class="display pl5"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần
+                                            trước</a></li>
+                                    <li class="display pl5"><a data-time="THIS_MONTH"
+                                                               class="btn_choose_time border b-gray active padding0-5">Tháng
+                                            này</a></li>
+                                    <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
+                                            trước</a></li>
+                                    <li class="display pl5"><a data-time="THIS_YEAR" class="btn_choose_time">Năm nay</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table card-table table-vcenter text-nowrap table-primary">
-                                <thead class="bg-primary text-white">
-                                <tr>
-                                    <th class="text-white text-center">SĐT mới</th>
-                                    <th class="text-white text-center">Số lần trao đổi</th>
-                                    <th class="text-white text-center">Lịch hẹn</th>
-                                    <th class="text-white text-center">Đơn hàng</th>
-                                    <th class="text-white text-center">Doanh thu</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="text-center"><h2>{{ @$statuses[0]->customers->count() }}</h2></td>
-                                    <td class="text-center"><h2>{{ count($groupComments) }}</h2></td>
-                                    <td class="text-center"><h2>{{ count($books) }}</h2></td>
-                                    <td class="text-center"><h2>{{ count($orders) }}</h2></td>
-                                    <td class="text-center"><h2>{{ number_format($orderTotal) }}</h2></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div id="registration-form">
+                            @include('customers.ajax_chart')
                         </div>
-                        <div class="row">
-                            {{--<div class="col-md-6">--}}
-                                {{--<div id="piechart_relation_account" class="row tc">--}}
-                                {{--</div>--}}
-                                {{--<div class="ct-tooltip" style="display: none; left: 252px; top: -33px;"></div>--}}
-                            {{--</div>--}}
-                            <div class="col-md-6">
-                                <div id="piechart-1"></div>
-                            </div>
-                            <div class="col-md-6">
-                                <div id="piechart-2"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            {{--<div class="col-md-6">--}}
-                                {{--<div id="piechart_relation_account" class="row tc">--}}
-                                {{--</div>--}}
-                                {{--<div class="ct-tooltip" style="display: none; left: 252px; top: -33px;"></div>--}}
-                            {{--</div>--}}
-                            <div class="col-md-6">
-                                <div id="piechart-3"></div>
-                            </div>
-                            <div class="col-md-6">
-                                <div id="piechart-4"></div>
-                            </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 @endsection
 @section('_script')
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
+        $(document).on('click', '.btn_choose_time', function (e) {
+            let target = $(e.target).parent();
 
-        function drawChart() {
+            const data_time = $(target).find('.btn_choose_time').data('time');
 
-            var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                    @foreach($statusRevenues as $statusRevenue)
-                ['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],
-                @endforeach
-            ]);
-
-            var options = {
-                title: 'DOANH THU THEO NGUỒN'
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
-
-            chart.draw(data, options);
-        }
-    </script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-
-            var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                    @foreach($statusRevenueByRelations as $statusRevenueByRelation)
-                ['{{ $statusRevenueByRelation['name'] }}', {{ $statusRevenueByRelation['revenue'] }}],
-                @endforeach
-            ]);
-
-            var options = {
-                title: 'DOANH THU THEO MỐI QUAN HỆ'
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));
-
-            chart.draw(data, options);
-        }
-    </script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-
-            var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                    @foreach($categoryRevenues as $categoryRevenue)
-                ['{{ $categoryRevenue['name'] }}', {{ $categoryRevenue['revenue'] }}],
-                @endforeach
-            ]);
-
-            var options = {
-                title: 'DOANH THU THEO NHÓM KHÁCH HÀNG'
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart-3'));
-
-            chart.draw(data, options);
-        }
-    </script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-
-            var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                    @foreach($customerRevenueByGenders as $customerRevenueByGender)
-                ['{{ $customerRevenueByGender['name'] }}', {{ $customerRevenueByGender['revenue'] }}],
-                @endforeach
-            ]);
-
-            var options = {
-                title: 'DOANH THU THEO GIỚI TÍNH'
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart-4'));
-
-            chart.draw(data, options);
-        }
-    </script>
-    <!-- Index Scripts -->
-    <script>
-        /*chart-area-spline-sracked*/
-        var chart = c3.generate({
-            bindto: '#chart-sracked', // id of chart wrapper
-            data: {
-                columns: [
-                    // each columns data
-                    ['data1',
-                        @foreach($customer as $item)
-                        {{ $item->totalCustomer }},
-                        @endforeach
-                    ],
-                ],
-                labels: true,
-                type: 'area-spline', // default type of chart
-                groups: [
-                    ['data1', 'data2']
-                ],
-                colors: {
-                    data1: '#17a2b8'
-                },
-                names: {
-                    // name of each serie
-                    'data1': 'Tổng số khách hàng'
+            $.ajax({
+                url: "{{ Url('report/customers') }}",
+                method: "get",
+                data: {
+                    data_time: data_time,
                 }
-            },
-            axis: {
-                x: {
-                    type: 'category',
-                    // name of each category
-                    categories: [
-                        @foreach($customer as $item)
-                            '{{ $item->monthNum }}',
-                        @endforeach
-                    ]
-                },
-            },
-            legend: {
-                show: false, //hide legend
-            },
-            padding: {
-                bottom: 0,
-                top: 0
-            },
-        });
-
-        /*chart-pie*/
-        var chart = c3.generate({
-            bindto: '#chart-pie2', // id of chart wrapper
-            data: {
-                columns: [
-                    // each columns data
-                        @foreach($statuses as $status)
-                    [{{ $status->id }}, {{ $status->customers->count() }}],
-                    @endforeach
-                ],
-                type: 'pie', // default type of chart
-                colors: {
-        @foreach($statuses as $status)
-        {{$status->id}}:
-        '{{$status->color}}',
-        @endforeach
-        },
-        names: {
-            // name of each serie
-            @foreach($statuses as $key => $status)
-            {{$status->id}}:
-            '{{$status->name}}',
-            @endforeach
-        }
-        },
-        axis: {
-        }
-        ,
-        legend: {
-            show: false, //hide legend
-        }
-        ,
-        padding: {
-            bottom: 0,
-                top
-        :
-            0
-        }
-        ,
+            }).done(function (data) {
+//                console.log(data);
+                $('#registration-form').html(data);
+            });
         })
-        ;
     </script>
 @endsection
