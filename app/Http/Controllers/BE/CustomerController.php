@@ -272,23 +272,40 @@ class CustomerController extends Controller
         return $customer;
     }
 
-    public function reportCustomer()
+    public function reportCustomer(Request $request)
     {
         $title = 'THỐNG KÊ KHÁCH HÀNG';
+        $input = $request->all();
 
-        $customer = Customer::getDataOfYears();
-        $statusRevenues = Status::getRevenueSource();
-        $statusRevenueByRelations = Status::getRevenueSourceByRelation();
+        $customer = Customer::getDataOfYears($input);
+        $statusRevenues = Status::getRevenueSource($input);
+        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
 
-        $statuses = Status::getRelationship();
+        $statuses = Status::getRelationship($input);
 
-        $categoryRevenues = Category::getRevenue();
-        $customerRevenueByGenders = Customer::getRevenueByGender();
+        $categoryRevenues = Category::getRevenue($input);
+        $customerRevenueByGenders = Customer::getRevenueByGender($input);
 
-        $orders = Order::getAll();
-        $groupComments = GroupComment::get();
-        $books = Schedule::where('status', StatusCode::BOOK)->get();
-        $orderTotal = Order::sum('gross_revenue');
+        $orders = Order::getAll($input);
+        $groupComments = GroupComment::getAll($input);
+        $books = Schedule::getBooks($input);
+        $orderTotal = Order::getAll($input)->sum('gross_revenue');
+
+        if ($request->ajax()) {
+            return Response::json(view('customers.ajax_chart', compact(
+                    'title',
+                    'statuses',
+                    'customer',
+                    'orders',
+                    'orderTotal',
+                    'statusRevenues',
+                    'statusRevenueByRelations',
+                    'categoryRevenues',
+                    'customerRevenueByGenders',
+                    'groupComments',
+                    'books'
+                ))->render());
+        }
 
 
         return view('customers.chart', compact(

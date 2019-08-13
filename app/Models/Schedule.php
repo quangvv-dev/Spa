@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\StatusCode;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -67,5 +68,30 @@ class Schedule extends Model
         if ($this->status == Schedule::SCHEDULE_STATUS[4]['id']) {
             return 'Hủy';
         }
+    }
+
+    public static function getBooks($input)
+    {
+        $data = self::where('status', StatusCode::BOOK);
+
+        if (isset($input)) {
+            $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
+                $query->when($input['data_time'] == 'TODAY' ||
+                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                    $q->whereDate('created_at', getTime(($input['data_time'])));
+                })
+                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'THIS_MONTH' ||
+                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    });
+            });
+        }
+
+        $data = $data->get();
+
+        return $data;
     }
 }

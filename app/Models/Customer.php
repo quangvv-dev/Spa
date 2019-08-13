@@ -103,18 +103,54 @@ class Customer extends Model
             ->get();
     }
 
-    public static function getDataOfYears()
+    public static function getDataOfYears($input)
     {
-        return self::select(DB::raw("DATE_FORMAT(created_at,'%M') as monthNum"),
+        $data = self::with('status', 'marketing', 'category');
+
+        if (isset($input)) {
+            $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
+                $query->when($input['data_time'] == 'TODAY' ||
+                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                    $q->whereDate('created_at', getTime(($input['data_time'])));
+                })
+                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'THIS_MONTH' ||
+                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    });
+            });
+        }
+
+        $data = $data->select(DB::raw("DATE_FORMAT(created_at,'%M') as monthNum"),
             DB::raw('IFNULL(count(*),0) as totalCustomer'))
-            ->groupBy('monthNum')
-            ->orderBy('created_at', 'ASC')
-            ->get();
+        ->groupBy('monthNum')
+        ->orderBy('created_at', 'ASC')
+        ->get();
+
+        return $data;
     }
 
-    public static function getRevenueByGender()
+    public static function getRevenueByGender($input)
     {
         $data = self::with('orders');
+
+        if (isset($input)) {
+            $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
+                $query->when($input['data_time'] == 'TODAY' ||
+                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                    $q->whereDate('created_at', getTime(($input['data_time'])));
+                })
+                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'THIS_MONTH' ||
+                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    });
+            });
+        }
 
         $dataMale = $data->where('gender', UserConstant::MALE)->get();
         $dataFemale = $data->where('gender', UserConstant::FEMALE)->get();
