@@ -17,7 +17,7 @@ class Status extends Model
         return $this->hasMany(Customer::class, 'status_id', 'id');
     }
 
-    public static function getRelationship($input)
+    public static function getRelationship($input = null)
     {
         $data = self::with('customers.orders')
             ->where('type', StatusCode::RELATIONSHIP);
