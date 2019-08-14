@@ -21,7 +21,7 @@ class ScheduleController extends Controller
     public function __construct()
     {
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
-        $customer_plus = Customer::get()->pluck('full_name', 'id')->prepend('Khách hàng', 0)->toArray();
+        $customer_plus = Customer::get()->pluck('full_name', 'id')->prepend('Tất cả khách hàng', 0)->toArray();
         $staff2 = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')
             ->prepend('Tất cả nhân viên', 0)->toArray();
         $color = [
@@ -182,7 +182,7 @@ class ScheduleController extends Controller
         $title = 'Danh sách lịch hẹn';
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $user = $request->user ?: 0;
-        $customer = $request->customer_plus ?: 0;
+        $customer = $request->customer ?: 0;
         if ($request->ajax()) {
             return Response::json(view('schedules.ajax2',
                 compact('docs', 'title', 'now', 'staff', 'user'))->render());
