@@ -17,7 +17,7 @@ class SmsController extends Controller
     {
 //        require_once('lib/nusoap.php');
         setting(['sms_birthday' => 'Day la tin nhan tu dong.'])->save();
-        $client = new nusoap_client("https://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
+        $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
         $client->decode_utf8 = false;
         $sms_text = setting('sms_birthday');
