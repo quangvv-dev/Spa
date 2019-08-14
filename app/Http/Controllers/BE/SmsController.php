@@ -16,7 +16,7 @@ class SmsController extends Controller
     public function index()
     {
 //        require_once('lib/nusoap.php');
-        setting(['sms_birthday' => 'Đây là tin nhắn tự động !!!.'])->save();
+        setting(['sms_birthday' => 'Day la tin nhan tu dong.'])->save();
         $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
         $client->decode_utf8 = false;
