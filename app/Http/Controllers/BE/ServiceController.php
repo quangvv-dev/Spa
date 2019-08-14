@@ -139,7 +139,6 @@ class ServiceController extends Controller
      */
     public function destroy(Request $request, Service $service)
     {
-//        dd($service);
         if ($service->images) {
             foreach ($service->images as $k => $v) {
                 Functions::unlinkUpload('services', @$v);

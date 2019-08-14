@@ -22,6 +22,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('services', 'ServiceController');
     Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
+    //sms
+    Route::resource('sms', 'SmsController');
 
     Route::resource('department', 'DepartmentController');
     Route::get('position/{id}', 'PositionController@index')->name('position.index');
