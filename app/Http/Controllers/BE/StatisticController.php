@@ -40,11 +40,11 @@ class StatisticController extends Controller
         $input = $request->all();
         $title = 'Nhân viên';
 
-        $statusRevenues = Status::getRevenueSource();
-        $statusRevenueByRelations = Status::getRevenueSourceByRelation();
+        $statusRevenues = Status::getRevenueSource($input);
+        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
 
-        $categoryRevenues = Category::getRevenue();
-        $customerRevenueByGenders = Customer::getRevenueByGender();
+        $categoryRevenues = Category::getRevenue($input);
+        $customerRevenueByGenders = Customer::getRevenueByGender($input);
         $price_commision = [];
         $customer = Customer::orderBy('id', 'desc');
         $books = Schedule::where('status', StatusCode::BOOK);
