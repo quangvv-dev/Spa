@@ -22,7 +22,7 @@
             <th class="text-white text-center">Chỉnh sửa</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody style="background: white;">
         @if (count($customers))
             @foreach($customers as $customer)
                 <tr>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Models\Customer;
 use App\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class ScheduleController extends Controller
     public function __construct()
     {
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+        $customer_plus = Customer::get()->pluck('full_name', 'id')->prepend('Khách hàng', 0)->toArray();
         $staff2 = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')
             ->prepend('Tất cả nhân viên', 0)->toArray();
         $color = [
@@ -31,9 +33,10 @@ class ScheduleController extends Controller
             6 => 'Tất cả',
         ];
         view()->share([
-            'staff'  => $staff,
-            'staff2' => $staff2,
-            'color'  => $color,
+            'staff'         => $staff,
+            'customer_plus' => $customer_plus,
+            'staff2'        => $staff2,
+            'color'         => $color,
         ]);
     }
 
@@ -171,16 +174,20 @@ class ScheduleController extends Controller
             $now = $request->date;
         }
         if ($request->user) {
-            $docs = $docs->where('user_id', $request->user);
+            $docs = $docs->where('creator_id', $request->user);
+        }
+        if ($request->customer) {
+            $docs = $docs->where('user_id', $request->customer);
         }
         $title = 'Danh sách lịch hẹn';
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $user = $request->user ?: 0;
+        $customer = $request->customer_plus ?: 0;
         if ($request->ajax()) {
             return Response::json(view('schedules.ajax2',
                 compact('docs', 'title', 'now', 'staff', 'user'))->render());
         }
-        return view('schedules.home2', compact('title', 'docs', 'now', 'user'));
+        return view('schedules.home2', compact('title', 'docs', 'now', 'user', 'customer'));
     }
 
     /**
@@ -209,7 +216,7 @@ class ScheduleController extends Controller
 
         return $data = [
             'schedule_id' => $scheduleId,
-            'data' => $status
+            'data'        => $status,
         ];;
     }
 
