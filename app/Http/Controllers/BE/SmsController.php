@@ -15,7 +15,7 @@ class SmsController extends Controller
      */
     public function index()
     {
-        setting(['sms_birthday' => 'Đây là số của Tú'])->save();
+        setting(['sms_birthday' => 'TU CO PHAI K'])->save();
 
         $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
@@ -30,7 +30,7 @@ class SmsController extends Controller
                 'msisdn'           => '0975924428',
                 'alias'            => 'VMGtest',
                 'message'          => $sms_text,
-                'sendTime'         => '15/08/2019 15:22',
+                'sendTime'         => '15/08/2019 15:32',
                 'authenticateUser' => 'vmgtest1',
                 'authenticatePass' => 'vmG@123b',
             ], '', '', ''
