@@ -29,7 +29,7 @@ class SmsController extends Controller
         $result = $client->call('BulkSendSms',
             [
                 'msisdn'           => '0353997108',
-                'alias'            => 'Royal Spa',
+                'alias'            => 'ROYAL SPA',
                 'message'          => $sms_text,
                 'sendTime'         => '',
                 'authenticateUser' => 'vmgtest1',
