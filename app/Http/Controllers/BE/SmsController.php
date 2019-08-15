@@ -30,7 +30,7 @@ class SmsController extends Controller
                 'msisdn'           => '0353997108',
                 'alias'            => 'VMGtest',
                 'message'          => $sms_text,
-                'sendTime'         => '2019-08-15 15:13:23',
+                'sendTime'         => '15/08/2019 15:15:23',
                 'authenticateUser' => 'vmgtest1',
                 'authenticatePass' => 'vmG@123b',
             ], '', '', ''
