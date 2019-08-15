@@ -15,8 +15,8 @@ class SmsController extends Controller
      */
     public function index()
     {
-//        require_once('lib/nusoap.php');
         setting(['sms_birthday' => 'Day la tin nhan tu dong.'])->save();
+
         $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
         $client->decode_utf8 = false;
@@ -25,11 +25,10 @@ class SmsController extends Controller
         if ($err) {
             echo '<h2>Test-Constructor error</h2><pre>' . $err . '</pre>';
         }
-
         $result = $client->call('BulkSendSms',
             [
                 'msisdn'           => '0353997108',
-                'alias'            => 'ROYAL SPA',
+                'alias'            => 'VMGtest',
                 'message'          => $sms_text,
                 'sendTime'         => '',
                 'authenticateUser' => 'vmgtest1',
