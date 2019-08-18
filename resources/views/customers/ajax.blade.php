@@ -2,7 +2,7 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th style="width:3%"><input type="checkbox" class="selectall myCheck" onchange="myFunction()"/></th>
+            <th style="width:3%"><input type="checkbox" class="selectall myCheck"/></th>
             <th class="text-white text-center">Thao tác</th>
             <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
@@ -26,8 +26,7 @@
         @if (count($customers))
             @foreach($customers as $customer)
                 <tr>
-                    <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}"><input type="checkbox" name="delid[]" class="myCheck"
-                                                   onchange="myFunction()" data-id="{{$customer->id}}"/></td>
+                    <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}"><input type="checkbox" name="delid[]" class="myCheck" data-id="{{$customer->id}}"/></td>
                     <td class="text-center">
                         @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN
                         ||\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::WAITER)
