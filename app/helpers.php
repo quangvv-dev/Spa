@@ -13,24 +13,30 @@ function getTime($dataTime)
     }
 
     if ($dataTime == 'THIS_WEEK') {
-        return [Carbon\Carbon::now('Asia/Ho_Chi_Minh')->startOfWeek()->format('Y-m-d')." 00:00:00",
-            Carbon\Carbon::now('Asia/Ho_Chi_Minh')->endOfWeek()->format('Y-m-d')." 23:59:59"];
+        return [
+            Carbon\Carbon::now('Asia/Ho_Chi_Minh')->startOfWeek()->format('Y-m-d') . " 00:00:00",
+            Carbon\Carbon::now('Asia/Ho_Chi_Minh')->endOfWeek()->format('Y-m-d') . " 23:59:59",
+        ];
     }
 
     if ($dataTime == 'LAST_WEEK') {
         return [
-            date("Y-m-d", strtotime("last week monday"))." 00:00:00",
-            date("Y-m-d", strtotime("last week sunday"))." 23:59:59"
+            date("Y-m-d", strtotime("last week monday")) . " 00:00:00",
+            date("Y-m-d", strtotime("last week sunday")) . " 23:59:59",
         ];
     }
 
     if ($dataTime == 'THIS_MONTH') {
-        return ([Carbon\Carbon::today()->startOfMonth()->format('Y-m-d'),
-            Carbon\Carbon::tomorrow()->format('Y-m-d')]);
+        return ([
+            Carbon\Carbon::today()->startOfMonth()->format('Y-m-d'),
+            Carbon\Carbon::tomorrow()->format('Y-m-d'),
+        ]);
     }
 
     if ($dataTime == 'LAST_MONTH') {
-        return ([Carbon\Carbon::today()->subMonth()->startOfMonth()->format('Y-m-d'),
-            Carbon\Carbon::today()->subMonth()->endOfMonth()->format('Y-m-d')]);
+        return ([
+            Carbon\Carbon::today()->subMonth()->startOfMonth()->format('Y-m-d'),
+            Carbon\Carbon::today()->subMonth()->endOfMonth()->format('Y-m-d'),
+        ]);
     }
 }
