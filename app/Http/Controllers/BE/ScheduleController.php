@@ -182,13 +182,7 @@ class ScheduleController extends Controller
 //                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
 //        }
         $now = Carbon::now()->format('Y-m-d');
-        $docs = Schedule::orderBy('id', 'desc')->get()->map(function ($item) use ($now) {
-            $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
-            $check = Schedule::orderBy('id', 'desc')->where('date', $now)
-                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to)->get();
-            $item->count = count($check);
-            return $item;
-        });
+        $docs = Schedule::with('customer')->orderBy('id', 'desc');
         if ($request->search) {
             if ($request->search != 6) {
                 $docs = $docs->where('status', $request->search);
@@ -201,13 +195,27 @@ class ScheduleController extends Controller
         if ($request->user) {
             $docs = $docs->where('creator_id', $request->user);
         }
+//        if ($request->customer) {
+//            $docs = $docs->where('user_id', $request->customer);
+//        }
         if ($request->customer) {
-            $docs = $docs->where('user_id', $request->customer);
+            $param = $request->customer;
+            $docs->whereHas('customer', function ($q) use ($param) {
+                $q->where('phone', 'like', '%' . $param . '%');
+            });
         }
+        $docs = $docs->get()->map(function ($item) use ($now) {
+            $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
+            $check = Schedule::orderBy('id', 'desc')->where('date', $now)
+                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to)->get();
+            $item->count = count($check);
+            return $item;
+        });
+
         $title = 'Danh sách lịch hẹn';
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $user = $request->user ?: 0;
-        $customer = $request->customer ?: 0;
+        $customer = $request->customer ?: '';
         if ($request->ajax()) {
             return Response::json(view('schedules.ajax2',
                 compact('docs', 'title', 'now', 'staff', 'user'))->render());

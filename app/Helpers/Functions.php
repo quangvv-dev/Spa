@@ -191,7 +191,6 @@ class Functions
 
     public static function sendSms($phone, $sms_text, $send_after = '')
     {
-//        dd($send_after);
         $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
         $client->decode_utf8 = false;
