@@ -155,6 +155,21 @@ class CustomerController extends Controller
         $request->session()->flash('error', 'Xóa người dùng thành công!');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param array $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteMultiple(Request $request)
+    {
+        $ids = $request->ids;
+        Customer::whereIn('id', $ids)->delete();
+
+        $request->session()->flash('error', 'Xóa dữ liệu thành công!');
+    }
+
     public function checkUniquePhone(Request $request)
     {
         $customer = Customer::where('phone', $request->phone)->first();

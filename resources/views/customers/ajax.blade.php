@@ -26,7 +26,7 @@
         @if (count($customers))
             @foreach($customers as $customer)
                 <tr>
-                    <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}"><input type="checkbox" name="delid[]" class="myCheck" data-id="{{$customer->id}}"/></td>
+                    <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}"><input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                     <td class="text-center">
                         @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN
                         ||\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::WAITER)
@@ -34,7 +34,7 @@
                             <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>
                         @endif
                         <a title="Trao đổi" class="btn" href="{{ url('group_comments/'. $customer->id) }}"><i class="fas fa-users"></i></a>
-                        {{--<a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
+                        <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center">{{ $customer->full_name }}</td>
