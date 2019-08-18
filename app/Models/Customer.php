@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Constants\UserConstant;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
+    use SoftDeletes;
     protected $guarded = ['id'];
 
     public static function search($param)
@@ -42,6 +44,11 @@ class Customer extends Model
                         $param['data_time'] == 'THIS_MONTH' ||
                         $param['data_time'] == 'LAST_MONTH', function ($q) use ($param) {
                         $q->whereBetween('created_at', getTime(($param['data_time'])));
+                    });
+                })
+                ->when(isset($param['invalid_account']), function ($query) use ($param) {
+                    $query->when($param['invalid_account'] == 0, function ($q) use ($param) {
+                        $q->onlyTrashed();
                     });
                 })
                 ->latest()->paginate(10);
