@@ -38,7 +38,7 @@
                             style="height: 39px; border-radius: 3px;"><i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="true" style="height: 39px; border-radius: 3px;"><i
+                            aria-haspopup="true" aria-expanded="true" style="height: 39px; border-radius: 3px; margin-right: 10px"><i
                                 class="fa fa-caret-down"></i></button>
                     <ul class="dropdown-menu">
                         <li class="pd5" id="search"><a class="invalid_account" data-invalid="1" data-icon-class="fa fa-trash">
@@ -50,6 +50,25 @@
                         </li>
                     </ul>
                 </div>
+                <div class="display btn-group" id="btn_tool_group" style="display: none;">
+                    <button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown_action"><a id="send_email">Gửi Email</a></li>
+                        <li class="dropdown_action"><a id="send_sms">Gửi SMS</a></li>
+                        <li class="dropdown_action"><a id="mark_as_potential">Tạo cơ hội</a></li>
+                        <li class="dropdown_action"><a id="show_popup_task">Tạo công việc</a></li>
+                        <li class="dropdown_action"><a id="show_group_type_account">Nhóm khách hàng</a></li>
+                        <li class="dropdown_action"><a id="show_manager_account">Người phụ trách</a></li>
+                        <li class="dropdown_action"><a data-toggle="modal" href="#change-account-viewers">Người xem</a>
+                        </li>
+                        <li class="dropdown_action"><a id="remove_selected_account">Xóa nhiều</a></li>
+                        <li class="dropdown_action" id="restore_account" style="display: none;"><a>Khôi phục</a></li>
+                        <li class="dropdown_action" id="permanently_delete_account" style="display: none;"><a>Xóa
+                                hẳn</a></li>
+                        <li class="dropdown_action"><a id="change_relations">Mối quan hệ</a></li>
+                    </ul>
+                </div>
                 <div style="margin-left: 10px">
                     <button class="btn btn-default" style="height: 40px;">
                         <a href="{{ route('status.create') }}">
@@ -57,7 +76,7 @@
                         </a>
                     </button>
                 </div>
-                <div class="scrollmenu col-md-5">
+                <div class="scrollmenu col-md-4">
                     @foreach(@$statuses as $k => $item)
                         <button class="status btn white account_relation position" data-name="{{$item->name}}"
                                 style="background: {{$item->color ?:''}}">{{ $item->name }}<span
@@ -114,7 +133,6 @@
         $(document).on('click', '.invalid_account', function (e) {
             let target = $(e.target).parent();
             const invalid_account = $(target).find('.invalid_account').data('invalid');
-            console.log(invalid_account);
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
@@ -206,16 +224,6 @@
             });
         });
 
-        function myFunction() {
-            var button = document.getElementById("button");
-            if ($('td .myCheck:checked').length) {
-                button.style.display = "block";
-                selectall.style.display = "block";
-            } else {
-                button.style.display = "none";
-                selectall.style.display = "none";
-            }
-        };
 
         $('.selectall').click(function () {
             if ($(this).hasClass('active')) {
@@ -234,7 +242,7 @@
             }
         });
 
-        $('.deleteall').click(function () {
+        $('.delete-all').click(function () {
             var idss = $('td .myCheck:checked');
             var ids = [];
             $.each(idss, function () {
@@ -251,7 +259,7 @@
             }).then(function () {
                 $.ajax({
                     type: 'POST',
-                    url: 'user/del',
+                    url: 'customers/delete',
                     dataType: "JSON",
                     data: {
                         "ids": ids,
