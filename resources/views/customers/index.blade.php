@@ -242,41 +242,33 @@
             }
         });
 
-        $('.delete-all').click(function () {
-            var idss = $('td .myCheck:checked');
-            var ids = [];
-            $.each(idss, function () {
-                ids.push($(this).data('id'));
+        $('#remove_selected_account').click(function () {
+            const id = $('td .myCheck:checked');
+            const ids = [];
+            $.each(id, function () {
+                ids.push($(this).val());
             });
+
             swal({
-                title: 'Bạn có chắc chắn xóa',
-                text: "",
-                type: 'warning',
+                title: 'Bạn có muốn xóa ?',
+                text: "Nếu bạn xóa tất cả các thông tin sẽ không thể khôi phục!",
+                type: "error",
                 showCancelButton: true,
-                confirmButtonColor: '#4fa7f3',
-                cancelButtonColor: '#d57171',
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
                 confirmButtonText: 'OK'
-            }).then(function () {
+            }, function () {
+                console.log(ids);
                 $.ajax({
                     type: 'POST',
-                    url: 'customers/delete',
-                    dataType: "JSON",
+                    url: 'customers/delete-multiple',
                     data: {
-                        "ids": ids,
-                        "_token": '{{csrf_token()}}',
+                        ids: ids,
                     },
-                    success: function (data) {
-                        if (data) {
-                            location.href = "user";
-                        } else {
-                            swal(
-                                'Cancelled',
-                                "{{ __('message.cant_delete_item') }}",
-                                'error'
-                            )
-                        }
-                    },
-            })
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
             })
         });
 
