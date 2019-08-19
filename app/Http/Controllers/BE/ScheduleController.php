@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Models\Customer;
 use App\User;
 use DateTime;
@@ -85,7 +86,31 @@ class ScheduleController extends Controller
             'person_action' => $request->person_action,
             'creator_id'    => Auth::user()->id,
         ]);
-        Schedule::create($request->all());
+        $data = Schedule::create($request->all());
+        $customer = Customer::find($id);
+        $person_action = User::find($request->person_action);
+        $now = Carbon::now()->format('Y-m-d');
+        if ($now != $data->date) {
+            $date = Carbon::parse($data->date)->format('d/m/Y') . ' 07:00';
+        } else {
+            $date = '';
+        }
+        if (isset($customer) && $customer) {
+            $body = setting('sms_cskh');
+            $body = str_replace('%full_name%', $customer->full_name, $body);
+            $body = str_replace('%time_from%', $data->time_from, $body);
+            $body = str_replace('%time_to%', $data->time_to, $body);
+            $body = Functions::vi_to_en($body);
+            Functions::sendSms(@$customer->phone, $body, $date);
+        }
+        if (isset($person_action) && $person_action) {
+            $body = setting('sms_csnv');
+            $body = str_replace('%full_name%', $person_action->full_name, $body);
+            $body = str_replace('%time_from%', $data->time_from, $body);
+            $body = str_replace('%time_to%', $data->time_to, $body);
+            $body = Functions::vi_to_en($body);
+            Functions::sendSms(@$person_action->phone, $body, $date);
+        }
         return redirect()->back();
     }
 
@@ -157,13 +182,7 @@ class ScheduleController extends Controller
 //                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
 //        }
         $now = Carbon::now()->format('Y-m-d');
-        $docs = Schedule::orderBy('id', 'desc')->get()->map(function ($item) use ($now) {
-            $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
-            $check = Schedule::orderBy('id', 'desc')->where('date', $now)
-                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to)->get();
-            $item->count = count($check);
-            return $item;
-        });
+        $docs = Schedule::with('customer')->orderBy('id', 'desc');
         if ($request->search) {
             if ($request->search != 6) {
                 $docs = $docs->where('status', $request->search);
@@ -176,13 +195,27 @@ class ScheduleController extends Controller
         if ($request->user) {
             $docs = $docs->where('creator_id', $request->user);
         }
+//        if ($request->customer) {
+//            $docs = $docs->where('user_id', $request->customer);
+//        }
         if ($request->customer) {
-            $docs = $docs->where('user_id', $request->customer);
+            $param = $request->customer;
+            $docs->whereHas('customer', function ($q) use ($param) {
+                $q->where('phone', 'like', '%' . $param . '%');
+            });
         }
+        $docs = $docs->get()->map(function ($item) use ($now) {
+            $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
+            $check = Schedule::orderBy('id', 'desc')->where('date', $now)
+                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to)->get();
+            $item->count = count($check);
+            return $item;
+        });
+
         $title = 'Danh sách lịch hẹn';
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $user = $request->user ?: 0;
-        $customer = $request->customer ?: 0;
+        $customer = $request->customer ?: '';
         if ($request->ajax()) {
             return Response::json(view('schedules.ajax2',
                 compact('docs', 'title', 'now', 'staff', 'user'))->render());

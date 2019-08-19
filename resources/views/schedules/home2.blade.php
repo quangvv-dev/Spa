@@ -47,7 +47,7 @@
                     {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
                 </div>
                 <div class="col-md-2">
-                    {!! Form::select('customer_plus',@$customer_plus, $customer, array( 'id'=>'customer_plus','class' => 'form-control','data-placeholder'=>'Khách hàng','required'=>true)) !!}
+                    {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
                 </div>
             </div>
             <div class="side-app">

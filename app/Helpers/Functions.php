@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use nusoap_client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Functions
@@ -188,4 +189,42 @@ class Functions
         return \Carbon\Carbon::parse($date)->format('Y-m-d');
     }
 
+    public static function sendSms($phone, $sms_text, $send_after = '')
+    {
+        $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
+        $client->soap_defencoding = 'UTF-8';
+        $client->decode_utf8 = false;
+        $err = $client->getError();
+        if ($err) {
+//            echo '<h2>Test-Constructor error</h2><pre>' . $err . '</pre>';
+        }
+        $result = $client->call('BulkSendSms',
+            [
+                'msisdn'           => $phone,
+                'alias'            => 'VMGtest',
+                'message'          => $sms_text,
+                'sendTime'         => $send_after,
+                //                'sendTime'         => '15/08/2019 15:32',
+                'authenticateUser' => 'vmgtest1',
+                'authenticatePass' => 'vmG@123b',
+            ], '', '', ''
+        );
+
+        // Check for a fault
+//        if ($client->fault) {
+//            echo '<h2>Fault</h2><pre>';
+//            print_r($result);
+//            echo '</pre>';
+//        } else {
+//            // Check for errors
+//            $err = $client->getError();
+//            if ($err) {
+//                // Display the error
+//                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+//            } else {
+//                // Display the result
+//                print_r($result);
+//            }
+//        }
+    }
 }
