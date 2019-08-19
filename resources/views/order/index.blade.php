@@ -78,7 +78,7 @@
                                 <td class="text-center">
                                     {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                                 </td>
-                                <td class="text-center"></td>
+                                <td class="tc vertical-middle remove_row"> <button class='btn btn-danger'>X</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -112,6 +112,9 @@
                         {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
                     </td>
                     <td class="text-center">
+                        {!! Form::number('count_day[]', null, array('class' => 'form-control')) !!}
+                    </td>
+                    <td class="text-center">
                         {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                     </td>
                     <td class="text-center">
@@ -120,7 +123,7 @@
                     <td class="text-center">
                         {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                     </td>
-                    <td class="text-center"></td>
+                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
                 </tr>
             `)
         });
@@ -159,6 +162,11 @@
                 $('.phone').val(data['phone']);
                 $('.address').val(data['address']);
             });
+        });
+
+        $(document).on('click', '.remove_row', function (e) {
+            $(e.target).parent().parent().remove();
         })
+
     </script>
 @endsection
