@@ -170,17 +170,6 @@ class ScheduleController extends Controller
 
     public function homePage(Request $request)
     {
-//        $year = Carbon::now()->format('Y');
-//        $date = new DateTime($now);
-//        $week = $date->format("W");
-//        $week_array = self::getStartAndEndDate($week, $year);
-//        $docs = Schedule::orderBy('id', 'desc')->where('date', '>=', $week_array['week_start'])
-//            ->where('date', '<=', $week_array['week_end'])->get();
-//        if ($request->search) {
-//            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
-//                ->orwhere('code', 'like', '%' . $request->search . '%')
-//                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
-//        }
         $now = Carbon::now()->format('Y-m-d');
         $docs = Schedule::with('customer')->orderBy('id', 'desc');
         if ($request->search) {
@@ -195,9 +184,6 @@ class ScheduleController extends Controller
         if ($request->user) {
             $docs = $docs->where('creator_id', $request->user);
         }
-//        if ($request->customer) {
-//            $docs = $docs->where('user_id', $request->customer);
-//        }
         if ($request->customer) {
             $param = $request->customer;
             $docs->whereHas('customer', function ($q) use ($param) {
