@@ -107,4 +107,81 @@ a:hover {
     text-decoration: none;
     color: #535353;
 }
+/*css view_account*/
+#main-content {
+    padding-top: 43px;
+    padding-left: 50px;
+    background: #ffffff;
+}
 
+.bor-bot {
+    border-bottom: 1px solid #d0d0d0!important;
+}
+.info-avatar {
+    display: table-cell;
+    vertical-align: top;
+    padding-left: 10px;
+    line-height: 18px;
+}
+.avatar {
+    display: table-cell;
+    vertical-align: top;
+    width: 52px;
+    height: 52px;
+    -webkit-box-sizing: none;
+    box-sizing: none;
+}
+.a35, .a35 img {
+    width: 35px;
+    height: 35px;
+}
+.full2 {
+    font-size: 14px!important;
+}
+.fl {
+    float: left;
+}
+.a45, .a45 img {
+    width: 45px;
+    height: 45px;
+}
+.bor-l {
+    border-left: 1px solid #d0d0d0!important;
+}
+.font12 {
+    font-size: 12px!important;
+}
+.color-picker-bg-41 {
+    background: #ce0000!important;
+}
+.mt10 {
+    margin-top: 10px;
+}
+.pb20 {
+    padding-bottom: 20px!important;
+}
+.ml2 {
+    margin-left: 2px;
+}
+.padding {
+    padding: 10px!important;
+}
+.border {
+    border: 1px solid #d0d0d0;
+}
+.font12 {
+    font-size: 12px!important;
+}
+
+.mb10 {
+    margin-bottom: 10px!important;
+}
+.mg0, .mr0 {
+    margin: 0!important;
+}
+.pb5 {
+    padding-bottom: 5px;
+}
+.mt5 {
+    margin-top: 5px!important;
+}
