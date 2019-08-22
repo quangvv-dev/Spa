@@ -37,7 +37,7 @@
                         <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
-                    <td class="text-center">{{ $customer->full_name }}</td>
+                    <td class="text-center"><a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
                     <td class="text-center">{{ $customer->phone }}</td>
                     <td class="text-center">{{ @$customer->category->name }}</td>
                     <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>

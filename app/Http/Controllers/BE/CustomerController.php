@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use App\Models\GroupComment as Model;
 use Excel;
 
 class CustomerController extends Controller
@@ -108,7 +109,10 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'Trao đổi';
+        $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer', 'orders')->findOrFail($id);
+        $docs = Model::orderBy('id', 'desc')->get();
+        return view('customers.view_account', compact('title', 'docs', 'customer'));
     }
 
     /**
