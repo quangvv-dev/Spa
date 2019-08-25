@@ -25,7 +25,7 @@
                     </li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
                     <li class="display position"><a class="other_time choose_time  border b-gray"
-                                                    >Khác</a>
+                        >Khác</a>
                         <div class="add-drop add-d-right other_time_panel"
                              style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>
                             <div class="padding tl"><p>Ngày bắt đầu</p>
@@ -47,12 +47,19 @@
             <div class="card-header col-md-12">
                 <div class="col-md-12">
                     <div class="btn-group ml5" id="more_filters">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-expanded="false"><span
                                     class="filter_name">Lọc bổ sung</span> <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a class="tl filter_advanced bor-none" data-filter="advanced">Chưa thanh toán</a></li>
                             <li><a class="tl filter_paid bor-none" data-filter="paid">Đã thanh toán</a></li>
                         </ul>
+                    </div>
+                    <div class="btn-group ml5">
+                        <button class="btn btn-default order_status" data-status="0">Đã hủy</button>
+                    </div>
+                    <div class="btn-group ml5">
+                        <button class="btn btn-default" id="payment_tab" data-status="1">Đã thu trong kỳ</button>
                     </div>
                 </div>
             </div>
@@ -64,9 +71,9 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none, #payment_tab', function (e) {
             let target = $(e.target).parent();
-            const group= $('.group').val();
+            const group = $('.group').val();
             const telesales = $('.telesales').val();
             const marketing = $('.marketing').val();
             const customer = $('.customer').val();
@@ -76,8 +83,9 @@
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
             const bor_none = $(target).find('.bor-none').data('filter');
-            $(".other_time_panel").css({ 'display' : 'none'});
-            $("#boxSearch").css({ 'display' : 'none'});
+            const order_payment = $('#payment_tab').data('status');
+            $(".other_time_panel").css({'display': 'none'});
+            $("#boxSearch").css({'display': 'none'});
 
             $.ajax({
                 url: "{{ Url('list-orders/') }}",
@@ -92,7 +100,8 @@
                     data_time: data_time,
                     start_date: start_date,
                     end_date: end_date,
-                    bor_none: bor_none
+                    bor_none: bor_none,
+                    order_payment: order_payment
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
@@ -120,5 +129,18 @@
                 zIndex: 2048,
             });
         });
+
+        $(document).on('click', '.order_status', function () {
+            const order_cancel = $('.order_status').data('status');
+            $.ajax({
+                url: "{{ Url('list-orders/') }}",
+                method: "get",
+                data: {
+                    order_cancel: order_cancel
+                }
+            }).done(function (data) {
+                $('#registration-form').html(data);
+            });
+        })
     </script>
 @endsection
