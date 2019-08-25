@@ -12,8 +12,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" href="{{asset('assets/images/brand/logo.png')}}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/brand/logo.png')}}" />
 
     <!-- Title -->
     <title>Hệ Thống Spa Royal</title>
