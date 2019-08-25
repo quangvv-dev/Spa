@@ -24,7 +24,8 @@
                         <div class="avatar a35"><img class="account_manager_avatar"
                                                      src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png">
                         </div>
-                        <div class="info-avatar"><p class="account_manager_name"><a class="gfname">{{ @$customer->telesale->full_name }}</a>
+                        <div class="info-avatar"><p class="account_manager_name"><a
+                                        class="gfname">{{ @$customer->telesale->full_name }}</a>
                             </p>
                             <p class="gray1 font12">Người phụ trách</p></div>
                     </div>
@@ -32,24 +33,24 @@
                 <div class="col-md-1 no-padd bor-l mg0 position hoverlastactive" rel="tooltip"
                      data-original-title="Click thay đổi liên hệ lần cuối" data-placement="bottom">
                     {{--<div class="last_active tc" style="cursor:pointer"><h1 id="days_from_last_active"--}}
-                                                                           {{--style="font-size:30px" class="bold mg0">--}}
-                            {{--1</h1>--}}
-                        {{--<p>Liên hệ lần cuối</p></div>--}}
+                    {{--style="font-size:30px" class="bold mg0">--}}
+                    {{--1</h1>--}}
+                    {{--<p>Liên hệ lần cuối</p></div>--}}
                     {{--<div class="add-drop add-d-left other_last_active"--}}
-                         {{--style="right: 125px; top: 60px; width: 286px; padding: 10px; z-index: 12; border: 1px solid rgb(208, 208, 208); display: none;">--}}
-                        {{--<s class="gf-icon-neotop"></s>--}}
-                        {{--<div class="col-md-12 no-padd"><p>Liên hệ lần cuối</p>--}}
-                            {{--<div class=""><input type="text" placeholder="Thời gian" class="datepick form-control"--}}
-                                                 {{--id="date_last_active" value="22/08/2019 18:24:01"></div>--}}
-                        {{--</div>--}}
-                        {{--<div class="col-md-12 no-padd mt10"><p>Nội dung <span class="red">(*)</span></p> <textarea--}}
-                                    {{--class="content_last_active form-control" cols="4"--}}
-                                    {{--style="height:80px"></textarea></div>--}}
-                        {{--<div class="col-md-12 no-padd mt10">--}}
-                            {{--<button class="btn btn-info submit_last_active">Cập nhật</button>--}}
-                            {{--<button class="btn btn-default submit_and_create_comment">Cập nhật và tạo trao đổi--}}
-                            {{--</button>--}}
-                        {{--</div>--}}
+                    {{--style="right: 125px; top: 60px; width: 286px; padding: 10px; z-index: 12; border: 1px solid rgb(208, 208, 208); display: none;">--}}
+                    {{--<s class="gf-icon-neotop"></s>--}}
+                    {{--<div class="col-md-12 no-padd"><p>Liên hệ lần cuối</p>--}}
+                    {{--<div class=""><input type="text" placeholder="Thời gian" class="datepick form-control"--}}
+                    {{--id="date_last_active" value="22/08/2019 18:24:01"></div>--}}
+                    {{--</div>--}}
+                    {{--<div class="col-md-12 no-padd mt10"><p>Nội dung <span class="red">(*)</span></p> <textarea--}}
+                    {{--class="content_last_active form-control" cols="4"--}}
+                    {{--style="height:80px"></textarea></div>--}}
+                    {{--<div class="col-md-12 no-padd mt10">--}}
+                    {{--<button class="btn btn-info submit_last_active">Cập nhật</button>--}}
+                    {{--<button class="btn btn-default submit_and_create_comment">Cập nhật và tạo trao đổi--}}
+                    {{--</button>--}}
+                    {{--</div>--}}
                     {{--</div>--}}
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">0</h1>
@@ -72,7 +73,8 @@
                         <div class="box-cont">
                             <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">
                                 <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i
-                                                class="icon-user mr5 mt2 fl"></i> <b class="blue">{{ $customer->full_name }}</b> <i
+                                                class="icon-user mr5 mt2 fl"></i> <b
+                                                class="blue">{{ $customer->full_name }}</b> <i
                                                 data-original-title="Liên hệ chính" rel="tooltip"
                                                 class="fa orange fa-star" aria-hidden="true"></i></p>
                                     <p></p>
@@ -103,8 +105,8 @@
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Điện thoại:</p>
                                 <p class="bold word-wrap"><a class="" data-account-id="4629" data-phone="0904341335"
-                                                             data-type="crm" data-issensitive="true"> 
-                                         {{ $customer->phone }} </a></p>
+                                                             data-type="crm" data-issensitive="true">
+                                        {{ $customer->phone }} </a></p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Người phụ trách:</p>
                                 <p class="bold word-wrap"> {{ @$customer->telesale->full_name }}</p>
@@ -151,10 +153,15 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">{{$title}}</h3></br>
-                                    <div class="col" style="float: right">
-                                        <a class="right btn btn-primary btn-flat"
-                                           href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i
-                                                    class="fa fa-arrow-right"></i>Tới đặt lịch</a>
+                                    <div class="col">
+                                        <div class="right">
+                                            <a class=" btn btn-primary btn-flat"
+                                               href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i
+                                                        class="fa fa-arrow-right"></i>Đặt lịch</a>
+                                            <a class=" btn btn-primary btn-flat"
+                                               href="{{ url('orders' ) }}"><i
+                                                        class="fa fa-arrow-right"></i>Tạo đơn hàng</a>
+                                        </div>
                                     </div>
                                 </div>
                                 {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
@@ -176,21 +183,22 @@
                     </div>
                     <div class="col-md-3 no-padd bor-l bor-bot" style="float: left;">
                         <div class="col-md-12 no-padd padding">
-                                <div class="col-md-12 fl mt5"><i class="fa fa-random mr5 gray"></i> Nguồn: <span
-                                            class="bold"> {{ @$customer->source_customer->name }}</span>
-                                </div>
-                                <div class="col-md-12 fl mt5">
-                                    <i class="fa fa-user mr5 gray"></i> Người tạo: {{ @$customer->marketing->full_name }}
-                                </div>
-                                <div class="col-md-12 fl mt5">
-                                    <i class="fa fa-calendar mr5 gray"></i> Ngày tạo: <span class="bold">{{ $customer->created_at }}</span>
-                                </div>
-                                <div class="col-md-12 fl mt5">
-                                    <i class="fa fa-shopping-cart mr5 gray"></i> Đã mua: {{ @$customer->orders->count() }}
-                                </div>
-                                {{--<div class="col-md-12">--}}
-                                    {{--<i class="fa fa-calendar mr5 gray"></i> Lần mua gần nhất:--}}
-                                {{--</div>--}}
+                            <div class="col-md-12 fl mt5"><i class="fa fa-random mr5 gray"></i> Nguồn: <span
+                                        class="bold"> {{ @$customer->source_customer->name }}</span>
+                            </div>
+                            <div class="col-md-12 fl mt5">
+                                <i class="fa fa-user mr5 gray"></i> Người tạo: {{ @$customer->marketing->full_name }}
+                            </div>
+                            <div class="col-md-12 fl mt5">
+                                <i class="fa fa-calendar mr5 gray"></i> Ngày tạo: <span
+                                        class="bold">{{ $customer->created_at }}</span>
+                            </div>
+                            <div class="col-md-12 fl mt5">
+                                <i class="fa fa-shopping-cart mr5 gray"></i> Đã mua: {{ @$customer->orders->count() }}
+                            </div>
+                            {{--<div class="col-md-12">--}}
+                            {{--<i class="fa fa-calendar mr5 gray"></i> Lần mua gần nhất:--}}
+                            {{--</div>--}}
                         </div>
                     </div>
                 </div>
