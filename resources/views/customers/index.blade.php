@@ -34,9 +34,6 @@
             </div>
             <div class="card-header">
                 <div class="display btn-group open">
-                    <button type="button" class="btn btn-default" id="btn_group_invalid"
-                            style="height: 39px; border-radius: 3px;"><i class="fa fa-trash" aria-hidden="true"></i>
-                    </button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="true" style="height: 39px; border-radius: 3px; margin-right: 10px"><i
                                 class="fa fa-caret-down"></i></button>
