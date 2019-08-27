@@ -34,8 +34,8 @@
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">{{ @$order->customer->account_code }}</td>
-                    <td class="text-center">{{ $order->customer->full_name }}</td>
-                    <td class="text-center">{{ $order->customer->phone }}</td>
+                    <td class="text-center">{{ @$order->customer->full_name }}</td>
+                    <td class="text-center">{{ @$order->customer->phone }}</td>
                     <td class="text-center">
                         @foreach($order->orderDetails as $orderDetail)
                             {{ @$orderDetail->service->name }},

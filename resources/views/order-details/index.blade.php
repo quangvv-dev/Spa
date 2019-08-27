@@ -142,5 +142,35 @@
                 $('#registration-form').html(data);
             });
         })
+
+        $(window).on('hashchange', function() {
+            const order_cancel = $('.order_status').data('status');
+            if (window.location.hash) {
+                var page = window.location.hash.replace('#', '');
+                if (page == Number.NaN || page <= 0) {
+                    return false;
+                } else {
+                    getPosts(page);
+                }
+            }
+        });
+        $(document).ready(function() {
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                getPosts($(this).attr('href').split('page=')[1]);
+            });
+        });
+        function getPosts(page) {
+            $.ajax({
+                url : '?page=' + page,
+                dataType: 'json',
+                data: {
+                    order_cancel: $('.order_status').data('status')
+                }
+            }).done(function (data) {
+                $('#registration-form').html(data);
+                location.hash = page;
+            });
+        }
     </script>
 @endsection
