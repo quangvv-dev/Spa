@@ -78,14 +78,11 @@ class Order extends Model
             })
             ->when(isset($input['bor_none']), function ($query) use ($input) {
                 $query->when($input['bor_none'] == 'advanced', function ($q) use ($input) {
-                    $q->where('the_rest', '>', 0);
+                        $q->where('the_rest', '>', 0);
                     })
                     ->when($input['bor_none'] == 'paid', function ($q) use ($input) {
                         $q->where('the_rest', 0);
                     });
-            })
-            ->when(isset($input['order_payment']), function ($query) use ($input) {
-                $query->where('the_rest', '>', 0);
             })
             ->when(isset($input['order_cancel']), function ($query) use ($input) {
                 $query->onlyTrashed();
