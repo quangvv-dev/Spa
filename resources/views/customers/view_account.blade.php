@@ -147,30 +147,66 @@
                 </div>
                 <div class="col-md-10 no-padd" style="float: left;">
                     <div class="col-md-9 no-padd spanfull2 padding" style="float: left;">
-                        <div class="col-md-12 col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">{{$title}}</h3></br>
-                                    <div class="col" style="float: right">
-                                        <a class="right btn btn-primary btn-flat"
-                                           href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i
-                                                    class="fa fa-arrow-right"></i>Tới đặt lịch</a>
+                        <div class="card-body p-6">
+                            <div class="panel panel-primary">
+                                <div class=" tab-menu-heading">
+                                    <div class="tabs-menu1 ">
+                                        <!-- Tabs -->
+                                        <ul class="nav panel-tabs">
+                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a></li>
+                                            <li><a href="#tab6" data-toggle="tab">Đơn hàng</a></li>
+                                            <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
+                                            <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
+                                        </ul>
                                     </div>
                                 </div>
-                                {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                <div class="col-md-12">
-                                    {!! Form::textArea('messages', null, array('class' => 'messages')) !!}
-                                </div>
-                                <br>
-                                <div class="col-md-12">
-                                    <button style="float: right" type="submit" class="btn btn-success">Gửi</button>
-                                </div>
-                                {{ Form::close() }}
+                                <div class="panel-body tabs-menu-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active " id="tab5">
+                                            <div class="col-md-12 col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">{{$title}}</h3></br>
+                                                        <div class="col" style="float: right">
+                                                            <a class="right btn btn-primary btn-flat"
+                                                               href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i
+                                                                        class="fa fa-arrow-right"></i>Tới đặt lịch</a>
+                                                        </div>
+                                                    </div>
+                                                    {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                                                    <div class="col-md-12">
+                                                        {!! Form::textArea('messages', null, array('class' => 'messages')) !!}
+                                                    </div>
+                                                    <br>
+                                                    <div class="col-md-12">
+                                                        <button style="float: right" type="submit" class="btn btn-success">Gửi</button>
+                                                    </div>
+                                                    {{ Form::close() }}
 
-                                <div id="registration-form">
-                                    @include('group_comment.ajax')
+                                                    <div id="registration-form">
+                                                        @include('group_comment.ajax')
+                                                    </div>
+                                                    <!-- table-responsive -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane " id="tab6">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Danh sách đơn hàng bán</h3></br>
+                                                <div class="col relative">
+                                                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i
+                                                                class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                                            </div>
+                                            @include('customers.order')
+                                        </div>
+                                        <div class="tab-pane " id="tab7">
+
+                                        </div>
+                                        <div class="tab-pane " id="tab8">
+
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- table-responsive -->
                             </div>
                         </div>
                     </div>
