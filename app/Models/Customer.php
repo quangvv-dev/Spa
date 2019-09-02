@@ -72,9 +72,9 @@ class Customer extends Model
         return $this->belongsTo(Category::class, 'group_id', 'id');
     }
 
-    public function customerGroup()
+    public function categories()
     {
-        return $this->hasMany(CustomerGroup::class, 'customer_id', 'id');
+        return $this->belongsToMany(Category::class, 'customer_groups', 'customer_id', 'category_id');
     }
 
     public function orders()

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerGroup extends Model
 {
-    protected $table = 'customer_group';
+    protected $table = 'customer_groups';
     protected $guarded = ['id'];
     public $timestamps = false;
 }
