@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('schedules/{id}', 'ScheduleController@ajaxUpdate');
         Route::get('statuses', 'StatusController@getList');
         Route::get('/status-schedules', 'ScheduleController@getList');
+        Route::get('categories/{id}', 'CustomerController@categories');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');

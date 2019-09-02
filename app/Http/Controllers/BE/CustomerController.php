@@ -110,7 +110,8 @@ class CustomerController extends Controller
     public function show($id)
     {
         $title = 'Trao đổi';
-        $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer', 'orders')->findOrFail($id);
+        $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer',
+            'orders')->findOrFail($id);
         $docs = Model::orderBy('id', 'desc')->get();
         return view('customers.view_account', compact('title', 'docs', 'customer'));
     }
@@ -312,18 +313,18 @@ class CustomerController extends Controller
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax_chart', compact(
-                    'title',
-                    'statuses',
-                    'customer',
-                    'orders',
-                    'orderTotal',
-                    'statusRevenues',
-                    'statusRevenueByRelations',
-                    'categoryRevenues',
-                    'customerRevenueByGenders',
-                    'groupComments',
-                    'books'
-                ))->render());
+                'title',
+                'statuses',
+                'customer',
+                'orders',
+                'orderTotal',
+                'statusRevenues',
+                'statusRevenueByRelations',
+                'categoryRevenues',
+                'customerRevenueByGenders',
+                'groupComments',
+                'books'
+            ))->render());
         }
 
 
@@ -341,5 +342,15 @@ class CustomerController extends Controller
                 'books'
             )
         );
+    }
+
+    public function categories(Customer $id)
+    {
+        $customerId = $id->id;
+        $category = Category::get();
+        return $data = [
+            'customer_id' => $customerId,
+            'data'        => $category,
+        ];
     }
 }

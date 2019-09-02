@@ -26,23 +26,30 @@
         @if (count($customers))
             @foreach($customers as $customer)
                 <tr>
-                    <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}"><input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
+                    <td class="text-center"
+                        style="background: {{isset($customer->status)?$customer->status->color :''}}"><input
+                                type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                     <td class="text-center">
                         @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN
                         ||\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::WAITER)
-{{--                            <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>--}}
-{{--                            <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>--}}
-                            <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('customers.destroy', $customer->id) }}"><i class="fas fa-trash-alt"></i></a>
+                            {{--                            <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>--}}
+                            {{--                            <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>--}}
+                            <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)"
+                               data-url="{{ route('customers.destroy', $customer->id) }}"><i
+                                        class="fas fa-trash-alt"></i></a>
                         @endif
-{{--                        <a title="Trao đổi" class="btn" href="{{ url('group_comments/'. $customer->id) }}"><i class="fas fa-users"></i></a>--}}
+                        {{--                        <a title="Trao đổi" class="btn" href="{{ url('group_comments/'. $customer->id) }}"><i class="fas fa-users"></i></a>--}}
                     </td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
-                    <td class="text-center"><a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
+                    <td class="text-center"><a
+                                href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
                     <td class="text-center">{{ $customer->phone }}</td>
-                    <td class="text-center">{{ @$customer->category->name }}</td>
+                    <td class="text-center category-db"
+                        data-id="{{$customer->id}}">{{ @$customer->category->name }}</td>
                     <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     <td class="text-center">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center description" data-id="{{$customer->id}}" width="250">{{ $customer->description }}</td>
+                    <td class="text-center description" data-id="{{$customer->id}}"
+                        width="250">{{ $customer->description }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ $customer->gender_text  }}</td>
@@ -52,7 +59,8 @@
                     <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('the_rest')) }}</td>
                     <td class="text-center">
-                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a>
+                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
+                                    class="fas fa-edit"></i></a>
                     </td>
                 </tr>
             @endforeach
