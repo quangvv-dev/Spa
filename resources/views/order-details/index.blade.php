@@ -56,10 +56,10 @@
                         </ul>
                     </div>
                     <div class="btn-group ml5">
-                        <button class="btn btn-default order_status" data-status="0">Đã hủy</button>
+                        <button class="btn btn-default order_status" data-status="">Đã hủy</button>
                     </div>
                     <div class="btn-group ml5">
-                        <button class="btn btn-default" id="payment_tab" data-status="1">Đã thu trong kỳ</button>
+                        <button class="btn btn-default bor-none" data-filter="advanced" id="payment_tab" >Đã thu trong kỳ</button>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,6 @@
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
             const bor_none = $(target).find('.bor-none').data('filter');
-            const order_payment = $('#payment_tab').data('status');
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
 
@@ -100,8 +99,7 @@
                     data_time: data_time,
                     start_date: start_date,
                     end_date: end_date,
-                    bor_none: bor_none,
-                    order_payment: order_payment
+                    bor_none: bor_none
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
@@ -131,6 +129,7 @@
         });
 
         $(document).on('click', '.order_status', function () {
+            $('.order_status').data('status', 0);
             const order_cancel = $('.order_status').data('status');
             $.ajax({
                 url: "{{ Url('list-orders/') }}",
@@ -141,6 +140,6 @@
             }).done(function (data) {
                 $('#registration-form').html(data);
             });
-        })
+        });
     </script>
 @endsection
