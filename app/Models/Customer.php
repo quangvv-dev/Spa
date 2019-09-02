@@ -15,7 +15,7 @@ class Customer extends Model
 
     public static function search($param)
     {
-        $data = self::with('status', 'marketing', 'category');
+        $data = self::with('status', 'marketing', 'category', 'orders');
         if (isset($param)) {
             $data = $data->when(isset($param['search']), function ($query) use ($param) {
                     $query->where(function ($q) use ($param) {
@@ -48,7 +48,7 @@ class Customer extends Model
                 })
                 ->when(isset($param['invalid_account']), function ($query) use ($param) {
                     $query->when($param['invalid_account'] == 0, function ($q) use ($param) {
-                        $q->onlyTrashed();
+                            $q->onlyTrashed();
                     });
                 })
                 ->latest()->paginate(10);
