@@ -290,9 +290,9 @@ class CustomerController extends Controller
 
     public function ajaxUpdate(Request $request, $id)
     {
-        $input = $request->all();
-        $customer = $this->customerService->find($id);
-        $customer->update($input);
+        $input = $request->except('category_ids');
+        $customer = $this->customerService->update($input, $id);
+        $customer->categories()->sync($request->category_ids);;
 
         return $customer;
     }

@@ -181,7 +181,6 @@
         });
 
         $(document).on('dblclick', '.category-db', function (e) {
-            $('.toollist').select2("destroy");
             let target = $(e.target).parent();
             $(target).find('.category-db').empty();
             const id = $(this).data('id');
@@ -190,20 +189,20 @@
             $.ajax({
                 url: "ajax/categories/",
                 method: "get",
-                data: {}
+                data: {id: id}
             }).done(function (data) {
                 html +=
-                    '<select class="category-result form-control select2-multiple" multiple="multiple" data-id="' + data.customer_id + '" name="category_id[]">';
+                    '<select class="category-result form-control select2-multiple" multiple="multiple" data-id="' + data.customer_id + '" name="group_id[]">';
                 data.categories.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '">' + item.name + '</option>';
+                        '<option value="' + item.id + '" class="category-op">' + item.name + '</option>';
                 });
 
                 html += '</select>';
                 $(target).find(".category-db").append(html);
 
                 $('.select2-multiple').select2({ //apply select2 to my element
-                    placeholder: "Chọn nhóm",
+                    placeholder: "Chọn nhóm KH",
                     allowClear: true
                 });
 
@@ -226,7 +225,7 @@
                     '<option value="">' + "Chọn trạng thái" + '</option>';
                 data.data.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '">' + item.name + '</option>';
+                        '<option value="' + item.id + '" >' + item.name + '</option>';
                 });
 
                 html += '</select>';
@@ -235,10 +234,10 @@
         });
 
         $(document).on('focusout, change', '.description-result, .status-result', function (e) {
-            var target = $(e.target).parent();
-            var description = $(target).find('.description-result').val();
-            var status_id = $(target).find('.status-result').val();
-            var id = $(this).data('id');
+            let target = $(e.target).parent();
+            let description = $(target).find('.description-result').val();
+            let status_id = $(target).find('.status-result').val();
+            let id = $(this).data('id');
 
             $.ajax({
                 url: "ajax/customers/" + id,
@@ -249,6 +248,30 @@
                 }
             }).done(function () {
                 window.location.reload();
+            });
+        });
+
+        $(document).on('select2:select', '.category-result', function (e) {
+            let target = $(e.target).parent();
+            let category_ids = $(target).find('.category-result').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    category_ids: category_ids
+                }
+            }).done(function () {
+                $(document).on('click', function(evt) {
+                    // if($(evt.target).closest('.category-op').length)
+                    // if(()) {
+                    //     window.location.reload();
+                    // }
+                });
+                $("body").not($(".select2-results__option", ".select2-search__field")).click(function() {
+                    alert('haha');
+                });
             });
         });
 
