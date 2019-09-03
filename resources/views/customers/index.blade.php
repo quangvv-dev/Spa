@@ -13,10 +13,10 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col relative">
-                    <a title="Upload Data" style="position: absolute;right: 13%" class="btn" href="#"
+                    <a title="Upload Data" style="position: absolute;right: 17%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
-                    <a title="Download Data" style="position: absolute;right: 10%" class="btn"
+                    <a title="Download Data" style="position: absolute;right: 13%" class="btn"
                        href="{{url('customer-export')}}">
                         <i class="fas fa-download"></i></a>
                     <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
@@ -179,43 +179,35 @@
                 $(target).find(".description").append(html);
             });
         });
-        // $(document).on('dblclick', '.category-db', function (e) {
-        //     var target = $(e.target).parent();
-        //     $(target).find('.category-db').empty();
-        //     var id = $(this).data('id');
-        //     var html = '';
-        //
-        //     $.ajax({
-        //         url: "ajax/categories/" + id,
-        //         method: "get",
-        //         data: {}
-        //     }).done(function (data) {
-        //         $('.select2').select2({
-        //             width: '100%',
-        //             theme: 'bootstrap',
-        //             allowClear: true,
-        //             placeholder: function () {
-        //                 $(this).data('placeholder');
-        //             }
-        //         });
-        //
-        //         $('.select2-hidden-accessible').on('change', function () {
-        //             $(this).valid();
-        //         });
-        //         console.log(data);
-        //         html +=
-        //             '<select class="category-result form-control select2" multiple data-id="' + data.customer_id + '" name="category_id">' +
-        //             '<option value="">' + "Chọn nhóm" + '</option>';
-        //         data.data.forEach(function (item) {
-        //             html +=
-        //                 '<option value="' + item.id + '">' + item.name + '</option>';
-        //         });
-        //
-        //         html += '</select>';
-        //         $(target).find(".category-db").append(html);
-        //
-        //     });
-        // });
+
+        $(document).on('dblclick', '.category-db', function (e) {
+            let target = $(e.target).parent();
+            $(target).find('.category-db').empty();
+            const id = $(this).data('id');
+            let html = '';
+
+            $.ajax({
+                url: "ajax/categories/",
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+                html +=
+                    '<select class="category-result form-control select2-multiple" multiple="multiple" data-id="' + data.customer_id + '" name="group_id[]">';
+                data.categories.forEach(function (item) {
+                    html +=
+                        '<option value="' + item.id + '" class="category-op">' + item.name + '</option>';
+                });
+
+                html += '</select>';
+                $(target).find(".category-db").append(html);
+
+                $('.select2-multiple').select2({ //apply select2 to my element
+                    placeholder: "Chọn nhóm KH",
+                    allowClear: true
+                });
+
+            });
+        });
 
         $(document).on('dblclick', '.status-db', function (e) {
             var target = $(e.target).parent();
@@ -233,7 +225,7 @@
                     '<option value="">' + "Chọn trạng thái" + '</option>';
                 data.data.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '">' + item.name + '</option>';
+                        '<option value="' + item.id + '" >' + item.name + '</option>';
                 });
 
                 html += '</select>';
@@ -241,12 +233,11 @@
             });
         });
 
-        $(document).on('focusout, change', '.description-result, .status-result, .category-result', function (e) {
-            var target = $(e.target).parent();
-            var description = $(target).find('.description-result').val();
-            var status_id = $(target).find('.status-result').val();
-            var id = $(this).data('id');
-            console.log(id);
+        $(document).on('focusout, change', '.description-result, .status-result', function (e) {
+            let target = $(e.target).parent();
+            let description = $(target).find('.description-result').val();
+            let status_id = $(target).find('.status-result').val();
+            let id = $(this).data('id');
 
             $.ajax({
                 url: "ajax/customers/" + id,
@@ -257,6 +248,22 @@
                 }
             }).done(function () {
                 window.location.reload();
+            });
+        });
+
+        $(document).on('select2:select', '.category-result', function (e) {
+            let target = $(e.target).parent();
+            let category_ids = $(target).find('.category-result').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    category_ids: category_ids
+                }
+            }).done(function () {
+
             });
         });
 

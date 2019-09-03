@@ -92,10 +92,12 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
+        $input = $request->except('group_id');
         $input['mkt_id'] = $request->mkt_id;
 
-        $this->customerService->create($input);
+        $customer = $this->customerService->create($input);
+        $category = Category::find($request->group_id);
+        $customer->categories()->attach($category);
 
         return redirect('customers')->with('status', 'Tạo người dùng thành công');
     }
@@ -126,8 +128,10 @@ class CustomerController extends Controller
     public function edit(Customer $customer)
     {
         $user['birthday'] = Functions::dayMonthYear($customer->birthday);
+        $categories = Category::get();
+        $categoryId = $customer->categories()->get()->pluck('id')->toArray();
         $title = 'Sửa khách hàng';
-        return view('customers._form', compact('customer', 'title'));
+        return view('customers._form', compact('customer', 'title', 'categories', 'categoryId'));
     }
 
     /**
@@ -140,9 +144,10 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $input = $request->all();
+        $input = $request->except('group_id');
 
-        $this->customerService->update($input, $id);
+        $customer = $this->customerService->update($input, $id);
+        $customer->categories()->sync($request->group_id);
 
         return redirect(route('customers.index'))->with('status', 'Cập nhật khách hàng thành công');
     }
@@ -285,9 +290,9 @@ class CustomerController extends Controller
 
     public function ajaxUpdate(Request $request, $id)
     {
-        $input = $request->all();
-        $customer = $this->customerService->find($id);
-        $customer->update($input);
+        $input = $request->except('category_ids');
+        $customer = $this->customerService->update($input, $id);
+        $customer->categories()->sync($request->category_ids);;
 
         return $customer;
     }
@@ -342,15 +347,5 @@ class CustomerController extends Controller
                 'books'
             )
         );
-    }
-
-    public function categories(Customer $id)
-    {
-        $customerId = $id->id;
-        $category = Category::get();
-        return $data = [
-            'customer_id' => $customerId,
-            'data'        => $category,
-        ];
     }
 }

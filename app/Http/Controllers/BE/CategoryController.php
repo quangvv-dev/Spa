@@ -144,4 +144,15 @@ class CategoryController extends Controller
             $request->session()->flash('error', 'Xóa thành công danh mục!');
         }
     }
+
+    public function getListApi(Request $request)
+    {
+        $customerId = $request->id;
+        $categories = Category::get();
+
+        return $data = [
+            'customer_id' => $customerId,
+            'categories' => $categories
+        ];
+    }
 }

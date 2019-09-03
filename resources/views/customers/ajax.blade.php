@@ -45,7 +45,11 @@
                                 href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
                     <td class="text-center">{{ $customer->phone }}</td>
                     <td class="text-center category-db"
-                        data-id="{{$customer->id}}">{{ @$customer->category->name }}</td>
+                        data-id="{{$customer->id}}">
+                        @foreach($customer->categories as $category)
+                            {{ $category->name }},
+                            @endforeach
+                    </td>
                     <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     <td class="text-center">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description" data-id="{{$customer->id}}"
