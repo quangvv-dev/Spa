@@ -263,15 +263,7 @@
                     category_ids: category_ids
                 }
             }).done(function () {
-                $(document).on('click', function(evt) {
-                    // if($(evt.target).closest('.category-op').length)
-                    // if(()) {
-                    //     window.location.reload();
-                    // }
-                });
-                $("body").not($(".select2-results__option", ".select2-search__field")).click(function() {
-                    alert('haha');
-                });
+
             });
         });
 
