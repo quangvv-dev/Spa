@@ -70,7 +70,7 @@ class OrderController extends Controller
         $order = $this->orderService->create($param);
         $this->orderDetailService->create($param, $order->id);
 
-        return redirect('/list-orders/'.$order->id. 'show')->with('status', 'Tạo đơn hàng thành công');
+        return redirect('/order/'.$order->id. '/show')->with('status', 'Tạo đơn hàng thành công');
     }
 
     public function listOrder(Request $request)
