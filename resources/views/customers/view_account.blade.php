@@ -279,14 +279,11 @@
                 $.ajax({
                     type: 'PUT',
                     url: "{{ Url('ajax/orders/') }}" + "/" +id,
-                    success: function (data) {
-
-                        if (data === 1) {
-                            alert("Trừ số buổi thành công");
-                        } else {
+                    success: function (res) {
+                        if (res == 'Success')
+                            alert("Trừ số liệu trình thành công");
+                        else if (res == "Failed")
                             alert("Số liệu trình đã hết");
-                        }
-                        window.location.reload();
                     }
                 })
             })
