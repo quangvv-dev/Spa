@@ -150,14 +150,14 @@ class OrderController extends Controller
         $order = $this->orderService->find($id);
 
         if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day == 0) {
-            $request->session()->flash('error', 'Số buổi của liệu trình đã hết!');
+            return 0;
         }
 
         $order->update([
            'count_day' => $order->count_day - 1,
         ]);
 
-        $request->session()->flash('success', 'Trừ thành công!');
+        return 1;
     }
 
 }
