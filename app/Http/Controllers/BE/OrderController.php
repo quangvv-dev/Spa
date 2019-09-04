@@ -145,4 +145,19 @@ class OrderController extends Controller
         return view('report_products.chart', compact('title', 'services'));
     }
 
+    public function updateCountDay(Request $request, $id)
+    {
+        $order = $this->orderService->find($id);
+
+        if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day == 0) {
+            return 0;
+        }
+
+        $order->update([
+           'count_day' => $order->count_day - 1,
+        ]);
+
+        return 1;
+    }
+
 }

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     protected $guarded = ['id'];
+    const TYPE_ORDER_DEFAULT = 0;
+    const TYPE_ORDER_ADVANCE = 1;
     use SoftDeletes;
 
     public function orderDetails()
@@ -100,6 +102,17 @@ class Order extends Model
 
         if ($this->payment_type === 2) {
             return "Thẻ";
+        }
+    }
+
+    public function getNameTypeAttribute()
+    {
+        if ($this->type === self::TYPE_ORDER_DEFAULT) {
+            return "Đơn hàng thường";
+        }
+
+        if ($this->type === self::TYPE_ORDER_ADVANCE) {
+            return "Liệu trình";
         }
     }
 
