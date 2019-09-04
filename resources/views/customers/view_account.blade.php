@@ -2,6 +2,26 @@
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{asset('/assets/plugins/wysiwyag/richtext.min.css')}}" rel="stylesheet"/>
+    <style>
+        #snoAlertBox1{
+            position:absolute;
+            z-index:1400;
+            top:2%;
+            right:4%;
+            margin:0px auto;
+            text-align:center;
+            display:none;
+        }
+        #snoAlertBox2{
+            position:absolute;
+            z-index:1400;
+            top:2%;
+            right:4%;
+            margin:0px auto;
+            text-align:center;
+            display:none;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
@@ -245,6 +265,25 @@
 
         $(function (e) {
             $('.messages').richText();
+        });
+
+        $('.quantity-edit').click( function () {
+            const id = $(this).data('order-id');
+            swal({
+                title: 'Bạn có muốn trừ liệu trình ?',
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'PUT',
+                    url: "{{ Url('ajax/orders/') }}" + "/" +id,
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
+            })
         });
     </script>
 @endsection

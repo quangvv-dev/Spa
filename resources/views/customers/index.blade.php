@@ -309,7 +309,6 @@
                 confirmButtonClass: 'btn-danger waves-effect waves-light',
                 confirmButtonText: 'OK'
             }, function () {
-                console.log(ids);
                 $.ajax({
                     type: 'POST',
                     url: 'customers/delete-multiple',

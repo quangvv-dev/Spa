@@ -49,7 +49,6 @@
                             <th class="text-white text-center">Dịch vụ</th>
                             <th class="text-white text-center">Số lượng</th>
                             <th class="text-white text-center">Đơn giá</th>
-                            <th class="text-white text-center">Số buổi</th>
                             <th class="text-white text-center">VAT (%)</th>
                             <th class="text-white text-center">CK (đ)</th>
                             <th class="text-white text-center">Thành tiền</th>
@@ -67,9 +66,6 @@
                                     {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
                                 </td>
                                 <td class="text-center">
-                                    {!! Form::number('count_day[]', null, array('class' => 'form-control')) !!}
-                                </td>
-                                <td class="text-center">
                                     {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                                 </td>
                                 <td class="text-center">
@@ -84,6 +80,10 @@
                     </table>
                     <div class="col bot">
                         <a href="javascript:void(0)" id="add_row" class="red">(+) Thêm sản phẩm</a>
+                    </div>
+                    <div class="col-md-3 bot">
+                        {!! Form::label('count_day', 'Số buổi') !!}
+                        {!! Form::number('count_day', null, array('class' => 'form-control')) !!}
                     </div>
                 </div>
 
@@ -110,9 +110,6 @@
                     </td>
                     <td class="text-center">
                         {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                    </td>
-                    <td class="text-center">
-                        {!! Form::number('count_day[]', null, array('class' => 'form-control')) !!}
                     </td>
                     <td class="text-center">
                         {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
