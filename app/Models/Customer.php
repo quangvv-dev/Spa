@@ -79,7 +79,7 @@ class Customer extends Model
 
     public function orders()
     {
-        return $this->hasMany(Order::class, 'member_id', 'id');
+        return $this->hasMany(Order::class, 'member_id', 'id')->orderBy('created_at', 'DESC');
     }
 
     public function getGenderTextAttribute()

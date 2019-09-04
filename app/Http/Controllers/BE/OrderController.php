@@ -70,7 +70,7 @@ class OrderController extends Controller
         $order = $this->orderService->create($param);
         $this->orderDetailService->create($param, $order->id);
 
-        return redirect('/list-orders')->with('status', 'Tạo đơn hàng thành công');
+        return redirect('/list-orders/'.$order->id. 'show')->with('status', 'Tạo đơn hàng thành công');
     }
 
     public function listOrder(Request $request)
@@ -150,14 +150,14 @@ class OrderController extends Controller
         $order = $this->orderService->find($id);
 
         if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day == 0) {
-            return 0;
+            return "Failed";
         }
 
         $order->update([
            'count_day' => $order->count_day - 1,
         ]);
 
-        return 1;
+        return "Success";
     }
 
 }
