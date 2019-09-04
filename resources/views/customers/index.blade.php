@@ -252,7 +252,6 @@
         });
 
         $(document).on('change.select2', '.category-result', function (e) {
-            console.log('999');
             let target = $(e.target).parent();
             let category_ids = $(target).find('.category-result').val();
             let id = $(this).data('id');
