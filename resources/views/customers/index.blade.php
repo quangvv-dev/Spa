@@ -251,7 +251,7 @@
             });
         });
 
-        $(document).on('select2:select', '.category-result', function (e) {
+        $(document).on('change.select2', '.category-result', function (e) {
             let target = $(e.target).parent();
             let category_ids = $(target).find('.category-result').val();
             let id = $(this).data('id');
