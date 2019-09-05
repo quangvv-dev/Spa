@@ -2,6 +2,11 @@
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
+    <style>
+        select#order_type {
+            background: #dddddd;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
