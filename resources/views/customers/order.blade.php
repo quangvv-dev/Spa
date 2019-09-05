@@ -32,7 +32,7 @@
                     </td>
                     <td class="text-center">{{ $order->name_type }}</td>
                     <td class="text-center">{{ @$customer->marketing->full_name }}</td>
-                    <td class="text-center"></td>
+                    <td class="text-center">{{$order->count_day}}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
