@@ -26,13 +26,16 @@ class OrderController extends Controller
 
     public function __construct(OrderService $orderService, OrderDetailService $orderDetailService)
     {
-        $this->orderService       = $orderService;
+        $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
 
         $services = Services::orderBy('category_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
             'id')->prepend('-Chọn sản phẩm-', '');
+        $status = Status::where('type',StatusCode::RELATIONSHIP)->pluck('name', 'id');
+
         view()->share([
             'services' => $services,
+            'status'   => $status,
         ]);
     }
 
@@ -65,12 +68,12 @@ class OrderController extends Controller
     {
         $customer = Customer::find($request->user_id);
         $param = $request->all();
-        $customer->update($request->only('full_name', 'phone', 'address'));
+        $customer->update($request->only('full_name', 'phone', 'address','status_id'));
 
         $order = $this->orderService->create($param);
         $this->orderDetailService->create($param, $order->id);
 
-        return redirect('/order/'.$order->id. '/show')->with('status', 'Tạo đơn hàng thành công');
+        return redirect('/order/' . $order->id . '/show')->with('status', 'Tạo đơn hàng thành công');
     }
 
     public function listOrder(Request $request)
@@ -86,7 +89,8 @@ class OrderController extends Controller
             return Response::json(view('order-details.ajax', compact('orders', 'title'))->render());
         }
 
-        return view('order-details.index', compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source'));
+        return view('order-details.index',
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source'));
     }
 
     public function show($id)
@@ -154,7 +158,7 @@ class OrderController extends Controller
         }
 
         $order->update([
-           'count_day' => $order->count_day - 1,
+            'count_day' => $order->count_day - 1,
         ]);
 
         return "Success";

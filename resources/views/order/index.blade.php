@@ -40,6 +40,13 @@
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
+                <div class="col-xs-12 col-md-2">
+                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                        {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
+                        {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'required' => true, 'placeholder' => 'Trạng thái')) !!}
+                        <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                    </div>
+                </div>
             </div>
             <div class="col">
                 <div class="table-responsive">
@@ -55,27 +62,29 @@
                         </tr>
                         </thead>
                         <tbody class="order">
-                            <tr>
-                                <td width="250" scope="row">
-                                    {!! Form::select('service_id[]', $services, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                                </td>
-                                <td class="tc vertical-middle remove_row"> <button class='btn btn-danger'>X</button> </td>
-                            </tr>
+                        <tr>
+                            <td width="250" scope="row">
+                                {!! Form::select('service_id[]', $services, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
+                            </td>
+                            <td class="text-center">
+                                {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                            </td>
+                            <td class="text-center">
+                                {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                            </td>
+                            <td class="text-center">
+                                {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                            </td>
+                            <td class="text-center">
+                                {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                            </td>
+                            <td class="text-center">
+                                {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                            </td>
+                            <td class="tc vertical-middle remove_row">
+                                <button class='btn btn-danger'>X</button>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                     <div class="col bot">
@@ -99,30 +108,30 @@
 @endsection
 @section('_script')
     <script>
-        $(document).on('click', '#add_row', function() {
+        $(document).on('click', '#add_row', function () {
             $('.order').append(`
                 <tr>
                     <td width="250" scope="row">
                         {!! Form::select('service_id[]', $services, null, array('id' => "service",'class' => 'select2 form-control service', 'required' => true)) !!}
-                    </td>
-                    <td class="text-center">
-                        {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                    </td>
-                    <td class="text-center">
-                        {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                    </td>
-                    <td class="text-center">
-                        {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                    </td>
-                    <td class="text-center">
-                        {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                    </td>
-                    <td class="text-center">
-                        {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                    </td>
-                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
-                </tr>
-            `)
+                </td>
+                <td class="text-center">
+{!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                </td>
+                <td class="text-center">
+{!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                </td>
+                <td class="text-center">
+{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                </td>
+                <td class="text-center">
+{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                </td>
+                <td class="text-center">
+{!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                </td>
+                <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
+            </tr>
+`)
         });
 
         $(document).on('change', '.service', function (e) {
@@ -158,6 +167,7 @@
                 $('.full_name').val(data['full_name']);
                 $('.phone').val(data['phone']);
                 $('.address').val(data['address']);
+                $('#status').val(data['status_id']).trigger( "change" );
             });
         });
 
