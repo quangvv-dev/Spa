@@ -64,7 +64,7 @@
                         </button>
                     </div>
                     <div class="btn-group ml5">
-                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Loại đơn')) !!}
+                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Tất cả đơn')) !!}
                     </div>
                 </div>
             </div>
