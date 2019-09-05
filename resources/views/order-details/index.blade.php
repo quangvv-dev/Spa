@@ -59,7 +59,12 @@
                         <button class="btn btn-default order_status" data-status="">Đã hủy</button>
                     </div>
                     <div class="btn-group ml5">
-                        <button class="btn btn-default bor-none" data-filter="advanced" id="payment_tab" >Đã thu trong kỳ</button>
+                        <button class="btn btn-default bor-none" data-filter="advanced" id="payment_tab">Đã thu trong
+                            kỳ
+                        </button>
+                    </div>
+                    <div class="btn-group ml5">
+                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Loại đơn')) !!}
                     </div>
                 </div>
             </div>
@@ -71,7 +76,7 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none, #payment_tab', function (e) {
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none, #payment_tab,#order_type', function (e) {
             let target = $(e.target).parent();
             const group = $('.group').val();
             const telesales = $('.telesales').val();
@@ -82,6 +87,7 @@
             const data_time = $(target).find('.choose_time').data('time');
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
+            const order_type = $('#order_type').val();
             const bor_none = $(target).find('.bor-none').data('filter');
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
@@ -99,7 +105,8 @@
                     data_time: data_time,
                     start_date: start_date,
                     end_date: end_date,
-                    bor_none: bor_none
+                    bor_none: bor_none,
+                    order_type: order_type
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
