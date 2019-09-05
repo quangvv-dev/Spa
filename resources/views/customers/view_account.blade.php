@@ -21,6 +21,15 @@
             text-align:center;
             display:none;
         }
+        th.text-white.text-center{
+            font-size: 12px;
+        }
+        td.text-center{
+            font-size: 13px;
+        }
+        .margin-left-10{
+            margin-left: 10px;
+        }
     </style>
 @endsection
 @section('content')
@@ -86,6 +95,14 @@
                                 quan hệ</h3>
                             <div class="">{{ $customer->status->name }}
                             </div>
+                        </div>
+                    </div>
+                    <div class="full2 pb20 mt10" id="info_bar">
+                        <div class="border padding infor-list-ct ml2">
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i class="fa fa-random mr5 gray margin-left-10">{{ @$customer->source_customer->name }}</i> </h3>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo: <i class="fa fa-user mr5 gray margin-left-10">{{ @$customer->marketing->full_name }}</i></h3>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo: <i class="fa fa-calendar mr5 gray margin-left-10">{{ $customer->created_at }}</i> </h3>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua:  <i class="fa fa-shopping-cart mr5 gray margin-left-10">{{ $customer->orders->count() }}</i></h3>
                         </div>
                     </div>
                     <div class="border padding infor-list-ct ml2 mt10"><h3
@@ -168,8 +185,8 @@
                     </div>
                 </div>
                 <div class="col-md-10 no-padd" style="float: left;">
-                    <div class="col-md-9 no-padd spanfull2 padding" style="float: left;">
-                        <div class="card-body p-6">
+                    <div class="col-md-12 no-padd spanfull2 padding" style="float: left;">
+                        <div class="">
                             <div class="panel panel-primary">
                                 <div class=" tab-menu-heading">
                                     <div class="tabs-menu1 ">
@@ -230,26 +247,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 no-padd bor-l bor-bot" style="float: left;">
-                        <div class="col-md-12 no-padd padding">
-                            <div class="col-md-12 fl mt5"><i class="fa fa-random mr5 gray"></i> Nguồn: <span
-                                        class="bold"> {{ @$customer->source_customer->name }}</span>
-                            </div>
-                            <div class="col-md-12 fl mt5">
-                                <i class="fa fa-user mr5 gray"></i> Người tạo: {{ @$customer->marketing->full_name }}
-                            </div>
-                            <div class="col-md-12 fl mt5">
-                                <i class="fa fa-calendar mr5 gray"></i> Ngày tạo: <span
-                                        class="bold">{{ $customer->created_at }}</span>
-                            </div>
-                            <div class="col-md-12 fl mt5">
-                                <i class="fa fa-shopping-cart mr5 gray"></i> Đã mua: {{ @$customer->orders->count() }}
-                            </div>
-                            {{--<div class="col-md-12">--}}
-                            {{--<i class="fa fa-calendar mr5 gray"></i> Lần mua gần nhất:--}}
-                            {{--</div>--}}
                         </div>
                     </div>
                 </div>
