@@ -28,6 +28,11 @@ class Order extends Model
         return $this->hasMany(PaymentHistory::class, 'order_id', 'id');
     }
 
+    public function historyUpdateOrders()
+    {
+        return $this->hasMany(HistoryUpdateOrder::class, 'order_id', 'id');
+    }
+
     public static function search($input)
     {
         $data = self::with( 'orderDetails');

@@ -6,6 +6,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Services;
@@ -16,6 +17,7 @@ use App\Services\PaymentHistoryService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use DB;
 
@@ -161,7 +163,19 @@ class OrderController extends Controller
             'count_day' => $order->count_day - 1,
         ]);
 
+        $historyUpdateOrder = HistoryUpdateOrder::create([
+            'user_id' => Auth::user()->id,
+            'order_id' => $order->id
+        ]);
+
         return "Success";
+    }
+
+    public function getOrderById(Request $request, $id)
+    {
+        $order = Order::with('historyUpdateOrders.user')->find($id);
+
+        return Response::json($order);
     }
 
 }
