@@ -75,14 +75,14 @@
                         </a>
                     </button>
                 </div>
-                <div class="scrollmenu col-md-4">
+                <div class="scrollmenu col-md-7">
                     @foreach(@$statuses as $k => $item)
                         <button class="status btn white account_relation position" data-name="{{$item->name}}"
                                 style="background: {{$item->color ?:''}}">{{ $item->name }}<span
                                     class="not-number-account white">{{ $item->customers->count() }}</span></button>
                     @endforeach
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div id="div_created_at_dropdown" style="float: right !important;"
                          class="display position pointer mt5 open" rel="tooltip"
                          data-placement="left" data-original-title="Thời gian tạo khách hàng"

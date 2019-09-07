@@ -33,11 +33,15 @@ class OrderController extends Controller
 
         $services = Services::orderBy('category_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
             'id')->prepend('-Chọn sản phẩm-', '');
-        $status = Status::where('type',StatusCode::RELATIONSHIP)->pluck('name', 'id');
-
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
+        $order_type = [
+            Order::TYPE_ORDER_DEFAULT => 'Đơn thường',
+            Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
+        ];
         view()->share([
-            'services' => $services,
-            'status'   => $status,
+            'services'   => $services,
+            'status'     => $status,
+            'order_type' => $order_type,
         ]);
     }
 
@@ -70,7 +74,7 @@ class OrderController extends Controller
     {
         $customer = Customer::find($request->user_id);
         $param = $request->all();
-        $customer->update($request->only('full_name', 'phone', 'address','status_id'));
+        $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 
         $order = $this->orderService->create($param);
         $this->orderDetailService->create($param, $order->id);
