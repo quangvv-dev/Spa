@@ -260,11 +260,25 @@
 
     <script type="text/javascript">
 
-        $(function (e) {
-            $('.messages').richText();
+        $(document).on('click', '#edit-history-order', function (e) {
+            e.preventDefault();
+            $('.data-history-update-order').empty();
+            const id = $(this).data('order-id');
+            $.ajax({
+                url: "{{ Url('ajax/orders/') }}" + '/' + id,
+                method: "get",
+            }).done(function (data) {
+                let html = '';
+                data.history_update_orders.forEach(function (item) {
+                    html += '<tr>' + '<td class="text-center">'+ item.created_at + '</td>' +
+                        '<td class="text-center">' +item.user.full_name + '</td>' + '</tr>';
+                });
+                $('.data-history-update-order').append(html);
+                $('#largeModal').modal("show");
+            });
         });
 
-        $('.quantity-edit').click( function () {
+        $('.save-update-history-order').click( function () {
             const id = $(this).data('order-id');
             swal({
                 title: 'Bạn có muốn trừ liệu trình ?',
@@ -281,9 +295,14 @@
                             alert("Trừ số liệu trình thành công");
                         else if (res == "Failed")
                             alert("Số liệu trình đã hết");
+                        window.location.reload();
                     }
                 })
             })
+        });
+
+        $(function (e) {
+            $('.messages').richText();
         });
     </script>
 @endsection
