@@ -15,35 +15,51 @@
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('user_id', 'Tìm kiếm khách hàng có trên hệ thống', array('class' => ' required')) !!}
-                        {!! Form::select('user_id', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn khách hàng')) !!}
+                        @if(isset($customer))
+                            <select class="form-control select2 user" name="user_id" required="required"  data-placeholder="Chọn khách hàng">
+                                @foreach($customers as $key => $value)
+                                    <option value="{{ $key }}" {{ $key == $customer->id ? 'selected' : "" }}>{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        @else
+                            {!! Form::select('user_id', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn khách hàng')) !!}
+                            @endif
                         <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
-                        {!! Form::text('full_name',null, array('class' => 'form-control full_name', 'required' => true)) !!}
+                        {!! Form::text('full_name',$customer ? $customer->full_name: null , array('class' => 'form-control full_name', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
                         {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                        {!! Form::text('phone',null, array('class' => 'form-control phone', 'required' => true)) !!}
+                        {!! Form::text('phone', $customer ? $customer->phone: null, array('class' => 'form-control phone', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
-                        {!! Form::text('address',null, array('class' => 'form-control address', 'required' => true)) !!}
+                        {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
-                        {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'required' => true, 'placeholder' => 'Trạng thái')) !!}
+                        @if(isset($customer))
+                            <select id="status" class="form-control select2" name="status_id" required="required"  data-placeholder="Trạng thái">
+                                @foreach($status as $key => $value)
+                                    <option value="{{ $key }}" {{ $key == $customer->status_id ? 'selected' : "" }}>{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        @else
+                            {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'required' => true, 'placeholder' => 'Trạng thái')) !!}
+                        @endif
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
@@ -99,7 +115,7 @@
             </div>
             <div class="col bot">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('customers.index')}}" class="btn btn-danger">Về danh sách</a>
+                <a href="{{route('order.list')}}" class="btn btn-danger">Về danh sách</a>
             </div>
             {{ Form::close() }}
 
