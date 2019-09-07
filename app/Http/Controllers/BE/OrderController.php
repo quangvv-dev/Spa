@@ -45,11 +45,14 @@ class OrderController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $customerId = $request->customer_id;
+        $customer = Customer::where('id', $customerId)->first();
         $title = 'Tạo đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.index', compact('title', 'customers'));
+
+        return view('order.index', compact('title', 'customers', 'customer'));
     }
 
     public function getInfoService(Request $request)

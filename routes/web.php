@@ -41,7 +41,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/statistics/', 'StatisticController@index')->name('statistics.index');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
     //Order
-    Route::get('orders', 'OrderController@index')->name('orders.create');
+    Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');
     Route::group(['prefix' => 'ajax',], function () {
         Route::get('info-service', 'OrderController@getInfoService');
         Route::get('info-customer', 'OrderController@getInfoCustomer');

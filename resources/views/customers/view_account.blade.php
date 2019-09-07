@@ -233,7 +233,7 @@
                                             <div class="card-header">
                                                 <h3 class="card-title">Danh sách đơn hàng bán</h3></br>
                                                 <div class="col relative">
-                                                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i
+                                                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create', $customer->id) }}"><i
                                                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
                                             </div>
                                             @include('customers.order')
