@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('statuses', 'StatusController@getList');
         Route::get('/status-schedules', 'ScheduleController@getList');
         Route::get('categories', 'CategoryController@getListApi');
-        Route::put('orders/{id}', 'OrderController@updateCountDay');
+        Route::put('orders/{id}', 'OrderController@updateCountDay')->name('order.update_count_day');
         Route::get('orders/{id}', 'OrderController@getOrderById');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
