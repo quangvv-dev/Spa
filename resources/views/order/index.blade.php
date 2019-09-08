@@ -129,23 +129,23 @@
                 <tr>
                     <td width="250" scope="row">
                         {!! Form::select('service_id[]', $services, null, array('id' => "service",'class' => 'select2 form-control service', 'required' => true)) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                </td>
-                <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                    </td>
+                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
             </tr>
 `)
         });

@@ -114,8 +114,10 @@ class CustomerController extends Controller
         $title = 'Trao đổi';
         $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer',
             'orders')->findOrFail($id);
+        $waiters = User::where('role', UserConstant::WAITER)->pluck('full_name', 'id');
         $docs = Model::orderBy('id', 'desc')->get();
-        return view('customers.view_account', compact('title', 'docs', 'customer'));
+
+        return view('customers.view_account', compact('title', 'docs', 'customer', 'waiters'));
     }
 
     /**

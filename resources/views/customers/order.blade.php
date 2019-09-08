@@ -21,7 +21,7 @@
                         <a title="Thanh toán" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
                                     class="fas fa-file-invoice-dollar"></i></a>
                         @if($order->type === \App\Models\Order::TYPE_ORDER_ADVANCE)
-                            <a title="Trừ liệu trình" class="save-update-history-order" data-order-id="{{ $order->id }}"><i class="fas fa-edit"></i></a>
+                            <a title="Trừ liệu trình" class="edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-edit"></i></a>
                         @endif
                     </td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
@@ -49,3 +49,4 @@
     </table>
 </div>
 @include('customers.modal_order')
+@include('customers.modal_update_history_order')

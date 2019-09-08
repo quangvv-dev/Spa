@@ -269,36 +269,41 @@
                 method: "get",
             }).done(function (data) {
                 let html = '';
-                data.history_update_orders.forEach(function (item) {
-                    html += '<tr>' + '<td class="text-center">'+ item.created_at + '</td>' +
-                        '<td class="text-center">' +item.user.full_name + '</td>' + '</tr>';
+                data.history_update_orders.forEach(function (item, index) {
+                    html += '<tr>' + '<td class="text-center">' + index + '</td>' +
+                        '<td class="text-center">' +item.created_at + '</td>' +
+                        '<td class="text-center">' +item.user.full_name + '</td>' +
+                        '<td class="text-center">' +item.description + '</td>' + '</tr>';
                 });
                 $('.data-history-update-order').append(html);
                 $('#largeModal').modal("show");
             });
         });
 
-        $('.save-update-history-order').click( function () {
+        $('.edit-order').click( function () {
             const id = $(this).data('order-id');
-            swal({
-                title: 'Bạn có muốn trừ liệu trình ?',
-                showCancelButton: true,
-                cancelButtonClass: 'btn-secondary waves-effect',
-                confirmButtonClass: 'btn-danger waves-effect waves-light',
-                confirmButtonText: 'OK'
-            }, function () {
-                $.ajax({
-                    type: 'PUT',
-                    url: "{{ Url('ajax/orders/') }}" + "/" +id,
-                    success: function (res) {
-                        if (res == 'Success')
-                            alert("Trừ số liệu trình thành công");
-                        else if (res == "Failed")
-                            alert("Số liệu trình đã hết");
-                        window.location.reload();
-                    }
+            $('.save-update-history-order').click(function () {
+                swal({
+                    title: 'Bạn có muốn trừ liệu trình ?',
+                    showCancelButton: true,
+                    cancelButtonClass: 'btn-secondary waves-effect',
+                    confirmButtonClass: 'btn-danger waves-effect waves-light',
+                    confirmButtonText: 'OK'
+                }, function () {
+                    $.ajax({
+                        type: 'PUT',
+                        url: "{{ Url('ajax/orders/') }}" + "/" +id,
+                        data: $('#historyUpdateOrrder').serialize(),
+                        success: function (res) {
+                            if (res == 'Success')
+                                alert("Trừ số liệu trình thành công");
+                            else if (res == "Failed")
+                                alert("Số liệu trình đã hết");
+                            window.location.reload();
+                        }
+                    })
                 })
-            })
+            });
         });
 
         $(function (e) {

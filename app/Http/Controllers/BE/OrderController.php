@@ -171,8 +171,9 @@ class OrderController extends Controller
         ]);
 
         $historyUpdateOrder = HistoryUpdateOrder::create([
-            'user_id' => Auth::user()->id,
-            'order_id' => $order->id
+            'user_id' => $request->user_id,
+            'order_id' => $order->id,
+            'description' => $request->description
         ]);
 
         return "Success";
