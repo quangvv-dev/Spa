@@ -35,6 +35,16 @@
         .margin-left-10{
             margin-left: 10px;
         }
+        .container {
+            max-width: 90%;
+        }
+        a#edit-history-order{
+            color: #007bff !important;
+            font-weight: 600 !important;
+        }
+        /*.btn{*/
+        /*    background: #7235bb;*/
+        /*}*/
     </style>
 @endsection
 @section('content')
@@ -198,8 +208,8 @@
                                         <!-- Tabs -->
                                         <ul class="nav panel-tabs">
                                             <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a></li>
-                                            <li><a href="#tab6" data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
+                                            <li><a href="#tab6" data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
                                         </ul>
                                     </div>
