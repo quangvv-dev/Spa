@@ -1,5 +1,10 @@
 @extends('layout.app')
 @section('_style')
+    <script>document.getElementsByTagName("html")[0].className += " js";</script>
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{asset('/assets/plugins/wysiwyag/richtext.min.css')}}" rel="stylesheet"/>
     <style>
@@ -238,8 +243,8 @@
                                             </div>
                                             @include('customers.order')
                                         </div>
-                                        <div class="tab-pane " id="tab7">
-
+                                        <div class="tab-pane" id="tab7">
+                                            @include('schedules.index')
                                         </div>
                                         <div class="tab-pane " id="tab8">
 
@@ -257,6 +262,8 @@
 @endsection
 @section('_script')
     <script src="{{asset('/assets/plugins/wysiwyag/jquery.richtext.js')}}"></script>
+    <script src="{{asset('assets/js/util.js')}}"></script> <!-- util functions included in the CodyHouse framework -->
+    <script src="{{asset('assets/js/main.js')}}"></script>
 
     <script type="text/javascript">
 
@@ -309,5 +316,94 @@
         $(function (e) {
             $('.messages').richText();
         });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(document).on('dblclick', '.status', function (e) {
+                let target = $(e.target).parent();
+                $(target).find('.status').empty();
+                let id = $(this).data('id');
+                let html = '';
+
+                $.ajax({
+                    url: "{{ Url('ajax/status-schedules/') }}",
+                    method: "get",
+                    data: {id: id}
+                }).done(function (data) {
+                    html +=
+                        '<select class="status-result form-control" data-id="' + data.schedule_id+ '" name="status">' +
+                        '<option value="">' + "Chọn trạng thái" + '</option>';
+                    data.data.forEach(function (item) {
+                        html +=
+                            '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+
+                    html += '</select>';
+                    $(target).find(".status").append(html);
+                });
+            });
+
+            $(document).on('change', '.status-result', function (e) {
+                let target = $(e.target).parent();
+                let status = $(target).find('.status-result').val();
+                let id = $(this).data('id');
+
+                $.ajax({
+                    url: "{{ Url('ajax/schedules/') }}" + '/' + id,
+                    method: "put",
+                    data: {
+                        status: status
+                    }
+                }).done(function () {
+                    window.location.reload();
+                });
+            });
+
+            $('.update').on('click', function () {
+                var id = $(this).attr("data-id");
+                var link = 'schedules/edit/' + id;
+                $.ajax({
+                    url: window.location.origin + '/' + link,
+                    // url: "http://localhost/Spa/public/" + link,
+                    method: "get",
+                }).done(function (data) {
+                    $('#update_id').val(data['id']);
+                    $('#update_date').val(data['date']);
+                    $('#update_time1').val(data['time_from']);
+                    $('#update_time2').val(data['time_to']);
+                    $('#update_status').val(data['status']);
+                    $('#update_note').val(data['note']);
+                    $('#update_action').val(data['person_action']).change();
+                    ;
+                });
+            })
+            $('[data-toggle="datepicker"]').datepicker({
+                format: 'yyyy-mm-dd',
+                autoHide: true,
+                zIndex: 2048,
+            });
+            $("#fvalidate").validate({
+                rules: {
+                    note: {
+                        required: true
+                    },
+                    // date: {
+                    //     required: true
+                    // },
+                    time_from: {
+                        required: true
+                    },
+                    time_to: {
+                        required: true
+                    },
+                },
+                messages: {
+                    note: "Không được để trống !!!",
+                    // date: "Không được để trống !!!",
+                    time_from: "Không được để trống !!!",
+                    time_to: "Không được để trống !!!",
+                },
+            });
+        })
     </script>
 @endsection

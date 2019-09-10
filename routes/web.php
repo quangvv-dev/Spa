@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('position/edit/{id}', 'PositionController@edit')->name('position.edit');
 
     Route::get('schedules', 'ScheduleController@homePage');
-    Route::get('schedules/{id}', 'ScheduleController@index')->name('schedules.index');
+//    Route::get('schedules/{id}', 'ScheduleController@index')->name('schedules.index');
     Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');
     Route::get('schedules/edit/{id}', 'ScheduleController@edit')->name('schedules.edit');

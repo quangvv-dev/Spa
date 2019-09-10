@@ -13,8 +13,8 @@
         </tr>
         </thead>
         <tbody>
-        @if(@count($docs))
-            @foreach($docs as $k => $s)
+        @if(@count($schedules))
+            @foreach($schedules as $k => $s)
                 <tr>
                     <th scope="row">{{$k}}</th>
                     <td class="text-center">{{$s->date}}</td>
@@ -38,11 +38,11 @@
     </table>
     <div class="pull-left">
         <div class="page-info">
-            {{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+            {{ 'Tổng số ' . $schedules->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
         </div>
     </div>
     <div class="pull-right">
-        {{ $docs->appends(['search' => request()->search ])->links() }}
+        {{ $schedules->appends(['search' => request()->search ])->links() }}
     </div>
     {{--    Modal thêm --}}
     @include('schedules.modal')
