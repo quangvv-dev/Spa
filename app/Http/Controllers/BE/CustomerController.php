@@ -109,15 +109,18 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $title = 'Trao đổi';
         $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer',
             'orders')->findOrFail($id);
         $waiters = User::where('role', UserConstant::WAITER)->pluck('full_name', 'id');
+        $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+        $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
+
         $docs = Model::orderBy('id', 'desc')->get();
 
-        return view('customers.view_account', compact('title', 'docs', 'customer', 'waiters'));
+        return view('customers.view_account', compact('title', 'docs', 'customer', 'waiters' , 'schedules', 'id', 'staff'));
     }
 
     /**
