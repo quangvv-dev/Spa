@@ -106,14 +106,20 @@
                     <div class="col bot">
                         <a href="javascript:void(0)" id="add_row" class="red">(+) Thêm sản phẩm</a>
                     </div>
-                    <div class="col-md-3 bot">
-                        {!! Form::label('count_day', 'Số buổi liệu trình (nếu có)') !!}
-                        {!! Form::number('count_day', null, array('class' => 'form-control')) !!}
+                    <div class="col row">
+                        <div class="col-md-3">
+                            {!! Form::label('count_day', 'Số buổi liệu trình (nếu có)') !!}
+                            {!! Form::number('count_day', null, array('class' => 'form-control')) !!}
+                        </div>
+                        <div class="col-md-3">
+                            {!! Form::label('spa_therapisst_id', 'Kỹ thuật viên') !!}
+                            {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2')) !!}
+                        </div>
                     </div>
                 </div>
 
             </div>
-            <div class="col bot">
+            <div class="col bot" style="margin-top: 10px;">
                 <button type="submit" class="btn btn-success">Lưu</button>
                 <a href="{{route('order.list')}}" class="btn btn-danger">Về danh sách</a>
             </div>

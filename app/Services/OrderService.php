@@ -24,11 +24,12 @@ class OrderService
         }
 
         $input = [
-            'member_id' => $data['user_id'],
-            'the_rest'  => $theRest,
-            'count_day' => $data['count_day'] ?: 0,
-            'type'      => $data['count_day'] == null ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total' => array_sum($data['total_price']),
+            'member_id'         => $data['user_id'],
+            'the_rest'          => $theRest,
+            'count_day'         => $data['count_day'] ?: 0,
+            'type'              => $data['count_day'] == null ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'all_total'         => array_sum($data['total_price']),
+            'spa_therapisst_id' => $data['spa_therapisst_id']
         ];
 
         $model = $this->order->fill($input);
