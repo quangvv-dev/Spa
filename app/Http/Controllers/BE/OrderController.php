@@ -49,10 +49,11 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::where('id', $customerId)->first();
+        $spaTherapissts = User::where('role', UserConstant::WAITER)->pluck('full_name', 'id');
         $title = 'Tạo đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
 
-        return view('order.index', compact('title', 'customers', 'customer'));
+        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts'));
     }
 
     public function getInfoService(Request $request)
