@@ -174,6 +174,10 @@
 
     <div class="fixed-bottom">
         <div class="list_task_footer col-md-12 padding menu-footer">
+            <div class="fl task_footer_box">
+                <button class="btn btn-info ml5 fr paymentOrder" data-toggle="modal" data-target="#paymentModal"><a
+                            class="white">Thanh toán</a></button>
+            </div>
             <div class="btn-group dropup fl task_footer_box">
                 <button class="btn btn-success ml5 printOrder" data-number="2"><a class="white" href="/order-pdf/{{$order->id}}"><i
                                 class="fa fa-print"></i>&nbsp;In</a>
@@ -188,10 +192,6 @@
                 <button class="btn btn-default fr ml5">
                     <a href="{{route('order.list')}}">Trở lại</a>
                 </button>
-            </div>
-            <div class="fl task_footer_box">
-                <button class="btn btn-info ml5 fr paymentOrder" data-toggle="modal" data-target="#paymentModal"><a
-                            class="white">Thanh toán</a></button>
             </div>
         </div>
     </div>

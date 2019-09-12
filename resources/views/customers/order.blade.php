@@ -7,10 +7,11 @@
             <th class="text-white text-center">Tên SP</th>
             <th class="text-white text-center">Loại đơn</th>
             <th class="text-white text-center">Người thực hiện</th>
-            <th class="text-white text-center">Buổi</th>
+            <th class="text-white text-center">Buổi còn lại</th>
             <th class="text-white text-center">Số tiền DH</th>
             <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Còn lại</th>
+            <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
         <tbody style="background: white;">
@@ -18,8 +19,6 @@
             @foreach($customer->orders as $order)
                 <tr>
                     <td class="text-center">
-                        <a title="Thanh toán" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
-                                    class="fas fa-file-invoice-dollar"></i></a>
                         @if($order->type === \App\Models\Order::TYPE_ORDER_ADVANCE)
                             <a title="Trừ liệu trình" class="btn edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                         @endif
@@ -38,6 +37,10 @@
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
+                    <td class="text-center">
+                        <a title="Thanh toán" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
+                                    class="fas fa-file-invoice-dollar"></i></a>
+                    </td>
                 </tr>
             @endforeach
         @else
