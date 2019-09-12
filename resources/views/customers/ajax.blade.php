@@ -3,7 +3,7 @@
         <thead class="bg-primary text-white">
         <tr>
             <th style="width:3%"><input type="checkbox" class="selectall myCheck"/></th>
-            <th class="text-white text-center">Thao tác</th>
+            {{--<th class="text-white text-center">Thao tác</th>--}}
             <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
@@ -29,17 +29,17 @@
                     <td class="text-center"
                         style="background: {{isset($customer->status)?$customer->status->color :''}}"><input
                                 type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
-                    <td class="text-center">
-                        @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN
-                        ||\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::WAITER)
+                    {{--<td class="text-center">--}}
+                        {{--@if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN--}}
+                        {{--||\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::WAITER)--}}
                             {{--                            <a title="Đặt lịch" class="btn" href="{{ route('schedules.index', $customer->id) }}"><i class="fas fa-calendar-alt"></i></a>--}}
                             {{--                            <a title="Tạo đơn hàng" class="btn" href="{{ url('orders') }}"><i class="fas fa-file-invoice-dollar"></i></a>--}}
-                            <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)"
-                               data-url="{{ route('customers.destroy', $customer->id) }}"><i
-                                        class="fas fa-trash-alt"></i></a>
-                        @endif
+                            {{--<a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)"--}}
+                               {{--data-url="{{ route('customers.destroy', $customer->id) }}"><i--}}
+                                        {{--class="fas fa-trash-alt"></i></a>--}}
+                        {{--@endif--}}
                         {{--                        <a title="Trao đổi" class="btn" href="{{ url('group_comments/'. $customer->id) }}"><i class="fas fa-users"></i></a>--}}
-                    </td>
+                    {{--</td>--}}
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center"><a
                                 href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>

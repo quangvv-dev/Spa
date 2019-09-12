@@ -113,7 +113,7 @@
                         </div>
                         <div class="col-md-3">
                             {!! Form::label('spa_therapisst_id', 'Kỹ thuật viên') !!}
-                            {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2')) !!}
+                            {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
                         </div>
                     </div>
                 </div>
@@ -195,7 +195,32 @@
 
         $(document).on('click', '.remove_row', function (e) {
             $(e.target).parent().parent().remove();
-        })
+        });
+
+        $("#fvalidate").validate({
+            rules: {
+                service_id: {
+                    required: true
+                },
+                quantity: {
+                    required: true
+                },
+                price: {
+                    required: true
+                },
+                count_day: {
+                    min: 2
+                },
+            },
+            messages: {
+                service_id: "Chưa chọn dịch vụ",
+                quantity: {
+                    required: "Chưa nhập số lượng",
+                },
+                price: "Chưa nhập giá",
+                count_day: "Số buổi phải lớn hơn 2",
+            },
+        });
 
     </script>
 @endsection
