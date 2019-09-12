@@ -21,16 +21,16 @@
                         <a title="Thanh toán" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
                                     class="fas fa-file-invoice-dollar"></i></a>
                         @if($order->type === \App\Models\Order::TYPE_ORDER_ADVANCE)
-                            <a title="Trừ liệu trình" class="edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-edit"></i></a>
+                            <a title="Trừ liệu trình" class="btn edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                         @endif
                     </td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">
-                        <a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">
-                            @foreach($order->orderDetails as $orderDetail)
-                                {{ @$orderDetail->service->name }},
-                            @endforeach
-                        </a>
+                        <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">
+                                @foreach($order->orderDetails as $orderDetail)
+                                    {{ @$orderDetail->service->name }},
+                                @endforeach
+                            </a></b>
                     </td>
                     <td class="text-center">{{ $order->name_type }}</td>
                     <td class="text-center">{{ @$customer->marketing->full_name }}</td>
