@@ -81,6 +81,14 @@ class OrderController extends Controller
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 
         $order = $this->orderService->create($param);
+
+        if (isset($request->spa_therapisst_id) && isset($request->count_day)) {
+            HistoryUpdateOrder::create([
+                'user_id' => $request->spa_therapisst_id,
+                'order_id' => $order->id
+            ]);
+        }
+
         $this->orderDetailService->create($param, $order->id);
 
         return redirect('/order/' . $order->id . '/show')->with('status', 'Tạo đơn hàng thành công');
