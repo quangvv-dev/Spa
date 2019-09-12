@@ -212,9 +212,9 @@
                                                     <div class="card-header">
                                                         <h3 class="card-title">{{$title}}</h3></br>
                                                         <div class="col" style="float: right">
-                                                            <a class="right btn btn-primary btn-flat"
-                                                               href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i
-                                                                        class="fa fa-arrow-right"></i>Tới đặt lịch</a>
+                                                            {{--<a class="right btn btn-primary btn-flat"--}}
+                                                               {{--href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i--}}
+                                                                        {{--class="fa fa-arrow-right"></i>Tới đặt lịch</a>--}}
                                                         </div>
                                                     </div>
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
