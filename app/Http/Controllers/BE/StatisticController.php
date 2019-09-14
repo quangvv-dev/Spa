@@ -38,6 +38,7 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
+        $input['user_id'] = $request->user_id?: Auth::user()->id;
         $title = 'Nhân viên';
 
         $statusRevenues = Status::getRevenueSource($input);
@@ -63,49 +64,53 @@ class StatisticController extends Controller
         });
         $receive = Schedule::where('status', StatusCode::RECEIVE);
         $comment = Schedule::orderBy('id', 'desc');
-        $orders = OrderDetail::orderBy('id', 'desc');
+
         $price_customer = Customer::where('status_id', 13)->get();
         $commision = Commission::orderBy('id', 'desc');
 
-        if ($request->user_id) {
+        $customer = $customer->where('telesales_id', $input['user_id'])->where('status_id',
+            StatusCode::NEW)->with('source_customer')->get();
+        $books = $books->where('creator_id', $input['user_id'])->get();
+        $receive = $receive->where('creator_id', $input['user_id'])->get();
+        $comment = $comment->where('user_id', $input['user_id'])->get();
 
-        } else {
-            $customer = $customer->where('telesales_id', Auth::user()->id)->where('status_id',
-                StatusCode::NEW)->with('source_customer')->get();
-            $books = $books->where('creator_id', Auth::user()->id)->get();
-            $receive = $receive->where('creator_id', Auth::user()->id)->get();
-            $comment = $comment->where('user_id', Auth::user()->id)->get();
-            $orders = $orders->where('user_id', Auth::user()->id)->get();
-            $commision = $commision->where('customer_id', 'like', '%' . Auth::user()->id . '%')->get();
-            if (count($commision)) {
-                foreach ($commision as $item) {
-                    if ($item->customer_id) {
-                        foreach (json_decode($item->customer_id) as $key => $value1) {
-                            if ($value1 == Auth::user()->id) {
-                                $rose_price = json_decode($item->rose_price);
-                                $price_commision[] = $rose_price[$key];
-                            }
+        $orders = Order::whereHas('customer', function ($query) use ($input) {
+            $query->where('mkt_id', $input['user_id']);
+        });
+
+        $countOrders = $orders->count();
+
+        $orders = $orders->get();
+        $dataOrder = [];
+
+        $commision = $commision->where('customer_id', 'like', '%' . $input['user_id'] . '%')->get();
+
+        if (count($commision)) {
+            foreach ($commision as $item) {
+                if ($item->customer_id) {
+                    foreach (json_decode($item->customer_id) as $key => $value1) {
+                        if ($value1 == $input['user_id']) {
+                            $rose_price = json_decode($item->rose_price);
+                            $price_commision[] = $rose_price[$key];
                         }
                     }
                 }
-                $price_commision = array_sum($price_commision);
             }
+            $price_commision = array_sum($price_commision);
         }
-        $customer = count($customer);
-        $books = count($books);
-        $receive = count($receive);
-        $comment = count($comment);
-        $orders = count($orders);
+
+
+
         $price_customer = count($price_customer);
         $commision = $price_commision;
 
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_home',
-                compact('customer', 'books', 'receive', 'comment', 'orders', 'price_customer', 'commision',
-                    'title', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders'))->render());
+                compact('customer', 'books', 'receive', 'comment', 'countOrders', 'price_customer', 'commision',
+                    'title', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders', 'orders'))->render());
         }
         return view('statistics.index',
-            compact('customer', 'books', 'receive', 'comment', 'orders', 'price_customer', 'commision', 'title', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders'));
+            compact('customer', 'books', 'receive', 'comment', 'countOrders', 'price_customer', 'commision', 'title','orders', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders'));
     }
 
     public function show($id)

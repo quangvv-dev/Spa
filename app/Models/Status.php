@@ -71,6 +71,11 @@ class Status extends Model
                         });
                     });
                 });
+            })
+            ->when(isset($input['user_id']), function ($query) use ($input) {
+                $query->whereHas('customers', function ($q) use ($input) {
+                    $q->where('mkt_id', $input['user_id']);
+                });
             });
         }
 
@@ -99,6 +104,11 @@ class Status extends Model
                             $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                             $q->whereBetween('created_at', getTime(($input['data_time'])));
                         });
+                    });
+                })
+                ->when(isset($input['user_id']), function ($query) use ($input) {
+                    $query->whereHas('customers', function ($q) use ($input) {
+                        $q->where('mkt_id', $input['user_id']);
                     });
                 });
             });

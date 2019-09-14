@@ -47,7 +47,7 @@
                 {{--                        {!! Form::text('to_date', null, array('id' => 'to-date', 'class' => 'form-control fc-datepicker', 'placeholder' => 'Đến ngày')) !!}--}}
                 {{--                    </div>--}}
                 {{--                </div>--}}
-                <div class="col-md-2 col-xs-6 wd-200 mg-b-30">
+                <div class="col-md-3 col-xs-6 wd-200 mg-b-30">
                     <div class="input-group">
                         {!! Form::select('user_id', $user,null, array('id' => 'user_id', 'class' => 'form-control select2', 'data-placeholder' => 'Chọn nhân viên')) !!}
                     </div>
@@ -155,7 +155,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".fc-datepicker").datepicker({dateFormat: 'dd-mm-yy'});
-        })
+        });
 
         $(document).on('keyup change', '#from-date,#to-date', function (e) {
             e.preventDefault();
@@ -188,7 +188,6 @@
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
-
             });
         });
     </script>
