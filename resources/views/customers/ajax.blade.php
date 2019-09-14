@@ -53,7 +53,7 @@
                     <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     <td class="text-center">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description" data-id="{{$customer->id}}"
-                        width="250">{{ $customer->description }}</td>
+                        style="width: 291px; height: 59px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ $customer->gender_text  }}</td>
