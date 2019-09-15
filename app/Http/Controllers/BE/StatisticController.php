@@ -66,7 +66,6 @@ class StatisticController extends Controller
         $comment = Schedule::orderBy('id', 'desc');
 
         $price_customer = Customer::where('status_id', 13)->get();
-        $commision = Commission::orderBy('id', 'desc');
 
         $customer = $customer->where('telesales_id', $input['user_id'])->where('status_id',
             StatusCode::NEW)->with('source_customer')->get();
@@ -74,54 +73,56 @@ class StatisticController extends Controller
         $receive = $receive->where('creator_id', $input['user_id'])->get();
         $comment = $comment->where('user_id', $input['user_id'])->get();
 
-        $orders = Order::whereHas('customer', function ($query) use ($input) {
+        $orders = Order::with('commission', 'customer')
+            ->whereHas('customer', function ($query) use ($input) {
             $query->where('mkt_id', $input['user_id']);
         });
 
         $countOrders = $orders->count();
 
         $orders = $orders->get();
-        $dataOrder = [];
-
-        $commision = $commision->where('customer_id', 'like', '%' . $input['user_id'] . '%')->get();
-
-        if (count($commision)) {
-            foreach ($commision as $item) {
-                if ($item->customer_id) {
-                    foreach (json_decode($item->customer_id) as $key => $value1) {
-                        if ($value1 == $input['user_id']) {
-                            $rose_price = json_decode($item->rose_price);
-                            $price_commision[] = $rose_price[$key];
-                        }
-                    }
-                }
-            }
-            $price_commision = array_sum($price_commision);
-        }
 
         foreach ($orders as $order) {
-            foreach ($commision as $item) {
-                if ($item->customer_id && $order->customer->mkt_id) {
-                    foreach (json_decode($item->customer_id) as $key => $value) {
-                        if ($order->id == $item->order_id) {
-                            $rosePrice = array_sum(json_decode($item->rose_price));
-                            $order->rose_price = $rosePrice[$key];
-                        }
-                    }
-                }
-            }
+            $order->rose_price = $order->commission->sum('earn');
         }
 
-        $price_customer = count($price_customer);
-        $commision = $price_commision;
+        $commissions = Commission::with('orders')->where('user_id', $input['user_id'])->get();
 
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_home',
-                compact('customer', 'books', 'receive', 'comment', 'countOrders', 'price_customer', 'commision',
-                    'title', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders', 'orders'))->render());
+                compact('customer',
+                    'books',
+                    'receive',
+                    'comment',
+                    'countOrders',
+                    'price_customer',
+                    'commissions',
+                    'title',
+                    'statusRevenues',
+                    'statusRevenueByRelations',
+                    'categoryRevenues',
+                    'customerRevenueByGenders',
+                    'orders',
+                    'earnTotal'
+                ))->render());
         }
         return view('statistics.index',
-            compact('customer', 'books', 'receive', 'comment', 'countOrders', 'price_customer', 'commision', 'title','orders', 'statusRevenues', 'statusRevenueByRelations', 'categoryRevenues', 'customerRevenueByGenders'));
+            compact(
+                'customer',
+                'books',
+                'receive',
+                'comment',
+                'countOrders',
+                'price_customer',
+                'commissions',
+                'title',
+                'orders',
+                'statusRevenues',
+                'statusRevenueByRelations',
+                'categoryRevenues',
+                'customerRevenueByGenders',
+                'earnTotal'
+            ));
     }
 
     public function show($id)

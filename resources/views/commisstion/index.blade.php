@@ -18,24 +18,20 @@
                 {!! Form::open(array('url' => url()->full(), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col order" style="padding: 10px">
-                @if(isset($doc) && $doc)
-                    @foreach(\json_decode($doc->customer_id) as $k1 =>$value1)
+                @if(isset($commissions) && $commissions)
+                    @foreach($commissions as $item)
                         <div class="row">
                             <div class="col-xs-12 col-md-3">
-                                {!! Form::label('customer_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
-                                {!! Form::select('customer_id[]', $customers, $value1, array('class' => 'form-control select2 user', 'required' => true,'disabled'=>true, 'placeholder' => 'Chọn nhân viên')) !!}
-                                {!! Form::hidden('customer_id[]', $value1, array('class' => 'form-control','readonly'=>true,'required'=>true)) !!}
+                                {!! Form::label('user_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
+                                {!! Form::select('user_id', $customers, $item->user_id, array('class' => 'form-control select2 user', 'required' => true,'disabled'=>true, 'placeholder' => 'Chọn nhân viên')) !!}
+                                {!! Form::hidden('user_id', null, array('class' => 'form-control','readonly'=>true,'required'=>true)) !!}
                             </div>
-                            @foreach(\json_decode($doc->rose_price) as $k2 =>$value2)
-                                @if($k1==$k2)
-                                    <div class="col-xs-12 col-md-3">
-                                        <div class="form-group required {{ $errors->has('rose_price') ? 'has-error' : '' }}">
-                                            {!! Form::label('rose_price', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
-                                            {!! Form::text('rose_price[]', $value2, array('class' => 'form-control rose_price number','readonly'=>true,'required'=>true)) !!}
-                                        </div>
+                                <div class="col-xs-12 col-md-3">
+                                    <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">
+                                        {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
+                                        {!! Form::text('earn', $item->earn, array('class' => 'form-control rose_price number','readonly'=>true,'required'=>true)) !!}
                                     </div>
-                                @endif
-                            @endforeach
+                                </div>
                         </div>
                     @endforeach
                 @endif
@@ -67,15 +63,15 @@
             <div class='row item-file' >
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
-                        {!! Form::label('customer_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
-                    {!! Form::select('customer_id[]', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn nhân viên')) !!}
+                        {!! Form::label('user_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
+                    {!! Form::select('user_id', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn nhân viên')) !!}
                 <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('rose_price', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
-                    {!! Form::text('rose_price[]', null, array('class' => 'form-control number','required'=>true)) !!}
+                        {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
+                    {!! Form::text('earn', null, array('class' => 'form-control number','required'=>true)) !!}
                 </div>
             </div>
             <div class="col-xs-12 col-md-1" style="margin-top:34px">

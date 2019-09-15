@@ -33,6 +33,11 @@ class Order extends Model
         return $this->hasMany(HistoryUpdateOrder::class, 'order_id', 'id');
     }
 
+    public function commission()
+    {
+        return $this->belongsTo(Commission::class, 'order_id', 'id');
+    }
+
     public static function search($input)
     {
         $data = self::with( 'orderDetails');
