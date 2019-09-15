@@ -38,7 +38,7 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $input['user_id'] = $request->user_id?: Auth::user()->id;
+        $input['user_id'] = $request->user_id ?: Auth::user()->id;
         $title = 'Nhân viên';
 
         $statusRevenues = Status::getRevenueSource($input);
@@ -73,19 +73,23 @@ class StatisticController extends Controller
         $receive = $receive->where('creator_id', $input['user_id'])->get();
         $comment = $comment->where('user_id', $input['user_id'])->get();
 
-        $orders = Order::with('commission', 'customer')
-            ->whereHas('customer', function ($query) use ($input) {
-            $query->where('mkt_id', $input['user_id']);
-        });
-
-        $countOrders = $orders->count();
-
-        $orders = $orders->get();
-
-        foreach ($orders as $order) {
-            $order->rose_price = $order->commission->sum('earn');
+        //
+        $order_arr = [];
+        $commissions = Commission::where('user_id', $request->user_id ?: 1)->get();
+        foreach ($commissions as $commiss) {
+            $order_arr[] = $commiss->order_id;
         }
 
+        $orders = Order::whereIN('id', @array_values($order_arr));
+        $countOrders = $orders->count();
+        $orders = $orders->get();
+        $orders = $orders->map(function ($order) use ($request) {
+            $check = Commission::where('order_id', $order->id)->where('user_id', $request->user_id ?: 1)->first();
+            if (isset($check) && $check) {
+                $order->rose_price = !empty($check->earn) ? $check->earn : 0;
+            }
+            return $order;
+        });
         $commissions = Commission::with('orders')->where('user_id', $input['user_id'])->get();
 
         if ($request->ajax()) {
@@ -102,8 +106,8 @@ class StatisticController extends Controller
                     'statusRevenueByRelations',
                     'categoryRevenues',
                     'customerRevenueByGenders',
-                    'orders',
-                    'earnTotal'
+                    'orders'
+//                    'earnTotal'
                 ))->render());
         }
         return view('statistics.index',
@@ -120,8 +124,8 @@ class StatisticController extends Controller
                 'statusRevenues',
                 'statusRevenueByRelations',
                 'categoryRevenues',
-                'customerRevenueByGenders',
-                'earnTotal'
+                'customerRevenueByGenders'
+//                'earnTotal'
             ));
     }
 

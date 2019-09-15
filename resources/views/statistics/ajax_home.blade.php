@@ -186,7 +186,7 @@
             <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
             <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
             <td class="text-center">{{ number_format($order->the_rest) }}</td>
-            <td class="text-center">{{ $order->rose_price }}</td>
+            <td class="text-center">{{ @number_format($order->rose_price) }}</td>
             <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
         </tr>
         @endforeach
