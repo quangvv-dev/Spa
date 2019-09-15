@@ -48,9 +48,11 @@
                 {{--                    </div>--}}
                 {{--                </div>--}}
                 <div class="col-md-3 col-xs-6 wd-200 mg-b-30">
-                    <div class="input-group">
-                        {!! Form::select('user_id', $user,null, array('id' => 'user_id', 'class' => 'form-control select2', 'data-placeholder' => 'Chọn nhân viên')) !!}
-                    </div>
+                    <form action="">
+                        <div class="input-group">
+                            {!! Form::select('user_id', $user, null, array('id' => 'user_id', 'class' => 'form-control select2', 'data-placeholder' => 'Chọn nhân viên')) !!}
+                        </div>
+                    </form>
                 </div>
 
             </div>
@@ -189,6 +191,22 @@
             }).done(function (data) {
                 $('#registration-form').html(data);
             });
+        });
+
+        $(document).on('change.select2', '#user_id', function (e) {
+            const user_id = $(this).val();
+            console.log(user_id);
+
+            $.ajax({
+                url: "{{ Url('statistics/') }}",
+                method: "get",
+                data: {
+                    user_id: user_id
+                }
+            }).done(function (data) {
+                $('#registration-form').html(data);
+            });
+
         });
     </script>
 @endsection

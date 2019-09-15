@@ -20,7 +20,7 @@
             <td class="text-center"><h2>{{ count($customer) }}</h2></td>
             <td class="text-center"><h2>{{count($books) + count($receive) + count($comment)}}</h2></td>
 {{--            <td class="text-center"><h2>0</h2></td>--}}
-            <td class="text-center"><h2>{{$orders }}</h2></td>
+            <td class="text-center"><h2>{{$countOrders }}</h2></td>
             <td class="text-center"><h2>{{number_format((int)$commision+($price_customer?:0 * 20000))}}</h2></td>
         </tr>
         <tr>
@@ -99,7 +99,7 @@
                         Đơn hàng :
                     </div>
                     <div class="col-md-4 col-xs-6 title">
-                        {{$orders}}
+                        {{$countOrders}}
                     </div>
                 </div>
             </td>
@@ -175,27 +175,32 @@
         @foreach($orders as $order)
         <tr>
             <td class="text-center">{{$loop->iteration}}</td>
-            <td class="text-center"></td>
+            <td class="text-center">
+                @foreach($order->orderDetails as $orderDetail)
+                    {{ @$orderDetail->service->name }},
+                @endforeach
+                - {{$order->customer->full_name}}
+            </td>
             <td class="text-center">{{ $order->created_at }}</td>
             <td class="text-center">{{ number_format($order->all_total) }}</td>
             <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
             <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
             <td class="text-center">{{ number_format($order->the_rest) }}</td>
-            <td class="text-center"></td>
+            <td class="text-center">{{ $order->rose_price }}</td>
             <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
         </tr>
+        @endforeach
         <tr>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
             <td class="text-center bold">Tổng</td>
-            <td class="text-center bold">  </td>
             <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center">{{ number_format($orders->sum('all_total')) }}</td>
+            <td class="text-center">{{ number_format($orders->sum('gross_revenue')) }}</td>
+            <td class="text-center">{{ number_format($orders->sum('gross_revenue')) }}</td>
+            <td class="text-center">{{ number_format($orders->sum('the_rest')) }}</td>
+            <td class="text-center">{{ number_format($orders->sum('rose_price')) }}</td>
             <td class="text-center bold">  </td>
         </tr>
-        @endforeach
         @else
             <tr>
                 <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>
