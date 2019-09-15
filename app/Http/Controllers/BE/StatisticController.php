@@ -99,7 +99,18 @@ class StatisticController extends Controller
             $price_commision = array_sum($price_commision);
         }
 
-
+        foreach ($orders as $order) {
+            foreach ($commision as $item) {
+                if ($item->customer_id && $order->customer->mkt_id) {
+                    foreach (json_decode($item->customer_id) as $key => $value) {
+                        if ($order->id == $item->order_id) {
+                            $rosePrice = array_sum(json_decode($item->rose_price));
+                            $order->rose_price = $rosePrice[$key];
+                        }
+                    }
+                }
+            }
+        }
 
         $price_customer = count($price_customer);
         $commision = $price_commision;
