@@ -50,7 +50,7 @@
                 <div class="col-md-3 col-xs-6 wd-200 mg-b-30">
                     <form action="">
                         <div class="input-group">
-                            {!! Form::select('user_id', $user, null, array('id' => 'user_id', 'class' => 'form-control select2', 'data-placeholder' => 'Chọn nhân viên')) !!}
+                            {!! Form::select('user_id', $user, Auth::user()->id, array('id' => 'user_id', 'class' => 'form-control select2', 'data-placeholder' => 'Chọn nhân viên')) !!}
                         </div>
                     </form>
                 </div>

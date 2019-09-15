@@ -10,7 +10,7 @@ class Commission extends Model
     protected $guarded = ['id'];
     protected $table = 'commissions';
 
-    public function order()
+    public function orders()
     {
         return $this->belongsTo(Order::class, 'order_id', 'id');
     }

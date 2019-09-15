@@ -66,7 +66,6 @@ class StatisticController extends Controller
         $comment = Schedule::orderBy('id', 'desc');
 
         $price_customer = Customer::where('status_id', 13)->get();
-        $commision = Commission::orderBy('id', 'desc');
 
         $customer = $customer->where('telesales_id', $input['user_id'])->where('status_id',
             StatusCode::NEW)->with('source_customer')->get();
@@ -74,7 +73,7 @@ class StatisticController extends Controller
         $receive = $receive->where('creator_id', $input['user_id'])->get();
         $comment = $comment->where('user_id', $input['user_id'])->get();
 
-        $orders = Order::with('commisions', 'customer')
+        $orders = Order::with('commission', 'customer')
             ->whereHas('customer', function ($query) use ($input) {
             $query->where('mkt_id', $input['user_id']);
         });
@@ -84,10 +83,10 @@ class StatisticController extends Controller
         $orders = $orders->get();
 
         foreach ($orders as $order) {
-            $order->rose_price = $order->commisions->sum('earn');
+            $order->rose_price = $order->commission->sum('earn');
         }
 
-        $commissions = Commission::with('order')->where('user_id', $input['user_id'])->get();
+        $commissions = Commission::with('orders')->where('user_id', $input['user_id'])->get();
 
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_home',
