@@ -21,7 +21,7 @@
             <td class="text-center"><h2>{{count($books) + count($receive) + count($comment)}}</h2></td>
 {{--            <td class="text-center"><h2>0</h2></td>--}}
             <td class="text-center"><h2>{{$countOrders }}</h2></td>
-            <td class="text-center"><h2>{{number_format((int)$commision+($price_customer?:0 * 20000))}}</h2></td>
+            <td class="text-center"><h2>{{number_format($orders->sum('gross_revenue'))}}</h2></td>
         </tr>
         <tr>
             <td class="text-center">
@@ -109,7 +109,7 @@
                         Khách hàng mới mua dịch vụ :
                     </div>
                     <div class="col-md-4 col-xs-6 title">
-                        {{number_format((int)$price_customer * 20000)}}
+                        {{--{{number_format(}}--}}
                     </div>
                 </div>
                 <div class="col row padding-bottom">
@@ -117,7 +117,7 @@
                         Hoa hồng :
                     </div>
                     <div class="col-md-4 col-xs-6 title">
-                        {{number_format((int)$commision)}}
+                        {{number_format($commissions->sum('earn'))}}
                     </div>
                 </div>
             </td>
