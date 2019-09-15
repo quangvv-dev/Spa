@@ -20,8 +20,9 @@ class CommissionController extends Controller
         $title = 'Hoa hồng upsale';
         $customers = User::where('role', '<>', UserConstant::MARKETING)->pluck('full_name', 'id');
         $doc = Commission::where('order_id', $id)->first();
+        $commissions = Commission::where('order_id', $id)->get();
         if (isset($doc) && $doc) {
-            return view('commisstion.index', compact('title', 'customers', 'doc'));
+            return view('commisstion.index', compact('title', 'customers', 'doc', 'commissions'));
         } else {
             return view('commisstion.index', compact('title', 'customers'));
         }
@@ -29,35 +30,23 @@ class CommissionController extends Controller
 
     public function store(Request $request, $id)
     {
-        $price = [];
-        if (isset($request->rose_price) && $request->rose_price) {
-            foreach ($request->rose_price as $item) {
-                $price[] = str_replace(',', '', $item);
-            }
-        }
-        $request->merge([
-            'customer_id' => json_encode($request->customer_id),
-            'rose_price'  => json_encode($price),
-            'order_id'    => $id,
-        ]);
-        Commission::create($request->except('_token'));
+        $input = $request->except('_token');
+        $input['earn'] = str_replace(',', '', $request->earn);
+        $input['order_id'] = $id;
+
+        Commission::create($input);
         return redirect(url('order/' . $id . '/show'));
     }
 
-    public function update(Request $request, Commission $id)
+    public function update(Request $request, Commission $commission)
     {
-        $price = [];
-        if (isset($request->rose_price) && $request->rose_price) {
-            foreach ($request->rose_price as $item) {
-                $price[] = str_replace(',', '', $item);
-            }
-        }
-        $request->merge([
-            'customer_id' => json_encode($request->customer_id),
-            'rose_price'  => json_encode($price),
-            'order_id'    => $id->id,
-        ]);
-        $id->update($request->except('_token', 'order_id'));
-        return redirect('order/' . $id->id . '/show');
+        $commission1 = Commission::where('id', $request->id)->first();
+        $input = $request->except('_token', 'order_id');
+        $input['earn'] = str_replace(',', '', $request->earn);
+        $input['order_id'] = $commission1->order_id;
+
+        $commission->fill($input);
+        $commission->save();
+        return redirect('order/' . $commission1->order_id . '/show');
     }
 }
