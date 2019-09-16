@@ -15,7 +15,7 @@ class Customer extends Model
 
     public static function search($param)
     {
-        $data = self::with('status', 'marketing', 'category', 'orders');
+        $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer');
         if (isset($param)) {
             $data = $data->when(isset($param['search']), function ($query) use ($param) {
                 $query->where(function ($q) use ($param) {
@@ -29,7 +29,9 @@ class Customer extends Model
                     });
                 })
                 ->when(isset($param['group']), function ($query) use ($param) {
-                    $query->where('group_id', $param['group']);
+                    $query->whereHas('categories', function ($q) use ($param) {
+                        $q->where('categories.id', $param['group']);
+                    });
                 })
                 ->when(isset($param['telesales']), function ($query) use ($param) {
                     $query->where('telesales_id', $param['telesales']);
