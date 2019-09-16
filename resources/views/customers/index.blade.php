@@ -68,7 +68,7 @@
                         <li class="dropdown_action"><a id="change_relations">Mối quan hệ</a></li>
                     </ul>
                 </div>
-                <div>
+                <div style="margin-left: 10px">
                     <button data-name="" class="btn btn-default status btn white account_relation position" style="height: 40px;">
                         TẤT CẢ
                         <span class="not-number-account white">{{ count($customers) }}</span>
