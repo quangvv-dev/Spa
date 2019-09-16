@@ -1,3 +1,8 @@
+<style>
+    .page-header{
+        display: none;
+    }
+</style>
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
