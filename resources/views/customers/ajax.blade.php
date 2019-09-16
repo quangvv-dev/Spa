@@ -29,7 +29,7 @@
         </thead>
         <tbody style="background: white;">
         @if (count($customers))
-            @foreach($customers as $customer)
+            @foreach($customers as $key => $customer)
                 <tr>
                     <td class="text-center"
                         style="background: {{isset($customer->status)?$customer->status->color :''}}"><input
@@ -45,7 +45,7 @@
                         {{--@endif--}}
                         {{--                        <a title="Trao đổi" class="btn" href="{{ url('group_comments/'. $customer->id) }}"><i class="fas fa-users"></i></a>--}}
                     {{--</td>--}}
-                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td class="text-center">{{ $rank ++ }}</td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center"><a
                                 href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>

@@ -62,14 +62,15 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $statuses = Status::getRelationship();
-        $title = 'Danh sách khách hàng';
         $customers = Customer::search($request->all());
+        $customerCount = Customer::getAll()->count();
+        $rank = $customers->firstItem();
 
         if ($request->ajax()) {
-            return Response::json(view('customers.ajax', compact('customers', 'statuses', 'title'))->render());
+            return Response::json(view('customers.ajax', compact('customers', 'statuses', 'customerCount', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'title'));
+        return view('customers.index', compact('customers', 'statuses', 'customerCount', 'rank'));
     }
 
     /**
