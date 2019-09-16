@@ -11,18 +11,6 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                {{--<h3 class="card-title">{{$title}}</h3></br>--}}
-                <div class="col relative">
-                    <a title="Upload Data" style="position: absolute;right: 17%" class="btn" href="#"
-                       data-toggle="modal" data-target="#myModal">
-                        <i class="fas fa-upload"></i></a>
-                    <a title="Download Data" style="position: absolute;right: 13%" class="btn"
-                       href="{{url('customer-export')}}">
-                        <i class="fas fa-download"></i></a>
-                    <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
-                                class="fa fa-plus-circle"></i>Thêm mới</a></div>
-            </div>
-            <div class="card-header">
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
                        type="text" id="search">
                 <div class="col-md-2 col-xs-12">
@@ -30,6 +18,16 @@
                 </div>
                 <div class="col-md-2 col-xs-12">
                     {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
+                </div>
+                <div class="col relative">
+                    <a title="Upload Data" style="position: absolute;right: 26%" class="btn" href="#"
+                       data-toggle="modal" data-target="#myModal">
+                        <i class="fas fa-upload"></i></a>
+                    <a title="Download Data" style="position: absolute;right: 21%" class="btn"
+                       href="{{url('customer-export')}}">
+                        <i class="fas fa-download"></i></a>
+                    <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
+                                class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
             </div>
             <div class="card-header">
