@@ -11,7 +11,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                {{--<h3 class="card-title">{{$title}}</h3></br>--}}
                 <div class="col relative">
                     <a title="Upload Data" style="position: absolute;right: 17%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
@@ -67,6 +67,12 @@
                                 hẳn</a></li>
                         <li class="dropdown_action"><a id="change_relations">Mối quan hệ</a></li>
                     </ul>
+                </div>
+                <div>
+                    <button data-name="" class="btn btn-default status btn white account_relation position" style="height: 40px;">
+                        TẤT CẢ
+                        <span class="not-number-account white">{{ count($customers) }}</span>
+                    </button>
                 </div>
                 <div style="margin-left: 10px">
                     <button class="btn btn-default" style="height: 40px;">
