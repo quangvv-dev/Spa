@@ -89,7 +89,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('group_id') ? 'has-error' : '' }}">
-                            {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => 'required')) !!}
+                            {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => 'required control-label')) !!}
                             @if(isset($customer))
                             <select class="form-control select2" name="group_id[]" multiple="multiple" data-placeholder="Chọn nhóm khách hàng">
                                 @foreach($categories as $item)
@@ -97,14 +97,14 @@
                                 @endforeach
                             </select>
                             @else
-                            {!! Form::select('group_id[]', $group, null, array('class' => 'form-control select2', 'multiple' => 'multiple')) !!}
+                            {!! Form::select('group_id[]', $group, null, array('class' => 'form-control select2', 'multiple' => 'multiple', 'data-placeholder'=> "Chọn nhóm khách hàng" )) !!}
                             <span class="help-block">{{ $errors->first('group_id', ':message') }}</span>
                                 @endif
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('source_id') ? 'has-error' : '' }}">
-                            {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => ' required')) !!}
+                            {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => 'required control-label')) !!}
                             {!! Form::select('source_id', $source, @$customer->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
                             <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
                         </div>
@@ -161,6 +161,12 @@
                     status_id: {
                         required: true
                     },
+                    'group_id[]': {
+                        required: true
+                    },
+                    source_id: {
+                        required: true
+                    },
                 },
                 messages: {
                     full_name: "Chưa nhập tên",
@@ -170,6 +176,8 @@
                     },
                     gender: "Chưa chọn giới tính",
                     status_id: "Chưa chọn trạng thái",
+                    'group_id[]': "Chưa chọn nhóm khách hàng",
+                    source_id: "Chưa chọn nguồn khách hàng",
                 },
             });
         });
