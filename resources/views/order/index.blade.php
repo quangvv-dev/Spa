@@ -44,7 +44,7 @@
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
-                        {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address', 'required' => true)) !!}
+                        {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address')) !!}
                         <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                     </div>
                 </div>
@@ -199,26 +199,34 @@
 
         $("#fvalidate").validate({
             rules: {
-                service_id: {
+                user_id: {
                     required: true
                 },
-                quantity: {
+                full_name: {
                     required: true
                 },
-                price: {
+                phone: {
                     required: true
                 },
-                count_day: {
-                    min: 2
+                status_id: {
+                    required: true
+                },
+                'service_id[]': {
+                    required: true
+                },
+                'price[]': {
+                    required: true
                 },
             },
             messages: {
-                service_id: "Chưa chọn dịch vụ",
-                quantity: {
-                    required: "Chưa nhập số lượng",
+                user_id: "Chưa chọn khách hàng",
+                full_name: {
+                    required: "Tên khách hàng không được để trống",
                 },
-                price: "Chưa nhập giá",
-                count_day: "Số buổi phải lớn hơn 2",
+                phone: "Số điện thoại không được để trống",
+                status_id: "Chưa chọn trạng thái",
+                'service_id[]': "Chưa chọn dịch vụ",
+                'price[]': "Chưa nhập giá",
             },
         });
 

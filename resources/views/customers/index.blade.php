@@ -86,7 +86,7 @@
                                     class="not-number-account white">{{ $item->customers->count() }}</span></button>
                     @endforeach
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div id="div_created_at_dropdown" style="float: right !important;"
                          class="display position pointer mt5 open" rel="tooltip"
                          data-placement="left" data-original-title="Thời gian tạo khách hàng"
