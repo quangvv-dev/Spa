@@ -4,6 +4,8 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Models\Category;
+use App\Models\Customer;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
@@ -17,7 +19,8 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->list[0] = ('category.parent');
-        $categories = Category::orderBy('parent_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('Danh mục cha ...', 0)->toArray();
+        $categories = Category::orderBy('parent_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
+            'id')->prepend('Danh mục cha ...', 0)->toArray();
         view()->share([
             'category_pluck' => $categories,
         ]);
@@ -152,7 +155,7 @@ class CategoryController extends Controller
 
         return $data = [
             'customer_id' => $customerId,
-            'categories' => $categories
+            'categories'  => $categories,
         ];
     }
 }
