@@ -49,7 +49,7 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::where('id', $customerId)->first();
-        $spaTherapissts = User::where('role', UserConstant::WAITER)->pluck('full_name', 'id');
+        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         $title = 'Tạo đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
 
