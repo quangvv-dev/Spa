@@ -8,6 +8,12 @@
                     .page-header {
                         display: none;
                     }
+                    .menu2.hidden-sm.hidden-xs{
+                        display: none !important;
+                    }
+                    a.logo img{
+                        display: none !important;
+                    }
                 </style>
             </div>
             <!-- table-responsive -->
@@ -16,17 +22,17 @@
 @endsection
 @section('_script')
     <script>
-        $(window).bind("load", function () {
-            $('.menu2.hidden-sm.hidden-xs').css('display', 'none');
-            $('a.logo img').css('display', 'none');
-            $('a[href^="#/user"]').each(function () {
-                var oldUrl = $(this).attr("href"); // Get current url
-                if (oldUrl == '#/user') {
-                    var newUrl = '#'; // Create new url
-                    $(this).attr("href", newUrl); // Set herf value
-                }
-            });
-        });
-        // $('.dropdown-menu.dropdown-avatar h4 a')
+        // $(window).bind("load", function () {
+        //     $('.menu2.hidden-sm.hidden-xs').css('display', 'none');
+        //     $('a.logo img').css('display', 'none');
+        //     $('a[href^="#/user"]').each(function () {
+        //         var oldUrl = $(this).attr("href"); // Get current url
+        //         if (oldUrl == '#/user') {
+        //             var newUrl = '#'; // Create new url
+        //             $(this).attr("href", newUrl); // Set herf value
+        //         }
+        //     });
+        // });
+        // // $('.dropdown-menu.dropdown-avatar h4 a')
     </script>
 @endsection
