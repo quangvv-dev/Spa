@@ -17,9 +17,10 @@
 @section('_script')
     <script>
         $(window).bind("load", function () {
-            $('.menu2.hidden-sm.hidden-xs').addClass('display', 'none');
-            $('a.logo img').addClass('display', 'none');
-            $('a[href^="#/user"]').each(function () {
+            $('iframe.menu2.hidden-sm.hidden-xs').addClass('display', 'none');
+            console.log('iframe.menu2.hidden-sm.hidden-xs');
+            $('iframe a.logo img').addClass('display', 'none');
+            $('iframe a[href^="#/user"]').each(function () {
                 var oldUrl = $(this).attr("href"); // Get current url
                 if (oldUrl == '#/user') {
                     var newUrl = '#'; // Create new url
