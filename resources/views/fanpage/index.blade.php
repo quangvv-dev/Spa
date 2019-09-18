@@ -17,11 +17,10 @@
 @section('_script')
     <script>
         $(window).bind("load", function () {
-            $('iframe.menu2.hidden-sm.hidden-xs').addCss('display', 'none');
-            $('iframe a.logo img').addCss('display', 'none');
+            $('iframe.menu2.hidden-sm.hidden-xs').css('display', 'none');
+            $('iframe a.logo img').css('display', 'none');
             $('iframe a[href^="#/user"]').each(function () {
                 var oldUrl = $(this).attr("href"); // Get current url
-                console.log(oldUrl);
                 if (oldUrl == '#/user') {
                     var newUrl = '#'; // Create new url
                     $(this).attr("href", newUrl); // Set herf value
