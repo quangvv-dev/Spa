@@ -26,9 +26,13 @@
 @endsection
 @section('_script')
     <script>
-        $('iframe').load(function () {
-            $('iframe').contents().find("head")
-                .append($("<style type='text/css'>.menu2.hidden-sm.hidden-xs {display: none !important;}a.logo img {display: none !important;}  </style>"));
+        $(window).load(function () {
+            $('iframe').load(function () {
+                console.log($('iframe').contents());
+                $('iframe').contents().find("head")
+                    .append($("<style type='text/css'>.menu2.hidden-sm.hidden-xs {display: none !important;}a.logo img {display: none !important;}  </style>"));
+            });
         });
+
     </script>
 @endsection
