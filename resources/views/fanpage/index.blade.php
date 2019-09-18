@@ -4,11 +4,13 @@
         .page-header {
             display: none;
         }
-        nav.menu2.hidden-sm.hidden-xs{
-            display: none;
+
+        nav.menu2.hidden-sm.hidden-xs {
+            display: none !important;
         }
+
         a.logo img {
-            display: none;
+            display: none !important;
         }
     </style>
     <div class="col-md-12 col-lg-12">
@@ -22,10 +24,10 @@
 @endsection
 @section('_script')
     <script>
-        $(document).ready(function(){
-            $('a[href^="http://"]').each(function(){
+        $(document).ready(function () {
+            $('a[href^="http://"]').each(function () {
                 var oldUrl = $(this).attr("href"); // Get current url
-                if (oldUrl=='#/user'){
+                if (oldUrl == '#/user') {
                     var newUrl = '#'; // Create new url
                     $(this).attr("href", newUrl).trigger('change'); // Set herf value
                 }
