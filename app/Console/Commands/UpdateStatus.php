@@ -43,7 +43,7 @@ class UpdateStatus extends Command
         $status = Status::where('code', 'like', '%da_mua_dv%')->first();
         if (isset($status) && $status) {
             $data = Customer::with('status', 'orders')->whereHas('status', function ($q) {
-                $q->where('status.code', 'like', '%da_mua_dv%');
+                $q->where('status.code', 'like', '%moi%');
             });
             $data = $data->get();
             if (count($data)) {
