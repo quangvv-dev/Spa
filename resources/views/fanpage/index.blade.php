@@ -4,24 +4,24 @@
         <div class="card">
             <div id="registration-form">
                 <iframe width="100%" height="950px" src="https://smax.in/#/?returnUrl=%2Ffbpage"></iframe>
+                <style>
+                    .page-header {
+                        display: none;
+                    }
+
+                    nav.menu2.hidden-sm.hidden-xs {
+                        display: none !important;
+                    }
+
+                    a.logo img {
+                        display: none !important;
+                    }
+                </style>
             </div>
             <!-- table-responsive -->
         </div>
     </div>
 @endsection
-<style>
-    .page-header {
-        display: none;
-    }
-
-    nav.menu2.hidden-sm.hidden-xs {
-        display: none !important;
-    }
-
-    a.logo img {
-        display: none !important;
-    }
-</style>
 @section('_script')
     <script>
         $(document).ready(function () {
