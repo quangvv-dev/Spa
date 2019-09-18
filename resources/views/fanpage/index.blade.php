@@ -10,6 +10,10 @@
         a.logo img{
             display: none !important;
         }
+
+        nav.menu2.hidden-sm.hidden-xs {
+            display: none;
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -22,6 +26,9 @@
 @endsection
 @section('_script')
     <script>
+        setTimeout(function () {
+            alert('aaa');
+        }, 5000)
         // $(window).bind("load", function () {
         //     $('.menu2.hidden-sm.hidden-xs').css('display', 'none');
         //     $('a.logo img').css('display', 'none');
