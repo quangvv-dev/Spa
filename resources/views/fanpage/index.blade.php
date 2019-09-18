@@ -5,17 +5,15 @@
             display: none;
         }
 
-        .menu2.hidden-sm.hidden-xs {
-            display: none !important;
-        }
+        /*.menu2.hidden-sm.hidden-xs {display: none !important;}*/
 
         a.logo img {
             display: none !important;
         }
 
-        nav.menu2.hidden-sm.hidden-xs {
-            display: none;
-        }
+        /*nav.menu2.hidden-sm.hidden-xs {*/
+        /*    display: none;*/
+        /*}*/
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -28,21 +26,9 @@
 @endsection
 @section('_script')
     <script>
-        setTimeout(function () {
-            $('.menu2.hidden-sm.hidden-xs').css('display', 'none');
-            $('a.logo img').css('display', 'none');
-        }, 7000)
-        // $(window).bind("load", function () {
-        //     $('.menu2.hidden-sm.hidden-xs').css('display', 'none');
-        //     $('a.logo img').css('display', 'none');
-        //     $('a[href^="#/user"]').each(function () {
-        //         var oldUrl = $(this).attr("href"); // Get current url
-        //         if (oldUrl == '#/user') {
-        //             var newUrl = '#'; // Create new url
-        //             $(this).attr("href", newUrl); // Set herf value
-        //         }
-        //     });
-        // });
-        // // $('.dropdown-menu.dropdown-avatar h4 a')
+        $('iframe').load(function () {
+            $('iframe').contents().find("head")
+                .append($("<style type='text/css'>.menu2.hidden-sm.hidden-xs {display: none !important;}a.logo img {display: none !important;}  </style>"));
+        });
     </script>
 @endsection
