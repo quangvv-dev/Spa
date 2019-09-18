@@ -8,14 +8,6 @@
                     .page-header {
                         display: none;
                     }
-
-                    nav.menu2.hidden-sm.hidden-xs {
-                        display: none !important;
-                    }
-
-                    a.logo img {
-                        display: none !important;
-                    }
                 </style>
             </div>
             <!-- table-responsive -->
@@ -32,6 +24,10 @@
                     $(this).attr("href", newUrl).trigger('change'); // Set herf value
                 }
             });
+        });
+        $(window).bind("load", function () {
+            $('.menu2.hidden-sm.hidden-xs').addClass('display', 'none');
+            $('a.logo img').addClass('display', 'none');
         });
         // $('.dropdown-menu.dropdown-avatar h4 a')
     </script>
