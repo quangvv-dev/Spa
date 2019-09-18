@@ -8,8 +8,10 @@
 
 namespace App\Services;
 
+use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\Customer;
+use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 
 class CustomerService
@@ -62,5 +64,22 @@ class CustomerService
 
         return $customer;
 
+    }
+
+    public function updateStatus($data)
+    {
+        $id = [];
+
+        foreach ($data as $item) {
+            if ($item->orders->sum('all_total') >= Customer::VIP_STATUS) {
+                $id[] = $item->id;
+            }
+        }
+
+        $vip = Status::where('type', StatusCode::RELATIONSHIP)->where('name', 'Vip 1')->first();
+
+        $customers = $this->customer->whereIn('id', $id)->update(['status_id' => $vip->id]);
+
+        return $customers;
     }
 }

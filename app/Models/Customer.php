@@ -12,6 +12,7 @@ class Customer extends Model
 {
     use SoftDeletes;
     protected $guarded = ['id'];
+    const VIP_STATUS = 8000000;
 
     public static function search($param)
     {
