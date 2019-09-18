@@ -42,12 +42,13 @@ class UpdateStatus extends Command
     {
         $status = Status::where('code', 'like', '%da_mua_dv%')->first();
         if (isset($status) && $status) {
-            $data = Customer::with('status')->whereHas('status', function ($q) {
-                $q->where('name', 'like', '%Mới%');
-            })->get();
+            $data = Customer::with('status', 'orders')->whereHas('status', function ($q) {
+                $q->where('status.code', 'like', '%moi%');
+            });
+            $data = $data->get();
             if (count($data)) {
                 foreach ($data as $item) {
-                    if (isset($item->orders) && $item->orders) {
+                    if (isset($item->orders) && count($item->orders)) {
                         $item->update(['status_id' => $status->id]);
                     }
                 }

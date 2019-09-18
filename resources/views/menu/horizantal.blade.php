@@ -23,7 +23,7 @@
                 <div class="sub-item">
                     <ul>
                         <li>
-                            <a href="#">Fanpage </a>
+                            <a href="{{route('fanpage.index')}}">Fanpage </a>
                         </li>
                         <li>
                             <a href="#">SMS</a>
