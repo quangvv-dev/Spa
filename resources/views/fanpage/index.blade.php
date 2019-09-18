@@ -16,18 +16,16 @@
 @endsection
 @section('_script')
     <script>
-        $(document).ready(function () {
-            $('a[href^="http://"]').each(function () {
+        $(window).bind("load", function () {
+            $('.menu2.hidden-sm.hidden-xs').addClass('display', 'none');
+            $('a.logo img').addClass('display', 'none');
+            $('a[href^="#/user"]').each(function () {
                 var oldUrl = $(this).attr("href"); // Get current url
                 if (oldUrl == '#/user') {
                     var newUrl = '#'; // Create new url
                     $(this).attr("href", newUrl).trigger('change'); // Set herf value
                 }
             });
-        });
-        $(window).bind("load", function () {
-            $('.menu2.hidden-sm.hidden-xs').addClass('display', 'none');
-            $('a.logo img').addClass('display', 'none');
         });
         // $('.dropdown-menu.dropdown-avatar h4 a')
     </script>
