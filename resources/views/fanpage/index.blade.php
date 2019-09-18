@@ -18,10 +18,10 @@
     <script>
         $(window).bind("load", function () {
             $('iframe.menu2.hidden-sm.hidden-xs').addClass('display', 'none');
-            console.log('iframe.menu2.hidden-sm.hidden-xs');
             $('iframe a.logo img').addClass('display', 'none');
             $('iframe a[href^="#/user"]').each(function () {
                 var oldUrl = $(this).attr("href"); // Get current url
+                console.log(oldUrl);
                 if (oldUrl == '#/user') {
                     var newUrl = '#'; // Create new url
                     $(this).attr("href", newUrl).trigger('change'); // Set herf value
