@@ -4,10 +4,12 @@
         .page-header {
             display: none;
         }
-        .menu2.hidden-sm.hidden-xs{
+
+        .menu2.hidden-sm.hidden-xs {
             display: none !important;
         }
-        a.logo img{
+
+        a.logo img {
             display: none !important;
         }
 
@@ -27,8 +29,9 @@
 @section('_script')
     <script>
         setTimeout(function () {
-            alert('aaa');
-        }, 5000)
+            $('.menu2.hidden-sm.hidden-xs').css('display', 'none');
+            $('a.logo img').css('display', 'none');
+        }, 7000)
         // $(window).bind("load", function () {
         //     $('.menu2.hidden-sm.hidden-xs').css('display', 'none');
         //     $('a.logo img').css('display', 'none');
