@@ -40,11 +40,19 @@ class UpdateStatus extends Command
      */
     public function handle()
     {
-        $status = Status::where('code', 'like', '%moi%')->first();
+        $status = Status::where('code', 'like', '%da_mua_dv%')->first();
         if (isset($status) && $status) {
-            Customer::has('orders')->has('status')->whereHas('status', function ($q) {
-                $q->where('status.code', 'like', '%moi%');
-            })->update(['status_id' => $status->id]);
+            $data = Customer::with('status', 'orders')->whereHas('status', function ($q) {
+                $q->where('status.code', 'like', '%da_mua_dv%');
+            });
+            $data = $data->get();
+            if (count($data)) {
+                foreach ($data as $item) {
+                    if (isset($item->orders) && count($item->orders)) {
+                        $item->update(['status_id' => $status->id]);
+                    }
+                }
+            }
         }
     }
 }
