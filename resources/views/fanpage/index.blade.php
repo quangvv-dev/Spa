@@ -1,18 +1,5 @@
 @extends('layout.app')
 @section('content')
-    <style>
-        .page-header {
-            display: none;
-        }
-
-        nav.menu2.hidden-sm.hidden-xs {
-            display: none !important;
-        }
-
-        a.logo img {
-            display: none !important;
-        }
-    </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div id="registration-form">
@@ -22,6 +9,19 @@
         </div>
     </div>
 @endsection
+<style>
+    .page-header {
+        display: none;
+    }
+
+    nav.menu2.hidden-sm.hidden-xs {
+        display: none !important;
+    }
+
+    a.logo img {
+        display: none !important;
+    }
+</style>
 @section('_script')
     <script>
         $(document).ready(function () {
