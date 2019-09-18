@@ -15,6 +15,16 @@
         /*    display: none;*/
         /*}*/
     </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            setTimeout(function(){
+                var iframe = document.getElementById("frameDemo");
+                var elmnt = iframe.contentWindow.document.getElementsByClassName("menu2")[0];
+                $(elmnt).css('display', 'none');
+            }, 3000);
+        });
+    </script>
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div id="registration-form">
@@ -26,17 +36,5 @@
     </div>
 @endsection
 @section('_script')
-    <script>
-        $(window).bind("load", function () {
-            $("#frameDemo").contents().find(".menu2.hidden-sm.hidden-xs").css("display", "none");
-        });
-        // $(window).load(function () {
-        //     $('iframe').load(function () {
-        //         console.log($('iframe').contents());
-        //     //     $('iframe').contents().find("head")
-        //     //         .append($("<style type='text/css'>.menu2.hidden-sm.hidden-xs {display: none !important;}a.logo img {display: none !important;}  </style>"));
-        //         $("#frameDemo").contents().find( ".menu2.hidden-sm.hidden-xs" ).css( "display-color", "none" );
-        // });
-        // });
-    </script>
+
 @endsection
