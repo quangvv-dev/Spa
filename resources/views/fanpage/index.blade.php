@@ -4,6 +4,12 @@
         .page-header {
             display: none;
         }
+        nav.menu2.hidden-sm.hidden-xs{
+            display: none;
+        }
+        a.logo img {
+            display: none;
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -15,4 +21,16 @@
     </div>
 @endsection
 @section('_script')
+    <script>
+        $(document).ready(function(){
+            $('a[href^="http://"]').each(function(){
+                var oldUrl = $(this).attr("href"); // Get current url
+                if (oldUrl=='#/user'){
+                    var newUrl = '#'; // Create new url
+                    $(this).attr("href", newUrl).trigger('change'); // Set herf value
+                }
+            });
+        });
+        // $('.dropdown-menu.dropdown-avatar h4 a')
+    </script>
 @endsection
