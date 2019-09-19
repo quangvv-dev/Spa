@@ -3,7 +3,7 @@
         display: none;
     }
 </style>
-<div class="table-responsive">
+<div class="table-responsive" style="position: relative">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
@@ -45,7 +45,7 @@
                         {{--@endif--}}
                         {{--                        <a title="Trao đổi" class="btn" href="{{ url('group_comments/'. $customer->id) }}"><i class="fas fa-users"></i></a>--}}
                     {{--</td>--}}
-                    <td class="text-center">{{ $rank ++ }}</td>
+                    <td class="text-center"></td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center"><a
                                 href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
@@ -81,13 +81,57 @@
         @endif
         </tbody>
     </table>
-    <div class="pull-left">
-        <div class="page-info">
-            {{ 'Tổng số ' . $customers->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
-        </div>
+</div>
+<div style="position: absolute; top: 121px; left: 0;width: 830px; overflow: hidden">
+    <div style="overflow: hidden">
+        <table class="table card-table table-vcenter text-nowrap table-primary">
+            <thead class="bg-primary text-white">
+            <tr>
+                <th><input type="checkbox" class="selectall myCheck"/></th>
+                <th class="text-white text-center">STT</th>
+                <th class="text-white text-center">Ngày tạo KH</th>
+                <th class="text-white text-center">Họ tên</th>
+                <th class="text-white text-center">SĐT</th>
+                <th class="text-white text-center">Nhóm KH</th>
+                <th class="text-white text-center">Trạng thái</th>
+            </tr>
+            </thead>
+            <tbody style="background: white;">
+            @if (count($customers))
+                @foreach($customers as $key => $customer)
+                    <tr>
+                        <td class="text-center"
+                            style="background: {{isset($customer->status)?$customer->status->color :''}}; height: 63px"><input
+                                    type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
+                        <td class="text-center">{{ $rank ++ }}</td>
+                        <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
+                        <td class="text-center"><a
+                                    href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
+                        <td class="text-center">{{ $customer->phone }}</td>
+                        <td class="text-center category-db"
+                            data-id="{{$customer->id}}">
+                            @foreach($customer->categories as $category)
+                                {{ $category->name }},
+                            @endforeach
+                        </td>
+                        <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    {{--<td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>--}}
+                </tr>
+            @endif
+            </tbody>
+        </table>
     </div>
-    <div class="pull-right">
-        {{ $customers->appends(['search' => request()->search ])->links() }}
+</div>
+<div class="pull-left">
+    <div class="page-info">
+        {{ 'Tổng số ' . $customers->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
     </div>
+</div>
+<div class="pull-right">
+    {{ $customers->appends(['search' => request()->search ])->links() }}
 </div>
 <!-- table-responsive -->
