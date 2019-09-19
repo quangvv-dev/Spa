@@ -19,6 +19,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     Route::resource('status', 'StatusController');
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
+    Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryController');
     Route::resource('services', 'ServiceController');
     Route::resource('users', 'UserController')->middleware('admin');

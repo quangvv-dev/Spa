@@ -115,7 +115,6 @@
                 <button type="submit" class="btn btn-success">Lưu</button>
                 <a href="{{route('customers.index')}}" class="btn btn-danger">Trở lại</a>
             </div>
-
             {{ Form::close() }}
 
         </div>
