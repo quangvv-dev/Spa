@@ -82,7 +82,7 @@
         </tbody>
     </table>
 </div>
-<div style="position: absolute; top: 121px; left: 0;width: 830px; overflow: hidden">
+<div style="position: absolute; top: 121px; left: 0;width: 770px; overflow: hidden">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary">
             <thead class="bg-primary text-white">
@@ -104,7 +104,7 @@
                             style="background: {{isset($customer->status)?$customer->status->color :''}}; height: 63px"><input
                                     type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                         <td class="text-center">{{ $rank ++ }}</td>
-                        <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
+                        <td class="text-center">{{ date('d-m-Y', strtotime($customer->created_at)) }}</td>
                         <td class="text-center"><a
                                     href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
                         <td class="text-center">{{ $customer->phone }}</td>
