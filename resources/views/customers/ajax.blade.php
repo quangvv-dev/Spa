@@ -82,7 +82,7 @@
         </tbody>
     </table>
 </div>
-<div style="position: absolute; top: 121px; left: 0;width: 770px; overflow: hidden">
+<div style="position: absolute; top: 121px; left: 0;width: 60%; overflow: hidden">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary">
             <thead class="bg-primary text-white">
