@@ -123,9 +123,9 @@
                                         </div>
                                         <div class="col-md-12" style="padding-top: 10px">
                                             <button type="submit" class="btn btn-success">Lưu</button>
-                                            <a class="btn btn-primary btn-flat"
-                                               href="{{url('orders')}}"><i class="fa fa-arrow-right"></i>Tới tạo đơn
-                                                hàng</a>
+{{--                                            <a class="btn btn-primary btn-flat"--}}
+{{--                                               href="{{url('orders')}}"><i class="fa fa-arrow-right"></i>Tới tạo đơn--}}
+{{--                                                hàng</a>--}}
                                         </div>
                                     </div>
                                     {{ Form::close() }}

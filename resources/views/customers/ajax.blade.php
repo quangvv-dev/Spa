@@ -2,6 +2,17 @@
     .page-header{
         display: none;
     }
+
+    @media only screen and (max-width: 1439px) {
+        .table-ajax{
+            width: 71%;
+        }
+    }
+    @media only screen and (min-width: 1440px) {
+        .table-ajax{
+            width: 50%;
+        }
+    }
 </style>
 <div class="table-responsive" style="position: relative">
     <table class="table card-table table-vcenter text-nowrap table-primary">
@@ -18,6 +29,7 @@
             <th class="text-white text-center">Mô tả</th>
             <th class="text-white text-center">Người tạo KH</th>
             <th class="text-white text-center">Nguồn KH</th>
+            <th class="text-white text-center">Link FB</th>
             <th class="text-white text-center">Giới tính</th>
             <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Mã KH</th>
@@ -62,6 +74,7 @@
                         style="width: 291px; height: 59px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
+                    <td class="text-center">{{ @$customer->facebook}}</td>
                     <td class="text-center">{{ $customer->gender_text  }}</td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ $customer->account_code }}</td>
@@ -82,7 +95,7 @@
         </tbody>
     </table>
 </div>
-<div style="position: absolute; top: 121px; left: 0;width: 770px; overflow: hidden">
+<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary">
             <thead class="bg-primary text-white">
