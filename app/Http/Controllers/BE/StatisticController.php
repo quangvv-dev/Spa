@@ -75,16 +75,16 @@ class StatisticController extends Controller
 
         //
         $order_arr = [];
-        $commissions = Commission::where('user_id', $request->user_id ?: 1)->get();
+        $commissions = Commission::where('user_id', $input['user_id'])->get();
         foreach ($commissions as $commiss) {
             $order_arr[] = $commiss->order_id;
         }
 
-        $orders = Order::whereIN('id', @array_values($order_arr));
+        $orders = Order::whereIn('id', @array_values($order_arr));
         $countOrders = $orders->count();
         $orders = $orders->get();
-        $orders = $orders->map(function ($order) use ($request) {
-            $check = Commission::where('order_id', $order->id)->where('user_id', $request->user_id ?: 1)->first();
+        $orders = $orders->map(function ($order) use ($request, $input) {
+            $check = Commission::where('order_id', $order->id)->where('user_id', $input['user_id'])->first();
             if (isset($check) && $check) {
                 $order->rose_price = !empty($check->earn) ? $check->earn : 0;
             }
