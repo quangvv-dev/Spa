@@ -2,6 +2,17 @@
     .page-header{
         display: none;
     }
+
+    @media only screen and (max-width: 1439px) {
+        .table-ajax{
+            width: 71%;
+        }
+    }
+    @media only screen and (min-width: 1440px) {
+        .table-ajax{
+            width: 51%;
+        }
+    }
 </style>
 <div class="table-responsive" style="position: relative">
     <table class="table card-table table-vcenter text-nowrap table-primary">
@@ -82,7 +93,7 @@
         </tbody>
     </table>
 </div>
-<div style="position: absolute; top: 121px; left: 0;width: 66%; overflow: hidden">
+<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary">
             <thead class="bg-primary text-white">
