@@ -17,7 +17,7 @@ class Category extends Model
 
     public function customers()
     {
-        return $this->hasMany(Customer::class, 'group_id', 'id');
+        return $this->belongsToMany(Customer::class, 'customer_groups', 'category_id', 'customer_id');
     }
 
     public static function getRevenue($input)
@@ -53,15 +53,15 @@ class Category extends Model
         $data = $data->get();
 
         $status = [];
-        $revenue = 0;
 
         foreach ($data as $item) {
+            $revenue = 0;
             if (isset($item->customers)) {
-                $status[$item->id]['name'] = $item->name;
                 foreach ($item->customers as $customer) {
-                    $revenue += $customer->orders->sum('all_total');
+                    $revenue += $customer->orders->sum('gross_revenue');
                 }
             }
+            $status[$item->id]['name'] = $item->name;
             $status[$item->id]['revenue'] = $revenue;
         }
 

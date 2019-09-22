@@ -307,6 +307,7 @@ class CustomerController extends Controller
     {
         $title = 'THỐNG KÊ KHÁCH HÀNG';
         $input = $request->all();
+        $input['user_id'] = null;
 
         $customer = Customer::getDataOfYears($input);
         $statusRevenues = Status::getRevenueSource($input);

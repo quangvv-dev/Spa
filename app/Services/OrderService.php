@@ -112,15 +112,15 @@ class OrderService
     public static function handleData($data)
     {
         $status = [];
-        $revenue = 0;
 
         foreach ($data as $item) {
-            if (isset($item->customers)) {
-                $status[$item->id]['name'] = $item->name;
-                foreach ($item->customers as $customer) {
-                    $revenue += $customer->orders->sum('all_total');
+            $revenue = 0;
+            if (isset($item->customerSources)) {
+                foreach ($item->customerSources as $customer) {
+                    $revenue += $customer->orders->sum('gross_revenue');
                 }
                 $status[$item->id]['revenue'] = $revenue;
+                $status[$item->id]['name'] = $item->name;
             }
         }
 
