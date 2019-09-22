@@ -159,7 +159,6 @@ class Order extends Model
         }
 
         $data = $data->get();
-
         return $data;
     }
 }

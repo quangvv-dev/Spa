@@ -186,11 +186,11 @@ class Customer extends Model
         $revenueFemale = 0;
 
         foreach ($dataMale as $item) {
-            $revenueMale += $item->orders->sum('all_total');
+            $revenueMale += $item->orders->sum('gross_revenue');
         }
 
         foreach ($dataFemale as $item) {
-            $revenueFemale += $item->orders->sum('all_total');
+            $revenueFemale += $item->orders->sum('gross_revenue');
         }
 
         return $result = [

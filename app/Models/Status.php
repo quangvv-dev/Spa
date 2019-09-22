@@ -17,6 +17,11 @@ class Status extends Model
         return $this->hasMany(Customer::class, 'status_id', 'id');
     }
 
+    public function customerSources()
+    {
+        return $this->hasMany(Customer::class, 'source_id', 'id');
+    }
+
     public static function getRelationship($input = null)
     {
         $data = self::with('customers.orders')
@@ -50,8 +55,8 @@ class Status extends Model
 
     public static function getRevenueSource($input)
     {
-        $data = self::with('customers.orders')
-            ->has('customers.orders')
+        $data = self::with('customerSources.orders')
+            ->has('customerSources.orders')
             ->where('type', StatusCode::SOURCE_CUSTOMER);
 
         if (isset($input)) {
@@ -80,7 +85,6 @@ class Status extends Model
         }
 
         $data = $data->get();
-
         return OrderService::handleData($data);
     }
 
@@ -117,17 +121,19 @@ class Status extends Model
         $data = $data->get();
 
         $status = [];
-        $revenue = 0;
 
         foreach ($data as $item) {
             if (!empty($item->customers)) {
-                $status[$item->id]['name'] = $item->name;
+                $price = 0;
+
                 foreach ($item->customers as $customer) {
                     if (!empty($customer->orders)) {
-                        $revenue += $customer->orders->sum('all_total');
+                        $price += $customer->orders->sum('gross_revenue');
                     }
                 }
-                $status[$item->id]['revenue'] = $revenue;
+
+                $status[$item->id]['name'] = $item->name;
+                $status[$item->id]['revenue'] = $price;
             }
         }
 
