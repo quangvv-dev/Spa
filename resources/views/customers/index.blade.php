@@ -5,6 +5,9 @@
         .dropdown-toggle::after {
             display: none;
         }
+        .table-vcenter td, .table-vcenter th {
+            border-left: 1px solid #e7effc;
+        }
     </style>
 @endsection
 @section('content')
