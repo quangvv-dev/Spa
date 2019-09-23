@@ -255,6 +255,23 @@
             });
         });
 
+        $(document).on('focusout, change', '.status-result', function (e) {
+            let target = $(e.target).parent();
+            let status_id = $(target).find('.status-result').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    description: description,
+                    status_id: status_id
+                }
+            }).done(function () {
+                window.location.reload();
+            });
+        });
+
         $(document).on('change.select2', '.category-result', function (e) {
             let target = $(e.target).parent();
             let category_ids = $(target).find('.category-result').val();

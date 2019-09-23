@@ -67,7 +67,8 @@ class CustomerController extends Controller
         $rank = $customers->firstItem();
 
         if ($request->ajax()) {
-            return Response::json(view('customers.ajax', compact('customers', 'statuses', 'customerCount', 'rank'))->render());
+            return Response::json(view('customers.ajax',
+                compact('customers', 'statuses', 'customerCount', 'rank'))->render());
         }
 
         return view('customers.index', compact('customers', 'statuses', 'customerCount', 'rank'));
@@ -121,7 +122,8 @@ class CustomerController extends Controller
 
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
 
-        return view('customers.view_account', compact('title', 'docs', 'customer', 'waiters' , 'schedules', 'id', 'staff'));
+        return view('customers.view_account',
+            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff'));
     }
 
     /**
@@ -298,8 +300,9 @@ class CustomerController extends Controller
     {
         $input = $request->except('category_ids');
         $customer = $this->customerService->update($input, $id);
-        $customer->categories()->sync($request->category_ids);;
-
+        if (isset($request->category_ids) && $request->category_ids) {
+            $customer->categories()->sync($request->category_ids);
+        }
         return $customer;
     }
 
