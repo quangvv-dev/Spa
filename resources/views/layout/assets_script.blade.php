@@ -1,5 +1,4 @@
 <!-- Dashboard Core -->
-<script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>
 <script src="{{asset('assets/js/vendors/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('assets/js/vendors/jquery.sparkline.min.js')}}"></script>
 <script src="{{asset('assets/js/vendors/selectize.min.js')}}"></script>

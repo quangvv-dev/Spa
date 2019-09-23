@@ -6,6 +6,7 @@
             display: none;
         }
     </style>
+    {{--<script src="{{ asset('js/assets/jquery-2.1.3.js') }}"></script>--}}
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">

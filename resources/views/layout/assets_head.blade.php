@@ -47,4 +47,5 @@
 
     <link href="{{ asset('css/common.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet"/>
+    <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>
 </head>
