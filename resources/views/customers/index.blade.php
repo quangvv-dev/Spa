@@ -5,6 +5,7 @@
         .dropdown-toggle::after {
             display: none;
         }
+
         .table-vcenter td, .table-vcenter th {
             border-left: 1px solid #e7effc;
         }
@@ -70,7 +71,8 @@
                     </ul>
                 </div>
                 <div style="margin-left: 10px">
-                    <button data-name="" class="btn btn-default status btn white account_relation position" style="height: 40px;">
+                    <button data-name="" class="btn btn-default status btn white account_relation position"
+                            style="height: 40px;">
                         TẤT CẢ
                         <span class="not-number-account white">{{ $customerCount }}</span>
                     </button>
@@ -116,6 +118,11 @@
                 </div>
             </div>
             @include('customers.modal')
+            <input type="hidden" id="status">
+            <input type="hidden" id="invalid_account">
+            <input type="hidden" id="group">
+            <input type="hidden" id="telesales">
+            <input type="hidden" id="btn_choose_time">
             <div id="registration-form">
                 @include('customers.ajax')
             </div>
@@ -126,6 +133,7 @@
     <script type="text/javascript">
         $(document).on('click', '.status', function () {
             const status = $(this).data('name');
+            $('#status').val(status);
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
@@ -139,6 +147,7 @@
         $(document).on('click', '.invalid_account', function (e) {
             let target = $(e.target).parent();
             const invalid_account = $(target).find('.invalid_account').data('invalid');
+            $('#invalid_account').val(invalid_account);
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
@@ -293,11 +302,11 @@
         });
 
         $('body').not('.category-result').on('click', function () {
-           if (!($('.category-result').parent().find('span.select2-container--focus').length) &&
-               $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
-           ) {
-               location.reload();
-           }
+            if (!($('.category-result').parent().find('span.select2-container--focus').length) &&
+                $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
+            ) {
+                location.reload();
+            }
         });
 
         $('.selectall').click(function () {
@@ -351,6 +360,32 @@
                 $("#btn_tool_group").css({'display': 'block'});
             else
                 $("#btn_tool_group").css({'display': 'none'});
+        });
+        $('body').on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            var pages = $(this).attr('href').split('page=')[1];
+            let status = $('#status').val();
+            let group = $('#group').val();
+            let invalid_account = $('#invalid_account').val();
+            let telesales = $('#telesales').val();
+            let btn_choose_time = $('#btn_choose_time').val();
+            $.ajax({
+                url: '{{ url()->current() }}',
+                method: "get",
+                data: {
+                    page: pages,
+                    group: group,
+                    telesales: telesales,
+                    invalid_account: invalid_account,
+                    // search: search,
+                    status: status,
+                    data_time: btn_choose_time
+                },
+            }).done(function (data) {
+                $('#registration-form').html(data);
+            }).fail(function () {
+                alert('Articles could not be loaded.');
+            });
         });
     </script>
 @endsection
