@@ -122,6 +122,7 @@
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
             <input type="hidden" id="telesales">
+            <input type="hidden" id="search_value">
             <input type="hidden" id="btn_choose_time">
             <div id="registration-form">
                 @include('customers.ajax')
@@ -162,6 +163,7 @@
             const group = $('.group').val();
             const telesales = $('.telesales').val();
             const search = $('#search').val();
+            $('#search_value').val(search);
             const data_time = $(target).find('.btn_choose_time').data('time');
             $.ajax({
                 url: "{{ Url('customers/') }}",
@@ -365,6 +367,7 @@
             e.preventDefault();
             var pages = $(this).attr('href').split('page=')[1];
             let status = $('#status').val();
+            let search = $('#search_value').val();
             let group = $('#group').val();
             let invalid_account = $('#invalid_account').val();
             let telesales = $('#telesales').val();
@@ -377,7 +380,7 @@
                     group: group,
                     telesales: telesales,
                     invalid_account: invalid_account,
-                    // search: search,
+                    search: search,
                     status: status,
                     data_time: btn_choose_time
                 },
