@@ -68,8 +68,9 @@
                     {{--</td>--}}
                     <td class="text-center"></td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
-                    <td class="text-center"><a
-                                href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
+                    <td class="text-center">
+                        <a href="#"><i class="fas fa-info-circle"></i></a>
+                        <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
                     <td class="text-center">{{ $customer->phone }}</td>
                     <td class="text-center category-db"
                         data-id="{{$customer->id}}">
@@ -137,8 +138,11 @@
                                     type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                         <td class="text-center">{{ $rank ++ }}</td>
                         <td class="text-center">{{ date('d-m-Y', strtotime($customer->created_at)) }}</td>
-                        <td class="text-center"><a
-                                    href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
+                        <td class="text-center">
+                            <a class="view_modal" data-id="{{$customer->id}}" href="#">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         </td>
                         <td class="text-center">{{ $customer->phone }}</td>
                         <td class="text-center category-db"
@@ -162,10 +166,11 @@
 </div>
 <div class="pull-left">
     <div class="page-info">
-        {{ 'Tổng số ' . $customers->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+        {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
     </div>
 </div>
 <div class="pull-right">
     {{ $customers->appends(['search' => request()->search ])->links() }}
 </div>
+@include('customers.modal_view')
 <!-- table-responsive -->

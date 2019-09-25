@@ -17,7 +17,7 @@ class Customer extends Model
     public static function search($param)
     {
         $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer');
-        if (isset($param)) {
+        if (isset($param) && $param) {
             $data = $data->when(isset($param['search']), function ($query) use ($param) {
                 $query->where(function ($q) use ($param) {
                     $q->where('full_name', 'like', '%' . $param['search'] . '%')
@@ -51,12 +51,12 @@ class Customer extends Model
                 })
                 ->when(isset($param['invalid_account']), function ($query) use ($param) {
                     $query->when($param['invalid_account'] == 0, function ($q) use ($param) {
-                            $q->onlyTrashed();
+                        $q->onlyTrashed();
                     });
-                })
-                ->latest()->paginate(10);
+                })->latest()->paginate(10);
+        } else {
+            $data = $data->latest()->paginate(10);
         }
-
         return $data;
     }
 
@@ -166,16 +166,16 @@ class Customer extends Model
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                     $q->whereDate('created_at', getTime(($input['data_time'])));
                 })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                })
-                ->when(isset($input['user_id']), function ($query) use ($input) {
-                    $query->where('mkt_id', $input['user_id']);
-                });
+                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'THIS_MONTH' ||
+                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    })
+                    ->when(isset($input['user_id']), function ($query) use ($input) {
+                        $query->where('mkt_id', $input['user_id']);
+                    });
             });
         }
 

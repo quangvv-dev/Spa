@@ -65,8 +65,12 @@ class CustomerController extends Controller
         $customers = Customer::search($request->all());
         $customerCount = Customer::getAll()->count();
         $rank = $customers->firstItem();
-
+//        $grid = session("grid");
+//        if (!empty($grid)) {
+//            $customers = $grid;
+//        }
         if ($request->ajax()) {
+//            session(["grid" => $customers]);
             return Response::json(view('customers.ajax',
                 compact('customers', 'statuses', 'customerCount', 'rank'))->render());
         }
@@ -357,5 +361,15 @@ class CustomerController extends Controller
                 'books'
             )
         );
+    }
+
+    public function getChat()
+    {
+
+    }
+
+    public function postChat()
+    {
+
     }
 }

@@ -390,5 +390,19 @@
                 alert('Articles could not be loaded.');
             });
         });
+
+        $('body').delegate(".view_modal", 'click', function () {
+            var data = $(this).data('id');
+            $('#view_chat').modal('show');
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+
+            });
+
+        });
+
     </script>
 @endsection
