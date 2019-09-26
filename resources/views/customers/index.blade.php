@@ -158,7 +158,7 @@
                         <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
                     </div>
                 </div>
-                <div class="col row chat-ajax"></div>`;
+                <div class="col row chat-ajax" style="border-bottom: 1px solid #CCCCCC; padding: 10px;"></div>`;
 
                 data.group_comments.forEach(function (item) {
                     html += `<div class="col row" style="border-bottom: 1px solid #CCCCCC; padding: 10px;">
