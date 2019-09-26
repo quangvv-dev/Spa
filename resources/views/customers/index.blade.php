@@ -141,7 +141,7 @@
                 method: "get",
             }).done(function (data) {
                 let html = '';
-                html += `<div class="row">
+                html += `<div class="row" style="padding-bottom: 10px;">
                     <div class="chat-flash col-md-12">
                         <div class="white-space" style="display: flex; align-items: center;">
                             <img width="50" height="50" class="fl mr10 a40 border"
@@ -154,18 +154,20 @@
                     <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-md-12" style="padding-top: 10px; padding-bottom: 10px">
+                    <div class="col-md-12">
                         <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
                     </div>
                 </div>
                 <div class="col row chat-ajax"></div>`;
 
                 data.group_comments.forEach(function (item) {
-                    html += `<div class="col row">
-                            <div class="col-md-11"><p><a href="#" class="bold blue">`+ item.user.full_name+`</a>
-                                <span><i class="fa fa-clock"> `+ item.created_at +`</i></span></p>
-                            </div>
-                            <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages +`</div>
+                    html += `<div class="col row" style="border-bottom: 1px solid #CCCCCC; padding: 10px;">
+                                <div class="info-avatar no-padd col-md-12">
+                                    <div class="col-md-11"><p><a href="#" class="bold blue">`+ item.user.full_name+`</a>
+                                        <span><i class="fa fa-clock"> `+ item.created_at +`</i></span></p>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages +`</div>
+                                </div>
                         </div>`;
                 });
 
