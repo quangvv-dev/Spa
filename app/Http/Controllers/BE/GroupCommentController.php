@@ -115,6 +115,8 @@ class GroupCommentController extends Controller
 
         $groupComment = GroupComment::create($input);
 
-        return response()->json(['group_comment' => $groupComment]);
+        $groupComment1 = GroupComment::with('user', 'customer')->where('id', $groupComment->id)->first();
+
+        return response()->json(['group_comment' => $groupComment1]);
     }
 }
