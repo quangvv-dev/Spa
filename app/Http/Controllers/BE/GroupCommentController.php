@@ -30,6 +30,25 @@ class GroupCommentController extends Controller
     }
 
     /**
+     * Trao đổi nhanh.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index2(Request $request, $id)
+    {
+        $customer = Customer::find($id);
+        $groupComments = GroupComment::with('user', 'customer')
+            ->where('customer_id', $id)
+            ->orderBy('id', 'desc')
+            ->take(3)->get();
+
+        return response()->json([
+            'customer' => $customer,
+            'group_comments' => $groupComments
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

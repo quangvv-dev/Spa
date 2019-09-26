@@ -158,10 +158,12 @@
                         <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
                     </div>
                 </div>
-                <div class="col row chat-ajax" style="border-bottom: 1px solid #CCCCCC; padding: 10px;"></div>`;
+                <div class="chat-ajax" >
+
+                </div>`;
 
                 data.group_comments.forEach(function (item) {
-                    html += `<div class="col row" style="border-bottom: 1px solid #CCCCCC; padding: 10px;">
+                    html += `<div class="col" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
                                 <div class="info-avatar no-padd col-md-12">
                                     <div class="col-md-11"><p><a href="#" class="bold blue">`+ item.user.full_name+`</a>
                                         <span><i class="fa fa-clock"> `+ item.created_at +`</i></span></p>
@@ -193,11 +195,11 @@
             }).done(function (data) {
 
                 let html = '';
-                html += `
+                html += `<div style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;" >
                     <div class="col-md-11"><p><a href="#" class="bold blue">`+ data.group_comment.user.full_name+`</a>
                         <span><i class="fa fa-clock"> `+ data.group_comment.created_at +`</i></span></p>
                     </div>
-                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages +`</div>`;
+                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages +`</div></div>`;
 
                 $('.chat-ajax').prepend(html);
             });

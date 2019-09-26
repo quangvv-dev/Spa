@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //Chart doanh số
     Route::get('chart-revenue', 'ChartController@index');
     //Trao đổi với khách hàng
-    Route::get('group_comments/{id}', 'GroupCommentController@index');
+    Route::get('group_comments/{id}', 'GroupCommentController@index2');
     Route::post('group_comments/{id}', 'GroupCommentController@store');
     Route::group(['prefix' => 'report'], function () {
         Route::get('customers', 'CustomerController@reportCustomer');
