@@ -5,7 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\GroupComment as Model;
+use App\Models\GroupComment;
 use Illuminate\Support\Facades\Auth;
 
 class GroupCommentController extends Controller
@@ -15,11 +15,18 @@ class GroupCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, $id)
     {
-        $title = 'Trao đổi';
-        $docs = Model::orderBy('id', 'desc')->get();
-        return view('group_comment.index', compact('title', 'docs'));
+        $customer = Customer::find($id);
+        $groupComments = GroupComment::with('user', 'customer')
+            ->where('customer_id', $id)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return response()->json([
+            'customer' => $customer,
+            'group_comments' => $groupComments
+        ]);
     }
 
     /**
@@ -46,7 +53,7 @@ class GroupCommentController extends Controller
             'customer_id' => @$customer->id,
             'user_id'     => Auth::user()->id,
         ]);
-        Model::create($request->all());
+        GroupComment::create($request->all());
         return redirect()->back();
     }
 
@@ -97,5 +104,19 @@ class GroupCommentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function chatAjax(Request $request)
+    {
+        $input = $request->all();
+
+        $input['customer_id'] = $request->customer_id;
+        $input['user_id'] = Auth::user()->id;
+
+        $groupComment = GroupComment::create($input);
+
+        $groupComment1 = GroupComment::with('user', 'customer')->where('id', $groupComment->id)->first();
+
+        return response()->json(['group_comment' => $groupComment1]);
     }
 }

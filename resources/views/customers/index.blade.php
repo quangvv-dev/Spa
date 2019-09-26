@@ -132,6 +132,76 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
+        $(document).on('click', '.view_modal', function () {
+            $('.customer-chat').empty();
+            const id = $(this).data('customer-id');
+
+            $.ajax({
+                url: "{{ Url('/group_comments/') }}" + '/' + id,
+                method: "get",
+            }).done(function (data) {
+                let html = '';
+                html += `<div class="row">
+                    <div class="chat-flash col-md-12">
+                        <div class="white-space" style="display: flex; align-items: center;">
+                            <img width="50" height="50" class="fl mr10 a40 border"
+                                 src="{{asset('default/no-image.png')}}" style="border-radius:100%">
+                            <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
+                            <span>`  + data.customer.full_name +  `</span>
+                            </a></div>
+                        <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
+                            {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
+                    <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-top: 10px; padding-bottom: 10px">
+                        <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
+                    </div>
+                </div>
+                <div class="col row chat-ajax"></div>`;
+
+                data.group_comments.forEach(function (item) {
+                    html += `<div class="col row">
+                            <div class="col-md-11"><p><a href="#" class="bold blue">`+ item.user.full_name+`</a>
+                                <span><i class="fa fa-clock"> `+ item.created_at +`</i></span></p>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages +`</div>
+                        </div>`;
+                });
+
+                $('.customer-chat').append(html);
+                $('#view_chat').modal("show");
+                $('.chat-save').attr('data-customer-chat-id', data.customer.id);
+            });
+        });
+
+        $(document).on('click', '.chat-save', function (e) {
+            e.preventDefault();
+            let customer_id = $(this).data('customer-chat-id');
+            let messages = $('.message').val();
+            $('.message').val('');
+
+            $.ajax({
+                url: "{{ Url('/ajax/group-comments/') }}",
+                method: "post",
+                data: {
+                    messages: messages,
+                    customer_id: customer_id
+                }
+            }).done(function (data) {
+
+                let html = '';
+                html += `
+                    <div class="col-md-11"><p><a href="#" class="bold blue">`+ data.group_comment.user.full_name+`</a>
+                        <span><i class="fa fa-clock"> `+ data.group_comment.created_at +`</i></span></p>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages +`</div>`;
+
+                $('.chat-ajax').prepend(html);
+            });
+
+        });
+
         $(document).on('click', '.status', function () {
             const status = $(this).data('name');
             $('#status').val(status);
@@ -363,6 +433,7 @@
             else
                 $("#btn_tool_group").css({'display': 'none'});
         });
+
         $('body').on('click', 'a.page-link', function (e) {
             e.preventDefault();
             var pages = $(this).attr('href').split('page=')[1];
@@ -389,19 +460,6 @@
             }).fail(function () {
                 alert('Articles could not be loaded.');
             });
-        });
-
-        $('body').delegate(".view_modal", 'click', function () {
-            var data = $(this).data('id');
-            $('#view_chat').modal('show');
-            $.ajax({
-                url: "ajax/customers/" + id,
-                method: "get",
-                data: {id: id}
-            }).done(function (data) {
-
-            });
-
         });
 
     </script>
