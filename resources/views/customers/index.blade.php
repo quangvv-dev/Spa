@@ -363,6 +363,7 @@
             else
                 $("#btn_tool_group").css({'display': 'none'});
         });
+
         $('body').on('click', 'a.page-link', function (e) {
             e.preventDefault();
             var pages = $(this).attr('href').split('page=')[1];
@@ -391,18 +392,40 @@
             });
         });
 
-        $('body').delegate(".view_modal", 'click', function () {
-            var data = $(this).data('id');
-            $('#view_chat').modal('show');
+        $(document).on('click', '#chat-fast', function (e) {
+            e.preventDefault();
+            $('.user-name').empty();
+            $('.content-msg').empty();
+            const id = $(this).data('customer-id');
+            $('#chat-save').attr('data-customer-id', id);
             $.ajax({
-                url: "ajax/customers/" + id,
+                url: "{{ Url('/group_comments/') }}" + '/' + id,
                 method: "get",
-                data: {id: id}
             }).done(function (data) {
+                let html = '';
+                let html_content = '';
+                html += '<span>' + data.customer.full_name + '</span>';
 
+                data.group_comments.forEach(function (item) {
+                    html_content += `<div class="col row">
+                            <div class="col-md-11"><p><a href="#" class="bold blue">`+ item.user.full_name+`</a>
+                                <span><i class="fa fa-clock"> `+ item.created_at +`</i></span></p>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages +`</div>
+                        </div>`;
+                });
+
+                $('.user-name').append(html);
+                $('.content-msg').append(html_content);
+                $('#view_chat').modal("show");
             });
-
         });
+
+        $(document).on('click', '#chat-save', function (e) {
+            e.preventDefault();
+            const id = $(this).data('customer-id');
+            console.log(id);
+        })
 
     </script>
 @endsection
