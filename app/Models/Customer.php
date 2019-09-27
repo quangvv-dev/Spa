@@ -158,41 +158,55 @@ class Customer extends Model
 
     public static function getRevenueByGender($input)
     {
-        $data = self::with('orders');
+        $data = self::with('orders')->has('orders');
 
         if (isset($input)) {
             $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
-                $query->when($input['data_time'] == 'TODAY' ||
-                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                    $q->whereDate('created_at', getTime(($input['data_time'])));
-                })
-                    ->when($input['data_time'] == 'THIS_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'THIS_MONTH' ||
-                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                $query->whereHas('orders', function ($query) use ($input) {
+                    $query->when($input['data_time'] == 'TODAY' ||
+                        $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                        $q->whereDate('created_at', getTime(($input['data_time'])));
                     })
-                    ->when(isset($input['user_id']), function ($query) use ($input) {
-                        $query->where('mkt_id', $input['user_id']);
-                    });
+                        ->when($input['data_time'] == 'THIS_WEEK' ||
+                            $input['data_time'] == 'LAST_WEEK' ||
+                            $input['data_time'] == 'LAST_WEEK' ||
+                            $input['data_time'] == 'THIS_MONTH' ||
+                            $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                            $q->whereBetween('created_at', getTime(($input['data_time'])));
+                        });
+                })
+                ->when(isset($input['user_id']), function ($query) use ($input) {
+                    $query->where('mkt_id', $input['user_id']);
+                });
             });
         }
 
-        $dataMale = $data->where('gender', UserConstant::MALE)->get();
-        $dataFemale = $data->where('gender', UserConstant::FEMALE)->get();
-
+        $data = $data->get();
         $revenueMale = 0;
         $revenueFemale = 0;
 
-        foreach ($dataMale as $item) {
-            $revenueMale += $item->orders->sum('gross_revenue');
+        foreach ($data as $item) {
+            if ($item->gender == UserConstant::MALE) {
+                $revenueMale += $item->orders->sum('gross_revenue');
+            } else {
+                $revenueFemale += $item->orders->sum('gross_revenue');
+            }
         }
 
-        foreach ($dataFemale as $item) {
-            $revenueFemale += $item->orders->sum('gross_revenue');
-        }
+//        $dataMale = $data->where('gender', UserConstant::MALE)->get();
+//        $dataFemale = $data->where('gender', UserConstant::FEMALE)->get();
+//        dd($dataFemale);
+//
 
+//
+//        foreach ($dataMale as $item) {
+//            $revenueMale += $item->orders->sum('gross_revenue');
+//        }
+//
+//        foreach ($dataFemale as $item) {
+//            $revenueFemale += $item->orders->sum('gross_revenue');
+//        }
+//
         return $result = [
             [
                 'name'    => 'Nam',
