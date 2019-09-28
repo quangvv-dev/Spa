@@ -318,9 +318,8 @@ class CustomerController extends Controller
 
         $customer = Customer::getDataOfYears($input);
         $statusRevenues = Status::getRevenueSource($input);
-        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
-
         $statuses = Status::getRelationship($input);
+        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
 
         $categoryRevenues = Category::getRevenue($input);
         $customerRevenueByGenders = Customer::getRevenueByGender($input);
@@ -328,7 +327,6 @@ class CustomerController extends Controller
         $orders = Order::getAll($input);
         $groupComments = GroupComment::getAll($input);
         $books = Schedule::getBooks($input);
-        $orderTotal = Order::getAll($input)->sum('gross_revenue');
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax_chart', compact(
@@ -336,7 +334,6 @@ class CustomerController extends Controller
                 'statuses',
                 'customer',
                 'orders',
-                'orderTotal',
                 'statusRevenues',
                 'statusRevenueByRelations',
                 'categoryRevenues',
@@ -352,7 +349,6 @@ class CustomerController extends Controller
                 'statuses',
                 'customer',
                 'orders',
-                'orderTotal',
                 'statusRevenues',
                 'statusRevenueByRelations',
                 'categoryRevenues',
