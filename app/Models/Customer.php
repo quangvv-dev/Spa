@@ -193,20 +193,6 @@ class Customer extends Model
             }
         }
 
-//        $dataMale = $data->where('gender', UserConstant::MALE)->get();
-//        $dataFemale = $data->where('gender', UserConstant::FEMALE)->get();
-//        dd($dataFemale);
-//
-
-//
-//        foreach ($dataMale as $item) {
-//            $revenueMale += $item->orders->sum('gross_revenue');
-//        }
-//
-//        foreach ($dataFemale as $item) {
-//            $revenueFemale += $item->orders->sum('gross_revenue');
-//        }
-//
         return $result = [
             [
                 'name'    => 'Nam',
