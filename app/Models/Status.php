@@ -61,7 +61,7 @@ class Status extends Model
 
         if (isset($input)) {
             $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
-                $query->whereHas('customers', function ($query) use ($input) {
+                $query->whereHas('customerSources', function ($query) use ($input) {
                     $query->whereHas('orders', function ($query) use ($input) {
                         $query->when($input['data_time'] == 'TODAY' ||
                             $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
@@ -78,7 +78,7 @@ class Status extends Model
                 });
             })
             ->when(isset($input['user_id']), function ($query) use ($input) {
-                $query->whereHas('customers', function ($q) use ($input) {
+                $query->whereHas('customerSources', function ($q) use ($input) {
                     $q->where('mkt_id', $input['user_id']);
                 });
             });
