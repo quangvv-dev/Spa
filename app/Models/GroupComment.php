@@ -36,6 +36,9 @@ class GroupComment extends Model
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
+            })
+            ->when(isset($input['user_id']), function ($query) use($input) {
+               $query->where('user_id', $input['user_id']);
             });
         }
 

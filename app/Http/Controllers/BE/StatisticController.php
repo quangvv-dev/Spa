@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Customer;
+use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Schedule;
@@ -38,18 +39,42 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $input['user_id'] = $request->user_id ?: Auth::user()->id;
+        $input['user_id'] = $request->has('user_id') ? $request->user_id : Auth::user()->id;
         $title = 'Nhân viên';
+
+        if ($request->has('data_time') == null) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+
+        $order_arr = [];
+        $commissions = Commission::where('user_id', $input['user_id'])->get();
+        foreach ($commissions as $commiss) {
+            $order_arr[] = $commiss->order_id;
+        }
+
+        $input['order_id'] = $order_arr;
+
+        $orders = Order::whereIn('id', $order_arr);
+        $orders = $orders->get();
+
+        $orders = $orders->map(function ($order) use ($request, $input) {
+            $check = Commission::where('order_id', $order->id)->where('user_id', $input['user_id'])->first();
+            if (isset($check) && $check) {
+                $order->rose_price = !empty($check->earn) ? $check->earn : 0;
+            }
+            return $order;
+        });
 
         $statusRevenues = Status::getRevenueSource($input);
         $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
 
         $categoryRevenues = Category::getRevenue($input);
         $customerRevenueByGenders = Customer::getRevenueByGender($input);
-        $price_commision = [];
-        $customer = Customer::orderBy('id', 'desc');
-        $books = Schedule::where('status', StatusCode::BOOK);
-        $books->when(isset($input['data_time']), function ($query) use ($input) {
+        $customer = Customer::count($input);
+        $groupComments = GroupComment::getAll($input);
+
+        $schedule = Schedule::orderBy('id', 'DESC');
+        $schedule->when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                 $q->whereDate('created_at', getTime(($input['data_time'])));
@@ -62,35 +87,11 @@ class StatisticController extends Controller
                     $q->whereBetween('created_at', getTime(($input['data_time'])));
                 });
         });
-        $receive = Schedule::where('status', StatusCode::RECEIVE);
-        $comment = Schedule::orderBy('id', 'desc');
-
-        $price_customer = Customer::where('status_id', 13)->get();
-
-        $customer = $customer->where('telesales_id', $input['user_id'])->where('status_id',
-            StatusCode::NEW)->with('source_customer')->get();
-        $books = $books->where('creator_id', $input['user_id'])->get();
-        $receive = $receive->where('creator_id', $input['user_id'])->get();
-        $comment = $comment->where('user_id', $input['user_id'])->get();
-
-        //
-        $order_arr = [];
-        $commissions = Commission::where('user_id', $input['user_id'])->get();
-        foreach ($commissions as $commiss) {
-            $order_arr[] = $commiss->order_id;
-        }
-
-        $orders = Order::whereIn('id', @array_values($order_arr));
-        $countOrders = $orders->count();
-        $orders = $orders->get();
-        $orders = $orders->map(function ($order) use ($request, $input) {
-            $check = Commission::where('order_id', $order->id)->where('user_id', $input['user_id'])->first();
-            if (isset($check) && $check) {
-                $order->rose_price = !empty($check->earn) ? $check->earn : 0;
-            }
-            return $order;
-        });
-        $commissions = Commission::with('orders')->where('user_id', $input['user_id'])->get();
+        $books = $schedule->where('status', StatusCode::BOOK)->where('creator_id', $input['user_id'])->get();
+        $receive = $schedule->where('status', StatusCode::RECEIVE)->where('creator_id', $input['user_id'])->get();
+        $comment = $schedule->where('user_id', $input['user_id'])
+            ->where('status', '<>', StatusCode::BOOK)
+            ->where('status', '<>', StatusCode::RECEIVE)->get();
 
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_home',
@@ -98,16 +99,14 @@ class StatisticController extends Controller
                     'books',
                     'receive',
                     'comment',
-                    'countOrders',
-                    'price_customer',
                     'commissions',
                     'title',
                     'statusRevenues',
                     'statusRevenueByRelations',
                     'categoryRevenues',
                     'customerRevenueByGenders',
-                    'orders'
-//                    'earnTotal'
+                    'orders',
+                    'groupComments'
                 ))->render());
         }
         return view('statistics.index',
@@ -116,16 +115,14 @@ class StatisticController extends Controller
                 'books',
                 'receive',
                 'comment',
-                'countOrders',
-                'price_customer',
                 'commissions',
                 'title',
                 'orders',
                 'statusRevenues',
                 'statusRevenueByRelations',
                 'categoryRevenues',
-                'customerRevenueByGenders'
-//                'earnTotal'
+                'customerRevenueByGenders',
+                'groupComments'
             ));
     }
 

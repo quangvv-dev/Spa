@@ -315,7 +315,7 @@ class CustomerController extends Controller
         $title = 'THỐNG KÊ KHÁCH HÀNG';
         $input = $request->all();
 
-        $input['user_id'] = null;
+        $input['order_id'] = null;
 
         if ($request->has('data_time') == null) {
             $input['data_time'] = 'THIS_MONTH';

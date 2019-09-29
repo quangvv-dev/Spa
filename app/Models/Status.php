@@ -53,7 +53,10 @@ class Status extends Model
         $data = self::with(['customerSources' => function ($query) use ($input) {
             $query->when(isset($input['data_time']), function ($query) use ($input) {
                 $query->with(['orders' => function ($query) use ($input) {
-                    $query->when($input['data_time'] == 'TODAY' ||
+                    $query->when(isset($input['order_id']), function ($query) use ($input) {
+                        $query->whereIn('id', $input['order_id']);
+                    })
+                    ->when($input['data_time'] == 'TODAY' ||
                         $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                         $q->whereDate('created_at', getTime(($input['data_time'])));
                     })
@@ -67,11 +70,6 @@ class Status extends Model
                 }]);
             });
         }])
-        ->when(isset($input['user_id']), function ($query) use ($input) {
-            $query->whereHas('customerSources', function ($q) use ($input) {
-                $q->where('mkt_id', $input['user_id']);
-            });
-        })
         ->where('type', StatusCode::SOURCE_CUSTOMER);
 
         $data = $data->get();
@@ -83,7 +81,10 @@ class Status extends Model
         $data = self::with(['customers' => function($query) use($input) {
             $query->when(isset($input['data_time']), function ($query) use ($input) {
                 $query->with(['orders' => function ($query) use ($input) {
-                    $query->when($input['data_time'] == 'TODAY' ||
+                    $query->when(isset($input['order_id']), function ($query) use ($input) {
+                        $query->whereIn('id', $input['order_id']);
+                    })
+                    ->when($input['data_time'] == 'TODAY' ||
                         $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                         $q->whereDate('created_at', getTime(($input['data_time'])));
                     })
