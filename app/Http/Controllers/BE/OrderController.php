@@ -15,6 +15,7 @@ use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use App\Services\PaymentHistoryService;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -84,8 +85,8 @@ class OrderController extends Controller
 
         if (isset($request->spa_therapisst_id) && isset($request->count_day)) {
             HistoryUpdateOrder::create([
-                'user_id' => $request->spa_therapisst_id,
-                'order_id' => $order->id
+                'user_id'  => $request->spa_therapisst_id,
+                'order_id' => $order->id,
             ]);
         }
 
@@ -101,7 +102,14 @@ class OrderController extends Controller
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-        $orders = Order::search($request->all());
+        if (count($request->all()) > 0) {
+            $orders = Order::searchAll($request->all());
+
+        } else {
+            $now = Carbon::now()->format('m');
+            $orders = Order::whereMonth('created_at', $now)->with('orderDetails');
+            $orders = $orders->paginate(100);
+        }
 
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax', compact('orders', 'title'))->render());
@@ -180,9 +188,9 @@ class OrderController extends Controller
         ]);
 
         $historyUpdateOrder = HistoryUpdateOrder::create([
-            'user_id' => $request->user_id,
-            'order_id' => $order->id,
-            'description' => $request->description
+            'user_id'     => $request->user_id,
+            'order_id'    => $order->id,
+            'description' => $request->description,
         ]);
 
         return "Success";
