@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Functions;
 use App\Services\OrderService;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,9 +24,12 @@ class Category extends Model
     public static function getRevenue($input)
     {
         $data = self::with(['customers' => function ($query) use($input) {
-            $query->when(isset($input['data_time']), function ($query) use ($input) {
-                $query->with(['orders' => function ($query) use ($input) {
-                    $query->when($input['data_time'] == 'TODAY' ||
+            $query->with(['orders' => function ($query) use ($input) {
+                $query->when(isset($input['data_time']), function ($query) use ($input) {
+                    $query->when(isset($input['order_id']), function ($query) use ($input) {
+                        $query->whereIn('id', $input['order_id']);
+                    })
+                    ->when($input['data_time'] == 'TODAY' ||
                         $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                         $q->whereDate('created_at', getTime(($input['data_time'])));
                     })
@@ -36,14 +40,12 @@ class Category extends Model
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
-                }]);
-            });
+                })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                    $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
+                });
+            }]);
         }])
-        ->when(isset($input['user_id']), function ($query) use ($input) {
-            $query->whereHas('customers', function ($q) use ($input) {
-                $q->where('mkt_id', $input['user_id']);
-            });
-        })->has('customers.orders');
+        ->has('customers.orders');
 
         $data = $data->get();
 

@@ -209,7 +209,7 @@ class Order extends Model
 
     public static function getAll($input)
     {
-        $data = self::with('orderDetails', 'customer', 'paymentHistories');
+        $data = self::with('orderDetails', 'paymentHistories');
 
         if (isset($input)) {
             $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
