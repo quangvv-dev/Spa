@@ -48,7 +48,6 @@ class Status extends Model
         return $data;
     }
 
-
     public static function getRevenueSource($input)
     {
         $data = self::with(['customerSources' => function ($query) use ($input) {

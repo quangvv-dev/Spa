@@ -20,7 +20,7 @@
         </thead>
         <tbody>
         <tr>
-            <td class="text-center"><h2>{{ isset($statuses[0]) && $statuses[0]->customers? $statuses[0]->customers->count(): 0 }}</h2></td>
+            <td class="text-center"><h2>{{ count($countCustomer) }}</h2></td>
             <td class="text-center"><h2>{{ count($groupComments) }}</h2></td>
             <td class="text-center"><h2>{{ count($books) }}</h2></td>
             <td class="text-center"><h2>{{ count($orders) }}</h2></td>

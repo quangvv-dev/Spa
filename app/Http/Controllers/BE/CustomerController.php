@@ -314,9 +314,15 @@ class CustomerController extends Controller
     {
         $title = 'THỐNG KÊ KHÁCH HÀNG';
         $input = $request->all();
+
         $input['user_id'] = null;
 
+        if ($request->has('data_time') == null) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+
         $customer = Customer::getDataOfYears($input);
+        $countCustomer = Customer::count($input);
         $statusRevenues = Status::getRevenueSource($input);
         $statuses = Status::getRelationship($input);
         $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
@@ -339,7 +345,8 @@ class CustomerController extends Controller
                 'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
-                'books'
+                'books',
+                'countCustomer'
             ))->render());
         }
 
@@ -354,7 +361,8 @@ class CustomerController extends Controller
                 'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
-                'books'
+                'books',
+                'countCustomer'
             )
         );
     }
