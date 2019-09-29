@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use App\Services\OrderService;
 use Illuminate\Database\Eloquent\Model;
 
@@ -51,8 +52,8 @@ class Status extends Model
     public static function getRevenueSource($input)
     {
         $data = self::with(['customerSources' => function ($query) use ($input) {
-            $query->when(isset($input['data_time']), function ($query) use ($input) {
-                $query->with(['orders' => function ($query) use ($input) {
+            $query->with(['orders' => function ($query) use ($input) {
+                $query->when(isset($input['data_time']), function ($query) use ($input) {
                     $query->when(isset($input['order_id']), function ($query) use ($input) {
                         $query->whereIn('id', $input['order_id']);
                     })
@@ -67,8 +68,11 @@ class Status extends Model
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
-                }]);
-            });
+                })
+                ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                    $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
+                });
+            }]);
         }])
         ->where('type', StatusCode::SOURCE_CUSTOMER);
 
@@ -79,8 +83,8 @@ class Status extends Model
     public static function getRevenueSourceByRelation($input)
     {
         $data = self::with(['customers' => function($query) use($input) {
-            $query->when(isset($input['data_time']), function ($query) use ($input) {
-                $query->with(['orders' => function ($query) use ($input) {
+            $query->with(['orders' => function ($query) use ($input) {
+                $query->when(isset($input['data_time']), function ($query) use ($input) {
                     $query->when(isset($input['order_id']), function ($query) use ($input) {
                         $query->whereIn('id', $input['order_id']);
                     })
@@ -95,8 +99,11 @@ class Status extends Model
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
-                }]);
-            });
+                })
+                ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                    $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
+                });
+            }]);
         }])
         ->where('type', StatusCode::RELATIONSHIP);
 
