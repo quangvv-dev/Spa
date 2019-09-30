@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Customer;
@@ -55,7 +56,22 @@ class StatisticController extends Controller
         $input['order_id'] = $order_arr;
 
         $orders = Order::whereIn('id', $order_arr);
-        $orders = $orders->get();
+        $orders = $orders->when(isset($input['data_time']), function ($query) use ($input) {
+            $query->when($input['data_time'] == 'TODAY' ||
+                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                $q->whereDate('created_at', getTime(($input['data_time'])));
+            })
+                ->when($input['data_time'] == 'THIS_WEEK' ||
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'THIS_MONTH' ||
+                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                    $q->whereBetween('created_at', getTime(($input['data_time'])));
+                });
+            })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
+            })
+            ->get();
 
         $orders = $orders->map(function ($order) use ($request, $input) {
             $check = Commission::where('order_id', $order->id)->where('user_id', $input['user_id'])->first();
@@ -86,6 +102,9 @@ class StatisticController extends Controller
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                     $q->whereBetween('created_at', getTime(($input['data_time'])));
                 });
+        })
+        ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
         });
         $books = $schedule->where('status', StatusCode::BOOK)->where('creator_id', $input['user_id'])->get();
         $receive = $schedule->where('status', StatusCode::RECEIVE)->where('creator_id', $input['user_id'])->get();
