@@ -209,7 +209,6 @@ class Customer extends Model
     public static function count($input)
     {
         $data = [];
-//        dd($data);
 
         if (isset($input)) {
             $data = self::when(isset($input['data_time']), function ($query) use ($input) {
