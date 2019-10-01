@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +55,11 @@ class Customer extends Model
                     $query->when($param['invalid_account'] == 0, function ($q) use ($param) {
                         $q->onlyTrashed();
                     });
-                })->latest()->paginate(10);
+                })
+                ->when(isset($param['birthday']), function ($query) use ($param) {
+                    $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?' , Carbon::now()->format('m-d'));
+                })
+                ->latest()->paginate(10);
         } else {
             $data = $data->latest()->paginate(10);
         }
