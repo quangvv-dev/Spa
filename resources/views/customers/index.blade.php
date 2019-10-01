@@ -92,10 +92,16 @@
                     @endforeach
                 </div>
                 <div class="col-md-3">
-                    <div id="div_created_at_dropdown" style="float: right !important;"
+                    <div class="display birthday_tab position font20 pointer mt7" rel="tooltip" data-placement="left"
+                         data-original-title="Sinh nhật hôm nay"
+                         aria-describedby="tooltip146058"><i class="fa fa-birthday-cake gf-icon-h02"
+                                                             aria-hidden="true"></i><span class="not-number-account"
+                                                                                          style="background: rgb(249, 87, 87); color: rgb(255, 255, 255); display: none;"></span>
+                    </div>
+                    <div id="div_created_at_dropdown"
                          class="display position pointer mt5 open" rel="tooltip"
                          data-placement="left" data-original-title="Thời gian tạo khách hàng"
-                         style="padding-top:2px;padding-left:2px"><a class="dropdown-toggle" data-toggle="dropdown"
+                         style="padding-left: 5px"><a class="dropdown-toggle" data-toggle="dropdown"
                                                                      aria-expanded="true"><i id="created_at_icon"
                                                                                              class="far fa-clock"
                                                                                              style="font-size:22px"></i></a>
@@ -147,7 +153,7 @@
                             <img width="50" height="50" class="fl mr10 a40 border"
                                  src="{{asset('default/no-image.png')}}" style="border-radius:100%">
                             <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
-                            <span>`  + data.customer.full_name +  `</span>
+                            <span>` + data.customer.full_name + `</span>
                             </a></div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
@@ -165,10 +171,10 @@
                 data.group_comments.forEach(function (item) {
                     html += `<div class="col" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
                                 <div class="info-avatar no-padd col-md-12">
-                                    <div class="col-md-11"><p><a href="#" class="bold blue">`+ item.user.full_name+`</a>
-                                        <span><i class="fa fa-clock"> `+ item.created_at +`</i></span></p>
+                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + item.user.full_name + `</a>
+                                        <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
                                     </div>
-                                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages +`</div>
+                                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages + `</div>
                                 </div>
                         </div>`;
                 });
@@ -196,10 +202,10 @@
 
                 let html = '';
                 html += `<div style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;" >
-                    <div class="col-md-11"><p><a href="#" class="bold blue">`+ data.group_comment.user.full_name+`</a>
-                        <span><i class="fa fa-clock"> `+ data.group_comment.created_at +`</i></span></p>
+                    <div class="col-md-11"><p><a href="#" class="bold blue">` + data.group_comment.user.full_name + `</a>
+                        <span><i class="fa fa-clock"> ` + data.group_comment.created_at + `</i></span></p>
                     </div>
-                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages +`</div></div>`;
+                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages + `</div></div>`;
 
                 $('.chat-ajax').prepend(html);
             });
@@ -232,9 +238,10 @@
             });
         });
 
-        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time', function (e) {
+        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time, .birthday_tab', function (e) {
             let target = $(e.target).parent();
             const group = $('.group').val();
+            const birthday = $('.birthday_tab').data('original-title');
             const telesales = $('.telesales').val();
             const search = $('#search').val();
             $('#search_value').val(search);
@@ -247,7 +254,8 @@
                     telesales: telesales,
                     search: search,
                     status: status,
-                    data_time: data_time
+                    data_time: data_time,
+                    birthday: birthday
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
