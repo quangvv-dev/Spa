@@ -102,9 +102,9 @@
                          class="display position pointer mt5 open" rel="tooltip"
                          data-placement="left" data-original-title="Thời gian tạo khách hàng"
                          style="padding-left: 5px"><a class="dropdown-toggle" data-toggle="dropdown"
-                                                                     aria-expanded="true"><i id="created_at_icon"
-                                                                                             class="far fa-clock"
-                                                                                             style="font-size:22px"></i></a>
+                                                      aria-expanded="true"><i id="created_at_icon"
+                                                                              class="far fa-clock"
+                                                                              style="font-size:22px"></i></a>
                         <ul class="dropdown-menu pull-right tr">
                             <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
                                     nay</a>
@@ -364,23 +364,6 @@
             });
         });
 
-        $(document).on('focusout, change', '.status-result', function (e) {
-            let target = $(e.target).parent();
-            let status_id = $(target).find('.status-result').val();
-            let id = $(this).data('id');
-
-            $.ajax({
-                url: "ajax/customers/" + id,
-                method: "put",
-                data: {
-                    description: description,
-                    status_id: status_id
-                }
-            }).done(function () {
-                window.location.reload();
-            });
-        });
-
         $(document).on('change.select2', '.category-result', function (e) {
             let target = $(e.target).parent();
             let category_ids = $(target).find('.category-result').val();
@@ -486,6 +469,70 @@
                 $('#registration-form').html(data);
             }).fail(function () {
                 alert('Articles could not be loaded.');
+            });
+        });
+
+        $(document).on('dblclick', '.name-customer', function (e) {
+            let target = $(e.target).parent();
+            $(target).find('.name-customer').empty();
+            let id = $(this).data('customer-id');
+            let html = '';
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+
+                html += `<textarea data-id=` + data.id +` class="handsontableInput" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> `+ data.full_name+`</textarea>`;
+                $(target).find(".name-customer").append(html);
+            });
+        });
+        $(document).on('dblclick', '.phone-customer', function (e) {
+            let target = $(e.target).parent();
+            $(target).find('.phone-customer').empty();
+            let id = $(this).data('customer-id');
+            let html = '';
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+
+                html += `<textarea data-id=` + data.id +` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> `+ data.phone+`</textarea>`;
+                $(target).find(".phone-customer").append(html);
+            });
+        });
+
+        $(document).on('focusout', '.handsontableInput', function (e) {
+            let target = $(e.target).parent();
+            let full_name = $(target).find('.handsontableInput').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    full_name: full_name,
+                }
+            }).done(function () {
+                window.location.reload();
+            });
+        });
+        $(document).on('focusout', '.phone-result', function (e) {
+            let target = $(e.target).parent();
+            let phone = $(target).find('.phone-result').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    phone: phone,
+                }
+            }).done(function () {
+                window.location.reload();
             });
         });
 
