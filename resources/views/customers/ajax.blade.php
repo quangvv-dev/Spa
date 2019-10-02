@@ -127,13 +127,13 @@
                                     type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                         <td class="text-center">{{ $rank ++ }}</td>
                         <td class="text-center">{{ date('d-m-Y', strtotime($customer->created_at)) }}</td>
-                        <td class="text-center">
+                        <td class="text-center name-customer" data-customer-id="{{ $customer->id }}">
                             <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
                                 <i class="fas fa-info-circle"></i>
                             </a>
                             <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         </td>
-                        <td class="text-center">{{ $customer->phone }}</td>
+                        <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
                         <td class="text-center category-db"
                             data-id="{{$customer->id}}">
                             @foreach($customer->categories as $category)
