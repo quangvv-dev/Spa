@@ -63,7 +63,7 @@ class CustomerController extends Controller
     {
         $statuses = Status::getRelationship();
         $customers = Customer::search($request->all());
-        $customerCount = Customer::getAll()->count();
+        $customerCount = Customer::getAll($request->all())->count();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
 

@@ -130,6 +130,7 @@
             <input type="hidden" id="telesales">
             <input type="hidden" id="search_value">
             <input type="hidden" id="btn_choose_time">
+            <input type="hidden" id="birthday_tab">
             <div id="registration-form">
                 @include('customers.ajax')
             </div>
@@ -215,10 +216,24 @@
         $(document).on('click', '.status', function () {
             const status = $(this).data('name');
             $('#status').val(status);
+            $('#birthday_tab').val('');
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
                 data: {status: status}
+            }).done(function (data) {
+                $('.load').hide();
+                $('#registration-form').html(data);
+            });
+        });
+
+        $(document).on('click', '.birthday_tab', function () {
+            const birthday = $('.birthday_tab').data('original-title');
+            $('#birthday_tab').val(birthday);
+            $.ajax({
+                url: "{{ Url('customers/') }}",
+                method: "get",
+                data: {birthday: birthday}
             }).done(function (data) {
                 $('.load').hide();
                 $('#registration-form').html(data);
@@ -238,13 +253,13 @@
             });
         });
 
-        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time, .birthday_tab', function (e) {
+        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time', function (e) {
             let target = $(e.target).parent();
             const group = $('.group').val();
-            const birthday = $('.birthday_tab').data('original-title');
             const telesales = $('.telesales').val();
             const search = $('#search').val();
             $('#search_value').val(search);
+            $('#birthday_tab').val('');
             const data_time = $(target).find('.btn_choose_time').data('time');
             $.ajax({
                 url: "{{ Url('customers/') }}",
@@ -253,9 +268,7 @@
                     group: group,
                     telesales: telesales,
                     search: search,
-                    status: status,
                     data_time: data_time,
-                    birthday: birthday
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
@@ -263,10 +276,10 @@
         });
 
         $(document).on('dblclick', '.description', function (e) {
-            var target = $(e.target).parent();
+            let target = $(e.target).parent();
             $(target).find('.description').empty();
-            var id = $(this).data('id');
-            var html = '';
+            let id = $(this).data('id');
+            let html = '';
 
             $.ajax({
                 url: "ajax/customers/" + id,
@@ -310,10 +323,10 @@
         });
 
         $(document).on('dblclick', '.status-db', function (e) {
-            var target = $(e.target).parent();
+            let target = $(e.target).parent();
             $(target).find('.status-db').empty();
-            var id = $(this).data('id');
-            var html = '';
+            let id = $(this).data('id');
+            let html = '';
 
             $.ajax({
                 url: "ajax/statuses/",
@@ -448,13 +461,14 @@
 
         $('body').on('click', 'a.page-link', function (e) {
             e.preventDefault();
-            var pages = $(this).attr('href').split('page=')[1];
+            let pages = $(this).attr('href').split('page=')[1];
+            const group = $('.group').val();
+            const telesales = $('.telesales').val();
+            const search = $('#search').val();
             let status = $('#status').val();
-            let search = $('#search_value').val();
-            let group = $('#group').val();
             let invalid_account = $('#invalid_account').val();
-            let telesales = $('#telesales').val();
             let btn_choose_time = $('#btn_choose_time').val();
+            const birthday = $('#birthday_tab').val();
             $.ajax({
                 url: '{{ url()->current() }}',
                 method: "get",
@@ -465,7 +479,8 @@
                     invalid_account: invalid_account,
                     search: search,
                     status: status,
-                    data_time: btn_choose_time
+                    data_time: btn_choose_time,
+                    birthday: birthday
                 },
             }).done(function (data) {
                 $('#registration-form').html(data);
