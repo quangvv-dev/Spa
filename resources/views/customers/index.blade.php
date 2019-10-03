@@ -61,8 +61,8 @@
                         <li class="dropdown_action"><a id="show_popup_task">Tạo công việc</a></li>
                         <li class="dropdown_action"><a id="show_group_type_account">Nhóm khách hàng</a></li>
                         <li class="dropdown_action"><a id="show_manager_account">Người phụ trách</a></li>
-                        <li class="dropdown_action"><a data-toggle="modal" href="#change-account-viewers">Người xem</a>
-                        </li>
+                        {{--<li class="dropdown_action"><a data-toggle="modal" href="change-account-viewers">Người xem</a>--}}
+                        {{--</li>--}}
                         <li class="dropdown_action"><a id="remove_selected_account">Xóa nhiều</a></li>
                         <li class="dropdown_action" id="restore_account" style="display: none;"><a>Khôi phục</a></li>
                         <li class="dropdown_action" id="permanently_delete_account" style="display: none;"><a>Xóa
@@ -243,7 +243,16 @@
         $(document).on('click', '.invalid_account', function (e) {
             let target = $(e.target).parent();
             const invalid_account = $(target).find('.invalid_account').data('invalid');
+            if (invalid_account === 0) {
+                $("#send_email, #send_sms, #mark_as_potential, #show_popup_task, #show_group_type_account, #show_manager_account, #remove_selected_account, #change_relations").css({'display': 'none'});
+                $("#restore_account, #permanently_delete_account").css({'display': 'block'});
+            } else {
+                $("#send_email, #send_sms, #mark_as_potential, #show_popup_task, #show_group_type_account, #show_manager_account, #remove_selected_account, #change_relations").css({'display': 'block'});
+                $("#restore_account, #permanently_delete_account").css({'display': 'none'});
+            }
+            $('#birthday_tab').val('');
             $('#invalid_account').val(invalid_account);
+
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
@@ -447,7 +456,7 @@
             let pages = $(this).attr('href').split('page=')[1];
             const group = $('.group').val();
             const telesales = $('.telesales').val();
-            const search = $('#search').val();
+            const search = $('#search_value').val();
             let status = $('#status').val();
             let invalid_account = $('#invalid_account').val();
             let btn_choose_time = $('#btn_choose_time').val();
@@ -534,6 +543,63 @@
             }).done(function () {
                 window.location.reload();
             });
+        });
+
+        $(document).on('click', '#restore_account', function () {
+            const id = $('td .myCheck:checked');
+            const ids = [];
+            $.each(id, function () {
+                ids.push($(this).val());
+            });
+
+            swal({
+                title: 'Bạn có muốn khôi phục tài khoản ?',
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'POST',
+                    url: 'customers/restore',
+                    data: {
+                        ids: ids,
+                    },
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
+            })
+        });
+
+        $('#permanently_delete_account').click(function () {
+            const id = $('td .myCheck:checked');
+            const ids = [];
+            $.each(id, function () {
+                ids.push($(this).val());
+            });
+
+            swal({
+                title: 'Bạn có muốn xóa ?',
+                text: "Nếu bạn xóa tất cả các thông tin sẽ không thể khôi phục!",
+                type: "error",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'POST',
+                    url: 'customers/force-delete',
+                    data: {
+                        ids: ids,
+                    },
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
+            })
         });
 
     </script>
