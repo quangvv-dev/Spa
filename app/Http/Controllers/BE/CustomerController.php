@@ -363,13 +363,15 @@ class CustomerController extends Controller
         );
     }
 
-    public function getChat()
+    public function restore(Request $request)
     {
-
+        $ids = $request->ids;
+        Customer::onlyTrashed()->whereIn('id', $ids)->restore();
     }
 
-    public function postChat()
+    public function forceDelete(Request $request)
     {
-
+        $ids = $request->ids;
+        Customer::onlyTrashed()->whereIn('id', $ids)->forceDelete();
     }
 }

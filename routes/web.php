@@ -25,6 +25,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::post('customers/delete-multiple', 'CustomerController@deleteMultiple');
+    Route::post('customers/restore', 'CustomerController@restore');
+    Route::post('customers/force-delete', 'CustomerController@forceDelete');
     //sms
     Route::resource('sms', 'SmsController');
 
