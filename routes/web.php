@@ -25,6 +25,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::post('customers/delete-multiple', 'CustomerController@deleteMultiple');
+    Route::post('customers/restore', 'CustomerController@restore');
+    Route::post('customers/force-delete', 'CustomerController@forceDelete');
     //sms
     Route::resource('sms', 'SmsController');
 
@@ -34,7 +36,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::put('position/{id}', 'PositionController@update')->name('position.update');
     Route::get('position/edit/{id}', 'PositionController@edit')->name('position.edit');
 
-    Route::get('schedules', 'ScheduleController@homePage');
+    Route::get('schedules', 'ScheduleController@homePage')->name('schedules.index');
 //    Route::get('schedules/{id}', 'ScheduleController@index')->name('schedules.index');
     Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');
@@ -56,6 +58,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('categories', 'CategoryController@getListApi');
         Route::put('orders/{id}', 'OrderController@updateCountDay')->name('order.update_count_day');
         Route::get('orders/{id}', 'OrderController@getOrderById');
+        Route::get('view-chat/{id}', 'CustomerController@getChat');
+        Route::post('view-chat/{id}', 'CustomerController@postChat');
+        Route::post('group-comments', 'GroupCommentController@chatAjax');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
@@ -72,7 +77,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //Chart doanh số
     Route::get('chart-revenue', 'ChartController@index');
     //Trao đổi với khách hàng
-    Route::get('group_comments/{id}', 'GroupCommentController@index');
+    Route::get('group_comments/{id}', 'GroupCommentController@index2');
     Route::post('group_comments/{id}', 'GroupCommentController@store');
     Route::group(['prefix' => 'report'], function () {
         Route::get('customers', 'CustomerController@reportCustomer');

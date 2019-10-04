@@ -33,16 +33,16 @@
 
             });
         });
-        $(document).on('change','.header-search',function() {
-            var search = $(this).val();
-            $.ajax({
-                url: "{{ Url('services/') }}",
-                method: "get",
-                data:{search: search}
-            }).done(function (data) {
-                $('#registration-form').html(data);
+        {{--$(document).on('change','.header-search',function() {--}}
+        {{--    var search = $(this).val();--}}
+        {{--    $.ajax({--}}
+        {{--        url: "{{ Url('services/') }}",--}}
+        {{--        method: "get",--}}
+        {{--        data:{search: search}--}}
+        {{--    }).done(function (data) {--}}
+        {{--        $('#registration-form').html(data);--}}
 
-            });
-        });
+        {{--    });--}}
+        {{--});--}}
     </script>
 @endsection

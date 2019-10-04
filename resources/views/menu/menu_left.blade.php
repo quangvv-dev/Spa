@@ -18,7 +18,7 @@
                             </a>
                         </div>
                         <div class="float-menu">
-                            <a class="display padding7-10 uppercase bold font12 decoration-none" href="#">
+                            <a class="display padding7-10 uppercase bold font12 decoration-none" href="{{route('schedules.index')}}">
                                 <s class="gf-neo-b mr5"></s>Lịch hẹn
                             </a>
                         </div>

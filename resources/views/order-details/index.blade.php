@@ -120,7 +120,7 @@
 
         $(document).on('click', '.other_time', function () {
             $(".other_time_panel").css({'display': ''});
-        })
+        });
 
         $(document).on('click', '.cancel_other_time', function () {
             $(".other_time_panel").css({'display': 'none'});
@@ -151,6 +151,35 @@
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
+            });
+        });
+    </script>
+{{--    //--}}
+
+
+    <style type="text/css">
+        thead {
+            height: 30px;
+            width: 100%;
+            margin-right: 0;
+            margin-left: 0;
+            left: 0px;
+            right: 0px;
+            position: relative;
+            z-index: 9999;
+        }
+        .fixed { position:fixed;}
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var aboveHeight = 300;
+            $(window).scroll(function(){
+                if ($(window).scrollTop() > aboveHeight){
+                    $('thead').addClass('fixed').css('top','62px').next().css('padding-top','60px');
+                } else {
+                    $('thead').removeClass('fixed').next().css('padding-top','0');
+                    // $('.fixed-header').css('top','0px');
+                }
             });
         });
     </script>

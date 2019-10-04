@@ -5,6 +5,10 @@
         .dropdown-toggle::after {
             display: none;
         }
+
+        .table-vcenter td, .table-vcenter th {
+            border-left: 1px solid #e7effc;
+        }
     </style>
     {{--<script src="{{ asset('js/assets/jquery-2.1.3.js') }}"></script>--}}
 @endsection
@@ -58,8 +62,8 @@
                         <li class="dropdown_action"><a id="show_popup_task">Tạo công việc</a></li>
                         <li class="dropdown_action"><a id="show_group_type_account">Nhóm khách hàng</a></li>
                         <li class="dropdown_action"><a id="show_manager_account">Người phụ trách</a></li>
-                        <li class="dropdown_action"><a data-toggle="modal" href="#change-account-viewers">Người xem</a>
-                        </li>
+                        {{--<li class="dropdown_action"><a data-toggle="modal" href="change-account-viewers">Người xem</a>--}}
+                        {{--</li>--}}
                         <li class="dropdown_action"><a id="remove_selected_account">Xóa nhiều</a></li>
                         <li class="dropdown_action" id="restore_account" style="display: none;"><a>Khôi phục</a></li>
                         <li class="dropdown_action" id="permanently_delete_account" style="display: none;"><a>Xóa
@@ -68,7 +72,8 @@
                     </ul>
                 </div>
                 <div style="margin-left: 10px">
-                    <button data-name="" class="btn btn-default status btn white account_relation position" style="height: 40px;">
+                    <button data-name="" class="btn btn-default status btn white account_relation position"
+                            style="height: 40px;">
                         TẤT CẢ
                         <span class="not-number-account white">{{ $customerCount }}</span>
                     </button>
@@ -88,13 +93,19 @@
                     @endforeach
                 </div>
                 <div class="col-md-3">
-                    <div id="div_created_at_dropdown" style="float: right !important;"
+                    <div class="display birthday_tab position font20 pointer mt7" rel="tooltip" data-placement="left"
+                         data-original-title="Sinh nhật hôm nay"
+                         aria-describedby="tooltip146058"><i class="fa fa-birthday-cake gf-icon-h02"
+                                                             aria-hidden="true"></i><span class="not-number-account"
+                                                                                          style="background: rgb(249, 87, 87); color: rgb(255, 255, 255); display: none;"></span>
+                    </div>
+                    <div id="div_created_at_dropdown"
                          class="display position pointer mt5 open" rel="tooltip"
                          data-placement="left" data-original-title="Thời gian tạo khách hàng"
-                         style="padding-top:2px;padding-left:2px"><a class="dropdown-toggle" data-toggle="dropdown"
-                                                                     aria-expanded="true"><i id="created_at_icon"
-                                                                                             class="far fa-clock"
-                                                                                             style="font-size:22px"></i></a>
+                         style="padding-left: 5px"><a class="dropdown-toggle" data-toggle="dropdown"
+                                                      aria-expanded="true"><i id="created_at_icon"
+                                                                              class="far fa-clock"
+                                                                              style="font-size:22px"></i></a>
                         <ul class="dropdown-menu pull-right tr">
                             <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
                                     nay</a>
@@ -114,6 +125,13 @@
                 </div>
             </div>
             @include('customers.modal')
+            <input type="hidden" id="status">
+            <input type="hidden" id="invalid_account">
+            <input type="hidden" id="group">
+            <input type="hidden" id="telesales">
+            <input type="hidden" id="search_value">
+            <input type="hidden" id="btn_choose_time">
+            <input type="hidden" id="birthday_tab">
             <div id="registration-form">
                 @include('customers.ajax')
             </div>
@@ -122,8 +140,84 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
+        $(document).on('click', '.view_modal', function () {
+            $('.customer-chat').empty();
+            const id = $(this).data('customer-id');
+
+            $.ajax({
+                url: "{{ Url('/group_comments/') }}" + '/' + id,
+                method: "get",
+            }).done(function (data) {
+                let html = '';
+                html += `<div class="row" style="padding-bottom: 10px;">
+                    <div class="chat-flash col-md-12">
+                        <div class="white-space" style="display: flex; align-items: center;">
+                            <img width="50" height="50" class="fl mr10 a40 border"
+                                 src="{{asset('default/no-image.png')}}" style="border-radius:100%">
+                            <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
+                            <span>` + data.customer.full_name + `</span>
+                            </a></div>
+                        <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
+                            {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
+                    <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
+                    </div>
+                </div>
+                <div class="chat-ajax" >
+
+                </div>`;
+
+                data.group_comments.forEach(function (item) {
+                    html += `<div class="col" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
+                                <div class="info-avatar no-padd col-md-12">
+                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + item.user.full_name + `</a>
+                                        <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages + `</div>
+                                </div>
+                        </div>`;
+                });
+
+                $('.customer-chat').append(html);
+                $('#view_chat').modal("show");
+                $('.chat-save').attr('data-customer-chat-id', data.customer.id);
+            });
+        });
+
+        $(document).on('click', '.chat-save', function (e) {
+            e.preventDefault();
+            let customer_id = $(this).data('customer-chat-id');
+            let messages = $('.message').val();
+            $('.message').val('');
+
+            $.ajax({
+                url: "{{ Url('/ajax/group-comments/') }}",
+                method: "post",
+                data: {
+                    messages: messages,
+                    customer_id: customer_id
+                }
+            }).done(function (data) {
+
+                let html = '';
+                html += `<div style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;" >
+                    <div class="col-md-11"><p><a href="#" class="bold blue">` + data.group_comment.user.full_name + `</a>
+                        <span><i class="fa fa-clock"> ` + data.group_comment.created_at + `</i></span></p>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages + `</div></div>`;
+
+                $('.chat-ajax').prepend(html);
+            });
+
+        });
+
         $(document).on('click', '.status', function () {
             const status = $(this).data('name');
+            $('#status').val(status);
+            $('#birthday_tab').val('');
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
@@ -134,9 +228,32 @@
             });
         });
 
+        $(document).on('click', '.birthday_tab', function () {
+            const birthday = $('.birthday_tab').data('original-title');
+            $('#birthday_tab').val(birthday);
+            $.ajax({
+                url: "{{ Url('customers/') }}",
+                method: "get",
+                data: {birthday: birthday}
+            }).done(function (data) {
+                $('.load').hide();
+                $('#registration-form').html(data);
+            });
+        });
+
         $(document).on('click', '.invalid_account', function (e) {
             let target = $(e.target).parent();
             const invalid_account = $(target).find('.invalid_account').data('invalid');
+            if (invalid_account === 0) {
+                $("#send_email, #send_sms, #mark_as_potential, #show_popup_task, #show_group_type_account, #show_manager_account, #remove_selected_account, #change_relations").css({'display': 'none'});
+                $("#restore_account, #permanently_delete_account").css({'display': 'block'});
+            } else {
+                $("#send_email, #send_sms, #mark_as_potential, #show_popup_task, #show_group_type_account, #show_manager_account, #remove_selected_account, #change_relations").css({'display': 'block'});
+                $("#restore_account, #permanently_delete_account").css({'display': 'none'});
+            }
+            $('#birthday_tab').val('');
+            $('#invalid_account').val(invalid_account);
+
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
@@ -151,6 +268,8 @@
             const group = $('.group').val();
             const telesales = $('.telesales').val();
             const search = $('#search').val();
+            $('#search_value').val(search);
+            $('#birthday_tab').val('');
             const data_time = $(target).find('.btn_choose_time').data('time');
             $.ajax({
                 url: "{{ Url('customers/') }}",
@@ -159,8 +278,7 @@
                     group: group,
                     telesales: telesales,
                     search: search,
-                    status: status,
-                    data_time: data_time
+                    data_time: data_time,
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
@@ -168,10 +286,10 @@
         });
 
         $(document).on('dblclick', '.description', function (e) {
-            var target = $(e.target).parent();
+            let target = $(e.target).parent();
             $(target).find('.description').empty();
-            var id = $(this).data('id');
-            var html = '';
+            let id = $(this).data('id');
+            let html = '';
 
             $.ajax({
                 url: "ajax/customers/" + id,
@@ -215,10 +333,10 @@
         });
 
         $(document).on('dblclick', '.status-db', function (e) {
-            var target = $(e.target).parent();
+            let target = $(e.target).parent();
             $(target).find('.status-db').empty();
-            var id = $(this).data('id');
-            var html = '';
+            let id = $(this).data('id');
+            let html = '';
 
             $.ajax({
                 url: "ajax/statuses/",
@@ -274,11 +392,11 @@
         });
 
         $('body').not('.category-result').on('click', function () {
-           if (!($('.category-result').parent().find('span.select2-container--focus').length) &&
-               $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
-           ) {
-               location.reload();
-           }
+            if (!($('.category-result').parent().find('span.select2-container--focus').length) &&
+                $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
+            ) {
+                location.reload();
+            }
         });
 
         $('.selectall').click(function () {
@@ -333,5 +451,157 @@
             else
                 $("#btn_tool_group").css({'display': 'none'});
         });
+
+        $('body').on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            let pages = $(this).attr('href').split('page=')[1];
+            const group = $('.group').val();
+            const telesales = $('.telesales').val();
+            const search = $('#search_value').val();
+            let status = $('#status').val();
+            let invalid_account = $('#invalid_account').val();
+            let btn_choose_time = $('#btn_choose_time').val();
+            const birthday = $('#birthday_tab').val();
+            $.ajax({
+                url: '{{ url()->current() }}',
+                method: "get",
+                data: {
+                    page: pages,
+                    group: group,
+                    telesales: telesales,
+                    invalid_account: invalid_account,
+                    search: search,
+                    status: status,
+                    data_time: btn_choose_time,
+                    birthday: birthday
+                },
+            }).done(function (data) {
+                $('#registration-form').html(data);
+            }).fail(function () {
+                alert('Articles could not be loaded.');
+            });
+        });
+
+        $(document).on('dblclick', '.name-customer', function (e) {
+            let target = $(e.target).parent();
+            $(target).find('.name-customer').empty();
+            let id = $(this).data('customer-id');
+            let html = '';
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+
+                html += `<textarea data-id=` + data.id +` class="handsontableInput" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> `+ data.full_name+`</textarea>`;
+                $(target).find(".name-customer").append(html);
+            });
+        });
+        $(document).on('dblclick', '.phone-customer', function (e) {
+            let target = $(e.target).parent();
+            $(target).find('.phone-customer').empty();
+            let id = $(this).data('customer-id');
+            let html = '';
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+
+                html += `<textarea data-id=` + data.id +` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> `+ data.phone+`</textarea>`;
+                $(target).find(".phone-customer").append(html);
+            });
+        });
+
+        $(document).on('focusout', '.handsontableInput', function (e) {
+            let target = $(e.target).parent();
+            let full_name = $(target).find('.handsontableInput').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    full_name: full_name,
+                }
+            }).done(function () {
+                window.location.reload();
+            });
+        });
+        $(document).on('focusout', '.phone-result', function (e) {
+            let target = $(e.target).parent();
+            let phone = $(target).find('.phone-result').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "ajax/customers/" + id,
+                method: "put",
+                data: {
+                    phone: phone,
+                }
+            }).done(function () {
+                window.location.reload();
+            });
+        });
+
+        $(document).on('click', '#restore_account', function () {
+            const id = $('td .myCheck:checked');
+            const ids = [];
+            $.each(id, function () {
+                ids.push($(this).val());
+            });
+
+            swal({
+                title: 'Bạn có muốn khôi phục tài khoản ?',
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'POST',
+                    url: 'customers/restore',
+                    data: {
+                        ids: ids,
+                    },
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
+            })
+        });
+
+        $('#permanently_delete_account').click(function () {
+            const id = $('td .myCheck:checked');
+            const ids = [];
+            $.each(id, function () {
+                ids.push($(this).val());
+            });
+
+            swal({
+                title: 'Bạn có muốn xóa ?',
+                text: "Nếu bạn xóa tất cả các thông tin sẽ không thể khôi phục!",
+                type: "error",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'POST',
+                    url: 'customers/force-delete',
+                    data: {
+                        ids: ids,
+                    },
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
+            })
+        });
+
     </script>
 @endsection

@@ -63,11 +63,12 @@ class CustomerController extends Controller
     {
         $statuses = Status::getRelationship();
         $customers = Customer::search($request->all());
-        $customerCount = Customer::getAll()->count();
+        $customerCount = Customer::getAll($request->all())->count();
         $rank = $customers->firstItem();
-
         if ($request->ajax()) {
-            return Response::json(view('customers.ajax', compact('customers', 'statuses', 'customerCount', 'rank'))->render());
+
+            return Response::json(view('customers.ajax',
+                compact('customers', 'statuses', 'customerCount', 'rank'))->render());
         }
 
         return view('customers.index', compact('customers', 'statuses', 'customerCount', 'rank'));
@@ -121,7 +122,8 @@ class CustomerController extends Controller
 
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
 
-        return view('customers.view_account', compact('title', 'docs', 'customer', 'waiters' , 'schedules', 'id', 'staff'));
+        return view('customers.view_account',
+            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff'));
     }
 
     /**
@@ -298,8 +300,9 @@ class CustomerController extends Controller
     {
         $input = $request->except('category_ids');
         $customer = $this->customerService->update($input, $id);
-        $customer->categories()->sync($request->category_ids);;
-
+        if (isset($request->category_ids) && $request->category_ids) {
+            $customer->categories()->sync($request->category_ids);
+        }
         return $customer;
     }
 
@@ -307,13 +310,18 @@ class CustomerController extends Controller
     {
         $title = 'THỐNG KÊ KHÁCH HÀNG';
         $input = $request->all();
-        $input['user_id'] = null;
+
+        $input['order_id'] = null;
+
+        if ($request->has('data_time') == null) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
 
         $customer = Customer::getDataOfYears($input);
+        $countCustomer = Customer::count($input);
         $statusRevenues = Status::getRevenueSource($input);
-        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
-
         $statuses = Status::getRelationship($input);
+        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
 
         $categoryRevenues = Category::getRevenue($input);
         $customerRevenueByGenders = Customer::getRevenueByGender($input);
@@ -321,7 +329,6 @@ class CustomerController extends Controller
         $orders = Order::getAll($input);
         $groupComments = GroupComment::getAll($input);
         $books = Schedule::getBooks($input);
-        $orderTotal = Order::getAll($input)->sum('gross_revenue');
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax_chart', compact(
@@ -329,13 +336,13 @@ class CustomerController extends Controller
                 'statuses',
                 'customer',
                 'orders',
-                'orderTotal',
                 'statusRevenues',
                 'statusRevenueByRelations',
                 'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
-                'books'
+                'books',
+                'countCustomer'
             ))->render());
         }
 
@@ -345,14 +352,26 @@ class CustomerController extends Controller
                 'statuses',
                 'customer',
                 'orders',
-                'orderTotal',
                 'statusRevenues',
                 'statusRevenueByRelations',
                 'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
-                'books'
+                'books',
+                'countCustomer'
             )
         );
+    }
+
+    public function restore(Request $request)
+    {
+        $ids = $request->ids;
+        Customer::onlyTrashed()->whereIn('id', $ids)->restore();
+    }
+
+    public function forceDelete(Request $request)
+    {
+        $ids = $request->ids;
+        Customer::onlyTrashed()->whereIn('id', $ids)->forceDelete();
     }
 }
