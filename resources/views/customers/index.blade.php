@@ -154,20 +154,37 @@
             searchAjax(data);
         });
 
-        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time', function (e) {
+        $(document).on('click', '.btn_choose_time', function (e) {
             let target = $(e.target).parent();
+            const data_time = $(target).find('.btn_choose_time').data('time');
+            $('#birthday_tab').val('');
+            $('#btn_choose_time').val(data_time);
+            const search = $('#search_value').val();
+            const group = $('#group').val();
+            const telesales = $('#telesales').val();
+            let data = {
+                data_time: data_time,
+                group: group,
+                telesales: telesales,
+                search: search,
+            };
+
+            searchAjax(data);
+        });
+
+        $(document).on('change keyup', '.group, .telesales, #search', function () {
             const group = $('.group').val();
             const telesales = $('.telesales').val();
             const search = $('#search').val();
             $('#search_value').val(search);
             $('#birthday_tab').val('');
-            const data_time = $(target).find('.btn_choose_time').data('time');
+            const data_time = $('#btn_choose_time').val();
 
             let data = {
                 group: group,
                 telesales: telesales,
                 search: search,
-                data_time: data_time,
+                data_time: data_time
             };
 
             searchAjax(data);
