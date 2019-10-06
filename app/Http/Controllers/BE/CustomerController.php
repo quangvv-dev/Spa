@@ -61,7 +61,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $statuses = Status::getRelationship();
+        $statuses = Status::getRelationshipByCustomer($request->all());
         $customers = Customer::search($request->all());
         $customerCount = Customer::getAll($request->all())->count();
         $rank = $customers->firstItem();
