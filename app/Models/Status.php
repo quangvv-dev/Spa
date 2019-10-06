@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Services\OrderService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
@@ -47,6 +48,52 @@ class Status extends Model
         $data = $data->get();
 
         return $data;
+    }
+
+    public static function getRelationshipByCustomer($input)
+    {
+        $data = self::orderBy('id', 'ASC');
+
+        if (isset($input)) {
+            $data = $data->with(['customers' => function ($query) use ($input) {
+                $query->when(isset($input['search']), function ($query) use ($input) {
+                    $query->where(function ($query) use ($input) {
+                       $query->where('full_name', 'like', '%' . $input['search'] . '%')
+                           ->orWhere('phone', 'like', '%' . $input['search'] . '%');
+                    });
+                })
+                ->when(isset($input['telesales']), function ($query) use ($input) {
+                    $query->where('telesales_id', $input['telesales']);
+                })
+                ->when(isset($input['data_time']), function ($query) use ($input) {
+                    $query->when($input['data_time'] == 'TODAY' ||
+                        $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                        $q->whereDate('created_at', getTime(($input['data_time'])));
+                    })
+                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'THIS_MONTH' ||
+                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    });
+                })
+                ->when(isset($input['birthday']), function ($query) use ($input) {
+                    $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?' , Carbon::now()->format('m-d'));
+                })
+                ->when(isset($input['invalid_account']), function ($query) use ($input) {
+                    $query->when($input['invalid_account'] == 0, function ($q) use ($input) {
+                        $q->onlyTrashed();
+                    });
+                })
+                ->whereHas('categories', function ($query) use ($input) {
+                    $query->when(isset($input['group']), function ($query) use($input) {
+                        $query->where('categories.id', $input['group']);
+                    });
+                });
+            }]);
+        }
+
+        return $data->get();
     }
 
     public static function getRevenueSource($input)

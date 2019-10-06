@@ -34,94 +34,8 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
             </div>
-            <div class="card-header">
-                <div class="display btn-group open">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="true"
-                            style="height: 39px; border-radius: 3px; margin-right: 10px"><i
-                                class="fa fa-caret-down"></i></button>
-                    <ul class="dropdown-menu">
-                        <li class="pd5" id="search"><a class="invalid_account" data-invalid="1"
-                                                       data-icon-class="fa fa-trash">
-                                <span class="pr10"></span> Đang sử dụng </a>
-                        </li>
-                        <li class="pd5"><a class="invalid_account" data-invalid="0"
-                                           data-icon-class="fa fa-dot-circle-o"> <span class="pr10"><i
-                                            class="fa fa-dot-circle-o" aria-hidden="true"></i></span> Đã xoá </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="display btn-group" id="btn_tool_group" style="display: none;">
-                    <button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown_action"><a id="send_email">Gửi Email</a></li>
-                        <li class="dropdown_action"><a id="send_sms">Gửi SMS</a></li>
-                        <li class="dropdown_action"><a id="mark_as_potential">Tạo cơ hội</a></li>
-                        <li class="dropdown_action"><a id="show_popup_task">Tạo công việc</a></li>
-                        <li class="dropdown_action"><a id="show_group_type_account">Nhóm khách hàng</a></li>
-                        <li class="dropdown_action"><a id="show_manager_account">Người phụ trách</a></li>
-                        {{--<li class="dropdown_action"><a data-toggle="modal" href="change-account-viewers">Người xem</a>--}}
-                        {{--</li>--}}
-                        <li class="dropdown_action"><a id="remove_selected_account">Xóa nhiều</a></li>
-                        <li class="dropdown_action" id="restore_account" style="display: none;"><a>Khôi phục</a></li>
-                        <li class="dropdown_action" id="permanently_delete_account" style="display: none;"><a>Xóa
-                                hẳn</a></li>
-                        <li class="dropdown_action"><a id="change_relations">Mối quan hệ</a></li>
-                    </ul>
-                </div>
-                <div style="margin-left: 10px">
-                    <button data-name="" class="btn btn-default status btn white account_relation position"
-                            style="height: 40px;">
-                        TẤT CẢ
-                        <span class="not-number-account white">{{ $customerCount }}</span>
-                    </button>
-                </div>
-                <div style="margin-left: 10px">
-                    <button class="btn btn-default" style="height: 40px;">
-                        <a href="{{ route('status.create') }}">
-                            <i class="fa fa-plus font16"></i>
-                        </a>
-                    </button>
-                </div>
-                <div class="scrollmenu col-md-7">
-                    @foreach(@$statuses as $k => $item)
-                        <button class="status btn white account_relation position" data-name="{{$item->name}}"
-                                style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                                    class="not-number-account white">{{ $item->customers->count() }}</span></button>
-                    @endforeach
-                </div>
-                <div class="col-md-3">
-                    <div class="display birthday_tab position font20 pointer mt7" rel="tooltip" data-placement="left"
-                         data-original-title="Sinh nhật hôm nay"
-                         aria-describedby="tooltip146058"><i class="fa fa-birthday-cake gf-icon-h02"
-                                                             aria-hidden="true"></i><span class="not-number-account"
-                                                                                          style="background: rgb(249, 87, 87); color: rgb(255, 255, 255); display: none;"></span>
-                    </div>
-                    <div id="div_created_at_dropdown"
-                         class="display position pointer mt5 open" rel="tooltip"
-                         data-placement="left" data-original-title="Thời gian tạo khách hàng"
-                         style="padding-left: 5px"><a class="dropdown-toggle" data-toggle="dropdown"
-                                                      aria-expanded="true"><i id="created_at_icon"
-                                                                              class="far fa-clock"
-                                                                              style="font-size:22px"></i></a>
-                        <ul class="dropdown-menu pull-right tr">
-                            <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
-                                    nay</a>
-                            </li>
-                            <li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm
-                                    qua</a></li>
-                            <li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần
-                                    này</a></li>
-                            <li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần
-                                    trước</a></li>
-                            <li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng
-                                    này</a></li>
-                            <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
-                                    trước</a></li>
-                        </ul>
-                    </div>
-                </div>
+            <div id="registration-form">
+                @include('customers.ajax')
             </div>
             @include('customers.modal')
             <input type="hidden" id="status">
@@ -131,9 +45,6 @@
             <input type="hidden" id="search_value">
             <input type="hidden" id="btn_choose_time">
             <input type="hidden" id="birthday_tab">
-            <div id="registration-form">
-                @include('customers.ajax')
-            </div>
         </div>
     </div>
 @endsection
@@ -213,31 +124,53 @@
 
         });
 
-        $(document).on('click', '.status', function () {
-            const status = $(this).data('name');
-            $('#status').val(status);
-            $('#birthday_tab').val('');
+        function searchAjax(data) {
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
-                data: {status: status}
+                data: data
             }).done(function (data) {
                 $('.load').hide();
                 $('#registration-form').html(data);
             });
+        }
+
+        $(document).on('click', '.status', function () {
+            const status = $(this).data('name');
+            $('#status').val(status);
+            $('#birthday_tab').val('');
+            let data = {
+                status: status
+            };
+
+            searchAjax(data);
         });
 
         $(document).on('click', '.birthday_tab', function () {
             const birthday = $('.birthday_tab').data('original-title');
             $('#birthday_tab').val(birthday);
-            $.ajax({
-                url: "{{ Url('customers/') }}",
-                method: "get",
-                data: {birthday: birthday}
-            }).done(function (data) {
-                $('.load').hide();
-                $('#registration-form').html(data);
-            });
+            let data = {birthday: birthday};
+
+            searchAjax(data);
+        });
+
+        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time', function (e) {
+            let target = $(e.target).parent();
+            const group = $('.group').val();
+            const telesales = $('.telesales').val();
+            const search = $('#search').val();
+            $('#search_value').val(search);
+            $('#birthday_tab').val('');
+            const data_time = $(target).find('.btn_choose_time').data('time');
+
+            let data = {
+                group: group,
+                telesales: telesales,
+                search: search,
+                data_time: data_time,
+            };
+
+            searchAjax(data);
         });
 
         $(document).on('click', '.invalid_account', function (e) {
@@ -252,36 +185,9 @@
             }
             $('#birthday_tab').val('');
             $('#invalid_account').val(invalid_account);
+            let data = {invalid_account: invalid_account};
 
-            $.ajax({
-                url: "{{ Url('customers/') }}",
-                method: "get",
-                data: {invalid_account: invalid_account}
-            }).done(function (data) {
-                $('#registration-form').html(data);
-            });
-        });
-
-        $(document).on('change keyup click', '.group, .telesales, #search, .btn_choose_time', function (e) {
-            let target = $(e.target).parent();
-            const group = $('.group').val();
-            const telesales = $('.telesales').val();
-            const search = $('#search').val();
-            $('#search_value').val(search);
-            $('#birthday_tab').val('');
-            const data_time = $(target).find('.btn_choose_time').data('time');
-            $.ajax({
-                url: "{{ Url('customers/') }}",
-                method: "get",
-                data: {
-                    group: group,
-                    telesales: telesales,
-                    search: search,
-                    data_time: data_time,
-                }
-            }).done(function (data) {
-                $('#registration-form').html(data);
-            });
+            searchAjax(data);
         });
 
         $(document).on('dblclick', '.description', function (e) {
