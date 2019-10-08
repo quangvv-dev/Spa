@@ -80,12 +80,22 @@ class Customer extends Model
                     });
                 })
                 ->when(isset($param['birthday']), function ($query) use ($param) {
-                    $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?' , Carbon::now()->format('m-d'));
-                })
-                ->latest()->paginate(10);
-        } else {
-            $data = $data->latest()->paginate(10);
+                    $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'));
+                });
         }
+
+        $data = $data->latest()->paginate(10);
+
+        $grossRevenue = 0;
+        $theRest = 0;
+        foreach ($data as $item) {
+            $grossRevenue += $item->orders->sum('gross_revenue');
+            $theRest += $item->orders->sum('the_rest');
+        }
+
+        $data[0]['gross_total'] = $grossRevenue;
+        $data[0]['the_rest_total'] = $grossRevenue;
+
         return $data;
     }
 

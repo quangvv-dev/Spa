@@ -175,6 +175,27 @@
                     </td>
                 </tr>
             @endforeach
+            <tr>
+                <td></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">{{ number_format($customers[0]['gross_total']) }}</td>
+                <td class="text-center">{{ number_format($customers[0]['gross_total']) }}</td>
+                <td class="text-center">{{ number_format($customers[0]['the_rest_total']) }}</td>
+                <td class="text-center"></td>
+            </tr>
         @else
             <tr>
                 <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>
