@@ -93,8 +93,9 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->except('group_id');
+        $input = $request->except(['group_id', 'image']);
         $input['mkt_id'] = $request->mkt_id;
+        $input['image'] = $request->image;
 
         $customer = $this->customerService->create($input);
         $category = Category::find($request->group_id);
