@@ -83,7 +83,7 @@ class OrderController extends Controller
 
         $order = $this->orderService->create($param);
 
-        if (isset($request->spa_therapisst_id) && isset($request->count_day)) {
+        if (isset($request->spa_therapisst_id)) {
             HistoryUpdateOrder::create([
                 'user_id'  => $request->spa_therapisst_id,
                 'order_id' => $order->id,
