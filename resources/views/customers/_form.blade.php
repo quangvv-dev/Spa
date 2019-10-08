@@ -1,4 +1,8 @@
 @extends('layout.app')
+@section('_style')
+    <!-- Bootstrap fileupload css -->
+    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
+@endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -109,6 +113,26 @@
                             <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                            {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
+                            <div class="fileupload fileupload-{{isset($customer) ? 'exists' : 'new' }}"
+                                 data-provides="fileupload">
+                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
+                                    @if (isset($customer))
+                                        <img src="{{ $customer->avatar }}" alt="image"/>
+                                    @endif
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-default btn-file">
+                                        <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
+                                        <input type="file" name="image" accept="image/*" class="btn-default upload"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col" style="margin-bottom: 10px;">
@@ -121,6 +145,7 @@
     </div>
 @endsection
 @section('_script')
+    <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script>
         $(document).ready(function () {
             // validate phone

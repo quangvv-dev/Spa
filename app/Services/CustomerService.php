@@ -8,6 +8,7 @@
 
 namespace App\Services;
 
+use App\Components\Filesystem\Filesystem;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\Customer;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\Auth;
 class CustomerService
 {
     public $customer;
+    private $fileUpload;
 
-    public function __construct(Customer $customer)
+    public function __construct(Filesystem $fileUpload, Customer $customer)
     {
         $this->customer = $customer;
+        $this->fileUpload = $fileUpload;
     }
 
     public function find($id)
@@ -37,6 +40,7 @@ class CustomerService
         if ($input['mkt_id'] === null) {
             $input['mkt_id'] = $userLogin;
         }
+
         $data = $this->data($input);
 
         $customer = $this->customer->fill($data);
@@ -49,6 +53,10 @@ class CustomerService
     {
         @$date = Functions::yearMonthDay($input['birthday']);
         $input['birthday'] = isset($date) && $date ? $date : '';
+
+        if ($input['image']) {
+            $input['avatar'] = $this->fileUpload->uploadUserImage($input['image']);
+        }
 
         return $input;
 
