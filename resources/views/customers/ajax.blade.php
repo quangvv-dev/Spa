@@ -54,7 +54,7 @@
         <button data-name="" class="btn btn-default status btn white account_relation position"
                 style="height: 40px;">
             TẤT CẢ
-            <span class="not-number-account white">{{ $customerCount }}</span>
+            <span class="not-number-account white">{{ $customers->total() }}</span>
         </button>
     </div>
     <div style="margin-left: 10px">
