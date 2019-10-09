@@ -254,6 +254,16 @@
                             data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     </tr>
                 @endforeach
+
+                <tr>
+                    <td></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                </tr>
             @else
                 <tr>
                     {{--<td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>--}}
