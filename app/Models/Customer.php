@@ -84,19 +84,7 @@ class Customer extends Model
                 });
         }
 
-        $data = $data->latest()->paginate(10);
-
-        $grossRevenue = 0;
-        $theRest = 0;
-        foreach ($data as $item) {
-            $grossRevenue += $item->orders->sum('gross_revenue');
-            $theRest += $item->orders->sum('the_rest');
-        }
-
-        $data[0]['gross_total'] = $grossRevenue;
-        $data[0]['the_rest_total'] = $grossRevenue;
-
-        return $data;
+        return $data->latest()->paginate(10);
     }
 
     public function status()

@@ -105,15 +105,6 @@
 </div>
 <div class="table-responsive" style="position: relative">
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
-        <colgroup>
-            <col style="width: 50px;">
-            <col style="width: 50px;">
-            <col style="width: 70px;">
-            <col style="width: 150px;">
-            <col style="width: 50px;">
-            <col style="width: 150px;">
-            <col style="width: 50px;">
-        </colgroup>
         <thead class="bg-primary text-white">
         <tr>
             <th style="width:3%"><input type="checkbox" class="selectall myCheck"/></th>
@@ -138,6 +129,10 @@
         </tr>
         </thead>
         <tbody style="background: white;">
+        <div style="display: none">
+            {{ $totalGrossRevenue = 0}}
+            {{ $totalTheRest = 0}}
+        </div>
         @if (count($customers))
             @foreach($customers as $key => $customer)
                 <tr>
@@ -173,6 +168,8 @@
                         <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
                                     class="fas fa-edit"></i></a>
                     </td>
+                    <div style="display: none">{{$totalGrossRevenue += $customer->orders->sum('gross_revenue')}}</div>
+                    <div style="display: none">{{$totalTheRest += $customer->orders->sum('the_rest')}}</div>
                 </tr>
             @endforeach
             <tr>
@@ -191,9 +188,9 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
-                <td class="text-center">{{ number_format($customers[0]['gross_total']) }}</td>
-                <td class="text-center">{{ number_format($customers[0]['gross_total']) }}</td>
-                <td class="text-center">{{ number_format($customers[0]['the_rest_total']) }}</td>
+                <td class="text-center">{{ number_format($totalGrossRevenue) }}</td>
+                <td class="text-center">{{ number_format($totalGrossRevenue) }}</td>
+                <td class="text-center">{{ number_format($totalTheRest) }}</td>
                 <td class="text-center"></td>
             </tr>
         @else
@@ -207,15 +204,6 @@
 <div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
-            <colgroup>
-                <col style="width: 50px;">
-                <col style="width: 50px;">
-                <col style="width: 70px;">
-                <col style="width: 150px;">
-                <col style="width: 50px;">
-                <col style="width: 150px;">
-                <col style="width: 50px;">
-            </colgroup>
             <thead class="bg-primary text-white">
             <tr>
                 <th><input type="checkbox" class="selectall myCheck"/></th>
