@@ -1,6 +1,17 @@
 @extends('layout.app')
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
+    <style>
+        .add-drop {
+            position: absolute;
+            border: 1px solid #d0d0d0;
+            top: 28px;
+            box-shadow: 0 0 5px #ccc;
+            z-index: 3;
+            min-width: 300px;
+            background: #fff;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="container">
@@ -30,6 +41,21 @@
                                             trước</a></li>
                                     <li class="display pl5"><a data-time="THIS_YEAR" class="btn_choose_time">Năm nay</a>
                                     </li>
+                                    <li class="display position"><a class="other_time choose_time border b-gray">Khác</a>
+                                        <div class="add-drop add-d-right other_time_panel"
+                                             style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>
+                                            <div class="padding tl"><p>Ngày bắt đầu</p>
+                                                <input type="text" class="form-control filter_start_date" id="datepicker" data-toggle="datepicker" name="payment_date">
+                                            </div>
+                                            <div class="padding tl"><p>Ngày kết thúc</p>
+                                                <input type="text" class="form-control filter_end_date" id="datepicker" data-toggle="datepicker" name="payment_date">
+                                            </div>
+                                            <div class="padding5-10 tl mb5">
+                                                <button class="btn btn-info submit_other_time">Tìm kiếm</button>
+                                                <button class="btn btn-default cancel_other_time">Đóng</button>
+                                            </div>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -45,21 +71,40 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('click', '.btn_choose_time', function (e) {
+        $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
             let target = $(e.target).parent();
 
             const data_time = $(target).find('.btn_choose_time').data('time');
+            const start_date = $('.filter_start_date').val();
+            const end_date = $('.filter_end_date').val();
+            console.log(start_date, end_date, data_time);
 
             $.ajax({
                 url: "{{ Url('report/customers') }}",
                 method: "get",
                 data: {
                     data_time: data_time,
+                    start_date: start_date,
+                    end_date: end_date
                 }
             }).done(function (data) {
-//                console.log(data);
                 $('#registration-form').html(data);
             });
         })
+
+        $(document).on('click', '.other_time', function () {
+            $(".other_time_panel").css({'display': ''});
+        });
+
+        $(document).on('click', '.cancel_other_time', function () {
+            $(".other_time_panel").css({'display': 'none'});
+        });
+        $(document).ready(function () {
+            $('[data-toggle="datepicker"]').datepicker({
+                format: 'dd-mm-yyyy',
+                autoHide: true,
+                zIndex: 2048,
+            });
+        });
     </script>
 @endsection
