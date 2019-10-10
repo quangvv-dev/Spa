@@ -126,11 +126,21 @@
             searchAjax({
                 order_type: order_type
             });
-        })
+        });
 
-        $(document).on('click', '.order-detail-modal', function () {
+        $(document).on('click', '.order-detail-modal', function (e) {
+            e.preventDefault();
+            // $('#orderDetailModal').empty();
+            const id = $(this).data('order-id');
+            $.ajax({
+                url: "{{ Url('ajax/orders/') }}" + '/' + id,
+                method: "get",
+            }).done(function (data) {
+                let html = '';
 
-            $('#orderDetailModal').modal("show");
+                $('.orderDetailModal').append(html);
+                $('#orderDetailModal').modal("show");
+            });
         });
 
         $(document).on('click', '.other_time', function () {

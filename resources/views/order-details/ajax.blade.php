@@ -31,7 +31,7 @@
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">
-                        <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal" data-customer-id="{{ $order->id }}" href="#">
+                        <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal" data-order-id="{{ $order->id }}" href="#">
                             <i class="fas fa-info-circle"></i>
                         </a>
                         {{ @$order->customer->account_code }}</td>

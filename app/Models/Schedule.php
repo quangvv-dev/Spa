@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
