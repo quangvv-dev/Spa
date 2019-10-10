@@ -81,7 +81,17 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none, #payment_tab,#order_type', function (e) {
+        function searchAjax(data) {
+            $.ajax({
+                url: "{{ Url('list-orders/') }}",
+                method: "get",
+                data: data
+            }).done(function (data) {
+                $('#registration-form').html(data);
+            });
+        }
+
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none, #payment_tab', function (e) {
             let target = $(e.target).parent();
             const group = $('.group').val();
             const telesales = $('.telesales').val();
@@ -92,30 +102,35 @@
             const data_time = $(target).find('.choose_time').data('time');
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
-            const order_type = $('#order_type').val();
             const bor_none = $(target).find('.bor-none').data('filter');
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
 
-            $.ajax({
-                url: "{{ Url('list-orders/') }}",
-                method: "get",
-                data: {
-                    group: group,
-                    telesales: telesales,
-                    marketing: marketing,
-                    customer: customer,
-                    service: service,
-                    payment_type: payment_type,
-                    data_time: data_time,
-                    start_date: start_date,
-                    end_date: end_date,
-                    bor_none: bor_none,
-                    order_type: order_type
-                }
-            }).done(function (data) {
-                $('#registration-form').html(data);
+            searchAjax({
+                group: group,
+                telesales: telesales,
+                marketing: marketing,
+                customer: customer,
+                service: service,
+                payment_type: payment_type,
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                bor_none: bor_none,
             });
+        });
+
+        $(document).on('change', '#order_type', function () {
+            const order_type = $('#order_type').val();
+
+            searchAjax({
+                order_type: order_type
+            });
+        })
+
+        $(document).on('click', '.order-detail-modal', function () {
+
+            $('#orderDetailModal').modal("show");
         });
 
         $(document).on('click', '.other_time', function () {
