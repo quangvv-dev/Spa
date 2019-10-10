@@ -15,7 +15,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                             {!! Form::label('payment_date', 'Ngày thanh toán', array('class' => ' required')) !!}
-                            <input type="text" class="form-control payment-date" id="datepicker" data-toggle="datepicker" name="payment_date">
+                            <input type="text" class="form-control payment-date" id="datepicker" data-toggle="datepicker" name="payment_date" value="{{ $order->now }}">
                             <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                         </div>
                     </div>
