@@ -29,7 +29,7 @@ class ScheduleController extends Controller
             1 => 'Hẹn gọi lại',
             2 => 'Đặt lịch',
             3 => 'Đã đến',
-            4 => 'Không đến',
+            4 => 'Trễ hẹn',
             5 => 'Hủy',
             6 => 'Tất cả',
         ];
