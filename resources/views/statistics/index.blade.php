@@ -52,6 +52,10 @@
             </div>
             <!-- table-responsive -->
         </div>
+        <input type="hidden" id="data-time">
+        <input type="hidden" id="start-date">
+        <input type="hidden" id="end-date">
+        <input type="hidden" id="search-user">
     </div>
 @endsection
 @section('_script')
@@ -60,27 +64,55 @@
             $(".fc-datepicker").datepicker({dateFormat: 'dd-mm-yy'});
         });
 
-        $(document).on('click change.select2', '.choose_time, .submit_other_time, .search-user', function (e) {
+        function searchAjax(data) {
+            $.ajax({
+                url: "{{ Url('statistics/') }}",
+                method: "get",
+                data: data
+            }).done(function (data) {
+                $('#registration-form').html(data);
+            });
+        }
+
+        $(document).on('click', '.choose_time, .submit_other_time', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
             const data_time = $(target).find('.choose_time').data('time');
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
-            const user_id = $('.search-user').val();
+            const user_id = $('#search-user').val();
 
-            $.ajax({
-                url: "{{ Url('statistics/') }}",
-                method: "get",
-                data: {
-                    data_time: data_time,
-                    user_id: user_id,
-                    start_date: start_date,
-                    end_date: end_date,
-                }
-            }).done(function (data) {
-                $('#registration-form').html(data);
+            if (typeof data_time === "undefined") {
+                $('#data-time').val();
+            } else {
+                $('#data-time').val(data_time);
+            }
+            $('#start-date').val(start_date);
+            $('#end-date').val(end_date);
+
+            searchAjax({
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                user_id: user_id,
             });
         });
+
+        $(document).on('change.select2', '.search-user', function () {
+            const user_id = $('.search-user').val();
+            const data_time = $('#data-time').val();
+            const start_date = $('#start-date').val();
+            const end_date = $('#end-date').val();
+            $('#search-user').val(user_id);
+
+            searchAjax({
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                user_id: user_id,
+            })
+        });
+
         $(document).on('click', '.other_time', function () {
             $(".other_time_panel").css({'display': ''});
         });

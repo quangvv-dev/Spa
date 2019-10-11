@@ -40,12 +40,9 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $input['user_id'] = $request->has('user_id') ? $request->user_id : Auth::user()->id;
+        $input['user_id'] = $request->user_id ?: Auth::user()->id;
+        $input['data_time'] = $request->data_time ?: 'THIS_MONTH';
         $title = 'Nhân viên';
-
-        if ($request->has('data_time') == null) {
-            $input['data_time'] = 'THIS_MONTH';
-        }
 
         $order_arr = [];
         $commissions = Commission::where('user_id', $input['user_id'])->get();
