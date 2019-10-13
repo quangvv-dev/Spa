@@ -61,6 +61,8 @@ class OrderDetailService
             ];
         }
 
+        OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
+
         foreach ($dataArr as $item) {
             if (!empty($item['id'])) {
                 $orderDetail = OrderDetail::where('id', $item['id'])->first();
@@ -70,6 +72,8 @@ class OrderDetailService
                 $orderDetail = OrderDetail::create($item);
             }
         }
+
+
 
         return $orderDetail;
     }
