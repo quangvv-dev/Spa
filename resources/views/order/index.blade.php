@@ -81,8 +81,8 @@
                         @if(!empty($order))
                             @foreach($order->orderDetails as $orderDetail)
                             <tr>
-                                {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                 <td width="250" scope="row">
+                                    {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                     {!! Form::select('service_id[]', $services, $orderDetail->booking_id ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
                                 </td>
                                 <td class="text-center">
