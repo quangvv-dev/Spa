@@ -67,6 +67,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');
+    Route::get('orders/{id}/edit', 'OrderController@edit')->name('order.edit');
+    Route::put('orders/{id}/edit', 'OrderController@update')->name('order.update');
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
     Route::get('commission/{id}', 'CommissionController@index')->name('commission.index');
     Route::post('commission/{id}', 'CommissionController@store')->name('commission.store');

@@ -132,6 +132,7 @@
             e.preventDefault();
             $('.list1').empty();
             $('.customer-info').empty();
+            $('.task_footer_box').empty();
             const id = $(this).data('order-id');
             $.ajax({
                 url: "{{ Url('ajax/order-details/') }}" + '/' + id,
@@ -155,7 +156,6 @@
                     html += '<tr>'+
                     '<td class="tc">'+ item.service.name +'</td>'+
                         '<td class="tc">'+ item.quantity+ '</td>'+
-                        '<td class="tc">'+ item.quantity+ '</td>'+
                         '<td class="tc">'+ item.total_price+ '</td>'+
                         '<td class="tc">'+ item.number_discount+ '</td>'+
                         '<td class="tc">'+ item.total_price+ '</td>'+
@@ -164,6 +164,11 @@
 
                 $('.customer-info').append(html1);
                 $('.list1').append(html);
+                $('.task_footer_box').append(`
+                    <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Sửa đổi</a>
+                    </button>
+                `);
+                $(".link-order").attr("href", "orders/" + data.order.id+ "/edit");
                 $('#orderDetailModal').modal("show");
             });
         });

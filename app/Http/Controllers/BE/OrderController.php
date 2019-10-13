@@ -212,4 +212,29 @@ class OrderController extends Controller
         return \response()->json($data);
     }
 
+    public function edit($id)
+    {
+        $order = $this->orderService->find($id);
+        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $title = 'Cập nhật đơn hàng';
+        $customers = Customer::pluck('full_name', 'id');
+        $customerId = $order->member_id;
+        $customer = Customer::where('id', $customerId)->first();
+
+        return view('order.index', compact('order', 'spaTherapissts', 'title', 'customers', 'customer'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $input = $request->all();
+        $customer = Customer::find($request->user_id);
+        $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
+
+        $order = $this->orderService->update($id, $input);
+        $orderDetail = $this->orderDetailService->update($input, $id);
+
+        return redirect('list-orders');
+
+    }
+
 }

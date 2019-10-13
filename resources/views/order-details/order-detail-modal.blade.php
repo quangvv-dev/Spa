@@ -1,3 +1,8 @@
+<style>
+    #orderDetailModal {
+        color: black;
+    }
+</style>
 <div class="modal fade" id="orderDetailModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -14,7 +19,6 @@
                     <tr class="bold b-gray">
                         <td class="padding5">Tên sản phẩm</td>
                         <td class="padding5">Số lượng</td>
-                        <td class="padding5">Số buổi</td>
                         <td class="padding5">Giá trị đơn</td>
                         <td class="padding5">CK (đ)</td>
                         <td class="padding5">Thành tiền</td>
@@ -23,6 +27,9 @@
                     <tbody class="list1">
                     </tbody>
                 </table>
+                <div class="btn-group dropup fl task_footer_box" style="margin-top: 15px">
+
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>

@@ -39,4 +39,38 @@ class OrderDetailService
             return $model;
         }
     }
+
+    public function update($data, $orderId)
+    {
+        if (empty($data) && is_array($data) == false)
+            return false;
+        $dataArr = [];
+
+        foreach ($data['service_id'] as $key => $value) {
+            $dataArr[] = [
+                'id'               => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key]: '',
+                'order_id'         => $orderId,
+                'user_id'          => $data['user_id'],
+                'booking_id'       => $data['service_id'][$key],
+                'quantity'         => $data['quantity'][$key],
+                'price'            => $data['price'][$key],
+                'vat'              => $data['vat'][$key],
+                'address'          => $data['address'],
+                'number_discount'  => $data['number_discount'][$key],
+                'total_price'      => $data['total_price'][$key],
+            ];
+        }
+
+        foreach ($dataArr as $item) {
+            if (!empty($item['id'])) {
+                $orderDetail = OrderDetail::where('id', $item['id'])->first();
+                $orderDetail->update($item);
+            }
+            if (empty($item['id'])) {
+                $orderDetail = OrderDetail::create($item);
+            }
+        }
+
+        return $orderDetail;
+    }
 }
