@@ -130,15 +130,40 @@
 
         $(document).on('click', '.order-detail-modal', function (e) {
             e.preventDefault();
-            // $('#orderDetailModal').empty();
+            $('.list1').empty();
+            $('.customer-info').empty();
             const id = $(this).data('order-id');
             $.ajax({
-                url: "{{ Url('ajax/orders/') }}" + '/' + id,
+                url: "{{ Url('ajax/order-details/') }}" + '/' + id,
                 method: "get",
             }).done(function (data) {
                 let html = '';
+                let html1 = '';
 
-                $('.orderDetailModal').append(html);
+                html1 += `<div class="row">
+                    <div class="col-md-6">
+                        <p>Tên KH: `+ data.order.customer.full_name +`</p>
+                        <p>SDT: `+ data.order.customer.phone +`</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>Người thực hiện đơn hàng: `+ data.order.spa_therapisst.full_name+`</p>
+                        <p>Người phụ trách: `+ (data.order.customer.telesale ? data.order.customer.telesale.full_name: '')+`</p>
+                    </div>
+                </div>`;
+
+                data.order_details.forEach(function (item) {
+                    html += '<tr>'+
+                    '<td class="tc">'+ item.service.name +'</td>'+
+                        '<td class="tc">'+ item.quantity+ '</td>'+
+                        '<td class="tc">'+ item.quantity+ '</td>'+
+                        '<td class="tc">'+ item.total_price+ '</td>'+
+                        '<td class="tc">'+ item.number_discount+ '</td>'+
+                        '<td class="tc">'+ item.total_price+ '</td>'+
+                        '</tr>';
+                });
+
+                $('.customer-info').append(html1);
+                $('.list1').append(html);
                 $('#orderDetailModal').modal("show");
             });
         });

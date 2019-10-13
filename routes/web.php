@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('categories', 'CategoryController@getListApi');
         Route::put('orders/{id}', 'OrderController@updateCountDay')->name('order.update_count_day');
         Route::get('orders/{id}', 'OrderController@getOrderById');
+        Route::get('order-details/{id}', 'OrderController@find');
         Route::get('view-chat/{id}', 'CustomerController@getChat');
         Route::post('view-chat/{id}', 'CustomerController@postChat');
         Route::post('group-comments', 'GroupCommentController@chatAjax');

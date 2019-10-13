@@ -126,4 +126,21 @@ class OrderService
 
         return $status;
     }
+
+    public function orderDetail($id)
+    {
+        $order = Order::with('customer.telesale', 'orderDetails.service', 'spaTherapisst')->find($id);
+
+        $orderDetails = [];
+        foreach ($order->orderDetails as $orderDetail) {
+            if ($orderDetail->service) {
+                $orderDetails[] = $orderDetail;
+            }
+        }
+
+        return $data = [
+            'order' => $order,
+            'order_details' => $orderDetails
+        ];
+    }
 }
