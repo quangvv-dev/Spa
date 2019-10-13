@@ -6,8 +6,8 @@
                 <h3 class="card-title">{{$title}}</h3></br>
             </div>
 
-            @if (isset($doc))
-                {!! Form::model($doc, array('url' => url('order-detail/'.$doc->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+            @if (isset($order))
+                {!! Form::model($order, array('url' => url('orders/'.$order->id. '/edit'), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
                 {!! Form::open(array('url' => route('order-detail.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
@@ -78,29 +78,58 @@
                         </tr>
                         </thead>
                         <tbody class="order">
-                        <tr>
-                            <td width="250" scope="row">
-                                {!! Form::select('service_id[]', $services, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                            </td>
-                            <td class="text-center">
-                                {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                            </td>
-                            <td class="tc vertical-middle remove_row">
-                                <button class='btn btn-danger'>X</button>
-                            </td>
-                        </tr>
+                        @if(!empty($order))
+                            @foreach($order->orderDetails as $orderDetail)
+                            <tr>
+                                {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
+                                <td width="250" scope="row">
+                                    {!! Form::select('service_id[]', $services, $orderDetail->booking_id ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('price[]', $orderDetail->price, array('class' => 'form-control price', 'required' => true)) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('number_discount[]', $orderDetail->number_discount, array('class' => 'form-control CK2')) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('total_price[]', $orderDetail->total_price, array('class' => 'form-control total','readonly'=>true)) !!}
+                                </td>
+                                <td class="tc vertical-middle remove_row">
+                                    <button class='btn btn-danger'>X</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td width="250" scope="row">
+                                    {!! Form::select('service_id[]', $services, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                                </td>
+                                <td class="text-center">
+                                    {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                                </td>
+                                <td class="tc vertical-middle remove_row">
+                                    <button class='btn btn-danger'>X</button>
+                                </td>
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
                     <div class="col bot">
@@ -157,8 +186,8 @@
         });
 
         $(document).on('change', '.service', function (e) {
-            var target = $(e.target).parent().parent();
-            var id = $(this).val();
+            let target = $(e.target).parent().parent();
+            let id = $(this).val();
             $.ajax({
                 url: "{{ Url('ajax/info-service') }}",
                 method: "get",
@@ -166,18 +195,19 @@
             }).done(function (data) {
                 $(target).find('.price').val(data['price_sell']);
                 $(target).find('.total').val(data['price_sell']);
-                $('body').on('keyup', '.price, .VAT, .CK1, .CK2, .quantity', function (e) {
-                    let target = $(e.target).parent().parent();
-                    var quantity = $(target).find('.quantity').val();
-                    var VAT = $(target).find('.VAT').val();
-                    var price = $(target).find('.price').val();
-                    var CK2 = $(target).find('.CK2').val();
-
-                    var total_service = price * quantity + price * quantity * (VAT / 100) - CK2;
-                    $(target).find('.total').val(total_service);
-                })
             });
         });
+
+        $('body').on('keyup', '.price, .VAT, .CK1, .CK2, .quantity', function (e) {
+            let target = $(e.target).parent().parent();
+            let quantity = $(target).find('.quantity').val();
+            let VAT = $(target).find('.VAT').val();
+            let price = $(target).find('.price').val();
+            let CK2 = $(target).find('.CK2').val();
+
+            let total_service = price * quantity + price * quantity * (VAT / 100) - CK2;
+            $(target).find('.total').val(total_service);
+        })
 
         $('.user').change(function () {
             var id = $(this).val();

@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('categories', 'CategoryController@getListApi');
         Route::put('orders/{id}', 'OrderController@updateCountDay')->name('order.update_count_day');
         Route::get('orders/{id}', 'OrderController@getOrderById');
+        Route::get('order-details/{id}', 'OrderController@find');
         Route::get('view-chat/{id}', 'CustomerController@getChat');
         Route::post('view-chat/{id}', 'CustomerController@postChat');
         Route::post('group-comments', 'GroupCommentController@chatAjax');
@@ -66,6 +67,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');
+    Route::get('orders/{id}/edit', 'OrderController@edit')->name('order.edit');
+    Route::put('orders/{id}/edit', 'OrderController@update')->name('order.update');
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
     Route::get('commission/{id}', 'CommissionController@index')->name('commission.index');
     Route::post('commission/{id}', 'CommissionController@store')->name('commission.store');

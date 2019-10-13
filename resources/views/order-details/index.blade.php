@@ -130,15 +130,45 @@
 
         $(document).on('click', '.order-detail-modal', function (e) {
             e.preventDefault();
-            // $('#orderDetailModal').empty();
+            $('.list1').empty();
+            $('.customer-info').empty();
+            $('.task_footer_box').empty();
             const id = $(this).data('order-id');
             $.ajax({
-                url: "{{ Url('ajax/orders/') }}" + '/' + id,
+                url: "{{ Url('ajax/order-details/') }}" + '/' + id,
                 method: "get",
             }).done(function (data) {
                 let html = '';
+                let html1 = '';
 
-                $('.orderDetailModal').append(html);
+                html1 += `<div class="row">
+                    <div class="col-md-6">
+                        <p>Tên KH: `+ data.order.customer.full_name +`</p>
+                        <p>SDT: `+ data.order.customer.phone +`</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>Người thực hiện đơn hàng: `+ data.order.spa_therapisst.full_name+`</p>
+                        <p>Người phụ trách: `+ (data.order.customer.telesale ? data.order.customer.telesale.full_name: '')+`</p>
+                    </div>
+                </div>`;
+
+                data.order_details.forEach(function (item) {
+                    html += '<tr>'+
+                    '<td class="tc">'+ item.service.name +'</td>'+
+                        '<td class="tc">'+ item.quantity+ '</td>'+
+                        '<td class="tc">'+ item.total_price+ '</td>'+
+                        '<td class="tc">'+ item.number_discount+ '</td>'+
+                        '<td class="tc">'+ item.total_price+ '</td>'+
+                        '</tr>';
+                });
+
+                $('.customer-info').append(html1);
+                $('.list1').append(html);
+                $('.task_footer_box').append(`
+                    <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Sửa đổi</a>
+                    </button>
+                `);
+                $(".link-order").attr("href", "orders/" + data.order.id+ "/edit");
                 $('#orderDetailModal').modal("show");
             });
         });
@@ -176,35 +206,6 @@
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
-            });
-        });
-    </script>
-{{--    //--}}
-
-
-    <style type="text/css">
-        thead {
-            height: 30px;
-            width: 100%;
-            margin-right: 0;
-            margin-left: 0;
-            left: 0px;
-            right: 0px;
-            position: relative;
-            z-index: 9999;
-        }
-        .fixed { position:fixed;}
-    </style>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var aboveHeight = 300;
-            $(window).scroll(function(){
-                if ($(window).scrollTop() > aboveHeight){
-                    $('thead').addClass('fixed').css('top','62px').next().css('padding-top','60px');
-                } else {
-                    $('thead').removeClass('fixed').next().css('padding-top','0');
-                    // $('.fixed-header').css('top','0px');
-                }
             });
         });
     </script>
