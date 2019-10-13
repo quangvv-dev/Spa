@@ -48,3 +48,7 @@
     border: 1px solid #d0d0d0!important;
     font-size: 13px;
 }
+
+body {
+    overflow-y: hidden !important;
+}
