@@ -6,7 +6,15 @@
         select#order_type {
             background: #dddddd;
         }
+        #parent {
+            height: 300px;
+        }
     </style>
+    <script>
+        $(document).ready(function() {
+            $("#fixTable").tableHeadFixer();
+        });
+    </script>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
