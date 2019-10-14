@@ -18,6 +18,7 @@
 
     <!--Font Awesome-->
     <link href="{{asset('assets/plugins/fontawesome-free/css/all.css')}}" rel="stylesheet">
+    <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>
 
     <!-- Font family -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500" rel="stylesheet">

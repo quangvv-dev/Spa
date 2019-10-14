@@ -126,4 +126,45 @@ class OrderService
 
         return $status;
     }
+
+    public function orderDetail($id)
+    {
+        $order = Order::with('customer.telesale', 'orderDetails.service', 'spaTherapisst')->find($id);
+
+        $orderDetails = [];
+        foreach ($order->orderDetails as $orderDetail) {
+            if ($orderDetail->service) {
+                $orderDetails[] = $orderDetail;
+            }
+        }
+
+        return $data = [
+            'order' => $order,
+            'order_details' => $orderDetails
+        ];
+    }
+
+    public function update($id, $attibutes)
+    {
+        $order = $this->find($id);
+
+        $theRest = array_sum($attibutes['total_price']);
+        if (empty($attibutes) && is_array($attibutes) == false) {
+            return false;
+        }
+
+        $attibutes = [
+            'member_id'         => $attibutes['user_id'],
+            'the_rest'          => $theRest,
+            'count_day'         => $attibutes['count_day'],
+            'type'              => $attibutes['count_day'] == null ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'all_total'         => array_sum($attibutes['total_price']),
+            'spa_therapisst_id' => $attibutes['spa_therapisst_id']
+        ];
+
+        $model = $order->update($attibutes);
+
+        return $model;
+
+    }
 }
