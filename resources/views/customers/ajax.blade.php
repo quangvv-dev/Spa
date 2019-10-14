@@ -122,6 +122,7 @@
             <th class="text-white text-center">Giới tính</th>
             <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Mã KH</th>
+            <th class="text-white text-center">Số đơn</th>
             <th class="text-white text-center">Tổng doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Còn lại</th>
@@ -129,10 +130,6 @@
         </tr>
         </thead>
         <tbody style="background: white;">
-        <div style="display: none">
-            {{ $totalGrossRevenue = 0}}
-            {{ $totalTheRest = 0}}
-        </div>
         @if (count($customers))
             @foreach($customers as $key => $customer)
                 <tr>
@@ -161,38 +158,16 @@
                     <td class="text-center">{{ $customer->gender_text  }}</td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ $customer->account_code }}</td>
-                    <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
+                    <td class="text-center">{{ count($customer->orders) }}</td>
+                    <td class="text-center">{{ number_format($customer->orders->sum('all_total')) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('the_rest')) }}</td>
                     <td class="text-center">
                         <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
                                     class="fas fa-edit"></i></a>
                     </td>
-                    <div style="display: none">{{$totalGrossRevenue += $customer->orders->sum('gross_revenue')}}</div>
-                    <div style="display: none">{{$totalTheRest += $customer->orders->sum('the_rest')}}</div>
                 </tr>
             @endforeach
-            <tr>
-                <td></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center">{{ number_format($totalGrossRevenue) }}</td>
-                <td class="text-center">{{ number_format($totalGrossRevenue) }}</td>
-                <td class="text-center">{{ number_format($totalTheRest) }}</td>
-                <td class="text-center"></td>
-            </tr>
         @else
             <tr>
                 <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>
@@ -242,16 +217,6 @@
                             data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     </tr>
                 @endforeach
-
-                <tr>
-                    <td></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                </tr>
             @else
                 <tr>
                     {{--<td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>--}}
