@@ -45,4 +45,9 @@
         <div id="piechart-4"></div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6">
+        <div id="piechart-5"></div>
+    </div>
+</div>
 @include('customers.script')

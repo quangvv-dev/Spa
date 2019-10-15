@@ -109,6 +109,28 @@
         chart.draw(data, options);
     }
 </script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @foreach($schedules as $schedule)
+            ['{{ $schedule->name_status }}', {{ $schedule->total }}],
+            @endforeach
+        ]);
+
+        var options = {
+            title: 'SỐ LƯỢNG TRẠNG THÁI LỊCH HẸN'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-5'));
+
+        chart.draw(data, options);
+    }
+</script>
 {{--<!-- Index Scripts -->--}}
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
