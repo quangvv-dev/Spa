@@ -188,7 +188,7 @@
                 // alert('test');
             });
             $('[data-toggle="datepicker"]').datepicker({
-                format: 'yyyy-mm-dd',
+                format: 'dd-mm-yyyy',
                 autoHide: true,
                 zIndex: 2048,
             });
