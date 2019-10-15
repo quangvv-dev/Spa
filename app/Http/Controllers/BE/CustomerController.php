@@ -329,6 +329,7 @@ class CustomerController extends Controller
         $orders = Order::getAll($input);
         $groupComments = GroupComment::getAll($input);
         $books = Schedule::getBooks($input);
+        $schedules = Schedule::countStatus($input);
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax_chart', compact(
@@ -342,7 +343,8 @@ class CustomerController extends Controller
                 'customerRevenueByGenders',
                 'groupComments',
                 'books',
-                'countCustomer'
+                'countCustomer',
+                'schedules'
             ))->render());
         }
 
@@ -358,7 +360,8 @@ class CustomerController extends Controller
                 'customerRevenueByGenders',
                 'groupComments',
                 'books',
-                'countCustomer'
+                'countCustomer',
+                'schedules'
             )
         );
     }
