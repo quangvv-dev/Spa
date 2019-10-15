@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
@@ -50,6 +51,10 @@ class Schedule extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'user_id', 'id');
+    }
+
+    public function getDateScheduleAttribute() {
+        return Carbon::parse($this->attributes['date'])->format('d/m/Y');
     }
 
     public function getNameStatusAttribute()

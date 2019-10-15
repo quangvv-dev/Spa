@@ -94,7 +94,7 @@
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
-                                            {!! Form::date('date', $item->date, array('class' => 'form-control','id'=>'update_date','readonly'=>true)) !!}
+                                            {!! Form::text('date', $item->date_schedule, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}
