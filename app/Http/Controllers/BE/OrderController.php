@@ -4,11 +4,13 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\PaymentHistory;
 use App\Models\Services;
 use App\Models\Status;
 use App\Services\OrderDetailService;
@@ -150,12 +152,20 @@ class OrderController extends Controller
         try {
             $paymentHistory = PaymentHistoryService::create($request->all(), $id);
             $order = $this->orderService->updatePayment($request->all(), $id);
-
             if (!$paymentHistory || !$order) {
                 DB::rollBack();
             }
 
             DB::commit();
+            $check = PaymentHistory::where('order_id', $id)->get();
+            $check2 = PaymentHistory::where('order_id', $id)->first();
+            if (count($check) == 1) {
+                $body = setting('sms_cskh_booking');
+                $body = str_replace('%full_name%', @$check2->order->customer->full_name, $body);
+                $body = Functions::vi_to_en($body);
+                $date = Carbon::now()->format('d/m/Y H:i');
+                Functions::sendSms(@$check2->order->customer->phone, $body, $date);
+            }
             return $order;
         } catch (\Exception $e) {
             DB::rollBack();
