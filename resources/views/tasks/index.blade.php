@@ -25,20 +25,20 @@
                             <div>
                                 <div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s
                                                 class="gf-neo-b mr5"></s>Công việc</a><span
-                                            class="project_notify noti-position noti-number noti-number-on">8</span>
+                                            class="project_notify noti-position noti-number noti-number-on"></span>
                                 </div>
-                                <div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s
-                                                class="gf-neo-b mr5"></s>TELESALE - CSKH sau mua</a><span
-                                            class="project_notify noti-position noti-number noti-number-on hide"></span>
-                                </div>
-                                <div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s
-                                                class="gf-neo-b mr5"></s>TELESALE - Nhắc lịch HẸN GỌI LẠI</a><span
-                                            class="project_notify noti-position noti-number noti-number-on hide"></span>
-                                </div>
-                                <div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s
-                                                class="gf-neo-b mr5"></s>LỄ TÂN - Xác nhận KH đến</a><span
-                                            class="project_notify noti-position noti-number noti-number-on">3</span>
-                                </div>
+                                {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
+                                                {{--class="gf-neo-b mr5"></s>TELESALE - CSKH sau mua</a><span--}}
+                                            {{--class="project_notify noti-position noti-number noti-number-on hide"></span>--}}
+                                {{--</div>--}}
+                                {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
+                                                {{--class="gf-neo-b mr5"></s>TELESALE - Nhắc lịch HẸN GỌI LẠI</a><span--}}
+                                            {{--class="project_notify noti-position noti-number noti-number-on hide"></span>--}}
+                                {{--</div>--}}
+                                {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
+                                                {{--class="gf-neo-b mr5"></s>LỄ TÂN - Xác nhận KH đến</a><span--}}
+                                            {{--class="project_notify noti-position noti-number noti-number-on">3</span>--}}
+                                {{--</div>--}}
                             </div>
                         </div>
                     </div>
