@@ -23,6 +23,11 @@
                             </a>
                         </div>
                         <div class="float-menu">
+                            <a class="display padding7-10 uppercase bold font12 decoration-none" href="{{ route('tasks.index') }}">
+                                <s class="gf-neo-b mr5"></s>Công việc
+                            </a>
+                        </div>
+                        <div class="float-menu">
                             <a class="display padding7-10 uppercase bold font12 decoration-none" href="#">
                                 <s class="gf-neo-b mr5"></s>Tài liệu
                             </a>

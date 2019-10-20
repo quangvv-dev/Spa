@@ -1,0 +1,194 @@
+.padding5-10 {
+    padding: 5px 10px !important;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.color_3 {
+    background-color: #175f96 !important;
+}
+
+.white {
+    color: #fff !important;
+}
+
+.bor-bot-matt {
+    border-bottom: 1px solid #ebebeb;
+}
+
+.white-space, .white-space2 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.white-space2 a {
+    text-decoration: none;
+    color: #535353;
+
+}
+
+span.noti-position {
+    position: absolute;
+    right: 1px;
+    margin-top: 5px;
+}
+
+span.noti-number-on {
+    background-color: #ee630c !important;
+}
+
+span.noti-number {
+    background: silver;
+    border-radius: 16px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .2), 0 1px 1px hsla(0, 0%, 100%, .4);
+    color: #fff;
+    display: inline-block;
+    font-family: helvetica neue, helvetica, arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    height: 14px;
+    line-height: 14px;
+    min-width: 20px;
+    padding: 0 4px;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .3);
+    margin-right: 10px;
+}
+
+.position {
+    position: relative;
+}
+
+.pr20 {
+    padding-right: 20px !important;
+}
+
+.pr10 {
+    padding-right: 10px !important;
+}
+
+.pl10 {
+    padding-left: 10px !important;
+}
+
+.mt5 {
+    margin-top: 5px !important;
+}
+
+.mb10 {
+    margin-bottom: 10px !important;
+}
+
+.border-ds {
+    border: 1px dashed #d0d0d0 !important;
+}
+
+.gf-icon-hover {
+    opacity: .6 !important;
+    cursor: pointer;
+}
+
+.bor-r {
+    border-right: 1px solid #d0d0d0 !important;
+}
+
+.pt20 {
+    padding-top: 20px !important;
+}
+
+.pb10 {
+    padding-bottom: 10px !important;
+}
+
+.pr20 {
+    padding-right: 20px !important;
+}
+
+.pl20 {
+    padding-left: 20px !important;
+}
+
+.bold {
+    font-weight: 700 !important;
+}
+
+.blue {
+    color: #175f96 !important;
+}
+
+.font20 {
+    font-size: 20px !important;
+}
+
+.mb10 {
+    margin-bottom: 10px !important;
+}
+
+.font14 {
+    font-size: 14px !important;
+}
+
+p {
+    margin: 0 !important;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.mr10 {
+    margin-right: 10px !important;
+}
+
+.padding {
+    padding: 10px !important;
+}
+
+.bor-ds2 {
+    border: 2px dashed #d0d0d0 !important;
+}
+
+.fl {
+    float: left;
+}
+
+.mt2 {
+    margin-top: 2px;
+}
+
+.no-padd {
+    padding: 0 !important;
+}
+
+.display {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.mr20 {
+    margin-right: 20px;
+}
+
+.mr20 a {
+    text-decoration: none;
+    color: #535353;
+}
+
+.fr {
+    float: right !important;
+}
+
+.mt2 {
+    margin-top: 2px;
+}
+
+.hide {
+    display: none !important;
+}
+
+.modal-xl {
+    max-width: 1140px !important;
+}

@@ -61,6 +61,11 @@ class Filesystem
         return $this->saveUploadedFile($input, DirectoryConstant::USER_IMAGE);
     }
 
+    public function uploadDocumentFile($input)
+    {
+        return $this->saveUploadedFile($input, DirectoryConstant::DOCUMENT_FILE);
+    }
+
     /**
      * @param \Illuminate\Http\uploadVideo|array $input
      *
