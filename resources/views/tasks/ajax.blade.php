@@ -12,16 +12,18 @@
         </tr>
         </thead>
         <tbody>
-
+            @foreach($tasks as $task)
                 <tr>
-                    <th scope="row"></th>
+                    <th class="text-center">{{$task->name}}</th>
+                    <th class="text-center">{{@$task->user->full_name}}</th>
+                    <th class="text-center">{{@$task->user->department->name}}</th>
+                    <th class="text-center">{{$task->name_priority}}</th>
+                    <td class="text-center">{{$task->date_from}}</td>
+                    <td class="text-center">{{$task->date_to}}</td>
                     <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center">
-                    </td>
                 </tr>
+
+            @endforeach
         </tbody>
     </table>
     <div class="pull-left">

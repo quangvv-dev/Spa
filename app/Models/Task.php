@@ -47,4 +47,21 @@ class Task extends Model
     {
         return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'user_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function getNamePriorityAttribute()
+    {
+        if ($this->attributes['priority'] == 1) return 'Cao';
+        if ($this->attributes['priority'] == 2) return 'Trung bình';
+        if ($this->attributes['priority'] == 3) return 'Thấp';
+    }
+
+    public static function getAll()
+    {
+        return self::with('user.department')->get();
+    }
 }

@@ -34,8 +34,9 @@ class TaskController extends Controller
         $users = User::pluck('full_name', 'id');
         $customers = Customer::pluck('full_name', 'id');
         $priority = Task::PRIORITY;
+        $tasks = Task::getAll();
 
-        return view('tasks.index', compact('type', 'users', 'customers', 'priority'));
+        return view('tasks.index', compact('type', 'users', 'customers', 'priority', 'tasks'));
     }
 
     /**

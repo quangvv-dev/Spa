@@ -85,43 +85,43 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row padding col-md-12">
-                        <div class="col-md-6 elfinder-button-search"><input type="text"
-                                                                            placeholder="Nhập điều kiện tìm kiếm ..."
-                                                                            class="form-control"></div>
-                        <div class="col-md-3 pl10 position">
-                            <div class="w100i ant-select ant-select-enabled">
-                                <div class="ant-select-selection
-            ant-select-selection--single" role="combobox" aria-autocomplete="list" aria-haspopup="true"
-                                     aria-controls="408b3a16-d56c-4416-a75f-be0fa1a8d355" aria-expanded="false"
-                                     tabindex="0">
-                                    <div class="ant-select-selection__rendered">
-                                        <div unselectable="on" class="ant-select-selection__placeholder"
-                                             style="display: block; user-select: none;">Mời chọn
-                                        </div>
-                                        <div class="ant-select-search ant-select-search--inline"
-                                             style="display: none;">
-                                            <div class="ant-select-search__field__wrap"><input autocomplete="off"
-                                                                                               class="ant-select-search__field"
-                                                                                               value=""><span
-                                                        class="ant-select-search__field__mirror">&nbsp;</span></div>
-                                        </div>
-                                    </div>
-                                    <span class="ant-select-arrow" unselectable="on" style="user-select: none;"><i
-                                                aria-label="icon: down"
-                                                class="anticon anticon-down ant-select-arrow-icon"><svg
-                                                    viewBox="64 64 896 896" class="" data-icon="down" width="1em"
-                                                    height="1em" fill="currentColor" aria-hidden="true"><path
-                                                        d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 pl10 position"><select class="form-control pl20">
-                                <option value="qf1">Công việc giao cho tôi</option>
-                                <option value="qf2">Công việc tôi giao</option>
-                                <option value="qf3">Công việc tôi liên quan</option>
-                            </select></div>
-                    </div>
+                    {{--<div class="row padding col-md-12">--}}
+                        {{--<div class="col-md-6 elfinder-button-search"><input type="text"--}}
+                                                                            {{--placeholder="Nhập điều kiện tìm kiếm ..."--}}
+                                                                            {{--class="form-control"></div>--}}
+                        {{--<div class="col-md-3 pl10 position">--}}
+                            {{--<div class="w100i ant-select ant-select-enabled">--}}
+                                {{--<div class="ant-select-selection--}}
+            {{--ant-select-selection--single" role="combobox" aria-autocomplete="list" aria-haspopup="true"--}}
+                                     {{--aria-controls="408b3a16-d56c-4416-a75f-be0fa1a8d355" aria-expanded="false"--}}
+                                     {{--tabindex="0">--}}
+                                    {{--<div class="ant-select-selection__rendered">--}}
+                                        {{--<div unselectable="on" class="ant-select-selection__placeholder"--}}
+                                             {{--style="display: block; user-select: none;">Mời chọn--}}
+                                        {{--</div>--}}
+                                        {{--<div class="ant-select-search ant-select-search--inline"--}}
+                                             {{--style="display: none;">--}}
+                                            {{--<div class="ant-select-search__field__wrap"><input autocomplete="off"--}}
+                                                                                               {{--class="ant-select-search__field"--}}
+                                                                                               {{--value=""><span--}}
+                                                        {{--class="ant-select-search__field__mirror">&nbsp;</span></div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<span class="ant-select-arrow" unselectable="on" style="user-select: none;"><i--}}
+                                                {{--aria-label="icon: down"--}}
+                                                {{--class="anticon anticon-down ant-select-arrow-icon"><svg--}}
+                                                    {{--viewBox="64 64 896 896" class="" data-icon="down" width="1em"--}}
+                                                    {{--height="1em" fill="currentColor" aria-hidden="true"><path--}}
+                                                        {{--d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></i></span>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-3 pl10 position"><select class="form-control pl20">--}}
+                                {{--<option value="qf1">Công việc giao cho tôi</option>--}}
+                                {{--<option value="qf2">Công việc tôi giao</option>--}}
+                                {{--<option value="qf3">Công việc tôi liên quan</option>--}}
+                            {{--</select></div>--}}
+                    {{--</div>--}}
                     @include('tasks.ajax')
                 </div>
             </div>
