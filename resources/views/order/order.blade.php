@@ -224,7 +224,7 @@
                     description: description
                 }
             }).done(function () {
-                window.location.reload();
+                // window.location.reload();
             });
         });
 

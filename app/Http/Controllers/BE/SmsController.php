@@ -38,9 +38,10 @@ class SmsController extends Controller
     public function store(Request $request)
     {
         setting([
-            'sms_cskh'        => $request->sms_cskh,
-            'sms_csnv'        => $request->sms_csnv,
-            'sms_birthday_kh' => $request->sms_birthday_kh,
+            'sms_cskh'         => $request->sms_cskh,
+            'sms_csnv'         => $request->sms_csnv,
+            'sms_birthday_kh'  => $request->sms_birthday_kh,
+            'sms_cskh_booking' => $request->sms_cskh_booking,
         ])->save();
         return redirect()->back();
     }

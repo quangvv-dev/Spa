@@ -20,6 +20,11 @@
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                     </div>
                     <div class="col-xs-12">
+                        {!! Form::label('sms_cskh_booking', 'Nội dung tin nhắn cám ơn KH đã sử dụng dịch vụ', array('class' => ' required')) !!}
+                        {!! Form::text('sms_cskh_booking', setting('sms_cskh_booking'), array('class' => 'form-control')) !!}
+                        <span class="help-block">{{ $errors->first('sms_cskh_booking', ':message') }}</span>
+                    </div>
+                    <div class="col-xs-12">
                         {!! Form::label('sms_birthday_kh', 'Nội dung tin nhắn mừng sinh nhật KH', array('class' => ' required')) !!}
                         {!! Form::text('sms_birthday_kh', setting('sms_birthday_kh'), array('class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
