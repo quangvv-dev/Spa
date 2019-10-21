@@ -92,7 +92,7 @@
                 </div>
                 <div class="col row" style="margin-top: 15px">
                     <div class="col-md-12 mb10 task_file"><p class="fl pr10 mt5">Tài liệu đính kèm</p>
-                        <input type="file">
+                        <input type="file" name="file_document">
                     </div>
                 </div>
                 <div class="col row">
