@@ -79,7 +79,7 @@
                             <a href="{{url('report/products')}}">Sản phẩm</a>
                         </li>
                         <li>
-                            <a href="#">Công việc</a>
+                            <a href="{{route('tasks.index')}}">Công việc</a>
                         </li>
                         <li>
                             <a href="#">Báo cáo Telesale</a>
