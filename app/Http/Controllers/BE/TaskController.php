@@ -76,7 +76,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -88,7 +88,16 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = $this->taskService->find($id);
+        $users = User::get();
+        $user = $task->users()->get()->pluck('id')->toArray();
+        $users2 = User::pluck('full_name', 'id');
+        $priority = Task::PRIORITY;
+        $type = Task::TYPE;
+        $customers = Customer::pluck('full_name', 'id');
+        $title = 'Thay đổi công việc';
+
+        return view('tasks._form-edit', compact('users', 'users2','task', 'user', 'customers', 'type', 'priority', 'title'));
     }
 
     /**
@@ -101,7 +110,12 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->except('user_id2');
+
+        $task = $this->taskService->update($input, $id);
+        $task->users()->sync($request->user_id2);
+
+        return redirect(route('tasks.index'))->with('status', 'Cập nhật công việc thành công');
     }
 
     /**

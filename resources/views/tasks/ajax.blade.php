@@ -14,7 +14,8 @@
         <tbody>
             @foreach($tasks as $task)
                 <tr>
-                    <th class="text-center">{{$task->name}}</th>
+                    <th class="text-center">
+                        <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></th>
                     <th class="text-center">{{@$task->user->full_name}}</th>
                     <th class="text-center">{{@$task->user->department->name}}</th>
                     <th class="text-center">{{$task->name_priority}}</th>

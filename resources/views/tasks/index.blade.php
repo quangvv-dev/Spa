@@ -6,27 +6,27 @@
     <div class="container bg-white">
         <div class="row">
             <div class="col-md-3 bor-r">
-                <div>
-                    <div class="dropdown padding5-10 position"><i class="fa fa-briefcase mr5 mt3"></i><span
-                                class="bold display uppercase">&nbsp; Dự án</span><a class="dropdown-toggle"
-                                                                                     data-toggle="dropdown"><s
-                                    class="gf-icon-setting-g gf-icon-h02 reset fr"></s></a>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"
-                            style="width: 100px; position: absolute; left: 150px; top: 20px; padding: 0px;">
-                            <li class="bor-bot"><a href="/#/projects/new/0/3">Tạo dự án</a></li>
-                            <li><a href="/#/projects/menu_setting">Sắp xếp dự án</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <div>
-                            <div class="folder_name bor-bot-w bor-bot-matt padding5-10 color_3 white bold position"><s
-                                        class="gf-neo-w mr5"></s>Chưa phân loại
-                            </div>
-                            <div>
-                                <div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s
-                                                class="gf-neo-b mr5"></s>Công việc</a><span
-                                            class="project_notify noti-position noti-number noti-number-on"></span>
-                                </div>
+                {{--<div>--}}
+                    {{--<div class="dropdown padding5-10 position"><i class="fa fa-briefcase mr5 mt3"></i><span--}}
+                                {{--class="bold display uppercase">&nbsp; Dự án</span><a class="dropdown-toggle"--}}
+                                                                                     {{--data-toggle="dropdown"><s--}}
+                                    {{--class="gf-icon-setting-g gf-icon-h02 reset fr"></s></a>--}}
+                        {{--<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"--}}
+                            {{--style="width: 100px; position: absolute; left: 150px; top: 20px; padding: 0px;">--}}
+                            {{--<li class="bor-bot"><a href="/#/projects/new/0/3">Tạo dự án</a></li>--}}
+                            {{--<li><a href="/#/projects/menu_setting">Sắp xếp dự án</a></li>--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
+                    {{--<div>--}}
+                        {{--<div>--}}
+                            {{--<div class="folder_name bor-bot-w bor-bot-matt padding5-10 color_3 white bold position"><s--}}
+                                        {{--class="gf-neo-w mr5"></s>Chưa phân loại--}}
+                            {{--</div>--}}
+                            {{--<div>--}}
+                                {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
+                                                {{--class="gf-neo-b mr5"></s>Công việc</a><span--}}
+                                            {{--class="project_notify noti-position noti-number noti-number-on"></span>--}}
+                                {{--</div>--}}
                                 {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
                                                 {{--class="gf-neo-b mr5"></s>TELESALE - CSKH sau mua</a><span--}}
                                             {{--class="project_notify noti-position noti-number noti-number-on hide"></span>--}}
@@ -39,15 +39,15 @@
                                                 {{--class="gf-neo-b mr5"></s>LỄ TÂN - Xác nhận KH đến</a><span--}}
                                             {{--class="project_notify noti-position noti-number noti-number-on">3</span>--}}
                                 {{--</div>--}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pl10 pr10">
-                        <div class="position padding5-10 mt5 mb10 border-ds row ml0 gf-icon-hover"
-                             style="margin-right: 0px;"><a href="/#/projects/new/0/3" class="pointer"><i
-                                        class="fa fa-plus mr5 mt3"></i>Tạo dự án</a></div>
-                    </div>
-                </div>
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="pl10 pr10">--}}
+                        {{--<div class="position padding5-10 mt5 mb10 border-ds row ml0 gf-icon-hover"--}}
+                             {{--style="margin-right: 0px;"><a href="/#/projects/new/0/3" class="pointer"><i--}}
+                                        {{--class="fa fa-plus mr5 mt3"></i>Tạo dự án</a></div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
             </div>
             <div class="col-md-9">
                 <img class="taskimg mb10">

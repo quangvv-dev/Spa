@@ -16,8 +16,8 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned()->comment('Người thực hiện');
-            $table->bigInteger('customer_id')->unsigned()->comment('Khách hàng liên quan');
-            $table->bigInteger('project_id')->unsigned()->comment('Dự án');
+            $table->bigInteger('customer_id')->unsigned()->nullable()->comment('Khách hàng liên quan');
+            $table->bigInteger('project_id')->unsigned()->nullable()->comment('Dự án');
             $table->bigInteger('parent_id')->comment('id công việc cha')->default(0);
             $table->string('name')->comment('Tên công việc');
             $table->string('code')->comment('Mã công việc');

@@ -1,7 +1,11 @@
-<!-- The Modal -->
-<div class="modal fade" id="task">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
+@extends('layout.app')
+@section('content')
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{$title}}</h3></br>
+            </div>
+
             @if (isset($task))
                 {!! Form::model($task, array('url' => url('tasks/'.$task->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
@@ -95,7 +99,7 @@
                     <div class="col-xs-12 col-md-3">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('user_id', 'Người thực hiện', array('class' => ' required')) !!}
-                            {!! Form::select('user_id', $users, null, array('class' => 'form-control select2', 'required' => true, 'placeholder'=>'Người thực hiện',)) !!}
+                            {!! Form::select('user_id', $users2, null, array('class' => 'form-control select2', 'required' => true, 'placeholder'=>'Người thực hiện',)) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
@@ -109,7 +113,13 @@
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('users', 'Người tham gia', array('class' => ' required')) !!}
-                            {!! Form::select('user_id2[]', $users, null, array('class' => 'form-control select2', 'multiple' => 'multiple' , 'data-placeholder'=>'Người tham gia')) !!}
+                            @if(isset($task))
+                                <select class="form-control select2" name="user_id2[]" multiple="multiple" data-placeholder="Chọn nhóm khách hàng">
+                                    @foreach($users as $item)
+                                        <option value="{{ $item->id }}" {{ isset($task) && in_array($item->id, $user) ? 'selected' : "" }}>{{ $item->full_name }}</option>
+                                    @endforeach
+                                </select>
+                            @endif
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
@@ -128,10 +138,29 @@
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-primary"><a href="{{route('tasks.index')}}" style="color: #ffffff;">Quay lại</a></button>
             </div>
 
         </div>
         {{ Form::close() }}
+
+        </div>
     </div>
-</div>
+@endsection
+@section('_script')
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
+    <script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
+    <script>
+        $('document').ready(function () {
+            $('.clockpicker').clockpicker();
+        });
+        $('[data-toggle="datepicker"]').datepicker({
+            format: 'dd-mm-yyyy',
+            autoHide: true,
+            zIndex: 2048,
+        });
+    </script>
+@endsection
