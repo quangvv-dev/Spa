@@ -11,6 +11,7 @@ namespace App\Services;
 use App\Components\Filesystem\Filesystem;
 use App\Helpers\Functions;
 use App\Models\Task;
+use Carbon\Carbon;
 
 class TaskService
 {
@@ -50,6 +51,8 @@ class TaskService
         $data['date_from'] = isset($data['date_from']) ? Functions::yearMonthDay($data['date_from']): '';
         $data['date_to'] = isset($data['date_to']) ? Functions::yearMonthDay($data['date_to']): '';
 
+        $data['code'] = $this->genderCode();
+
         if (!empty($input['file_document'])) {
             $data['document'] = $this->fileUpload->uploadDocumentFile($data['file_document']);
         }
@@ -58,15 +61,44 @@ class TaskService
 
     }
 
+    public function genderCode()
+    {
+        $today = Carbon::parse(Carbon::now())->format('Y-m');
+
+        $task = $this->task->count() +1;
+
+        $num = '';
+
+        switch (strlen((string)$task)) {
+            case 1:
+                $num = '000'. $task;
+                break;
+            case 2:
+                $num = '00' . $task;
+                break;
+            case 3:
+                $num = '0' . $task;
+                break;
+            default:
+                $num = $task;
+                break;
+        }
+
+        $code = 'CV/' . $today . '/'. $num;
+
+        return $code;
+    }
+
     public function update($input, $id)
     {
         $data = $this->data($input);
 
-        $customer = $this->find($id);
+        $task = $this->find($id);
+        $data['code'] = $task->code;
 
-        $customer->update($data);
+        $task->update($data);
 
-        return $customer;
+        return $task;
 
     }
 }

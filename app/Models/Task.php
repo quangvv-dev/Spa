@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -58,6 +59,16 @@ class Task extends Model
         if ($this->attributes['priority'] == 1) return 'Cao';
         if ($this->attributes['priority'] == 2) return 'Trung bình';
         if ($this->attributes['priority'] == 3) return 'Thấp';
+    }
+
+    public function getDateFromAttribute()
+    {
+        return Carbon::parse($this->attributes['date_from'])->format('d-m-Y');
+    }
+
+    public function getDateToAttribute()
+    {
+        return Carbon::parse($this->attributes['date_to'])->format('d-m-Y');
     }
 
     public static function getAll()
