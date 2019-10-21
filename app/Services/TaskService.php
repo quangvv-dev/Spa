@@ -53,7 +53,7 @@ class TaskService
 
         $data['code'] = $this->genderCode();
 
-        if (!empty($input['file_document'])) {
+        if (!empty($data['file_document'])) {
             $data['document'] = $this->fileUpload->uploadDocumentFile($data['file_document']);
         }
 
