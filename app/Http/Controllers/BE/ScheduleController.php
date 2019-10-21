@@ -6,6 +6,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Customer;
+use App\Services\TaskService;
 use App\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -19,8 +20,12 @@ use function MongoDB\BSON\toJSON;
 class ScheduleController extends Controller
 {
 
-    public function __construct()
+    private $taskService;
+
+    public function __construct(TaskService $taskService)
     {
+        $this->taskService = $taskService;
+
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $customer_plus = Customer::get()->pluck('full_name', 'id')->prepend('Tất cả khách hàng', 0)->toArray();
         $staff2 = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')
@@ -86,6 +91,7 @@ class ScheduleController extends Controller
             'person_action' => $request->person_action,
             'creator_id'    => Auth::user()->id,
         ]);
+//        dd($request->all());
         $data = Schedule::create($request->all());
         $customer = Customer::find($id);
         $person_action = User::find($request->person_action);
@@ -111,6 +117,24 @@ class ScheduleController extends Controller
             $body = Functions::vi_to_en($body);
             Functions::sendSms(@$person_action->phone, $body, $date);
         }
+        $input = [
+            'customer_id'    => $id,
+            'date_from'      => Carbon::now()->format('Y-m-d'),
+            'time_from'      => '07:00',
+            'date_to'        => $request->date,
+            'time_to'        => $request->time_from,
+            'code'           => 'CV-CSKH',
+            'user_id'        => $request->person_action,
+            'all_day'        => 'on',
+            'priority'       => 1,
+            'amount_of_work' => 1,
+            'type'           => 2,
+            'name'           => 'Công việc chăm sóc khách hàng',
+            'description'    => 'Bạn có công việc CSKH với khách hàng ' . $customer->full_name . '---' . $customer->phone . ' đặt lịch hẹn. Trao đổi với KH : ' . $request->note,
+        ];
+        $task = $this->taskService->create($input);
+        $user = User::find($request->user_id2);
+        $task->users()->attach($user);
         return redirect()->back();
     }
 
