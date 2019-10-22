@@ -66,9 +66,7 @@ class CustomerService
         $data = $this->data($input);
 
         $customer = $this->find($id);
-
         $customer->update($data);
-
         return $customer;
 
     }
