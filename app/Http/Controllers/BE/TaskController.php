@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Models\Customer;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use App\Services\TaskService;
 use App\User;
 use Illuminate\Http\Request;
@@ -35,8 +36,11 @@ class TaskController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $priority = Task::PRIORITY;
         $tasks = Task::getAll();
+        $taskStatus = TaskStatus::with('tasks')->get();
+        $status = TaskStatus::pluck('name', 'id');
+        $progress = Task::PROGRESS;
 
-        return view('tasks.index', compact('type', 'users', 'customers', 'priority', 'tasks'));
+        return view('tasks.index', compact('type', 'users', 'customers', 'priority', 'tasks', 'status', 'progress', 'taskStatus'));
     }
 
     /**
@@ -92,8 +96,10 @@ class TaskController extends Controller
         $type = Task::TYPE;
         $customers = Customer::pluck('full_name', 'id');
         $title = 'Thay đổi công việc';
+        $status = TaskStatus::pluck('name', 'id');
+        $progress = Task::PROGRESS;
 
-        return view('tasks._form-edit', compact('users', 'users2','task', 'user', 'customers', 'type', 'priority', 'title'));
+        return view('tasks._form-edit', compact('users', 'users2','task', 'user', 'customers', 'type', 'priority', 'title', 'status', 'progress'));
     }
 
     /**

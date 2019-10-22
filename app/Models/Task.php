@@ -28,6 +28,8 @@ class Task extends Model
         'document',
         'description',
         'priority',
+        'task_status_id',
+        'progress',
     ];
 
     const TYPE = [
@@ -42,6 +44,20 @@ class Task extends Model
        1 => 'Cao',
        2 => 'Trung bình',
        3 => 'Thấp',
+    ];
+
+    const PROGRESS = [
+       0 => '0 %',
+       1 => '10 %',
+       2 => '20 %',
+       3 => '30 %',
+       4 => '40 %',
+       5 => '50 %',
+       6 => '60 %',
+       7 => '70 %',
+       8 => '80 %',
+       9 => '90 %',
+       10 => '100 %',
     ];
 
     public function users()
@@ -73,6 +89,11 @@ class Task extends Model
 
     public static function getAll()
     {
-        return self::with('user.department')->get();
+        return self::with('user.department', 'taskStatus')->get();
+    }
+
+    public function taskStatus()
+    {
+        return $this->belongsTo(TaskStatus::class, 'task_status_id', 'id');
     }
 }
