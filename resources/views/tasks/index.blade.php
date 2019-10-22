@@ -62,27 +62,11 @@
                 </div>
                 <div>
                     <div class="title padding5-10 col-md-12 mt10">
-                        <div class="col-md-8 fl mt2 no-padd"><a
-                                    class="display filter_all mr20 text-filter"><span>Tất cả</span></a><a
-                                    class="display filter_all mr20 text-filter" style="color: rgb(246, 142, 66);">Ưu
-                                tiên</a><a class="display filter_all mr20 text-filter"
-                                           style="color: rgb(23, 95, 150);">Công việc của tôi</a><a
-                                    class="display filter_all mr20 text-filter"
-                                    style="color: rgb(58, 135, 173);">Mới</a><a
-                                    class="display filter_all mr20 text-filter"
-                                    style="color: rgb(60, 60, 60);">Chậm</a><a
-                                    class="display filter_all mr20 text-filter" style="color: rgb(60, 60, 60);">Hoàn
-                                thành chậm</a></div>
-                        <div class="col-md-4 fr no-padd">
-                            <div class="fr mt2 hide" id="btn_action">
-                                <div class="btn-group mr10"><p class="dropdown-toggle fl mr10"
-                                                               data-toggle="dropdown" style="box-shadow: none;">Thao
-                                        tác(<span class="show-selected-num">0</span>)<span class="caret"></span></p>
-                                    <ul class="dropdown-menu tl" style="width: 150px;">
-                                        <li id="finish_task"><a class="padding5">Hoàn thành công việc</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="col-md-12 fl mt2 no-padd"><a
+                                    class="display filter_all mr20 text-filter"><span>Tất cả(0)</span></a>
+                            @foreach ($taskStatus as $item)
+                                    <a class="display filter_all mr20 text-filter"> {{ $item->name}} ({{$item->tasks->count()}})</a>
+                            @endforeach
                         </div>
                     </div>
                     {{--<div class="row padding col-md-12">--}}
