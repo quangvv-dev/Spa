@@ -32,6 +32,7 @@ class CreateTasksTable extends Migration
             $table->integer('priority')->comment('Độ ưu tiên')->nullable();
             $table->integer('task_status_id')->comment('Trạng thái công việc')->nullable();
             $table->integer('progress')->comment('Tiến độ công việc')->nullable();
+            $table->integer('taskmaster_id')->comment('Người giao việc');
             $table->softDeletes();
             $table->timestamps();
         });

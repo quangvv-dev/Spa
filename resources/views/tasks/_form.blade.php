@@ -125,7 +125,7 @@
                     <div class="col-xs-12 col-md-3">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('status', 'Trạng thái công việc', array('class' => ' required')) !!}
-                            {!! Form::select('status', $status, null, array('class' => 'form-control select2', 'placeholder'=>'Trạng thái công việc', 'required' => 'required')) !!}
+                            {!! Form::select('task_status_id', $status, null, array('class' => 'form-control select2', 'placeholder'=>'Trạng thái công việc', 'required' => 'required')) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
