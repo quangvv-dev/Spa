@@ -63,7 +63,7 @@
                 <div>
                     <div class="title padding5-10 col-md-12 mt10">
                         <div class="col-md-12 fl mt2 no-padd"><a
-                                    class="display filter_all mr20 text-filter"><span>Tất cả(0)</span></a>
+                                    class="display filter_all mr20 text-filter"><span>Tất cả({{count($tasks)}})</span></a>
                             @foreach ($taskStatus as $item)
                                     <a class="display filter_all mr20 text-filter"> {{ $item->name}} ({{$item->tasks->count()}})</a>
                             @endforeach
