@@ -11,14 +11,14 @@
             <th class="text-white text-center">Thời gian</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody style="background-color: white">
             @foreach($tasks as $task)
                 <tr>
-                    <th class="text-center">
-                        <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></th>
-                    <th class="text-center">{{@$task->user->full_name}}</th>
-                    <th class="text-center">{{@$task->user->department->name}}</th>
-                    <th class="text-center">{{$task->name_priority}}</th>
+                    <td class="text-center">
+                        <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></td>
+                    <td class="text-center">{{@$task->user->full_name}}</td>
+                    <td class="text-center">{{@$task->user->department->name}}</td>
+                    <td class="text-center">{{$task->name_priority}}</td>
                     <td class="text-center">{{$task->date_from}}</td>
                     <td class="text-center">{{$task->date_to}}</td>
                     <td class="text-center"></td>

@@ -9,6 +9,7 @@ use App\Services\TaskService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
 
 class TaskController extends Controller
 {
@@ -30,18 +31,41 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $input = $request->all();
+        $input['type'] = $request->type ?: 'qf1';
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
         $customers = Customer::pluck('full_name', 'id');
         $priority = Task::PRIORITY;
-        $tasks = Task::getAll();
+        $tasks = Task::getAll($input);
         $taskStatus = TaskStatus::with('tasks')->get();
         $status = TaskStatus::pluck('name', 'id');
         $progress = Task::PROGRESS;
 
-        return view('tasks.index', compact('type', 'users', 'customers', 'priority', 'tasks', 'status', 'progress', 'taskStatus'));
+        if ($request->ajax()) return Response::json(view('tasks.ajax', compact(
+            'type',
+            'users',
+            'customers',
+            'priority',
+            'tasks',
+            'status',
+            'progress',
+            'taskStatus'
+        ))->render());
+
+
+        return view('tasks.index', compact(
+            'type',
+            'users',
+            'customers',
+            'priority',
+            'tasks',
+            'status',
+            'progress',
+            'taskStatus'
+        ));
     }
 
     /**

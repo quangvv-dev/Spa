@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Task extends Model
 {
@@ -30,6 +31,7 @@ class Task extends Model
         'priority',
         'task_status_id',
         'progress',
+        'taskmaster_id'
     ];
 
     const TYPE = [
@@ -62,7 +64,7 @@ class Task extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_tasks', 'user_id', 'task_id');
     }
 
     public function user()
@@ -87,9 +89,35 @@ class Task extends Model
         return Carbon::parse($this->attributes['date_to'])->format('d-m-Y');
     }
 
-    public static function getAll()
+    public static function getAll($input)
     {
-        return self::with('user.department', 'taskStatus')->get();
+        $idlogin = Auth::user()->id;
+        $data = self::with('user.department', 'taskStatus');
+
+            if (isset($input)) {
+                $data = $data->when(isset($input['task_id']), function ($query) use ($input){
+                        $query->where('task_status_id', $input['task_id']);
+                    })
+                    ->when(isset($input['name']), function ($query) use ($input) {
+                        $query->where('name', 'LIKE', '%'. $input['name'] . '%');
+                    })
+                    ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
+                        $query->when($input['type'] == 'qf1', function ($q) use ($idlogin) {
+                            $q->where('user_id', $idlogin);
+                        })
+                            ->when($input['type'] == 'qf2', function ($q) use ($idlogin) {
+                            $q->where('taskmaster_id', $idlogin);
+                        })->when($input['type'] == 'qf3', function ($q1) use ($idlogin) {
+                            $q1->whereHas('users', function ($q) use ($idlogin) {
+                                $q->where('users.id', $idlogin);
+                            });
+                        });
+                    });
+            }
+
+            $data = $data->orderBy('id', 'DESC')->get();
+
+        return $data;
     }
 
     public function taskStatus()

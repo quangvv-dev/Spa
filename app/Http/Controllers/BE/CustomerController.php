@@ -312,10 +312,7 @@ class CustomerController extends Controller
         $input = $request->all();
 
         $input['order_id'] = null;
-
-        if ($request->has('data_time') == null) {
-            $input['data_time'] = 'THIS_MONTH';
-        }
+        $input['data_time'] = $request->data_time ?: 'THIS_MONTH';
 
         $customer = Customer::getDataOfYears($input);
         $countCustomer = Customer::count($input);
