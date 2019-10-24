@@ -103,4 +103,12 @@ class TaskService
         return $task;
 
     }
+
+    public function updateStatus()
+    {
+        $dateNow = Carbon::now()->format('Y-m-d');
+        $tasks = $this->task->whereDate('date_to' ,'<' , $dateNow)->update(['task_status_id' => 6]) ;
+
+        return $tasks;
+    }
 }
