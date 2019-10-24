@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('update:status')->daily();
         $schedule->command('update:customer_status')->daily();
+        $schedule->command('update:status_task')->daily();
     }
 
     /**
