@@ -24,7 +24,7 @@
                             </div>
                             <div>
                                 <div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s
-                                                class="gf-neo-b mr5"></s>Công việc</a><span
+                                                class="gf-neo-b mr5"></s>Chăm sóc</a><span
                                             class="project_notify noti-position noti-number noti-number-on"></span>
                                 </div>
                                 {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}

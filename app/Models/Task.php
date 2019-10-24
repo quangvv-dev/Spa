@@ -72,6 +72,11 @@ class Task extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
     public function getNamePriorityAttribute()
     {
         if ($this->attributes['priority'] == 1) return 'Cao';
@@ -92,7 +97,7 @@ class Task extends Model
     public static function getAll($input)
     {
         $idlogin = Auth::user()->id;
-        $data = self::with('user.department', 'taskStatus');
+        $data = self::with('user.department', 'taskStatus', 'customer');
 
             if (isset($input)) {
                 $data = $data->when(isset($input['task_id']), function ($query) use ($input){
