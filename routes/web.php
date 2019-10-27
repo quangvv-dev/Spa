@@ -87,4 +87,5 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('products', 'OrderController@reportProduct');
     });
     Route::resource('tasks', 'TaskController');
+    Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');
 });

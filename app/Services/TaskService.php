@@ -41,7 +41,6 @@ class TaskService
         $task = $this->task->fill($handleData);
 
         $task->save();
-
         return $task;
 
 

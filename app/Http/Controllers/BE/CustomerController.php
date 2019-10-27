@@ -127,18 +127,20 @@ class CustomerController extends Controller
         $input['type'] = $request->type ?: 'qf1';
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
-        $customers = Customer::find($id)->pluck('full_name', 'id');
+        $customers = Customer::find($id);
+        $customers = [
+            $customers->id => $customers->full_name,
+        ];
         $priority = Task::PRIORITY;
         $tasks = Task::where('customer_id', $id)->orderBy('id', 'DESC')->get();
         $taskStatus = TaskStatus::with('tasks')->get();
         $status = TaskStatus::pluck('name', 'id')->toArray();
-//        dd($status);
         $progress = Task::PROGRESS;
         //EndTask
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'type','users','customers','priority','status','progress'));
+                'type', 'users', 'customers', 'priority', 'status', 'progress'));
     }
 
     /**
