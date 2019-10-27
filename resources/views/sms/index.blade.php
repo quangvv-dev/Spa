@@ -84,9 +84,9 @@
                                         <div class="col-md-4 col-xs-12"></div>
                                         <div class="col-md-4 col-xs-12">
                                             <div class="col-xs-12">
-                                                {!! Form::label('sms_cskh', 'Nội dung tin nhắn KH đặt lịch', array('class' => ' required')) !!}
-                                                {!! Form::text('sms_cskh', setting('sms_cskh'), array('class' => 'form-control')) !!}
-                                                <span class="help-block">{{ $errors->first('note', ':message') }}</span>
+                                                {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                                                {!! Form::select('category_id', $category, null, array('class' => 'form-control select2', 'required' => true, 'placeholder'=>'Nhóm dịch vụ',)) !!}
+                                                <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
                                             </div>
                                             <div class="col-xs-12">
                                                 {!! Form::label('sms_cskh', 'Nội dung tin nhắn KH đặt lịch', array('class' => ' required')) !!}

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Helpers\Functions;
 use App\Models\Category;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,10 +18,29 @@ class SmsController extends Controller
     public function index()
     {
         $title = 'Quản lý nội dung tin nhắn';
+        $category = Category::has('services')->with('services')->get()->pluck('name','id');
         $services = [];
-        $category = Category::has('services')->get();
-        dd($category);
-        return view('sms.index', compact('title'));
+        $phone = [];
+//        $category = Category::has('services')->with('services')->get();
+//        if (count($category)) {
+//            foreach ($category as $item) {
+//                foreach ($item->services as $value) {
+//                    $services[] = $value->id;
+//                }
+//            }
+//        }
+//        $order_detail = OrderDetail::groupBy('order_id')->has('order')->with('order')->whereIn('booking_id',
+//            $services)->get();
+//        if (count($order_detail)) {
+//            foreach ($order_detail as $val) {
+//                if (isset($val->order->customer) && $val->order->customer->phone) {
+//                    dd($val->order->customer->phone);
+//                    $phone[] = $val->order->customer->phone;
+//                }
+//            }
+//        }
+//        dd($order_detail);
+        return view('sms.index', compact('title','category'));
     }
 
     /**
