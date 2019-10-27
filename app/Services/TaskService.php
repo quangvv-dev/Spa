@@ -51,7 +51,7 @@ class TaskService
     {
         $data['date_from'] = isset($data['date_from']) ? Functions::yearMonthDay($data['date_from']): '';
         $data['date_to'] = isset($data['date_to']) ? Functions::yearMonthDay($data['date_to']): '';
-        $data['taskmaster_id'] = Auth::user()->id;
+//        $data['user_id'] = Auth::user()->id;
 
         $data['code'] = $this->genderCode();
 

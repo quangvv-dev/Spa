@@ -12,6 +12,8 @@ use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\Schedule;
 use App\Models\Status;
+use App\Models\Task;
+use App\Models\TaskStatus;
 use App\Services\CustomerService;
 use App\Services\OrderService;
 use App\User;
@@ -119,11 +121,24 @@ class CustomerController extends Controller
         $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
-
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
 
+        //Task
+        $input['type'] = $request->type ?: 'qf1';
+        $type = Task::TYPE;
+        $users = User::pluck('full_name', 'id');
+        $customers = Customer::find($id)->pluck('full_name', 'id');
+        $priority = Task::PRIORITY;
+        $tasks = Task::where('customer_id', $id)->orderBy('id', 'DESC')->get();
+        $taskStatus = TaskStatus::with('tasks')->get();
+        $status = TaskStatus::pluck('name', 'id')->toArray();
+//        dd($status);
+        $progress = Task::PROGRESS;
+        //EndTask
+
         return view('customers.view_account',
-            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff'));
+            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
+                'type','users','customers','priority','status','progress'));
     }
 
     /**

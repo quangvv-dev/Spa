@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,6 +16,9 @@ class SmsController extends Controller
     public function index()
     {
         $title = 'Quản lý nội dung tin nhắn';
+        $services = [];
+        $category = Category::has('services')->get();
+        dd($category);
         return view('sms.index', compact('title'));
     }
 

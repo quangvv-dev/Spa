@@ -257,7 +257,10 @@
                                             @include('schedules.index')
                                         </div>
                                         <div class="tab-pane " id="tab8">
-
+                                            <a style="color: #ffffff" class="right btn btn-primary btn-flat" data-toggle="modal"
+                                               data-target="#task"><i class="fa fa-plus-circle"></i>Thêm mới CV</a>
+                                            @include('tasks.ajax')
+                                            @include('tasks._form')
                                         </div>
                                     </div>
                                 </div>
