@@ -9,7 +9,6 @@
             <th class="text-white text-center">Ưu tiên</th>
             <th class="text-white text-center">Bắt đầu</th>
             <th class="text-white text-center">Kết thúc</th>
-            <th class="text-white text-center">Thời gian</th>
             <th class="text-white text-center">Trạng thái</th>
         </tr>
         </thead>
@@ -19,14 +18,12 @@
                     <td class="text-center">
                         <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></td>
                     <td class="text-center">
-                        <img src="{{ @$task->user->avatar }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover">
-                        {{@$task->user->full_name}}</td>
+                        <img src="{{ @$task->user->avatar }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover"></td>
                     <td class="text-center">{{@$task->customer->full_name}}</td>
                     <td class="text-center">{{@$task->user->department->name}}</td>
                     <td class="text-center">{{$task->name_priority}}</td>
                     <td class="text-center">{{$task->date_from}}</td>
                     <td class="text-center">{{$task->date_to}}</td>
-                    <td class="text-center"></td>
                     <td class="text-center">{{ @$task->taskStatus->name }}</td>
                 </tr>
 
