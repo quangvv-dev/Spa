@@ -35,6 +35,7 @@ class TaskService
     public function create(array $data)
     {
         if (empty($data)) return false;
+        $data['task_status_id'] = 1;
 
         $handleData = $this->data($data);
 
