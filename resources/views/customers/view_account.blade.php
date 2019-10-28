@@ -8,40 +8,47 @@
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{asset('/assets/plugins/wysiwyag/richtext.min.css')}}" rel="stylesheet"/>
     <style>
-        #snoAlertBox1{
-            position:absolute;
-            z-index:1400;
-            top:2%;
-            right:4%;
-            margin:0px auto;
-            text-align:center;
-            display:none;
+        #snoAlertBox1 {
+            position: absolute;
+            z-index: 1400;
+            top: 2%;
+            right: 4%;
+            margin: 0px auto;
+            text-align: center;
+            display: none;
         }
-        #snoAlertBox2{
-            position:absolute;
-            z-index:1400;
-            top:2%;
-            right:4%;
-            margin:0px auto;
-            text-align:center;
-            display:none;
+
+        #snoAlertBox2 {
+            position: absolute;
+            z-index: 1400;
+            top: 2%;
+            right: 4%;
+            margin: 0px auto;
+            text-align: center;
+            display: none;
         }
-        th.text-white.text-center{
+
+        th.text-white.text-center {
             font-size: 12px;
         }
-        td.text-center{
+
+        td.text-center {
             font-size: 13px;
         }
-        .margin-left-10{
+
+        .margin-left-10 {
             margin-left: 10px;
         }
+
         .container {
             max-width: 90%;
         }
-        a#edit-history-order{
+
+        a#edit-history-order {
             color: #007bff !important;
             font-weight: 600 !important;
         }
+
         /*.btn{*/
         /*    background: #7235bb;*/
         /*}*/
@@ -114,10 +121,18 @@
                     </div>
                     <div class="full2 pb20 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i class="fa fa-random mr5 gray margin-left-10">{{ @$customer->source_customer->name }}</i> </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo: <i class="fa fa-user mr5 gray margin-left-10">{{ @$customer->marketing->full_name }}</i></h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo: <i class="fa fa-calendar mr5 gray margin-left-10">{{ $customer->created_at }}</i> </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua:  <i class="fa fa-shopping-cart mr5 gray margin-left-10">{{ $customer->orders->count() }}</i></h3>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i
+                                        class="fa fa-random mr5 gray margin-left-10">{{ @$customer->source_customer->name }}</i>
+                            </h3>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo: <i
+                                        class="fa fa-user mr5 gray margin-left-10">{{ @$customer->marketing->full_name }}</i>
+                            </h3>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo: <i
+                                        class="fa fa-calendar mr5 gray margin-left-10">{{ $customer->created_at }}</i>
+                            </h3>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua: <i
+                                        class="fa fa-shopping-cart mr5 gray margin-left-10">{{ $customer->orders->count() }}</i>
+                            </h3>
                         </div>
                     </div>
                     <div class="border padding infor-list-ct ml2 mt10"><h3
@@ -207,7 +222,8 @@
                                     <div class="tabs-menu1 ">
                                         <!-- Tabs -->
                                         <ul class="nav panel-tabs">
-                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a></li>
+                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
+                                            </li>
                                             <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
                                             <li><a href="#tab6" data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
@@ -223,8 +239,8 @@
                                                         <h3 class="card-title">{{$title}}</h3></br>
                                                         <div class="col" style="float: right">
                                                             {{--<a class="right btn btn-primary btn-flat"--}}
-                                                               {{--href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i--}}
-                                                                        {{--class="fa fa-arrow-right"></i>Tới đặt lịch</a>--}}
+                                                            {{--href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i--}}
+                                                            {{--class="fa fa-arrow-right"></i>Tới đặt lịch</a>--}}
                                                         </div>
                                                     </div>
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
@@ -233,7 +249,9 @@
                                                     </div>
                                                     <br>
                                                     <div class="col-md-12">
-                                                        <button style="float: right" type="submit" class="btn btn-success">Gửi</button>
+                                                        <button style="float: right" type="submit"
+                                                                class="btn btn-success">Gửi
+                                                        </button>
                                                     </div>
                                                     {{ Form::close() }}
 
@@ -248,7 +266,8 @@
                                             <div class="card-header">
                                                 <h3 class="card-title">Danh sách đơn hàng bán</h3></br>
                                                 <div class="col relative">
-                                                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create', $customer->id) }}"><i
+                                                    <a class="right btn btn-primary btn-flat"
+                                                       href="{{ route('orders.create', $customer->id) }}"><i
                                                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
                                             </div>
                                             @include('customers.order')
@@ -257,7 +276,11 @@
                                             @include('schedules.index')
                                         </div>
                                         <div class="tab-pane " id="tab8">
-
+                                            <a style="color: #ffffff;margin-bottom: 8px;"
+                                               class="right btn btn-primary btn-flat" data-toggle="modal"
+                                               data-target="#task"><i class="fa fa-plus-circle"></i>Thêm mới CV</a>
+                                            @include('tasks.ajax')
+                                            @include('tasks._form_customer')
                                         </div>
                                     </div>
                                 </div>
@@ -288,16 +311,16 @@
                 let html = '';
                 data.history_update_orders.forEach(function (item, index) {
                     html += '<tr>' + '<td class="text-center">' + index + '</td>' +
-                        '<td class="text-center">' +item.created_at + '</td>' +
-                        '<td class="text-center">' +item.user.full_name + '</td>' +
-                        '<td class="text-center">' +item.description + '</td>' + '</tr>';
+                        '<td class="text-center">' + item.created_at + '</td>' +
+                        '<td class="text-center">' + item.user.full_name + '</td>' +
+                        '<td class="text-center">' + item.description + '</td>' + '</tr>';
                 });
                 $('.data-history-update-order').append(html);
                 $('#largeModal').modal("show");
             });
         });
 
-        $('.edit-order').click( function () {
+        $('.edit-order').click(function () {
             const id = $(this).data('order-id');
             $('.save-update-history-order').click(function () {
                 swal({
@@ -309,7 +332,7 @@
                 }, function () {
                     $.ajax({
                         type: 'PUT',
-                        url: "{{ Url('ajax/orders/') }}" + "/" +id,
+                        url: "{{ Url('ajax/orders/') }}" + "/" + id,
                         data: $('#historyUpdateOrrder').serialize(),
                         success: function (res) {
                             if (res == 'Success')
@@ -341,7 +364,7 @@
                     data: {id: id}
                 }).done(function (data) {
                     html +=
-                        '<select class="status-result form-control" data-id="' + data.schedule_id+ '" name="status">' +
+                        '<select class="status-result form-control" data-id="' + data.schedule_id + '" name="status">' +
                         '<option value="">' + "Chọn trạng thái" + '</option>';
                     data.data.forEach(function (item) {
                         html +=
