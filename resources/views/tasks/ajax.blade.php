@@ -1,3 +1,11 @@
+<div class="title padding5-10 col-md-12 mt10">
+    <div class="col-md-12 fl mt2 no-padd"><a
+                class="display filter_all mr20 text-filter" data-task-id=""><span>Tất cả({{count($tasks)}})</span></a>
+        @foreach ($taskStatus as $item)
+            <a class="display filter_all mr20 text-filter" data-task-id="{{$item->id}}"> {{ $item->name}} ({{$item->tasks->count()}})</a>
+        @endforeach
+    </div>
+</div>
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">

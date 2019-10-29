@@ -3,9 +3,9 @@
     <link href="{{ asset('css/task.css') }}" rel="stylesheet"/>
 @endsection
 @section('content')
-    <div class="container bg-white" style="margin-top: 30px">
+    <div class="col-md-12 col-lg-12" style="margin-top: 30px">
         <div class="row">
-            <div class="col-md-3 bor-r">
+            <div class="col-md-2 bor-r">
                 <div>
                     <div class="dropdown padding5-10 position"><i class="fa fa-briefcase mr5 mt3"></i><span
                                 class="bold display uppercase">&nbsp; Dự án</span><a class="dropdown-toggle"
@@ -27,10 +27,12 @@
                                                 class="gf-neo-b mr5"></s>Chăm sóc</a><span
                                             class="project_notify noti-position noti-number noti-number-on"></span>
                                 </div>
-                                {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
-                                                {{--class="gf-neo-b mr5"></s>TELESALE - CSKH sau mua</a><span--}}
-                                            {{--class="project_notify noti-position noti-number noti-number-on hide"></span>--}}
-                                {{--</div>--}}
+                                <div class="padding5-10 position b-hover white-space pr20"><select class="form-control pl20 choose-type">
+                                        <option value="qf1">Công việc giao cho tôi</option>
+                                        <option value="qf2">Công việc tôi giao</option>
+                                        <option value="qf3">Công việc tôi liên quan</option>
+                                    </select>
+                                </div>
                                 {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
                                                 {{--class="gf-neo-b mr5"></s>TELESALE - Nhắc lịch HẸN GỌI LẠI</a><span--}}
                                             {{--class="project_notify noti-position noti-number noti-number-on hide"></span>--}}
@@ -61,28 +63,15 @@
                     </div>
                 </div>
                 <div>
-                    <div class="title padding5-10 col-md-12 mt10">
-                        <div class="col-md-12 fl mt2 no-padd"><a
-                                    class="display filter_all mr20 text-filter" data-task-id=""><span>Tất cả({{count($tasks)}})</span></a>
-                            @foreach ($taskStatus as $item)
-                                    <a class="display filter_all mr20 text-filter" data-task-id="{{$item->id}}"> {{ $item->name}} ({{$item->tasks->count()}})</a>
-                            @endforeach
-                        </div>
-                    </div>
                     <div class="row padding col-md-12">
                         <div class="col-md-5 elfinder-button-search"><input type="text"
                                                                             placeholder="Tìm kiếm tên công việc"
                                                                             class="form-control search-task"></div>
                         {{--<div class="col-md-3 pl10 position">--}}
-                            {{--<div class="w100i ant-select ant-select-enabled">--}}
+                        {{--<div class="w100i ant-select ant-select-enabled">--}}
 
-                            {{--</div>--}}
                         {{--</div>--}}
-                        <div class="col-md-4 pl10 position"><select class="form-control pl20 choose-type">
-                                <option value="qf1">Công việc giao cho tôi</option>
-                                <option value="qf2">Công việc tôi giao</option>
-                                <option value="qf3">Công việc tôi liên quan</option>
-                            </select></div>
+                        {{--</div>--}}
                     </div>
                     <div id="registration-form">
                         @include('tasks.ajax')
@@ -90,13 +79,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    {{--</div>--}}
     @include('tasks._form')
 @endsection
 @section('_script')
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
     <script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
     <script>
