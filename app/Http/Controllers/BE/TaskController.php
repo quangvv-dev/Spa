@@ -40,9 +40,7 @@ class TaskController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $priority = Task::PRIORITY;
         $tasks = Task::getAll($input);
-        $taskStatus = TaskStatus::with('tasks')->get();
-        $status = TaskStatus::pluck('name', 'id');
-        $progress = Task::PROGRESS;
+        $taskStatus = TaskStatus::getAll($input);
 
         if ($request->ajax()) return Response::json(view('tasks.ajax', compact(
             'type',
@@ -50,8 +48,6 @@ class TaskController extends Controller
             'customers',
             'priority',
             'tasks',
-            'status',
-            'progress',
             'taskStatus'
         ))->render());
 
@@ -62,8 +58,6 @@ class TaskController extends Controller
             'customers',
             'priority',
             'tasks',
-            'status',
-            'progress',
             'taskStatus'
         ));
     }
