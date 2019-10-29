@@ -35,13 +35,13 @@ class TaskService
     public function create(array $data)
     {
         if (empty($data)) return false;
+        $data['task_status_id'] = 1;
 
         $handleData = $this->data($data);
 
         $task = $this->task->fill($handleData);
 
         $task->save();
-
         return $task;
 
 
@@ -49,8 +49,8 @@ class TaskService
 
     public function data(array $data)
     {
-        $data['date_from'] = isset($data['date_from']) ? Functions::yearMonthDay($data['date_from']): '';
-        $data['date_to'] = isset($data['date_to']) ? Functions::yearMonthDay($data['date_to']): '';
+        $data['date_from'] = isset($data['date_from']) ? Functions::yearMonthDay($data['date_from']) : '';
+        $data['date_to'] = isset($data['date_to']) ? Functions::yearMonthDay($data['date_to']) : '';
         $data['taskmaster_id'] = Auth::user()->id;
 
         $data['code'] = $this->genderCode();
@@ -67,13 +67,13 @@ class TaskService
     {
         $today = Carbon::parse(Carbon::now())->format('Y-m');
 
-        $task = $this->task->count() +1;
+        $task = $this->task->count() + 1;
 
         $num = '';
 
         switch (strlen((string)$task)) {
             case 1:
-                $num = '000'. $task;
+                $num = '000' . $task;
                 break;
             case 2:
                 $num = '00' . $task;
@@ -86,7 +86,7 @@ class TaskService
                 break;
         }
 
-        $code = 'CV/' . $today . '/'. $num;
+        $code = 'CV/' . $today . '/' . $num;
 
         return $code;
     }
@@ -107,7 +107,7 @@ class TaskService
     public function updateStatus()
     {
         $dateNow = Carbon::now()->format('Y-m-d');
-        $tasks = $this->task->whereDate('date_to' ,'<' , $dateNow)->update(['task_status_id' => 6]) ;
+        $tasks = $this->task->whereDate('date_to', '<', $dateNow)->update(['task_status_id' => 6]);
 
         return $tasks;
     }

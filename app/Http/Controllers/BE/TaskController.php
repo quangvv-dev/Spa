@@ -88,6 +88,21 @@ class TaskController extends Controller
 
         return redirect('tasks')->with('status', 'Tạo người dùng thành công');
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCustomer(Request $request)
+    {
+        $input = $request->except('user_id2');
+        $task = $this->taskService->create($input);
+        $user = User::find($request->user_id2);
+        $task->users()->attach($user);
+        return back();
+    }
 
     /**
      * Display the specified resource.
