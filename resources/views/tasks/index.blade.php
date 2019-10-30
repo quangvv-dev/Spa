@@ -12,7 +12,7 @@
                                                                                      data-toggle="dropdown"><s
                                     class="gf-icon-setting-g gf-icon-h02 reset fr"></s></a>
                         {{--<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"--}}
-                            {{--style="width: 100px; position: absolute; left: 150px; top: 20px; padding: 0px;">--}}
+                                 {{--style="width: 100px; position: absolute; left: 150px; top: 20px; padding: 0px;">--}}
                             {{--<li class="bor-bot"><a href="/#/projects/new/0/3">Tạo dự án</a></li>--}}
                             {{--<li><a href="/#/projects/menu_setting">Sắp xếp dự án</a></li>--}}
                         {{--</ul>--}}
@@ -27,21 +27,18 @@
                                                 class="gf-neo-b mr5"></s>Chăm sóc</a><span
                                             class="project_notify noti-position noti-number noti-number-on"></span>
                                 </div>
-                                <div class="padding5-10 position b-hover white-space pr20"><select class="form-control pl20 choose-type">
-                                        <option>Chọn loại công việc</option>
+                                <div class="dropdown padding5-10 position"><span
+                                            class="display uppercase">Loại công việc</span><a class="dropdown-toggle"
+                                                                                                 data-toggle="dropdown"><s
+                                                class="gf-icon-setting-g gf-icon-h02 reset fr"></s></a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"
+                                        style="width: 100px; position: absolute; left: 150px; top: 20px; padding: 0px;">
                                         @foreach($type as $key => $item)
-                                        <option value="{{$key}}">{{$item}}</option>
+                                            <li class="bor-bot choose-type" data-value-type="{{$key}}"><a href="#">{{$item}}</a></li>
+
                                         @endforeach
-                                    </select>
+                                    </ul>
                                 </div>
-                                {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
-                                                {{--class="gf-neo-b mr5"></s>TELESALE - Nhắc lịch HẸN GỌI LẠI</a><span--}}
-                                            {{--class="project_notify noti-position noti-number noti-number-on hide"></span>--}}
-                                {{--</div>--}}
-                                {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
-                                                {{--class="gf-neo-b mr5"></s>LỄ TÂN - Xác nhận KH đến</a><span--}}
-                                            {{--class="project_notify noti-position noti-number noti-number-on">3</span>--}}
-                                {{--</div>--}}
                             </div>
                         </div>
                     </div>
@@ -81,6 +78,7 @@
             </div>
         </div>
     {{--</div>--}}
+        <input type="hidden" id="type-task">
     @include('tasks._form')
 @endsection
 @section('_script')
@@ -97,17 +95,19 @@
             zIndex: 2048,
         });
 
-        $(document).on('click', '.filter_all', function () {
-            const task_id = $(this).data('task-id');
+        $(document).on('click', '.choose-type', function () {
+            const type = $(this).data('value-type');
+            const name = $('.search-task').val();
+            $('#type-task').val(type);
             search({
-                task_id: task_id
+                type: type,
+                name: name
             })
         });
 
-        $(document).on('keyup change', '.search-task, .choose-type', function () {
+        $(document).on('keyup', '.search-task', function () {
             const name = $('.search-task').val();
-            const type = $('.choose-type').val();
-            console.log(type);
+            const type = $('#type-task').val()
             search({
                 name: name,
                 type: type,
