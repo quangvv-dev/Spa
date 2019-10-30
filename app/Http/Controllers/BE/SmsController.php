@@ -95,7 +95,7 @@ class SmsController extends Controller
                             $body = $request->sms_group;
                             $body = str_replace('%full_name%', @$val->order->customer->full_name, $body);
                             $body = Functions::vi_to_en($body);
-                        Functions::sendSms($val->order->customer->phone, $body, $date);
+//                        Functions::sendSms($val->order->customer->phone, $body, $date);
                         }
                     }
                 }
