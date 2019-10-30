@@ -16,31 +16,24 @@
                     </div>
                 </div>
                 <div class="col row">
-                    <div class="col-xs-12 col-md-3">
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('project_id', 'Chọn dự án', array('class' => ' required')) !!}
                             {!! Form::select('project_id',[], null, array('class' => 'form-control select2','placeholder'=>'Chọn dự án')) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-3">
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('type', 'Loại công việc', array('class' => ' required')) !!}
                             {!! Form::select('type', $type, null, array('class' => 'form-control select2','placeholder'=>'Loại công việc', 'required' => true)) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-3">
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('code', 'Mã công việc', array('class' => ' required')) !!}
-                            {!! Form::text('code',null, array('class' => 'form-control', 'readonly' => 'readonly')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('amount_of_work', 'Khối lượng công việc', array('class' => ' required')) !!}
-                            {!! Form::number('amount_of_work',null, array('class' => 'form-control')) !!}
+                            {!! Form::label('customer_id', 'Khách hàng liên quan', array('class' => ' required')) !!}
+                            {!! Form::select('customer_id',$customers, null, array('class' => 'form-control select2')) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
@@ -108,29 +101,6 @@
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('users', 'Người tham gia', array('class' => ' required')) !!}
                             {!! Form::select('user_id2[]', $users, null, array('class' => 'form-control select2', 'multiple' => 'multiple' , 'data-placeholder'=>'Người tham gia')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col row">
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('customer_id', 'Khách hàng liên quan', array('class' => ' required')) !!}
-                            {!! Form::select('customer_id',$customers, null, array('class' => 'form-control select2')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('status', 'Trạng thái công việc', array('class' => ' required')) !!}
-                            {!! Form::select('task_status_id', $status, null, array('class' => 'form-control select2', 'placeholder'=>'Trạng thái công việc')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('progress', 'Tiến độ công việc', array('class' => ' required')) !!}
-                            {!! Form::select('progress', $progress, null, array('class' => 'form-control select2', 'placeholder'=>'Tiến độ công việc', 'required' => 'required')) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>

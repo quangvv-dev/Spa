@@ -36,6 +36,13 @@
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
+                            {!! Form::label('customer_id', 'Khách hàng liên quan', array('class' => ' required')) !!}
+                            {!! Form::select('customer_id',$customers, null, array('class' => 'form-control select2')) !!}
+                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="col row">
                     <div class="col-xs-12 col-md-3">
@@ -100,7 +107,8 @@
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('users', 'Người tham gia', array('class' => ' required')) !!}
                             @if(isset($task))
-                                <select class="form-control select2" name="user_id2[]" multiple="multiple" data-placeholder="Chọn nhóm khách hàng">
+                                <select class="form-control select2" name="user_id2[]" multiple="multiple"
+                                        data-placeholder="Chọn người tham gia">
                                     @foreach($users as $item)
                                         <option value="{{ $item->id }}" {{ isset($task) && in_array($item->id, $user) ? 'selected' : "" }}>{{ $item->full_name }}</option>
                                     @endforeach
@@ -115,13 +123,14 @@
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <button type="submit" class="btn btn-primary"><a href="{{route('tasks.index')}}" style="color: #ffffff;">Quay lại</a></button>
+                <button type="submit" class="btn btn-primary"><a href="{{route('tasks.index')}}"
+                                                                 style="color: #ffffff;">Quay lại</a></button>
             </div>
 
         </div>
         {{ Form::close() }}
 
-        </div>
+    </div>
     </div>
 @endsection
 @section('_script')
