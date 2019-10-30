@@ -31,7 +31,8 @@ class Task extends Model
         'priority',
         'task_status_id',
         'progress',
-        'taskmaster_id'
+        'taskmaster_id',
+        'department_id',
     ];
 
     const TYPE = [
@@ -97,7 +98,7 @@ class Task extends Model
     public static function getAll($input)
     {
         $idlogin = Auth::user()->id;
-        $data = self::with('user.department', 'taskStatus', 'customer');
+        $data = self::with('user.department', 'taskStatus', 'customer')->where('user_id', $idlogin);
 
             if (isset($input)) {
                 $data = $data->when(isset($input['task_id']), function ($query) use ($input){
@@ -107,16 +108,7 @@ class Task extends Model
                         $query->where('name', 'LIKE', '%'. $input['name'] . '%');
                     })
                     ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
-                        $query->when($input['type'] == 'qf1', function ($q) use ($idlogin) {
-                            $q->where('user_id', $idlogin);
-                        })
-                            ->when($input['type'] == 'qf2', function ($q) use ($idlogin) {
-                            $q->where('taskmaster_id', $idlogin);
-                        })->when($input['type'] == 'qf3', function ($q1) use ($idlogin) {
-                            $q1->whereHas('users', function ($q) use ($idlogin) {
-                                $q->where('users.id', $idlogin);
-                            });
-                        });
+                        $query->where('type', $input['type']);
                     });
             }
 

@@ -35,17 +35,9 @@ class TaskStatus extends Model
                 $query->where('name', 'like', '%'. $input['name'] . '%');
 
             })
+            ->where('user_id', $idlogin)
             ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
-                $query->when($input['type'] == 'qf1', function ($q) use ($idlogin) {
-                    $q->where('user_id', $idlogin);
-                })
-                ->when($input['type'] == 'qf2', function ($q) use ($idlogin) {
-                    $q->where('taskmaster_id', $idlogin);
-                })->when($input['type'] == 'qf3', function ($q1) use ($idlogin) {
-                    $q1->whereHas('users', function ($q) use ($idlogin) {
-                        $q->where('users.id', $idlogin);
-                    });
-                });
+                $query->where('type', $input['type']);
             });
         }]);
 

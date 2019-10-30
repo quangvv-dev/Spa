@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Models\Customer;
+use App\Models\Department;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Services\TaskService;
@@ -34,10 +35,10 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $input['type'] = $request->type ?: 'qf1';
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
         $customers = Customer::pluck('full_name', 'id');
+        $departments = Department::pluck('name', 'id');
         $priority = Task::PRIORITY;
         $tasks = Task::getAll($input);
         $taskStatus = TaskStatus::getAll($input);
@@ -48,7 +49,8 @@ class TaskController extends Controller
             'customers',
             'priority',
             'tasks',
-            'taskStatus'
+            'taskStatus',
+            'departments'
         ))->render());
 
 
@@ -58,7 +60,8 @@ class TaskController extends Controller
             'customers',
             'priority',
             'tasks',
-            'taskStatus'
+            'taskStatus',
+            'departments'
         ));
     }
 
@@ -135,8 +138,9 @@ class TaskController extends Controller
         $title = 'Thay đổi công việc';
         $status = TaskStatus::pluck('name', 'id');
         $progress = Task::PROGRESS;
+        $departments = Department::pluck('name', 'id');
 
-        return view('tasks._form-edit', compact('users', 'users2','task', 'user', 'customers', 'type', 'priority', 'title', 'status', 'progress'));
+        return view('tasks._form-edit', compact('users', 'departments', 'users2','task', 'user', 'customers', 'type', 'priority', 'title', 'status', 'progress'));
     }
 
     /**

@@ -3,7 +3,7 @@
     <link href="{{ asset('css/task.css') }}" rel="stylesheet"/>
 @endsection
 @section('content')
-    <div class="col-md-12 col-lg-12" style="margin-top: 30px">
+    <div class="col-md-12 col-lg-12" style="margin-top: 30px; background-color: white">
         <div class="row">
             <div class="col-md-2 bor-r">
                 <div>
@@ -28,9 +28,10 @@
                                             class="project_notify noti-position noti-number noti-number-on"></span>
                                 </div>
                                 <div class="padding5-10 position b-hover white-space pr20"><select class="form-control pl20 choose-type">
-                                        <option value="qf1">Công việc giao cho tôi</option>
-                                        <option value="qf2">Công việc tôi giao</option>
-                                        <option value="qf3">Công việc tôi liên quan</option>
+                                        <option>Chọn loại công việc</option>
+                                        @foreach($type as $key => $item)
+                                        <option value="{{$key}}">{{$item}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 {{--<div class="padding5-10 position b-hover white-space pr20"><a class="project_link"><s--}}
@@ -83,6 +84,7 @@
     @include('tasks._form')
 @endsection
 @section('_script')
+
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
     <script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
     <script>

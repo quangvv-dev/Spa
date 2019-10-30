@@ -24,8 +24,8 @@
                 <div class="col row">
                     <div class="col-xs-12 col-md-3">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('project_id', 'Chọn dự án', array('class' => ' required')) !!}
-                            {!! Form::select('project_id',[], null, array('class' => 'form-control select2','placeholder'=>'Chọn dự án')) !!}
+                            {!! Form::label('project_id', 'Chọn phòng ban', array('class' => ' required')) !!}
+                            {!! Form::select('department_id', $departments, null, array('class' => 'form-control select2','placeholder'=>'Chọn phòng ban')) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
