@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('customers/force-delete', 'CustomerController@forceDelete');
     //sms
     Route::resource('sms', 'SmsController');
+    Route::post('sent-sms', 'SmsController@sentSms')->name('sms.sent');
 
     Route::resource('department', 'DepartmentController');
     Route::get('position/{id}', 'PositionController@index')->name('position.index');
