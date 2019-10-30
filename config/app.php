@@ -179,6 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Berkayk\OneSignal\OneSignalServiceProvider::class
 
     ],
 
@@ -236,6 +237,7 @@ return [
         'Html'     => Collective\Html\HtmlFacade::class,
         'Excel'    => Maatwebsite\Excel\Facades\Excel::class,
         'Setting'  => anlutro\LaravelSettings\Facade::class,
+        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class
 
     ],
 

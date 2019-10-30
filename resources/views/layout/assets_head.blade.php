@@ -17,6 +17,9 @@
     <title>Hệ Thống Spa Royal</title>
 
     <!--Font Awesome-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
     <link href="{{asset('assets/plugins/fontawesome-free/css/all.css')}}" rel="stylesheet">
     <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>
 
