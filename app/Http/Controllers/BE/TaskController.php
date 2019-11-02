@@ -180,6 +180,7 @@ class TaskController extends Controller
         $input = $request->all();
         $input['task_status_id'] = $taskStatus->id;
 
-        $task = $this->taskService->update($input, $request->id);
+        $task = $this->taskService->find($request->id);
+        $task->update($input);
     }
 }
