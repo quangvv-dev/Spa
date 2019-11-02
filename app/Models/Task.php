@@ -78,6 +78,11 @@ class Task extends Model
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
     public function getNamePriorityAttribute()
     {
         if ($this->attributes['priority'] == 1) return 'Cao';
@@ -98,7 +103,8 @@ class Task extends Model
     public static function getAll($input)
     {
         $idlogin = Auth::user()->id;
-        $data = self::with('user.department', 'taskStatus', 'customer')->where('user_id', $idlogin);
+        $user = User::where('id', $idlogin)->first();
+        $data = self::with('user', 'taskStatus', 'customer', 'department');
 
             if (isset($input)) {
                 $data = $data->when(isset($input['task_id']), function ($query) use ($input){
@@ -109,6 +115,16 @@ class Task extends Model
                     })
                     ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
                         $query->where('type', $input['type']);
+                    })->when(isset($input['type1']), function ($query) use ($input, $user) {
+                        $query->when($input['type1'] == 'qf1', function ($q) {
+                            $q->where('user_id', Auth::user()->id);
+                        })->when($input['type1'] == 'qf2', function ($q) use($user) {
+                            $q->where('department_id', $user->department_id);
+                        })->when($input['type1'] == 'qf3', function ($q) {
+                            $q->with(['users', function ($q) {
+                                $q->where('users.id', Auth::user()->id);
+                            }]);
+                        });
                     });
             }
 
