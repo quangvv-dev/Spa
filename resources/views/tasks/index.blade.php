@@ -86,7 +86,6 @@
     @include('tasks._form')
 @endsection
 @section('_script')
-
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
     <script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
     <script>
@@ -132,7 +131,7 @@
                 type: type,
                 type1: type1
             })
-        })
+        });
 
         function search(data) {
             $.ajax({
@@ -144,5 +143,29 @@
 
             });
         }
+        $('.update-status').click(function () {
+            const id = $(this).data('id');
+            console.log(id)
+
+            swal({
+                title: 'Bạn có muốn hoàn thành công việc ?',
+                type: "success",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'POST',
+                    url: 'ajax/tasks/update',
+                    data: {
+                        id: id,
+                    },
+                    success: function () {
+                        window.location.reload();
+                    }
+                })
+            })
+        });
     </script>
 @endsection

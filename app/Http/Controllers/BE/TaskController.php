@@ -173,4 +173,13 @@ class TaskController extends Controller
     {
         //
     }
+
+    public function updateStatus(Request $request)
+    {
+        $taskStatus = TaskStatus::where('name', 'Hoàn thành')->first();
+        $input = $request->all();
+        $input['task_status_id'] = $taskStatus->id;
+
+        $task = $this->taskService->update($input, $request->id);
+    }
 }
