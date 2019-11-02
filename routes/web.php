@@ -63,6 +63,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('view-chat/{id}', 'CustomerController@getChat');
         Route::post('view-chat/{id}', 'CustomerController@postChat');
         Route::post('group-comments', 'GroupCommentController@chatAjax');
+        Route::post('tasks/update', 'TaskController@updateStatus');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');

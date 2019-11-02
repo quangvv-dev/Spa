@@ -10,6 +10,7 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
+            <th class="text-white">Thao tác</th>
             <th class="text-white">Công việc</th>
             <th class="text-white text-center">Thực hiện</th>
             <th class="text-white text-center">Khách hàng</th>
@@ -23,6 +24,7 @@
         <tbody style="background-color: white">
             @foreach($tasks as $task)
                 <tr>
+                    <td class="text-center update-status" data-id="{{$task->id}}"><i class="fas fa-edit"></i></td>
                     <td class="text-center">
                         <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></td>
                     <td class="text-center">

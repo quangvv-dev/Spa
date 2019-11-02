@@ -35,6 +35,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
+        $input['type1'] = isset($input['type1']) ? $input['type1']: 'qf1';
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
         $customers = Customer::pluck('full_name', 'id');
@@ -171,5 +172,14 @@ class TaskController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $taskStatus = TaskStatus::where('name', 'Hoàn thành')->first();
+        $input = $request->all();
+        $input['task_status_id'] = $taskStatus->id;
+
+        $task = $this->taskService->update($input, $request->id);
     }
 }
