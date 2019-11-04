@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\Schedule;
@@ -136,11 +137,13 @@ class CustomerController extends Controller
         $taskStatus = TaskStatus::with('tasks')->get();
         $status = TaskStatus::pluck('name', 'id')->toArray();
         $progress = Task::PROGRESS;
+        $departments = Department::pluck('name', 'id');
+
         //EndTask
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'type', 'users', 'customers', 'priority', 'status', 'progress'));
+                'type', 'users', 'customers', 'priority', 'status', 'progress','departments'));
     }
 
     /**
