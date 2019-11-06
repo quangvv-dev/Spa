@@ -104,7 +104,7 @@ class CustomerController extends Controller
         $category = Category::find($request->group_id);
         $customer->categories()->attach($category);
 
-        return redirect('customers')->with('status', 'Tạo người dùng thành công');
+        return redirect('customers/' . $customer->id)->with('status', 'Tạo người dùng thành công');
     }
 
     /**
