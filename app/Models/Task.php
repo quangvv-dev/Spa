@@ -37,10 +37,7 @@ class Task extends Model
 
     const TYPE = [
        1 => 'Gọi điện',
-       2 => 'Hẹn gặp',
-       3 => 'Email',
-       4 => 'Ăn trưa',
-       5 => 'Kỷ niệm',
+       2 => 'Chăm sóc',
     ];
 
     const PRIORITY = [
