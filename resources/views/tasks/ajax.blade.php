@@ -29,8 +29,14 @@
                 <td class="text-center">
                     <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></td>
                 <td class="text-center">
-                    <img src="{{ @$task->user->avatar }}"
-                         style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover"></td>
+                    @if($task->user->avatar)
+                        <img src="{{ @$task->user->avatar }}"
+                             style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover">
+                    @else
+                        <img src="{{ asset('/images/users/default-avatar-profile-icon-vector-18942381.jpg') }}"
+                             style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover">
+                    @endif
+                </td>
                 <td class="text-center">{{@$task->customer->full_name}}</td>
                 <td class="text-center">{{@$task->user->department->name?:@$task->department->name}}</td>
                 <td class="text-center">{{$task->name_priority}}</td>
