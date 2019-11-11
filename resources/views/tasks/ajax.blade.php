@@ -1,8 +1,8 @@
 <div class="title padding5-10 col-md-12 mt10">
     <div class="col-md-12 fl mt2 no-padd"><a
-                class="display filter_all mr20 text-filter" data-task-id=""><span>Tất cả({{count($tasks)}})</span></a>
+                class="display filter_all mr20 text-filter bold" data-task-id=""><span>Tất cả({{count($tasks)}})</span></a>
         @foreach ($taskStatus as $item)
-            <a class="display filter_all mr20 text-filter" data-task-id="{{$item->id}}"> {{ $item->name}}
+            <a class="display filter_all mr20 text-filter bold" data-task-id="{{$item->id}}"> {{ $item->name}}
                 ({{$item->tasks->count()}})</a>
         @endforeach
     </div>
@@ -36,7 +36,14 @@
                 <td class="text-center">{{$task->name_priority}}</td>
                 <td class="text-center">{{$task->date_from}}</td>
                 <td class="text-center">{{$task->date_to}}</td>
-                <td class="text-center">{{ @$task->taskStatus->name }}</td>
+                @if($task->task_status_id == 6)
+
+                    <td class="text-center bold" style="color: red !important;">{{ @$task->taskStatus->name }}</td>
+                @elseif($task->task_status_id == 3)
+                    <td class="text-center bold" style="color: green !important;">{{ @$task->taskStatus->name }}</td>
+                @else
+                    <td class="text-center">{{ @$task->taskStatus->name }}</td>
+                @endif
             </tr>
 
         @endforeach
