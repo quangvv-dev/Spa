@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Models\Customer;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\GroupComment;
@@ -41,10 +43,12 @@ class GroupCommentController extends Controller
             ->where('customer_id', $id)
             ->orderBy('id', 'desc')
             ->take(3)->get();
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
 
         return response()->json([
             'customer' => $customer,
-            'group_comments' => $groupComments
+            'group_comments' => $groupComments,
+            'status' => $status
         ]);
     }
 
