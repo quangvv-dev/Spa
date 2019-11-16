@@ -66,7 +66,12 @@
                                  src="{{asset('default/no-image.png')}}" style="border-radius:100%">
                             <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
                             <span>` + data.customer.full_name + `</span>
-                            </a></div>
+                            </a>
+                        </div>
+                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
+                            {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}
+                            {!! Form::select('status_id', $status, ` + data.customer.status_id +`, array('class' => 'form-control status-result select2', 'placeholder' => 'Mối quan hệ', 'data-id' => "`+ data.customer.id+`")) !!}
+                        </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
                     <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
@@ -90,7 +95,8 @@
                                 </div>
                         </div>`;
                 });
-
+                $(".status-result").val(data.customer.status_id).change();
+                // $('.id_100 option[value=data.customer.status_id]').attr('selected','selected');
                 $('.customer-chat').append(html);
                 $('#view_chat').modal("show");
                 $('.chat-save').attr('data-customer-chat-id', data.customer.id);
