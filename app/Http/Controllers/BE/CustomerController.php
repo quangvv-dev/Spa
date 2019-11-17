@@ -66,10 +66,6 @@ class CustomerController extends Controller
     {
         $statuses = Status::getRelationshipByCustomer($request->all());
         $customers = Customer::search($request->all());
-        $data = Customer::get();
-        foreach ($data as $item) {
-            $this->update_code($item);
-        }
         $rank = $customers->firstItem();
         if ($request->ajax()) {
 
