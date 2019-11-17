@@ -66,6 +66,10 @@ class CustomerController extends Controller
     {
         $statuses = Status::getRelationshipByCustomer($request->all());
         $customers = Customer::search($request->all());
+        $data = Customer::get();
+        foreach ($data as $item) {
+            $this->update_code($item);
+        }
         $rank = $customers->firstItem();
         if ($request->ajax()) {
 
@@ -101,6 +105,7 @@ class CustomerController extends Controller
         $input['image'] = $request->image;
 
         $customer = $this->customerService->create($input);
+        $this->update_code($customer);
         $category = Category::find($request->group_id);
         $customer->categories()->attach($category);
 
@@ -143,7 +148,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'type', 'users', 'customers', 'priority', 'status', 'progress','departments'));
+                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments'));
     }
 
     /**
@@ -393,5 +398,17 @@ class CustomerController extends Controller
     {
         $ids = $request->ids;
         Customer::onlyTrashed()->whereIn('id', $ids)->forceDelete();
+    }
+
+    /**
+     * update code
+     *
+     * @param $customer
+     */
+    public function update_code($customer)
+    {
+        $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
+        $code = 'KH' . $customer_id;
+        $customer->update(['account_code' => $code]);
     }
 }
