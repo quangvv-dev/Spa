@@ -9,12 +9,17 @@
         #parent {
             height: 300px;
         }
+        .tableFixHead{ overflow-y: auto; height: 100px; }
+        .tableFixHead thead th { position: sticky; top: 0; }
+        table  { border-collapse: collapse; width: 100%; }
+        /*th, td { padding: 8px 16px; }*/
+        th     { background:#0062cc; }
     </style>
-    <script>
-        $(document).ready(function() {
-            $("#fixTable").tableHeadFixer();
-        });
-    </script>
+    {{--<script>--}}
+        {{--$(document).ready(function() {--}}
+            {{--$("#fixTable").tableHeadFixer();--}}
+        {{--});--}}
+    {{--</script>--}}
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">

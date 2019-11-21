@@ -1,4 +1,4 @@
-<div class="table-responsive" id="parent">
+<div class="table-responsive tableFixHead" id="parent">
     <table class="table card-table table-vcenter text-nowrap table-primary" id="fixTable">
         <thead class="bg-primary text-white">
         <tr>
@@ -28,7 +28,7 @@
                             <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
                     </td>
-                    <th scope="row">{{ $loop->iteration }}</th>
+                    <td class="text-center">{{ $loop->iteration }}</td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">
                         <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal" data-order-id="{{ $order->id }}" href="#">
