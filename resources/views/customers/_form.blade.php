@@ -79,7 +79,7 @@
                 <div class="col-md-6">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
-                            {!! Form::label('telesales_id', 'Người phụ trách', array('class' => ' required')) !!}
+                            {!! Form::label('telesales_id', 'Người phụ trách', array('class' => 'control-label required')) !!}
                             {!! Form::select('telesales_id', $telesales,@$customer->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên telesale')) !!}
                             <span class="help-block">{{ $errors->first('telesales_id', ':message') }}</span>
                         </div>
@@ -191,6 +191,9 @@
                     source_id: {
                         required: true
                     },
+                    telesales_id: {
+                        required: true
+                    }
                 },
                 messages: {
                     full_name: "Chưa nhập tên",
@@ -202,6 +205,7 @@
                     status_id: "Chưa chọn trạng thái",
                     'group_id[]': "Chưa chọn nhóm khách hàng",
                     source_id: "Chưa chọn nguồn khách hàng",
+                    telesales_id: "Chưa chọn người phụ trách",
                 },
             });
         });
