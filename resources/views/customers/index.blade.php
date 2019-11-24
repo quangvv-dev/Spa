@@ -10,6 +10,15 @@
             border-left: 1px solid #e7effc;
         }
     </style>
+    <!-- anheasy -->
+    <style>
+        .table-ajax table {
+            min-width: auto !important;
+            width: auto !important;
+        }
+    </style>
+    <script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>
+    <!-- end anheasy -->
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
@@ -530,6 +539,18 @@
                 })
             })
         });
-
+        // anheasy
+        $('.table-responsive .table-primary').floatThead({
+            top: 63,
+            scrollContainer: function($table){
+                return $table.closest('');
+            },
+            position: 'absolute'
+        });
+        $('.table-ajax .table-primary').floatThead({
+            top: 63,
+            position: 'absolute'
+        });
+        // end anheasy
     </script>
 @endsection
