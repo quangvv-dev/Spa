@@ -84,7 +84,7 @@ class Customer extends Model
                 });
         }
 
-        return $data->latest()->paginate(15);
+        return $data->latest()->paginate(30);
     }
 
     public function status()
