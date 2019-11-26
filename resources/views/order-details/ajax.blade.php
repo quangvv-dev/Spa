@@ -54,7 +54,7 @@
             @endforeach
             <tr>
                 <td class="text-center"></td>
-                <th scope="row"></th>
+                <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
