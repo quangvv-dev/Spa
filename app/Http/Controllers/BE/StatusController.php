@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Helpers\Functions;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Status;
@@ -129,10 +130,11 @@ class StatusController extends Controller
     public function getList(Request $request)
     {
         $customerId = $request->id;
+        $customer = Customer::with('status')->where('id', $customerId)->first();
         $statuses = Status::get();
 
         return $data = [
-                'customer_id' => $customerId,
+                'customer' => $customer,
                 'data' => $statuses
             ];
     }

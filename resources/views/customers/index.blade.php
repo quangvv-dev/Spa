@@ -93,9 +93,13 @@
                             </a>
                         </div>
                          <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
-                            {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}
-                            {!! Form::select('status_id', $status, ` + data.customer.status_id +`, array('class' => 'form-control status-result select2', 'placeholder' => 'Mối quan hệ', 'data-id' => "`+ data.customer.id+`")) !!}
-                        </div>
+                            {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}` +
+                        `<select name="status_id" class="form-control status-result select2" data-id="`+data.customer.id+`">`;
+                            data.status.forEach(function (item) {
+                                html += `<option value="`+item.id+`"  `+(item.id === data.customer.status_id ? "selected": "")+`>`+item.name +`</option>`;
+                            });
+                                    html += `</select>`;
+                        html += `</div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
                     <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
@@ -120,10 +124,13 @@
                         </div>`;
                 });
                 $(".status-result").val(data.customer.status_id).change();
-                // $('.id_100 option[value=data.customer.status_id]').attr('selected','selected');
                 $('.customer-chat').append(html);
                 $('#view_chat').modal("show");
                 $('.chat-save').attr('data-customer-chat-id', data.customer.id);
+                $('.select2').select2({ //apply select2 to my element
+                    placeholder: "Chọn trạng thái",
+                    allowClear: true
+                });
             });
         });
 
@@ -296,15 +303,18 @@
                 data: {id: id}
             }).done(function (data) {
                 html +=
-                    '<select class="status-result form-control" data-id="' + data.customer_id + '" name="status_id">' +
-                    '<option value="">' + "Chọn trạng thái" + '</option>';
+                    '<select class="status-result form-control select2" data-id="' + data.customer.id + '" name="status_id">';
                 data.data.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '" >' + item.name + '</option>';
+                        '<option value="' + item.id + '" '+(item.id === data.customer.status_id ? "selected": "")+'>' + item.name + '</option>';
                 });
 
                 html += '</select>';
                 $(target).find(".status-db").append(html);
+                $('.select2').select2({ //apply select2 to my element
+                    placeholder: "Chọn trạng thái",
+                    allowClear: true
+                });
             });
         });
 

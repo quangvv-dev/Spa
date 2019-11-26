@@ -43,7 +43,7 @@ class GroupCommentController extends Controller
             ->where('customer_id', $id)
             ->orderBy('id', 'desc')
             ->take(3)->get();
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->get();
 
         return response()->json([
             'customer' => $customer,
