@@ -127,10 +127,6 @@
                 $('.customer-chat').append(html);
                 $('#view_chat').modal("show");
                 $('.chat-save').attr('data-customer-chat-id', data.customer.id);
-                $('.select2').select2({ //apply select2 to my element
-                    placeholder: "Chọn trạng thái",
-                    allowClear: true
-                });
             });
         });
 
@@ -311,10 +307,6 @@
 
                 html += '</select>';
                 $(target).find(".status-db").append(html);
-                $('.select2').select2({ //apply select2 to my element
-                    placeholder: "Chọn trạng thái",
-                    allowClear: true
-                });
             });
         });
 
