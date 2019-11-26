@@ -14,7 +14,7 @@
     /*}*/
     /*}*/
 </style>
-<div class="card-header">
+<div class="card-header filter-box">
     <div class="display btn-group open">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="true"

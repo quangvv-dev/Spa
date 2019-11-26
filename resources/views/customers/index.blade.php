@@ -16,6 +16,21 @@
             min-width: auto !important;
             width: auto !important;
         }
+        .search-box,
+        .filter-box{
+            z-index: 999;
+            background: #FFF;
+        }
+        .searchbox-sticky{
+            position: sticky;
+            top: 63px;
+            left: 0;
+        }
+        .filterbox-sticky{
+            position: sticky;
+            top: calc(63px + 57px);
+            left: 0;
+        }
     </style>
     <script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>
     <!-- end anheasy -->
@@ -23,7 +38,7 @@
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header search-box">
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
                        type="text" id="search">
                 <div class="col-md-2 col-xs-12">
@@ -551,15 +566,25 @@
         });
         // anheasy
         $('.table-responsive .table-primary').floatThead({
-            top: 63,
+            top: 183,
             scrollContainer: function($table){
                 return $table.closest('');
             },
             position: 'absolute'
         });
         $('.table-ajax .table-primary').floatThead({
-            top: 63,
+            top: 183,
             position: 'absolute'
+        });
+        $(window).on("scroll", function(e){
+            if ($(window).scrollTop() >= 150) {
+                $('.search-box').addClass('searchbox-sticky');
+                $('.filter-box').addClass('filterbox-sticky');
+            }
+            else {
+                $('.search-box').removeClass('searchbox-sticky');
+                $('.filter-box').removeClass('filterbox-sticky');
+            }
         });
         // end anheasy
     </script>
