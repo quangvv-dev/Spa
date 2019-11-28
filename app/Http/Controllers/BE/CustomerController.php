@@ -101,7 +101,7 @@ class CustomerController extends Controller
         $input['image'] = $request->image;
 
         $customer = $this->customerService->create($input);
-        $this->update_code($customer);
+        $update = $this->update_code($customer);
         $category = Category::find($request->group_id);
         $customer->categories()->attach($category);
 
@@ -406,5 +406,6 @@ class CustomerController extends Controller
         $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
         $code = 'KH' . $customer_id;
         $customer->update(['account_code' => $code]);
+        return $customer;
     }
 }
