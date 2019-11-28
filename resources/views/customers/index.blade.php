@@ -94,7 +94,7 @@
                         </div>
                          <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                             {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}` +
-                        `<select name="status_id" class="form-control status-result select2" data-id="`+data.customer.id+`">`;
+                        `<select name="status_id" class="form-control status-result select2" data-id="`+data.customer.id+`" style="font-size: 14px;">`;
                             data.status.forEach(function (item) {
                                 html += `<option value="`+item.id+`"  `+(item.id === data.customer.status_id ? "selected": "")+`>`+item.name +`</option>`;
                             });
@@ -299,7 +299,7 @@
                 data: {id: id}
             }).done(function (data) {
                 html +=
-                    '<select class="status-result form-control select2" data-id="' + data.customer.id + '" name="status_id">';
+                    '<select class="status-result form-control select2" data-id="' + data.customer.id + '" name="status_id" style="font-size: 14px;">';
                 data.data.forEach(function (item) {
                     html +=
                         '<option value="' + item.id + '" '+(item.id === data.customer.status_id ? "selected": "")+'>' + item.name + '</option>';
