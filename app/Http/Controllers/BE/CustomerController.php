@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
 use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\Order;
@@ -291,19 +292,32 @@ class CustomerController extends Controller
         if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
-//                dd(Auth::user());
                 foreach ($result as $k => $row) {
-                    Customer::create([
-                        'full_name'    => $row['ten_khach_hang'],
-                        'account_code' => $row['ma_khach_hang'],
-                        'mkt_id'       => @Auth::user()->id,
-                        'phone'        => $row['so_dien_thoai'],
-                        'birthday'     => $row['sinh_nhat'],
-                        'gender'       => $row['gioi_tinh'] == 'Nữ' ? 0 : 1,
-                        'address'      => $row['dia_chi'] ?: '',
-                        'facebook'     => $row['link_facebook'] ?: '',
-                        'description'  => $row['mo_ta'],
-                    ]);
+                    $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
+                    $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
+                    $category = Category::where('name', 'like', '%' . $row['nhom_khach_hang'] . '%')->first();
+                    $source = Status::where('name', 'like', '%' . $row['nguon_kh'] . '%')->first();
+                    $check = Customer::where('phone', $row['so_dien_thoai'])->first();
+                    if (empty($check)) {
+                        $data = Customer::create([
+                            'full_name'    => $row['ten_khach_hang'],
+                            'account_code' => $row['ma_khach_hang'],
+                            'mkt_id'       => @Auth::user()->id,
+                            'telesales_id' => isset($telesale) ? $telesale->id : 1,
+                            'status_id'    => isset($status) ? $status->id : 1,
+                            'source_id'    => isset($source) ? $source->id : 18,
+                            'phone'        => $row['so_dien_thoai'],
+                            'birthday'     => $row['sinh_nhat'],
+                            'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                            'address'      => $row['dia_chi'] ?: '',
+                            'facebook'     => $row['link_facebook'] ?: '',
+                            'description'  => $row['mo_ta'],
+                        ]);
+                        CustomerGroup::create([
+                            'customer_id' => $data->id,
+                            'category_id' => $category->id,
+                        ]);
+                    }
                 }
             });
             return redirect()->back()->with('status', 'Tải khách hàng thành công');
