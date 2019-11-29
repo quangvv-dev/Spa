@@ -293,6 +293,7 @@ class CustomerController extends Controller
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
+                    $date = Carbon::createFromFormat('d/m/Y H:i:s', $row['ngay_tao_kh'])->format('Y-m-d H:i:s');
                     $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
                     $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
                     $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
@@ -313,6 +314,8 @@ class CustomerController extends Controller
                                 'address'      => $row['dia_chi'] ?: '',
                                 'facebook'     => $row['link_facebook'] ?: '',
                                 'description'  => $row['mo_ta'],
+                                'created_at'   => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
+                                'updated_at'   => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
                             ]);
 
                             if (count($category)) {
