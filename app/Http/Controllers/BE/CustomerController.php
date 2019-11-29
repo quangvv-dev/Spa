@@ -295,28 +295,42 @@ class CustomerController extends Controller
                 foreach ($result as $k => $row) {
                     $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
                     $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
-                    $category = Category::where('name', 'like', '%' . $row['nhom_khach_hang'] . '%')->first();
-                    $source = Status::where('name', 'like', '%' . $row['nguon_kh'] . '%')->first();
+                    $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
                     $check = Customer::where('phone', $row['so_dien_thoai'])->first();
+                    $category = explode(',', $row['nhom_khach_hang']);
                     if (empty($check)) {
-                        $data = Customer::create([
-                            'full_name'    => $row['ten_khach_hang'],
-                            'account_code' => $row['ma_khach_hang'],
-                            'mkt_id'       => @Auth::user()->id,
-                            'telesales_id' => isset($telesale) ? $telesale->id : 1,
-                            'status_id'    => isset($status) ? $status->id : 1,
-                            'source_id'    => isset($source) ? $source->id : 18,
-                            'phone'        => $row['so_dien_thoai'],
-                            'birthday'     => $row['sinh_nhat'],
-                            'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
-                            'address'      => $row['dia_chi'] ?: '',
-                            'facebook'     => $row['link_facebook'] ?: '',
-                            'description'  => $row['mo_ta'],
-                        ]);
-                        CustomerGroup::create([
-                            'customer_id' => $data->id,
-                            'category_id' => $category->id,
-                        ]);
+                        if ($row['so_dien_thoai']) {
+                            $data = Customer::create([
+                                'full_name'    => $row['ten_khach_hang'],
+                                'account_code' => $row['ma_khach_hang'],
+                                'mkt_id'       => @Auth::user()->id,
+                                'telesales_id' => isset($telesale) ? $telesale->id : 1,
+                                'status_id'    => isset($status) ? $status->id : 1,
+                                'source_id'    => isset($source) ? $source->id : 18,
+                                'phone'        => $row['so_dien_thoai'],
+                                'birthday'     => $row['sinh_nhat'],
+                                'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                                'address'      => $row['dia_chi'] ?: '',
+                                'facebook'     => $row['link_facebook'] ?: '',
+                                'description'  => $row['mo_ta'],
+                            ]);
+
+                            if (count($category)) {
+                                foreach ($category as $item) {
+                                    $field = Category::where('name', 'like',
+                                        '%' . $item . '%')->first();
+                                }
+                                CustomerGroup::create([
+                                    'customer_id' => $data->id,
+                                    'category_id' => isset($field) ? $field->id : 25,
+                                ]);
+                            } else {
+                                CustomerGroup::create([
+                                    'customer_id' => $data->id,
+                                    'category_id' => 25,
+                                ]);
+                            }
+                        }
                     }
                 }
             });
