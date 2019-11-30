@@ -91,7 +91,6 @@ class ScheduleController extends Controller
             'person_action' => $request->person_action,
             'creator_id'    => Auth::user()->id,
         ]);
-//        dd($request->all());
         $data = Schedule::create($request->all());
         $customer = Customer::find($id);
         $person_action = User::find($request->person_action);
@@ -175,6 +174,8 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
+        $request->merge(['date'=> $date]);
         $data = Schedule::find($request->id);
         $data->update($request->except('id'));
         return redirect()->back();

@@ -35,6 +35,8 @@ class Customer extends Model
         'facebook',
         'avatar',
         'deleted_at',
+        'updated_at',
+        'created_at',
     ];
 
     const VIP_STATUS = 8000000;
@@ -42,7 +44,8 @@ class Customer extends Model
     public static function search($param)
     {
         $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer');
-        if (isset($param) && $param) {
+        if (count($param)) {
+
             $data = $data->when(isset($param['search']), function ($query) use ($param) {
                 $query->where(function ($q) use ($param) {
                     $q->where('full_name', 'like', '%' . $param['search'] . '%')
@@ -151,7 +154,7 @@ class Customer extends Model
     public static function getAll()
     {
         $data = self::with('status', 'marketing', 'category', 'orders', 'telesale', 'source_customer');
-            return $data->get();
+        return $data->get();
     }
 
     public static function getDataOfYears($input)
@@ -164,17 +167,20 @@ class Customer extends Model
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                     $q->whereDate('created_at', getTime(($input['data_time'])));
                 })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                });
+                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'THIS_MONTH' ||
+                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    });
             })
-            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
-            });
+                ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                    ]);
+                });
         }
 
         $data = $data->select(DB::raw("DATE_FORMAT(created_at,'%M') as monthNum"),
@@ -188,28 +194,33 @@ class Customer extends Model
 
     public static function getRevenueByGender($input)
     {
-        $data = self::with(['orders' => function ($query) use($input) {
-            $query->when(isset($input['order_id']), function ($query) use ($input) {
-                $query->whereIn('id', $input['order_id']);
-            })
-            ->when(isset($input['data_time']), function ($query) use ($input) {
-                $query->when($input['data_time'] == 'TODAY' ||
-                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                    $q->whereDate('created_at', getTime(($input['data_time'])));
+        $data = self::with([
+            'orders' => function ($query) use ($input) {
+                $query->when(isset($input['order_id']), function ($query) use ($input) {
+                    $query->whereIn('id', $input['order_id']);
                 })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                });
-            })
-            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
-            });
-        }])
-        ->has('orders');
+                    ->when(isset($input['data_time']), function ($query) use ($input) {
+                        $query->when($input['data_time'] == 'TODAY' ||
+                            $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                            $q->whereDate('created_at', getTime(($input['data_time'])));
+                        })
+                            ->when($input['data_time'] == 'THIS_WEEK' ||
+                                $input['data_time'] == 'LAST_WEEK' ||
+                                $input['data_time'] == 'LAST_WEEK' ||
+                                $input['data_time'] == 'THIS_MONTH' ||
+                                $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                                $q->whereBetween('created_at', getTime(($input['data_time'])));
+                            });
+                    })
+                    ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                        $q->whereBetween('created_at', [
+                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                        ]);
+                    });
+            },
+        ])
+            ->has('orders');
 
         $data = $data->get();
         $revenueMale = 0;
@@ -245,19 +256,22 @@ class Customer extends Model
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                     $q->whereDate('created_at', getTime(($input['data_time'])));
                 })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                });
+                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'LAST_WEEK' ||
+                        $input['data_time'] == 'THIS_MONTH' ||
+                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    });
             })->when(isset($input['user_id']), function ($query) use ($input) {
                 $query->where(function ($query) use ($input) {
                     $query->where('mkt_id', $input['user_id']);
                 });
             })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
             });
         }
 

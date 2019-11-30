@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
 use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\Order;
@@ -101,7 +102,7 @@ class CustomerController extends Controller
         $input['image'] = $request->image;
 
         $customer = $this->customerService->create($input);
-        $this->update_code($customer);
+        $update = $this->update_code($customer);
         $category = Category::find($request->group_id);
         $customer->categories()->attach($category);
 
@@ -291,19 +292,49 @@ class CustomerController extends Controller
         if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
-//                dd(Auth::user());
                 foreach ($result as $k => $row) {
-                    Customer::create([
-                        'full_name'    => $row['ten_khach_hang'],
-                        'account_code' => $row['ma_khach_hang'],
-                        'mkt_id'       => @Auth::user()->id,
-                        'phone'        => $row['so_dien_thoai'],
-                        'birthday'     => $row['sinh_nhat'],
-                        'gender'       => $row['gioi_tinh'] == 'Nữ' ? 0 : 1,
-                        'address'      => $row['dia_chi'] ?: '',
-                        'facebook'     => $row['link_facebook'] ?: '',
-                        'description'  => $row['mo_ta'],
-                    ]);
+                    $date = Carbon::createFromFormat('d/m/Y H:i:s', $row['ngay_tao_kh'])->format('Y-m-d H:i:s');
+                    $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
+                    $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
+                    $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
+                    $check = Customer::where('phone', $row['so_dien_thoai'])->first();
+                    $category = explode(',', $row['nhom_khach_hang']);
+                    if (empty($check)) {
+                        if ($row['so_dien_thoai']) {
+                            $data = Customer::create([
+                                'full_name'    => $row['ten_khach_hang'],
+                                'account_code' => $row['ma_khach_hang'],
+                                'mkt_id'       => @Auth::user()->id,
+                                'telesales_id' => isset($telesale) ? $telesale->id : 1,
+                                'status_id'    => isset($status) ? $status->id : 1,
+                                'source_id'    => isset($source) ? $source->id : 18,
+                                'phone'        => $row['so_dien_thoai'],
+                                'birthday'     => $row['sinh_nhat'],
+                                'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                                'address'      => $row['dia_chi'] ?: '',
+                                'facebook'     => $row['link_facebook'] ?: '',
+                                'description'  => $row['mo_ta'],
+                                'created_at'   => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
+                                'updated_at'   => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
+                            ]);
+
+                            if (count($category)) {
+                                foreach ($category as $item) {
+                                    $field = Category::where('name', 'like',
+                                        '%' . $item . '%')->first();
+                                }
+                                CustomerGroup::create([
+                                    'customer_id' => $data->id,
+                                    'category_id' => isset($field) ? $field->id : 25,
+                                ]);
+                            } else {
+                                CustomerGroup::create([
+                                    'customer_id' => $data->id,
+                                    'category_id' => 25,
+                                ]);
+                            }
+                        }
+                    }
                 }
             });
             return redirect()->back()->with('status', 'Tải khách hàng thành công');
@@ -406,5 +437,6 @@ class CustomerController extends Controller
         $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
         $code = 'KH' . $customer_id;
         $customer->update(['account_code' => $code]);
+        return $customer;
     }
 }
