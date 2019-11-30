@@ -52,7 +52,7 @@ class Customer extends Model
                         ->orWhere('phone', 'like', '%' . $param['search'] . '%');
                 });
             })
-                ->when($param['status'], function ($query) use ($param) {
+                ->when(isset($param['status']), function ($query) use ($param) {
                     $query->whereHas('status', function ($q) use ($param) {
                         $q->where('name', $param['status']);
                     });
