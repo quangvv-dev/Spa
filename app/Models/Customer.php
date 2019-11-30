@@ -44,14 +44,15 @@ class Customer extends Model
     public static function search($param)
     {
         $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer');
-        if (isset($param) && $param) {
+        if (count($param)) {
+
             $data = $data->when(isset($param['search']), function ($query) use ($param) {
                 $query->where(function ($q) use ($param) {
                     $q->where('full_name', 'like', '%' . $param['search'] . '%')
                         ->orWhere('phone', 'like', '%' . $param['search'] . '%');
                 });
             })
-                ->when(isset($param['status']), function ($query) use ($param) {
+                ->when($param['status'], function ($query) use ($param) {
                     $query->whereHas('status', function ($q) use ($param) {
                         $q->where('name', $param['status']);
                     });
