@@ -158,6 +158,7 @@
         });
 
         function searchAjax(data) {
+            $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
                 url: "{{ Url('customers/') }}",
                 method: "get",
