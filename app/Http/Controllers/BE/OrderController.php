@@ -106,6 +106,7 @@ class OrderController extends Controller
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+
         if (count($request->all()) > 0) {
             $orders = Order::searchAll($request->all());
 
