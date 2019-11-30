@@ -15,11 +15,6 @@
                             Browse… <input required name="file" type="file" style="display: none" >
                         </label>
                     </div>
-                    <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Lưu</button>
-                        <a href="{{asset('default/data.xlsx')}}" style="color: #ffffff" class="btn btn-warning">Mẫu
-                            upload</a>
-                    </div>
                 </div>
                 {{ Form::close() }}
 
