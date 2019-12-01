@@ -21,12 +21,12 @@
                     <th scope="row">
                         <img src="{{App\Helpers\Functions::getImageModels($s,'services','images')}}" class="rounded-circle" height="60" width="60" />
                     </th>
-                    <td class="text-center">{{$s->name}}</td>
-                    <td class="text-center">{{$s->code}}</td>
+                    <td class="text-center">{{@$s->name}}</td>
+                    <td class="text-center">{{@$s->code}}</td>
 {{--                    <td class="text-center">{{$s->description}}</td>--}}
-                    <td class="text-center">{{$s->trademark}}</td>
-                    <td class="text-center">{{$s->category->name}}</td>
-                    <td class="text-center">{{$s->active_text}}</td>
+                    <td class="text-center">{{@$s->trademark}}</td>
+                    <td class="text-center">{{@$s->category->name}}</td>
+                    <td class="text-center">{{@$s->active_text}}</td>
                     <td class="text-center">
                         <a class="btn" href="{{ url('services/' . $s->id . '/edit') }}"><i
                                     class="fas fa-edit"></i></a>
