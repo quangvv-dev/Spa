@@ -58,9 +58,9 @@ class Customer extends Model
                     });
                 })
                 ->when(isset($param['group']), function ($query) use ($param) {
-                    $query->whereHas('categories', function ($q) use ($param) {
-                        $q->where('categories.id', $param['group']);
-                    });
+                    $group_customer = CustomerGroup::where('category_id', $param['group'])->pluck('customer_id')
+                        ->toArray();
+                    $query->whereIn('id', $group_customer);
                 })
                 ->when(isset($param['telesales']), function ($query) use ($param) {
                     $query->where('telesales_id', $param['telesales']);
