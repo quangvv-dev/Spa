@@ -267,36 +267,38 @@ class OrderController extends Controller
                         $paymentType = 2;
                     }
 
-                    if (!empty($customer) && !empty($service)) {
-
-                        $order = Order::create([
-                            'member_id' => $customer->id,
-                            'all_total' => $row['doanh_so'],
-                            'count_day' => 0,
-                            'the_rest' => $row['con_lai'],
-                            'description' => $row['mo_ta'],
-                            'gross_revenue' => $row['doanh_thu'],
-                            'payment_type' => $paymentType,
-                            'payment_date' => Carbon::createFromFormat('d/m/Y', substr($row['ngay_thanh_toan'], 0, 10))->format('Y-m-d'),
-                            'type' => Order::TYPE_ORDER_DEFAULT,
-                            'spa_therapisst_id' => '',
-                            'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
-                        ]);
+                    if (!empty($service)) {
+                        if (!empty($customer)) {
+                            $order = Order::create([
+                                'code' => $row['ma_dh'],
+                                'member_id' => $customer->id,
+                                'all_total' => $row['doanh_so'],
+                                'count_day' => 0,
+                                'the_rest' => $row['con_lai'],
+                                'description' => $row['mo_ta'],
+                                'gross_revenue' => $row['doanh_thu'],
+                                'payment_type' => $paymentType,
+                                'payment_date' => Carbon::createFromFormat('d/m/Y', substr($row['ngay_thanh_toan'], 0, 10))->format('Y-m-d'),
+                                'type' => Order::TYPE_ORDER_DEFAULT,
+                                'spa_therapisst_id' => '',
+                                'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
+                            ]);
+                        }
 
                         $orderDetail = OrderDetail::create([
                             'order_id' => $order->id,
+                            'code' => $row['ma_sp'],
                             'booking_id' => $service->id,
                             'quantity' => $row['so_luong'],
                             'total_price' => $row['gia_ban'],
-                            'user_id' => $customer->id,
-                            'address' => $customer->address ?: '',
+                            'user_id' => $customer ? $customer->id : '',
+                            'address' => $customer ? $customer->address : '',
                             'vat' => $row['vat'],
                             'percent_discount' => $row['ck'],
                             'number_discount' => $row['ckd'],
                             'price' => $row['gia_ban'],
                         ]);
                     }
-
 
                 }
             });
