@@ -25,6 +25,7 @@
                     </td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">
+                        <a style="color: #7b41d8" href="{{url('/orders/'.$order->id.'/edit')}}"><i class="fas fa-info-circle"></i></a>
                         <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">
                                 @foreach($order->orderDetails as $orderDetail)
                                     {{ @$orderDetail->service->name }},

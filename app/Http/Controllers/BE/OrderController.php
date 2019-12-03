@@ -52,12 +52,11 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $customerId = $request->customer_id;
-        $customer = Customer::where('id', $customerId)->first();
+        $customer = Customer::find($customerId);
         $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         $title = 'Tạo đơn hàng';
         $services = Services::with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
-
         return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services'));
     }
 
@@ -214,7 +213,6 @@ class OrderController extends Controller
     public function getOrderById(Request $request, $id)
     {
         $order = Order::with('historyUpdateOrders.user', 'customer', 'orderDetails.service')->find($id);
-
         return Response::json($order);
     }
 
