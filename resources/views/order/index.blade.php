@@ -110,7 +110,7 @@
                                 <td width="250" scope="row">
                                     <select class="select2 form-control service" required id="service" name="service_id[]">
                                         @foreach($services as $service)
-                                            <option value="{{$service->id}}">{{$service->category->name}} - {{$service->name}}</option>
+                                            <option value="{{$service->id}}">{{@$service->category->name}} - {{$service->name}}</option>
                                         @endforeach
                                     </select>
 {{--                                    {!! Form::select('service_id[]', $services, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}--}}
@@ -171,7 +171,7 @@
                     <td width="250" scope="row">
                     <select class="select2 form-control service" required id="service" name="service_id[]">
                         @foreach($services as $service)
-                            <option value="{{$service->id}}">{{$service->category->name}} - {{$service->name}} </option>
+                            <option value="{{$service->id}}">{{@$service->category->name}} - {{$service->name}} </option>
                         @endforeach
                     </select>
 {{--                        {!! Form::select('service_id[]', $services, null, array('id' => "service",'class' => 'select2 form-control service', 'required' => true)) !!}--}}
