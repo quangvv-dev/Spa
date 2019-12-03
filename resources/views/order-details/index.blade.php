@@ -152,10 +152,12 @@
             $('.customer-info').empty();
             $('.task_footer_box').empty();
             const id = $(this).data('order-id');
+
             $.ajax({
                 url: "{{ Url('ajax/order-details/') }}" + '/' + id,
                 method: "get",
             }).done(function (data) {
+                console.log(data);
                 let html = '';
                 let html1 = '';
 
