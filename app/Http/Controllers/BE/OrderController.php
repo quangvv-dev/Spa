@@ -257,6 +257,7 @@ class OrderController extends Controller
                 foreach ($result as $k => $row) {
                     $customer = Customer::where('phone', $row['so_dt'])->first();
                     $service = Services::where('name', $row['ten_san_pham'])->first();
+                    $checkOrder = Order::where('code', $row['ma_dh'])->first();
                     $paymentType = NULL;
 
                     if ($row['hinh_thuc_thanh_toan_tung_lan'] == null) {
@@ -268,7 +269,7 @@ class OrderController extends Controller
                     }
 
                     if (!empty($service)) {
-                        if (!empty($customer)) {
+                        if (!empty($customer) && empty($checkOrder)) {
                             $order = Order::create([
                                 'code' => $row['ma_dh'],
                                 'member_id' => $customer->id,
@@ -291,7 +292,7 @@ class OrderController extends Controller
                             'booking_id' => $service->id,
                             'quantity' => $row['so_luong'],
                             'total_price' => $row['gia_ban'],
-                            'user_id' => $customer ? $customer->id : '',
+                            'user_id' => $customer ? $customer->id : $order->member_id,
                             'address' => $customer ? $customer->address : '',
                             'vat' => $row['vat'],
                             'percent_discount' => $row['ck'],
@@ -302,7 +303,8 @@ class OrderController extends Controller
 
                 }
             });
-            return redirect()->back()->with('status', 'Tải khách hàng thành công');
+
+            return redirect()->back()->with('status', 'Tải đơn hàng thành công');
         }
     }
 
