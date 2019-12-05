@@ -167,7 +167,7 @@
                         <p>SDT: `+ data.order.customer.phone +`</p>
                     </div>
                     <div class="col-md-6">
-                        <p>Người thực hiện đơn hàng: `+ data.order.spa_therapisst.full_name+`</p>
+                        <p>Người thực hiện đơn hàng: `+ (data.order.spa_therapisst ? data.order.spa_therapisst.full_name: '') +`</p>
                         <p>Người phụ trách: `+ (data.order.customer.telesale ? data.order.customer.telesale.full_name: '')+`</p>
                     </div>
                 </div>`;
