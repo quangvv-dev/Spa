@@ -156,6 +156,7 @@ class OrderService
         }
 
         $attibutes = [
+            'code'              => $attibutes['code'],
             'member_id'         => $attibutes['user_id'],
             'the_rest'          => $theRest,
             'count_day'         => $attibutes['count_day'],
