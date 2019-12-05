@@ -340,4 +340,13 @@ class OrderController extends Controller
         }
     }
 
+    public function checkUniqueCode(Request $request)
+    {
+        $order = Order::where('code',$request->code)->first();
+
+        if ($order) return $order->id == $request->id ? 'true' : 'false';
+
+        return 'true';
+    }
+
 }
