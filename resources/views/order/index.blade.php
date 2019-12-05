@@ -110,12 +110,12 @@
                                 <td width="250" scope="row">
                                     <select class="select2 form-control service" required id="service"
                                             name="service_id[]">
+                                        <option>-Chọn sản phẩm-</option>
                                         @foreach($services as $service)
                                             <option value="{{$service->id}}">{{@$service->category->name}}
                                                 - {{$service->name}}</option>
                                         @endforeach
                                     </select>
-                                    {{--                                    {!! Form::select('service_id[]', $services, null ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}--}}
                                 </td>
                                 <td class="text-center">
                                     {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
@@ -165,37 +165,38 @@
     </div>
 @endsection
 @section('_script')
+    <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
-
         $(document).on('click', '#add_row', function () {
             $('.order').append(`
                 <tr>
                     <td width="250" scope="row">
-                    <select class="select2 form-control service" required id="service" name="service_id[]">
-                        @foreach($services as $service)
-                <option value="{{@$service->id}}">{{@$service->category->name}} - {{@$service->name}} </option>
-                        @endforeach
-                </select>
-{{--                        {!! Form::select('service_id[]', $services, null, array('id' => "service",'class' => 'select2 form-control service', 'required' => true)) !!}--}}
-                </td>
-                <td class="text-center">
-{!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                </td>
-                <td class="text-center">
-{!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                </td>
-                <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
-        </tr>
-`)
+                        <select class="select2 form-control service" required id="service" name="service_id[]">
+                            <option>-Chọn sản phẩm-</option>
+                            @foreach($services as $service)
+                                <option value="{{@$service->id}}">{{@$service->category->name}} - {{@$service->name}} </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                    </td>
+                    <td class="text-center">
+                        {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                    </td>
+                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
+                </tr>
+            `);
+
             $('.select2').select2({ //apply select2 to my element
                 placeholder: "-Chọn sản phẩm-",
                 allowClear: true
@@ -210,8 +211,8 @@
                 method: "get",
                 data: {id: id}
             }).done(function (data) {
-                $(target).find('.price').val(data['price_sell']);
-                $(target).find('.total').val(data['price_sell']);
+                $(target).find('.price').val(formatNumber((data['price_sell'])));
+                $(target).find('.total').val(formatNumber((data['price_sell'])));
             });
         });
 
@@ -222,9 +223,13 @@
             let price = $(target).find('.price').val();
             let CK2 = $(target).find('.CK2').val();
 
-            let total_service = price * quantity + price * quantity * (VAT / 100) - CK2;
-            $(target).find('.total').val(total_service);
-        })
+            price = replaceNumber(price);
+
+            let total_service = price * quantity + price * quantity * (VAT / 100) - replaceNumber(CK2);
+            $(target).find('.price').val(formatNumber((price)));
+            $(target).find('.CK2').val(formatNumber((CK2)));
+            $(target).find('.total').val(formatNumber(total_service));
+        });
 
         $('.user').change(function () {
             var id = $(this).val();
@@ -276,7 +281,6 @@
                 'price[]': "Chưa nhập giá",
             },
         });
-        // $("#service").multilineSelectmenu();
 
     </script>
 @endsection

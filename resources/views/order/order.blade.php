@@ -238,9 +238,9 @@
                     gross_revenue: grossRevenue
                 }
             }).done(function (data) {
-                $(".cash").text(data.cash.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('.remain_cash').text((data.remain_cash).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('.return_cash').text((data.return_cash).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $(".cash").text(formatNumber(data.cash));
+                $('.remain_cash').text(formatNumber(data.remain_cash));
+                $('.return_cash').text(formatNumber(data.return_cash));
             });
         });
     </script>

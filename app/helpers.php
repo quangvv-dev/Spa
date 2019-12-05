@@ -40,3 +40,8 @@ function getTime($dataTime)
         ]);
     }
 }
+
+function replaceNumberFormat($number)
+{
+    return str_replace(',', '', $number);
+}

@@ -18,7 +18,7 @@ class OrderService
 
     public function create($data)
     {
-        $theRest = array_sum($data['total_price']);
+        $theRest = array_sum(replaceNumberFormat($data['total_price']));
         $countDay = 0;
         if (empty($data) && is_array($data) == false) {
             return false;
@@ -33,7 +33,7 @@ class OrderService
             'the_rest'          => $theRest,
             'count_day'         => $countDay,
             'type'              => $data['count_day'] == null ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total'         => array_sum($data['total_price']),
+            'all_total'         => $theRest,
             'spa_therapisst_id' => $data['spa_therapisst_id']
         ];
 
@@ -47,7 +47,7 @@ class OrderService
     public function updatePayment($data, $id)
     {
         $model = $this->find($id);
-        $data['gross_revenue'] = str_replace(',', '', $data['gross_revenue']);
+        $data['gross_revenue'] = replaceNumberFormat($data['gross_revenue']);
         $data['gross_revenue'] = $model->gross_revenue + $data['gross_revenue'];
         $data['payment_date'] = Functions::yearMonthDay($data['payment_date']);
         $data['the_rest'] = $model->all_total - $data['gross_revenue'];
@@ -78,7 +78,7 @@ class OrderService
 
     public function getPayment($data, $id)
     {
-        $data['gross_revenue'] = str_replace(',', '', $data['gross_revenue']);
+        $data['gross_revenue'] = replaceNumberFormat($data['gross_revenue']);
         if (empty($data['gross_revenue']) && is_array($data) == false) {
             return false;
         }
