@@ -29,6 +29,7 @@ class OrderService
         }
 
         $input = [
+            'code'              => $data['code'],
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
             'count_day'         => $countDay,
