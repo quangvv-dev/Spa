@@ -243,13 +243,15 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = $this->orderService->find($id);
+
         $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
+        $services = Services::with('category')->get();
 
-        return view('order.index', compact('order', 'spaTherapissts', 'title', 'customers', 'customer'));
+        return view('order.index', compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services'));
     }
 
     public function update(Request $request, $id)
@@ -258,11 +260,24 @@ class OrderController extends Controller
         $customer = Customer::find($request->user_id);
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 
-        $order = $this->orderService->update($id, $input);
-        $orderDetail = $this->orderDetailService->update($input, $id);
+        DB::beginTransaction();
+        try {
+            $order = $this->orderService->update($id, $input);
 
-        return redirect('list-orders');
+            if (!$order) DB::rollBack();
 
+            $orderDetail = $this->orderDetailService->update($input, $id);
+
+            if (!$orderDetail) DB::rollBack();
+
+            DB::commit();
+            return redirect('list-orders');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function importDataByExcel(Request $request)

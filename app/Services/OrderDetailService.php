@@ -53,11 +53,11 @@ class OrderDetailService
                 'user_id'          => $data['user_id'],
                 'booking_id'       => $data['service_id'][$key],
                 'quantity'         => $data['quantity'][$key],
-                'price'            => $data['price'][$key],
+                'price'            => replaceNumberFormat($data['price'][$key]),
                 'vat'              => $data['vat'][$key],
                 'address'          => $data['address'],
-                'number_discount'  => $data['number_discount'][$key],
-                'total_price'      => $data['total_price'][$key],
+                'number_discount'  => replaceNumberFormat($data['number_discount'][$key]),
+                'total_price'      => replaceNumberFormat($data['total_price'][$key]),
             ];
         }
 

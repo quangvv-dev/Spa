@@ -19,13 +19,14 @@
             @foreach($customer->orders as $order)
                 <tr>
                     <td class="text-center">
+                        <a class="btn" href="{{url('/orders/'.$order->id.'/edit')}}" title="Chỉnh sửa"><i
+                                    class="fas fa-edit"></i></a>
                         @if($order->type === \App\Models\Order::TYPE_ORDER_ADVANCE)
                             <a title="Trừ liệu trình" class="btn edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                         @endif
                     </td>
                     <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
                     <td class="text-center">
-                        <a style="color: #7b41d8" href="{{url('/orders/'.$order->id.'/edit')}}"><i class="fas fa-info-circle"></i></a>
                         <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">
                                 @foreach($order->orderDetails as $orderDetail)
                                     {{ @$orderDetail->service->name }},
