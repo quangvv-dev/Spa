@@ -148,7 +148,8 @@ class OrderService
     {
         $order = $this->find($id);
 
-        $theRest = array_sum($attibutes['total_price']);
+        $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue;
+
         if (empty($attibutes) && is_array($attibutes) == false) {
             return false;
         }
@@ -158,7 +159,7 @@ class OrderService
             'the_rest'          => $theRest,
             'count_day'         => $attibutes['count_day'],
             'type'              => $attibutes['count_day'] == null ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total'         => array_sum($attibutes['total_price']),
+            'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])),
             'spa_therapisst_id' => $attibutes['spa_therapisst_id']
         ];
 

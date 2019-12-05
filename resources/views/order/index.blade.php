@@ -83,22 +83,30 @@
                                 <tr>
                                     <td width="250" scope="row">
                                         {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
-                                        {!! Form::select('service_id[]', $services, $orderDetail->booking_id ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}
+                                        <select class="select2 form-control service" required id="service"
+                                                name="service_id[]">
+                                            <option>-Chọn sản phẩm-</option>
+                                            @foreach($services as $service)
+                                                <option value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
+                                                    - {{$service->name}}</option>
+                                            @endforeach
+                                        </select>
+{{--                                        {!! Form::select('service_id[]', $services, $orderDetail->booking_id ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}--}}
                                     </td>
                                     <td class="text-center">
                                         {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('price[]', $orderDetail->price, array('class' => 'form-control price', 'required' => true)) !!}
+                                        {!! Form::text('price[]', number_format($orderDetail->price), array('class' => 'form-control price', 'required' => true)) !!}
                                     </td>
                                     <td class="text-center">
                                         {!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('number_discount[]', $orderDetail->number_discount, array('class' => 'form-control CK2')) !!}
+                                        {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2')) !!}
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('total_price[]', $orderDetail->total_price, array('class' => 'form-control total','readonly'=>true)) !!}
+                                        {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total','readonly'=>true)) !!}
                                     </td>
                                     <td class="tc vertical-middle remove_row">
                                         <button class='btn btn-danger'>X</button>
