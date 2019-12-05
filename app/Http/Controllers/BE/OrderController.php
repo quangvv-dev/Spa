@@ -84,18 +84,35 @@ class OrderController extends Controller
         $param = $request->all();
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 
-        $order = $this->orderService->create($param);
+        DB::beginTransaction();
+        try {
 
-        if (isset($request->spa_therapisst_id)) {
-            HistoryUpdateOrder::create([
-                'user_id'  => $request->spa_therapisst_id,
-                'order_id' => $order->id,
-            ]);
+            $order = $this->orderService->create($param);
+
+            if (!$order) DB::rollBack();
+
+            if (isset($request->spa_therapisst_id)) {
+                HistoryUpdateOrder::create([
+                    'user_id'  => $request->spa_therapisst_id,
+                    'order_id' => $order->id,
+                ]);
+            }
+
+            $orderDetail = $this->orderDetailService->create($param, $order->id);
+
+            if (!$orderDetail) DB::rollBack();
+
+            DB::commit();
+            return redirect('/order/' . $order->id . '/show')->with('status', 'Tạo đơn hàng thành công');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            throw new \Exception($e->getMessage());
         }
 
-        $this->orderDetailService->create($param, $order->id);
 
-        return redirect('/order/' . $order->id . '/show')->with('status', 'Tạo đơn hàng thành công');
+
+
     }
 
     public function listOrder(Request $request)
