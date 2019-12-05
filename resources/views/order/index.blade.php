@@ -152,6 +152,10 @@
                     </div>
                     <div class="col row">
                         <div class="col-md-3">
+                            {!! Form::label('code', 'Mã đơn hàng') !!}
+                            {!! Form::text('code', null, array('id' => 'code', 'class' => 'form-control')) !!}
+                        </div>
+                        <div class="col-md-3">
                             {!! Form::label('count_day', 'Số buổi liệu trình (nếu có)') !!}
                             {!! Form::number('count_day', null, array('class' => 'form-control')) !!}
                         </div>
@@ -277,6 +281,19 @@
                 'price[]': {
                     required: true
                 },
+                code: {
+                    required: true,
+                    remote: {
+                        url: "{{ url('api/check-unique-code-orders') }}",
+                        type: "post",
+                        data: {
+                            code: function () {
+                                return $("#code").val();
+                            },
+                            id: {{ isset($order) ? $order->id : 0 }},
+                        },
+                    }
+                },
             },
             messages: {
                 user_id: "Chưa chọn khách hàng",
@@ -287,6 +304,10 @@
                 status_id: "Chưa chọn trạng thái",
                 'service_id[]': "Chưa chọn dịch vụ",
                 'price[]': "Chưa nhập giá",
+                code: {
+                    required: "Chưa nhập mã đơn hàng",
+                    remote: "Mã đơn hàng đã tồn tại",
+                },
             },
         });
 
