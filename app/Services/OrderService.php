@@ -152,12 +152,9 @@ class OrderService
 
         $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue;
 
-        if (empty($attibutes) && is_array($attibutes) == false) {
-            return false;
-        }
+        if (empty($attibutes) && is_array($attibutes) == false) return false;
 
         $attibutes = [
-            'code'              => $attibutes['code'],
             'member_id'         => $attibutes['user_id'],
             'the_rest'          => $theRest,
             'count_day'         => $attibutes['count_day'],
@@ -166,9 +163,9 @@ class OrderService
             'spa_therapisst_id' => $attibutes['spa_therapisst_id']
         ];
 
-        $model = $order->update($attibutes);
+        $order->update($attibutes);
 
-        return $model;
+        return $order;
 
     }
 }
