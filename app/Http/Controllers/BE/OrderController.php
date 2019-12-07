@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use DB;
 use Excel;
+use Exception;
 
 class OrderController extends Controller
 {
@@ -104,10 +105,10 @@ class OrderController extends Controller
 
             DB::commit();
             return redirect('/order/' . $order->id . '/show')->with('status', 'Tạo đơn hàng thành công');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
 
-            throw new \Exception($e->getMessage());
+            throw new Exception($e->getMessage());
         }
 
 
@@ -271,12 +272,12 @@ class OrderController extends Controller
             if (!$orderDetail) DB::rollBack();
 
             DB::commit();
-            return redirect('list-orders');
+            return redirect('/order/' . $order->id . '/show');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
 
-            throw new \Exception($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
