@@ -29,7 +29,7 @@ class OrderService
         }
 
         $input = [
-            'code'              => $data['code'],
+//            'code'              => $data['code'],
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
             'count_day'         => $countDay,
@@ -40,7 +40,8 @@ class OrderService
 
         $model = $this->order->fill($input);
         $model->save();
-
+        $model->code = $model->id < 10 ?'DH0'.$model->id:'DH'.$model->id;
+        $model->save();
         return $model;
 
     }

@@ -151,10 +151,10 @@
                         <a href="javascript:void(0)" id="add_row" class="red">(+) Thêm sản phẩm</a>
                     </div>
                     <div class="col row">
-                        <div class="col-md-3">
-                            {!! Form::label('code', 'Mã đơn hàng') !!}
-                            {!! Form::text('code', null, array('id' => 'code', 'class' => 'form-control')) !!}
-                        </div>
+{{--                        <div class="col-md-3">--}}
+{{--                            {!! Form::label('code', 'Mã đơn hàng') !!}--}}
+{{--                            {!! Form::text('code', null, array('id' => 'code', 'class' => 'form-control')) !!}--}}
+{{--                        </div>--}}
                         <div class="col-md-3">
                             {!! Form::label('count_day', 'Số buổi liệu trình (nếu có)') !!}
                             {!! Form::number('count_day', null, array('class' => 'form-control')) !!}
