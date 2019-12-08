@@ -23,13 +23,13 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-3">
                                 {!! Form::label('user_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
-                                {!! Form::select('user_id', $customers, $item->user_id, array('class' => 'form-control select2 user', 'required' => true,'disabled'=>true, 'placeholder' => 'Chọn nhân viên')) !!}
-                                {!! Form::hidden('user_id', null, array('class' => 'form-control','readonly'=>true,'required'=>true)) !!}
+                                {!! Form::select('user_id[]', $customers, $item->user_id, array('class' => 'form-control select2 user', 'required' => true,'disabled'=>true, 'placeholder' => 'Chọn nhân viên')) !!}
+                                {!! Form::hidden('user_id[]', null, array('class' => 'form-control','readonly'=>true,'required'=>true)) !!}
                             </div>
                                 <div class="col-xs-12 col-md-3">
                                     <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">
-                                        {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
-                                        {!! Form::text('earn', $item->earn, array('class' => 'form-control rose_price number','readonly'=>true,'required'=>true)) !!}
+                                        {!! Form::label('percent', 'Hoa hồng hưởng (%)', array('class' => ' required')) !!}
+                                        {!! Form::number('percent[]', $item->percent, array('class' => 'form-control rose_price number','readonly'=>true,'required'=>true)) !!}
                                     </div>
                                 </div>
                         </div>
@@ -64,14 +64,14 @@
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('user_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
-                    {!! Form::select('user_id', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn nhân viên')) !!}
-                <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
+                        {!! Form::select('user_id[]', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn nhân viên')) !!}
+                        <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
-                    {!! Form::text('earn', null, array('class' => 'form-control number','required'=>true)) !!}
+                        {!! Form::label('percent', 'Hoa hồng hưởng (%)', array('class' => ' required')) !!}
+                        {!! Form::number('percent[]', null, array('class' => 'form-control number','required'=>true)) !!}
                 </div>
             </div>
             <div class="col-xs-12 col-md-1" style="margin-top:34px">

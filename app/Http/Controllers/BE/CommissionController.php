@@ -4,15 +4,22 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\UserConstant;
 use App\Models\Commission;
+use App\Services\CommissionService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class CommissionController extends Controller
 {
-    public function __construct()
+    private $commissionService;
+
+    /**
+     * CommissionController constructor.
+     * @param CommissionService $commissionService
+     */
+    public function __construct(CommissionService $commissionService)
     {
-        //
+        $this->commissionService = $commissionService;
     }
 
     public function index($id)
@@ -31,10 +38,9 @@ class CommissionController extends Controller
     public function store(Request $request, $id)
     {
         $input = $request->except('_token');
-        $input['earn'] = str_replace(',', '', $request->earn);
-        $input['order_id'] = $id;
 
-        Commission::create($input);
+        $commission = $this->commissionService->create($input, $id);
+
         return redirect(url('order/' . $id . '/show'));
     }
 
@@ -42,7 +48,6 @@ class CommissionController extends Controller
     {
         $commission1 = Commission::where('id', $request->id)->first();
         $input = $request->except('_token', 'order_id');
-        $input['earn'] = str_replace(',', '', $request->earn);
         $input['order_id'] = $commission1->order_id;
 
         $commission->fill($input);
