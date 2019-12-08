@@ -4,6 +4,8 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\UserConstant;
 use App\Models\Commission;
+use App\Models\OrderDetail;
+use App\Models\Services;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,10 +23,14 @@ class CommissionController extends Controller
         $customers = User::where('role', '<>', UserConstant::MARKETING)->pluck('full_name', 'id');
         $doc = Commission::where('order_id', $id)->first();
         $commissions = Commission::where('order_id', $id)->get();
+        $bookingId = OrderDetail::select('booking_id')->where('order_id', $id)->get()->toArray();
+
+        $services = Services::whereIn('id', $bookingId)->pluck('name', 'id');
+
         if (isset($doc) && $doc) {
-            return view('commisstion.index', compact('title', 'customers', 'doc', 'commissions'));
+            return view('commisstion.index', compact('title', 'customers', 'doc', 'commissions', 'services'));
         } else {
-            return view('commisstion.index', compact('title', 'customers'));
+            return view('commisstion.index', compact('title', 'customers', 'services'));
         }
     }
 
