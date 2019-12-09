@@ -47,11 +47,10 @@ class CommissionController extends Controller
     public function update(Request $request, Commission $commission)
     {
         $commission1 = Commission::where('id', $request->id)->first();
-        $input = $request->except('_token', 'order_id');
+        $input = $request->except('_token', 'order_id', 'user_id1', 'percent1');
         $input['order_id'] = $commission1->order_id;
+        $commission = $this->commissionService->create($input, $input['order_id']);
 
-        $commission->fill($input);
-        $commission->save();
         return redirect('order/' . $commission1->order_id . '/show');
     }
 }
