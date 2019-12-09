@@ -355,7 +355,10 @@ class CustomerController extends Controller
         if (isset($request->category_ids) && $request->category_ids) {
             $customer->categories()->sync($request->category_ids);
         }
-        return $customer;
+
+        $data = Customer::with('status', 'categories')->where('id', $id)->first();
+
+        return $data;
     }
 
     public function reportCustomer(Request $request)

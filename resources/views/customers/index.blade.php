@@ -241,9 +241,9 @@
             searchAjax(data);
         });
 
-        $(document).on('dblclick', '.description', function (e) {
+        $(document).on('dblclick', '.description-cus', function (e) {
             let target = $(e.target).parent();
-            $(target).find('.description').empty();
+            $(target).find('.description-cus').empty();
             let id = $(this).data('id');
             let html = '';
 
@@ -254,8 +254,8 @@
             }).done(function (data) {
 
                 html +=
-                    '<textarea name="description" data-id="' + data.id + '" class="handsontableInput description-result" style="width: 291px; height: 59px; font-size: 14px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">' + data.description + '</textarea>';
-                $(target).find(".description").append(html);
+                    '<textarea name="description" data-id="' + data.id + '" class="description-result-customer" style="width: 291px; height: 59px; font-size: 14px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">' + (data.description ? data.description : '') + '</textarea>';
+                $(target).find(".description-cus").append(html);
             });
         });
 
@@ -311,9 +311,8 @@
             });
         });
 
-        $(document).on('focusout, change', '.description-result, .status-result', function (e) {
+        $(document).on('change', '.status-result', function (e) {
             let target = $(e.target).parent();
-            let description = $(target).find('.description-result').val();
             let status_id = $(target).find('.status-result').val();
             let id = $(this).data('id');
 
@@ -321,36 +320,51 @@
                 url: "ajax/customers/" + id,
                 method: "put",
                 data: {
-                    description: description,
                     status_id: status_id
                 }
-            }).done(function () {
-                window.location.reload();
+            }).done(function (data) {
+                $(target).parent().find(".status-db").empty();
+                $(target).parent().find('.status-db').html(data.status.name);
             });
         });
-
-        $(document).on('change.select2', '.category-result', function (e) {
+        $(document).on('focusout', '.description-result-customer', function (e) {
             let target = $(e.target).parent();
-            let category_ids = $(target).find('.category-result').val();
+            let description = $(target).find('.description-result-customer').val();
             let id = $(this).data('id');
 
             $.ajax({
                 url: "ajax/customers/" + id,
                 method: "put",
                 data: {
-                    category_ids: category_ids
+                    description: description,
                 }
-            }).done(function () {
-
+            }).done(function (data) {
+                $(target).parent().find(".description-cus").empty();
+                $(target).parent().find(".description-cus").html(data.description);
             });
-
         });
 
-        $('body').not('.category-result').on('click', function () {
+        $('body').not('.category-result').on('click', function (e) {
             if (!($('.category-result').parent().find('span.select2-container--focus').length) &&
                 $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
             ) {
-                location.reload();
+                let category_ids = $(e.target).parent().find('.category-result').val();
+                let id = $(e.target).parent().find('.category-result').data('id');
+
+                $.ajax({
+                    url: "ajax/customers/" + id,
+                    method: "put",
+                    data: {
+                        category_ids: category_ids
+                    }
+                }).done(function (data) {
+                    const blkstr = $.map(data.categories, function (val) {
+                        const str = val.name;
+                        return str;
+                    }).join(", ");
+
+                    $('.category-result').parent().parent().find('.category-db').html(blkstr);
+                });
             }
         });
 
