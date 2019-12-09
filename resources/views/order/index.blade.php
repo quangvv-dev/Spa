@@ -234,8 +234,8 @@
             price = replaceNumber(price);
 
             let total_service = price * quantity + price * quantity * (VAT / 100) - replaceNumber(CK2);
-            $(target).find('.price').val(formatNumber((price)));
-            $(target).find('.CK2').val(formatNumber((CK2)));
+            $(target).find('.price').val(formatNumber(price));
+            $(target).find('.CK2').val(formatNumber(CK2));
             $(target).find('.total').val(formatNumber(total_service));
         });
 

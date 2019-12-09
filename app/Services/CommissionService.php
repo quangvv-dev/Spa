@@ -10,7 +10,6 @@ namespace App\Services;
 
 
 use App\Models\Commission;
-use App\Models\Order;
 
 class CommissionService
 {
@@ -28,7 +27,7 @@ class CommissionService
         $dataArr = [];
 
         foreach ($data['user_id'] as $key => $val) {
-            $data['earn'][$key] = $this->calculate($data['percent'][$key], $orderId);
+            $data['earn'][$key] = replaceNumberFormat($data['earn'][$key]);
 
             $dataArr[] = [
                 'user_id'  => $data['user_id'][$key],
@@ -42,14 +41,5 @@ class CommissionService
         $model = Commission::insert($dataArr);
 
         return $model;
-    }
-
-    public function calculate($percent, $orderId)
-    {
-        $order = Order::where('id', $orderId)->first();
-
-        $money = ($percent / 100) * $order->all_total;
-
-        return (int)$money;
     }
 }
