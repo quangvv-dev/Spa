@@ -9,6 +9,7 @@ class Commission extends Model
 {
     protected $guarded = ['id'];
     protected $table = 'commissions';
+    public $timestamps = 'true';
 
     public function orders()
     {
