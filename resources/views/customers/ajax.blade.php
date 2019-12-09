@@ -150,7 +150,7 @@
                     </td>
                     <td class="text-center " data-id="{{$customer->id}}"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
                     <td class="text-center">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center description" data-id="{{$customer->id}}"
+                    <td class="text-center description-cus" data-id="{{$customer->id}}"
                         style="width: 291px; height: 59px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
