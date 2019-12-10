@@ -442,4 +442,9 @@ class CustomerController extends Controller
         $customer->update(['account_code' => $code]);
         return $customer;
     }
+
+    public function updateMultipleStatus(Request $request)
+    {
+        $customer = Customer::whereIn('id', $request->ids)->update(['status_id' => $request->status_id]);
+    }
 }
