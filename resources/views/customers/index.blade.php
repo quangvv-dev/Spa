@@ -62,6 +62,7 @@
                 @include('customers.ajax')
             </div>
             @include('customers.modal')
+            @include('customers.modal-update-relation')
             <input type="hidden" id="status">
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
@@ -368,7 +369,7 @@
             }
         });
 
-        $('.selectall').click(function () {
+        $(document).on('click', '.selectall', function () {
             if ($(this).hasClass('active')) {
                 $(':checkbox').each(function () {
                     this.checked = false;
@@ -594,5 +595,29 @@
             }
         });
         // end anheasy
+
+        $(document).on('click', '#change_relations', function () {
+            $('#updateRelation').modal("show");
+        });
+
+        $(document).on('click', '.update-multiple-status', function () {
+            const id = $('td .myCheck:checked');
+            const ids = [];
+            const status_id = $('.status-customer').val();
+            $.each(id, function () {
+                ids.push($(this).val());
+            });
+
+            $.ajax({
+                url: "customers/update-multiple-status",
+                method: "post",
+                data: {
+                    ids: ids,
+                    status_id: status_id,
+                }
+            }).done(function () {
+                window.location.reload();
+            });
+        })
     </script>
 @endsection
