@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                {!! Form::open(array('url' => route('customers.update-multiple-status'), 'method' => 'put', 'id'=>'updateRelationCustomer')) !!}
+                {!! Form::open(array('url' => route('customers.update-multiple-status'), 'method' => 'post', 'id'=>'updateRelationCustomer')) !!}
                 <div class="col row">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('user_id') ? 'has-error' : '' }}">
