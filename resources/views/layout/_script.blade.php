@@ -6,7 +6,7 @@
             }
         });
         // delete action
-        $('.delete').click(function () {
+        $(document).on('click', '.delete', function (e) {
             var url = $(this).data('url');
             swal({
                 title: 'Bạn có muốn xóa ?',
