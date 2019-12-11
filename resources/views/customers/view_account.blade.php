@@ -55,12 +55,12 @@
     </style>
 @endsection
 @section('content')
-    <div class="col-md-12 col-lg-12">
+    <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
         <div class="card">
             <div class="card-header">
                 <div class="col-md-6 no-padd font16"><a class="avatar a45 fl mr10 pic"> <img
                                 src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png"> </a> <span
-                            class="bold uppercase ">  {{ $customer->full_name }}  </span>
+                            class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
                     <div class="display" id="toolbox"><a rel="tooltip" data-original-title="Sửa"
                                                          data-placement="bottom" class="ml10"
                                                          href="#/crm/account/4629"><i
@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">0</h1>
                     <p>Tương tác</p></div>
-                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">0</h1>
+                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}} VNĐ</h1>
                     <p>Giá trị</p></div>
             </div>
             <div style="height:5px" class="color-picker-bg-41"></div>
@@ -122,16 +122,16 @@
                     <div class="full2 pb20 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
                             <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i
-                                        class="fa fa-random mr5 gray margin-left-10">{{ @$customer->source_customer->name }}</i>
+                                        class="fa fa-random mr5 gray margin-left-10">&nbsp;{{ @$customer->source_customer->name }}</i>
                             </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo: <i
-                                        class="fa fa-user mr5 gray margin-left-10">{{ @$customer->marketing->full_name }}</i>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo:<i
+                                        class="fa fa-user mr5 gray margin-left-10">&nbsp;{{ @$customer->marketing->full_name }}</i>
                             </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo: <i
-                                        class="fa fa-calendar mr5 gray margin-left-10">{{ $customer->created_at }}</i>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo:<i
+                                        class="fa fa-calendar mr5 gray margin-left-10">&nbsp;{{ $customer->created_at }}</i>
                             </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua: <i
-                                        class="fa fa-shopping-cart mr5 gray margin-left-10">{{ $customer->orders->count() }}</i>
+                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua:<i
+                                        class="fa fa-shopping-cart mr5 gray margin-left-10">&nbsp;{{ $customer->orders->count() }}</i>
                             </h3>
                         </div>
                     </div>
@@ -141,11 +141,11 @@
                             <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">
                                 <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i
                                                 class="icon-user mr5 mt2 fl"></i> <b
-                                                class="blue">{{ $customer->full_name }}</b> <i
+                                                class="blue">&nbsp;{{ $customer->full_name }}</b> <i
                                                 data-original-title="Liên hệ chính" rel="tooltip"
                                                 class="fa orange fa-star" aria-hidden="true"></i></p>
                                     <p></p>
-                                    <p class="clearfix">{{ $customer->phone }}</p>
+                                    <p class="clearfix">&nbsp;{{ $customer->phone }}</p>
                                 </div>
                                 <div class="col-md-12 no-padd hide"><a><i data-task-type="2"
                                                                           class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>
@@ -162,54 +162,54 @@
                                                       style="margin-bottom: 10px!important;">Thông tin khách
                                 hàng</h3>
                             <div class="mb10 clearfix"><p class="pr5 fl">Mã KH:</p>
-                                <p class="bold word-wrap"> {{$customer->account_code}}</p>
+                                <p class="bold word-wrap"> &nbsp;{{$customer->account_code}}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Tên KH:</p>
-                                <p class="bold word-wrap"> {{ $customer->full_name }} </p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->full_name }} </p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Địa chỉ:</p>
-                                <p class="bold word-wrap"> {{ $customer->address }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->address }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Điện thoại:</p>
                                 <p class="bold word-wrap"><a class="" data-account-id="4629" data-phone="0904341335"
                                                              data-type="crm" data-issensitive="true">
-                                        {{ $customer->phone }} </a></p>
+                                        &nbsp;{{ $customer->phone }} </a></p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Người phụ trách:</p>
-                                <p class="bold word-wrap"> {{ @$customer->telesale->full_name }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Nhóm KH:</p>
-                                <p class="bold word-wrap"> {{ @$customer->category->name }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ @$customer->category->name }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Nguồn KH:</p>
-                                <p class="bold word-wrap"> {{ @$customer->source_customer->name }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Sinh nhật:</p>
-                                <p class="bold word-wrap"> {{ $customer->birthday }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->birthday }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Mối quan hệ:</p>
-                                <p class="bold word-wrap"> {{ $customer->status->name }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->status->name }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Ngày tạo:</p>
-                                <p class="bold word-wrap"> {{ $customer->created_at }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->created_at }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Giới tính:</p>
-                                <p class="bold word-wrap"> {{ $customer->genderText }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->genderText }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Mô tả:</p>
-                                <p class="bold word-wrap"> {{ $customer->description }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->description }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Số đơn hàng:</p>
-                                <p class="bold word-wrap"> {{ $customer->orders->count() }}</p>
+                                <p class="bold word-wrap"> &nbsp;{{ $customer->orders->count() }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Tổng doanh thu:</p>
-                                <p class="bold word-wrap"> {{number_format($customer->orders->sum('gross_revenue'))}}</p>
+                                <p class="bold word-wrap"> &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Tổng số tương tác:</p>
-                                <p class="bold word-wrap">0</p>
+                                <p class="bold word-wrap">&nbsp;0</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Giá trị:</p>
-                                <p class="bold word-wrap"> {{number_format($customer->orders->sum('gross_revenue'))}}</p>
+                                <p class="bold word-wrap"> &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>
                         </div>
                     </div>
@@ -313,7 +313,7 @@
                     html += '<tr>' + '<td class="text-center">' + index + '</td>' +
                         '<td class="text-center">' + item.created_at + '</td>' +
                         '<td class="text-center">' + item.user.full_name + '</td>' +
-                        '<td class="text-center">' + item.description + '</td>' + '</tr>';
+                        '<td class="text-center">' + (item.description ? item.description: '') + '</td>' + '</tr>';
                 });
                 $('.data-history-update-order').append(html);
                 $('#largeModal').modal("show");
