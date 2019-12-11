@@ -91,7 +91,6 @@
                                                     - {{$service->name}}</option>
                                             @endforeach
                                         </select>
-{{--                                        {!! Form::select('service_id[]', $services, $orderDetail->booking_id ,array('id' => "service", 'class' => 'select2 form-control service', 'required' => true)) !!}--}}
                                     </td>
                                     <td class="text-center">
                                         {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
@@ -151,13 +150,45 @@
                         <a href="javascript:void(0)" id="add_row" class="red">(+) Thêm sản phẩm</a>
                     </div>
                     <div class="col row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             {!! Form::label('count_day', 'Số buổi liệu trình (nếu có)') !!}
                             {!! Form::number('count_day', null, array('class' => 'form-control')) !!}
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             {!! Form::label('spa_therapisst_id', 'Kỹ thuật viên') !!}
                             {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group required {{ $errors->has('payment_date') ? 'has-error' : '' }}">
+                                {!! Form::label('payment_date', 'Ngày thanh toán', array('class' => ' required')) !!}
+                                <div class="wd-200 mg-b-30">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
+                                            </div>
+                                        </div>
+                                        {!! Form::text('payment_date', null, array('class' => 'form-control fc-datepicker')) !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="help-block">{{ $errors->first('payment_date', ':message') }}</span>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
+                                {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
+                                <div class="wd-200 mg-b-30">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
+                                            </div>
+                                        </div>
+                                        {!! Form::text('created_at', null, array('class' => 'form-control fc-datepicker')) !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
                         </div>
                     </div>
                 </div>

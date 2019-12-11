@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Response;
 use DB;
 use Excel;
 use Exception;
+use Log;
 
 class OrderController extends Controller
 {
@@ -107,8 +108,9 @@ class OrderController extends Controller
             return redirect('/order/' . $order->id . '/show')->with('status', 'Tạo đơn hàng thành công');
         } catch (Exception $e) {
             DB::rollBack();
-
-            throw new Exception($e->getMessage());
+            Log::error($e);
+            $debug = 'Try catch exception : ' . $e->getMessage() . 'LINE : ___' . $e->getLine() . '___FILE___' . $e->getFile();
+            return ApiResult(500, 'Insert failed', null, null, $debug);
         }
 
 

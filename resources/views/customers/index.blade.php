@@ -386,7 +386,7 @@
             }
         });
 
-        $('#remove_selected_account').click(function () {
+        $(document).on('click', '#remove_selected_account', function () {
             const id = $('td .myCheck:checked');
             const ids = [];
             $.each(id, function () {
@@ -544,7 +544,7 @@
             })
         });
 
-        $('#permanently_delete_account').click(function () {
+        $(document).on('click', '#permanently_delete_account', function () {
             const id = $('td .myCheck:checked');
             const ids = [];
             $.each(id, function () {
