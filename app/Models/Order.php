@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\Functions;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -12,6 +13,7 @@ class Order extends Model
     protected $guarded = ['id'];
     const TYPE_ORDER_DEFAULT = 0;
     const TYPE_ORDER_ADVANCE = 1;
+    protected $appends = ['payment_date', 'created_at'];
     use SoftDeletes;
 
     public function orderDetails()
@@ -42,6 +44,24 @@ class Order extends Model
     public function spaTherapisst()
     {
         return $this->belongsTo(User::class, 'spa_therapisst_id', 'id');
+    }
+
+    public function getPaymentDateAttribute()
+    {
+        if (isset($this->attributes['payment_date'])) {
+            return Carbon::parse($this->attributes['payment_date'])->format('d-m-Y');
+        } else {
+            return null;
+        }
+    }
+
+    public function getCreatedAtAttribute()
+    {
+        if (isset($this->attributes['created_at'])) {
+            return Carbon::parse($this->attributes['created_at'])->format('d-m-Y');
+        } else {
+            return null;
+        }
     }
 
     public static function search($input)

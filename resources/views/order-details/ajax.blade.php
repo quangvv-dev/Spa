@@ -29,7 +29,7 @@
                         @endif
                     </td>
                     <td class="text-center">{{ $loop->iteration }}</td>
-                    <td class="text-center">{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
+                    <td class="text-center">{{ $order->created_at }}</td>
                     <td class="text-center">
                         <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal" data-order-id="{{ $order->id }}" href="#">
                             <i class="fas fa-info-circle"></i>

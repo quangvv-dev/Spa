@@ -29,13 +29,14 @@ class OrderService
         }
 
         $input = [
-//            'code'              => $data['code'],
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
             'count_day'         => $countDay,
-            'type'              => $data['count_day'] == null ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'type'              => ($data['count_day'] == null || $data['count_day'] == 0)  ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => $theRest,
-            'spa_therapisst_id' => $data['spa_therapisst_id']
+            'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id']: "",
+            'payment_date'      => isset($data['payment_date']) ? Functions::yearMonthDay($data['payment_date']): null,
+            'created_at'        => isset($data['payment_date']) ? Functions::yearMonthDay($data['created_at']): null
         ];
 
         $model = $this->order->fill($input);
@@ -158,9 +159,11 @@ class OrderService
             'member_id'         => $attibutes['user_id'],
             'the_rest'          => $theRest,
             'count_day'         => $attibutes['count_day'],
-            'type'              => $attibutes['count_day'] == null ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])),
-            'spa_therapisst_id' => $attibutes['spa_therapisst_id']
+            'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
+            'payment_date'      => isset($attibutes['payment_date']) ? Functions::yearMonthDay($attibutes['payment_date']): null,
+            'created_at'        => isset($attibutes['created_at']) ?Functions::yearMonthDay($attibutes['created_at']): null
         ];
 
         $order->update($attibutes);

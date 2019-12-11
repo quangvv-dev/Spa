@@ -45,3 +45,9 @@ function replaceNumberFormat($number)
 {
     return str_replace(',', '', $number);
 }
+
+function ApiResult($code = null, $msg = null, $data = null, $error = null, $debug = null)
+{
+    $response = ['code' => $code, 'msg' => $msg, 'data' => $data, 'error' => $error, 'debug' => $debug];
+    return response()->json($response, $code);
+}
