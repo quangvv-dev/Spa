@@ -159,22 +159,6 @@
                             {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group required {{ $errors->has('payment_date') ? 'has-error' : '' }}">
-                                {!! Form::label('payment_date', 'Ngày thanh toán', array('class' => ' required')) !!}
-                                <div class="wd-200 mg-b-30">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
-                                            </div>
-                                        </div>
-                                        {!! Form::text('payment_date', null, array('class' => 'form-control fc-datepicker')) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="help-block">{{ $errors->first('payment_date', ':message') }}</span>
-                        </div>
-                        <div class="col-md-2">
                             <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
                                 {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
                                 <div class="wd-200 mg-b-30">
@@ -184,7 +168,7 @@
                                                 <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
                                             </div>
                                         </div>
-                                        {!! Form::text('created_at', null, array('class' => 'form-control fc-datepicker')) !!}
+                                        {!! Form::text('created_at', isset($order) ? date("m-d-Y", strtotime($order->created_at)) : date("m-d-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
                                     </div>
                                 </div>
                             </div>
@@ -206,6 +190,7 @@
 @section('_script')
     <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
+        // $(".fc-datepicker").datepicker().datepicker("setDate", new Date());
         $(document).on('click', '#add_row', function () {
             $('.order').append(`
                 <tr>
