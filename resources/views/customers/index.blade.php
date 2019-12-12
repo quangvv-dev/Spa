@@ -275,7 +275,7 @@
                     '<select class="category-result form-control select2-multiple" multiple="multiple" data-id="' + data.customer_id + '" name="group_id[]">';
                 data.categories.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '" class="category-op">' + item.name + '</option>';
+                        '<option value="' + item.id + '" class="category-op"  '+((jQuery.inArray(item.id, data.category_id) !== -1 ? "selected": ""))+'>' + item.name + '</option>';
                 });
 
                 html += '</select>';
