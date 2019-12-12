@@ -151,11 +151,14 @@ class CategoryController extends Controller
     public function getListApi(Request $request)
     {
         $customerId = $request->id;
+        $customer = Customer::where('id', $customerId)->first();
+        $categoryId = $customer->categories()->get()->pluck('id')->toArray();
         $categories = Category::get();
 
         return $data = [
             'customer_id' => $customerId,
             'categories'  => $categories,
+            'category_id' => $categoryId
         ];
     }
 }
