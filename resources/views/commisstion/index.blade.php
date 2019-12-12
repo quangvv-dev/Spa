@@ -38,15 +38,15 @@
                                     {!! Form::text('earn1', number_format($item->earn), array('class' => 'form-control earn1','readonly'=>true,'required'=>true)) !!}
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-md-2">
+                                <div class="form-group required {{ $errors->has('note') ? 'has-error' : '' }}">
+                                    {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
+                                    {!! Form::text('note1', $item->note, array('class' => 'form-control','readonly'=>true)) !!}
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 @endif
-            </div>
-            <div class="col-xs-12 col-md-6">
-                <div class="form-group required {{ $errors->has('note') ? 'has-error' : '' }}">
-                    {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
-                    {!! Form::textarea('note', null, array('class' => 'form-control', 'rows' => 3)) !!}
-                </div>
             </div>
             <div class="col bot">
                 <a href="javascript:void(0)" id="add_row" class="red">(+)Tạo người hưởng</a>
@@ -93,11 +93,17 @@
                         {!! Form::text('all_total', $order->all_total, array('class' => 'form-control price-total hidden','required'=>true)) !!}
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-1" style="margin-top:34px">
-                    <a class="remove"> <i class="fa fa-times fa-2x"></i> </a>
+                <div class="col-xs-12 col-md-2">
+                    <div class="form-group required {{ $errors->has('note') ? 'has-error' : '' }}">
+                        {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
+                        {!! Form::text('note[]', null, array('class' => 'form-control')) !!}
                 </div>
             </div>
-        `);
+            <div class="col-xs-12 col-md-1" style="margin-top:34px">
+                <a class="remove"> <i class="fa fa-times fa-2x"></i> </a>
+            </div>
+            </div>
+`);
             $('.number').number(true);
             $("#fvalidate").validate({
                 rules: {

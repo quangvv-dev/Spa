@@ -46,24 +46,6 @@ class Order extends Model
         return $this->belongsTo(User::class, 'spa_therapisst_id', 'id');
     }
 
-    public function getPaymentDateAttribute()
-    {
-        if (isset($this->attributes['payment_date'])) {
-            return Carbon::parse($this->attributes['payment_date'])->format('d-m-Y');
-        } else {
-            return null;
-        }
-    }
-
-    public function getCreatedAtAttribute()
-    {
-        if (isset($this->attributes['created_at'])) {
-            return Carbon::parse($this->attributes['created_at'])->format('d-m-Y');
-        } else {
-            return null;
-        }
-    }
-
     public static function search($input)
     {
         $data = self::with( 'orderDetails');

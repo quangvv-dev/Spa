@@ -32,7 +32,7 @@ class CommissionService
             $dataArr[] = [
                 'user_id'  => $data['user_id'][$key],
                 'percent'  => $data['percent'][$key],
-                'note'     => $data['note'],
+                'note'     => $data['note'][$key],
                 'order_id' => $orderId,
                 'earn'     => $data['earn'][$key]
             ];
