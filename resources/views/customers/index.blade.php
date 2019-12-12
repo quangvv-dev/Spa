@@ -271,11 +271,12 @@
                 method: "get",
                 data: {id: id}
             }).done(function (data) {
+                console.log(data.category_id, data);
                 html +=
                     '<select class="category-result form-control select2-multiple" multiple="multiple" data-id="' + data.customer_id + '" name="group_id[]">';
                 data.categories.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '" class="category-op">' + item.name + '</option>';
+                        '<option value="' + item.id + '" class="category-op" '+((jQuery.inArray(item.id, data.category_id) !== -1 ? "selected": ""))+'>' + item.name + '</option>';
                 });
 
                 html += '</select>';
@@ -572,29 +573,6 @@
                 })
             })
         });
-        // anheasy
-        $('.table-responsive .table-primary').floatThead({
-            top: 183,
-            scrollContainer: function($table){
-                return $table.closest('');
-            },
-            position: 'absolute'
-        });
-        $('.table-ajax .table-primary').floatThead({
-            top: 183,
-            position: 'absolute'
-        });
-        $(window).on("scroll", function(e){
-            if ($(window).scrollTop() >= 150) {
-                $('.search-box').addClass('searchbox-sticky');
-                $('.filter-box').addClass('filterbox-sticky');
-            }
-            else {
-                $('.search-box').removeClass('searchbox-sticky');
-                $('.filter-box').removeClass('filterbox-sticky');
-            }
-        });
-        // end anheasy
 
         $(document).on('click', '#change_relations', function () {
             $('#updateRelation').modal("show");
@@ -618,6 +596,33 @@
             }).done(function () {
                 window.location.reload();
             });
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            // anheasy
+            $('.table-responsive .table-primary').floatThead({
+                top: 183,
+                scrollContainer: function($table){
+                    return $table.closest('');
+                },
+                position: 'absolute'
+            });
+            $('.table-ajax .table-primary').floatThead({
+                top: 183,
+                position: 'absolute'
+            });
+            $(window).on("scroll", function(e){
+                if ($(window).scrollTop() >= 150) {
+                    $('.search-box').addClass('searchbox-sticky');
+                    $('.filter-box').addClass('filterbox-sticky');
+                }
+                else {
+                    $('.search-box').removeClass('searchbox-sticky');
+                    $('.filter-box').removeClass('filterbox-sticky');
+                }
+            });
+            // end anheasy
         })
     </script>
 @endsection
