@@ -15,19 +15,19 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                             {!! Form::label('payment_date', 'Ngày thanh toán', array('class' => ' required')) !!}
-                            <input type="text" class="form-control payment-date" id="datepicker" data-toggle="datepicker" name="payment_date" value="{{ $order->now }}">
+                            <input type="text" class="form-control payment-date" id="datepicker" data-toggle="datepicker" name="payment_date" value="{{ $order->now }}" required>
                             <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required">
                             {!! Form::label('phone', 'Số tiền', array('class' => ' required')) !!}
-                            {!! Form::select('payment_type',[1 => "Tiền mặt", 2 => 'Thẻ'], null, array('id' => 'phone','class' => 'form-control select2 payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
+                            {!! Form::select('payment_type',[1 => "Tiền mặt", 2 => 'Thẻ'], null, array('id' => 'phone','class' => 'form-control select2 payment-type', 'placeholder' => 'Hình thức thanh toán', 'required' => true)) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required" style="margin-top: 29px">
-                            {!! Form::text('gross_revenue', null, array('class' => 'form-control gross-revenue', "data-type"=>"currency")) !!}
+                            {!! Form::text('gross_revenue', null, array('class' => 'form-control gross-revenue', "data-type"=>"currency", 'required' => true)) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">

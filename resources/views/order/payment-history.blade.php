@@ -13,7 +13,7 @@
         <tbody id="payment-history">
         @foreach($data as $item)
             <tr data-payment-id="628">
-                <td class="tc pl10">{{ $item->payment_date }}</td>
+                <td class="tc pl10">{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                 <td class="tc">{{ number_format($item->price) }}</td>
                 <td>{{ $item->description }}</td>
                 {{--<td class="tc">--}}
