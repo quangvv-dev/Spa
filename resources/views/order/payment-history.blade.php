@@ -7,7 +7,7 @@
             <th class="tl pl10 gray" width="30%" style="text-transform:initial;">Ngày</th>
             <th class="tc gray" width="30%" style="text-transform:initial;">Số tiền</th>
             <th class="tc gray" width="60%" style="text-transform:initial;">Ghi chú</th>
-            {{--<th class="tc gray" width="10%"></th>--}}
+            <th class="tc gray" width="10%"></th>
         </tr>
         </thead>
         <tbody id="payment-history">
@@ -16,11 +16,10 @@
                 <td class="tc pl10">{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
                 <td class="tc">{{ number_format($item->price) }}</td>
                 <td>{{ $item->description }}</td>
-                {{--<td class="tc">--}}
-                    {{--<a class="remove_payment" title="Xóa">--}}
-                        {{--<i class="gf-icon-hover fa fa-trash"></i>--}}
-                    {{--</a>--}}
-                {{--</td>--}}
+                <td class="tc">
+                    <a title="Xóa" class="btn delete" href="javascript:void(0)"
+                       data-url="{{ url('order/' . $item->id . '/delete-payment') }}"><i class="fas fa-trash-alt"></i></a>
+                </td>
             </tr>
         @endforeach
         </tbody>
