@@ -172,8 +172,10 @@ class OrderController extends Controller
     {
         DB::beginTransaction();
         try {
-            $paymentHistory = PaymentHistoryService::create($request->all(), $id);
-            $order = $this->orderService->updatePayment($request->all(), $id);
+            $input = $request->all();
+            $paymentHistory = PaymentHistoryService::create($input, $id);
+
+            $order = $this->orderService->updatePayment($input, $id);
             if (!$paymentHistory || !$order) {
                 DB::rollBack();
             }
@@ -191,8 +193,9 @@ class OrderController extends Controller
             return $order;
         } catch (\Exception $e) {
             DB::rollBack();
-
-            throw new \Exception($e->getMessage());
+            Log::error($e);
+            $debug = 'Try catch exception : ' . $e->getMessage() . 'LINE : ___' . $e->getLine() . '___FILE___' . $e->getFile();
+            return ApiResult(500, 'Insert failed', null, null, $debug);
         }
     }
 
