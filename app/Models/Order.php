@@ -13,7 +13,6 @@ class Order extends Model
     protected $guarded = ['id'];
     const TYPE_ORDER_DEFAULT = 0;
     const TYPE_ORDER_ADVANCE = 1;
-    protected $appends = ['payment_date', 'created_at'];
     use SoftDeletes;
 
     public function orderDetails()
