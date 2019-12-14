@@ -355,4 +355,11 @@ class OrderController extends Controller
         return 'true';
     }
 
+    public function deletePayment($id)
+    {
+        $order = $this->orderService->deletePayment($id);
+
+        return redirect('order/' . $order->id . '/show')->with('status', 'Xoá lịch sử thanh toán thành công');
+    }
+
 }

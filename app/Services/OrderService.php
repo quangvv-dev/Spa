@@ -5,11 +5,13 @@ namespace App\Services;
 use App\Models\GroupComment;
 use App\Models\Order;
 use App\Helpers\Functions;
+use App\Models\PaymentHistory;
 use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
     public $order;
+
 
     public function __construct(Order $order)
     {
@@ -170,5 +172,21 @@ class OrderService
 
         return $order;
 
+    }
+
+    public function deletePayment($id)
+    {
+        $paymentHistory = PaymentHistory::where('id', $id)->first();
+
+        $order = $this->find($paymentHistory->order_id);
+
+        $order->update([
+            'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
+            'the_rest' => $order->the_rest + $paymentHistory->price
+        ]);
+
+        $paymentHistory->delete();
+
+        return $order;
     }
 }
