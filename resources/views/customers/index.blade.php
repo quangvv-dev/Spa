@@ -496,8 +496,12 @@
                 data: {
                     full_name: full_name,
                 }
-            }).done(function () {
-                window.location.reload();
+            }).done(function (data) {
+                let html = `<a class="view_modal" id="chat-fast" data-customer-id="`+ data.id +`" href="#">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a href="customers/`+ data.id +`">`+ data.full_name +`</a>`;
+                $(target).parent().find(".name-customer").html(html);
             });
         });
 
@@ -512,8 +516,8 @@
                 data: {
                     phone: phone,
                 }
-            }).done(function () {
-                window.location.reload();
+            }).done(function (data) {
+                $(target).parent().find(".phone-customer").html(data.phone);
             });
         });
 
