@@ -2,17 +2,6 @@
     .page-header {
         display: none;
     }
-
-    /*@media only screen and (max-width: 1439px) {*/
-    /*.table-ajax{*/
-    /*width: 71%;*/
-    /*}*/
-    /*}*/
-    /*@media only screen and (min-width: 1440px) {*/
-    /*.table-ajax{*/
-    /*width: 50%;*/
-    /*}*/
-    /*}*/
 </style>
 <div class="card-header filter-box">
     <div class="display btn-group open">
@@ -35,15 +24,13 @@
         <button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
         <ul class="dropdown-menu">
-            <li class="dropdown_action"><a id="send_email">Gửi Email</a></li>
-            <li class="dropdown_action"><a id="send_sms">Gửi SMS</a></li>
-            <li class="dropdown_action"><a id="mark_as_potential">Tạo cơ hội</a></li>
-            <li class="dropdown_action"><a id="show_popup_task">Tạo công việc</a></li>
-            <li class="dropdown_action"><a id="show_group_type_account">Nhóm khách hàng</a></li>
-            <li class="dropdown_action"><a id="show_manager_account">Người phụ trách</a></li>
-            {{--<li class="dropdown_action"><a data-toggle="modal" href="change-account-viewers">Người xem</a>--}}
-            {{--</li>--}}
-            <li class="dropdown_action"><a id="remove_selected_account">Xóa nhiều</a></li>
+            <li class="dropdown_action" id="send_email"><a>Gửi Email</a></li>
+            <li class="dropdown_action" id="send_sms"><a>Gửi SMS</a></li>
+            <li class="dropdown_action" id="mark_as_potential"><a>Tạo cơ hội</a></li>
+            <li class="dropdown_action" id="show_popup_task"><a>Tạo công việc</a></li>
+            <li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>
+            <li class="dropdown_action" id="show_manager_account"><a>Người phụ trách</a></li>
+            <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
             <li class="dropdown_action" id="restore_account" style="display: none;"><a>Khôi phục</a></li>
             <li class="dropdown_action" id="permanently_delete_account" style="display: none;"><a>Xóa
                     hẳn</a></li>
