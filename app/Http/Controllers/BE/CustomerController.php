@@ -356,7 +356,7 @@ class CustomerController extends Controller
             $customer->categories()->sync($request->category_ids);
         }
 
-        $data = Customer::with('status', 'categories')->where('id', $id)->first();
+        $data = Customer::with('status', 'categories', 'telesale')->where('id', $id)->first();
 
         return $data;
     }
@@ -446,5 +446,19 @@ class CustomerController extends Controller
     public function updateMultipleStatus(Request $request)
     {
         $customer = Customer::whereIn('id', $request->ids)->update(['status_id' => $request->status_id]);
+    }
+
+    public function getListAjax(Request $request)
+    {
+        $id = $request->id;
+
+        $customer = Customer::with('telesale')->where('id', $id)->first();
+
+        $telesales = User::where('role', UserConstant::TELESALES)->get();
+
+        return [
+            'customer' => $customer,
+            'data' => $telesales
+        ];
     }
 }
