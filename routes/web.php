@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('commission/{id}', 'CommissionController@index')->name('commission.index');
     Route::post('commission/{id}', 'CommissionController@store')->name('commission.store');
     Route::put('commission/{id}', 'CommissionController@update')->name('commission.update');
+    Route::delete('commission/{id}/delete', 'CommissionController@destroy')->name('commission.destroy');
     Route::put('order/{id}/show', 'OrderController@payment')->name('order.payment');
     Route::delete('order/{id}/delete-payment', 'OrderController@deletePayment')->name('order.delete-payment');
     //Customer import & export
