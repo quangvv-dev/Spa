@@ -81,18 +81,22 @@
                         @if(!empty($order))
                             @foreach($order->orderDetails as $orderDetail)
                                 <tr>
-                                    <td width="250" scope="row">
+                                    <td width="350" class="row">
+                                        <div class="col-xs-12 col-md-10">
                                         {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
-                                        <select class="select2 form-control service" required id="service"
-                                                name="service_id[]">
-                                            <option>-Chọn sản phẩm-</option>
-                                            @foreach($services as $service)
-                                                <option value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
-                                                    - {{$service->name}}</option>
-                                            @endforeach
-                                        </select>
+                                            <select class="select2 form-control service" required id="service"
+                                                    name="service_id[]">
+                                                <option>-Chọn sản phẩm-</option>
+                                                @foreach($services as $service)
+                                                    <option value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
+                                                        - {{$service->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff;"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+                                        <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]">{{$orderDetail->service->description}}</textarea>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center" width="50">
                                         {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
                                     </td>
                                     <td class="text-center">
@@ -114,17 +118,21 @@
                             @endforeach
                         @else
                             <tr>
-                                <td width="250" scope="row">
-                                    <select class="select2 form-control service" required id="service"
-                                            name="service_id[]">
-                                        <option>-Chọn sản phẩm-</option>
-                                        @foreach($services as $service)
-                                            <option value="{{$service->id}}">{{@$service->category->name}}
-                                                - {{$service->name}}</option>
-                                        @endforeach
-                                    </select>
+                                <td width="350" class="row">
+                                    <div class="col-xs-12 col-md-10">
+                                        <select class="select2 form-control service" required id="service"
+                                                name="service_id[]">
+                                            <option>-Chọn sản phẩm-</option>
+                                            @foreach($services as $service)
+                                                <option value="{{$service->id}}">{{@$service->category->name}}
+                                                    - {{$service->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff;"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+                                    <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center" width="50">
                                     {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
                                 </td>
                                 <td class="text-center">
@@ -194,15 +202,19 @@
         $(document).on('click', '#add_row', function () {
             $('.order').append(`
                 <tr>
-                    <td width="250" scope="row">
+                    <td width="350" class="row">
+                    <div class="col-xs-12 col-md-10">
                         <select class="select2 form-control service" required id="service" name="service_id[]">
                             <option>-Chọn sản phẩm-</option>
                             @foreach($services as $service)
                                 <option value="{{@$service->id}}">{{@$service->category->name}} - {{@$service->name}} </option>
                             @endforeach
                         </select>
+                    </div>
+                    <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+                    <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" width="50">
                         {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
                     </td>
                     <td class="text-center">
@@ -228,15 +240,15 @@
         });
 
         $(document).on('change', '.service', function (e) {
-            let target = $(e.target).parent().parent();
+            let target = $(e.target).parent().parent().parent();
             let id = $(this).val();
             $.ajax({
                 url: "{{ Url('ajax/info-service') }}",
                 method: "get",
                 data: {id: id}
             }).done(function (data) {
-                $(target).find('.price').val(formatNumber((data['price_sell'])));
-                $(target).find('.total').val(formatNumber((data['price_sell'])));
+                $(target).find('.price').val(formatNumber(data.price_sell));
+                $(target).find('.total').val(formatNumber(data.price_sell));
             });
         });
 
@@ -305,6 +317,18 @@
                 'price[]': "Chưa nhập giá",
             },
         });
+
+        $(document).on('click', '.add_note', function (e) {
+            const clicks = $(this).data('clicks');
+            const target = $(e.target).parent().parent();
+
+            if (clicks) {
+                $(target).find('.product_note').css({'display': 'none'});
+            } else {
+                $(target).find('.product_note').css({'display': 'block'});
+            }
+            $(this).data("clicks", !clicks);
+        })
 
     </script>
 @endsection
