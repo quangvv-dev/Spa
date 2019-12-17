@@ -46,13 +46,20 @@ class CommissionController extends Controller
         return redirect(url('order/' . $id . '/show'));
     }
 
-    public function update(Request $request, Commission $commission)
+    public function update(Request $request)
     {
-        $commission1 = Commission::where('id', $request->id)->first();
+        $commission = $this->commissionService->find($request->id);
         $input = $request->except('_token', 'order_id', 'user_id1', 'percent1', 'all_total');
-        $input['order_id'] = $commission1->order_id;
-        $commission = $this->commissionService->create($input, $input['order_id']);
+        $input['order_id'] = $commission->order_id;
 
-        return redirect('order/' . $commission1->order_id . '/show');
+        $this->commissionService->create($input, $input['order_id']);
+
+        return redirect('order/' . $commission->order_id . '/show');
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $this->commissionService->delete($id);
+        $request->session()->flash('error', 'Xóa thành công!');
     }
 }

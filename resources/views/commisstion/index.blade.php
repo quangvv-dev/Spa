@@ -21,28 +21,38 @@
                 @if(isset($commissions) && $commissions)
                     @foreach($commissions as $item)
                         <div class="row">
+                            <input type="hidden" name="id[]" value="{{ $item->id }}">
                             <div class="col-xs-12 col-md-2">
                                 {!! Form::label('user_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
-                                {!! Form::select('user_id1', $customers, $item->user_id, array('class' => 'form-control select2 user', 'required' => true,'disabled'=>true, 'placeholder' => 'Chọn nhân viên')) !!}
-                                {!! Form::hidden('user_id1', null, array('class' => 'form-control','readonly'=>true,'required'=>true)) !!}
+                                {!! Form::select('user_id[]', $customers, $item->user_id, array('class' => 'form-control select2 user', 'placeholder' => 'Chọn nhân viên')) !!}
                             </div>
                                 <div class="col-xs-12 col-md-2">
                                     <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">
                                         {!! Form::label('percent', 'Hoa hồng hưởng (%)', array('class' => ' required')) !!}
-                                        {!! Form::number('percent1', $item->percent, array('class' => 'form-control','readonly'=>true,'required'=>true)) !!}
+                                        {!! Form::number('percent[]', isset($item->percent) ? $item->percent: "", array('class' => 'form-control percent-order')) !!}
                                     </div>
                                 </div>
                             <div class="col-xs-12 col-md-2">
                                 <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">
                                     {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
-                                    {!! Form::text('earn1', number_format($item->earn), array('class' => 'form-control earn1','readonly'=>true,'required'=>true)) !!}
+                                    {!! Form::text('earn[]', number_format($item->earn), array('class' => 'form-control earn-order')) !!}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-2 hidden">
+                                <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                                    {!! Form::label('all_total', 'Giá tiền', array('class' => ' required')) !!}
+                                    {!! Form::text('all_total', $order->all_total, array('class' => 'form-control price-total hidden','required'=>true)) !!}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-2">
                                 <div class="form-group required {{ $errors->has('note') ? 'has-error' : '' }}">
                                     {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
-                                    {!! Form::text('note1', $item->note, array('class' => 'form-control','readonly'=>true)) !!}
+                                    {!! Form::text('note[]', $item->note, array('class' => 'form-control')) !!}
                                 </div>
+                            </div>
+                            <div class="col-xs-12 col-md-1" style="display: flex; align-items: center">
+                                <a title="Xóa" class="btn delete" href="javascript:void(0)"
+                                   data-url="{{ url('commission/' . $item->id . '/delete') }}"><i class="fas fa-trash-alt"></i></a>
                             </div>
                         </div>
                     @endforeach

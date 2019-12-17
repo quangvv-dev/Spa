@@ -29,17 +29,45 @@ class CommissionService
         foreach ($data['user_id'] as $key => $val) {
             $data['earn'][$key] = replaceNumberFormat($data['earn'][$key]);
 
-            $dataArr[] = [
-                'user_id'  => $data['user_id'][$key],
-                'percent'  => $data['percent'][$key],
-                'note'     => $data['note'][$key],
-                'order_id' => $orderId,
-                'earn'     => $data['earn'][$key]
-            ];
+            if (!empty($data['id'][$key])) {
+                $model = $this->find($data['id'][$key]);
+
+                $model->update([
+                    'user_id'  => $data['user_id'][$key],
+                    'percent'  => $data['percent'][$key],
+                    'note'     => $data['note'][$key],
+                    'earn'     => $data['earn'][$key]
+                ]);
+            } else {
+                $dataArr[] = [
+                    'user_id'  => $data['user_id'][$key],
+                    'percent'  => $data['percent'][$key],
+                    'note'     => $data['note'][$key],
+                    'order_id' => $orderId,
+                    'earn'     => $data['earn'][$key]
+                ];
+            }
         }
 
-        $model = Commission::insert($dataArr);
+        if (!empty($dataArr)) {
+            $model = Commission::insert($dataArr);
+
+            return $model;
+        }
+    }
+
+    public function find($id)
+    {
+        $model = $this->commission->where('id', $id)->first();
 
         return $model;
+    }
+
+    public function delete($id)
+    {
+        $model = $this->find($id);
+
+        return $model->delete();
+
     }
 }
