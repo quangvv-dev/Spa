@@ -244,15 +244,15 @@
                                                         </div>
                                                     </div>
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                                    <div class="col-md-12">
-                                                        {!! Form::textArea('messages', null, array('class' => 'messages')) !!}
-                                                    </div>
-                                                    <br>
-                                                    <div class="col-md-12">
-                                                        <button style="float: right" type="submit"
-                                                                class="btn btn-success">Gửi
-                                                        </button>
-                                                    </div>
+                                                        <div class="col-md-12">
+                                                            {!! Form::textArea('messages', null, array('class' => 'messages')) !!}
+                                                        </div>
+                                                        <br>
+                                                        <div class="col-md-12">
+                                                            <button style="float: right" type="submit"
+                                                                    class="btn btn-success">Gửi
+                                                            </button>
+                                                        </div>
                                                     {{ Form::close() }}
 
                                                     <div id="registration-form">
@@ -349,6 +349,25 @@
         $(function (e) {
             $('.messages').richText();
         });
+        $('.btn-edit-comment').click(function (e) {
+            const target = $(e.target).parent().parent().parent().parent();
+            const group_comment_id = $(this).data('id');
+
+            console.log(group_comment_id);
+
+            $(target).find('.comment').empty();
+
+            let html = `<div class="col-md-12">
+                    {!! Form::textArea('messages', null, array('class' => 'messages')) !!}
+                </div>
+                <div class="col-md-12">
+                    <button style="float: right" type="submit"
+                            class="btn btn-success">Gửi
+                    </button>
+                </div>
+                `
+        })
+
     </script>
     <script>
         $(document).ready(function () {
@@ -409,7 +428,7 @@
                     $('#update_action').val(data['person_action']).change();
                     ;
                 });
-            })
+            });
             $('[data-toggle="datepicker"]').datepicker({
                 format: 'yyyy-mm-dd',
                 autoHide: true,
