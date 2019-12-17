@@ -116,7 +116,7 @@
 
                 data.group_comments.forEach(function (item) {
                     html += `<div class="col" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
-                                <div class="info-avatar no-padd col-md-12">
+                                <div class="no-padd col-md-12">
                                     <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.user ? item.user.full_name: "") + `</a>
                                         <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
                                     </div>
