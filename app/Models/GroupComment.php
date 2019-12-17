@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\Functions;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class GroupComment extends Model
@@ -49,5 +50,10 @@ class GroupComment extends Model
         $data = $data->get();
 
         return $data;
+    }
+
+    public function getCreatedAtAttribute()
+    {
+        return Carbon::parse($this->attributes['created_at'])->format('H:i d-m-Y');
     }
 }
