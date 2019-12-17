@@ -112,10 +112,6 @@ class OrderController extends Controller
             $debug = 'Try catch exception : ' . $e->getMessage() . 'LINE : ___' . $e->getLine() . '___FILE___' . $e->getFile();
             return ApiResult(500, 'Insert failed', null, null, $debug);
         }
-
-
-
-
     }
 
     public function listOrder(Request $request)

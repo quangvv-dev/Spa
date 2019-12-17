@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\OrderDetail;
+use App\Models\Services;
 
 class OrderDetailService
 {
@@ -31,6 +32,10 @@ class OrderDetailService
                 'number_discount'  => replaceNumberFormat($data['number_discount'][$key]),
                 'total_price'      => replaceNumberFormat($data['total_price'][$key]),
             ];
+
+            $service = Services::where('id', $data['service_id'][$key])->first();
+
+            $service->update(['description' => $data['service_note'][$key]]);
         }
 
         if (!empty($dataArr)) {
@@ -59,6 +64,10 @@ class OrderDetailService
                 'number_discount'  => replaceNumberFormat($data['number_discount'][$key]),
                 'total_price'      => replaceNumberFormat($data['total_price'][$key]),
             ];
+
+            $service = Services::where('id', $data['service_id'][$key])->first();
+
+            $service->update(['description' => $data['service_note'][$key]]);
         }
 
         OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
