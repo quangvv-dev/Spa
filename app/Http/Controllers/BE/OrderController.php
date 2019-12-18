@@ -287,7 +287,6 @@ class OrderController extends Controller
         if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
-                dd($result);
                 foreach ($result as $k => $row) {
                     $customer = Customer::where('phone', $row['so_dt'])->first();
                     $service = Services::where('name', $row['ten_san_pham'])->first();
