@@ -287,7 +287,7 @@ class OrderController extends Controller
         if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
-
+                dd($result);
                 foreach ($result as $k => $row) {
                     $customer = Customer::where('phone', $row['so_dt'])->first();
                     $service = Services::where('name', $row['ten_san_pham'])->first();
@@ -318,6 +318,8 @@ class OrderController extends Controller
                                 'spa_therapisst_id' => '',
                                 'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
                             ]);
+                        }else{
+                            $order = isset($checkOrder)?$checkOrder->id:0;
                         }
 
                         $orderDetail = OrderDetail::create([
