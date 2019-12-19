@@ -115,14 +115,23 @@
                 </div>`;
 
                 data.group_comments.forEach(function (item) {
-                    html += `<div class="col" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
+                    html += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
                                 <div class="no-padd col-md-12">
                                     <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.user ? item.user.full_name: "") + `</a>
                                         <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
+                                    </div>`+
+                                    (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
+                                            <i class="fas fa-edit btn-edit-comment" data-id="`+item.id+`"></i>
+                                        </a>
+                                        <a data-original-title="Xóa" rel="tooltip">
+                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="`+item.id+`"></i>
+                                        </a>
+                                    </div>`: "")+
+                                    `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px">` + item.messages + `
                                     </div>
-                                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + item.messages + `</div>
                                 </div>
-                        </div>`;
+                            </div>`;
                 });
                 $(".status-result").val(data.customer.status_id).change();
                 $('.customer-chat').append(html);
@@ -131,8 +140,7 @@
             });
         });
 
-        $(document).on('click', '.chat-save', function (e) {
-            e.preventDefault();
+        $(document).on('click', '.chat-save', function () {
             let customer_id = $(this).data('customer-chat-id');
             let messages = $('.message').val();
             $('.message').val('');
@@ -145,17 +153,83 @@
                     customer_id: customer_id
                 }
             }).done(function (data) {
-
                 let html = '';
                 html += `<div style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;" >
+                    <div class="no-padd col-md-12 comment-fast">
                     <div class="col-md-11"><p><a href="#" class="bold blue">` + data.group_comment.user.full_name + `</a>
                         <span><i class="fa fa-clock"> ` + data.group_comment.created_at + `</i></span></p>
+                    </div>`+
+                    (data.id_login == data.group_comment.user_id ?`<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
+                                            <i class="fas fa-edit btn-edit-comment" data-id="`+data.group_comment.id+`"></i>
+                                        </a>
+                                        <a data-original-title="Xóa" rel="tooltip">
+                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="`+data.group_comment.id+`"></i>
+                                        </a>
+                                    </div>`: "")+
+                    `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages + `</div>
                     </div>
-                    <div class="col-md-12" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages + `</div></div>`;
+                    </div>`;
 
                 $('.chat-ajax').prepend(html);
             });
 
+        });
+
+        $(document).on('click', '.btn-edit-comment',function (e) {
+            const target = $(e.target).parent().parent().parent();
+            const group_comment_id = $(this).data('id');
+
+            $.ajax({
+                url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/edit",
+                method: "get",
+            }).done(function (data) {
+
+                let html = `<div class="col-md-12" >
+                    <textarea name="messages" class="form-control message" rows="2" data-id="`+data.id+`">`+data.messages+`</textarea>
+                    </div>
+                    <div class="col-md-12" style="margin-bottom: 30px;">
+                        <button style="float: right; margin-top: 5px;" type="submit"
+                                class="btn btn-success update-messages">Cập nhật
+                        </button>
+                    </div>`;
+                $(target).find('.comment').empty();
+                $(target).find(".comment").append(html);
+            });
+        });
+
+        $(document).on('click', '.update-messages', function (e) {
+            console.log(1);
+            const target = $(e.target).parent().parent().parent().parent();
+
+            const messages = $(target).find('.message').val();
+            const id = $(target).find('.message').data('id');
+
+            $.ajax({
+                url: "{{ Url('group-comments/') }}" + "/" + id + "/edit",
+                method: "post",
+                data: {
+                    messages: messages
+                }
+            }).done(function (data) {
+                $(target).find('.message').empty();
+                $(target).find(".comment").html(data.messages);
+            });
+        });
+
+        $(document).on('click', '.btn-delete-comment', function (e) {
+            const target = $(e.target).parent().parent().parent();
+            const group_comment_id = $(this).data('id');
+
+            const result = confirm("Bạn muốn xoá tin nhắn này?");
+            if (result) {
+                $.ajax({
+                    url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/delete",
+                    method: "delete",
+                }).done(function () {
+                    $(target).parent().find(".comment-fast").remove();
+                });
+            }
         });
 
         function searchAjax(data) {
