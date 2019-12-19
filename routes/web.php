@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('group-comments', 'GroupCommentController@chatAjax');
         Route::post('tasks/update', 'TaskController@updateStatus');
         Route::get('customers', 'CustomerController@getListAjax');
+        Route::get('group-comments/{id}', 'GroupCommentController@edit');
     });
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
@@ -89,6 +90,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //Trao đổi với khách hàng
     Route::get('group_comments/{id}', 'GroupCommentController@index2');
     Route::post('group_comments/{id}', 'GroupCommentController@store');
+    Route::get('group-comments/{id}/edit', 'GroupCommentController@edit');
+    Route::post('group-comments/{id}/edit', 'GroupCommentController@update');
+    Route::delete('group-comments/{id}/delete', 'GroupCommentController@destroy');
     Route::group(['prefix' => 'report'], function () {
         Route::get('customers', 'CustomerController@reportCustomer');
         Route::get('products', 'OrderController@reportProduct');
