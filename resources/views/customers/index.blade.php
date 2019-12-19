@@ -500,7 +500,8 @@
                 let html = `<a class="view_modal" id="chat-fast" data-customer-id="`+ data.id +`" href="#">
                                 <i class="fas fa-info-circle"></i>
                             </a>
-                            <a href="customers/`+ data.id +`">`+ data.full_name +`</a>`;
+                            <a href="customers/`+ data.id +`">`+ data.full_name +`</a>
+                            <span class="noti-number noti-number-on ml5"></span>`;
                 $(target).parent().find(".name-customer").html(html);
             });
         });
