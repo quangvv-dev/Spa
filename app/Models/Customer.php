@@ -43,7 +43,7 @@ class Customer extends Model
 
     public static function search($param)
     {
-        $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer');
+        $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         if (count($param)) {
 
             $data = $data->when(isset($param['search']), function ($query) use ($param) {
@@ -142,6 +142,11 @@ class Customer extends Model
     public function source_customer()//nguồn KH
     {
         return $this->belongsTo(Status::class, 'source_id', 'id');
+    }
+
+    public function groupComments()
+    {
+        return $this->hasMany(GroupComment::class, 'customer_id', 'id');
     }
 
     public function getStatisticsUsers()

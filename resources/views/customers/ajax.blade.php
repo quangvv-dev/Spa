@@ -127,7 +127,9 @@
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center">
                         <a href="#"><i class="fas fa-info-circle"></i></a>
-                        <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a></td>
+                        <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
+                        <span class="noti-number noti-number-on ml5" style="background-color: #ee630c!important;">2</span>
+                    </td>
                     <td class="text-center">{{ $customer->phone }}</td>
                     <td class="text-center category-db"
                         data-id="{{$customer->id}}">
@@ -192,6 +194,7 @@
                                 <i class="fas fa-info-circle"></i>
                             </a>
                             <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
+                            <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                         </td>
                         <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
                         <td class="text-center category-db"
