@@ -53,13 +53,15 @@ class GroupCommentController extends Controller
         $groupComments = GroupComment::with('user', 'customer')
             ->where('customer_id', $id)
             ->orderBy('id', 'desc')
-            ->take(3)->get();
+            ->get();
         $status = Status::where('type', StatusCode::RELATIONSHIP)->get();
+        $idLogin = Auth::user()->id;
 
         return response()->json([
             'customer' => $customer,
             'group_comments' => $groupComments,
-            'status' => $status
+            'status' => $status,
+            'id_login' => $idLogin
         ]);
     }
 
@@ -155,6 +157,6 @@ class GroupCommentController extends Controller
 
         $groupComment1 = GroupComment::with('user', 'customer')->where('id', $groupComment->id)->first();
 
-        return response()->json(['group_comment' => $groupComment1]);
+        return response()->json(['group_comment' => $groupComment1, 'id_login' => Auth::user()->id]);
     }
 }
