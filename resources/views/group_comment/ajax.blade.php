@@ -14,7 +14,7 @@
                                     <i class="fas fa-edit btn-edit-comment" data-id="{{$item->id}}"></i>
                                 </a>
                                 <a data-original-title="Xóa" rel="tooltip">
-                                    <i class="fas fa-trash-alt" data-id="{{$item->id}}"></i>
+                                    <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
                                 </a>
                             </div>
                         </div>

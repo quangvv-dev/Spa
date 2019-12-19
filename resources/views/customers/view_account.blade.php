@@ -231,7 +231,7 @@
                                     </div>
                                 </div>
                                 <div class="panel-body tabs-menu-body">
-                                    <div class="tab-content">
+                                    <div class="tab-content" style="font-size: 15px;">
                                         <div class="tab-pane active " id="tab5">
                                             <div class="col-md-12 col-lg-12">
                                                 <div class="card">
@@ -244,8 +244,8 @@
                                                         </div>
                                                     </div>
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                                        <div class="col-md-12">
-                                                            {!! Form::textArea('messages', null, array('class' => 'messages')) !!}
+                                                        <div class="col-md-12" >
+                                                            {!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}
                                                         </div>
                                                         <br>
                                                         <div class="col-md-12">
@@ -349,23 +349,60 @@
         $(function (e) {
             $('.messages').richText();
         });
-        $('.btn-edit-comment').click(function (e) {
+
+        $(document).on('click', '.btn-edit-comment',function (e) {
             const target = $(e.target).parent().parent().parent().parent();
             const group_comment_id = $(this).data('id');
 
-            console.log(group_comment_id);
+            $.ajax({
+                url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/edit",
+                method: "get",
+            }).done(function (data) {
 
-            $(target).find('.comment').empty();
+                let html = `<div class="col-md-12">
+                    <textarea name="messages" class="form-control message" rows="3" data-id="`+data.id+`">`+data.messages+`</textarea>
+                    </div>
+                    <div class="col-md-12">
+                        <button style="float: right; margin-top: 10px;" type="submit"
+                                class="btn btn-success update-messages">Gửi
+                        </button>
+                    </div>`;
+                $(target).find('.comment').empty();
+                $(target).find(".comment").append(html);
+            });
+        });
 
-            let html = `<div class="col-md-12">
-                    {!! Form::textArea('messages', null, array('class' => 'messages')) !!}
-                </div>
-                <div class="col-md-12">
-                    <button style="float: right" type="submit"
-                            class="btn btn-success">Gửi
-                    </button>
-                </div>
-                `
+        $(document).on('click', '.update-messages', function (e) {
+            const target = $(e.target).parent().parent().parent().parent();
+
+            const messages = $(target).find('.message').val();
+            const id = $(target).find('.message').data('id');
+
+            $.ajax({
+                url: "{{ Url('group-comments/') }}" + "/" + id + "/edit",
+                method: "post",
+                data: {
+                    messages: messages
+                }
+            }).done(function (data) {
+                $(target).find('.message').empty();
+                $(target).find(".comment").html(data.messages);
+            });
+        });
+
+        $(document).on('click', '.btn-delete-comment', function (e) {
+            const target = $(e.target).parent().parent().parent().parent();
+            const group_comment_id = $(this).data('id');
+
+            const result = confirm("Bạn muốn xoá tin nhắn này?");
+            if (result) {
+                $.ajax({
+                    url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/delete",
+                    method: "delete",
+                }).done(function () {
+                    $(target).parent().find(".row").remove();
+                });
+            }
         })
 
     </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Models\Customer;
 use App\Models\Status;
+use App\Services\GroupCommentService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\GroupComment;
@@ -12,6 +13,16 @@ use Illuminate\Support\Facades\Auth;
 
 class GroupCommentController extends Controller
 {
+    protected $groupCommentService;
+
+    /**
+     * GroupCommentController constructor.
+     * @param GroupCommentService $groupCommentService
+     */
+    public function __construct(GroupCommentService $groupCommentService)
+    {
+        $this->groupCommentService = $groupCommentService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -101,7 +112,7 @@ class GroupCommentController extends Controller
      */
     public function edit($id)
     {
-        //
+        return $this->groupCommentService->find($id);
     }
 
     /**
@@ -114,7 +125,9 @@ class GroupCommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+
+        return $this->groupCommentService->update($input, $id);
     }
 
     /**
@@ -124,9 +137,11 @@ class GroupCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $this->groupCommentService->delete($id);
+
+        $request->session()->flash('error', 'Xóa tin nhắn thành công!');
     }
 
     public function chatAjax(Request $request)

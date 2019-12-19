@@ -90,6 +90,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //Trao đổi với khách hàng
     Route::get('group_comments/{id}', 'GroupCommentController@index2');
     Route::post('group_comments/{id}', 'GroupCommentController@store');
+    Route::get('group-comments/{id}/edit', 'GroupCommentController@edit');
+    Route::post('group-comments/{id}/edit', 'GroupCommentController@update');
+    Route::delete('group-comments/{id}/delete', 'GroupCommentController@destroy');
     Route::group(['prefix' => 'report'], function () {
         Route::get('customers', 'CustomerController@reportCustomer');
         Route::get('products', 'OrderController@reportProduct');
