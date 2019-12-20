@@ -90,7 +90,7 @@
                             <img width="50" height="50" class="fl mr10 a40 border"
                                  src="{{asset('default/no-image.png')}}" style="border-radius:100%">
                             <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
-                            <span>` + data.customer.full_name + `</span>
+                            <span>` + (data.customer.fb_name ? data.customer.fb_name: data.customer.full_name) + `</span>
                             </a>
                         </div>
                          <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">

@@ -39,6 +39,13 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
+                            {!! Form::label('fb_name', 'Tên Facebook', array('class' => 'required')) !!}
+                            {!! Form::text('fb_name', null, array('id' => 'fb_name','class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('fb_name', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
                             {!! Form::label('birthday', 'Ngày sinh', array('class' => ' required')) !!}
                             <div class="wd-200 mg-b-30">
