@@ -45,48 +45,48 @@ class Customer extends Model
     public static function search($param)
     {
         $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
-        if (count($param)) {
-
-            $data = $data->when(isset($param['search']), function ($query) use ($param) {
-                $query->where(function ($q) use ($param) {
-                    $q->where('full_name', 'like', '%' . $param['search'] . '%')
-                        ->orWhere('phone', 'like', '%' . $param['search'] . '%');
-                });
-            })
-                ->when(isset($param['status']), function ($query) use ($param) {
-                    $query->whereHas('status', function ($q) use ($param) {
-                        $q->where('name', $param['status']);
-                    });
-                })
-                ->when(isset($param['group']), function ($query) use ($param) {
-                    $group_customer = CustomerGroup::where('category_id', $param['group'])->pluck('customer_id')
-                        ->toArray();
-                    $query->whereIn('id', $group_customer);
-                })
-                ->when(isset($param['telesales']), function ($query) use ($param) {
-                    $query->where('telesales_id', $param['telesales']);
-                })
-                ->when(isset($param['data_time']), function ($query) use ($param) {
-                    $query->when($param['data_time'] == 'TODAY' ||
-                        $param['data_time'] == 'YESTERDAY', function ($q) use ($param) {
-                        $q->whereDate('created_at', getTime(($param['data_time'])));
-                    })
-                        ->when($param['data_time'] == 'THIS_WEEK' ||
-                            $param['data_time'] == 'LAST_WEEK' ||
-                            $param['data_time'] == 'THIS_MONTH' ||
-                            $param['data_time'] == 'LAST_MONTH', function ($q) use ($param) {
-                            $q->whereBetween('created_at', getTime(($param['data_time'])));
-                        });
-                })
-                ->when(isset($param['invalid_account']), function ($query) use ($param) {
-                    $query->when($param['invalid_account'] == 0, function ($q) use ($param) {
-                        $q->onlyTrashed();
-                    });
-                })
-                ->when(isset($param['birthday']), function ($query) use ($param) {
-                    $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'));
-                });
-        }
+//        if (count($param)) {
+//
+//            $data = $data->when(isset($param['search']), function ($query) use ($param) {
+//                $query->where(function ($q) use ($param) {
+//                    $q->where('full_name', 'like', '%' . $param['search'] . '%')
+//                        ->orWhere('phone', 'like', '%' . $param['search'] . '%');
+//                });
+//            })
+//                ->when(isset($param['status']), function ($query) use ($param) {
+//                    $query->whereHas('status', function ($q) use ($param) {
+//                        $q->where('name', $param['status']);
+//                    });
+//                })
+//                ->when(isset($param['group']), function ($query) use ($param) {
+//                    $group_customer = CustomerGroup::where('category_id', $param['group'])->pluck('customer_id')
+//                        ->toArray();
+//                    $query->whereIn('id', $group_customer);
+//                })
+//                ->when(isset($param['telesales']), function ($query) use ($param) {
+//                    $query->where('telesales_id', $param['telesales']);
+//                })
+//                ->when(isset($param['data_time']), function ($query) use ($param) {
+//                    $query->when($param['data_time'] == 'TODAY' ||
+//                        $param['data_time'] == 'YESTERDAY', function ($q) use ($param) {
+//                        $q->whereDate('created_at', getTime(($param['data_time'])));
+//                    })
+//                        ->when($param['data_time'] == 'THIS_WEEK' ||
+//                            $param['data_time'] == 'LAST_WEEK' ||
+//                            $param['data_time'] == 'THIS_MONTH' ||
+//                            $param['data_time'] == 'LAST_MONTH', function ($q) use ($param) {
+//                            $q->whereBetween('created_at', getTime(($param['data_time'])));
+//                        });
+//                })
+//                ->when(isset($param['invalid_account']), function ($query) use ($param) {
+//                    $query->when($param['invalid_account'] == 0, function ($q) use ($param) {
+//                        $q->onlyTrashed();
+//                    });
+//                })
+//                ->when(isset($param['birthday']), function ($query) use ($param) {
+//                    $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'));
+//                });
+//        }
 
         return $data->latest()->paginate(20);
     }
