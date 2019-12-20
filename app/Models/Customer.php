@@ -34,6 +34,7 @@ class Customer extends Model
         'description',
         'facebook',
         'avatar',
+        'fb_name',
         'deleted_at',
         'updated_at',
         'created_at',
