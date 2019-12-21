@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{asset('/assets/plugins/wysiwyag/richtext.min.css')}}" rel="stylesheet"/>
+    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
     <style>
         #snoAlertBox1 {
             position: absolute;
@@ -248,6 +249,23 @@
                                                             {!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}
                                                         </div>
                                                         <br>
+                                                    <div class="col-xs-12 col-md-12">
+                                                        <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                                                            <div class="fileupload fileupload-new"
+                                                                 data-provides="fileupload">
+                                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
+
+                                                                </div>
+                                                                <div>
+                                                                    <button type="button" class="btn btn-default btn-file">
+                                                                        <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Gửi ảnh</span>
+                                                                        <input type="file" name="image_contact" accept="image/*" class="btn-default upload"/>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                         <div class="col-md-12">
                                                             <button style="float: right" type="submit"
                                                                     class="btn btn-success">Gửi
@@ -297,6 +315,7 @@
     <script src="{{asset('/assets/plugins/wysiwyag/jquery.richtext.js')}}"></script>
     <script src="{{asset('assets/js/util.js')}}"></script> <!-- util functions included in the CodyHouse framework -->
     <script src="{{asset('assets/js/main.js')}}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
 
     <script type="text/javascript">
 
