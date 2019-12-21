@@ -86,7 +86,6 @@
                 url: "{{ Url('/group_comments/') }}" + '/' + id,
                 method: "get",
             }).done(function (data) {
-                console.log(data);
                 let html = '';
                 html += `<div class="row" style="padding-bottom: 10px;">
                     <div class="chat-flash col-md-12">
@@ -117,9 +116,9 @@
                 });
                 html += `</select>`;
                 html += `
-                <div class="row mt10"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">`+(data.customer.source_customer ? data.customer.source_customer.name: "")+`</div> </div>
-                <div class="row mt10"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">`+(data.lastContact ? data.lastContact: "")+`</div> </div>
-                <div class="row mt10"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break">`+data.orderRevenue+`VND</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">`+(data.customer.source_customer ? data.customer.source_customer.name: "")+`</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">`+(data.last_contact ? data.last_contact: "")+`</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break" style="color:orange;">`+data.order_revenue+` VND</div> </div>
                 </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}

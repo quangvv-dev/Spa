@@ -74,8 +74,8 @@ class GroupCommentController extends Controller
             'group_comments' => $groupComments,
             'status' => $status,
             'id_login' => $idLogin,
-            'orderRevenue' => $orderRevenue,
-            'lastContact' => $lastContact
+            'order_revenue' => $orderRevenue,
+            'last_contact' => $lastContact
         ]);
     }
 
