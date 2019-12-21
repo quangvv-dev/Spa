@@ -97,6 +97,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge(['fb_name' => $request->full_name]);
         $input = $request->except(['group_id', 'image']);
         $input['mkt_id'] = $request->mkt_id;
         $input['image'] = $request->image;
@@ -458,7 +459,7 @@ class CustomerController extends Controller
 
         return [
             'customer' => $customer,
-            'data' => $telesales
+            'data'     => $telesales,
         ];
     }
 }
