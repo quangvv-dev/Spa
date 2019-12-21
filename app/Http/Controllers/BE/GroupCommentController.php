@@ -6,6 +6,7 @@ use App\Constants\StatusCode;
 use App\Models\Customer;
 use App\Models\Status;
 use App\Services\GroupCommentService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\GroupComment;
@@ -49,11 +50,22 @@ class GroupCommentController extends Controller
      */
     public function index2(Request $request, $id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::with('telesale', 'source_customer', 'orders')->find($id);
+        $orderRevenue = number_format($customer->orders->sum('gross_revenue'));
+
         $groupComments = GroupComment::with('user', 'customer')
             ->where('customer_id', $id)
             ->orderBy('id', 'desc')
             ->get();
+
+        $lastContact = "";
+
+        if ($groupComments->isEmpty()) {
+            $lastContact = Carbon::parse($customer->created_at)->format('d-m-Y');
+        } else {
+            $lastContact = Carbon::parse($groupComments[0]->created_at)->format('d-m-Y');
+        }
+
         $status = Status::where('type', StatusCode::RELATIONSHIP)->get();
         $idLogin = Auth::user()->id;
 
@@ -61,7 +73,9 @@ class GroupCommentController extends Controller
             'customer' => $customer,
             'group_comments' => $groupComments,
             'status' => $status,
-            'id_login' => $idLogin
+            'id_login' => $idLogin,
+            'orderRevenue' => $orderRevenue,
+            'lastContact' => $lastContact
         ]);
     }
 

@@ -16,17 +16,20 @@
             min-width: auto !important;
             width: auto !important;
         }
+
         .search-box,
-        .filter-box{
+        .filter-box {
             z-index: 999;
             background: #FFF;
         }
-        .searchbox-sticky{
+
+        .searchbox-sticky {
             position: sticky;
             top: 63px;
             left: 0;
         }
-        .filterbox-sticky{
+
+        .filterbox-sticky {
             position: sticky;
             top: calc(63px + 57px);
             left: 0;
@@ -83,6 +86,7 @@
                 url: "{{ Url('/group_comments/') }}" + '/' + id,
                 method: "get",
             }).done(function (data) {
+                console.log(data);
                 let html = '';
                 html += `<div class="row" style="padding-bottom: 10px;">
                     <div class="chat-flash col-md-12">
@@ -90,17 +94,33 @@
                             <img width="50" height="50" class="fl mr10 a40 border"
                                  src="{{asset('default/no-image.png')}}" style="border-radius:100%">
                             <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
-                            <span>` + (data.customer.fb_name ? data.customer.fb_name: data.customer.full_name) + `</span>
+                            <span>` + (data.customer.fb_name ? data.customer.fb_name : data.customer.full_name) + `</span><br>
+                            <span>@` + (data.customer.telesale ? data.customer.telesale.full_name : "") + `</span>
                             </a>
+                        </div>
+                       <div class="mt10 pb10" style="height:86px">
+                            <div class="col-md-10 info-avatar border padding5 last_contacthover box_last">
+                            <p><i class="fa fa-user mr5" style="color: black;"></i> `+data.customer.full_name+`
+                                <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
+                            </p>
+                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue" data-contact-id="5678"
+                                                          rel="tooltip" data-original-title="Click để gọi"
+                                                          data-placement="right" data-phone="0977766139" data-flag="1"
+                                                          data-type="crm"> `+data.customer.phone+`</a></p>
+                            <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
                          <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                             {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}` +
-                        `<select name="status_id" class="form-control status-result select2" data-id="`+data.customer.id+`" style="font-size: 14px;">`;
-                            data.status.forEach(function (item) {
-                                html += `<option value="`+item.id+`"  `+(item.id === data.customer.status_id ? "selected": "")+`>`+item.name +`</option>`;
-                            });
-                                    html += `</select>`;
-                        html += `</div>
+                    `<select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `" style="font-size: 14px;">`;
+                data.status.forEach(function (item) {
+                    html += `<option value="` + item.id + `"  ` + (item.id === data.customer.status_id ? "selected" : "") + `>` + item.name + `</option>`;
+                });
+                html += `</select>`;
+                html += `
+                <div class="row mt10"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">`+(data.customer.source_customer ? data.customer.source_customer.name: "")+`</div> </div>
+                <div class="row mt10"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">`+(data.lastContact ? data.lastContact: "")+`</div> </div>
+                <div class="row mt10"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break">`+data.orderRevenue+`VND</div> </div>
+                </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
                     <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
@@ -117,18 +137,18 @@
                 data.group_comments.forEach(function (item) {
                     html += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
                                 <div class="no-padd col-md-12">
-                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.user ? item.user.full_name: "") + `</a>
+                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.user ? item.user.full_name : "") + `</a>
                                         <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
-                                    </div>`+
-                                    (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                                    </div>` +
+                        (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
                                         <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                            <i class="fas fa-edit btn-edit-comment" data-id="`+item.id+`"></i>
+                                            <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>
                                         </a>
                                         <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="`+item.id+`"></i>
+                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
                                         </a>
-                                    </div>`: "")+
-                                    `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px">` + item.messages + `
+                                    </div>` : "") +
+                        `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px">` + item.messages + `
                                     </div>
                                 </div>
                             </div>`;
@@ -158,15 +178,15 @@
                     <div class="no-padd col-md-12 comment-fast">
                     <div class="col-md-11"><p><a href="#" class="bold blue">` + data.group_comment.user.full_name + `</a>
                         <span><i class="fa fa-clock"> ` + data.group_comment.created_at + `</i></span></p>
-                    </div>`+
-                    (data.id_login == data.group_comment.user_id ?`<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                    </div>` +
+                    (data.id_login == data.group_comment.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
                                         <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                            <i class="fas fa-edit btn-edit-comment" data-id="`+data.group_comment.id+`"></i>
+                                            <i class="fas fa-edit btn-edit-comment" data-id="` + data.group_comment.id + `"></i>
                                         </a>
                                         <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="`+data.group_comment.id+`"></i>
+                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="` + data.group_comment.id + `"></i>
                                         </a>
-                                    </div>`: "")+
+                                    </div>` : "") +
                     `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px">` + data.group_comment.messages + `</div>
                     </div>
                     </div>`;
@@ -176,7 +196,7 @@
 
         });
 
-        $(document).on('click', '.btn-edit-comment',function (e) {
+        $(document).on('click', '.btn-edit-comment', function (e) {
             const target = $(e.target).parent().parent().parent();
             const group_comment_id = $(this).data('id');
 
@@ -186,7 +206,7 @@
             }).done(function (data) {
 
                 let html = `<div class="col-md-12" >
-                    <textarea name="messages" class="form-control message" rows="2" data-id="`+data.id+`">`+data.messages+`</textarea>
+                    <textarea name="messages" class="form-control message" rows="2" data-id="` + data.id + `">` + data.messages + `</textarea>
                     </div>
                     <div class="col-md-12" style="margin-bottom: 30px;">
                         <button style="float: right; margin-top: 5px;" type="submit"
@@ -349,7 +369,7 @@
                     '<select class="category-result form-control select2-multiple" multiple="multiple" data-id="' + data.customer_id + '" name="group_id[]">';
                 data.categories.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '" class="category-op"  '+((jQuery.inArray(item.id, data.category_id) !== -1 ? "selected": ""))+'>' + item.name + '</option>';
+                        '<option value="' + item.id + '" class="category-op"  ' + ((jQuery.inArray(item.id, data.category_id) !== -1 ? "selected" : "")) + '>' + item.name + '</option>';
                 });
 
                 html += '</select>';
@@ -378,7 +398,7 @@
                     '<select class="status-result form-control select2" data-id="' + data.customer.id + '" name="status_id" style="font-size: 14px;">';
                 data.data.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '" '+(item.id === data.customer.status_id ? "selected": "")+'>' + item.name + '</option>';
+                        '<option value="' + item.id + '" ' + (item.id === data.customer.status_id ? "selected" : "") + '>' + item.name + '</option>';
                 });
 
                 html += '</select>';
@@ -538,7 +558,7 @@
                 data: {id: id}
             }).done(function (data) {
 
-                html += `<textarea data-id=` + data.id +` class="handsontableInput" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> `+ data.full_name+`</textarea>`;
+                html += `<textarea data-id=` + data.id + ` class="handsontableInput" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.full_name + `</textarea>`;
                 $(target).find(".name-customer").append(html);
             });
         });
@@ -554,7 +574,7 @@
                 data: {id: id}
             }).done(function (data) {
 
-                html += `<textarea data-id=` + data.id +` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> `+ data.phone+`</textarea>`;
+                html += `<textarea data-id=` + data.id + ` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.phone + `</textarea>`;
                 $(target).find(".phone-customer").append(html);
             });
         });
@@ -571,10 +591,10 @@
                     full_name: full_name,
                 }
             }).done(function (data) {
-                let html = `<a class="view_modal" id="chat-fast" data-customer-id="`+ data.id +`" href="#">
+                let html = `<a class="view_modal" id="chat-fast" data-customer-id="` + data.id + `" href="#">
                                 <i class="fas fa-info-circle"></i>
                             </a>
-                            <a href="customers/`+ data.id +`">`+ data.full_name +`</a>
+                            <a href="customers/` + data.id + `">` + data.full_name + `</a>
                             <span class="noti-number noti-number-on ml5"></span>`;
                 $(target).parent().find(".name-customer").html(html);
             });
@@ -655,7 +675,7 @@
         // anheasy
         $('.table-responsive .table-primary').floatThead({
             top: 183,
-            scrollContainer: function($table){
+            scrollContainer: function ($table) {
                 return $table.closest('');
             },
             position: 'absolute'
@@ -664,7 +684,7 @@
             top: 183,
             position: 'absolute'
         });
-        $(window).on("scroll", function(e){
+        $(window).on("scroll", function (e) {
             if ($(window).scrollTop() >= 150) {
                 $('.search-box').addClass('searchbox-sticky');
                 $('.filter-box').addClass('filterbox-sticky');
@@ -715,7 +735,7 @@
                     '<select class="telesales-result form-control select2" data-id="' + data.customer.id + '" name="telesale_id" style="font-size: 14px;">';
                 data.data.forEach(function (item) {
                     html +=
-                        '<option value="' + item.id + '" '+(item.id === data.customer.telesales_id ? "selected": "")+'>' + item.full_name + '</option>';
+                        '<option value="' + item.id + '" ' + (item.id === data.customer.telesales_id ? "selected" : "") + '>' + item.full_name + '</option>';
                 });
 
                 html += '</select>';
