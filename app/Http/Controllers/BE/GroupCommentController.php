@@ -108,6 +108,7 @@ class GroupCommentController extends Controller
 
         $input['user_id'] = Auth::user()->id;
         $input['customer_id'] = @$customer->id;
+        dd($input);
 
         $groupComment = $this->groupCommentService->create($input);
         return redirect()->back();
@@ -147,7 +148,11 @@ class GroupCommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $input = $request->all();
+        dd($request->all());
+        $input = $request->except(['image_contact']);
+        $input['image'] = $request->image_contact;
+
+        dd($input);
 
         return $this->groupCommentService->update($input, $id);
     }

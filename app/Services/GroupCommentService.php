@@ -36,11 +36,12 @@ class GroupCommentService
     public function update($data, $id)
     {
         $model = $this->find($id);
+
         if (empty($data) && empty($model)) return false;
 
-        $model->update([
-            'messages' => $data['messages']
-        ]);
+        $input = $this->data($data);
+
+        $model->update($input);
 
         return $model;
     }

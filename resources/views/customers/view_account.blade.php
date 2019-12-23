@@ -250,16 +250,16 @@
                                                         </div>
                                                         <br>
                                                     <div class="col-xs-12 col-md-12">
-                                                        <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                                                        <div class="form-group required">
                                                             <div class="fileupload fileupload-new"
                                                                  data-provides="fileupload">
-                                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
+                                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 150px">
 
                                                                 </div>
                                                                 <div>
                                                                     <button type="button" class="btn btn-default btn-file">
                                                                         <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
-                                                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Gửi ảnh</span>
+                                                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
                                                                         <input type="file" name="image_contact" accept="image/*" class="btn-default upload"/>
                                                                     </button>
                                                                 </div>
@@ -378,14 +378,32 @@
                 method: "get",
             }).done(function (data) {
 
-                let html = `<div class="col-md-12">
+                let html = `
+            {!! Form::open(array('method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                <div class="col-md-12">
                     <textarea name="messages" class="form-control message" rows="3" data-id="`+data.id+`">`+data.messages+`</textarea>
+                    </div>
+                    <div class="col-xs-12 col-md-12 file-upload">
+                        <div class="form-group required">
+                            <div class="fileupload fileupload-new"
+                                 data-provides="fileupload">
+                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 150px">
+
+                                </div>
+                                <button type="button" class="btn btn-default btn-file">
+                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
+                                    <input type="file" name="image_contact" accept="image/*" class="btn-default upload" data-id="11"/>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12">
                         <button style="float: right; margin-top: 10px;" type="submit"
                                 class="btn btn-success update-messages">Gửi
                         </button>
-                    </div>`;
+                    </div>
+                    {{ Form::close() }}`;
                 $(target).find('.comment').empty();
                 $(target).find(".comment").append(html);
             });
@@ -393,16 +411,20 @@
 
         $(document).on('click', '.update-messages', function (e) {
             const target = $(e.target).parent().parent().parent().parent();
-
+            let formData = new FormData();
             const messages = $(target).find('.message').val();
+            const image_contact = $(target).parent().parent().find('.upload')[0].files[0];
+            formData.append('image_contact', image_contact);
+            formData.append('messages', messages);
+
             const id = $(target).find('.message').data('id');
 
             $.ajax({
                 url: "{{ Url('group-comments/') }}" + "/" + id + "/edit",
                 method: "post",
-                data: {
-                    messages: messages
-                }
+                processData: false,
+                contentType: false,
+                data: formData
             }).done(function (data) {
                 $(target).find('.message').empty();
                 $(target).find(".comment").html(data.messages);
