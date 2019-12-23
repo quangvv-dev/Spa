@@ -31,20 +31,22 @@
                             <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
-                            {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
-                            <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
+                                {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
+                                {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
+                                <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
+                            </div>
                         </div>
-                    </div>
+                    @if (isset($customer))
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('fb_name', 'Tên Facebook', array('class' => 'required')) !!}
+                            {!! Form::label('fb_name', 'Tên Facebook') !!}
                             {!! Form::text('fb_name', null, array('id' => 'fb_name','class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('fb_name', ':message') }}</span>
                         </div>
                     </div>
+                    @endif
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
                             {!! Form::label('birthday', 'Ngày sinh', array('class' => ' required')) !!}
@@ -102,15 +104,16 @@
                         <div class="form-group required {{ $errors->has('group_id') ? 'has-error' : '' }}">
                             {!! Form::label('group_id', 'Nhóm khách hàng', array('class' => 'required control-label')) !!}
                             @if(isset($customer))
-                            <select class="form-control select2" name="group_id[]" multiple="multiple" data-placeholder="Chọn nhóm khách hàng">
-                                @foreach($categories as $item)
-                                    <option value="{{ $item->id }}" {{ isset($customer) && in_array($item->id, $categoryId) ? 'selected' : "" }}>{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                                <select class="form-control select2" name="group_id[]" multiple="multiple"
+                                        data-placeholder="Chọn nhóm khách hàng">
+                                    @foreach($categories as $item)
+                                        <option value="{{ $item->id }}" {{ isset($customer) && in_array($item->id, $categoryId) ? 'selected' : "" }}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
                             @else
-                            {!! Form::select('group_id[]', $group, null, array('class' => 'form-control select2', 'multiple' => 'multiple', 'data-placeholder'=> "Chọn nhóm khách hàng" )) !!}
-                            <span class="help-block">{{ $errors->first('group_id', ':message') }}</span>
-                                @endif
+                                {!! Form::select('group_id[]', $group, null, array('class' => 'form-control select2', 'multiple' => 'multiple', 'data-placeholder'=> "Chọn nhóm khách hàng" )) !!}
+                                <span class="help-block">{{ $errors->first('group_id', ':message') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
