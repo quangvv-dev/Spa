@@ -58,7 +58,16 @@
                         class="not-number-account white">{{ $item->customers->count() }}</span></button>
         @endforeach
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
+    align-items: baseline;">
+        <div style="float: right">
+            <span>{{$customers->firstItem()}} - {{$customers->lastItem()}}</span>
+        </div>
+        <div style="float: right">
+            {{ $customers->appends(['search' => request()->search ])->links('vendor.pagination.simple-bootstrap-4') }}
+        </div>
+    </div>
+    <div class="col-md-1">
         <div class="display birthday_tab position font20 pointer mt7" rel="tooltip" data-placement="left"
              data-original-title="Sinh nhật hôm nay"
              aria-describedby="tooltip146058"><i class="fa fa-birthday-cake gf-icon-h02"
@@ -165,7 +174,7 @@
         </tbody>
     </table>
 </div>
-<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden">
+<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
             <thead class="bg-primary text-white">
@@ -220,9 +229,6 @@
     <div class="page-info">
         {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
     </div>
-</div>
-<div class="pull-right">
-    {{ $customers->appends(['search' => request()->search ])->links() }}
 </div>
 @include('customers.modal_view')
 <!-- table-responsive -->
