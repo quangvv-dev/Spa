@@ -61,13 +61,16 @@
                 <div class="col-md-6 no-padd font16"><a class="avatar a45 fl mr10 pic"> <img
                                 src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png"> </a> <span
                             class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
-                    <div class="display" id="toolbox"><a rel="tooltip" data-original-title="Sửa"
-                                                         data-placement="bottom" class="ml10"
-                                                         href="#/crm/account/4629"><i
-                                    class="icon-pencil mr5"></i></a> <a id="btn_del_account" rel="tooltip"
+                    <div class="display" id="toolbox" style="width: 28px; height: 20px">
+                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
+                                    class="fas fa-edit"></i></a>
+                        <a id="btn_del_account" rel="tooltip"
                                                                         data-placement="bottom"
-                                                                        data-original-title="Xóa" class="ml5"><i
-                                    class="gf-icon-hover icon-remove mr5"></i></a></div>
+                                                                        data-original-title="Xóa" class="ml5">
+                            <i
+                                    class="gf-icon-hover icon-remove mr5"></i>
+                        </a>
+                    </div>
                 </div>
                 <div class="col-md-2 no-padd bor-l pl20 mg0 pt10 position hoverlastactive" rel="tooltip"
                      data-original-title="Click thay đổi người phụ trách" data-placement="bottom">
