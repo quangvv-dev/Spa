@@ -2,6 +2,18 @@
     .page-header {
         display: none;
     }
+    .display {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .dropdown, .dropup {
+        position: relative;
+    }
+    .gf-icon-filter {
+        /*background-position: -758px -284px;*/
+        width: 28px;
+        height: 20px;
+    }
 </style>
 <div class="card-header filter-box">
     <div class="display btn-group open">
@@ -67,12 +79,26 @@
             {{ $customers->appends(['search' => request()->search ])->links('vendor.pagination.simple-bootstrap-4') }}
         </div>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
         <div class="display birthday_tab position font20 pointer mt7" rel="tooltip" data-placement="left"
              data-original-title="Sinh nhật hôm nay"
              aria-describedby="tooltip146058"><i class="fa fa-birthday-cake gf-icon-h02"
                                                  aria-hidden="true"></i><span class="not-number-account"
                                                                               style="background: rgb(249, 87, 87); color: rgb(255, 255, 255); display: none;"></span>
+        </div>
+        <div class="display" style="width: 28px; height: 20px;">
+            <div class="dropdown open"><i class="fa fa-eye dropdown-toggle" role="button"
+                                          data-toggle="dropdown" title="Hiển thị số trang" aria-expanded="true" style="margin-top: 8px; margin-left: 5px;"></i>
+                <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px">
+                    <li><a class="b-white b-hover limiting active_limit bold" data-limit="20">Hiển thị 20 kết
+                            quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
+                    {{--<li><a class="b-white b-hover limiting" data-limit="500">Hiển thị 500 kết quả/trang</a></li>--}}
+                    {{--<li><a class="b-white b-hover limiting" data-limit="1000">Hiển thị 1000 kết quả/trang</a></li>--}}
+                </ul>
+            </div>
         </div>
         <div id="div_created_at_dropdown"
              class="display position pointer mt5 open" rel="tooltip"
@@ -137,7 +163,8 @@
                     <td class="text-center">
                         <a href="#"><i class="fas fa-info-circle"></i></a>
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
-                        <span class="noti-number noti-number-on ml5" style="background-color: #ee630c!important;">2</span>
+                        <span class="noti-number noti-number-on ml5"
+                              style="background-color: #ee630c!important;">2</span>
                     </td>
                     <td class="text-center">{{ $customer->phone }}</td>
                     <td class="text-center category-db"
@@ -147,7 +174,8 @@
                         @endforeach
                     </td>
                     <td class="text-center " data-id="{{$customer->id}}"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-                    <td class="text-center telesale-customer" data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
+                    <td class="text-center telesale-customer"
+                        data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description-cus" data-id="{{$customer->id}}"
                         style="width: 291px; height: 59px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
@@ -205,7 +233,8 @@
                             <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                             <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                         </td>
-                        <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
+                        <td class="text-center phone-customer"
+                            data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
                         <td class="text-center category-db"
                             data-id="{{$customer->id}}">
                             @foreach($customer->categories as $category)
