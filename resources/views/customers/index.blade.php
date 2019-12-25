@@ -218,7 +218,6 @@
         });
 
         $(document).on('click', '.update-messages', function (e) {
-            console.log(1);
             const target = $(e.target).parent().parent().parent().parent();
 
             const messages = $(target).find('.message').val();
@@ -269,6 +268,16 @@
             $('#birthday_tab').val('');
             let data = {
                 status: status
+            };
+
+            searchAjax(data);
+        });
+
+        $(document).on('click', '.limiting', function () {
+            const limit = $(this).data('limit');
+            $('#birthday_tab').val('');
+            let data = {
+                limit: limit
             };
 
             searchAjax(data);

@@ -88,6 +88,8 @@ class Customer extends Model
                 });
         }
 
+        if (isset($param['limit'])) return $data->latest()->paginate($param['limit']);
+
         return $data->latest()->paginate(20);
     }
 
