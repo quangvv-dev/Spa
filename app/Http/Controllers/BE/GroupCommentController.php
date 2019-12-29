@@ -148,11 +148,8 @@ class GroupCommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->all());
         $input = $request->except(['image_contact']);
         $input['image'] = $request->image_contact;
-
-        dd($input);
 
         return $this->groupCommentService->update($input, $id);
     }

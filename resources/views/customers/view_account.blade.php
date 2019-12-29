@@ -410,6 +410,7 @@
         });
 
         $(document).on('click', '.update-messages', function (e) {
+            e.preventDefault();
             const target = $(e.target).parent().parent().parent().parent();
             let formData = new FormData();
             const messages = $(target).find('.message').val();
@@ -426,8 +427,7 @@
                 contentType: false,
                 data: formData
             }).done(function (data) {
-                $(target).find('.message').empty();
-                $(target).find(".comment").html(data.messages);
+                window.location.reload();
             });
         });
 
