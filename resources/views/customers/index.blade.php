@@ -99,13 +99,13 @@
                         </div>
                        <div class="mt10 pb10" style="height:86px">
                             <div class="col-md-10 info-avatar border padding5 last_contacthover box_last">
-                            <p><i class="fa fa-user mr5" style="color: black;"></i> `+data.customer.full_name+`
+                            <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
                                 <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
                             </p>
                             <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue" data-contact-id="5678"
                                                           rel="tooltip" data-original-title="Click để gọi"
                                                           data-placement="right" data-phone="0977766139" data-flag="1"
-                                                          data-type="crm"> `+data.customer.phone+`</a></p>
+                                                          data-type="crm"> ` + data.customer.phone + `</a></p>
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
                          <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
@@ -116,9 +116,9 @@
                 });
                 html += `</select>`;
                 html += `
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">`+(data.customer.source_customer ? data.customer.source_customer.name: "")+`</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">`+(data.last_contact ? data.last_contact: "")+`</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break" style="color:orange;">`+data.order_revenue+` VND</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">` + (data.last_contact ? data.last_contact : "") + `</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break" style="color:orange;">` + data.order_revenue + ` VND</div> </div>
                 </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
@@ -218,7 +218,6 @@
         });
 
         $(document).on('click', '.update-messages', function (e) {
-            console.log(1);
             const target = $(e.target).parent().parent().parent().parent();
 
             const messages = $(target).find('.message').val();
@@ -274,6 +273,16 @@
             searchAjax(data);
         });
 
+        $(document).on('click', '.limiting', function () {
+            const limit = $(this).data('limit');
+            $('#birthday_tab').val('');
+            let data = {
+                limit: limit
+            };
+
+            searchAjax(data);
+        });
+
         $(document).on('click', '.birthday_tab', function () {
             const birthday = $('.birthday_tab').data('original-title');
             $('#birthday_tab').val(birthday);
@@ -300,7 +309,20 @@
             searchAjax(data);
         });
 
-        $(document).on('change keyup', '.group, .telesales, #search', function () {
+        // delay keyup
+        function delay(callback, ms) {
+            // alert(ms);
+            var timer = 0;
+            return function () {
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    callback.apply(context, args);
+                }, ms || 0);
+            };
+        }
+
+        $(document).on('change keyup', '.group, .telesales,#search', delay(function () {
             const group = $('.group').val();
             const telesales = $('.telesales').val();
             const search = $('#search').val();
@@ -314,9 +336,8 @@
                 search: search,
                 data_time: data_time
             };
-
             searchAjax(data);
-        });
+        }, 500));
 
         $(document).on('click', '.invalid_account', function (e) {
             let target = $(e.target).parent();
@@ -687,8 +708,7 @@
             if ($(window).scrollTop() >= 150) {
                 $('.search-box').addClass('searchbox-sticky');
                 $('.filter-box').addClass('filterbox-sticky');
-            }
-            else {
+            } else {
                 $('.search-box').removeClass('searchbox-sticky');
                 $('.filter-box').removeClass('filterbox-sticky');
             }

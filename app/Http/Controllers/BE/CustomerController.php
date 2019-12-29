@@ -65,11 +65,12 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $statuses = Status::getRelationshipByCustomer($request->all());
-        $customers = Customer::search($request->all());
+        $input = $request->all();
+        $statuses = Status::getRelationshipByCustomer($input);
+        $customers = Customer::search($input);
         $rank = $customers->firstItem();
-        if ($request->ajax()) {
 
+        if ($request->ajax()) {
             return Response::json(view('customers.ajax',
                 compact('customers', 'statuses', 'rank'))->render());
         }
