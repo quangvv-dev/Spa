@@ -30,4 +30,5 @@ class DirectoryConstant
     const USER_IMAGE = '/images/users/';
 
     const DOCUMENT_FILE = '/documents';
+    const COMMENT_IMAGE = '/images/comment-images/';
 }

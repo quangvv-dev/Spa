@@ -65,6 +65,10 @@ class Filesystem
     {
         return $this->saveUploadedFile($input, DirectoryConstant::DOCUMENT_FILE);
     }
+    public function uploadCommentImage($input)
+    {
+        return $this->saveUploadedFile($input, DirectoryConstant::COMMENT_IMAGE);
+    }
 
     /**
      * @param \Illuminate\Http\uploadVideo|array $input

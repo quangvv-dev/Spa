@@ -22,6 +22,19 @@
                         </div>
                         <div class="col-md-11 comment">
                             {!! $item->messages !!}
+                            <br>
+                            <div class="col-xs-12 col-md-12">
+                                <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                                    <div class="fileupload fileupload-exists"
+                                         data-provides="fileupload">
+                                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">
+                                            @if (isset($item->image))
+                                                <img src="{{ $item->image }}" alt="image"/>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Models\Customer;
 use App\Models\Status;
+use App\Services\CustomerService;
 use App\Services\GroupCommentService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,14 +16,17 @@ use Illuminate\Support\Facades\Auth;
 class GroupCommentController extends Controller
 {
     protected $groupCommentService;
+    protected $customerService;
 
     /**
      * GroupCommentController constructor.
      * @param GroupCommentService $groupCommentService
+     * @param CustomerService $customerService
      */
-    public function __construct(GroupCommentService $groupCommentService)
+    public function __construct(GroupCommentService $groupCommentService, CustomerService $customerService)
     {
         $this->groupCommentService = $groupCommentService;
+        $this->customerService = $customerService;
     }
     /**
      * Display a listing of the resource.
@@ -96,14 +100,16 @@ class GroupCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Customer $id)
+    public function store(Request $request, $id)
     {
-        $customer = $id;
-        $request->merge([
-            'customer_id' => @$customer->id,
-            'user_id'     => Auth::user()->id,
-        ]);
-        GroupComment::create($request->all());
+        $customer = $this->customerService->find($id);
+        $input = $request->except(['image_contact']);
+        $input['image'] = $request->image_contact;
+
+        $input['user_id'] = Auth::user()->id;
+        $input['customer_id'] = @$customer->id;
+
+        $groupComment = $this->groupCommentService->create($input);
         return redirect()->back();
     }
 
@@ -141,7 +147,8 @@ class GroupCommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $input = $request->all();
+        $input = $request->except(['image_contact']);
+        $input['image'] = $request->image_contact;
 
         return $this->groupCommentService->update($input, $id);
     }
