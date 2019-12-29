@@ -108,7 +108,6 @@ class GroupCommentController extends Controller
 
         $input['user_id'] = Auth::user()->id;
         $input['customer_id'] = @$customer->id;
-        dd($input);
 
         $groupComment = $this->groupCommentService->create($input);
         return redirect()->back();
