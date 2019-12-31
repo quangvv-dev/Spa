@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Krub:300,500&subset=latin-ext');
+
+/* --- */
+
+html,
+body {
+	
+	margin: 0;
+	padding: 30px;
+	height: 100%;
+}
+
+body {
+
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	min-height: 100%;
+	
+	font: 17px 'Krub', sans-serif;
+	font-weight: 300;
+	background: #f5f5f5;
+	color: #111;
+	overflow-y: scroll;
+}
+
+a {
+	
+	color: #111;
+}
+
+p {
+	
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	
+	margin: 0 0 30px 0;
+	padding: 0 0 10px 0;
+	
+	font-size: 30px;
+	font-weight: 500;
+	border-bottom: 1px solid #aaa;
+}
+
+h2 {
+	
+	margin: 40px 0 20px 0;
+	padding: 0;
+	
+	font-size: 25px;
+	font-weight: 500;
+}
+
+#demo img {
+	
+	max-width: 320px;
+}
+
+code {
+	
+	display: block;
+	padding: 15px;
+	
+	background: #fff;
+	border: 1px solid #aaa;
+}
+
+
+@media all and (max-width: 1024px) {
+	
+	code {
+		
+		overflow-x: scroll;
+	}
+}

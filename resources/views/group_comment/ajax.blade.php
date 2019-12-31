@@ -29,7 +29,7 @@
                                          data-provides="fileupload">
                                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">
                                             @if (isset($item->image))
-                                                <img src="{{ $item->image }}" alt="image"/>
+                                                <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}" alt="image"/></a>
                                             @endif
                                         </div>
                                     </div>

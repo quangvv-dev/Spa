@@ -8,6 +8,8 @@
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{asset('/assets/plugins/wysiwyag/richtext.min.css')}}" rel="stylesheet"/>
     <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/style.css') }}" media="all">
+    <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/mobilelightbox.css') }}" media="all">
     <style>
         #snoAlertBox1 {
             position: absolute;
@@ -312,15 +314,26 @@
             </div>
         </div>
     </div>
-    </div>
 @endsection
 @section('_script')
+    <script src="{{ asset('zoom-image/js/mobilelightbox.js') }}"></script>
+    <script src="{{ asset('zoom-image/js/main.js') }}"></script>
     <script src="{{asset('/assets/plugins/wysiwyag/jquery.richtext.js')}}"></script>
     <script src="{{asset('assets/js/util.js')}}"></script> <!-- util functions included in the CodyHouse framework -->
     <script src="{{asset('assets/js/main.js')}}"></script>
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
 
     <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36251023-1']);
+        _gaq.push(['_setDomainName', 'jqueryscript.net']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
 
         $(document).on('click', '#edit-history-order', function (e) {
             e.preventDefault();
