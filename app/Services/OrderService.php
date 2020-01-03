@@ -38,7 +38,7 @@ class OrderService
             'all_total'         => $theRest,
             'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id']: "",
             'payment_date'      => isset($data['payment_date']) ? Functions::yearMonthDay($data['payment_date']): null,
-            'created_at'        => isset($data['payment_date']) ? Functions::yearMonthDay($data['created_at']): null
+            'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']): null
         ];
 
         $model = $this->order->fill($input);
