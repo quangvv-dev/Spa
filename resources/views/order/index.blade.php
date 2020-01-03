@@ -176,7 +176,7 @@
                                                 <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
                                             </div>
                                         </div>
-                                        {!! Form::text('created_at', isset($order) ? date("m-d-Y", strtotime($order->created_at)) : date("m-d-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
+                                        {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
                                     </div>
                                 </div>
                             </div>
