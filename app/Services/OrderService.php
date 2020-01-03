@@ -6,6 +6,7 @@ use App\Models\GroupComment;
 use App\Models\Order;
 use App\Helpers\Functions;
 use App\Models\PaymentHistory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class OrderService
@@ -26,6 +27,8 @@ class OrderService
             return false;
         }
 
+        $now = Carbon::now()->format('H:i:s');
+
         if (!empty($data['spa_therapisst_id']) && !empty($data['count_day'])) {
             $countDay = $data['count_day'] - 1;
         }
@@ -37,8 +40,7 @@ class OrderService
             'type'              => ($data['count_day'] == null || $data['count_day'] == 0)  ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => $theRest,
             'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id']: "",
-            'payment_date'      => isset($data['payment_date']) ? Functions::yearMonthDay($data['payment_date']): null,
-            'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']): null
+            'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']). $now: Carbon::now()
         ];
 
         $model = $this->order->fill($input);
@@ -154,6 +156,7 @@ class OrderService
         $order = $this->find($id);
 
         $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue;
+        $now = Carbon::now()->format('H:i:s');
 
         if (empty($attibutes) && is_array($attibutes) == false) return false;
 
@@ -164,8 +167,7 @@ class OrderService
             'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])),
             'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
-            'payment_date'      => isset($attibutes['payment_date']) ? Functions::yearMonthDay($attibutes['payment_date']): null,
-            'created_at'        => isset($attibutes['created_at']) ?Functions::yearMonthDay($attibutes['created_at']): null
+            'created_at'        => isset($attibutes['created_at']) ?Functions::yearMonthDay($attibutes['created_at']). $now: Carbon::now()
         ];
 
         $order->update($attibutes);
