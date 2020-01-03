@@ -91,7 +91,9 @@ class OrderController extends Controller
 
             $order = $this->orderService->create($param);
 
-            if (!$order) DB::rollBack();
+            if (!$order) {
+                DB::rollBack();
+            }
 
             if (isset($request->spa_therapisst_id)) {
                 HistoryUpdateOrder::create([
@@ -102,7 +104,9 @@ class OrderController extends Controller
 
             $orderDetail = $this->orderDetailService->create($param, $order->id);
 
-            if (!$orderDetail) DB::rollBack();
+            if (!$orderDetail) {
+                DB::rollBack();
+            }
 
             DB::commit();
             return redirect('/order/' . $order->id . '/show')->with('status', 'Tạo đơn hàng thành công');
@@ -127,8 +131,9 @@ class OrderController extends Controller
 
         } else {
             $now = Carbon::now()->format('m');
-            $orders = Order::whereMonth('created_at', $now)->with('orderDetails');
-            $orders = $orders->paginate(100);
+            $year = Carbon::now()->format('Y');
+            $orders = Order::whereYear('updated_at', $year)->whereMonth('updated_at', $now)->with('orderDetails');
+            $orders = $orders->paginate(500);
         }
 
         if ($request->ajax()) {
@@ -266,11 +271,15 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->update($id, $input);
 
-            if (!$order) DB::rollBack();
+            if (!$order) {
+                DB::rollBack();
+            }
 
             $orderDetail = $this->orderDetailService->update($input, $id);
 
-            if (!$orderDetail) DB::rollBack();
+            if (!$orderDetail) {
+                DB::rollBack();
+            }
 
             DB::commit();
             return redirect('/order/' . $order->id . '/show');
@@ -291,10 +300,10 @@ class OrderController extends Controller
                     $customer = Customer::where('phone', $row['so_dt'])->first();
                     $service = Services::where('name', $row['ten_san_pham'])->first();
                     $checkOrder = Order::where('code', $row['ma_dh'])->first();
-                    $paymentType = NULL;
+                    $paymentType = null;
 
                     if ($row['hinh_thuc_thanh_toan_tung_lan'] == null) {
-                        $paymentType = NULL;
+                        $paymentType = null;
                     } elseif ($row['hinh_thuc_thanh_toan_tung_lan'] == "Tiền mặt") {
                         $paymentType = 1;
                     } else {
@@ -304,35 +313,37 @@ class OrderController extends Controller
                     if (!empty($service)) {
                         if (!empty($customer) && empty($checkOrder)) {
                             $order = Order::create([
-                                'code' => $row['ma_dh'],
-                                'member_id' => $customer->id,
-                                'all_total' => $row['doanh_so'],
-                                'count_day' => 0,
-                                'the_rest' => $row['con_lai'],
-                                'description' => $row['mo_ta'],
-                                'gross_revenue' => $row['doanh_thu'],
-                                'payment_type' => $paymentType,
-                                'payment_date' => Carbon::createFromFormat('d/m/Y', substr($row['ngay_thanh_toan'], 0, 10))->format('Y-m-d'),
-                                'type' => Order::TYPE_ORDER_DEFAULT,
+                                'code'              => $row['ma_dh'],
+                                'member_id'         => $customer->id,
+                                'all_total'         => $row['doanh_so'],
+                                'count_day'         => 0,
+                                'the_rest'          => $row['con_lai'],
+                                'description'       => $row['mo_ta'],
+                                'gross_revenue'     => $row['doanh_thu'],
+                                'payment_type'      => $paymentType,
+                                'payment_date'      => Carbon::createFromFormat('d/m/Y',
+                                    substr($row['ngay_thanh_toan'], 0, 10))->format('Y-m-d'),
+                                'type'              => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
-                                'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
+                                'created_at'        => Carbon::createFromFormat('d/m/Y',
+                                    $row['ngay_tao'])->format('Y-m-d'),
                             ]);
-                        }else{
-                            $order = isset($checkOrder)?$checkOrder->id:0;
+                        } else {
+                            $order = isset($checkOrder) ? $checkOrder->id : 0;
                         }
 
                         $orderDetail = OrderDetail::create([
-                            'order_id' => $order->id,
-                            'code' => $row['ma_sp'],
-                            'booking_id' => $service->id,
-                            'quantity' => $row['so_luong'],
-                            'total_price' => $row['gia_ban'],
-                            'user_id' => $customer ? $customer->id : $order->member_id,
-                            'address' => $customer ? $customer->address : '',
-                            'vat' => $row['vat'],
+                            'order_id'         => $order->id,
+                            'code'             => $row['ma_sp'],
+                            'booking_id'       => $service->id,
+                            'quantity'         => $row['so_luong'],
+                            'total_price'      => $row['gia_ban'],
+                            'user_id'          => $customer ? $customer->id : $order->member_id,
+                            'address'          => $customer ? $customer->address : '',
+                            'vat'              => $row['vat'],
                             'percent_discount' => $row['ck'],
-                            'number_discount' => $row['ckd'],
-                            'price' => $row['gia_ban'],
+                            'number_discount'  => $row['ckd'],
+                            'price'            => $row['gia_ban'],
                         ]);
                     }
 
@@ -345,9 +356,11 @@ class OrderController extends Controller
 
     public function checkUniqueCode(Request $request)
     {
-        $order = Order::where('code',$request->code)->first();
+        $order = Order::where('code', $request->code)->first();
 
-        if ($order) return $order->id == $request->id ? 'true' : 'false';
+        if ($order) {
+            return $order->id == $request->id ? 'true' : 'false';
+        }
 
         return 'true';
     }
