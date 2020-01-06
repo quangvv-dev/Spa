@@ -309,6 +309,12 @@ class OrderController extends Controller
                     } else {
                         $paymentType = 2;
                     }
+                    if ($row['ngay_thanh_toan']) {
+                        $payment_date = Carbon::createFromFormat('d/m/Y',
+                            substr($row['ngay_thanh_toan'], 0, 10))->format('Y-m-d');
+                    } else {
+                        $payment_date = Carbon::now()->format('Y-m-d');
+                    }
 
                     if (!empty($service)) {
                         if (!empty($customer) && empty($checkOrder)) {
@@ -321,30 +327,31 @@ class OrderController extends Controller
                                 'description'       => $row['mo_ta'],
                                 'gross_revenue'     => $row['doanh_thu'],
                                 'payment_type'      => $paymentType,
-                                'payment_date'      => Carbon::createFromFormat('d/m/Y',
-                                    substr($row['ngay_thanh_toan'], 0, 10))->format('Y-m-d'),
+                                'payment_date'      => $payment_date,
                                 'type'              => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
                                 'created_at'        => Carbon::createFromFormat('d/m/Y',
                                     $row['ngay_tao'])->format('Y-m-d'),
                             ]);
                         } else {
-                            $order = isset($checkOrder) ? $checkOrder->id : 0;
+                            $order = isset($checkOrder) ? $checkOrder : 0;
                         }
 
-                        $orderDetail = OrderDetail::create([
-                            'order_id'         => $order->id,
-                            'code'             => $row['ma_sp'],
-                            'booking_id'       => $service->id,
-                            'quantity'         => $row['so_luong'],
-                            'total_price'      => $row['gia_ban'],
-                            'user_id'          => $customer ? $customer->id : $order->member_id,
-                            'address'          => $customer ? $customer->address : '',
-                            'vat'              => $row['vat'],
-                            'percent_discount' => $row['ck'],
-                            'number_discount'  => $row['ckd'],
-                            'price'            => $row['gia_ban'],
-                        ]);
+                        if (!empty($customer)) {
+                            $orderDetail = OrderDetail::create([
+                                'order_id'         => $order->id,
+                                'code'             => $row['ma_sp'],
+                                'booking_id'       => $service->id,
+                                'quantity'         => $row['so_luong'],
+                                'total_price'      => $row['gia_ban'],
+                                'user_id'          => $customer ? $customer->id : $order->member_id,
+                                'address'          => $customer ? $customer->address : '',
+                                'vat'              => $row['vat'],
+                                'percent_discount' => $row['ck'],
+                                'number_discount'  => $row['ckd'],
+                                'price'            => $row['gia_ban'],
+                            ]);
+                        }
                     }
 
                 }
