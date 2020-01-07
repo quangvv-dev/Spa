@@ -322,21 +322,41 @@
             };
         }
 
-        $(document).on('change keyup', '.group, .telesales,#search', delay(function () {
+        $(document).on('change', '.group, .telesales', delay(function () {
             const group = $('.group').val();
             const telesales = $('.telesales').val();
-            const search = $('#search').val();
-            $('#search_value').val(search);
+            const search = $('#search_value').val();
+            $('#group').val(group);
+            $('#telesales').val(telesales);
             $('#birthday_tab').val('');
             const data_time = $('#btn_choose_time').val();
 
             let data = {
                 group: group,
                 telesales: telesales,
-                search: search,
-                data_time: data_time
+                data_time: data_time,
+                search: search
             };
             searchAjax(data);
+
+        }, 500));
+
+        $(document).on('keyup', '#search', delay(function () {
+            const search = $('#search').val();
+            $('#search_value').val(search);
+            $('#birthday_tab').val('');
+            const data_time = $('#btn_choose_time').val();
+            const group = $('#group').val();
+            const telesales = $('#telesales').val();
+
+            let data = {
+                search: search,
+                data_time: data_time,
+                group: group,
+                telesales: telesales,
+            };
+            searchAjax(data);
+
         }, 500));
 
         $(document).on('click', '.invalid_account', function (e) {
