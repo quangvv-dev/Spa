@@ -6,20 +6,11 @@
         select#order_type {
             background: #dddddd;
         }
-        #parent {
-            height: 300px;
-        }
-        .tableFixHead{ overflow-y: auto; height: 100px; }
+        .tableFixHead{ overflow-y: auto; height: 800px; }
         .tableFixHead thead th { position: sticky; top: 0; }
         table  { border-collapse: collapse; width: 100%; }
-        /*th, td { padding: 8px 16px; }*/
-        th     { background:#0062cc; }
+        th     { background: #0062cc; }
     </style>
-    {{--<script>--}}
-        {{--$(document).ready(function() {--}}
-            {{--$("#fixTable").tableHeadFixer();--}}
-        {{--});--}}
-    {{--</script>--}}
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
@@ -95,6 +86,18 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="group">
+    <input type="hidden" id="telesales">
+    <input type="hidden" id="marketing">
+    <input type="hidden" id="customer">
+    <input type="hidden" id="service">
+    <input type="hidden" id="payment-type">
+    <input type="hidden" id="choose-time">
+    <input type="hidden" id="filter-start-date">
+    <input type="hidden" id="filter-end-date">
+    <input type="hidden" id="bor-none">
+    <input type="hidden" id="order-status">
+    <input type="hidden" id="order-type">
     @include('order-details.modal-upload-excel')
 @endsection
 @section('_script')
@@ -109,7 +112,8 @@
             });
         }
 
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none, #payment_tab', function (e) {
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, #payment_tab', function (e) {
+            e.preventDefault();
             let target = $(e.target).parent();
             const group = $('.group').val();
             const telesales = $('.telesales').val();
@@ -120,7 +124,18 @@
             const data_time = $(target).find('.choose_time').data('time');
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
+            const order_type = $('#order-type').val();
             const bor_none = $(target).find('.bor-none').data('filter');
+            $('#group').val(group);
+            $('#telesales').val(telesales);
+            $('#marketing').val(marketing);
+            $('#customer').val(customer);
+            $('#service').val(service);
+            $('#payment-type').val(payment_type);
+            $('#choose-time').val(data_time);
+            $('#filter-start-date').val(start_date);
+            $('#filter-end-date').val(end_date);
+            $('#bor-none').val(bor_none);
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
 
@@ -135,13 +150,35 @@
                 start_date: start_date,
                 end_date: end_date,
                 bor_none: bor_none,
+                order_type: order_type
             });
         });
 
         $(document).on('change', '#order_type', function () {
             const order_type = $('#order_type').val();
+            const group = $('#group').val();
+            const telesales = $('#telesales').val();
+            const marketing = $('#marketing').val();
+            const customer = $('#customer').val();
+            const service = $('#service').val();
+            const payment_type = $('#payment-type').val();
+            const data_time = $('#choose-time').val();
+            const start_date = $('#filter-start-date').val();
+            const end_date = $('#filter-end-date').val();
+            const bor_none = $('#bor-none').val();
+            $('#order-type').val(order_type);
 
             searchAjax({
+                group: group,
+                telesales: telesales,
+                marketing: marketing,
+                customer: customer,
+                service: service,
+                payment_type: payment_type,
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                bor_none: bor_none,
                 order_type: order_type
             });
         });
@@ -157,7 +194,6 @@
                 url: "{{ Url('ajax/order-details/') }}" + '/' + id,
                 method: "get",
             }).done(function (data) {
-                console.log(data);
                 let html = '';
                 let html1 = '';
 
@@ -218,14 +254,10 @@
         $(document).on('click', '.order_status', function () {
             $('.order_status').data('status', 0);
             const order_cancel = $('.order_status').data('status');
-            $.ajax({
-                url: "{{ Url('list-orders/') }}",
-                method: "get",
-                data: {
-                    order_cancel: order_cancel
-                }
-            }).done(function (data) {
-                $('#registration-form').html(data);
+            $('#order-status').val(order_cancel);
+
+            searchAjax({
+                order_cancel: order_cancel
             });
         });
     </script>

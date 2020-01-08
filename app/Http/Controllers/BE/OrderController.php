@@ -125,10 +125,10 @@ class OrderController extends Controller
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+        dump($request->all());
 
         if (count($request->all()) > 0) {
             $orders = Order::searchAll($request->all());
-
         } else {
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');

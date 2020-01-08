@@ -119,8 +119,7 @@ class Order extends Model
         $data = self::with( 'orderDetails');
 
         if ($input) {
-            $data = $data
-                ->when(isset($input['group']), function ($query) use ($input) {
+            $data = $data->when(isset($input['group']), function ($query) use ($input) {
                     $query->whereHas('customer', function ($q) use ($input) {
                         $q->where('group_id', $input['group']);
                     });
