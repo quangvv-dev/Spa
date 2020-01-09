@@ -52,7 +52,7 @@
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
                 </tr>
             @endforeach
-            <tr>
+            <tr class="fixed">
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
