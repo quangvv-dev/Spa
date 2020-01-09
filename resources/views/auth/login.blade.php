@@ -55,7 +55,7 @@
                         </div>
                     @endif
                     <form class="card" method="POST" action="{{ url('login') }}">
-                        {{ csrf_field() }}
+                        @csrf
                         <div class="card-body p-6">
                             <img src="assets/images/brand/logo_login.png" class="h-6" alt="">
 
