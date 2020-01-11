@@ -11,7 +11,7 @@
         .tableFixHead tbody .fixed td { position: sticky; bottom: 0; }
         table  { border-collapse: collapse; width: 100%; }
         th     { background: #0062cc; }
-        .tableFixHead tbody .fixed td { background: #0062cc; }
+        .tableFixHead tbody .fixed td { background: #cbdbf2;}
     </style>
 @endsection
 @section('content')
