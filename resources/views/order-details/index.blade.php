@@ -262,5 +262,43 @@
                 order_cancel: order_cancel
             });
         });
+
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            let pages = $(this).attr('href').split('page=')[1];
+            const order_type = $('#order_type').val();
+            const group = $('#group').val();
+            const telesales = $('#telesales').val();
+            const marketing = $('#marketing').val();
+            const customer = $('#customer').val();
+            const service = $('#service').val();
+            const payment_type = $('#payment-type').val();
+            const data_time = $('#choose-time').val();
+            const start_date = $('#filter-start-date').val();
+            const end_date = $('#filter-end-date').val();
+            const bor_none = $('#bor-none').val();
+            $.ajax({
+                url: '{{ url()->current() }}',
+                method: "get",
+                data: {
+                    group: group,
+                    telesales: telesales,
+                    marketing: marketing,
+                    customer: customer,
+                    service: service,
+                    payment_type: payment_type,
+                    data_time: data_time,
+                    start_date: start_date,
+                    end_date: end_date,
+                    bor_none: bor_none,
+                    order_type: order_type,
+                    page: pages,
+                },
+            }).done(function (data) {
+                $('#registration-form').html(data);
+            }).fail(function () {
+                alert('Articles could not be loaded.');
+            });
+        });
     </script>
 @endsection

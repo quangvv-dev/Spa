@@ -131,16 +131,17 @@ class OrderController extends Controller
         } else {
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');
-            $orders = Order::whereYear('updated_at', $year)->whereMonth('updated_at', $now)->with('orderDetails');
-            $orders = $orders->paginate(500);
+            $orders = Order::whereYear('updated_at', $year)->whereMonth('updated_at', $now)->with('orderDetails')->paginate(20);
         }
 
+        $rank = $orders->firstItem();
+
         if ($request->ajax()) {
-            return Response::json(view('order-details.ajax', compact('orders', 'title'))->render());
+            return Response::json(view('order-details.ajax', compact('orders', 'title', 'rank'))->render());
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank'));
     }
 
     public function show($id)
