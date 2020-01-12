@@ -179,7 +179,7 @@ class Order extends Model
                 });
         }
 
-        return $data->paginate(500);
+        return $data->paginate(20);
     }
 
     public function getNamePaymentTypeAttribute()

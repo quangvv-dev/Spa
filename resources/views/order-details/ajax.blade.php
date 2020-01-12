@@ -28,7 +28,7 @@
                             <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
                     </td>
-                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td class="text-center">{{ $rank++ }}</td>
                     <td class="text-center">{{ $order->updated_at }}</td>
                     <td class="text-center">
                         <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal" data-order-id="{{ $order->id }}" href="#">
