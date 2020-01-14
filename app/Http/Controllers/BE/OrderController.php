@@ -131,7 +131,7 @@ class OrderController extends Controller
         } else {
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');
-            $orders = Order::whereYear('updated_at', $year)->whereMonth('updated_at', $now)->with('orderDetails')->paginate(20);
+            $orders = Order::whereYear('created_at', $year)->whereMonth('created_at', $now)->with('orderDetails')->paginate(20);
         }
 
         $rank = $orders->firstItem();
