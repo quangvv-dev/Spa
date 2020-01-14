@@ -45,10 +45,10 @@
                 <div class="sub-item">
                     <ul>
                         <li>
-                            <a href="{!! route('category.index') !!}">Danh mục dịch vụ</a>
+                            <a href="{!! route('category.index') !!}">Nhóm dịch vụ</a>
                         </li>
                         <li>
-                            <a href="{!! route('services.index') !!}">Danh sách dịch vụ</a>
+                            <a href="{!! route('services.index') !!}">Danh sách SP/DV</a>
                         </li>
                         <li>
                             <a href="{!! route('order.list') !!}">Danh sách đơn hàng</a>
