@@ -45,7 +45,7 @@
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
                        type="text" id="search">
                 <div class="col-md-2 col-xs-12">
-                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm KH')) !!}
+                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}
                 </div>
                 <div class="col-md-2 col-xs-12">
                     {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
