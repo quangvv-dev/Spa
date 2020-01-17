@@ -129,24 +129,31 @@ class OrderController extends Controller
 
         if (count($request->all()) > 0) {
             $orders = Order::searchAll($request->all());
+            View::share([
+                'allTotal'     => $orders->sum('all_total'),
+                'grossRevenue' => $orders->sum('gross_revenue'),
+                'theRest'      => $orders->sum('the_rest'),
+            ]);
+            $orders = $orders->paginate(20);
+
         } else {
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');
             $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
-                $now)->with('orderDetails')->paginate(20);
+                $now)->with('orderDetails');
+            View::share([
+                'allTotal'     => $orders->sum('all_total'),
+                'grossRevenue' => $orders->sum('gross_revenue'),
+                'theRest'      => $orders->sum('the_rest'),
+            ]);
+            $orders = $orders->paginate(20);
         }
 
         $rank = $orders->firstItem();
-
 //        if ($orders->lastPage() == $orders->currentPage()) {
 //
+//
 //        }
-        View::share([
-            'allTotal'     => Order::sum('all_total'),
-            'grossRevenue' => Order::sum('gross_revenue'),
-            'theRest'      => Order::sum('the_rest'),
-        ]);
-
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax', compact('orders', 'title', 'rank'))->render());
         }
