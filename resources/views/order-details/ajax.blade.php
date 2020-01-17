@@ -64,11 +64,11 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center bold">Tổng</td>
-                <td class="text-center bold"> {{ number_format($allTotal) }} </td>
+                <td class="text-center bold"> {{ @number_format($allTotal) }} </td>
                 <td class="text-center"></td>
-                <td class="text-center bold"> {{ number_format($grossRevenue) }} </td>
-                <td class="text-center bold"> {{ number_format($grossRevenue) }}</td>
-                <td class="text-center bold">{{ number_format($theRest) }}</td>
+                <td class="text-center bold"> {{ @number_format($grossRevenue) }} </td>
+                <td class="text-center bold"> {{ @number_format($grossRevenue) }}</td>
+                <td class="text-center bold">{{ @number_format($theRest) }}</td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
             </tr>

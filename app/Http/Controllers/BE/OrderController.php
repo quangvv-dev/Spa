@@ -132,26 +132,28 @@ class OrderController extends Controller
         } else {
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');
-            $orders = Order::whereYear('created_at', $year)->whereMonth('created_at', $now)->with('orderDetails')->paginate(20);
+            $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
+                $now)->with('orderDetails')->paginate(20);
         }
 
         $rank = $orders->firstItem();
 
-        if($orders->lastPage() == $orders->currentPage())
-        {
+        if ($orders->lastPage() == $orders->currentPage()) {
             View::share([
-                'allTotal' => Order::sum('all_total'),
+                'allTotal'     => Order::sum('all_total'),
                 'grossRevenue' => Order::sum('gross_revenue'),
-                'theRest' => Order::sum('the_rest'),
+                'theRest'      => Order::sum('the_rest'),
             ]);
         }
+        $allTotal = Order::sum('all_total');
+
 
         if ($request->ajax()) {
-            return Response::json(view('order-details.ajax', compact('orders', 'title', 'rank'))->render());
+            return Response::json(view('order-details.ajax', compact('orders', 'title', 'rank', 'allTotal'))->render());
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank', 'allTotal'));
     }
 
     public function show($id)
