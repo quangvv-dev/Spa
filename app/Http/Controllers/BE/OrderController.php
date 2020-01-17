@@ -139,21 +139,21 @@ class OrderController extends Controller
         $rank = $orders->firstItem();
 
         if ($orders->lastPage() == $orders->currentPage()) {
-            View::share([
+            view()->share([
                 'allTotal'     => Order::sum('all_total'),
                 'grossRevenue' => Order::sum('gross_revenue'),
                 'theRest'      => Order::sum('the_rest'),
             ]);
         }
-        $allTotal = Order::sum('all_total');
+//        $allTotal = Order::sum('all_total');
 
 
         if ($request->ajax()) {
-            return Response::json(view('order-details.ajax', compact('orders', 'title', 'rank', 'allTotal'))->render());
+            return Response::json(view('order-details.ajax', compact('orders', 'title', 'rank'))->render());
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank', 'allTotal'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank'));
     }
 
     public function show($id)
