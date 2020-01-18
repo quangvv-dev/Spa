@@ -54,6 +54,24 @@
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
                 </tr>
             @endforeach
+            <tr class="fixed2">
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center bold">Tổng trang</td>
+                <td class="text-center bold"> {{ @number_format($allTotalPage) }} </td>
+                <td class="text-center"></td>
+                <td class="text-center bold"> {{ @number_format($grossRevenuePage) }} </td>
+                <td class="text-center bold"> {{ @number_format($grossRevenuePage) }}</td>
+                <td class="text-center bold">{{ @number_format($theRestPage) }}</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+            </tr>
             <tr class="fixed">
                 <td class="text-center"></td>
                 <td class="text-center"></td>
@@ -63,7 +81,7 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
-                <td class="text-center bold">Tổng</td>
+                <td class="text-center bold">Tổng cộng</td>
                 <td class="text-center bold"> {{ @number_format($allTotal) }} </td>
                 <td class="text-center"></td>
                 <td class="text-center bold"> {{ @number_format($grossRevenue) }} </td>

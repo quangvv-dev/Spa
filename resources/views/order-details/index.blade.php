@@ -9,9 +9,11 @@
         .tableFixHead{ overflow-y: auto; height: 800px; }
         .tableFixHead thead th { position: sticky; top: 0; }
         .tableFixHead tbody .fixed td { position: sticky; bottom: 0; }
+        .tableFixHead tbody .fixed2 td { position: sticky; bottom: 46px; }
         table  { border-collapse: collapse; width: 100%; }
         th     { background: #0062cc; }
         .tableFixHead tbody .fixed td { background: #cbdbf2;}
+        .tableFixHead tbody .fixed2 td { background: #cbdbf2;}
     </style>
 @endsection
 @section('content')

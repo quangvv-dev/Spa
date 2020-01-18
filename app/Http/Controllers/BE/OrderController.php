@@ -135,6 +135,11 @@ class OrderController extends Controller
                 'theRest'      => $orders->sum('the_rest'),
             ]);
             $orders = $orders->paginate(20);
+            View::share([
+                'allTotalPage'     => $orders->sum('all_total'),
+                'grossRevenuePage' => $orders->sum('gross_revenue'),
+                'theRestPage'      => $orders->sum('the_rest'),
+            ]);
 
         } else {
             $now = Carbon::now()->format('m');
@@ -147,6 +152,11 @@ class OrderController extends Controller
                 'theRest'      => $orders->sum('the_rest'),
             ]);
             $orders = $orders->paginate(20);
+            View::share([
+                'allTotalPage'     => $orders->sum('all_total'),
+                'grossRevenuePage' => $orders->sum('gross_revenue'),
+                'theRestPage'      => $orders->sum('the_rest'),
+            ]);
         }
 
         $rank = $orders->firstItem();
