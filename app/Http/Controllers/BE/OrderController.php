@@ -126,8 +126,8 @@ class OrderController extends Controller
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-
-        if (count($request->all()) > 0) {
+        $check_null = $this->checkNull($request);
+        if ($check_null== StatusCode::NOT_NULL) {
             $orders = Order::searchAll($request->all());
             View::share([
                 'allTotal'     => $orders->sum('all_total'),
@@ -397,4 +397,15 @@ class OrderController extends Controller
         return redirect('order/' . $order->id . '/show')->with('status', 'Xoá lịch sử thanh toán thành công');
     }
 
+    public function checkNull($request)
+    {
+        if (empty($request->group) && empty($request->telesales) && empty($request->marketing)
+            && empty($request->customer) && empty($request->service) && empty($request->payment_type)
+            && empty($request->data_time) && empty($request->start_date) && empty($request->end_date)
+            && empty($request->order_type)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

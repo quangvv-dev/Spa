@@ -32,4 +32,7 @@ class StatusCode
     const RECEIVE = 3;// ĐÃ ĐẾN
     const UN_RECEIVE = 4;// KHÔNG ĐẾN
     const CANCEL = 5;// HỦY
+
+    const NULL = 1;
+    const NOT_NULL = 0;
 }
