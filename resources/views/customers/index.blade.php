@@ -78,7 +78,9 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('click', '.view_modal', function () {
+        $(document).on('click', '.view_modal', function (e) {
+            e.preventDefault();
+
             $('.customer-chat').empty();
             const id = $(this).data('customer-id');
 

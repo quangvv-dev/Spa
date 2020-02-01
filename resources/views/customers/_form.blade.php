@@ -96,7 +96,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                             {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}
-                            {!! Form::select('status_id', $status, @$customer->status_id, array('class' => 'form-control select2', 'placeholder' => 'Mối quan hệ')) !!}
+                            {!! Form::select('status_id', $status, @$customer->status_id, array('class' => 'form-control select2')) !!}
                             <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
                         </div>
                     </div>
