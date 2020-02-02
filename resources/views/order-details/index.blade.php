@@ -102,6 +102,7 @@
     <input type="hidden" id="bor-none">
     <input type="hidden" id="order-status">
     <input type="hidden" id="order-type">
+    <input type="hidden" id="phone">
     @include('order-details.modal-upload-excel')
 @endsection
 @section('_script')
@@ -130,7 +131,9 @@
             const end_date = $('.filter_end_date').val();
             const order_type = $('#order-type').val();
             const bor_none = $(target).find('.bor-none').data('filter');
+            const phone = $('.phone').val();
             $('#group').val(group);
+            $('#phone').val(phone);
             $('#telesales').val(telesales);
             $('#marketing').val(marketing);
             $('#customer').val(customer);
@@ -142,7 +145,6 @@
             $('#bor-none').val(bor_none);
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
-
             searchAjax({
                 group: group,
                 telesales: telesales,
@@ -154,7 +156,8 @@
                 start_date: start_date,
                 end_date: end_date,
                 bor_none: bor_none,
-                order_type: order_type
+                order_type: order_type,
+                phone: phone,
             });
         });
 
@@ -170,6 +173,7 @@
             const start_date = $('#filter-start-date').val();
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
+            const phone = $('#phone').val();
             $('#order-type').val(order_type);
 
             searchAjax({
@@ -183,7 +187,8 @@
                 start_date: start_date,
                 end_date: end_date,
                 bor_none: bor_none,
-                order_type: order_type
+                order_type: order_type,
+                phone: phone,
             });
         });
 
@@ -279,6 +284,7 @@
             const start_date = $('#filter-start-date').val();
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
+            const phone = $('#phone').val();
             $.ajax({
                 url: '{{ url()->current() }}',
                 method: "get",
@@ -294,6 +300,7 @@
                     end_date: end_date,
                     bor_none: bor_none,
                     order_type: order_type,
+                    phone: phone,
                     page: pages,
                 },
             }).done(function (data) {

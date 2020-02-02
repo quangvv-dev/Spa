@@ -177,6 +177,11 @@ class Order extends Model
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
                 });
+            if (isset($input['phone'])) {
+                $customer = Customer::where('phone', 'like', '%'. $input['phone'] . '%')->pluck('id');
+
+                $data = $data->where('member_id', $customer);
+            }
         }
 
         return $data;

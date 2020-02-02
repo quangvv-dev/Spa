@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-md-6 col-xs-12">
                         <div class="form-group">
-                            {!! Form::text('order_category', null, array('class' => 'form-control', 'placeholder'=>'Nhóm SP')) !!}
+                            {!! Form::text('phone', null, array('class' => 'form-control phone', 'autocomplete' => 'false', 'placeholder'=>'Số điện thoại')) !!}
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12">

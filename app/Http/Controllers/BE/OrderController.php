@@ -13,6 +13,7 @@ use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Services;
 use App\Models\Status;
+use App\Services\CustomerService;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use App\Services\PaymentHistoryService;
@@ -32,8 +33,17 @@ class OrderController extends Controller
 {
     private $orderService;
     private $orderDetailService;
+    private $customerService;
 
-    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService)
+    /**
+     * OrderController constructor.
+     * @param OrderService $orderService
+     * @param OrderDetailService $orderDetailService
+     */
+    public function __construct(
+        OrderService $orderService,
+        OrderDetailService $orderDetailService
+    )
     {
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
@@ -127,7 +137,7 @@ class OrderController extends Controller
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
-        if ($check_null== StatusCode::NOT_NULL) {
+        if ($check_null == StatusCode::NOT_NULL) {
             $orders = Order::searchAll($request->all());
             View::share([
                 'allTotal'     => $orders->sum('all_total'),
@@ -160,10 +170,7 @@ class OrderController extends Controller
         }
 
         $rank = $orders->firstItem();
-//        if ($orders->lastPage() == $orders->currentPage()) {
-//
-//
-//        }
+
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax', compact('orders', 'title', 'rank'))->render());
         }
@@ -409,11 +416,12 @@ class OrderController extends Controller
 
     public function checkNull($request)
     {
-        if (empty($request->group) && empty($request->telesales) && empty($request->marketing)
-            && empty($request->customer) && empty($request->service) && empty($request->payment_type)
-            && empty($request->data_time) && empty($request->start_date) && empty($request->end_date)
-            && empty($request->order_type)) {
+        if (!isset($request->group) && !isset($request->telesales) && !isset($request->marketing)
+            && !isset($request->customer) && !isset($request->service) && !isset($request->payment_type)
+            && !isset($request->data_time) && !isset($request->start_date) && !isset($request->end_date)
+            && !isset($request->order_type) && !isset($request->phone)) {
             return 1;
+
         } else {
             return 0;
         }
