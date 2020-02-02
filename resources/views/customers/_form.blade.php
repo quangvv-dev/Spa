@@ -31,21 +31,21 @@
                             <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                         </div>
                     </div>
-                        <div class="col-xs-12 col-md-12">
-                            <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                                {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
-                                {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
-                                <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
-                            </div>
-                        </div>
-                    @if (isset($customer))
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('fb_name', 'Tên Facebook') !!}
-                            {!! Form::text('fb_name', null, array('id' => 'fb_name','class' => 'form-control')) !!}
-                            <span class="help-block">{{ $errors->first('fb_name', ':message') }}</span>
+                            {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
+                            {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
                         </div>
                     </div>
+                    @if (isset($customer))
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
+                                {!! Form::label('fb_name', 'Tên Facebook') !!}
+                                {!! Form::text('fb_name', null, array('id' => 'fb_name','class' => 'form-control')) !!}
+                                <span class="help-block">{{ $errors->first('fb_name', ':message') }}</span>
+                            </div>
+                        </div>
                     @endif
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
@@ -89,7 +89,19 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
                             {!! Form::label('telesales_id', 'Người phụ trách', array('class' => 'control-label required')) !!}
-                            {!! Form::select('telesales_id', $telesales,@$customer->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên telesale')) !!}
+                            {{--                            {!! Form::select('telesales_id', $telesales,@$customer->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên')) !!}--}}
+                            <select name="telesales_id" id="telesales_id" class="form-control select2"
+                                    data-placeholder="Chọn nhân viên">
+                                <option value=""></option>
+                                @foreach($telesales as $k => $l)
+                                    <optgroup label="{{ $k }}">
+                                        @foreach($l as $kl => $vl)
+                                            <option {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+
                             <span class="help-block">{{ $errors->first('telesales_id', ':message') }}</span>
                         </div>
                     </div>
