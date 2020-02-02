@@ -2,6 +2,11 @@
 @section('_style')
     <!-- Bootstrap fileupload css -->
     <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
+    <style>
+        strong.select2-results__group {
+            font-weight: 600;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">

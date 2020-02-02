@@ -12,9 +12,9 @@
                         <li>
                             <a href="{!! route('customers.index') !!}">Khách hàng </a>
                         </li>
-                        <li>
-                            <a href="{{url('schedules')}}">Lịch hẹn </a>
-                        </li>
+{{--                        <li>--}}
+{{--                            <a href="{{url('schedules')}}">Lịch hẹn </a>--}}
+{{--                        </li>--}}
                     </ul>
                 </div>
             </li>
