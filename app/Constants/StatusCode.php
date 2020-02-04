@@ -35,4 +35,6 @@ class StatusCode
 
     const NULL = 1;
     const NOT_NULL = 0;
+
+    const ALL = 0;//Tất cả nhóm KH
 }

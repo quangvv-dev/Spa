@@ -83,7 +83,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::put('order/{id}/show', 'OrderController@payment')->name('order.payment');
     Route::delete('order/{id}/delete-payment', 'OrderController@deletePayment')->name('order.delete-payment');
     //Customer import & export
-    Route::get('customer-export', 'CustomerController@exportCustomer');
+    Route::post('customer-export', 'CustomerController@exportCustomer')->name('customer.export');
     Route::post('customer-import', 'CustomerController@importCustomer');
     Route::post('import-orders', 'OrderController@importDataByExcel');
     //Chart doanh số

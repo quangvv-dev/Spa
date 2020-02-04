@@ -1,18 +1,3 @@
-<style>
-    /*input[type=file] {*/
-    /*    cursor: inherit;*/
-    /*    display: block;*/
-    /*    !*font-size: 10px;*!*/
-    /*    filter: alpha(opacity=0);*/
-    /*    min-height: 100%;*/
-    /*    min-width: 100%;*/
-    /*    opacity: 50;*/
-    /*    position: absolute;*/
-    /*    right: 0;*/
-    /*    text-align: right;*/
-    /*    top: 0;*/
-    /*}*/
-</style>
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->

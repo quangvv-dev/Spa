@@ -48,14 +48,23 @@
                     {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}
                 </div>
                 <div class="col-md-2 col-xs-12">
-                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales','placeholder'=>'Chọn nhân viên')) !!}
+                    <select name="telesales_id" id="telesales_id" class="form-control telesales">
+                        <option value="">Chọn nhân viên</option>
+                        @foreach($telesales as $k => $l)
+                            <optgroup label="{{ $k }}">
+                                @foreach($l as $kl => $vl)
+                                    <option {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col relative">
                     <a title="Upload Data" style="position: absolute;right: 26%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
                     <a title="Download Data" style="position: absolute;right: 21%" class="btn"
-                       href="{{url('customer-export')}}">
+                       href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
                     <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a>
@@ -65,6 +74,7 @@
                 @include('customers.ajax')
             </div>
             @include('customers.modal')
+            @include('customers.modal-export')
             @include('customers.modal-update-relation')
             <input type="hidden" id="status">
             <input type="hidden" id="invalid_account">

@@ -39,7 +39,8 @@ class CustomerController extends Controller
     public function __construct(CustomerService $customerService)
     {
         $this->customerService = $customerService;
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->prepend('Tất cả',
+            0)->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
@@ -231,7 +232,7 @@ class CustomerController extends Controller
         return 'true';
     }
 
-    public function exportCustomer()
+    public function exportCustomer(Request $request)
     {
         $now = Carbon::now()->format('d/m/Y');
         $data = Customer::orderBy('id', 'desc')->with('orders');
@@ -241,7 +242,11 @@ class CustomerController extends Controller
 //                ->orWhere('email', 'like', '%' . $rq['search'] . '%')
 //                ->orWhere('phone', 'like', '%' . $rq['search'] . '%');
 //        }
-        $data = $data->get();
+        if ($request->status != StatusCode::ALL) {
+            $data = $data->where('status_id', $request->status)->get();
+        } else {
+            $data = $data->get();
+        }
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
                 $sheet->cell('A1:Q1', function ($row) {
