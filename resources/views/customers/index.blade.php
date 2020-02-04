@@ -818,7 +818,7 @@
         $(document).on('click', '.update-multiple-account-manager', function () {
             const id = $('td .myCheck:checked');
             const ids = [];
-            const account_manager = $('#telesales_id').val();
+            const account_manager = $('#manager-account').val();
             $.each(id, function () {
                 ids.push($(this).val());
             });
