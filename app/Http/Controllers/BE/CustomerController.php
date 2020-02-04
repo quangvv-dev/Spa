@@ -460,7 +460,19 @@ class CustomerController extends Controller
 
     public function updateMultipleStatus(Request $request)
     {
-        $customer = Customer::whereIn('id', $request->ids)->update(['status_id' => $request->status_id]);
+        $customer = Customer::whereIn('id', $request->ids);
+
+        if (isset($request->status_id)) {
+            $customer->update([
+                'status_id' => $request->status_id,
+            ]);
+        }
+
+        if (isset($request->telesales_id)) {
+            $customer->update([
+                'telesales_id' => $request->telesales_id
+            ]);
+        }
     }
 
     public function getListAjax(Request $request)

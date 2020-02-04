@@ -76,6 +76,7 @@
             @include('customers.modal')
             @include('customers.modal-export')
             @include('customers.modal-update-relation')
+            @include('customers.modal-update-account-manager')
             <input type="hidden" id="status">
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
@@ -807,6 +808,30 @@
                 }
             }).done(function (data) {
                 $(target).parent().find(".telesale-customer").html(data.telesale.full_name);
+            });
+        });
+
+        $(document).on('click', '#show_manager_account', function () {
+            $('#show-manager-account').modal("show");
+        })
+
+        $(document).on('click', '.update-multiple-account-manager', function () {
+            const id = $('td .myCheck:checked');
+            const ids = [];
+            const account_manager = $('#telesales_id').val();
+            $.each(id, function () {
+                ids.push($(this).val());
+            });
+
+            $.ajax({
+                url: "customers/update-multiple-status",
+                method: "post",
+                data: {
+                    ids: ids,
+                    telesales_id: account_manager,
+                }
+            }).done(function () {
+                window.location.reload();
             });
         });
     </script>
