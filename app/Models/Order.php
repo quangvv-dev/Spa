@@ -120,9 +120,9 @@ class Order extends Model
 
         if ($input) {
             $data = $data->when(isset($input['group']), function ($query) use ($input) {
-                    $query->whereHas('customer', function ($q) use ($input) {
-                        $q->where('group_id', $input['group']);
-                    });
+                    $customer = CustomerGroup::where('category_id', $input['group'])->pluck('customer_id')
+                    ->toArray();
+                    $query->whereIn('member_id', $customer);
                 })
                 ->when(isset($input['telesales']), function ($query) use ($input) {
                     $query->whereHas('customer', function ($q) use ($input) {
