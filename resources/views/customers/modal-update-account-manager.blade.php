@@ -13,7 +13,8 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('user_id') ? 'has-error' : '' }}">
                             {!! Form::label('user_id', 'Trạng thái', array('class' => ' required')) !!}
-                            <select name="telesales_id" id="telesales_id" class="form-control select2">
+                            <select name="telesales_id" id="manager-account" class="form-control select2"
+                                    data-placeholder="Chọn nhân viên">
                                 <option value=""></option>
                                 @foreach($telesales as $k => $l)
                                     <optgroup label="{{ $k }}">
