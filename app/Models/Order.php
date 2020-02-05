@@ -167,12 +167,15 @@ class Order extends Model
                     $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
                 })
                 ->when(isset($input['bor_none']), function ($query) use ($input) {
-                    $query->when($input['bor_none'] == 'advanced', function ($q) use ($input) {
-                        $q->where('the_rest', '>', 0);
+                    $query->when($input['bor_none'] == 'unpaid', function ($q) use ($input) {
+                        $q->where('gross_revenue', 0);
                     })
-                        ->when($input['bor_none'] == 'paid', function ($q) use ($input) {
-                            $q->where('the_rest', 0);
-                        });
+                    ->when($input['bor_none'] == 'paid', function ($q) use ($input) {
+                        $q->where('the_rest', 0);
+                    })
+                    ->when($input['bor_none'] == 'payment', function ($q) use ($input) {
+                        $q->where('gross_revenue', '>', 0);
+                    });
                 })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
