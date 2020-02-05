@@ -111,7 +111,9 @@ class CustomerController extends Controller
         $input = $request->except(['group_id', 'image']);
         $input['mkt_id'] = $request->mkt_id;
         $input['image'] = $request->image;
-
+        if ((int)$input['status_id'] == StatusCode::ALL) {
+            $input['status_id'] = StatusCode::NEW;
+        }
         $customer = $this->customerService->create($input);
         $update = $this->update_code($customer);
         $category = Category::find($request->group_id);
@@ -186,7 +188,9 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->except('group_id');
-
+        if ((int)$input['status_id'] == StatusCode::ALL) {
+            $input['status_id'] = StatusCode::NEW;
+        }
         $customer = $this->customerService->update($input, $id);
         $customer->categories()->sync($request->group_id);
 
