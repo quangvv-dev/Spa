@@ -121,7 +121,7 @@
                     <div class="full2 pb20 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2"><h3 class="uppercase pb5 mb10 font12 bold mg0">Mối
                                 quan hệ</h3>
-                            <div class="">{{ $customer->status->name }}
+                            <div class="">{{ @$customer->status->name }}
                             </div>
                         </div>
                     </div>
