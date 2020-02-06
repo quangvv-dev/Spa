@@ -7,6 +7,7 @@ use App\Models\Services as Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
+use Illuminate\Support\Facades\Response;
 
 class ServiceController extends Controller
 {
@@ -31,13 +32,17 @@ class ServiceController extends Controller
     {
         $docs = Service::orderBy('id', 'desc');
         if ($request->search) {
-            $user = $docs->where('name', 'like', '%' . $request->search . '%')
+            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
                 ->orwhere('code', 'like', '%' . $request->search . '%')
                 ->orwhere('trademark', 'like', '%' . $request->search . '%')
                 ->orwhere('enable', 'like', '%' . $request->search . '%');
         }
         $docs = $docs->paginate(10);
+
         $title = 'Quản lý dịch vụ';
+        if ($request->ajax()) {
+            return Response::json(view('service.ajax', compact('docs', 'title'))->render());
+        }
         return view('service.index', compact('title', 'docs'));
     }
 

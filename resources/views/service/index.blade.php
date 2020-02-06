@@ -29,7 +29,7 @@
                 method: "get",
                 data:{search: search}
             }).done(function (data) {
-                $('#registration-form').html(data);
+                $('.table-responsive').html(data);
 
             });
         });
