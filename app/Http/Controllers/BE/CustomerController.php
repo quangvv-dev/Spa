@@ -277,9 +277,9 @@ class CustomerController extends Controller
                     'Mô tả',
                 ]);
                 $i = 1;
-                $categoryName = '';
                 if ($data) {
                     foreach ($data as $k => $ex) {
+                        $categoryName = '';
                         $i++;
                         foreach ($ex->categories as $category) {
                             $categoryName .= $category->name . ', ';
