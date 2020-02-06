@@ -239,7 +239,7 @@ class CustomerController extends Controller
     public function exportCustomer(Request $request)
     {
         $now = Carbon::now()->format('d/m/Y');
-        $data = Customer::orderBy('id', 'desc')->with('orders');
+        $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
         //        $rq = $request->all();
 //        if ($rq['search']) {
 //            $data = $data->where('name', 'like', '%' . $rq['search'] . '%')
@@ -279,7 +279,11 @@ class CustomerController extends Controller
                 $i = 1;
                 if ($data) {
                     foreach ($data as $k => $ex) {
+                        $categoryName = '';
                         $i++;
+                        foreach ($ex->categories as $category) {
+                            $categoryName .= $category->name . ', ';
+                        }
                         $sheet->row($i, [
                             @$ex->id,
                             @$ex->full_name,
@@ -294,7 +298,7 @@ class CustomerController extends Controller
                             @(int)$ex->orders->sum('all_total'),
                             @$ex->marketing->full_name,
                             @$ex->telesale->full_name,
-                            @$ex->category->name,
+                            @$categoryName,
                             @$ex->source_customer->name,
                             @$ex->status->name,
                             @$ex->description,

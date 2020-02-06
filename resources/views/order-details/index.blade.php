@@ -68,7 +68,7 @@
                                 aria-expanded="false"><span
                                     class="filter_name">Lọc bổ sung</span> <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a class="tl filter_advanced bor-none" data-filter="advanced">Chưa thanh toán</a></li>
+                            <li><a class="tl filter_advanced bor-none" data-filter="unpaid">Chưa thanh toán</a></li>
                             <li><a class="tl filter_paid bor-none" data-filter="paid">Đã thanh toán</a></li>
                         </ul>
                     </div>
@@ -76,7 +76,7 @@
                         <button class="btn btn-default order_status" data-status="">Đã hủy</button>
                     </div>
                     <div class="btn-group ml5">
-                        <button class="btn btn-default bor-none" data-filter="advanced" id="payment_tab">Đã thu trong
+                        <button class="btn btn-default bor-none" data-filter="payment" id="payment_tab">Đã thu trong
                             kỳ
                         </button>
                     </div>
@@ -117,7 +117,7 @@
             });
         }
 
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, #payment_tab', function (e) {
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
             const group = $('.group').val();
@@ -131,6 +131,7 @@
             const end_date = $('.filter_end_date').val();
             const order_type = $('#order-type').val();
             const bor_none = $(target).find('.bor-none').data('filter');
+            console.log(bor_none);
             const phone = $('.phone').val();
             $('#group').val(group);
             $('#phone').val(phone);
