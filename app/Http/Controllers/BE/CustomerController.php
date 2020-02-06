@@ -474,7 +474,7 @@ class CustomerController extends Controller
 
         if (isset($request->telesales_id)) {
             $customer->update([
-                'telesales_id' => $request->telesales_id
+                'telesales_id' => $request->telesales_id,
             ]);
         }
     }
@@ -485,7 +485,7 @@ class CustomerController extends Controller
 
         $customer = Customer::with('telesale')->where('id', $id)->first();
 
-        $telesales = User::where('role', UserConstant::TELESALES)->get();
+        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get();
 
         return [
             'customer' => $customer,
