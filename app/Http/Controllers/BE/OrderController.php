@@ -144,7 +144,7 @@ class OrderController extends Controller
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest'      => $orders->sum('the_rest'),
             ]);
-            $orders = $orders->paginate(20);
+            $orders = $orders->orderBy('id','desc')->paginate(20);
             View::share([
                 'allTotalPage'     => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
@@ -155,7 +155,7 @@ class OrderController extends Controller
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');
             $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
-                $now)->with('orderDetails');
+                $now)->with('orderDetails')->orderBy('id','desc');
             View::share([
                 'allTotal'     => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),

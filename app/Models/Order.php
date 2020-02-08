@@ -166,7 +166,7 @@ class Order extends Model
                             $q->whereBetween('created_at', getTime(($input['data_time'])));
                         });
                 })
-                ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                ->when(empty($input['bor_none']) &&isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                     $q->whereBetween('created_at', [
                         Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                         Functions::yearMonthDay($input['end_date']) . " 23:59:59",
@@ -184,10 +184,10 @@ class Order extends Model
                                 $detail = PaymentHistory::whereBetween('payment_date', [
                                     Functions::yearMonthDay($input['start_date']),
                                     Functions::yearMonthDay($input['end_date']),
-                                ])->pluck('order_id')->toArray();
+                                ])->groupBy('order_id')->pluck('order_id')->toArray();
                             } else {
                                 $detail = PaymentHistory::whereDate('payment_date', '=', date('Y-m-d'))
-                                    ->pluck('order_id')->toArray();
+                                    ->groupBy('order_id')->pluck('order_id')->toArray();
                             }
                             $q->whereIn('id', $detail);
                         });
