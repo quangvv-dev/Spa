@@ -41,7 +41,7 @@
                             này</a>
                     </li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                    <li class="display position"><a class="other_time choose_time  border b-gray"
+                    <li class="display position"><a class="other_time  border b-gray"
                         >Khác</a>
                         <div class="add-drop add-d-right other_time_panel"
                              style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>

@@ -180,8 +180,15 @@ class Order extends Model
                             $q->where('the_rest', 0);
                         })
                         ->when($input['bor_none'] == 'payment', function ($q) use ($input) {
-                            $detail = PaymentHistory::whereDate('created_at', '=', date('Y-m-d'))->pluck('order_id')
-                                ->toArray();
+                            if (isset($input['start_date']) && isset($input['end_date'])) {
+                                $detail = PaymentHistory::whereBetween('payment_date', [
+                                    Functions::yearMonthDay($input['start_date']),
+                                    Functions::yearMonthDay($input['end_date']),
+                                ])->pluck('order_id')->toArray();
+                            } else {
+                                $detail = PaymentHistory::whereDate('payment_date', '=', date('Y-m-d'))
+                                    ->pluck('order_id')->toArray();
+                            }
                             $q->whereIn('id', $detail);
                         });
                 })
