@@ -25,7 +25,7 @@
                             <a title="Trừ liệu trình" class="btn edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                         @endif
                     </td>
-                    <td class="text-center">{{ $order->updated_at }}</td>
+                    <td class="text-center">{{ $order->created_at }}</td>
                     <td class="text-center">
                         <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">
                                 @foreach($order->orderDetails as $orderDetail)
