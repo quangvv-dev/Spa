@@ -68,8 +68,8 @@
                         <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
                                     class="fas fa-edit"></i></a>
                         <a id="btn_del_account" rel="tooltip"
-                                                                        data-placement="bottom"
-                                                                        data-original-title="Xóa" class="ml5">
+                           data-placement="bottom"
+                           data-original-title="Xóa" class="ml5">
                             <i
                                     class="gf-icon-hover icon-remove mr5"></i>
                         </a>
@@ -112,7 +112,9 @@
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">0</h1>
                     <p>Tương tác</p></div>
-                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}} VNĐ</h1>
+                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:30px"
+                                                               class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
+                        VNĐ</h1>
                     <p>Giá trị</p></div>
             </div>
             <div style="height:5px" class="color-picker-bg-41"></div>
@@ -209,13 +211,15 @@
                                 <p class="bold word-wrap"> &nbsp;{{ $customer->orders->count() }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Tổng doanh thu:</p>
-                                <p class="bold word-wrap"> &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
+                                <p class="bold word-wrap">
+                                    &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Tổng số tương tác:</p>
                                 <p class="bold word-wrap">&nbsp;0</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Giá trị:</p>
-                                <p class="bold word-wrap"> &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
+                                <p class="bold word-wrap">
+                                    &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>
                         </div>
                     </div>
@@ -250,32 +254,38 @@
                                                         </div>
                                                     </div>
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                                        <div class="col-md-12" >
-                                                            {!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}
-                                                        </div>
-                                                        <br>
+                                                    <div class="col-md-12">
+                                                        {!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}
+                                                    </div>
+                                                    <br>
                                                     <div class="col-xs-12 col-md-12">
                                                         <div class="form-group required">
                                                             <div class="fileupload fileupload-new"
                                                                  data-provides="fileupload">
-                                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 150px">
+                                                                <div class="fileupload-preview fileupload-exists thumbnail"
+                                                                     style="max-width: 150px">
 
                                                                 </div>
                                                                 <div>
-                                                                    <button type="button" class="btn btn-default btn-file">
-                                                                        <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
-                                                                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
-                                                                        <input type="file" name="image_contact" accept="image/*" class="btn-default upload"/>
+                                                                    <button type="button"
+                                                                            class="btn btn-default btn-file">
+                                                                        <span class="fileupload-new"><i
+                                                                                    class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                                                        <span class="fileupload-exists"><i
+                                                                                    class="fa fa-undo"></i> Thay đổi</span>
+                                                                        <input type="file" name="image_contact"
+                                                                               accept="image/*"
+                                                                               class="btn-default upload"/>
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        <div class="col-md-12">
-                                                            <button style="float: right" type="submit"
-                                                                    class="btn btn-success">Gửi
-                                                            </button>
-                                                        </div>
+                                                    <div class="col-md-12">
+                                                        <button style="float: right" type="submit"
+                                                                class="btn btn-success">Gửi
+                                                        </button>
+                                                    </div>
                                                     {{ Form::close() }}
 
                                                     <div id="registration-form">
@@ -329,10 +339,13 @@
         _gaq.push(['_setDomainName', 'jqueryscript.net']);
         _gaq.push(['_trackPageview']);
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
         })();
 
         $(document).on('click', '#edit-history-order', function (e) {
@@ -348,11 +361,42 @@
                     html += '<tr>' + '<td class="text-center">' + index + '</td>' +
                         '<td class="text-center">' + item.created_at + '</td>' +
                         '<td class="text-center">' + item.user.full_name + '</td>' +
-                        '<td class="text-center">' + (item.description ? item.description: '') + '</td>' + '</tr>';
+                        '<td class="text-center">' + (item.description ? item.description : '') + '</td>' +
+                        '<td class="text-center"><a class="sum_history_order" href="javascript:void(0)" data-id="' + item.id + '"data-order="' + item.order_id + '"> <i class="fas fa-trash-alt"></i></a></td>' + '</tr>';
                 });
                 $('.data-history-update-order').append(html);
                 $('#largeModal').modal("show");
             });
+            $('body').delegate('.sum_history_order', 'click', function () {
+                const order_id = $(this).data('order');
+                const id = $(this).data('id');
+                // swal({
+                //     title: 'Bạn có muốn xóa ?',
+                //     text: "Lịch sử liệu trình sẽ bị xóa và cộng lại số buổi !",
+                //     showCancelButton: true,
+                //     cancelButtonClass: 'btn-secondary waves-effect',
+                //     confirmButtonClass: 'btn-danger waves-effect waves-light',
+                //     confirmButtonText: 'OK'
+                // }, function (order_id,id) {
+                    $.ajax({
+                        type: 'PUT',
+                        url: "{{ Url('ajax/orders_sum/') }}" + "/" + order_id,
+                        data: {
+                            history_id: id
+                        },
+                        success: function (res) {
+                            if (res == 'Success'){
+                                alert("Cộng buổi liệu trình thành công");
+                                // window.location.reload()
+                            }
+                        else if (res == "Failed")
+                                alert("Số liệu trình đã hết");
+                            window.location.reload();
+                        }
+                    })
+                // })
+            });
+
         });
 
         $('.edit-order').click(function () {
@@ -385,7 +429,7 @@
             $('.messages').richText();
         });
 
-        $(document).on('click', '.btn-edit-comment',function (e) {
+        $(document).on('click', '.btn-edit-comment', function (e) {
             const target = $(e.target).parent().parent().parent().parent();
             const group_comment_id = $(this).data('id');
 
@@ -396,8 +440,8 @@
 
                 let html = `
             {!! Form::open(array('method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                <div class="col-md-12">
-                    <textarea name="messages" class="form-control message" rows="3" data-id="`+data.id+`">`+data.messages+`</textarea>
+                    <div class="col-md-12">
+                        <textarea name="messages" class="form-control message" rows="3" data-id="` + data.id + `">` + data.messages + `</textarea>
                     </div>
                     <div class="col-xs-12 col-md-12 file-upload">
                         <div class="form-group required">

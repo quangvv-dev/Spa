@@ -17,6 +17,7 @@
                             <th class="text-white text-center">Ngày thực hiện</th>
                             <th class="text-white text-center">Người thực hiện</th>
                             <th class="text-white text-center">Mô tả</th>
+                            <th class="text-white text-center">thao tác</th>
                         </tr>
                         </thead>
                         <tbody style="background: white;" class="data-history-update-order">

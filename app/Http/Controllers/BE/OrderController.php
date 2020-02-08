@@ -269,6 +269,39 @@ class OrderController extends Controller
         return "Success";
     }
 
+    /**
+     * Sum process order /Cộng buổi liệu trình
+     *
+     * @param Request $request
+     * @param         $id
+     *
+     * @return string
+     */
+    public function sumCountDay(Request $request, $id)
+    {
+        $order = $this->orderService->find($id);
+
+        if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day == 0) {
+            return "Failed";
+        }
+
+        $order->update([
+            'count_day' => $order->count_day + 1,
+        ]);
+
+         HistoryUpdateOrder::where('id',$request->history_id)->delete();
+
+        return "Success";
+    }
+
+    /**
+     * Get order by id
+     *
+     * @param Request $request
+     * @param         $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getOrderById(Request $request, $id)
     {
         $order = Order::with('historyUpdateOrders.user', 'customer', 'orderDetails.service')->find($id);
