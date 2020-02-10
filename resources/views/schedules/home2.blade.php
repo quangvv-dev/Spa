@@ -57,9 +57,6 @@
     </div>
 @endsection
 @section('_script')
-    {{--    <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>--}}
-    <script src='{{asset('assets/plugins/fullcalendar/moment.min.js')}}'></script>
-    <script src='{{asset('assets/plugins/fullcalendar/fullcalendar.min.js')}}'></script>
     <script>
         $(document).ready(function () {
             $('.page-title').hide();
@@ -125,65 +122,6 @@
                 location.replace(url)
             });
 
-            $('#calendar1').fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
-                },
-                defaultDate: '{{$now}}',
-                navLinks: true, // can click day/week names to navigate views
-                selectable: true,
-                selectHelper: true,
-                select: function (start, end) {
-                    // var title = prompt('Tạo lịch đi nào:');
-                    // var eventData;
-                    // if (title) {
-                    //     eventData = {
-                    //         title: title,
-                    //         start: start,
-                    //         end: end
-                    //     };
-                    //     $('#calendar1').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    // }
-                    // $('#calendar1').fullCalendar('unselect');
-                },
-                editable: true,
-                eventLimit: true, // allow "more" link when too many events
-                events: [
-                        @foreach($docs as $item)
-                    {
-                        id: '{{$item->user_id}}',
-                        title: '{{'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note}}',
-                        description: '{{$item->note}}',
-                        @switch($item->status)
-                                @case(1)
-                        color: '#f39b4f',
-                        @break
-                                @case(2)
-                        color: '#7384db',
-                        @break
-                                @case(3)
-                        color: '#4cb354',
-                        @break
-                                @case(4)
-                        color: '#dccf34',
-                        @break
-                                @case(5)
-                        color: '#d03636',
-                        @break
-                                @endswitch
-                                {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
-                        start: '{{$item->date.'T'.$item->time_from.':00'}}',
-                        end: '{{$item->date.'T'.$item->time_to.':00'}}'
-                    },
-                    @endforeach
-                ],
-                eventClick: function (info) {
-                    let id = info.id;
-                    $('#modal_' + id).modal('show');
-                }
-            });
             $("body").delegate(".fc-content", "click", function () {
                 // alert('test');
             });
@@ -194,6 +132,5 @@
             });
         });
     </script>
-    {{--    <script src='{{asset('assets/js/fullcalendar.js')}}'></script>--}}
 
 @endsection

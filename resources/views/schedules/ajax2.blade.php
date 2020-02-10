@@ -11,6 +11,7 @@
                 <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>
                 <script src='{{asset('assets/plugins/fullcalendar/moment.min.js')}}'></script>
                 <script src='{{asset('assets/plugins/fullcalendar/fullcalendar.min.js')}}'></script>
+                <script src='{{asset('assets/plugins/fullcalendar/vi.js')}}'></script>
                 <script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
                 <script>
                     $('document').ready(function () {
@@ -21,6 +22,13 @@
                                 center: 'title',
                                 right: 'month,agendaWeek,agendaDay'
                             },
+                            buttonText: {
+                                today: 'Hôm nay',
+                                month: 'Tháng',
+                                week: 'Tuần',
+                                day: 'Ngày',
+                            },
+                            locale:'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
                             selectable: true,
