@@ -6,14 +6,43 @@
         select#order_type {
             background: #dddddd;
         }
-        .tableFixHead{ overflow-y: auto; height: 800px; }
-        .tableFixHead thead th { position: sticky; top: 0; }
-        .tableFixHead tbody .fixed td { position: sticky; bottom: 0; }
-        .tableFixHead tbody .fixed2 td { position: sticky; bottom: 46px; }
-        table  { border-collapse: collapse; width: 100%; }
-        th     { background: #0062cc; }
-        .tableFixHead tbody .fixed td { background: #cbdbf2;}
-        .tableFixHead tbody .fixed2 td { background: #cbdbf2;}
+
+        .tableFixHead {
+            overflow-y: auto;
+            height: 800px;
+        }
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+        }
+
+        .tableFixHead tbody .fixed td {
+            position: sticky;
+            bottom: 0;
+        }
+
+        .tableFixHead tbody .fixed2 td {
+            position: sticky;
+            bottom: 46px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            background: #0062cc;
+        }
+
+        .tableFixHead tbody .fixed td {
+            background: #cbdbf2;
+        }
+
+        .tableFixHead tbody .fixed2 td {
+            background: #cbdbf2;
+        }
     </style>
 @endsection
 @section('content')
@@ -120,19 +149,30 @@
         $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
+            const class_name = target.attr('class');
             const group = $('.group').val();
             const telesales = $('.telesales').val();
             const marketing = $('.marketing').val();
             const customer = $('.customer').val();
             const service = $('.service').val();
             const payment_type = $('.payment-type').val();
-            const data_time = $(target).find('.choose_time').data('time');
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
             const order_type = $('#order-type').val();
-            const bor_none = $(target).find('.bor-none').data('filter');
-            console.log(bor_none);
             const phone = $('.phone').val();
+
+            if (class_name === 'display pl5')
+                var data_time = $(target).find('.choose_time').data('time');
+            else {
+                var data_time = $('#choose_time').val();
+            }
+            if (class_name === 'btn-group ml5') {
+                var bor_none = $(target).find('.bor-none').data('filter');
+            } else {
+                var bor_none = $('#bor-none').val();
+
+            }
+            console.log(bor_none,data_time);
             $('#group').val(group);
             $('#phone').val(phone);
             $('#telesales').val(telesales);
@@ -140,12 +180,17 @@
             $('#customer').val(customer);
             $('#service').val(service);
             $('#payment-type').val(payment_type);
-            $('#choose-time').val(data_time);
             $('#filter-start-date').val(start_date);
             $('#filter-end-date').val(end_date);
-            $('#bor-none').val(bor_none);
+            if (typeof (data_time) != "undefined") {
+                $('#choose-time').val(data_time);
+            }
+            if (typeof (bor_none) != "undefined") {
+                $('#bor-none').val(bor_none);
+            }
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
+
             searchAjax({
                 group: group,
                 telesales: telesales,
@@ -160,7 +205,8 @@
                 order_type: order_type,
                 phone: phone,
             });
-        });
+        })
+        ;
 
         $(document).on('change', '#order_type', function () {
             const order_type = $('#order_type').val();
@@ -209,22 +255,22 @@
 
                 html1 += `<div class="row">
                     <div class="col-md-6">
-                        <p>Tên KH: `+ data.order.customer.full_name +`</p>
-                        <p>SDT: `+ data.order.customer.phone +`</p>
+                        <p>Tên KH: ` + data.order.customer.full_name + `</p>
+                        <p>SDT: ` + data.order.customer.phone + `</p>
                     </div>
                     <div class="col-md-6">
-                        <p>Người thực hiện đơn hàng: `+ (data.order.spa_therapisst ? data.order.spa_therapisst.full_name: '') +`</p>
-                        <p>Người phụ trách: `+ (data.order.customer.telesale ? data.order.customer.telesale.full_name: '')+`</p>
+                        <p>Người thực hiện đơn hàng: ` + (data.order.spa_therapisst ? data.order.spa_therapisst.full_name : '') + `</p>
+                        <p>Người phụ trách: ` + (data.order.customer.telesale ? data.order.customer.telesale.full_name : '') + `</p>
                     </div>
                 </div>`;
 
                 data.order_details.forEach(function (item) {
-                    html += '<tr>'+
-                    '<td class="tc">'+ item.service.name +'</td>'+
-                        '<td class="tc">'+ item.quantity+ '</td>'+
-                        '<td class="tc">'+ item.total_price+ '</td>'+
-                        '<td class="tc">'+ item.number_discount+ '</td>'+
-                        '<td class="tc">'+ item.total_price+ '</td>'+
+                    html += '<tr>' +
+                        '<td class="tc">' + item.service.name + '</td>' +
+                        '<td class="tc">' + item.quantity + '</td>' +
+                        '<td class="tc">' + item.total_price + '</td>' +
+                        '<td class="tc">' + item.number_discount + '</td>' +
+                        '<td class="tc">' + item.total_price + '</td>' +
                         '</tr>';
                 });
 
@@ -234,7 +280,7 @@
                     <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Sửa đổi</a>
                     </button>
                 `);
-                $(".link-order").attr("href", "orders/" + data.order.id+ "/edit");
+                $(".link-order").attr("href", "orders/" + data.order.id + "/edit");
                 $('#orderDetailModal').modal("show");
             });
         });
