@@ -9,9 +9,6 @@
         .table-vcenter td, .table-vcenter th {
             border-left: 1px solid #e7effc;
         }
-    </style>
-    <!-- anheasy -->
-    <style>
         .table-ajax table {
             min-width: auto !important;
             width: auto !important;
@@ -42,12 +39,18 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header search-box">
-                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
+                <input class="form-control col-md-3 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
                        type="text" id="search">
-                <div class="col-md-2 col-xs-12">
-                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}
+                <div class="col-md-3 col-xs-12">
+{{--                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}--}}
+                    <select name="group" class="form-control group">
+                        <option value="">Chọn nhóm DV</option>
+                        @foreach($categories as $item)
+                            <option value="{{$item->id}}">{{ $item->name}}({{ $item->customers->count() }})</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="col-md-2 col-xs-12">
+                <div class="col-md-3 col-xs-12">
                     <select name="telesales_id" id="telesales_id" class="form-control telesales">
                         <option value="">Chọn nhân viên</option>
                         @foreach($telesales as $k => $l)
@@ -60,10 +63,10 @@
                     </select>
                 </div>
                 <div class="col relative">
-                    <a title="Upload Data" style="position: absolute;right: 26%" class="btn" href="#"
+                    <a title="Upload Data" style="position: absolute;right: 50%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
-                    <a title="Download Data" style="position: absolute;right: 21%" class="btn"
+                    <a title="Download Data" style="position: absolute;right: 42%" class="btn"
                        href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
                     <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
