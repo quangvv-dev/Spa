@@ -95,25 +95,15 @@ class User extends Authenticatable
 
     public function getRoleTextAttribute()
     {
-        if ($this->role == UserConstant::ADMIN) {
-            return 'Admin';
-        }
+        $map = [
+            UserConstant::ADMIN => 'Admin',
+            UserConstant::MARKETING => 'Marketing',
+            UserConstant::TELESALES => 'Telesales',
+            UserConstant::WAITER => 'Lễ tân',
+            UserConstant::TECHNICIANS => 'Kỹ thuật viên',
+        ];
 
-        if ($this->role == UserConstant::MARKETING) {
-            return 'Marketing';
-        }
-
-        if ($this->role == UserConstant::TELESALES) {
-            return 'Telesales';
-        }
-
-        if ($this->role == UserConstant::WAITER) {
-            return 'Lễ tân';
-        }
-
-        if ($this->role == UserConstant::TECHNICIANS) {
-            return 'Kỹ thuật viên';
-        }
+        return $map[$this->role] ?? null;
     }
 
 }
