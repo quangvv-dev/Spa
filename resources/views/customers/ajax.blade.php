@@ -67,7 +67,7 @@
         @foreach(@$statuses as $k => $item)
             <button class="status btn white account_relation position" data-name="{{$item->name}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                        class="not-number-account white">{{ $item->customers->count() }}</span></button>
+                        class="not-number-account white">{{ $item->customers_count }}</span></button>
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
