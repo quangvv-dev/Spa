@@ -26,7 +26,7 @@
                     <td class="text-center">{{ $rank++ }}</td>
                     <td class="text-center">{{ isset($order->order) ? @date("d-m-Y", strtotime($order->order->created_at)) : '' }}</td>
                     <td class="text-center">{{ isset($order->payment_date) ? date("d-m-Y", strtotime($order->payment_date)) : '' }}</td>
-                    <td class="text-center">{{isset($order->order) ? $order->order->code:' ' }}</td>
+                    <td class="text-center"><a href="{{isset($order->order)?route('order.show',$order->order_id):'#'}}">{{isset($order->order) ? $order->order->code:' ' }}</a></td>
                     <td class="text-center">{{isset($order->order) && isset($order->order->customer) ? @$order->order->customer->full_name :''}}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer) ? @$order->order->customer->phone :''}}</td>
                     <td class="text-center">{{ @number_format($order->price) }}</td>
