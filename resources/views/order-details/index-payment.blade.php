@@ -51,16 +51,23 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col">
-                    <a title="Upload Data" style="position: absolute;right: 14%" class="btn" href="#"
-                       data-toggle="modal" data-target="#myModal">
-                        <i class="fas fa-upload"></i></a>
-                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i
-                                class="fa fa-plus-circle"></i>Thêm mới</a></div>
+{{--                    <a title="Upload Data" style="position: absolute;right: 14%" class="btn" href="#"--}}
+{{--                       data-toggle="modal" data-target="#myModal">--}}
+{{--                        <i class="fas fa-upload"></i></a>--}}
+{{--                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i--}}
+{{--                                class="fa fa-plus-circle"></i>Thêm mới</a>--}}
+                </div>
             </div>
             <div class="card-header col-md-12">
                 <div class="col-md-3">
-                    @include('order-details.search')
+{{--                    @include('order-details.search')--}}
                 </div>
+               {{-- <div class="col-md-3">
+                    <div class="btn-group ml5">
+                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Tất cả đơn')) !!}
+                    </div>
+                </div>--}}
+
                 <ul class="col-md-9 no-padd mt5 tr">
                     <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
                     <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
@@ -70,7 +77,7 @@
                             này</a>
                     </li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                    <li class="display position"><a class="other_time  border b-gray"
+                    <li class="display position"><a class="other_time choose_time border b-gray"
                         >Khác</a>
                         <div class="add-drop add-d-right other_time_panel"
                              style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>
@@ -90,32 +97,15 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-header col-md-12">
-                <div class="col-md-12">
-                    <div class="btn-group ml5" id="more_filters">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-expanded="false"><span
-                                    class="filter_name">Lọc bổ sung</span> <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="tl filter_advanced bor-none" data-filter="unpaid">Chưa thanh toán</a></li>
-                            <li><a class="tl filter_paid bor-none" data-filter="paid">Đã thanh toán</a></li>
-                        </ul>
-                    </div>
-                    <div class="btn-group ml5">
-                        <button class="btn btn-default order_status" data-status="">Đã hủy</button>
-                    </div>
-{{--                    <div class="btn-group ml5">--}}
-{{--                        <button class="btn btn-default bor-none" data-filter="payment" id="payment_tab">Đã thu trong--}}
-{{--                            kỳ--}}
-{{--                        </button>--}}
-{{--                    </div>--}}
-                    <div class="btn-group ml5">
-                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Tất cả đơn')) !!}
-                    </div>
-                </div>
-            </div>
+            {{--            <div class="card-header col-md-12">--}}
+            {{--                <div class="col-md-12">--}}
+            {{--                    <div class="btn-group ml5">--}}
+            {{--                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Tất cả đơn')) !!}--}}
+            {{--                    </div>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
             <div id="registration-form">
-                @include('order-details.ajax')
+                @include('order-details.ajax-payment')
             </div>
         </div>
     </div>
@@ -132,13 +122,13 @@
     <input type="hidden" id="order-status">
     <input type="hidden" id="order-type">
     <input type="hidden" id="phone">
-    @include('order-details.modal-upload-excel')
+    {{--    @include('order-details.modal-upload-excel')--}}
 @endsection
 @section('_script')
     <script type="text/javascript">
         function searchAjax(data) {
             $.ajax({
-                url: "{{ Url('list-orders/') }}",
+                url: "{{ Url('orders-payment/') }}",
                 method: "get",
                 data: data
             }).done(function (data) {
@@ -146,7 +136,7 @@
             });
         }
 
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
             const class_name = target.attr('class');
@@ -172,7 +162,7 @@
                 var bor_none = $('#bor-none').val();
 
             }
-            console.log(bor_none,data_time);
+            console.log(bor_none, data_time);
             $('#group').val(group);
             $('#phone').val(phone);
             $('#telesales').val(telesales);
@@ -236,52 +226,6 @@
                 bor_none: bor_none,
                 order_type: order_type,
                 phone: phone,
-            });
-        });
-
-        $(document).on('click', '.order-detail-modal', function (e) {
-            e.preventDefault();
-            $('.list1').empty();
-            $('.customer-info').empty();
-            $('.task_footer_box').empty();
-            const id = $(this).data('order-id');
-
-            $.ajax({
-                url: "{{ Url('ajax/order-details/') }}" + '/' + id,
-                method: "get",
-            }).done(function (data) {
-                let html = '';
-                let html1 = '';
-
-                html1 += `<div class="row">
-                    <div class="col-md-6">
-                        <p>Tên KH: ` + data.order.customer.full_name + `</p>
-                        <p>SDT: ` + data.order.customer.phone + `</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p>Người thực hiện đơn hàng: ` + (data.order.spa_therapisst ? data.order.spa_therapisst.full_name : '') + `</p>
-                        <p>Người phụ trách: ` + (data.order.customer.telesale ? data.order.customer.telesale.full_name : '') + `</p>
-                    </div>
-                </div>`;
-
-                data.order_details.forEach(function (item) {
-                    html += '<tr>' +
-                        '<td class="tc">' + item.service.name + '</td>' +
-                        '<td class="tc">' + item.quantity + '</td>' +
-                        '<td class="tc">' + item.total_price + '</td>' +
-                        '<td class="tc">' + item.number_discount + '</td>' +
-                        '<td class="tc">' + item.total_price + '</td>' +
-                        '</tr>';
-                });
-
-                $('.customer-info').append(html1);
-                $('.list1').append(html);
-                $('.task_footer_box').append(`
-                    <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Sửa đổi</a>
-                    </button>
-                `);
-                $(".link-order").attr("href", "orders/" + data.order.id + "/edit");
-                $('#orderDetailModal').modal("show");
             });
         });
 

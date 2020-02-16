@@ -51,3 +51,9 @@ function ApiResult($code = null, $msg = null, $data = null, $error = null, $debu
     $response = ['code' => $code, 'msg' => $msg, 'data' => $data, 'error' => $error, 'debug' => $debug];
     return response()->json($response, $code);
 }
+
+function getUser($id)
+{
+    $data = \App\User::select('id', 'full_name')->find($id);
+    return isset($data) && $data ? $data : [];
+}

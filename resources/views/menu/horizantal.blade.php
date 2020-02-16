@@ -54,7 +54,7 @@
                             <a href="{!! route('order.list') !!}">Danh sách đơn hàng</a>
                         </li>
                         <li>
-                            <a href="{!! route('order.list') !!}">Kho</a>
+                            <a href="{!! route('order.index_payment') !!}">Đã thu trong kỳ</a>
                         </li>
                     </ul>
                 </div>

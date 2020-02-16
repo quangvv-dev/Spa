@@ -16,7 +16,6 @@
             <th class="text-white text-center">Doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Còn lại</th>
-            <th class="text-white text-center">Thu trong kỳ</th>
             <th class="text-white text-center">Phương thức thanh toán</th>
             <th class="text-white text-center">Người lên đơn</th>
         </tr>
@@ -51,7 +50,7 @@
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
-                    <td class="text-center">{{ @$history_payment[$order->id]?@number_format($history_payment[$order->id]):0  }}</td>
+{{--                    <td class="text-center">{{ @$history_payment[$order->id]?@number_format($history_payment[$order->id]):0  }}</td>--}}
                     <td class="text-center">{{ $order->name_payment_type }}</td>
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
                 </tr>
@@ -89,7 +88,6 @@
                 <td class="text-center bold"> {{ @number_format($grossRevenue) }} </td>
                 <td class="text-center bold"> {{ @number_format($grossRevenue) }}</td>
                 <td class="text-center bold">{{ @number_format($theRest) }}</td>
-                <td class="text-center bold" >{{@number_format(array_sum(array_values($history_payment)))}}</td>
                 <td class="text-center"></td>
             </tr>
         @else

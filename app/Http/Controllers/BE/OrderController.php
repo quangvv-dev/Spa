@@ -137,39 +137,9 @@ class OrderController extends Controller
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
-        $history_payment = [];
         if ($check_null == StatusCode::NOT_NULL) {
             $orders = Order::searchAll($request->all());
-            $input = $request->all();
 
-            if (isset($input['bor_none']) && $input['bor_none'] == 'payment') {
-                if (isset($input['start_date']) && isset($input['end_date'])) {
-                    $detail = PaymentHistory::select(\DB::raw('SUM(price) as sum_price'), 'order_id')
-                        ->whereBetween('payment_date', [
-                            Functions::yearMonthDay($input['start_date']),
-                            Functions::yearMonthDay($input['end_date']),
-                        ])->groupBy('order_id')->pluck('sum_price', 'order_id')->toArray();
-                }
-
-                if (isset($input['data_time'])) {
-                    if ($input['data_time'] == 'THIS_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'THIS_MONTH' ||
-                        $input['data_time'] == 'LAST_MONTH') {
-                        $detail = PaymentHistory::select(\DB::raw('SUM(price) as sum_price'), 'order_id')
-                            ->whereBetween('updated_at', getTime(($input['data_time'])))
-                            ->groupBy('order_id')->pluck('sum_price', 'order_id')->toArray();
-                    }
-                }
-                if (empty($input['start_date']) && empty($input['end_date']) && $input['data_time']) {
-                    $detail = PaymentHistory::select(\DB::raw('SUM(price) as sum_price'), 'order_id')
-                        ->whereDate('payment_date', '=', date('Y-m-d'))
-                        ->groupBy('order_id')->pluck('sum_price', 'order_id')->toArray();
-                }
-                View::share([
-                    'history_payment' => $detail,
-                ]);
-            };
             View::share([
                 'allTotal'     => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
@@ -194,14 +164,12 @@ class OrderController extends Controller
                 'allTotal'     => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest'      => $orders->sum('the_rest'),
-                'history_payment' => $detail,
             ]);
             $orders = $orders->paginate(20);
             View::share([
                 'allTotalPage'     => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
                 'theRestPage'      => $orders->sum('the_rest'),
-                'history_payment' => $detail,
             ]);
         }
 
@@ -214,6 +182,60 @@ class OrderController extends Controller
         return view('order-details.index',
             compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank'));
     }
+
+    /**
+     * Đã thu trong kỳ
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
+    public function listOrderPayment(Request $request)
+    {
+        $title = 'ĐƠN THU TRONG KỲ';
+        $group = Category::pluck('name', 'id')->toArray();
+        $marketingUsers = User::pluck('full_name', 'id')->toArray();
+        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+        $check_null = $this->checkNull($request);
+        if ($check_null == StatusCode::NOT_NULL) {
+            $detail = PaymentHistory::search($request->all());
+            View::share([
+                'allTotal' => $detail->sum('price'),
+            ]);
+            $detail = $detail->orderBy('id', 'desc')->paginate(20);
+            View::share([
+                'allTotalPage' => $detail->sum('price'),
+            ]);
+
+        } else {
+            $request->merge([
+                'start_date' => Carbon::now()->startOfMonth()->format('Y-m-d'),
+                'end_date'   => Carbon::now()->endOfMonth()->format('Y-m-d'),
+            ]);
+            $detail = PaymentHistory::search($request->all());
+
+            View::share([
+                'allTotal' => $detail->sum('price'),
+            ]);
+            $detail = $detail->paginate(20);
+            View::share([
+                'allTotalPage' => $detail->sum('price'),
+            ]);
+        }
+
+        $rank = $detail->firstItem();
+        $orders = $detail;
+        if ($request->ajax()) {
+            return Response::json(view('order-details.ajax-payment',
+                compact('orders', 'title', 'rank'))->render());
+        }
+
+        return view('order-details.index-payment',
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank'));
+    }
+
 
     public function show($id)
     {
