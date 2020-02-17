@@ -13731,7 +13731,7 @@ body {
 
 body *::-webkit-scrollbar {
     width: 6px;
-    height: 6px;
+    height: 15px;
     transition: .3s background;
 }
 
