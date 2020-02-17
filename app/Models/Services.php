@@ -4,11 +4,13 @@ namespace App\Models;
 
 use App\Constants\UserConstant;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Services extends Model
 {
     protected $guarded = ['id'];
     protected $table = 'services';
+    use SoftDeletes;
 
     public function category()
     {
