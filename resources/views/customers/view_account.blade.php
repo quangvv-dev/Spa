@@ -254,7 +254,7 @@
                                                         </div>
                                                     </div>
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12 form-group required">
                                                         {!! Form::textArea('messages', null, array('class' => 'form-control', 'rows' => 3)) !!}
                                                     </div>
                                                     <br>

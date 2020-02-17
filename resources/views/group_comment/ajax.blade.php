@@ -20,22 +20,21 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-11 comment">
+                        <div class="col-md-11 comment" style="white-space: pre-line;">
                             {!! $item->messages !!}
-                            <br>
-                            <div class="col-xs-12 col-md-12">
+                        </div>
+                        @if (isset($item->image))
+                            <div class="col-md-11">
                                 <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                                     <div class="fileupload fileupload-exists"
                                          data-provides="fileupload">
                                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">
-                                            @if (isset($item->image))
-                                                <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}" alt="image"/></a>
-                                            @endif
+                                            <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}" alt="image"/></a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             @endforeach
