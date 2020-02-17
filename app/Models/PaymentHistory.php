@@ -22,7 +22,7 @@ class PaymentHistory extends Model
             $detail = PaymentHistory::whereBetween('payment_date', [
                 Functions::yearMonthDay($input['start_date']),
                 Functions::yearMonthDay($input['end_date']),
-            ])->with('order');
+            ])->with('order')->has('order');
         }
 
         if (isset($input['data_time'])) {
@@ -34,12 +34,12 @@ class PaymentHistory extends Model
                     ->with('order');
             } elseif ($input['data_time'] == 'YESTERDAY' || $input['data_time'] == 'TODAY') {
                 $detail = PaymentHistory::where('payment_date', getTime(($input['data_time'])))
-                    ->with('order');
+                    ->with('order')->has('order');
             }
         }
         if (empty($input['start_date']) && empty($input['end_date']) && empty($input['data_time'])) {
             $detail = PaymentHistory::whereDate('payment_date', '=', date('Y-m-d'))
-                ->with('order');
+                ->with('order')->has('order');
         }
 
         return $detail;
