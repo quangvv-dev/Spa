@@ -31,7 +31,7 @@ class PaymentHistory extends Model
                 $input['data_time'] == 'THIS_MONTH' ||
                 $input['data_time'] == 'LAST_MONTH') {
                 $detail = PaymentHistory::whereBetween('payment_date', getTime(($input['data_time'])))
-                    ->with('order');
+                    ->with('order')->has('order');
             } elseif ($input['data_time'] == 'YESTERDAY' || $input['data_time'] == 'TODAY') {
                 $detail = PaymentHistory::where('payment_date', getTime(($input['data_time'])))
                     ->with('order')->has('order');
