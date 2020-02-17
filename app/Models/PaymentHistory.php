@@ -18,7 +18,6 @@ class PaymentHistory extends Model
 
     public static function search($input)
     {
-//        dd($input);
         if (isset($input['start_date']) && isset($input['end_date'])) {
             $detail = PaymentHistory::whereBetween('payment_date', [
                 Functions::yearMonthDay($input['start_date']),

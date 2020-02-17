@@ -161,6 +161,9 @@
                             <tr>
                                 <td class="mb5">Đã thanh toán:</td>
                                 <td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>
+                            </tr><tr>
+                                <td class="mb5">Còn lại:</td>
+                                <td class="tr mb5" id="the_rest">{{ number_format($order->the_rest) }}</td>
                             </tr>
                             </tbody>
                         </table>

@@ -441,7 +441,6 @@ class OrderController extends Controller
                     } else {
                         $payment_date = Carbon::now()->format('Y-m-d');
                     }
-
                     if (!empty($service)) {
                         if (!empty($customer) && empty($checkOrder)) {
                             $order = Order::create([
@@ -449,9 +448,9 @@ class OrderController extends Controller
                                 'member_id'         => $customer->id,
                                 'all_total'         => $row['doanh_so'],
                                 'count_day'         => 0,
-                                'the_rest'          => $row['con_lai'],
+                                'the_rest'          => (int)$row['con_lai'],
                                 'description'       => $row['mo_ta'],
-                                'gross_revenue'     => $row['doanh_thu'],
+                                'gross_revenue'     => $row['da_thanh_toan'],
                                 'payment_type'      => $paymentType,
                                 'payment_date'      => $payment_date,
                                 'type'              => Order::TYPE_ORDER_DEFAULT,
@@ -476,6 +475,12 @@ class OrderController extends Controller
                                 'percent_discount' => $row['ck'],
                                 'number_discount'  => $row['ckd'],
                                 'price'            => $row['gia_ban'],
+                            ]);
+
+                            PaymentHistory::create([
+                                'order_id'     => $order->id,
+                                'price'        => $row['da_thanh_toan'],
+                                'payment_date' => Carbon::now()->format('Y-m-d'),
                             ]);
                         }
                     }
