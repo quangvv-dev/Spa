@@ -67,7 +67,7 @@
         @foreach(@$statuses as $k => $item)
             <button class="status btn white account_relation position" data-name="{{$item->name}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                        class="not-number-account white">{{ $item->customers_count }}</span></button>
+                        class="not-number-account white">{{ $item->customers->count() }}</span></button>
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
@@ -136,13 +136,13 @@
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Nhóm KH</th>
             <th class="text-white text-center" style="width: 200px">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+            <th class="text-white text-center">Ngày sinh&emsp;&emsp;&emsp;</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
             <th class="text-white text-center">Người tạo KH</th>
             <th class="text-white text-center">Nguồn KH</th>
             <th class="text-white text-center">Link FB</th>
             <th class="text-white text-center">Giới tính</th>
-            <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Mã KH</th>
             <th class="text-white text-center">Số đơn</th>
             <th class="text-white text-center">Tổng doanh thu</th>
@@ -174,6 +174,7 @@
                         @endforeach
                     </td>
                     <td class="text-center " data-id="{{$customer->id}}"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                    <td class="text-center customer-birthday" data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description-cus" data-id="{{$customer->id}}"
@@ -182,7 +183,6 @@
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ @$customer->facebook}}</td>
                     <td class="text-center">{{ $customer->gender_text  }}</td>
-                    <td class="text-center">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ $customer->account_code }}</td>
                     <td class="text-center">{{ count($customer->orders) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('all_total')) }}</td>
