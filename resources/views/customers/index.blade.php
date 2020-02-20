@@ -164,7 +164,7 @@
                                             <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
                                         </a>
                                     </div>` : "") +
-                            `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre;">` + item.messages + `
+                            `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + item.messages + `
                                     </div>
                                 </div>
                             </div>`;
@@ -203,7 +203,7 @@
                                             <i class="fas fa-trash-alt btn-delete-comment" data-id="` + data.group_comment.id + `"></i>
                                         </a>
                                     </div>` : "") +
-                        `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre;">` + data.group_comment.messages + `</div>
+                        `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + data.group_comment.messages + `</div>
                     </div>
                     </div>`;
 
