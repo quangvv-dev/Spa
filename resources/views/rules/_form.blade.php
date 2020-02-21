@@ -5,9 +5,9 @@
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 <style type="text/css">
     /* CSS for the traditional context menu */
@@ -54,6 +54,9 @@
     .show-menu, .menu-item:hover > .menu {
         display: block;
         opacity: 1;
+    }
+    .custom-control-label {
+        position: initial !important;
     }
     /**************************\
     Basic Modal Styles
@@ -258,6 +261,7 @@
     </div>
 @endsection
 @section('_script')
+    <script src="{{url('app.js')}}"></script>
     <script>
         $(document).ready(function () {
             $('form#fvalidate').validate({
