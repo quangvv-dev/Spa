@@ -29,7 +29,7 @@
                             <a href="#">SMS</a>
                         </li>
                         <li>
-                            <a href="#">Automation </a>
+                            <a href="{{url('rules')}}">Automation </a>
                         </li>
                         <li>
                             <a href="#">Optin Form</a>

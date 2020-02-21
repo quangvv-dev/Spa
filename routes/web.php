@@ -73,6 +73,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('group-comments/{id}', 'GroupCommentController@edit');
     });
 
+    Route::resource('rules', 'RuleController');//Automation
+
     Route::get('orders-payment', 'OrderController@listOrderPayment')->name('order.index_payment');//đã thu trong kỳ
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
