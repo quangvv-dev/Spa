@@ -174,7 +174,7 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $date = Carbon::createFromFormat('d-m-Y', $request->date)->format('Y-m-d');
+        $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
         $request->merge(['date' => $date]);
         $data = Schedule::find($request->id);
         $data->update($request->except('id'));

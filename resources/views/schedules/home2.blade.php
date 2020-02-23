@@ -126,7 +126,7 @@
                 // alert('test');
             });
             $('[data-toggle="datepicker"]').datepicker({
-                format: 'dd-mm-yyyy',
+                format: 'dd/mm/yyyy',
                 autoHide: true,
                 zIndex: 2048,
             });
