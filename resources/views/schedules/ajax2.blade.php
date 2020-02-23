@@ -14,6 +14,16 @@
                 <script src='{{asset('assets/plugins/fullcalendar/vi.js')}}'></script>
                 <script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
                 <script>
+                    function reformatDate(dateStr) {
+                        dArr = dateStr.split("-");  // ex input "2010-01-18"
+                        return dArr[0] + "/" + dArr[1] + "/" + dArr[2]; //ex out: "2010-01-18"
+                    }
+
+                    function reformatDMY(dateStr) {
+                        dArr = dateStr.split("/");  // ex input "2010-01-18"
+                        return dArr[2] + "/" + dArr[1] + "/" + dArr[0]; //ex out: "18/01/10"
+                    }
+
                     $('document').ready(function () {
                         $('.clockpicker').clockpicker();
                         $('#calendar1').fullCalendar({
@@ -28,7 +38,7 @@
                                 week: 'Tuần',
                                 day: 'Ngày',
                             },
-                            locale:'vi',
+                            locale: 'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
                             selectable: true,
@@ -67,10 +77,33 @@
                                 },
                                 @endforeach
                             ],
+                            //Su kien click
                             eventClick: function (info) {
                                 let id = info.id;
-                                // console.log(id);
                                 $('#modal_' + id).modal('show');
+                            },
+                            // editable: true,
+                            eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
+                                var date = reformatDate(new Date(event.start).toISOString().slice(0, 10));
+                                var id = event.id;
+                                // if (!confirm("Bạn có chắc chắn muốn thay đổi?")) {
+                                    let date2 = reformatDMY(date);
+                                    $('.date-' + id).val(date2).change();
+                                    $.ajax({
+                                        url: window.location.origin + '/ajax/' + 'schedules/' + id,
+                                        method: "PUT",
+                                        data: {
+                                            date: date,
+                                        }
+                                    }).done(function (data) {
+                                        if (data) {
+                                            revertFunc();
+                                        } else {
+                                            alert("Đã phát sinh lỗi xin thử lại sau !");
+                                        }
+                                    });
+                                // }
+
                             }
                         })
                         ;
@@ -102,7 +135,10 @@
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
-                                            {!! Form::text('date', $item->date_schedule, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}
+                                            {{--                                            {!! Form::text('date', $item->date_schedule, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}--}}
+                                            <input class="form-control {{'date-'.$item->id}}" id="update_date"
+                                                   data-toggle="datepicker" value="{{$item->date_schedule}}"
+                                                   name="date">
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}
@@ -131,9 +167,9 @@
                                         </div>
                                         <div class="col-md-12" style="padding-top: 10px">
                                             <button type="submit" class="btn btn-success">Lưu</button>
-{{--                                            <a class="btn btn-primary btn-flat"--}}
-{{--                                               href="{{url('orders')}}"><i class="fa fa-arrow-right"></i>Tới tạo đơn--}}
-{{--                                                hàng</a>--}}
+                                            <a class="btn btn-primary btn-flat"
+                                               href="{{url('orders')}}"><i class="fa fa-arrow-right"></i>Tới tạo đơn
+                                                hàng</a>
                                         </div>
                                     </div>
                                     {{ Form::close() }}

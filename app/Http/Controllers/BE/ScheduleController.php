@@ -32,11 +32,11 @@ class ScheduleController extends Controller
             ->prepend('Tất cả nhân viên', 0)->toArray();
         $color = [
 //            1 => 'Hẹn gọi lại',
-            2 => 'Đặt lịch',
-            3 => 'Đã đến',
-            4 => 'Trễ hẹn',
-            5 => 'Hủy',
-            6 => 'Tất cả',
+                2 => 'Đặt lịch',
+                3 => 'Đã đến',
+                4 => 'Trễ hẹn',
+                5 => 'Hủy',
+                6 => 'Tất cả',
         ];
         view()->share([
             'staff'         => $staff,
@@ -175,7 +175,7 @@ class ScheduleController extends Controller
     public function update(Request $request, $id)
     {
         $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
-        $request->merge(['date'=> $date]);
+        $request->merge(['date' => $date]);
         $data = Schedule::find($request->id);
         $data->update($request->except('id'));
         return redirect()->back();
@@ -196,7 +196,8 @@ class ScheduleController extends Controller
     public function homePage(Request $request)
     {
         $now = Carbon::now()->format('Y-m-d');
-        $docs = Schedule::with('customer')->orderBy('id', 'desc');
+        $docs = Schedule::with('customer');
+
         if ($request->search) {
             if ($request->search != 6) {
                 $docs = $docs->where('status', $request->search);
@@ -205,6 +206,9 @@ class ScheduleController extends Controller
         if ($request->date) {
             $docs = $docs->where('date', $request->date);
             $now = $request->date;
+        } else {
+            $docs = $docs->whereYear('date', Carbon::now()->format('Y'))
+                ->whereMonth('date', Carbon::now()->format('m'));
         }
         if ($request->user) {
             $docs = $docs->where('creator_id', $request->user);
@@ -218,11 +222,10 @@ class ScheduleController extends Controller
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
             $check = Schedule::orderBy('id', 'desc')->where('date', $now)
-                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to)->get();
-            $item->count = count($check);
+                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to);
+            $item->count = $check->count();
             return $item;
         });
-
         $title = 'Danh sách lịch hẹn';
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $user = $request->user ?: 0;
@@ -267,7 +270,6 @@ class ScheduleController extends Controller
     public function ajaxUpdate(Request $request, $id)
     {
         $input = $request->all();
-
         $schedule = Schedule::find($id);
         $schedule->update($input);
 
