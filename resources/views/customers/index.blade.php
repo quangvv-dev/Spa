@@ -281,10 +281,18 @@
 
             $(document).on('click', '.status', function () {
                 const status = $(this).data('name');
+                const data_time = $('#btn_choose_time').val();
+                const search = $('#search_value').val();
+                const group = $('#group').val();
+                const telesales = $('#telesales').val();
                 $('#status').val(status);
                 $('#birthday_tab').val('');
                 let data = {
-                    status: status
+                    status: status,
+                    data_time: data_time,
+                    group: group,
+                    telesales: telesales,
+                    search: search,
                 };
 
                 searchAjax(data);
@@ -316,11 +324,13 @@
                 const search = $('#search_value').val();
                 const group = $('#group').val();
                 const telesales = $('#telesales').val();
+                const status = $('#status').val();
                 let data = {
                     data_time: data_time,
                     group: group,
                     telesales: telesales,
                     search: search,
+                    status: status,
                 };
 
                 searchAjax(data);
@@ -347,12 +357,14 @@
                 $('#telesales').val(telesales);
                 $('#birthday_tab').val('');
                 const data_time = $('#btn_choose_time').val();
+                const status = $('#status').val();
 
                 let data = {
                     group: group,
                     telesales: telesales,
                     data_time: data_time,
-                    search: search
+                    search: search,
+                    status: status
                 };
                 searchAjax(data);
 
@@ -365,12 +377,14 @@
                 const data_time = $('#btn_choose_time').val();
                 const group = $('#group').val();
                 const telesales = $('#telesales').val();
+                const status = $('#status').val();
 
                 let data = {
                     search: search,
                     data_time: data_time,
                     group: group,
                     telesales: telesales,
+                    status: status
                 };
                 searchAjax(data);
 
