@@ -196,7 +196,8 @@ class OrderController extends Controller
         $title = 'ĐƠN THU TRONG KỲ';
         $group = Category::pluck('name', 'id')->toArray();
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
-        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
+            ->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {

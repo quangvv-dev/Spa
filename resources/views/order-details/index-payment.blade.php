@@ -60,7 +60,9 @@
             </div>
             <div class="card-header col-md-12">
                 <div class="col-md-3">
-{{--                    @include('order-details.search')--}}
+                    <div class="btn-group ml5">
+                        {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
+                    </div>
                 </div>
                {{-- <div class="col-md-3">
                     <div class="btn-group ml5">
@@ -198,7 +200,7 @@
         })
         ;
 
-        $(document).on('change', '#order_type', function () {
+        $(document).on('change', '#telesales', function () {
             const order_type = $('#order_type').val();
             const group = $('#group').val();
             const telesales = $('#telesales').val();
