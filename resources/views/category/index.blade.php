@@ -37,7 +37,6 @@
         $(document).on('keyup', '.name', function () {
             const name = $('.name').val();
             const type = $('.type').val();
-            console.log(11);
             const data = {
                 name: name,
                 type: type
