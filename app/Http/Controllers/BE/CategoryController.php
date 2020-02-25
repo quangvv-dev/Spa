@@ -49,17 +49,11 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $docs = Category::orderBy('id', 'desc');
-        if ($request->search) {
-            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
-                ->orwhere('code', 'like', '%' . $request->search . '%')
-                ->orwhere('parent_id', 'like', '%' . $request->search . '%');
-        }
-        $docs = $docs->paginate(10);
         $title = 'Quản lý danh mục';
-        if ($request->ajax()) {
-            return Response::json(view('category.ajax', compact('docs', 'title'))->render());
-        }
+        $docs = Category::search($request->all());
+
+        if ($request->ajax()) return Response::json(view('category.ajax', compact('docs', 'title'))->render());
+
         return view('category.index', compact('title', 'docs'));
     }
 
