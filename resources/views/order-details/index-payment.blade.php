@@ -43,6 +43,9 @@
         .tableFixHead tbody .fixed2 td {
             background: #cbdbf2;
         }
+        .form-control {
+            font-size: 14px;
+        }
     </style>
 @endsection
 @section('content')
@@ -112,7 +115,7 @@
         </div>
     </div>
     <input type="hidden" id="group">
-    <input type="hidden" id="telesales">
+    <input type="hidden" id="telesales-input">
     <input type="hidden" id="marketing">
     <input type="hidden" id="customer">
     <input type="hidden" id="service">
@@ -142,16 +145,9 @@
             e.preventDefault();
             let target = $(e.target).parent();
             const class_name = target.attr('class');
-            const group = $('.group').val();
-            const telesales = $('.telesales').val();
-            const marketing = $('.marketing').val();
-            const customer = $('.customer').val();
-            const service = $('.service').val();
-            const payment_type = $('.payment-type').val();
+            const telesales = $('#telesales-input').val();
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
-            const order_type = $('#order-type').val();
-            const phone = $('.phone').val();
 
             if (class_name === 'display pl5')
                 var data_time = $(target).find('.choose_time').data('time');
@@ -164,14 +160,7 @@
                 var bor_none = $('#bor-none').val();
 
             }
-            console.log(bor_none, data_time);
-            $('#group').val(group);
-            $('#phone').val(phone);
-            $('#telesales').val(telesales);
-            $('#marketing').val(marketing);
-            $('#customer').val(customer);
-            $('#service').val(service);
-            $('#payment-type').val(payment_type);
+
             $('#filter-start-date').val(start_date);
             $('#filter-end-date').val(end_date);
             if (typeof (data_time) != "undefined") {
@@ -184,50 +173,29 @@
             $("#boxSearch").css({'display': 'none'});
 
             searchAjax({
-                group: group,
                 telesales: telesales,
-                marketing: marketing,
-                customer: customer,
-                service: service,
-                payment_type: payment_type,
                 data_time: data_time,
                 start_date: start_date,
                 end_date: end_date,
                 bor_none: bor_none,
-                order_type: order_type,
-                phone: phone,
             });
         })
         ;
 
         $(document).on('change', '#telesales', function () {
-            const order_type = $('#order_type').val();
-            const group = $('#group').val();
             const telesales = $('#telesales').val();
-            const marketing = $('#marketing').val();
-            const customer = $('#customer').val();
-            const service = $('#service').val();
-            const payment_type = $('#payment-type').val();
             const data_time = $('#choose-time').val();
             const start_date = $('#filter-start-date').val();
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
-            const phone = $('#phone').val();
-            $('#order-type').val(order_type);
+            $('#telesales-input').val(telesales);
 
             searchAjax({
-                group: group,
                 telesales: telesales,
-                marketing: marketing,
-                customer: customer,
-                service: service,
-                payment_type: payment_type,
                 data_time: data_time,
                 start_date: start_date,
                 end_date: end_date,
-                bor_none: bor_none,
-                order_type: order_type,
-                phone: phone,
+                bor_none: bor_none
             });
         });
 
