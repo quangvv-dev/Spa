@@ -2,7 +2,6 @@
     <table class="table card-table table-vcenter text-nowrap table-primary" id="fixTable">
         <thead class="bg-primary text-white">
         <tr>
-{{--            <th class="text-white text-center">Thao tác</th>--}}
             <th class="text-white">STT</th>
             <th class="text-white text-center">Ngày đặt hàng</th>
             <th class="text-white text-center">Ngày thanh toán</th>
@@ -19,11 +18,6 @@
         @if (count($orders))
             @foreach($orders as $order)
                 <tr>
-{{--                    <td class="text-center">--}}
-{{--                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)--}}
-{{--                            <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
-{{--                        @endif--}}
-{{--                    </td>--}}
                     <td class="text-center">{{ $rank++ }}</td>
                     <td class="text-center">{{ isset($order->order) ? @date("d-m-Y", strtotime($order->order->created_at)) : '' }}</td>
                     <td class="text-center">{{ isset($order->payment_date) ? date("d-m-Y", strtotime($order->payment_date)) : '' }}</td>

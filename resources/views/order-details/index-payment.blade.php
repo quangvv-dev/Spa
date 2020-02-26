@@ -54,11 +54,6 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col">
-{{--                    <a title="Upload Data" style="position: absolute;right: 14%" class="btn" href="#"--}}
-{{--                       data-toggle="modal" data-target="#myModal">--}}
-{{--                        <i class="fas fa-upload"></i></a>--}}
-{{--                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i--}}
-{{--                                class="fa fa-plus-circle"></i>Thêm mới</a>--}}
                 </div>
             </div>
             <div class="card-header col-md-12">
@@ -67,11 +62,6 @@
                         {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                     </div>
                 </div>
-               {{-- <div class="col-md-3">
-                    <div class="btn-group ml5">
-                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Tất cả đơn')) !!}
-                    </div>
-                </div>--}}
 
                 <ul class="col-md-9 no-padd mt5 tr">
                     <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
@@ -102,32 +92,16 @@
                     </li>
                 </ul>
             </div>
-            {{--            <div class="card-header col-md-12">--}}
-            {{--                <div class="col-md-12">--}}
-            {{--                    <div class="btn-group ml5">--}}
-            {{--                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Tất cả đơn')) !!}--}}
-            {{--                    </div>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
             <div id="registration-form">
                 @include('order-details.ajax-payment')
             </div>
         </div>
     </div>
-    <input type="hidden" id="group">
     <input type="hidden" id="telesales-input">
-    <input type="hidden" id="marketing">
-    <input type="hidden" id="customer">
-    <input type="hidden" id="service">
-    <input type="hidden" id="payment-type">
     <input type="hidden" id="choose-time">
     <input type="hidden" id="filter-start-date">
     <input type="hidden" id="filter-end-date">
     <input type="hidden" id="bor-none">
-    <input type="hidden" id="order-status">
-    <input type="hidden" id="order-type">
-    <input type="hidden" id="phone">
-    {{--    @include('order-details.modal-upload-excel')--}}
 @endsection
 @section('_script')
     <script type="text/javascript">
@@ -221,47 +195,23 @@
             });
         });
 
-        $(document).on('click', '.order_status', function () {
-            $('.order_status').data('status', 0);
-            const order_cancel = $('.order_status').data('status');
-            $('#order-status').val(order_cancel);
-
-            searchAjax({
-                order_cancel: order_cancel
-            });
-        });
-
         $(document).on('click', 'a.page-link', function (e) {
             e.preventDefault();
             let pages = $(this).attr('href').split('page=')[1];
-            const order_type = $('#order_type').val();
-            const group = $('#group').val();
-            const telesales = $('#telesales').val();
-            const marketing = $('#marketing').val();
-            const customer = $('#customer').val();
-            const service = $('#service').val();
-            const payment_type = $('#payment-type').val();
+            const telesales = $('#telesales-input').val();
             const data_time = $('#choose-time').val();
             const start_date = $('#filter-start-date').val();
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
-            const phone = $('#phone').val();
             $.ajax({
                 url: '{{ url()->current() }}',
                 method: "get",
                 data: {
-                    group: group,
                     telesales: telesales,
-                    marketing: marketing,
-                    customer: customer,
-                    service: service,
-                    payment_type: payment_type,
                     data_time: data_time,
                     start_date: start_date,
                     end_date: end_date,
                     bor_none: bor_none,
-                    order_type: order_type,
-                    phone: phone,
                     page: pages,
                 },
             }).done(function (data) {
