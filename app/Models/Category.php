@@ -26,6 +26,23 @@ class Category extends Model
         return $this->belongsToMany(Customer::class, 'customer_groups', 'category_id', 'customer_id');
     }
 
+    public static function search($input)
+    {
+        $data = self::orderBy('id', 'desc');
+
+        if (isset($input)) {
+            $data = $data->when(isset($input['name']), function($query) use ($input){
+                $query->where('name', 'like', '%' .$input['name']. '%');
+            })
+            ->when(isset($input['type']) && $input['type'] != 0, function ($query) use ($input) {
+               $query->where('parent_id', $input['type']);
+            });
+        }
+
+        return $data->paginate(20);
+
+    }
+
     public static function getRevenue($input)
     {
         $data = self::with(['customers' => function ($query) use($input) {
