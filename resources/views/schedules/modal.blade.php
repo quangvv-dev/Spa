@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        {!! Form::select('status',array(2=>'Đặt lịch',3=>'Đã đến',4=>'Không đến',5=>'Hủy'), null, array('class' => 'form-control select2','required'=>true)) !!}
+                        {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đã đến/Mua',4 => 'Đã đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control select2','required'=>true)) !!}
                     </div>
                     <div class="col-md-12 ">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        {!! Form::select('status',array(2=>'Đặt lịch',3=>'Đã đến',4=>'Không đến',5=>'Hủy'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                        {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đã đến/Mua',4 => 'Đã đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                     </div>
                     <div class="col-md-12 ">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}

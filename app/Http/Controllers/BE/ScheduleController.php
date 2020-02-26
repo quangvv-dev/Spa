@@ -31,12 +31,12 @@ class ScheduleController extends Controller
         $staff2 = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')
             ->prepend('Tất cả nhân viên', 0)->toArray();
         $color = [
-//            1 => 'Hẹn gọi lại',
-                2 => 'Đặt lịch',
-                3 => 'Đã đến',
-                4 => 'Trễ hẹn',
-                5 => 'Hủy',
-                6 => 'Tất cả',
+            1 => 'Chưa qua',
+            2 => 'Đặt lịch',
+            3 => 'Đã đến/Mua',
+            4 => 'Đã đến/Chưa mua',
+            5 => 'Hủy',
+            6 => 'Tất cả',
         ];
         view()->share([
             'staff'         => $staff,

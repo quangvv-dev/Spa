@@ -18,22 +18,22 @@
                     <button class="status btn white account_relation position"
                             style="background: @switch($k)
                             @case(1)
-                            {{'#f39b4f'}}
+                            {{'#63cff9'}}
                             @break
                             @case(2)
-                            {{'#7384db'}}
-                            @break
-                            @case(3)
-                            {{'#4cb354'}}
-                            @break
-                            @case(4)
                             {{'#dccf34'}}
                             @break
-                            @case(5)
+                            @case(3)
                             {{'#d03636'}}
                             @break
+                            @case(4)
+                            {{'#4bcc4b'}}
+                            @break
+                            @case(5)
+                            {{'gray'}}
+                            @break
                             @case(6)
-                            {{'#63cff9'}}
+                            {{'#da70dc'}}
                             @break
                             @endswitch;margin-left: 3px">{{ $item }}
                         <input type="hidden" class="status-val" value="{{$k}}">

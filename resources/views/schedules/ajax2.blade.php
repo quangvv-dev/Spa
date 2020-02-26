@@ -54,21 +54,22 @@
                                     id: '{{$item->id}}',
                                     title: '{{'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note}}',
                                     description: '{{$item->note}}',
+                                    quang:'1231',
                                     @switch($item->status)
                                             @case(1)
                                     color: '#f39b4f',
                                     @break
                                             @case(2)
-                                    color: '#7384db',
-                                    @break
-                                            @case(3)
-                                    color: '#4cb354',
-                                    @break
-                                            @case(4)
                                     color: '#dccf34',
                                     @break
-                                            @case(5)
+                                            @case(3)
                                     color: '#d03636',
+                                    @break
+                                            @case(4)
+                                    color: '#4bcc4b',
+                                    @break
+                                            @case(5)
+                                    color: 'gray',
                                     @break
                                             @endswitch
                                             {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
@@ -79,6 +80,7 @@
                             ],
                             //Su kien click
                             eventClick: function (info) {
+                                console.log(info);
                                 let id = info.id;
                                 $('#modal_' + id).modal('show');
                             },
@@ -158,7 +160,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                                            {!! Form::select('status',array(2=>'Đặt lịch',3=>'Đã đến',4=>'Không đến',5=>'Hủy'), @$item->status, array('class' => 'form-control','id'=>'update_status')) !!}
+                                            {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đã đến/Mua',4 => 'Đã đến/Chưa mua',5 => 'Hủy'), @$item->status, array('class' => 'form-control','id'=>'update_status')) !!}
                                         </div>
                                         <div class="col-md-12 ">
                                             {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
