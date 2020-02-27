@@ -54,7 +54,6 @@
                                     id: '{{$item->id}}',
                                     title: '{{'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note}}',
                                     description: '{{$item->note}}',
-                                    quang:'1231',
                                     @switch($item->status)
                                             @case(1)
                                     color: '#f39b4f',
@@ -89,21 +88,21 @@
                                 var date = reformatDate(new Date(event.start).toISOString().slice(0, 10));
                                 var id = event.id;
                                 // if (!confirm("Bạn có chắc chắn muốn thay đổi?")) {
-                                    let date2 = reformatDMY(date);
-                                    $('.date-' + id).val(date2).change();
-                                    $.ajax({
-                                        url: window.location.origin + '/ajax/' + 'schedules/' + id,
-                                        method: "PUT",
-                                        data: {
-                                            date: date,
-                                        }
-                                    }).done(function (data) {
-                                        if (data) {
-                                            revertFunc();
-                                        } else {
-                                            alert("Đã phát sinh lỗi xin thử lại sau !");
-                                        }
-                                    });
+                                let date2 = reformatDMY(date);
+                                $('.date-' + id).val(date2).change();
+                                $.ajax({
+                                    url: window.location.origin + '/ajax/' + 'schedules/' + id,
+                                    method: "PUT",
+                                    data: {
+                                        date: date,
+                                    }
+                                }).done(function (data) {
+                                    if (data) {
+                                        revertFunc();
+                                    } else {
+                                        alert("Đã phát sinh lỗi xin thử lại sau !");
+                                    }
+                                });
                                 // }
 
                             }
@@ -158,9 +157,13 @@
                                             {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
                                             {!! Form::text('time_to', $item->time_to, array('class' => 'form-control','id'=>'update_time2')) !!}
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                                            {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đã đến/Mua',4 => 'Đã đến/Chưa mua',5 => 'Hủy'), @$item->status, array('class' => 'form-control','id'=>'update_status')) !!}
+                                            {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy'), @$item->status, array('class' => 'form-control','id'=>'update_status')) !!}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                                            {!! Form::select('category_id',$category, @$item->category_id, array('class' => 'form-control'))!!}
                                         </div>
                                         <div class="col-md-12 ">
                                             {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}

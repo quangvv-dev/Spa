@@ -28,9 +28,13 @@
                         {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
                         {!! Form::text('time_to', null, array('class' => 'form-control','required'=>true)) !!}
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đã đến/Mua',4 => 'Đã đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control select2','required'=>true)) !!}
+                        {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control select2','required'=>true)) !!}
+                    </div>
+                    <div class="col-md-6">
+                        {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                        {!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control'))!!}
                     </div>
                     <div class="col-md-12 ">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
@@ -79,9 +83,13 @@
                         {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
                         {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2','readonly'=>true)) !!}
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                         {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đã đến/Mua',4 => 'Đã đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                    </div>
+                    <div class="col-md-6">
+                        {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                        {!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control'))!!}
                     </div>
                     <div class="col-md-12 ">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}

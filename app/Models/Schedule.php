@@ -13,29 +13,29 @@ class Schedule extends Model
     protected $guarded = ['id'];
     const  SCHEDULE_STATUS = [
         [
-            'id' => 1,
+            'id'   => 1,
             'name' => 'Hẹn gọi lại',
         ],
         [
-            'id' => 2,
+            'id'   => 2,
             'name' => 'Đặt lịch',
         ],
         [
-            'id' => 3,
+            'id'   => 3,
             'name' => 'Đã đến',
         ],
         [
-            'id' => 4,
+            'id'   => 4,
             'name' => 'Không đến',
         ],
         [
-            'id' => 5,
+            'id'   => 5,
             'name' => 'Hủy',
         ],
         [
-            'id' => 6,
+            'id'   => 6,
             'name' => 'Tất cả',
-        ]
+        ],
     ];
 
     public function creator()
@@ -53,7 +53,8 @@ class Schedule extends Model
         return $this->belongsTo(Customer::class, 'user_id', 'id');
     }
 
-    public function getDateScheduleAttribute() {
+    public function getDateScheduleAttribute()
+    {
         return Carbon::parse($this->attributes['date'])->format('d/m/Y');
     }
 
@@ -102,9 +103,12 @@ class Schedule extends Model
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
             })
-            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
-            });
+                ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                    ]);
+                });
         }
 
         $data = $data->get();
@@ -130,11 +134,44 @@ class Schedule extends Model
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
             })
-            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
-            });
+                ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                    ]);
+                });
         }
 
         return $data->get();
+    }
+
+    public static function search($request)
+    {
+        $docs = self::with('customer');
+        if (!empty($request['search'])) {
+            if ($request['search'] != 6) {
+                $docs = $docs->where('status', $request['search']);
+            }
+        }
+        if (!empty($request['date'])) {
+            $docs = $docs->where('date', $request['date']);
+        } else {
+            $docs = $docs->whereYear('date', Carbon::now()->format('Y'))
+                ->whereMonth('date', Carbon::now()->format('m'));
+        }
+        if (!empty($request['user'])) {
+            $docs = $docs->where('creator_id', $request['user']);
+        }
+        if (!empty($request['category'])) {
+            $docs = $docs->where('category_id', $request['category']);
+        }
+        if (!empty($request['customer'])) {
+            $param = $request['customer'];
+            $docs->whereHas('customer', function ($q) use ($param) {
+                $q->where('phone', 'like', '%' . $param . '%');
+            });
+        }
+
+        return $docs;
     }
 }

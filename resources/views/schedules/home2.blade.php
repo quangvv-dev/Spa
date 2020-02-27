@@ -42,14 +42,17 @@
                 <div class="col-md-2">
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
-                <a class="btn btn-primary date"><i class="fas fa-search" style="font-size: 20px;color: #e0dede"></i></a>
                 <div class="col-md-2">
                     {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
                 </div>
                 <div class="col-md-2">
                     {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
                 </div>
+                <div class="col-md-2">
+                    {!! Form::select('category_id', $category,null, array( 'id'=>'category','class' => 'form-control','placeholder'=>'Nhóm DV')) !!}
+                </div>
             </div>
+            <input type="hidden" id="status_val">
             <div class="side-app">
                 @include('schedules.ajax2')
             </div>
@@ -61,70 +64,94 @@
         $(document).ready(function () {
             $('.page-title').hide();
             $('.breadcrumb').hide();
+
+            function searchAjax(data) {
+                $.ajax({
+                    url: "{{ Url('schedules/') }}",
+                    method: "get",
+                    data: data
+                }).done(function (data) {
+                    var b = [];
+                    $.each(data, function (index, value) {
+                        switch (value.status) {
+                            case 1:
+                                var col = '#f39b4f'
+                                break;
+                            case 2:
+                                var col = '#dccf34'
+                                break;
+                            case 3:
+                                var col = '#d03636'
+                                break;
+                            case 4:
+                                var col = '#4bcc4b'
+                                break;
+                            case 5:
+                                var col = '#gray'
+                                break;
+                            default:
+                            // code block
+                        }
+                        b.push({
+                            id: value.id,
+                            title: 'KH: ' + value.customer.full_name + ', SĐT: ' + value.customer.phone + ' Lưu ý: ' + value.note,
+                            description: value.note,
+                            start: value.date + 'T' + value.time_from + ':00',
+                            end: value.date + 'T' + value.time_to + ':00',
+                            color: col,
+                        });
+                    });
+                    $('#calendar1').fullCalendar('removeEvents');
+                    $('#calendar1').fullCalendar('addEventSource', b);
+                });
+            }
+
             $('body').delegate('.status', 'click', function () {
-                // $('.spin').show();
                 var val = $(this).find('.status-val').val();
-                if (val != 6) {
-                    var url = window.location.origin + '/schedules/?search=' + val;
-                    location.replace(url)
-                } else {
-                    var url = window.location.origin + '/schedules/';
-                    location.replace(url)
-                }
-                // $.ajax({
-                //     url: window.location.origin + '/' + 'schedules',
-                //     method: "get",
-                //     data: {
-                //         search: val,
-                //     }
-                // }).done(function (data) {
-                //     $('#calendar1').html(data);
-                //     $('.spin').hide();
-                // });
+                $('#status_val').val(val);
+                let category = $('#category').val();
+                let date = $('#search').val();
+                let user = $('#person_action').val();
+                let customer = $('#customer_plus').val();
+                searchAjax({search: val, category: category, date: date, user: user, customer: customer});
             });
             $(document).on('change', '#search', function () {
                 $('.spin').show();
                 var val = $(this).val();
-                if (val) {
-                    var url = window.location.origin + '/schedules/?date=' + val;
-                } else {
-                    var url = window.location.origin + '/schedules/';
-                }
-                location.replace(url)
-                // $.ajax({
-                //     url: window.location.origin + '/' + 'schedules',
-                //     method: "get",
-                //     data: {
-                //         date: val,
-                //     }
-                // }).done(function (data) {
-                //     $('#calendar1').html(data);
-                //     $('.spin').hide();
-                // });
+                let category = $('#category').val();
+                let search = $('#status_val').val();
+                let user = $('#person_action').val();
+                let customer = $('#customer_plus').val();
+                searchAjax({date: val, category: category, search: search, user: user, customer: customer});
+            });
+            $(document).on('change', '#category', function () {
+                $('.spin').show();
+                var val = $(this).val();
+                let search = $('#status_val').val();
+                let date = $('#search').val();
+                let user = $('#person_action').val();
+                let customer = $('#customer_plus').val();
+                searchAjax({category: val, date: date, search: search, user: user, customer: customer});
             });
             $(document).on('change', '#person_action', function () {
                 var val = $(this).val();
-                if (val != 0) {
-                    var url = window.location.origin + '/schedules/?user=' + val;
-                } else {
-                    var url = window.location.origin + '/schedules/';
-                }
-                location.replace(url)
-            });
+                let category = $('#category').val();
+                let search = $('#status_val').val();
+                let date = $('#search').val();
+                let customer = $('#customer_plus').val();
+                searchAjax({user: val, category: category, date: date, search: search, customer: customer});
 
+            });
             $(document).on('change', '#customer_plus', function () {
                 var val = $(this).val();
-                if (val != 0) {
-                    var url = window.location.origin + '/schedules/?customer=' + val;
-                } else {
-                    var url = window.location.origin + '/schedules/';
-                }
-                location.replace(url)
+                let category = $('#category').val();
+                let search = $('#status_val').val();
+                let date = $('#search').val();
+                let user = $('#person_action').val();
+                searchAjax({customer: val, category: category, user: user, date: date, search: search});
+
             });
 
-            $("body").delegate(".fc-content", "click", function () {
-                // alert('test');
-            });
             $('[data-toggle="datepicker"]').datepicker({
                 format: 'dd/mm/yyyy',
                 autoHide: true,

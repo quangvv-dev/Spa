@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Services\TaskService;
 use App\User;
@@ -25,24 +26,23 @@ class ScheduleController extends Controller
     public function __construct(TaskService $taskService)
     {
         $this->taskService = $taskService;
-
-        $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
-        $customer_plus = Customer::get()->pluck('full_name', 'id')->prepend('Tất cả khách hàng', 0)->toArray();
-        $staff2 = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')
-            ->prepend('Tất cả nhân viên', 0)->toArray();
+        $category = Category::pluck('name', 'id')->toArray();//nhóm KH
+        $user = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id');
+        $staff = $user->toArray();
+        $staff2 = $user->prepend('Tất cả nhân viên', 0)->toArray();
         $color = [
             1 => 'Chưa qua',
             2 => 'Đặt lịch',
-            3 => 'Đã đến/Mua',
-            4 => 'Đã đến/Chưa mua',
+            3 => 'Đến/mua',
+            4 => 'Đến/chưa mua',
             5 => 'Hủy',
             6 => 'Tất cả',
         ];
         view()->share([
-            'staff'         => $staff,
-            'customer_plus' => $customer_plus,
-            'staff2'        => $staff2,
-            'color'         => $color,
+            'staff'    => $staff,
+            'staff2'   => $staff2,
+            'color'    => $color,
+            'category' => $category,
         ]);
     }
 
@@ -196,29 +196,7 @@ class ScheduleController extends Controller
     public function homePage(Request $request)
     {
         $now = Carbon::now()->format('Y-m-d');
-        $docs = Schedule::with('customer');
-
-        if ($request->search) {
-            if ($request->search != 6) {
-                $docs = $docs->where('status', $request->search);
-            }
-        }
-        if ($request->date) {
-            $docs = $docs->where('date', $request->date);
-            $now = $request->date;
-        } else {
-            $docs = $docs->whereYear('date', Carbon::now()->format('Y'))
-                ->whereMonth('date', Carbon::now()->format('m'));
-        }
-        if ($request->user) {
-            $docs = $docs->where('creator_id', $request->user);
-        }
-        if ($request->customer) {
-            $param = $request->customer;
-            $docs->whereHas('customer', function ($q) use ($param) {
-                $q->where('phone', 'like', '%' . $param . '%');
-            });
-        }
+        $docs = Schedule::search($request->all());
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
             $check = Schedule::orderBy('id', 'desc')->where('date', $now)
@@ -227,12 +205,10 @@ class ScheduleController extends Controller
             return $item;
         });
         $title = 'Danh sách lịch hẹn';
-        $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $user = $request->user ?: 0;
         $customer = $request->customer ?: '';
         if ($request->ajax()) {
-            return Response::json(view('schedules.ajax2',
-                compact('docs', 'title', 'now', 'staff', 'user'))->render());
+            return $docs;
         }
         return view('schedules.home2', compact('title', 'docs', 'now', 'user', 'customer'));
     }
