@@ -182,6 +182,10 @@
                             </div>
                             <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
                         </div>
+                        <div class="col-md-2">
+                            {!! Form::label('type', 'Trạng thái đơn hàng') !!}
+                            {!! Form::select('type', [2 => 'Trong liệu trình', 3 => 'Đã bảo hành', 4 => 'Đang bảo lưu'], null, array('class' => 'form-control select2')) !!}
+                        </div>
                     </div>
                 </div>
 

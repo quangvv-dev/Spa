@@ -5,7 +5,7 @@
             <th class="text-white text-center">Trừ liệu trình</th>
             <th class="text-white text-center">Ngày tạo</th>
             <th class="text-white text-center">Tên SP</th>
-            <th class="text-white text-center">Loại đơn</th>
+            <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Người thực hiện</th>
             <th class="text-white text-center">Buổi còn lại</th>
             <th class="text-white text-center">Số tiền DH</th>

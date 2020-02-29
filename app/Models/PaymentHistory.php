@@ -21,8 +21,8 @@ class PaymentHistory extends Model
 
         if (isset($input['start_date']) && isset($input['end_date'])) {
             $detail = PaymentHistory::whereBetween('payment_date', [
-                Functions::yearMonthDay($input['start_date']),
-                Functions::yearMonthDay($input['end_date']),
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ])->with('order')->has('order');
         }
 
@@ -38,12 +38,12 @@ class PaymentHistory extends Model
                     ->with('order')->has('order');
             }
         }
-        if (empty($input['start_date']) && empty($input['end_date']) && empty($input['data_time'])) {
+        if (!isset($input['start_date']) && !isset($input['end_date']) && !isset($input['data_time'])) {
             $detail = PaymentHistory::whereDate('payment_date', '=', date('Y-m-d'))
                 ->with('order')->has('order');
         }
 
-        if (!empty($input['telesales'])) {
+        if (isset($input['telesales'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
                 $item->whereHas('customer', function ($q) use ($input) {
                     $q->where('telesales_id', $input['telesales']);
