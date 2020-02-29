@@ -13,6 +13,9 @@ class Order extends Model
     protected $guarded = ['id'];
     const TYPE_ORDER_DEFAULT = 0;
     const TYPE_ORDER_ADVANCE = 1;
+    const TYPE_ORDER_PROCESS = 2;
+    const TYPE_ORDER_GUARANTEE = 3; //guarantee
+    const TYPE_ORDER_RESERVE = 4; //Reserve
     use SoftDeletes;
 
     public function orderDetails()
@@ -218,13 +221,13 @@ class Order extends Model
 
     public function getNameTypeAttribute()
     {
-        if ($this->type === self::TYPE_ORDER_DEFAULT) {
-            return "Đơn hàng thường";
-        }
+        $map = [
+            self::TYPE_ORDER_PROCESS => 'Trong liệu trình',
+            self::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
+            self::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
+        ];
 
-        if ($this->type === self::TYPE_ORDER_ADVANCE) {
-            return "Liệu trình";
-        }
+        return $map[$this->type] ?? null;
     }
 
     public static function boot()

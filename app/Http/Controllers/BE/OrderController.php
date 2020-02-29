@@ -311,7 +311,7 @@ class OrderController extends Controller
     {
         $order = $this->orderService->find($id);
 
-        if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day == 0) {
+        if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day === 0) {
             return "Failed";
         }
 
