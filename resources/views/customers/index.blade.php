@@ -482,13 +482,10 @@
                     });
 
                     birthdayResult.focus();
-
-
                 });
             });
 
             function customerBirthday_handleChange(event){
-                console.log(event);
                 let parent = event.target.parentNode;
                 const birthday = event.target.value;
                 const id = event.target.id;
@@ -509,7 +506,6 @@
                 let target = $(e.target).parent();
                 let birthday = $(target).find('.birthday-result').val();
                 let id = $(this).data('id');
-                console.log(target);
 
                 $.ajax({
                     url: "ajax/customers/" + id,
@@ -880,7 +876,7 @@
                     html += '</select>';
                     $(target).find(".telesale-customer").append(html);
                 });
-            })
+            });
 
             $(document).on('change', '.telesales-result', function (e) {
                 let target = $(e.target).parent();

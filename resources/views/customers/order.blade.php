@@ -21,7 +21,7 @@
                     <td class="text-center">
                         <a class="btn" href="{{url('/orders/'.$order->id.'/edit')}}" title="Chỉnh sửa"><i
                                     class="fas fa-edit"></i></a>
-                        @if($order->type === \App\Models\Order::TYPE_ORDER_ADVANCE)
+                        @if($order->count_day > 0 )
                             <a title="Trừ liệu trình" class="btn edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                         @endif
                     </td>
@@ -33,7 +33,7 @@
                                 @endforeach
                             </a></b>
                     </td>
-                    <td class="text-center">{{ $order->name_type }}</td>
+                    <td class="text-center order-type" data-id="{{ $order->id }}">{{ $order->name_type }}</td>
                     <td class="text-center">{{ @$customer->marketing->full_name }}</td>
                     <td class="text-center">{{ $order->count_day }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>

@@ -364,7 +364,10 @@ class OrderController extends Controller
     public function getOrderById(Request $request, $id)
     {
         $order = Order::with('historyUpdateOrders.user', 'customer', 'orderDetails.service')->find($id);
-        return Response::json($order);
+
+        return Response::json([
+            'order' => $order,
+        ]);
     }
 
     public function find($id)
@@ -522,5 +525,22 @@ class OrderController extends Controller
         } else {
             return 0;
         }
+    }
+
+    public function updateType(Request $request, $id)
+    {
+        $order = $this->orderService->find($id);
+
+        $order->update([
+            'type' => $request->type,
+        ]);
+
+        $map = [
+            Order::TYPE_ORDER_PROCESS => 'Trong liệu trình',
+            Order::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
+            Order::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
+        ];
+
+        return $map[$order->type] ?? null;
     }
 }
