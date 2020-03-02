@@ -51,10 +51,9 @@
             color: #007bff !important;
             font-weight: 600 !important;
         }
-
-        /*.btn{*/
-        /*    background: #7235bb;*/
-        /*}*/
+        * {
+            font-size: 14px;
+        }
     </style>
 @endsection
 @section('content')
@@ -89,26 +88,6 @@
                 </div>
                 <div class="col-md-1 no-padd bor-l mg0 position hoverlastactive" rel="tooltip"
                      data-original-title="Click thay đổi liên hệ lần cuối" data-placement="bottom">
-                    {{--<div class="last_active tc" style="cursor:pointer"><h1 id="days_from_last_active"--}}
-                    {{--style="font-size:30px" class="bold mg0">--}}
-                    {{--1</h1>--}}
-                    {{--<p>Liên hệ lần cuối</p></div>--}}
-                    {{--<div class="add-drop add-d-left other_last_active"--}}
-                    {{--style="right: 125px; top: 60px; width: 286px; padding: 10px; z-index: 12; border: 1px solid rgb(208, 208, 208); display: none;">--}}
-                    {{--<s class="gf-icon-neotop"></s>--}}
-                    {{--<div class="col-md-12 no-padd"><p>Liên hệ lần cuối</p>--}}
-                    {{--<div class=""><input type="text" placeholder="Thời gian" class="datepick form-control"--}}
-                    {{--id="date_last_active" value="22/08/2019 18:24:01"></div>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-md-12 no-padd mt10"><p>Nội dung <span class="red">(*)</span></p> <textarea--}}
-                    {{--class="content_last_active form-control" cols="4"--}}
-                    {{--style="height:80px"></textarea></div>--}}
-                    {{--<div class="col-md-12 no-padd mt10">--}}
-                    {{--<button class="btn btn-info submit_last_active">Cập nhật</button>--}}
-                    {{--<button class="btn btn-default submit_and_create_comment">Cập nhật và tạo trao đổi--}}
-                    {{--</button>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">0</h1>
                     <p>Tương tác</p></div>
@@ -248,9 +227,6 @@
                                                     <div class="card-header">
                                                         <h3 class="card-title">{{$title}}</h3></br>
                                                         <div class="col" style="float: right">
-                                                            {{--<a class="right btn btn-primary btn-flat"--}}
-                                                            {{--href="{{ url('schedules/'.request()->segment(count(request()->segments())) ) }}"><i--}}
-                                                            {{--class="fa fa-arrow-right"></i>Tới đặt lịch</a>--}}
                                                         </div>
                                                     </div>
                                                     {!! Form::open(array('url' => url('group_comments/'.request()->segment(count(request()->segments())) ), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
@@ -334,50 +310,89 @@
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
 
     <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-36251023-1']);
-        _gaq.push(['_setDomainName', 'jqueryscript.net']);
-        _gaq.push(['_trackPageview']);
-
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
-
-        $(document).on('click', '#edit-history-order', function (e) {
-            e.preventDefault();
-            $('.data-history-update-order').empty();
-            const id = $(this).data('order-id');
-            $.ajax({
-                url: "{{ Url('ajax/orders/') }}" + '/' + id,
-                method: "get",
-            }).done(function (data) {
-                let html = '';
-                data.history_update_orders.forEach(function (item, index) {
-                    html += '<tr>' + '<td class="text-center">' + index + '</td>' +
-                        '<td class="text-center">' + item.created_at + '</td>' +
-                        '<td class="text-center">' + item.user.full_name + '</td>' +
-                        '<td class="text-center">' + (item.description ? item.description : '') + '</td>' +
-                        '<td class="text-center"><a class="sum_history_order" href="javascript:void(0)" data-id="' + item.id + '"data-order="' + item.order_id + '"> <i class="fas fa-trash-alt"></i></a></td>' + '</tr>';
-                });
-                $('.data-history-update-order').append(html);
-                $('#largeModal').modal("show");
-            });
-            $('body').delegate('.sum_history_order', 'click', function () {
-                const order_id = $(this).data('order');
+        // $(document).ready(function () {
+            $(document).on('dblclick', '.order-type', function () {
                 const id = $(this).data('id');
-                // swal({
-                //     title: 'Bạn có muốn xóa ?',
-                //     text: "Lịch sử liệu trình sẽ bị xóa và cộng lại số buổi !",
-                //     showCancelButton: true,
-                //     cancelButtonClass: 'btn-secondary waves-effect',
-                //     confirmButtonClass: 'btn-danger waves-effect waves-light',
-                //     confirmButtonText: 'OK'
-                // }, function (order_id,id) {
+                let target = $(this);
+                target.empty();
+
+                $.ajax({
+                    url: "{{ Url('ajax/orders/') }}" + '/' + id,
+                    method: "get",
+                    data: {id: id}
+                }).done(function (data) {
+                    let html = "";
+
+                    html +=
+                        `<select class="list-type form-control select2" data-id=" `+ data.order.id + `" name="type">`;
+                        html +=
+                            `<option value="2" `+ (2 === data.order.type ? "selected" : "")+ `> Trong liệu trình </option>
+                            <option value="3" ` + (3 === data.order.type ? "selected" : "") + `> Đã bảo hành </option>
+                            <option value="4" ` + (4 === data.order.type ? "selected" : "") +` > Đang bảo lưu </option>
+                        </select>`;
+
+                    target.append(html);
+
+                    $('.select2').select2({ //apply select2 to my element
+                        allowClear: true
+                    });
+                });
+            });
+
+            $(document).on('change', '.list-type', function (e) {
+                let target = $(this);
+                console.log(target);
+                const id = target.data('id');
+                const type = target.val();
+
+                $.ajax({
+                    url: "{{ Url('ajax/update-type-orders/') }}" + '/' + id,
+                    method: "put",
+                    data: {
+                        type: type,
+                    }
+                }).done(function (data) {
+                    target.parent().parent().find('.order-type').html(data);
+                });
+            });
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-36251023-1']);
+            _gaq.push(['_setDomainName', 'jqueryscript.net']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+
+            $(document).on('click', '#edit-history-order', function (e) {
+                e.preventDefault();
+                $('.data-history-update-order').empty();
+                const id = $(this).data('order-id');
+                $.ajax({
+                    url: "{{ Url('ajax/orders/') }}" + '/' + id,
+                    method: "get",
+                }).done(function (data) {
+                    console.log(data.order);
+                    let html = '';
+                    data.order.history_update_orders.forEach(function (item, index) {
+                        html += '<tr>' + '<td class="text-center">' + index + '</td>' +
+                            '<td class="text-center">' + item.created_at + '</td>' +
+                            '<td class="text-center">' + item.user.full_name + '</td>' +
+                            '<td class="text-center">' + (item.description ? item.description : '') + '</td>' +
+                            '<td class="text-center"><a class="sum_history_order" href="javascript:void(0)" data-id="' + item.id + '"data-order="' + item.order_id + '"> <i class="fas fa-trash-alt"></i></a></td>' + '</tr>';
+                    });
+                    $('.data-history-update-order').append(html);
+                    $('#largeModal').modal("show");
+                });
+                $('body').delegate('.sum_history_order', 'click', function () {
+                    const order_id = $(this).data('order');
+                    const id = $(this).data('id');
                     $.ajax({
                         type: 'PUT',
                         url: "{{ Url('ajax/orders_sum/') }}" + "/" + order_id,
@@ -387,61 +402,60 @@
                         success: function (res) {
                             if (res == 'Success'){
                                 alert("Cộng buổi liệu trình thành công");
-                                // window.location.reload()
                             }
-                        else if (res == "Failed")
-                                alert("Số liệu trình đã hết");
-                            window.location.reload();
-                        }
-                    })
-                // })
-            });
-
-        });
-
-        $('.edit-order').click(function () {
-            const id = $(this).data('order-id');
-            $('.save-update-history-order').click(function () {
-                swal({
-                    title: 'Bạn có muốn trừ liệu trình ?',
-                    showCancelButton: true,
-                    cancelButtonClass: 'btn-secondary waves-effect',
-                    confirmButtonClass: 'btn-danger waves-effect waves-light',
-                    confirmButtonText: 'OK'
-                }, function () {
-                    $.ajax({
-                        type: 'PUT',
-                        url: "{{ Url('ajax/orders/') }}" + "/" + id,
-                        data: $('#historyUpdateOrrder').serialize(),
-                        success: function (res) {
-                            if (res == 'Success')
-                                alert("Trừ số liệu trình thành công");
                             else if (res == "Failed")
                                 alert("Số liệu trình đã hết");
                             window.location.reload();
                         }
                     })
-                })
+                    // })
+                });
+
             });
-        });
 
-        $(function (e) {
-            $('.messages').richText();
-        });
+            $('.edit-order').click(function () {
+                const id = $(this).data('order-id');
+                $('.save-update-history-order').click(function () {
+                    swal({
+                        title: 'Bạn có muốn trừ liệu trình ?',
+                        showCancelButton: true,
+                        cancelButtonClass: 'btn-secondary waves-effect',
+                        confirmButtonClass: 'btn-danger waves-effect waves-light',
+                        confirmButtonText: 'OK'
+                    }, function () {
+                        $.ajax({
+                            type: 'PUT',
+                            url: "{{ Url('ajax/orders/') }}" + "/" + id,
+                            data: $('#historyUpdateOrrder').serialize(),
+                            success: function (res) {
+                                if (res == 'Success')
+                                    alert("Trừ số liệu trình thành công");
+                                else if (res == "Failed")
+                                    alert("Số liệu trình đã hết");
+                                window.location.reload();
+                            }
+                        })
+                    })
+                });
+            });
 
-        $(document).on('click', '.btn-edit-comment', function (e) {
-            const target = $(e.target).parent().parent().parent().parent();
-            const group_comment_id = $(this).data('id');
+            $(function (e) {
+                $('.messages').richText();
+            });
 
-            $.ajax({
-                url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/edit",
-                method: "get",
-            }).done(function (data) {
+            $(document).on('click', '.btn-edit-comment', function (e) {
+                const target = $(e.target).parent().parent().parent().parent();
+                const group_comment_id = $(this).data('id');
 
-                let html = `
+                $.ajax({
+                    url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/edit",
+                    method: "get",
+                }).done(function (data) {
+
+                    let html = `
             {!! Form::open(array('method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                    <div class="col-md-12">
-                        <textarea name="messages" class="form-control message" rows="3" data-id="` + data.id + `">` + data.messages + `</textarea>
+                        <div class="col-md-12">
+                            <textarea name="messages" class="form-control message" rows="3" data-id="` + data.id + `">` + data.messages + `</textarea>
                     </div>
                     <div class="col-xs-12 col-md-12 file-upload">
                         <div class="form-group required">
@@ -464,136 +478,130 @@
                         </button>
                     </div>
                     {{ Form::close() }}`;
-                $(target).find('.comment').empty();
-                $(target).find(".comment").append(html);
-            });
-        });
-
-        $(document).on('click', '.update-messages', function (e) {
-            e.preventDefault();
-            const target = $(e.target).parent().parent().parent().parent();
-            let formData = new FormData();
-            const messages = $(target).find('.message').val();
-            const image_contact = $(target).parent().parent().find('.upload')[0].files[0];
-            formData.append('image_contact', image_contact);
-            formData.append('messages', messages);
-
-            const id = $(target).find('.message').data('id');
-
-            $.ajax({
-                url: "{{ Url('group-comments/') }}" + "/" + id + "/edit",
-                method: "post",
-                processData: false,
-                contentType: false,
-                data: formData
-            }).done(function (data) {
-                window.location.reload();
-            });
-        });
-
-        $(document).on('click', '.btn-delete-comment', function (e) {
-            const target = $(e.target).parent().parent().parent().parent();
-            const group_comment_id = $(this).data('id');
-
-            const result = confirm("Bạn muốn xoá tin nhắn này?");
-            if (result) {
-                $.ajax({
-                    url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/delete",
-                    method: "delete",
-                }).done(function () {
-                    $(target).parent().find(".row").remove();
+                    $(target).find('.comment').empty();
+                    $(target).find(".comment").append(html);
                 });
-            }
-        })
+            });
 
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(document).on('dblclick', '.status', function (e) {
-                let target = $(e.target).parent();
-                $(target).find('.status').empty();
-                let id = $(this).data('id');
-                let html = '';
+            $(document).on('click', '.update-messages', function (e) {
+                e.preventDefault();
+                const target = $(e.target).parent().parent().parent().parent();
+                let formData = new FormData();
+                const messages = $(target).find('.message').val();
+                const image_contact = $(target).parent().parent().find('.upload')[0].files[0];
+                formData.append('image_contact', image_contact);
+                formData.append('messages', messages);
+
+                const id = $(target).find('.message').data('id');
 
                 $.ajax({
-                    url: "{{ Url('ajax/status-schedules/') }}",
-                    method: "get",
-                    data: {id: id}
+                    url: "{{ Url('group-comments/') }}" + "/" + id + "/edit",
+                    method: "post",
+                    processData: false,
+                    contentType: false,
+                    data: formData
                 }).done(function (data) {
-                    html +=
-                        '<select class="status-result form-control" data-id="' + data.schedule_id + '" name="status">' +
-                        '<option value="">' + "Chọn trạng thái" + '</option>';
-                    data.data.forEach(function (item) {
-                        html +=
-                            '<option value="' + item.id + '">' + item.name + '</option>';
-                    });
-
-                    html += '</select>';
-                    $(target).find(".status").append(html);
-                });
-            });
-
-            $(document).on('change', '.status-result', function (e) {
-                let target = $(e.target).parent();
-                let status = $(target).find('.status-result').val();
-                let id = $(this).data('id');
-
-                $.ajax({
-                    url: "{{ Url('ajax/schedules/') }}" + '/' + id,
-                    method: "put",
-                    data: {
-                        status: status
-                    }
-                }).done(function () {
                     window.location.reload();
                 });
             });
 
-            $('.update').on('click', function () {
-                var id = $(this).attr("data-id");
-                var link = 'schedules/edit/' + id;
-                $.ajax({
-                    url: window.location.origin + '/' + link,
-                    // url: "http://localhost/Spa/public/" + link,
-                    method: "get",
-                }).done(function (data) {
-                    $('#update_id').val(data['id']);
-                    $('#update_date').val(data['date']);
-                    $('#update_time1').val(data['time_from']);
-                    $('#update_time2').val(data['time_to']);
-                    $('#update_status').val(data['status']);
-                    $('#update_note').val(data['note']);
-                    $('#update_action').val(data['person_action']).change();
-                    ;
+            $(document).on('click', '.btn-delete-comment', function (e) {
+                const target = $(e.target).parent().parent().parent().parent();
+                const group_comment_id = $(this).data('id');
+
+                const result = confirm("Bạn muốn xoá tin nhắn này?");
+                if (result) {
+                    $.ajax({
+                        url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/delete",
+                        method: "delete",
+                    }).done(function () {
+                        $(target).parent().find(".row").remove();
+                    });
+                }
+            });
+
+            $(document).ready(function () {
+                $(document).on('dblclick', '.status', function (e) {
+                    let target = $(e.target).parent();
+                    $(target).find('.status').empty();
+                    let id = $(this).data('id');
+                    let html = '';
+
+                    $.ajax({
+                        url: "{{ Url('ajax/status-schedules/') }}",
+                        method: "get",
+                        data: {id: id}
+                    }).done(function (data) {
+                        html +=
+                            '<select class="status-result form-control" data-id="' + data.schedule_id + '" name="status">' +
+                            '<option value="">' + "Chọn trạng thái" + '</option>';
+                        data.data.forEach(function (item) {
+                            html +=
+                                '<option value="' + item.id + '">' + item.name + '</option>';
+                        });
+
+                        html += '</select>';
+                        $(target).find(".status").append(html);
+                    });
+                });
+
+                $(document).on('change', '.status-result', function (e) {
+                    let target = $(e.target).parent();
+                    let status = $(target).find('.status-result').val();
+                    let id = $(this).data('id');
+
+                    $.ajax({
+                        url: "{{ Url('ajax/schedules/') }}" + '/' + id,
+                        method: "put",
+                        data: {
+                            status: status
+                        }
+                    }).done(function () {
+                        window.location.reload();
+                    });
+                });
+
+                $('.update').on('click', function () {
+                    const id = $(this).attr("data-id");
+                    const link = 'schedules/edit/' + id;
+                    $.ajax({
+                        url: window.location.origin + '/' + link,
+                        method: "get",
+                    }).done(function (data) {
+                        $('#update_id').val(data['id']);
+                        $('#update_date').val(data['date']);
+                        $('#update_time1').val(data['time_from']);
+                        $('#update_time2').val(data['time_to']);
+                        $('#update_status').val(data['status']);
+                        $('#update_note').val(data['note']);
+                        $('#update_action').val(data['person_action']).change();
+                        ;
+                    });
+                });
+                $('[data-toggle="datepicker"]').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoHide: true,
+                    zIndex: 2048,
+                });
+                $("#fvalidate").validate({
+                    rules: {
+                        note: {
+                            required: true
+                        },
+                        time_from: {
+                            required: true
+                        },
+                        time_to: {
+                            required: true
+                        },
+                    },
+                    messages: {
+                        note: "Không được để trống !!!",
+                        time_from: "Không được để trống !!!",
+                        time_to: "Không được để trống !!!",
+                    },
                 });
             });
-            $('[data-toggle="datepicker"]').datepicker({
-                format: 'yyyy-mm-dd',
-                autoHide: true,
-                zIndex: 2048,
-            });
-            $("#fvalidate").validate({
-                rules: {
-                    note: {
-                        required: true
-                    },
-                    // date: {
-                    //     required: true
-                    // },
-                    time_from: {
-                        required: true
-                    },
-                    time_to: {
-                        required: true
-                    },
-                },
-                messages: {
-                    note: "Không được để trống !!!",
-                    // date: "Không được để trống !!!",
-                    time_from: "Không được để trống !!!",
-                    time_to: "Không được để trống !!!",
-                },
-            });
-        })
+        // });
     </script>
 @endsection

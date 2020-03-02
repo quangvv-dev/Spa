@@ -43,6 +43,9 @@
         .tableFixHead tbody .fixed2 td {
             background: #cbdbf2;
         }
+        .form-control {
+            font-size: 14px;
+        }
     </style>
 @endsection
 @section('content')
