@@ -341,7 +341,6 @@
 
             $(document).on('change', '.list-type', function (e) {
                 let target = $(this);
-                console.log(target);
                 const id = target.data('id');
                 const type = target.val();
 
