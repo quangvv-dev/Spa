@@ -28,8 +28,8 @@ class ScheduleController extends Controller
         $this->taskService = $taskService;
         $category = Category::pluck('name', 'id')->toArray();//nhóm KH
         $user = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id');
-        $staff = $user->toArray();
-        $staff2 = $user->prepend('Tất cả nhân viên', 0)->toArray();
+//        $staff = $user->toArray();
+        $staff2 = $user->prepend('Tất cả người tạo', 0)->toArray();
         $color = [
             1 => 'Chưa qua',
             2 => 'Đặt lịch',
@@ -39,7 +39,7 @@ class ScheduleController extends Controller
             6 => 'Tất cả',
         ];
         view()->share([
-            'staff'    => $staff,
+//            'staff'    => $staff,
             'staff2'   => $staff2,
             'color'    => $color,
             'category' => $category,
@@ -88,7 +88,7 @@ class ScheduleController extends Controller
     {
         $request->merge([
             'user_id'       => $id,
-            'person_action' => $request->person_action,
+            'person_action' => Auth::user()->id,
             'creator_id'    => Auth::user()->id,
         ]);
         $data = Schedule::create($request->all());

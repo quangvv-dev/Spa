@@ -10,10 +10,10 @@
                 {!! Form::open(array('url' => url('schedules/'.$id), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','autocomplete'=>'off')) !!}
 
                 <div class="row">
-                    <div class="col-md-6 col-xs-12">
-                        {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}
-                        {!! Form::select('person_action',@$staff, @$doc->person_action, array('class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
-                    </div>
+{{--                    <div class="col-md-6 col-xs-12">--}}
+{{--                        {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}--}}
+{{--                        {!! Form::select('person_action',@$staff, @$doc->person_action, array('class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}--}}
+{{--                    </div>--}}
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
                         {!! Form::text('date', null, array('class' => 'form-control','data-toggle'=>'datepicker','required'=>true)) !!}
@@ -32,7 +32,7 @@
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                         {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control select2','required'=>true)) !!}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
                         {!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control'))!!}
                     </div>
@@ -67,10 +67,10 @@
 
                 <div class="row">
                     {!! Form::hidden('id', null, array('class' => 'form-control','id'=>'update_id')) !!}
-                    <div class="col-md-6 col-xs-12">
-                        {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}
-                        {!! Form::select('person_action',@$staff, @$doc->person_action, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
-                    </div>
+{{--                    <div class="col-md-6 col-xs-12">--}}
+{{--                        {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}--}}
+{{--                        {!! Form::select('person_action',@$staff, @$doc->person_action, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}--}}
+{{--                    </div>--}}
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
                         {!! Form::date('date', null, array('class' => 'form-control','id'=>'update_date','readonly'=>true)) !!}
@@ -87,11 +87,11 @@
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                         {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đã đến/Mua',4 => 'Đã đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
                         {!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control'))!!}
                     </div>
-                    <div class="col-md-12 ">
+                    <div class="col-md-12">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
                         {!! Form::textArea('note', null, array('class' => 'form-control','id'=>'update_note','rows'=>5)) !!}
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>

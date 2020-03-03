@@ -8,7 +8,6 @@
             <th class="text-white text-center">Giờ đặt tới</th>
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Người tạo</th>
-            <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -22,7 +21,6 @@
                     <td class="text-center">{{@$s->time_to}}</td>
                     <td class="text-center status" data-id="{{ $s->id }}"> {{ @$s->name_status }}</td>
                     <td class="text-center">{{@$s->creator->full_name}}</td>
-                    <td class="text-center">{{@$s->staff->full_name}}</td>
                     <td class="text-center">
                         <a class="btn update" href="#" data-id="{{$s->id}}" title="Chỉnh sửa lịch hẹn"
                            data-toggle="modal" data-target="#updateModal"><i class="fas fa-edit"></i></a>

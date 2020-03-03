@@ -141,10 +141,10 @@
                                                    data-toggle="datepicker" value="{{$item->date_schedule}}"
                                                    name="date">
                                         </div>
-                                        <div class="col-md-6 col-xs-12">
-                                            {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}
-                                            {!! Form::select('person_action',@$staff, @$item->person_action, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
-                                        </div>
+{{--                                        <div class="col-md-6 col-xs-12">--}}
+{{--                                            {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}--}}
+{{--                                            {!! Form::select('person_action',@$staff, @$item->person_action, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}--}}
+{{--                                        </div>--}}
                                         <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
                                              data-align="top"
                                              data-autoclose="true">
@@ -161,7 +161,7 @@
                                             {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                                             {!! Form::select('status',array(1 => 'Chưa qua',2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy'), @$item->status, array('class' => 'form-control','id'=>'update_status')) !!}
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
                                             {!! Form::select('category_id',$category, @$item->category_id, array('class' => 'form-control'))!!}
                                         </div>
