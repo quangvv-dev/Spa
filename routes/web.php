@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');
     Route::get('schedules/edit/{id}', 'ScheduleController@edit')->name('schedules.edit');
+    Route::delete('schedules/{id}', 'ScheduleController@destroy')->name('schedules.destroy');
 
     Route::get('/statistics/', 'StatisticController@index')->name('statistics.index');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');

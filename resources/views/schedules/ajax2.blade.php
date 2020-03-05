@@ -55,23 +55,23 @@
                                     title: '{{'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note}}',
                                     description: '{{$item->note}}',
                                     @switch($item->status)
-                                            @case(1)
+                                        @case(1)
                                     color: '#f39b4f',
                                     @break
-                                            @case(2)
+                                        @case(2)
                                     color: '#dccf34',
                                     @break
-                                            @case(3)
+                                        @case(3)
                                     color: '#d03636',
                                     @break
-                                            @case(4)
+                                        @case(4)
                                     color: '#4bcc4b',
                                     @break
-                                            @case(5)
+                                        @case(5)
                                     color: 'gray',
                                     @break
-                                            @endswitch
-                                            {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
+                                        @endswitch
+                                        {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
                                     start: '{{$item->date.'T'.$item->time_from.':00'}}',
                                     end: '{{$item->date.'T'.$item->time_to.':00'}}'
                                 },
@@ -136,7 +136,6 @@
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
-                                            {{--                                            {!! Form::text('date', $item->date_schedule, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}--}}
                                             <input class="form-control {{'date-'.$item->id}}" id="update_date"
                                                    data-toggle="datepicker" value="{{$item->date_schedule}}"
                                                    name="date">
@@ -144,7 +143,6 @@
                                         <div class="col-md-6 col-xs-12">
                                             {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
                                             {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true,'disabled'=>true)) !!}
-{{--                                            {!! Form::text('person_action', @$item->creator_, array('class' => 'form-control','readonly'=>true)) !!}--}}
                                         </div>
                                         <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
                                              data-align="top"
@@ -173,13 +171,11 @@
                                         </div>
                                         <div class="col-md-12" style="padding-top: 10px">
                                             <button type="submit" class="btn btn-success">Lưu</button>
-                                            <a class="btn btn-primary btn-flat"
-                                               href="{{url('orders')}}"><i class="fa fa-arrow-right"></i>Tới tạo đơn
-                                                hàng</a>
+                                            <a class="btn btn-primary btn-flat delete"data-url="{{url('schedules/'.$item->id)}}"
+                                               href="javascript:"><i class="fa fa-arrow-"></i>Xoá lịch hẹn</a>
                                         </div>
                                     </div>
                                     {{ Form::close() }}
-
                                 </div>
                             </div>
                         </div>

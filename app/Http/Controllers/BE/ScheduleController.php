@@ -192,9 +192,9 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Schedule $id)
     {
-        //
+        $id->delete();
     }
 
     public function homePage(Request $request)

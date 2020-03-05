@@ -11,7 +11,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title">{{$title}}</h3>
             </div>
             <div class="card-header">
                 @foreach($color as $k => $item)
@@ -102,7 +102,7 @@
                         });
                     });
                     $('#calendar1').fullCalendar('removeEvents');
-                    $('#calendar1').fullCalendar('addEventSource', b);
+                    $('#calendar1').fullCalendar('addEventSource', b);s
                 });
             }
 
