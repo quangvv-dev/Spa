@@ -35,7 +35,7 @@ class ScheduleController extends Controller
             2 => 'Đặt lịch',
             3 => 'Đến/mua',
             4 => 'Đến/chưa mua',
-            5 => 'Hủy',
+//            5 => 'Hủy',
             6 => 'Tất cả',
         ];
         view()->share([
@@ -93,29 +93,29 @@ class ScheduleController extends Controller
         ]);
         $data = Schedule::create($request->all());
         $customer = Customer::find($id);
-        $person_action = User::find($request->person_action);
+//        $person_action = User::find($request->person_action);
         $now = Carbon::now()->format('Y-m-d');
         if ($now != $data->date) {
             $date = Carbon::parse($data->date)->format('d/m/Y') . ' 07:00';
         } else {
             $date = '';
         }
-        if (isset($customer) && $customer) {
-            $body = setting('sms_cskh');
-            $body = str_replace('%full_name%', $customer->full_name, $body);
-            $body = str_replace('%time_from%', $data->time_from, $body);
-            $body = str_replace('%time_to%', $data->time_to, $body);
-            $body = Functions::vi_to_en($body);
-            Functions::sendSms(@$customer->phone, $body, $date);
-        }
-        if (isset($person_action) && $person_action) {
-            $body = setting('sms_csnv');
-            $body = str_replace('%full_name%', $person_action->full_name, $body);
-            $body = str_replace('%time_from%', $data->time_from, $body);
-            $body = str_replace('%time_to%', $data->time_to, $body);
-            $body = Functions::vi_to_en($body);
-            Functions::sendSms(@$person_action->phone, $body, $date);
-        }
+//        if (isset($customer) && $customer) {
+//            $body = setting('sms_cskh');
+//            $body = str_replace('%full_name%', $customer->full_name, $body);
+//            $body = str_replace('%time_from%', $data->time_from, $body);
+//            $body = str_replace('%time_to%', $data->time_to, $body);
+//            $body = Functions::vi_to_en($body);
+//            Functions::sendSms(@$customer->phone, $body, $date);
+//        }
+//        if (isset($person_action) && $person_action) {
+//            $body = setting('sms_csnv');
+//            $body = str_replace('%full_name%', $person_action->full_name, $body);
+//            $body = str_replace('%time_from%', $data->time_from, $body);
+//            $body = str_replace('%time_to%', $data->time_to, $body);
+//            $body = Functions::vi_to_en($body);
+//            Functions::sendSms(@$person_action->phone, $body, $date);
+//        }
         $input = [
             'customer_id'    => $id,
             'date_from'      => Carbon::now()->format('Y-m-d'),

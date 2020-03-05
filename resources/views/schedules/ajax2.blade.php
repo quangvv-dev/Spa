@@ -141,10 +141,10 @@
                                                    data-toggle="datepicker" value="{{$item->date_schedule}}"
                                                    name="date">
                                         </div>
-{{--                                        <div class="col-md-6 col-xs-12">--}}
-{{--                                            {!! Form::label('person_action', 'Nhân viên phụ trách', array('class' => ' required')) !!}--}}
-{{--                                            {!! Form::select('person_action',@$staff, @$item->person_action, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}--}}
-{{--                                        </div>--}}
+                                        <div class="col-md-6 col-xs-12">
+                                            {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
+                                            {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                                        </div>
                                         <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
                                              data-align="top"
                                              data-autoclose="true">
