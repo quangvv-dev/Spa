@@ -28,7 +28,7 @@ class ScheduleController extends Controller
         $this->taskService = $taskService;
         $category = Category::pluck('name', 'id')->toArray();//nhóm KH
         $user = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id');
-//        $staff = $user->toArray();
+        $staff = $user->toArray();
         $staff2 = $user->prepend('Tất cả người tạo', 0)->toArray();
         $color = [
             1 => 'Chưa qua',
@@ -39,7 +39,7 @@ class ScheduleController extends Controller
             6 => 'Tất cả',
         ];
         view()->share([
-//            'staff'    => $staff,
+            'staff'    => $staff,
             'staff2'   => $staff2,
             'color'    => $color,
             'category' => $category,
@@ -174,10 +174,14 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
+        if(!empty($request->format_date)){
+            $date = $request->date;
+        }else{
+            $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
+        }
         $request->merge(['date' => $date]);
         $data = Schedule::find($request->id);
-        $data->update($request->except('id'));
+        $data->update($request->except('id','format_date'));
         return redirect()->back();
     }
 
@@ -199,7 +203,7 @@ class ScheduleController extends Controller
         $docs = Schedule::search($request->all());
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
-            $check = Schedule::orderBy('id', 'desc')->where('date', $now)
+            $check = Schedule::orderBy('id', 'desc')->where('date', $now)->with('creator')
                 ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to);
             $item->count = $check->count();
             return $item;

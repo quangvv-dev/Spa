@@ -143,7 +143,8 @@
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
-                                            {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                                            {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true,'disabled'=>true)) !!}
+{{--                                            {!! Form::text('person_action', @$item->creator_, array('class' => 'form-control','readonly'=>true)) !!}--}}
                                         </div>
                                         <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
                                              data-align="top"

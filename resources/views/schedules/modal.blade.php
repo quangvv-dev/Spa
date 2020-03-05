@@ -10,10 +10,10 @@
                 {!! Form::open(array('url' => url('schedules/'.$id), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','autocomplete'=>'off')) !!}
 
                 <div class="row">
-                    <div class="col-md-6 col-xs-12">
-                        {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
-                        {!! Form::select('person_action',@$staff, @$doc->creator_id, array('class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
-                    </div>
+{{--                    <div class="col-md-6 col-xs-12">--}}
+{{--                        {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}--}}
+{{--                        {!! Form::select('person_action',@$staff, @$doc->creator_id, array('class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true,'disable'=>true)) !!}--}}
+{{--                    </div>--}}
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
                         {!! Form::text('date', null, array('class' => 'form-control','data-toggle'=>'datepicker','required'=>true)) !!}
@@ -67,9 +67,10 @@
 
                 <div class="row">
                     {!! Form::hidden('id', null, array('class' => 'form-control','id'=>'update_id')) !!}
+                    {!! Form::hidden('format_date', 1, array('class' => 'form-control','id'=>'update_id')) !!}
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
-                        {!! Form::select('person_action',@$staff, @$doc->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                        {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true,'disabled'=>true)) !!}
                     </div>
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
@@ -101,13 +102,8 @@
                     </div>
                 </div>
                 {{ Form::close() }}
-
             </div>
         </div>
 
     </div>
-
 </div>
-{{--<script>--}}
-{{--    $('.clockpicker').clockpicker();--}}
-{{--</script>--}}
