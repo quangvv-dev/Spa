@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
         Element::truncate();
+        \App\Models\Rule::truncate();
 
         \DB::table('elements')->insert([
             'title' => 'Khách hàng',
