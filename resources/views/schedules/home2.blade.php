@@ -6,39 +6,48 @@
     .container {
         max-width: 90% !important;
     }
+    button.status.btn.white.account_relation.position {
+        text-align: left;
+    }
 </style>
 @section('content')
-    <div class="col-md-12 col-lg-12">
+    <div class="col-md-12 col-lg-12" style="margin-left: 6%">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3>
-            </div>
-            <div class="card-header">
-                @foreach($color as $k => $item)
-                    <button class="status btn white account_relation position"
-                            style="background: @switch($k)
-                            @case(1)
-                            {{'#63cff9'}}
-                            @break
-                            @case(2)
-                            {{'#dccf34'}}
-                            @break
-                            @case(3)
-                            {{'#d03636'}}
-                            @break
-                            @case(4)
-                            {{'#4bcc4b'}}
-                            @break
-                            @case(5)
-                            {{'gray'}}
-                            @break
-                            @case(6)
-                            {{'#da70dc'}}
-                            @break
-                            @endswitch;margin-left: 3px">{{ $item }}
-                        <input type="hidden" class="status-val" value="{{$k}}">
-                    </button>
-                @endforeach
+                <div class="left-click" style="position: absolute;
+                                            display: flex;
+                                            flex-direction: column;
+                                            left: -12.5%;
+                                            top: 2%;">
+                    @foreach($color as $k => $item)
+                        <div class="btn white account_relation position"
+                                style="background: @switch($k)
+                                @case(1)
+                                {{'#63cff9'}}
+                                @break
+                                @case(2)
+                                {{'#dccf34'}}
+                                @break
+                                @case(3)
+                                {{'#d03636'}}
+                                @break
+                                @case(4)
+                                {{'#4bcc4b'}}
+                                @break
+                                @case(5)
+                                {{'gray'}}
+                                @break
+                                @case(6)
+                                {{'#da70dc'}}
+                                @break
+                                @endswitch;margin-left: 3px;text-align: left">
+                            <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
+                            <label for="{{$k}}">{{$item}}</label>
+                        </div>
+                    @endforeach
+                        <input type="hidden" class="status-val">
+                </div>
+
                 <div class="col-md-2">
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
@@ -102,11 +111,29 @@
                         });
                     });
                     $('#calendar1').fullCalendar('removeEvents');
-                    $('#calendar1').fullCalendar('addEventSource', b);s
+                    $('#calendar1').fullCalendar('addEventSource', b);
+                    s
                 });
             }
 
             $('body').delegate('.status', 'click', function () {
+                var data = $(this).attr('id');
+                var arr = [];
+                if (! $(this).is(":checked")) {
+                    let defaults = $('.status-val').val();
+                    arr.push(defaults);
+                    // var trainindIdArray = defaults.replace("[","").replace("]","").split(',');
+                    // var filteredAry = trainindIdArray.filter(e => e !== data)
+                    console.log(arr,'no check');
+                    var training = filteredAry.split(',');
+                    console.log(training,'no check');
+                } else { // if the checkbox is checked
+                    let defaults = $('.status-val').val();
+                    var trainindIdArray = data.replace("[","").replace("]","").split(',');
+                    var filteredAry = trainindIdArray.filter(e => e !== data)
+                    console.log(arr,'check');
+                }
+                var data = $(this).val();
                 var val = $(this).find('.status-val').val();
                 $('#status_val').val(val);
                 let category = $('#category').val();
