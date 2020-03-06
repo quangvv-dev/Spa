@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content history-update-order">
             <div class="modal-header pd-x-20">
-                <h6 class="modal-title">Lịch sử trừ số buổi</h6>
+                <h6 class="modal-title">Lịch sử liệu trình </h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -17,6 +17,7 @@
                             <th class="text-white text-center">Ngày thực hiện</th>
                             <th class="text-white text-center">Người thực hiện</th>
                             <th class="text-white text-center">Mô tả</th>
+                            <th class="text-white text-center">Loại</th>
                             <th class="text-white text-center">thao tác</th>
                         </tr>
                         </thead>

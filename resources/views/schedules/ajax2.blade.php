@@ -115,7 +115,7 @@
                     <div class="modal fade" id="modal_{{$item->id}}" role="dialog">
                         <div class="modal-dialog">
                             <!-- Modal content-->
-                            <div class="modal-content" style="height: 70%">
+                            <div class="modal-content" style="height: 80%">
                                 <div class="modal-header">
                                     <h4>Cập nhật lịch hẹn</h4>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>

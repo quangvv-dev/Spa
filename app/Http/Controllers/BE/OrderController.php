@@ -41,10 +41,8 @@ class OrderController extends Controller
      * @param OrderService       $orderService
      * @param OrderDetailService $orderDetailService
      */
-    public function __construct(
-        OrderService $orderService,
-        OrderDetailService $orderDetailService
-    ) {
+    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService)
+    {
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
 
@@ -314,14 +312,16 @@ class OrderController extends Controller
         if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day === 0) {
             return "Failed";
         }
+        if ($request->type_delete == StatusCode::TYPE_ORDER_PROCESS) {
+            $order->update([
+                'count_day' => $order->count_day - 1,
+            ]);
+        }
 
-        $order->update([
-            'count_day' => $order->count_day - 1,
-        ]);
-
-        $historyUpdateOrder = HistoryUpdateOrder::create([
+        HistoryUpdateOrder::create([
             'user_id'     => $request->user_id,
             'order_id'    => $order->id,
+            'type'        => $request->type_delete,
             'description' => $request->description,
         ]);
 
@@ -344,9 +344,11 @@ class OrderController extends Controller
             return "Failed";
         }
 
-        $order->update([
-            'count_day' => $order->count_day + 1,
-        ]);
+        if ($request->type == StatusCode::TYPE_ORDER_PROCESS) {
+            $order->update([
+                'count_day' => $order->count_day + 1,
+            ]);
+        }
 
         HistoryUpdateOrder::where('id', $request->history_id)->delete();
 
@@ -365,9 +367,8 @@ class OrderController extends Controller
     {
         $order = Order::with('historyUpdateOrders.user', 'customer', 'orderDetails.service')->find($id);
 
-        return Response::json([
-            'order' => $order,
-        ]);
+        return Response::json($order);
+
     }
 
     public function find($id)
@@ -536,9 +537,9 @@ class OrderController extends Controller
         ]);
 
         $map = [
-            Order::TYPE_ORDER_PROCESS => 'Trong liệu trình',
+            Order::TYPE_ORDER_PROCESS   => 'Trong liệu trình',
             Order::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
-            Order::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
+            Order::TYPE_ORDER_RESERVE   => 'Đang bảo lưu',
         ];
 
         return $map[$order->type] ?? null;

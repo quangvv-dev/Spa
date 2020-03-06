@@ -10,16 +10,25 @@
     button.status.btn.white.account_relation.position {
         text-align: left;
     }
+    .left-click{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        left: -12.5%;
+        top: 2%;
+    }
+    @media (max-width: 1366px){
+        .btn.white.account_relation.position {
+            font-size: 12px;
+        }
+    }
+
 </style>
 @section('content')
     <div class="col-md-12 col-lg-12" style="margin-left: 6%">
         <div class="card">
             <div class="card-header">
-                <div class="left-click" style="position: absolute;
-                                            display: flex;
-                                            flex-direction: column;
-                                            left: -12.5%;
-                                            top: 2%;">
+                <div class="left-click">
                     @foreach($color as $k => $item)
                         <div class="btn white account_relation position"
                              style="background: @switch($k)
@@ -46,7 +55,6 @@
                             <label for="{{$k}}">{{$item}}</label>
                         </div>
                     @endforeach
-                    <input type="hidden" class="status-val">
                 </div>
 
                 <div class="col-md-2">

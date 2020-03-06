@@ -37,4 +37,8 @@ class StatusCode
     const NOT_NULL = 0;
 
     const ALL = 0;//Tất cả nhóm KH
+
+    const TYPE_ORDER_PROCESS = 0; //Trừ liệu trinh
+    const TYPE_ORDER_GUARANTEE = 1; //Đã bảo
+    const TYPE_ORDER_RESERVE = 2; //Đang bảo lưu
 }

@@ -169,12 +169,13 @@ class Order extends Model
                             $q->whereBetween('created_at', getTime(($input['data_time'])));
                         });
                 })
-                ->when(empty($input['bor_none']) &&isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                    $q->whereBetween('created_at', [
-                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                    ]);
-                })
+                ->when(empty($input['bor_none']) && isset($input['start_date']) && isset($input['end_date']),
+                    function ($q) use ($input) {
+                        $q->whereBetween('created_at', [
+                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                        ]);
+                    })
                 ->when(isset($input['bor_none']), function ($query) use ($input) {
                     $query->when($input['bor_none'] == 'unpaid', function ($q) use ($input) {
                         $q->where('gross_revenue', 0);
@@ -221,13 +222,14 @@ class Order extends Model
 
     public function getNameTypeAttribute()
     {
-        $map = [
-            self::TYPE_ORDER_PROCESS => 'Trong liệu trình',
-            self::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
-            self::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
-        ];
+        if ($this->type === self::TYPE_ORDER_DEFAULT) {
+            return "Đơn hàng thường";
+        }
 
-        return $map[$this->type] ?? null;
+        if ($this->type === self::TYPE_ORDER_ADVANCE) {
+            return "Liệu trình";
+        }
+
     }
 
     public static function boot()
