@@ -149,9 +149,7 @@ class Schedule extends Model
     {
         $docs = self::with('customer');
         if (!empty($request['search'])) {
-            if ($request['search'] != 6) {
-                $docs = $docs->where('status', $request['search']);
-            }
+            $docs = $docs->whereIn('status', $request['search']);
         }
         if (!empty($request['date'])) {
             $docs = $docs->where('date', $request['date']);

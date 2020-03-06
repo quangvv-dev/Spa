@@ -6,6 +6,7 @@
     .container {
         max-width: 90% !important;
     }
+
     button.status.btn.white.account_relation.position {
         text-align: left;
     }
@@ -21,31 +22,31 @@
                                             top: 2%;">
                     @foreach($color as $k => $item)
                         <div class="btn white account_relation position"
-                                style="background: @switch($k)
-                                @case(1)
-                                {{'#63cff9'}}
-                                @break
-                                @case(2)
-                                {{'#dccf34'}}
-                                @break
-                                @case(3)
-                                {{'#d03636'}}
-                                @break
-                                @case(4)
-                                {{'#4bcc4b'}}
-                                @break
-                                @case(5)
-                                {{'gray'}}
-                                @break
-                                @case(6)
-                                {{'#da70dc'}}
-                                @break
-                                @endswitch;margin-left: 3px;text-align: left">
+                             style="background: @switch($k)
+                             @case(1)
+                             {{'#63cff9'}}
+                             @break
+                             @case(2)
+                             {{'#dccf34'}}
+                             @break
+                             @case(3)
+                             {{'#d03636'}}
+                             @break
+                             @case(4)
+                             {{'#4bcc4b'}}
+                             @break
+                             @case(5)
+                             {{'gray'}}
+                             @break
+                             @case(6)
+                             {{'#da70dc'}}
+                             @break
+                             @endswitch;margin-left: 3px;text-align: left">
                             <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
                             <label for="{{$k}}">{{$item}}</label>
                         </div>
                     @endforeach
-                        <input type="hidden" class="status-val">
+                    <input type="hidden" class="status-val">
                 </div>
 
                 <div class="col-md-2">
@@ -112,70 +113,53 @@
                     });
                     $('#calendar1').fullCalendar('removeEvents');
                     $('#calendar1').fullCalendar('addEventSource', b);
-                    s
                 });
             }
 
+            var arr = [];
             $('body').delegate('.status', 'click', function () {
                 var data = $(this).attr('id');
-                var arr = [];
-                if (! $(this).is(":checked")) {
-                    let defaults = $('.status-val').val();
-                    arr.push(defaults);
-                    // var trainindIdArray = defaults.replace("[","").replace("]","").split(',');
-                    // var filteredAry = trainindIdArray.filter(e => e !== data)
-                    console.log(arr,'no check');
-                    var training = filteredAry.split(',');
-                    console.log(training,'no check');
+                if (!$(this).is(":checked")) {
+                    arr = arr.filter(e => e !== data);
                 } else { // if the checkbox is checked
-                    let defaults = $('.status-val').val();
-                    var trainindIdArray = data.replace("[","").replace("]","").split(',');
-                    var filteredAry = trainindIdArray.filter(e => e !== data)
-                    console.log(arr,'check');
+                    arr.push(data);
                 }
-                var data = $(this).val();
-                var val = $(this).find('.status-val').val();
-                $('#status_val').val(val);
                 let category = $('#category').val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({search: val, category: category, date: date, user: user, customer: customer});
+                searchAjax({search: arr, category: category, date: date, user: user, customer: customer});
             });
             $(document).on('change', '#search', function () {
                 $('.spin').show();
                 var val = $(this).val();
                 let category = $('#category').val();
-                let search = $('#status_val').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({date: val, category: category, search: search, user: user, customer: customer});
+                searchAjax({date: val, category: category, search: arr, user: user, customer: customer});
             });
             $(document).on('change', '#category', function () {
                 $('.spin').show();
                 var val = $(this).val();
-                let search = $('#status_val').val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({category: val, date: date, search: search, user: user, customer: customer});
+                searchAjax({category: val, date: date, search: arr, user: user, customer: customer});
             });
             $(document).on('change', '#person_action', function () {
                 var val = $(this).val();
                 let category = $('#category').val();
-                let search = $('#status_val').val();
                 let date = $('#search').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({user: val, category: category, date: date, search: search, customer: customer});
+                searchAjax({user: val, category: category, date: date, search: arr, customer: customer});
 
             });
             $(document).on('change', '#customer_plus', function () {
                 var val = $(this).val();
                 let category = $('#category').val();
-                let search = $('#status_val').val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
-                searchAjax({customer: val, category: category, user: user, date: date, search: search});
+                searchAjax({customer: val, category: category, user: user, date: date, search: arr});
 
             });
 
