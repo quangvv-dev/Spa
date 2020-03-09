@@ -27,6 +27,13 @@
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
+                            {!! Form::label('position', 'Vị trí', array('class' => ' required')) !!}
+                            {!! Form::text('position',null, array('class' => 'form-control', 'required' => true)) !!}
+                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                        </div>
+                    </div>
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
@@ -35,6 +42,7 @@
                         <span class="help-block">{{ $errors->first('type', ':message') }}</span>
                     </div>
                 </div>
+                
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                         {!! Form::label('color','Màu nền', array('class' => 'required')) !!}

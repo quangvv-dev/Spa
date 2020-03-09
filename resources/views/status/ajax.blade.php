@@ -6,6 +6,7 @@
             <th class="text-white text-center">Tên nhóm</th>
             <th class="text-white text-center">Mã nhóm</th>
             <th class="text-white text-center">Loại nhóm</th>
+            <th class="text-white text-center">Vị trí</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -23,6 +24,7 @@
                             @endif
                         @endforeach
                     </td>
+                    <td class="text-center">{{$s->position}}</td>
                     <td class="text-center">
                         <a class="btn" href="{{ url('status/' . $s->id . '/edit') }}"><i
                                     class="fas fa-edit"></i></a>

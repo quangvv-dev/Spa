@@ -55,7 +55,7 @@ class Status extends Model
 
     public static function getRelationshipByCustomer($input)
     {
-        $data = self::orderBy('id', 'ASC');
+        $data = self::orderBy('position', 'ASC');
 
 //        $data = $data->withCount(['customers' => function ($query) use ($input) {
 //            Customer::applySearchConditions($query, $input)
