@@ -47,7 +47,7 @@ class  SmsRevenue extends Command
         ];
         $detail = PaymentHistory::search($input);
         $total = $detail->sum('price');
-        $text = 'chi nhanh ' . request()->getHost() . ' co doanh thu trong ngay ' . Carbon::now()->format('d-m-Y') . ' : ' . $total . ' VND';
+        $text = 'chi nhanh ' . request()->getHttpHost() . ' co doanh thu trong ngay ' . Carbon::now()->format('d-m-Y') . ' : ' . @number_format($total) . ' VND';
         Functions::sendSms('0334299996', $text);
     }
 }
