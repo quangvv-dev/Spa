@@ -35,8 +35,8 @@ class ScheduleController extends Controller
             2 => 'Đặt lịch',
             3 => 'Đến/mua',
             4 => 'Đến/chưa mua',
-//            5 => 'Hủy',
-//            6 => 'Tất cả',
+            //            5 => 'Hủy',
+            //            6 => 'Tất cả',
         ];
         view()->share([
             'staff'    => $staff,
@@ -91,6 +91,10 @@ class ScheduleController extends Controller
             'person_action' => Auth::user()->id,
             'creator_id'    => Auth::user()->id,
         ]);
+        if ($request->note) {
+            $note= str_replace("\r\n", ' ', $request->note);
+            $request->merge(['note' =>$note]);
+        }
         $data = Schedule::create($request->all());
         $customer = Customer::find($id);
 //        $person_action = User::find($request->person_action);
@@ -174,14 +178,18 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if(!empty($request->format_date)){
+        if ($request->note) {
+            $note= str_replace("\r\n", ' ', $request->note);
+            $request->merge(['note' =>$note]);
+        }
+        if (!empty($request->format_date)) {
             $date = $request->date;
-        }else{
+        } else {
             $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
         }
         $request->merge(['date' => $date]);
         $data = Schedule::find($request->id);
-        $data->update($request->except('id','format_date'));
+        $data->update($request->except('id', 'format_date'));
         return redirect()->back();
     }
 
