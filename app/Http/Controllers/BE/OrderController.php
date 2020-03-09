@@ -155,9 +155,6 @@ class OrderController extends Controller
             $year = Carbon::now()->format('Y');
             $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
                 $now)->with('orderDetails')->orderBy('id', 'desc');
-            $detail = PaymentHistory::select(\DB::raw('SUM(price) as sum_price'), 'order_id')
-                ->whereYear('created_at', $year)->whereMonth('created_at', $now)
-                ->groupBy('order_id')->pluck('sum_price', 'order_id')->toArray();
             View::share([
                 'allTotal'     => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),

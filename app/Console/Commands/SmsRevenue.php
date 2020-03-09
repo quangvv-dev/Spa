@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Helpers\Functions;
+use App\Models\Order;
 use App\Models\PaymentHistory;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -47,7 +48,14 @@ class  SmsRevenue extends Command
         ];
         $detail = PaymentHistory::search($input);
         $total = $detail->sum('price');
-        $text = 'chi nhanh ' . request()->getHttpHost() . ' co doanh thu trong ngay ' . Carbon::now()->format('d-m-Y') . ' : ' . @number_format($total) . ' VND';
+        $orders = Order::whereBetween('created_at', [
+            Functions::yearMonthDay(Carbon::now()->format('Y-m-d')) . " 00:00:00",
+            Functions::yearMonthDay(Carbon::now()->format('Y-m-d')) . " 23:59:59",
+        ])->with('orderDetails');
+        $all_total = $orders->sum('all_total');
+        $grossRevenue = $orders->sum('gross_revenue');
+        $text = request()->getHttpHost() . ' trong ngay ' . Carbon::now()->format('d/m/Y') . ' có DS: '.@number_format($all_total).' DT: '.@number_format($grossRevenue).' DTTK: ' . @number_format($total) . ' VND';
+        dd($text);
         Functions::sendSms('0334299996', $text);
     }
 }
