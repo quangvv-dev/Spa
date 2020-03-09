@@ -258,6 +258,9 @@
     <div class="page-info">
         {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
     </div>
+    <div class="pull-right">
+        {{ $customers->appends(['search' => request()->search ])->links() }}
+    </div>
 </div>
 @include('customers.modal_view')
 <!-- table-responsive -->

@@ -20,7 +20,7 @@
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('user_id') ? 'has-error' : '' }}">
                                 {!! Form::label('type_delete', 'Loai') !!}
-                                 {!! Form::select('type_delete', [0 => 'Trong liệu trình', 1 => 'Đã bảo hành', 2 => 'Đang bảo lưu'], null, array('class' => 'form-control select2')) !!}
+                                 {!! Form::select('type_delete', [0 => 'Trừ liệu trình', 1 => 'Đã bảo hành', 2 => 'Đang bảo lưu'], null, array('class' => 'form-control select2')) !!}
                                 <span class="help-block">{{ $errors->first('user_id', ':message') }}</span>
                             </div>
                         </div>
