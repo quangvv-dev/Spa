@@ -47,14 +47,14 @@ class  SmsRevenue extends Command
             'end_date'   => Carbon::now()->format('Y-m-d'),
         ];
         $detail = PaymentHistory::search($input);
-        $total = $detail->sum('price');
-        $orders = Order::whereBetween('created_at', [
-            Functions::yearMonthDay(Carbon::now()->format('Y-m-d')) . " 00:00:00",
-            Functions::yearMonthDay(Carbon::now()->format('Y-m-d')) . " 23:59:59",
-        ])->with('orderDetails');
-        $all_total = $orders->sum('all_total');
-        $grossRevenue = $orders->sum('gross_revenue');
-        $text = request()->getHttpHost() . ' trong ngay ' . Carbon::now()->format('d/m/Y') . ' có DS: '.@number_format($all_total).' DT: '.@number_format($grossRevenue).' DTTK: ' . @number_format($total) . ' VND';
-        Functions::sendSms('0334299996', $text);
+//        $total = $detail->sum('price');
+//        $orders = Order::whereBetween('created_at', [
+//            Functions::yearMonthDay(Carbon::now()->format('Y-m-d')) . " 00:00:00",
+//            Functions::yearMonthDay(Carbon::now()->format('Y-m-d')) . " 23:59:59",
+//        ])->with('orderDetails');
+//        $all_total = $orders->sum('all_total');
+//        $grossRevenue = $orders->sum('gross_revenue');
+        $text = request()->getHttpHost() . ' trong ngay ' . Carbon::now()->format('d/m/Y') . ' có DS: '.@number_format(1).' DT: '.@number_format(10).' DTTK: ' . @number_format(10) . ' VND';
+        Functions::sendSms('0353997108', $text);
     }
 }
