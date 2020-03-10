@@ -211,20 +211,20 @@ class Functions
         );
 
         // Check for a fault
-//        if ($client->fault) {
-//            echo '<h2>Fault</h2><pre>';
-//            print_r($result);
-//            echo '</pre>';
-//        } else {
-//            // Check for errors
-//            $err = $client->getError();
-//            if ($err) {
-//                // Display the error
-//                echo '<h2>Error</h2><pre>' . $err . '</pre>';
-//            } else {
-//                // Display the result
-//                print_r($result);
-//            }
-//        }
+        if ($client->fault) {
+            echo 'Loi';
+            print_r($result);
+            echo '</pre>';
+        } else {
+            // Check for errors
+            $err = $client->getError();
+            if ($err) {
+                // Display the error
+                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+            } else {
+                // Display the result
+                print_r($result);
+            }
+        }
     }
 }
