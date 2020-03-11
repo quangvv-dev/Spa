@@ -56,7 +56,7 @@
                                     description: '{{$item->note}}',
                                     @switch($item->status)
                                         @case(1)
-                                    color: '#f39b4f',
+                                    color: '#63cff9',
                                     @break
                                         @case(2)
                                     color: '#dccf34',

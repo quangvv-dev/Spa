@@ -137,8 +137,8 @@
             <th class="text-white text-center">Nhóm KH</th>
             <th class="text-white text-center" style="width: 200px">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
             <th class="text-white text-center">Ngày sinh&emsp;&emsp;&emsp;</th>
-            <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
+            <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Người tạo KH</th>
             <th class="text-white text-center">Nguồn KH</th>
             <th class="text-white text-center">Link FB</th>
@@ -175,10 +175,10 @@
                     </td>
                     <td class="text-center " data-id="{{$customer->id}}"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
                     <td class="text-center customer-birthday" data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
-                    <td class="text-center telesale-customer"
-                        data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description-cus" data-id="{{$customer->id}}"
                         style="width: 291px; height: 59px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
+                    <td class="text-center telesale-customer"
+                        data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ @$customer->facebook}}</td>
