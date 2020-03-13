@@ -73,6 +73,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('customers', 'CustomerController@getListAjax');
         Route::get('group-comments/{id}', 'GroupCommentController@edit');
         Route::put('update-type-orders/{id}', 'OrderController@updateType');
+        Route::any('updatePostion', 'StatusController@updatePostion');
+        Route::any('updateColor', 'StatusController@updateColor');
     });
 
     Route::resource('rules', 'RuleController');//Automation

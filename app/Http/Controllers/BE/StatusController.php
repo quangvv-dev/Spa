@@ -33,12 +33,12 @@ class StatusController extends Controller
      */
     public function index(Request $request)
     {
-        $docs = Status::orderBy('id', 'desc');
+        $docs = Status::orderBy('position', 'asc');
         if ($request->search) {
             $docs = $docs->where('name', 'like', '%' . $request->search . '%')
                 ->orwhere('type', 'like', '%' . $request->search. '%');
         }
-        $docs = $docs->paginate(10);
+        $docs = $docs->paginate(15);
         $title = 'Quản lý trạng thái';
         if ($request->ajax()) {
             return Response::json(view('status.ajax', compact('docs', 'title'))->render());
@@ -137,5 +137,19 @@ class StatusController extends Controller
                 'customer' => $customer,
                 'data' => $statuses
             ];
+    }
+    public function updatePostion(Request $request)
+    {
+        $data = $request->all();
+        foreach ($data['data'] as $key => $record) {
+            Status::where('id',$record['id'])->update(['position'=>$record['position']]);
+        }
+    }
+    public function updateColor(Request $request)
+    {
+        $data = $request->id;
+        $color = Status::find($request->id);
+        $color->color = $request->color;
+        $color->save();
     }
 }
