@@ -35,6 +35,37 @@
                 $('#registration-form').html(data);
 
             });
+            $( function () {
+                $( "table tbody" ).sortable({
+                    stop: function( event, ui ) {
+                        var rows = $('.table tbody tr');
+                        var dataPosition = [];
+                        for (var r = 0; r < rows.length; r++) {
+                            $(rows[r]).attr('data-position',r)
+                            dataPosition.push({
+                                id : $(rows[r]).attr('data-id'),
+                                position : r
+                            })
+                        }
+
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: "{{ Url('ajax/updatePostion/') }}",
+                            method: "post",
+                            dataType:'json',
+                            data:{
+                                data : dataPosition
+                            }
+                        }).done(function (data) {
+                            console.log('ok')
+                        });
+                    }
+                });
+                // $( ".table" ).disableSelection();
+            } );
+
         });
         $(document).on('change','.header-search',function() {
             var search = $(this).val();
@@ -44,20 +75,43 @@
                 data:{search: search}
             }).done(function (data) {
                 $('#registration-form').html(data);
-
             });
+            $( function () {
+                $( "table tbody" ).sortable({
+                    stop: function( event, ui ) {
+                        var rows = $('.table tbody tr');
+                        var dataPosition = [];
+                        for (var r = 0; r < rows.length; r++) {
+                            $(rows[r]).attr('data-position',r)
+                            dataPosition.push({
+                                id : $(rows[r]).attr('data-id'),
+                                position : r
+                            })
+                        }
+
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: "{{ Url('ajax/updatePostion/') }}",
+                            method: "post",
+                            dataType:'json',
+                            data:{
+                                data : dataPosition
+                            }
+                        }).done(function (data) {
+                            console.log('ok')
+                        });
+                    }
+                });
+                // $( ".table" ).disableSelection();
+            } );
         });
 
 
         // sortable update position
-        $( function() {
-            // var abc = null;
-            // var bcd = null;
+        $( function () {
             $( "table tbody" ).sortable({
-                // start: function( event, ui ) {
-                //     this.abc = event.originalEvent.target.innerText;
-                //     this.bcd = event;
-                // },
                 stop: function( event, ui ) {
                     var rows = $('.table tbody tr');
                     var dataPosition = [];
