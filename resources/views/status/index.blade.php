@@ -24,7 +24,7 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('keyup','.header-search',function(e) {
+        $('.card-header').on('keyup','.header-search',function(e) {
             e.preventDefault();
             var search = $(this).val();
             $.ajax({
@@ -34,9 +34,11 @@
             }).done(function (data) {
                 $('#registration-form').html(data);
 
+                sortable();
+                updateColor();
             });
         });
-        $(document).on('change','.header-search',function() {
+        $('.card-header').on('change','.header-search',function() {
             var search = $(this).val();
             $.ajax({
                 url: "{{ Url('status/') }}",
@@ -45,19 +47,15 @@
             }).done(function (data) {
                 $('#registration-form').html(data);
 
+                sortable();
+                updateColor();
             });
         });
-
-
+        
+        
         // sortable update position
-        $( function() {
-            // var abc = null;
-            // var bcd = null;
+        function sortable(){
             $( "table tbody" ).sortable({
-                // start: function( event, ui ) {
-                //     this.abc = event.originalEvent.target.innerText;
-                //     this.bcd = event;
-                // },
                 stop: function( event, ui ) {
                     var rows = $('.table tbody tr');
                     var dataPosition = [];
@@ -82,10 +80,9 @@
                     }).done(function (data) {
                         console.log('ok')
                     });
-            }
-        });
-            // $( ".table" ).disableSelection();
-        } );
+                }
+            });
+        }
 
 
         function debounce(func, wait) {
@@ -126,19 +123,11 @@
 
         }, 500);
 
-        $('.bgcolor').on('change', handleClick);
 
-        // function myFunc(e){
-        //     console.log(123,e);
-        //     $('#bgcolor').on('change', handleClick);
-        // }
+        function updateColor(){
+            $('.bgcolor').on('change', handleClick);
+        }
 
-
-        // $(document).on("change" , "#bgcolor" , function(){
-        //     // alert($(this).val());
-        //         console.log($(this).val());
-            
-        // });
 
 
     </script>
