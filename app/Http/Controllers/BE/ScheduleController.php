@@ -31,11 +31,11 @@ class ScheduleController extends Controller
         $staff = $user->toArray();
         $staff2 = $user->prepend('Tất cả người tạo', 0)->toArray();
         $color = [
-            1 => 'Chưa qua',
+//            1 => 'Chưa qua',
             2 => 'Đặt lịch',
             3 => 'Đến/mua',
             4 => 'Đến/chưa mua',
-            //            5 => 'Hủy',
+            5 => 'Hủy',
             //            6 => 'Tất cả',
         ];
         view()->share([
@@ -92,8 +92,8 @@ class ScheduleController extends Controller
             'creator_id'    => Auth::user()->id,
         ]);
         if ($request->note) {
-            $note= str_replace("\r\n", ' ', $request->note);
-            $request->merge(['note' =>$note]);
+            $note = str_replace("\r\n", ' ', $request->note);
+            $request->merge(['note' => $note]);
         }
         $data = Schedule::create($request->all());
         $customer = Customer::find($id);
@@ -179,8 +179,8 @@ class ScheduleController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->note) {
-            $note= str_replace("\r\n", ' ', $request->note);
-            $request->merge(['note' =>$note]);
+            $note = str_replace("\r\n", ' ', $request->note);
+            $request->merge(['note' => $note]);
         }
         if (!empty($request->format_date)) {
             $date = $request->date;

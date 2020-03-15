@@ -30,7 +30,7 @@
             <div class="card-header">
                 <div class="left-click">
                     @foreach($color as $k => $item)
-                        <div class="btn white account_relation position"
+                        <div  data-id="{{$k}}" class="btn white account_relation position"
                              style="background: @switch($k)
                              @case(1)
                              {{'#63cff9'}}
@@ -52,7 +52,7 @@
                              @break
                              @endswitch;margin-left: 3px;text-align: left">
                             <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
-                            <label for="{{$k}}">{{$item}}</label>
+                            <label>{{$item}}</label>
                         </div>
                     @endforeach
                 </div>
@@ -105,7 +105,7 @@
                                 var col = '#4bcc4b'
                                 break;
                             case 5:
-                                var col = '#gray'
+                                var col = '#808080'
                                 break;
                             default:
                             // code block
@@ -125,6 +125,10 @@
             }
 
             var arr = [];
+            $('.left-click').delegate('.account_relation', 'click', function () {
+                var data = $(this).attr('data-id');
+                $('#'+data).click();
+            });
             $('body').delegate('.status', 'click', function () {
                 var data = $(this).attr('id');
                 if (!$(this).is(":checked")) {
