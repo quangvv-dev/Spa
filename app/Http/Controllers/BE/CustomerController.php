@@ -75,6 +75,9 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
+        if (Auth::user()->role == UserConstant::TELESALES) {
+            $input['member_sale'] = Auth::user()->id;
+        }
         $statuses = Status::getRelationshipByCustomer($input);
         $customers = Customer::search($input);
         $categories = Category::with('customers')->get();
@@ -369,7 +372,9 @@ class CustomerController extends Controller
     {
         $customer = $this->customerService->find($id);
 
-        if (isset($customer->birthday)) $customer->birthday = Functions::dayMonthYear($customer->birthday);
+        if (isset($customer->birthday)) {
+            $customer->birthday = Functions::dayMonthYear($customer->birthday);
+        }
 
         return $customer;
     }
@@ -383,7 +388,9 @@ class CustomerController extends Controller
         }
 
         $data = Customer::with('status', 'categories', 'telesale')->where('id', $id)->first();
-        if (isset($data->birthday)) $data->birthday = Functions::dayMonthYear($data->birthday);
+        if (isset($data->birthday)) {
+            $data->birthday = Functions::dayMonthYear($data->birthday);
+        }
 
         return $data;
     }
