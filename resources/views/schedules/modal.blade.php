@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-6">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control select2','required'=>true)) !!}
+                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control select2','required'=>true)) !!}
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
@@ -86,7 +86,7 @@
                     </div>
                     <div class="col-md-6">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}

@@ -35,7 +35,7 @@ class ScheduleController extends Controller
             2 => 'Đặt lịch',
             3 => 'Đến/mua',
             4 => 'Đến/chưa mua',
-            5 => 'Hủy',
+            5 => 'Hủy lịch',
             //            6 => 'Tất cả',
         ];
         view()->share([

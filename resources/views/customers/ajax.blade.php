@@ -225,7 +225,7 @@
                             <input
                                     type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                         <td class="text-center">{{ $rank ++ }}</td>
-                        <td class="text-center">{{ date('d-m-Y', strtotime($customer->created_at)) }}</td>
+                        <td class="text-center">{{ date('d-m-Y H:i', strtotime($customer->created_at)) }}</td>
                         <td class="text-center name-customer" data-customer-id="{{ $customer->id }}">
                             <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
                                 <i class="fas fa-info-circle"></i>
