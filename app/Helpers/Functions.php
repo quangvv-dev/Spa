@@ -238,7 +238,7 @@ class Functions
         if ($err) {
             echo '<h2>Test-Constructor error</h2><pre>' . $err . '</pre>';
         }
-        $result = $client->call('checkBalance',
+        $result = $client->call('wsCpMt',
             [
                 'User'     => 'smsbrand_royal_spa',
                 'Password' => '123456a@',
