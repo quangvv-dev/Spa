@@ -240,14 +240,14 @@ class Functions
         }
         $result = $client->call('wsCpMt',
             [
-                'User'     => 'smsbrand_royal_spa',
-                'Password' => '123456a@',
-                'CPCode'   => 'ROYAL_SPA',
-                'RequestID'   => '1',
-                'ReceiverID'  => '84353997108',
-//                'ServiceID'   => 'ROYAL_SPA',
+                'User'        => 'smsbrand_royal_spa',
+                'Password'    => '123456a@',
+                'CPCode'      => 'ROYAL_SPA',
+                'RequestID'   => 1,
+                'ReceiverID'  => 84353997108,
+                'ServiceID'   => 'ROYAL_SPA',
                 'CommandCode' => 'bulksms',
-                'ContentType' => '0',
+                'ContentType' => 0,
                 'Content'     => 'Quang test sms',
             ], '', '', ''
         );
