@@ -90,11 +90,11 @@ class Customer extends Model
 
     public static function search($param)
     {
-        $data = self::orderBy('id', 'desc');
-        if (isset($param['member_sale']) && $param['member_sale']) {
-            $data = $data->where('telesales_id', $param['member_sale']);
-        }
-        $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+//        $data = self::orderBy('id', 'desc');
+//        if (isset($param['member_sale']) && $param['member_sale']) {
+//            $data = $data->where('telesales_id', $param['member_sale']);
+//        }
+        $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         if (count($param)) {
             static::applySearchConditions($data, $param);
         }

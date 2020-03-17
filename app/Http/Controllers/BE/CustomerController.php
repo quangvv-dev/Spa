@@ -75,9 +75,9 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        if (Auth::user()->role == UserConstant::TELESALES) {
-            $input['member_sale'] = Auth::user()->id;
-        }
+//        if (Auth::user()->role == UserConstant::TELESALES) {
+//            $input['member_sale'] = Auth::user()->id;
+//        }
         $statuses = Status::getRelationshipByCustomer($input);
         $customers = Customer::search($input);
         $categories = Category::with('customers')->get();
