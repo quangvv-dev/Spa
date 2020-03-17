@@ -228,7 +228,7 @@ class Functions
 //        }
     }
 
-    public static function sendSmsBK($phone, $sms_text, $send_after = '')
+    public static function sendSmsBK()
     {
         $client = new nusoap_client("http://203.190.170.43:9998/bulkapi?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
