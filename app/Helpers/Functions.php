@@ -245,7 +245,7 @@ class Functions
                 'CPCode'   => 'ROYAL_SPA',
                 'RequestID'   => '1',
                 'ReceiverID'  => '84353997108',
-                'ServiceID'   => 'ROYAL_SPA',
+//                'ServiceID'   => 'ROYAL_SPA',
                 'CommandCode' => 'bulksms',
                 'ContentType' => '0',
                 'Content'     => 'Quang test sms',
