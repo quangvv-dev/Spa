@@ -102,6 +102,23 @@ class CustomerController extends Controller
         return view('customers._form', compact('title'));
     }
 
+    public function createGroup()
+    {
+        $title = 'Thêm mới khách hàng';
+        $user_sale = User::where('role', UserConstant::TELESALES);
+        $sale = $user_sale->pluck('id')->toArray();
+        $name = $user_sale->pluck('full_name')->toArray();
+        $sale_name = '';
+        if (count($name)) {
+            foreach ($name as $item) {
+                $sale_name .= "'" . $item . "',";
+            }
+        }
+        $sale_name = substr($sale_name, 0, -1);
+
+        return view('customers._form_auto', compact('title', 'sale', 'sale_name'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -124,6 +141,26 @@ class CustomerController extends Controller
         $customer->categories()->attach($category);
 
         return redirect('customers/' . $customer->id)->with('status', 'Tạo người dùng thành công');
+    }
+
+    public function storeGroup(Request $request)
+    {
+        foreach ($request->full_name as $k => $item) {
+            $input['full_name'] = $item;
+            $input['phone'] = $request->phone[$k];
+            $input['gender'] = $request->gender[$k];
+            $input['facebook'] = $request->facebook[$k];
+            $input['source_id'] = $request->source_id[$k];
+            $input['telesales_id'] = $request->telesales_id[$k];
+            $input['fb_name'] = $item;
+            $input['mkt_id'] = null;
+            $input['status_id'] = StatusCode::NEW;
+            $customer = $this->customerService->create($input);
+            $update = $this->update_code($customer);
+            $category = Category::find($request->group_id[$k]);
+            $customer->categories()->attach($category);
+        }
+        return redirect('customers')->with('status', 'Tạo người dùng thành công');
     }
 
     /**

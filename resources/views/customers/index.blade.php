@@ -39,9 +39,9 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header search-box">
-                <input class="form-control col-md-3 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
+                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
                        type="text" id="search">
-                <div class="col-md-3 col-xs-12">
+                <div class="col-md-2 col-xs-12">
 {{--                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}--}}
                     <select name="group" class="form-control group">
                         <option value="">Chọn nhóm DV</option>
@@ -50,7 +50,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3 col-xs-12">
+                <div class="col-md-2 col-xs-12">
                     <select name="telesales_id" id="telesales_id" class="form-control telesales">
                         <option value="">Chọn nhân viên</option>
                         @foreach($telesales as $k => $l)
@@ -69,6 +69,10 @@
                     <a title="Download Data" style="position: absolute;right: 42%" class="btn"
                        href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
+                    {{--                    @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::MARKETING)--}}
+                    <a class="right btn btn-primary btn-flat" href="{{ route('customers.indexGroup') }}" style="margin-left: 3px"><i
+                            class="fa fa-plus-circle"></i>Auto (test)</a>
+                    {{--                    @endif--}}
                     <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
