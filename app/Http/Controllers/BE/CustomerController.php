@@ -128,7 +128,10 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge(['fb_name' => $request->full_name]);
+        $request->merge([
+            'fb_name'   => $request->full_name,
+            'full_name' => str_replace("'", "", $request->full_name),
+        ]);
         $input = $request->except(['group_id', 'image']);
         $input['mkt_id'] = $request->mkt_id;
         $input['image'] = $request->image;
@@ -146,7 +149,7 @@ class CustomerController extends Controller
     public function storeGroup(Request $request)
     {
         foreach ($request->full_name as $k => $item) {
-            $input['full_name'] = $item;
+            $input['full_name'] = str_replace("'", "", $item);
             $input['phone'] = $request->phone[$k];
             $input['gender'] = $request->gender[$k];
             $input['facebook'] = $request->facebook[$k];
@@ -228,6 +231,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->merge(['full_name' => str_replace("'", "", $request->full_name)]);
         $input = $request->except('group_id');
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
