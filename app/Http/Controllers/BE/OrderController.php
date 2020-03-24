@@ -277,8 +277,8 @@ class OrderController extends Controller
                 $body = setting('sms_cskh_booking');
                 $body = str_replace('%full_name%', @$check2->order->customer->full_name, $body);
                 $body = Functions::vi_to_en($body);
-                $date = Carbon::now()->format('d/m/Y H:i');
-                Functions::sendSms(@$check2->order->customer->phone, $body, $date);
+//                $date = Carbon::now()->format('d/m/Y H:i');
+                Functions::sendSms(@$check2->order->customer->phone, $body);
             }
             return $order;
         } catch (\Exception $e) {
