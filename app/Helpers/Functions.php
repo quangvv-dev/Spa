@@ -189,6 +189,13 @@ class Functions
         return \Carbon\Carbon::parse($date)->format('Y-m-d');
     }
 
+    /**
+     * SMS VMG BRANDNAME
+     *
+     * @param        $phone
+     * @param        $sms_text
+     * @param string $send_after
+     */
     public static function sendSms($phone, $sms_text, $send_after = '')
     {
         $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
@@ -228,13 +235,18 @@ class Functions
 //        }
     }
 
-    public static function sendSmsBK()
+    /**
+     * SMS VIETTEL
+     *
+     * @param $phone
+     * @param $sms_text
+     */
+    public static function sendSmsBK($phone, $sms_text)
     {
         $client = new nusoap_client("http://203.190.170.43:9998/bulkapi?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
         $client->decode_utf8 = false;
         $err = $client->getError();
-//        dd($client);
         if ($err) {
             echo '<h2>Test-Constructor error</h2><pre>' . $err . '</pre>';
         }
@@ -243,31 +255,31 @@ class Functions
                 'User'        => 'smsbrand_royal_spa',
                 'Password'    => '123456a@',
                 'CPCode'      => 'ROYAL_SPA',
-                'UserID'      => '84334299996',
+                'UserID'      => $phone,
                 'RequestID'   => '1',
-                'ReceiverID'  => '84353997108',
-                'ServiceID'   => 'ROYAL_SPA',
+                'ReceiverID'  => $phone,
+                'ServiceID'   => 'ROYAL-SPA',
                 'CommandCode' => 'bulksms',
                 'ContentType' => '0',
-                'Content'     => 'Quang test sms',
+                'Content'     => $sms_text,
             ], '', '', ''
         );
 
         // Check for a fault
-        if ($client->fault) {
-            echo 'Loi';
-            print_r($result);
-            echo '</pre>';
-        } else {
-            // Check for errors
-            $err = $client->getError();
-            if ($err) {
-                // Display the error
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
-            } else {
-                // Display the result
-                print_r($result);
-            }
-        }
+//        if ($client->fault) {
+//            echo 'Loi';
+//            print_r($result);
+//            echo '</pre>';
+//        } else {
+//            // Check for errors
+//            $err = $client->getError();
+//            if ($err) {
+//                // Display the error
+//                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+//            } else {
+//                // Display the result
+//                print_r($result);
+//            }
+//        }
     }
 }

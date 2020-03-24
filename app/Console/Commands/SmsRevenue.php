@@ -56,8 +56,8 @@ class  SmsRevenue extends Command
         $all_total = $orders->sum('all_total');
         $grossRevenue = $orders->sum('gross_revenue');
         $text = request()->getHttpHost() . ' trong ngay ' . Carbon::now()->format('d/m/Y') . ' co DS: ' . @number_format($all_total) . ' DT: ' . @number_format($grossRevenue) . ' DTTK: ' . @number_format($total) . ' VND';
-        Functions::sendSms('0986898662', $text);//chithuan
-        Functions::sendSms('0989996738', $text);//Athien
-        Functions::sendSms('0334299996', $text);//Sy
+        Functions::sendSmsBK('84986898662', $text);//chithuan
+        Functions::sendSmsBK('84989996738', $text);//Athien
+        Functions::sendSmsBK('84334299996', $text);//Sy
     }
 }
