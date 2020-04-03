@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\GroupComment;
 use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -153,14 +154,22 @@ class OrderController extends Controller
         } else {
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');
-            $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
-                $now)->with('orderDetails')->orderBy('id', 'desc');
+//            $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
+//                $now)->with('orderDetails')->orderBy('id', 'desc');
+            $customer_id = GroupComment::where('user_id', 77)->where('messages', 'like',
+                '%Xoá đơn hàng%')->groupBy('customer_id')->pluck('customer_id')
+                ->toArray();
+//            dd($customer_id);
+            $orders = Order::onlyTrashed()->orderBy('created_at', 'desc')->whereIn('member_id', $customer_id);
+
             View::share([
                 'allTotal'     => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest'      => $orders->sum('the_rest'),
             ]);
-            $orders = $orders->paginate(20);
+            $orders = $orders->paginate(30);
+//            dd($orders);
+
             View::share([
                 'allTotalPage'     => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
