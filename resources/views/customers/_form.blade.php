@@ -96,12 +96,14 @@
                             {!! Form::label('telesales_id', 'Người phụ trách', array('class' => 'control-label required')) !!}
                             {{--                            {!! Form::select('telesales_id', $telesales,@$customer->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên')) !!}--}}
                             <select name="telesales_id" id="telesales_id" class="form-control select2"
+                                    {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::TELESALES && isset($customer) ?'disabled':''}}
                                     data-placeholder="Chọn nhân viên">
                                 <option value=""></option>
                                 @foreach($telesales as $k => $l)
                                     <optgroup label="{{ $k }}">
                                         @foreach($l as $kl => $vl)
-                                            <option {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+                                            <option
+                                                {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
                                         @endforeach
                                     </optgroup>
                                 @endforeach
@@ -124,7 +126,8 @@
                                 <select class="form-control select2" name="group_id[]" multiple="multiple"
                                         data-placeholder="Chọn nhóm khách hàng">
                                     @foreach($categories as $item)
-                                        <option value="{{ $item->id }}" {{ isset($customer) && in_array($item->id, $categoryId) ? 'selected' : "" }}>{{ $item->name }}</option>
+                                        <option
+                                            value="{{ $item->id }}" {{ isset($customer) && in_array($item->id, $categoryId) ? 'selected' : "" }}>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             @else

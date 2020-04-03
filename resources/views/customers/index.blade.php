@@ -9,6 +9,7 @@
         .table-vcenter td, .table-vcenter th {
             border-left: 1px solid #e7effc;
         }
+
         .table-ajax table {
             min-width: auto !important;
             width: auto !important;
@@ -42,7 +43,7 @@
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
                        type="text" id="search">
                 <div class="col-md-2 col-xs-12">
-{{--                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}--}}
+                    {{--                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}--}}
                     <select name="group" class="form-control group">
                         <option value="">Chọn nhóm DV</option>
                         @foreach($categories as $item)
@@ -56,7 +57,8 @@
                         @foreach($telesales as $k => $l)
                             <optgroup label="{{ $k }}">
                                 @foreach($l as $kl => $vl)
-                                    <option {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+                                    <option
+                                        {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -69,12 +71,14 @@
                     <a title="Download Data" style="position: absolute;right: 42%" class="btn"
                        href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
-                    {{--                    @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::MARKETING)--}}
-                    <a class="right btn btn-primary btn-flat" href="{{ route('customers.indexGroup') }}" style="margin-left: 3px"><i
-                            class="fa fa-plus-circle"></i>Auto (test)</a>
-                    {{--                    @endif--}}
+                    @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::MARKETING ||
+\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
+                        <a class="right btn btn-primary btn-flat" href="{{ route('customers.indexGroup') }}"
+                           style="margin-left: 3px"><i
+                                class="fa fa-plus-circle"></i>Auto (test)</a>
+                    @endif
                     <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
-                                class="fa fa-plus-circle"></i>Thêm mới</a>
+                            class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
             </div>
             <div id="registration-form">
@@ -96,7 +100,7 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(function(){
+        $(function () {
             $(document).on('click', '.view_modal', function (e) {
                 e.preventDefault();
 
@@ -143,7 +147,7 @@
                 </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
-                        <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
+                    <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -489,7 +493,7 @@
                 });
             });
 
-            function customerBirthday_handleChange(event){
+            function customerBirthday_handleChange(event) {
                 let parent = event.target.parentNode;
                 const birthday = event.target.value;
                 const id = event.target.id;
