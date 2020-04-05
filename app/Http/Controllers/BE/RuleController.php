@@ -7,9 +7,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Element;
 use App\Models\Rule;
+use App\Models\Status;
+use App\Models\Category;
 
 class RuleController extends Controller
 {
+
+    public function __construct()
+    {
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//trạng thái KH
+        $category = Category::pluck('name', 'id')->toArray();//trạng thái KH
+
+        view()->share([
+            'category' => $category,
+            'status' => $status,
+        ]);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +47,7 @@ class RuleController extends Controller
     {
         $title = 'Automation';
         $elements = Element::all();
-        return view('rules._form', compact('elements','title'));
+        return view('rules._form', compact('elements', 'title'));
     }
 
     /**
@@ -90,7 +105,7 @@ class RuleController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

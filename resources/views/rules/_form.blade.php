@@ -139,7 +139,7 @@
                                 <div style="position:relative">
                                     <div id="myDiagramDiv" style="width:100%; height:600px; border: 1px solid;"></div>
                                     <ul id="contextMenu" class="menu"   >
-                                        <li id="new_actor" class="menu-item">Chọn đối tượng
+                                        <li id="new_actor" class="menu-item">Chọn hành động
                                             <ul class="menu">
                                                 @foreach($elements as $element)
                                                     @if($element->type == 'actor')
@@ -148,7 +148,7 @@
                                                 @endforeach
                                             </ul>
                                         </li>
-                                        <li id="new_event" class="menu-item">Thêm sự kiện
+                                        <li id="new_event" class="menu-item">hành động kèm theo
                                             <ul class="menu">
                                                 @foreach($elements as $element)
                                                     @if($element->type == 'event')
@@ -157,7 +157,7 @@
                                                 @endforeach
                                             </ul>
                                         </li>
-                                        <li id="new_action" class="menu-item">Thêm hành động
+                                        <li id="new_action" class="menu-item">Thực thi
                                             <ul class="menu">
                                                 @foreach($elements as $element)
                                                     @if($element->type == 'action')
