@@ -4,6 +4,7 @@ use App\Models\Department;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use App\Models\Element;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,49 +18,56 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
         Element::truncate();
         \App\Models\Rule::truncate();
+        DB::table('elements')->insert([
+            'title' => 'Tạo đơn',
+            'type'  => 'event',
+            'value'  => 'add_order',
+            'color' => '#40bfc1'
+        ]);
 
-        \DB::table('elements')->insert([
-            'title' => 'Khách hàng',
+        DB::table('elements')->insert([
+            'title' => 'Nhóm dịch vụ',
             'type'  => 'actor',
-            'color' => '#4d4646',
+            'value'  => 'customer',
+            'color' => '#4d4646'
         ]);
-        \DB::table('elements')->insert([
-            'title' => 'Nhân viên',
+        DB::table('elements')->insert([
+            'title' => 'Trạng thái KH',
             'type'  => 'actor',
-            'color' => '#5f6caf',
+            'value'  => 'staff',
+            'color' => '#5f6caf'
         ]);
 
-        \DB::table('elements')->insert([
-            'title' => 'Thêm mới',
-            'type'  => 'event',
-            'color' => '#40bfc1',
-        ]);
-        \DB::table('elements')->insert([
-            'title' => 'Chỉnh sửa',
-            'type'  => 'event',
-            'color' => '#db3056',
-        ]);
-        \DB::table('elements')->insert([
-            'title' => 'Thêm mới hoặc chỉnh sửa',
-            'type'  => 'event',
-            'color' => '#f17362',
-        ]);
+//        DB::table('elements')->insert([
+//            'title' => 'Thêm ',
+//            'type'  => 'event',
+//            'value'  => 'edit',
+//            'color' => '#db3056'
+//        ]);
+//        DB::table('elements')->insert([
+//            'title' => 'Thêm mới hoặc chỉnh sửa',
+//            'type'  => 'event',
+//            'value'  => 'update',
+//            'color' => '#f17362'
+//        ]);
 
-        \DB::table('elements')->insert([
+        DB::table('elements')->insert([
             'title' => 'Gửi SMS',
             'type'  => 'action',
-            'color' => '#ffcc00',
+            'value'  => 'send_sms',
+            'color' => '#ffcc00'
         ]);
-        \DB::table('elements')->insert([
+        DB::table('elements')->insert([
             'title' => 'Gửi Email',
             'type'  => 'action',
-            'color' => '#be9fe1',
+            'value'  => 'send_email',
+            'color' => '#be9fe1'
         ]);
-        \DB::table('rules')->insert([
-            'title' => 'Ví dụ 1',
-        ]);
-        \DB::table('rules')->insert([
-            'title' => 'Ví dụ 2',
+        DB::table('elements')->insert([
+            'title' => 'Tạo CV',
+            'type'  => 'action',
+            'value'  => 'create_job',
+            'color' => '#03a9f4'
         ]);
         Model::reguard();
     }

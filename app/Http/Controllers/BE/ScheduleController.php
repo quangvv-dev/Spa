@@ -135,6 +135,7 @@ class ScheduleController extends Controller
             'name'           => 'Công việc chăm sóc khách hàng',
             'description'    => 'Bạn có công việc CSKH với khách hàng ' . $customer->full_name . '---' . $customer->phone . ' đặt lịch hẹn. Trao đổi với KH : ' . $request->note,
         ];
+
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);

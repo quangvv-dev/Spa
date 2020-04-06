@@ -4,8 +4,8 @@
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Tiêu đề</th>
-            <th class="text-white text-center">Ngày bắt đầu</th>
-            <th class="text-white text-center">Ngày kết thúc</th>
+            {{--<th class="text-white text-center">Ngày bắt đầu</th>--}}
+            {{--<th class="text-white text-center">Ngày kết thúc</th>--}}
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Hành động</th>
         </tr>
@@ -23,17 +23,17 @@
                 <tr>
                     <th scope="row">{{$k}}</th>
                     <td class="lalign">{{$rule->title}}</td>
-                    <td><span class="text-center">{{$rule->start_at}}</span></td>
-                    <td><span class="text-center">{{$rule->end_at}}</span></td>
-                    <td>
+                    {{--<td><span class="text-center">{{$rule->start_at}}</span></td>--}}
+                    {{--<td><span class="text-center">{{$rule->end_at}}</span></td>--}}
+                    <td class="text-center">
                         @if($rule->status)
                             <span class="status-icon bg-primary"></span>Kích hoạt
                         @else
                             <span class="status-icon bg-warning"></span>Tạm ngưng
                     @endif
-                    <td>
+                    <td class="text-center">
                         <a href="{{url('rules/'.$rule->id)}}" class="btn btn-primary">Sửa</a>
-                        <a href="#" class="btn btn-danger">Xóa</a>
+                        <a href="javascript:void(0)" class="btn btn-danger delete" data-url="{{url('rules/' . $rule->id)}}">Xóa</a>
                     </td>
                 </tr>
         </tbody>

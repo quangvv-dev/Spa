@@ -9,6 +9,7 @@ use App\Models\Element;
 use App\Models\Rule;
 use App\Models\Status;
 use App\Models\Category;
+use App\Models\RuleOutput;
 
 class RuleController extends Controller
 {
@@ -16,7 +17,7 @@ class RuleController extends Controller
     public function __construct()
     {
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//trạng thái KH
-        $category = Category::pluck('name', 'id')->toArray();//trạng thái KH
+        $category = Category::pluck('name', 'id')->toArray();//danh sách nhóm dịch vụ
 
         view()->share([
             'category' => $category,
@@ -24,6 +25,10 @@ class RuleController extends Controller
         ]);
     }
 
+    function findIndexOfKey($key_to_index, $array)
+    {
+        return @$array[$key_to_index];
+    }
 
     /**
      * Display a listing of the resource.
@@ -33,7 +38,7 @@ class RuleController extends Controller
     public function index()
     {
         $title = 'Automation';
-        $docs = Rule::orderBy('id', 'desc');
+        $docs = Rule::orderBy('id','desc');
         $docs = $docs->paginate(10);
         return view('rules.index', compact('docs', 'title', 'total'));
     }
@@ -72,6 +77,7 @@ class RuleController extends Controller
             $rule = new Rule($data);
             $rule->save();
         }
+        $this->output($rule);
         return redirect('rules');
     }
 
@@ -123,6 +129,61 @@ class RuleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Rule::find($id)->delete();
+        $this->removeOutput($id);
+        return 1;
+    }
+
+    public function delete($id)
+    {
+
+    }
+
+    public function output($rule)
+    {
+        $configs = json_decode(json_decode($rule->configs));
+        $data = collect($configs->nodeDataArray);
+        $links = collect($configs->linkDataArray);
+        $nodes = $data->mapWithKeys(function ($item) {
+            return [$item->key => $item];
+        });
+        $arr = [];
+        $link_nodes = [];
+        foreach ($links as $key1 => $link1) {
+            $link = [];
+            foreach ($links as $key2 => $link2) {
+                if ($link1->to == $link2->from && count($link) == 0) {
+                    array_push($link, $link1->from, $link1->to, $link2->to);
+                }
+                if ($link1->from == $link2->to && count($link) == 0) {
+                    array_push($link, $link2->from, $link2->to, $link1->to);
+                }
+            }
+            if (!in_array($link, $link_nodes, true)) {
+                array_push($link_nodes, $link);
+            }
+        }
+        foreach ($link_nodes as $key => $record) {
+            $new = [];
+            $new['rule_id'] = $rule->id;
+            $new['status'] = $rule->status;
+            $new['event'] = $nodes[$record[0]]->value;
+            $new['action'] = $nodes[$record[2]]->value;
+            $new['configs'] = isset($nodes[$record[2]]->configs) ? json_encode($nodes[$record[2]]->configs) : null;
+
+            if (isset($nodes[$record[1]]->configs) && isset($nodes[$record[1]]->configs->group) && count($nodes[$record[1]]->configs->group)) {
+                foreach ($nodes[$record[1]]->configs->group as $key => $gr) {
+                    $new['actor'] = $gr;
+                    array_push($arr, $new);
+                }
+            }
+        }
+        $this->removeOutput($rule->id); // Remove before insert
+        RuleOutput::insert($arr);
+    }
+
+    public function removeOutput($ruleId)
+    {
+        RuleOutput::where('rule_id', $ruleId)->delete();
     }
 }
