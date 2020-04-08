@@ -40,6 +40,7 @@ class RuleController extends Controller
         $title = 'Automation';
         $docs = Rule::orderBy('id','desc');
         $docs = $docs->paginate(10);
+        $total = $docs->total();
         return view('rules.index', compact('docs', 'title', 'total'));
     }
 
