@@ -36,16 +36,17 @@ class OrderService
         $input = [
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
+            'role_type'         => $data['role_type'],
             'count_day'         => $countDay,
-            'type'              => ($data['count_day'] == null || $data['count_day'] == 0)  ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'type'              => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => $theRest,
-            'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id']: "",
-            'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']). $now: Carbon::now()
+            'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : "",
+            'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
         ];
 
         $model = $this->order->fill($input);
         $model->save();
-        $model->code = $model->id < 10 ?'DH0'.$model->id:'DH'.$model->id;
+        $model->code = $model->id < 10 ? 'DH0' . $model->id : 'DH' . $model->id;
         $model->save();
         return $model;
 
@@ -146,8 +147,8 @@ class OrderService
         }
 
         return $data = [
-            'order' => $order,
-            'order_details' => $orderDetails
+            'order'         => $order,
+            'order_details' => $orderDetails,
         ];
     }
 
@@ -158,16 +159,19 @@ class OrderService
         $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue;
         $now = Carbon::now()->format('H:i:s');
 
-        if (empty($attibutes) && is_array($attibutes) == false) return false;
+        if (empty($attibutes) && is_array($attibutes) == false) {
+            return false;
+        }
 
         $attibutes = [
             'member_id'         => $attibutes['user_id'],
             'the_rest'          => $theRest,
+            'role_type'         => $attibutes['role_type'],
             'count_day'         => $attibutes['count_day'],
             'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])),
             'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
-            'created_at'        => isset($attibutes['created_at']) ?Functions::yearMonthDay($attibutes['created_at']). $now: Carbon::now()
+            'created_at'        => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
         ];
 
         $order->update($attibutes);
@@ -184,7 +188,7 @@ class OrderService
 
         $order->update([
             'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
-            'the_rest' => $order->the_rest + $paymentHistory->price
+            'the_rest'      => $order->the_rest + $paymentHistory->price,
         ]);
 
         $paymentHistory->delete();

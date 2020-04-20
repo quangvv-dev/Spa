@@ -157,6 +157,9 @@ class Order extends Model
                 ->when(isset($input['order_type']), function ($query) use ($input) {
                     $query->where('type', $input['order_type']);
                 })
+                ->when(isset($input['role_type']), function ($query) use ($input) {
+                    $query->where('role_type', $input['role_type']);
+                })
                 ->when(isset($input['data_time']), function ($query) use ($input) {
                     $query->when($input['data_time'] == 'TODAY' ||
                         $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {

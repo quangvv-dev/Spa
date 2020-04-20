@@ -41,4 +41,7 @@ class StatusCode
     const TYPE_ORDER_PROCESS = 0; //Trừ liệu trinh
     const TYPE_ORDER_GUARANTEE = 1; //Đã bảo
     const TYPE_ORDER_RESERVE = 2; //Đang bảo lưu
+
+    const PRODUCT = 2; //sản phẩm
+    const SERVICE = 1;//dịch vụ
 }

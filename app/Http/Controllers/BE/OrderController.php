@@ -41,25 +41,28 @@ class OrderController extends Controller
     /**
      * OrderController constructor.
      *
-     * @param OrderService $orderService
+     * @param OrderService       $orderService
      * @param OrderDetailService $orderDetailService
      */
-    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService, TaskService $taskService)
-    {
+    public function __construct(
+        OrderService $orderService,
+        OrderDetailService $orderDetailService,
+        TaskService $taskService
+    ) {
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
         $this->taskService = $taskService;
 
-        $services = Services::orderBy('category_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
-            'id')->prepend('-Chọn sản phẩm-', '');
+        $services = Services::where('type', StatusCode::SERVICE)->orderBy('category_id', 'asc')->orderBy('id', 'desc')
+            ->get()->pluck('name', 'id')->prepend('-Chọn dịch vụ-', '');
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
         $order_type = [
             Order::TYPE_ORDER_DEFAULT => 'Đơn thường',
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
         view()->share([
-            'services' => $services,
-            'status' => $status,
+            'services'   => $services,
+            'status'     => $status,
             'order_type' => $order_type,
         ]);
     }
@@ -70,9 +73,10 @@ class OrderController extends Controller
         $customer = Customer::find($customerId);
         $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         $title = 'Tạo đơn hàng';
-        $services = Services::with('category')->get();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services'));
+        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services', 'products'));
     }
 
     public function getInfoService(Request $request)
@@ -110,7 +114,7 @@ class OrderController extends Controller
 
             if (isset($request->spa_therapisst_id)) {
                 HistoryUpdateOrder::create([
-                    'user_id' => $request->spa_therapisst_id,
+                    'user_id'  => $request->spa_therapisst_id,
                     'order_id' => $order->id,
                 ]);
             }
@@ -143,15 +147,15 @@ class OrderController extends Controller
             $orders = Order::searchAll($request->all());
 
             View::share([
-                'allTotal' => $orders->sum('all_total'),
+                'allTotal'     => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
-                'theRest' => $orders->sum('the_rest'),
+                'theRest'      => $orders->sum('the_rest'),
             ]);
             $orders = $orders->orderBy('id', 'desc')->paginate(20);
             View::share([
-                'allTotalPage' => $orders->sum('all_total'),
+                'allTotalPage'     => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
-                'theRestPage' => $orders->sum('the_rest'),
+                'theRestPage'      => $orders->sum('the_rest'),
             ]);
 
         } else {
@@ -160,15 +164,15 @@ class OrderController extends Controller
             $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
                 $now)->with('orderDetails')->orderBy('id', 'desc');
             View::share([
-                'allTotal' => $orders->sum('all_total'),
+                'allTotal'     => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
-                'theRest' => $orders->sum('the_rest'),
+                'theRest'      => $orders->sum('the_rest'),
             ]);
             $orders = $orders->paginate(20);
             View::share([
-                'allTotalPage' => $orders->sum('all_total'),
+                'allTotalPage'     => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
-                'theRestPage' => $orders->sum('the_rest'),
+                'theRestPage'      => $orders->sum('the_rest'),
             ]);
         }
 
@@ -212,7 +216,7 @@ class OrderController extends Controller
         } else {
             $request->merge([
                 'start_date' => Carbon::now()->startOfMonth()->format('Y-m-d'),
-                'end_date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
+                'end_date'   => Carbon::now()->endOfMonth()->format('Y-m-d'),
             ]);
             $detail = PaymentHistory::search($request->all());
 
@@ -294,19 +298,19 @@ class OrderController extends Controller
                 if (count($job)) {
                     $day = @array_values($job)[0]->configs->delay_value;
                     $input = [
-                        'customer_id' => @$check3->order->customer->id,
-                        'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
-                        'time_from' => '07:00',
-                        'date_to' => Carbon::now()->addDays($day)->format('Y-m-d'),
-                        'time_to' => '16:00',
-                        'code' => 'CV-CSKH',
-                        'user_id' => @$check3->order->customer->telesales_id,
-                        'all_day' => 'on',
-                        'priority' => 1,
+                        'customer_id'    => @$check3->order->customer->id,
+                        'date_from'      => Carbon::now()->addDays($day)->format('Y-m-d'),
+                        'time_from'      => '07:00',
+                        'date_to'        => Carbon::now()->addDays($day)->format('Y-m-d'),
+                        'time_to'        => '16:00',
+                        'code'           => 'CV-CSKH',
+                        'user_id'        => @$check3->order->customer->telesales_id,
+                        'all_day'        => 'on',
+                        'priority'       => 1,
                         'amount_of_work' => 1,
-                        'type' => 2,
-                        'name' => 'Công việc chăm sóc khách hàng',
-                        'description' => 'Bạn có công việc CSKH sau' . $day . ' sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
+                        'type'           => 2,
+                        'name'           => 'Công việc chăm sóc khách hàng',
+                        'description'    => 'Bạn có công việc CSKH sau' . $day . ' sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
                     ];
                     $this->taskService->create($input);
 
@@ -354,9 +358,9 @@ class OrderController extends Controller
         }
 
         HistoryUpdateOrder::create([
-            'user_id' => $request->user_id,
-            'order_id' => $order->id,
-            'type' => $request->type_delete,
+            'user_id'     => $request->user_id,
+            'order_id'    => $order->id,
+            'type'        => $request->type_delete,
             'description' => $request->description,
         ]);
 
@@ -422,9 +426,12 @@ class OrderController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
-        $services = Services::with('category')->get();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $role_type = $order->role_type;
 
-        return view('order.index', compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services'));
+        return view('order.index',
+            compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services', 'products', 'role_type'));
     }
 
     public function update(Request $request, $id)
@@ -484,18 +491,18 @@ class OrderController extends Controller
                     if (!empty($service)) {
                         if (!empty($customer) && empty($checkOrder)) {
                             $order = Order::create([
-                                'code' => $row['ma_dh'],
-                                'member_id' => $customer->id,
-                                'all_total' => $row['doanh_so'],
-                                'count_day' => 0,
-                                'the_rest' => (int)$row['con_lai'],
-                                'description' => $row['mo_ta'],
-                                'gross_revenue' => $row['da_thanh_toan'],
-                                'payment_type' => $paymentType,
-                                'payment_date' => $payment_date,
-                                'type' => Order::TYPE_ORDER_DEFAULT,
+                                'code'              => $row['ma_dh'],
+                                'member_id'         => $customer->id,
+                                'all_total'         => $row['doanh_so'],
+                                'count_day'         => 0,
+                                'the_rest'          => (int)$row['con_lai'],
+                                'description'       => $row['mo_ta'],
+                                'gross_revenue'     => $row['da_thanh_toan'],
+                                'payment_type'      => $paymentType,
+                                'payment_date'      => $payment_date,
+                                'type'              => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
-                                'created_at' => Carbon::createFromFormat('d/m/Y',
+                                'created_at'        => Carbon::createFromFormat('d/m/Y',
                                     $row['ngay_tao'])->format('Y-m-d'),
                             ]);
                         } else {
@@ -504,22 +511,22 @@ class OrderController extends Controller
 
                         if (!empty($customer)) {
                             $orderDetail = OrderDetail::create([
-                                'order_id' => $order->id,
-                                'code' => $row['ma_sp'],
-                                'booking_id' => $service->id,
-                                'quantity' => $row['so_luong'],
-                                'total_price' => $row['gia_ban'],
-                                'user_id' => $customer ? $customer->id : $order->member_id,
-                                'address' => $customer ? $customer->address : '',
-                                'vat' => $row['vat'],
+                                'order_id'         => $order->id,
+                                'code'             => $row['ma_sp'],
+                                'booking_id'       => $service->id,
+                                'quantity'         => $row['so_luong'],
+                                'total_price'      => $row['gia_ban'],
+                                'user_id'          => $customer ? $customer->id : $order->member_id,
+                                'address'          => $customer ? $customer->address : '',
+                                'vat'              => $row['vat'],
                                 'percent_discount' => $row['ck'],
-                                'number_discount' => $row['ckd'],
-                                'price' => $row['gia_ban'],
+                                'number_discount'  => $row['ckd'],
+                                'price'            => $row['gia_ban'],
                             ]);
 
                             PaymentHistory::create([
-                                'order_id' => $order->id,
-                                'price' => $row['da_thanh_toan'],
+                                'order_id'     => $order->id,
+                                'price'        => $row['da_thanh_toan'],
                                 'payment_date' => Carbon::now()->format('Y-m-d'),
                             ]);
                         }
@@ -572,9 +579,9 @@ class OrderController extends Controller
         ]);
 
         $map = [
-            Order::TYPE_ORDER_PROCESS => 'Trong liệu trình',
+            Order::TYPE_ORDER_PROCESS   => 'Trong liệu trình',
             Order::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
-            Order::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
+            Order::TYPE_ORDER_RESERVE   => 'Đang bảo lưu',
         ];
 
         return $map[$order->type] ?? null;

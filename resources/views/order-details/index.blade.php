@@ -43,6 +43,7 @@
         .tableFixHead tbody .fixed2 td {
             background: #cbdbf2;
         }
+
         .form-control {
             font-size: 14px;
         }
@@ -107,13 +108,16 @@
                     <div class="btn-group ml5">
                         <button class="btn btn-default order_status" data-status="">Đã hủy</button>
                     </div>
-{{--                    <div class="btn-group ml5">--}}
-{{--                        <button class="btn btn-default bor-none" data-filter="payment" id="payment_tab">Đã thu trong--}}
-{{--                            kỳ--}}
-{{--                        </button>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="btn-group ml5">--}}
+                    {{--                        <button class="btn btn-default bor-none" data-filter="payment" id="payment_tab">Đã thu trong--}}
+                    {{--                            kỳ--}}
+                    {{--                        </button>--}}
+                    {{--                    </div>--}}
                     <div class="btn-group ml5">
                         {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Tất cả đơn')) !!}
+                    </div>
+                    <div class="btn-group ml5">
+                        {!! Form::select('role_type', [1=>'Dịch vụ',2=>'Sản phẩm'], null, array('class' => 'form-control role_type', 'placeholder'=>'Sản phẩm & dịch vụ')) !!}
                     </div>
                 </div>
             </div>
@@ -134,12 +138,14 @@
     <input type="hidden" id="bor-none">
     <input type="hidden" id="order-status">
     <input type="hidden" id="order-type">
+    <input type="hidden" id="role_type">
     <input type="hidden" id="phone">
     @include('order-details.modal-upload-excel')
 @endsection
 @section('_script')
     <script type="text/javascript">
         function searchAjax(data) {
+            $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
                 url: "{{ Url('list-orders/') }}",
                 method: "get",
@@ -162,6 +168,7 @@
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
             const order_type = $('#order-type').val();
+            const role_type = $('#role_type').val();
             const phone = $('.phone').val();
 
             if (class_name === 'display pl5')
@@ -175,8 +182,9 @@
                 var bor_none = $('#bor-none').val();
 
             }
-            console.log(bor_none,data_time);
+            // console.log(bor_none, data_time);
             $('#group').val(group);
+            $('#role_type').val(role_type);
             $('#phone').val(phone);
             $('#telesales').val(telesales);
             $('#marketing').val(marketing);
@@ -206,6 +214,7 @@
                 end_date: end_date,
                 bor_none: bor_none,
                 order_type: order_type,
+                role_type: role_type,
                 phone: phone,
             });
         })
@@ -224,7 +233,9 @@
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
             const phone = $('#phone').val();
+            const role_type = $('#role_type').val();
             $('#order-type').val(order_type);
+            $('#role_type').val(role_type);
 
             searchAjax({
                 group: group,
@@ -238,6 +249,41 @@
                 end_date: end_date,
                 bor_none: bor_none,
                 order_type: order_type,
+                role_type: role_type,
+                phone: phone,
+            });
+        });
+
+        $(document).on('change', '.role_type', function () {
+            const order_type = $('#order_type').val();
+            const group = $('#group').val();
+            const telesales = $('#telesales').val();
+            const marketing = $('#marketing').val();
+            const customer = $('#customer').val();
+            const service = $('#service').val();
+            const payment_type = $('#payment-type').val();
+            const data_time = $('#choose-time').val();
+            const start_date = $('#filter-start-date').val();
+            const end_date = $('#filter-end-date').val();
+            const bor_none = $('#bor-none').val();
+            const phone = $('#phone').val();
+            const role_type = $('.role_type').val();
+            $('#role_type').val(role_type);
+
+
+            searchAjax({
+                group: group,
+                telesales: telesales,
+                marketing: marketing,
+                customer: customer,
+                service: service,
+                payment_type: payment_type,
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                bor_none: bor_none,
+                order_type: order_type,
+                role_type: role_type,
                 phone: phone,
             });
         });
@@ -324,6 +370,7 @@
             e.preventDefault();
             let pages = $(this).attr('href').split('page=')[1];
             const order_type = $('#order_type').val();
+            const role_type = $('#role_type').val();
             const group = $('#group').val();
             const telesales = $('#telesales').val();
             const marketing = $('#marketing').val();
@@ -350,6 +397,7 @@
                     end_date: end_date,
                     bor_none: bor_none,
                     order_type: order_type,
+                    role_type: role_type,
                     phone: phone,
                     page: pages,
                 },

@@ -277,9 +277,11 @@
                                             <div class="card-header">
                                                 <h3 class="card-title">Danh sách đơn hàng bán</h3></br>
                                                 <div class="col relative">
-                                                    <a class="right btn btn-primary btn-flat"
-                                                       href="{{ route('orders.create', $customer->id) }}"><i
-                                                            class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                                                    <a class="right btn btn-primary btn-flat" data-toggle="modal"
+                                                       data-target="#roleTypeModal"><i class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                                                @include('order.role_type_modal')
+
+
                                             </div>
                                             @include('customers.order')
                                         </div>
