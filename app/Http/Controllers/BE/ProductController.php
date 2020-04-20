@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
 use Illuminate\Support\Facades\Response;
 
-class ServiceController extends Controller
+class ProductController extends Controller
 {
     /**
      * ServiceController constructor.
@@ -31,7 +31,7 @@ class ServiceController extends Controller
      */
     public function index(Request $request)
     {
-        $docs = Service::where('type', StatusCode::SERVICE)->orderBy('id', 'desc');
+        $docs = Service::where('type', StatusCode::PRODUCT)->orderBy('id', 'desc');
         if ($request->search) {
             $docs = $docs->where('name', 'like', '%' . $request->search . '%')
                 ->orwhere('code', 'like', '%' . $request->search . '%')
@@ -40,7 +40,7 @@ class ServiceController extends Controller
         }
         $docs = $docs->paginate(10);
 
-        $title = 'Quản lý dịch vụ';
+        $title = 'Quản lý sản phẩm';
         if ($request->ajax()) {
             return Response::json(view('service.ajax', compact('docs', 'title'))->render());
         }
@@ -54,7 +54,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $title = 'Thêm dịch vụ';
+        $title = 'Thêm sản phẩm';
         return view('service._form', compact('title'));
     }
 
@@ -81,6 +81,7 @@ class ServiceController extends Controller
         $input['price_buy'] = $request->price_buy ? str_replace(',', '', $request->price_buy) : 0;
         $input['price_sell'] = $request->price_sell ? str_replace(',', '', $request->price_sell) : 0;
         $input['promotion_price'] = $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0;
+        $input['type'] = StatusCode::PRODUCT;
         $data = Service::create($input);
         $data->update([
             'code' => $data->id,
@@ -111,7 +112,7 @@ class ServiceController extends Controller
     public function edit(Service $service)
     {
         $doc = $service;
-        $title = 'Cập nhật dịch vụ';
+        $title = 'Cập nhật sản phẩm';
         return view('service._form', compact('title', 'doc'));
     }
 

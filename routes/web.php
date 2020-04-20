@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryController');
     Route::resource('services', 'ServiceController');
+    Route::resource('products', 'ProductController');
     Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::get('customers-group', 'CustomerController@createGroup')->name('customers.indexGroup');

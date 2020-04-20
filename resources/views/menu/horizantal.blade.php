@@ -48,7 +48,10 @@
                             <a href="{!! route('category.index') !!}">Nhóm dịch vụ</a>
                         </li>
                         <li>
-                            <a href="{!! route('services.index') !!}">Danh sách SP/DV</a>
+                            <a href="{!! route('services.index') !!}">Danh sách dịch vụ</a>
+                        </li>
+                        <li>
+                            <a href="{!! route('products.index') !!}">Danh sách sản phẩm</a>
                         </li>
                         <li>
                             <a href="{!! route('order.list') !!}">Danh sách đơn hàng</a>

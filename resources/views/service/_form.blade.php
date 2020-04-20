@@ -15,7 +15,7 @@
             <div class="col row">
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                        {!! Form::label('name', 'Tên dịch vụ', array('class' => ' required')) !!}
+                        {!! Form::label('name', 'Tên', array('class' => ' required')) !!}
                         {!! Form::text('name',null, array('class' => 'form-control', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                     </div>
@@ -35,21 +35,21 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('price_buy') ? 'has-error' : '' }}">
                         {!! Form::label('price_buy', 'Giá nhập', array('class' => ' required')) !!}
-                        {!! Form::text('price_buy',null, array('class' => 'form-control number')) !!}
+                        {!! Form::text('price_buy',@number_format($doc->price_buy), array('class' => 'form-control price')) !!}
                         <span class="help-block">{{ $errors->first('price_buy', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('price_sell') ? 'has-error' : '' }}">
                         {!! Form::label('price_sell', 'Giá bán', array('class' => ' required')) !!}
-                        {!! Form::text('price_sell',null, array('class' => 'form-control number')) !!}
+                        {!! Form::text('price_sell',@number_format($doc->price_sell), array('class' => 'form-control price')) !!}
                         <span class="help-block">{{ $errors->first('price_sell', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('promotion_price') ? 'has-error' : '' }}">
                         {!! Form::label('promotion_price', 'Giá khuyến mại', array('class' => ' required')) !!}
-                        {!! Form::text('promotion_price',null, array('class' => 'form-control number')) !!}
+                        {!! Form::text('promotion_price',@number_format($doc->promotion_price), array('class' => 'form-control price')) !!}
                         <span class="help-block">{{ $errors->first('promotion_price', ':message') }}</span>
                     </div>
                 </div>
@@ -88,19 +88,28 @@
             </div>
             <div class="col bot">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('services.index')}}" class="btn btn-danger">Về danh sách</a>
+                <a href="{{url(request()->segment(1)) }}" class="btn btn-danger">Về danh sách</a>
             </div>
-            {{ Form::close() }}
-
         </div>
+        {{ Form::close() }}
+
+    </div>
     </div>
 @endsection
 @section('_script')
-    <script src="{{asset('assets/js/jquery.number.min.js')}}"></script>
+
     <script src="{{asset('assets/js/fileinput.min.js')}}"></script>
+    <script src="{{asset('js/format-number.js')}}"></script>
+
     <script>
         $(document).ready(function () {
-            $('.number').number(true);
+            $('body').on('keyup', '.price', function (e) {
+                let target = $(e.target).parent().parent();
+                let price = $(target).find('.price').val();
+                price = replaceNumber(price);
+                $(target).find('.price').val(formatNumber(price));
+            });
+
             $("#fvalidate").validate({
                 rules: {
                     name: 'required',

@@ -4,8 +4,8 @@
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white">Ảnh</th>
-            <th class="text-white text-center">Tên dịch vụ</th>
-            <th class="text-white text-center">Mã dịch vụ</th>
+            <th class="text-white text-center">Tên</th>
+            <th class="text-white text-center">Mã</th>
 {{--            <th class="text-white text-center">Mô tả ngắn</th>--}}
             <th class="text-white text-center">Nhà cung cấp</th>
             <th class="text-white text-center">Thuộc danh mục</th>
