@@ -234,7 +234,7 @@
     <script>
         var searchParams = new URLSearchParams(window.location.search)
         var param = searchParams.get('type');
-        var param2 = {{@$role_type}};
+        var param2 = {{@$role_type?:0}};
         // $(".fc-datepicker").datepicker().datepicker("setDate", new Date());
         $(document).on('click', '#add_row', function () {
 
