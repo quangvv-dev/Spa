@@ -149,7 +149,7 @@
                             @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
                             <a class="dropdown-item" href="{!! route('users.index') !!}"><i class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
                             <a class="dropdown-item" href="{!! route('department.index') !!}"><i class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
-{{--                            <a class="dropdown-item" href="{!! route('sms.index') !!}"><i class="fas fa-envelope"></i>  Quản lý tin nhắn</a>--}}
+                            <a class="dropdown-item" href="{!! route('sms.index') !!}"><i class="dropdown-icon fas fa-envelope"></i>  Quản lý tin nhắn</a>
                             <a class="dropdown-item" href="{!! route('status.index') !!}"><i class="dropdown-icon mdi mdi-account-card-details"></i>  Quản lý CRM</a>
                             @endif
                             <div class="dropdown-divider"></div>

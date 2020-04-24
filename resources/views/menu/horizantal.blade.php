@@ -12,9 +12,9 @@
                         <li>
                             <a href="{!! route('customers.index') !!}">Khách hàng </a>
                         </li>
-{{--                        <li>--}}
-{{--                            <a href="{{url('schedules')}}">Lịch hẹn </a>--}}
-{{--                        </li>--}}
+                        {{--                        <li>--}}
+                        {{--                            <a href="{{url('schedules')}}">Lịch hẹn </a>--}}
+                        {{--                        </li>--}}
                     </ul>
                 </div>
             </li>
@@ -28,9 +28,11 @@
                         <li>
                             <a href="#">SMS</a>
                         </li>
-                        <li>
-                            <a href="{{url('rules')}}">Automation </a>
-                        </li>
+                        @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
+                            <li>
+                                <a href="{{url('rules')}}">Automation </a>
+                            </li>
+                        @endif
                         <li>
                             <a href="#">Optin Form</a>
                         </li>

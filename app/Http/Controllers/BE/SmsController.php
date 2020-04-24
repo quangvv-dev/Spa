@@ -80,24 +80,30 @@ class SmsController extends Controller
     {
         if (isset($request->sms_group) && $request->sms_group) {
             setting(['sms_group' => $request->sms_group])->save();
-            $err = Functions::sendSmsBK('84353997108', 'xin chao anh quang');
-            dd($err);
-//            $arr_customers = CustomerGroup::where('category_id', $request->category_id)
-//                ->groupBy('customer_id')->pluck('customer_id')->toArray();
-//            $users = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
-//                ->pluck('phone', 'full_name')->toArray();
-//            if (count($users)) {
-//                foreach ($users as $key => $item) {
-//                    if (strlen($item) == 10) {
-//                        $phone = '84' . (int)$item;
-//                        $key = str_replace('%full_name%', $key, $request->sms_group);
-//                        $body = Functions::vi_to_en($key);
-//                        Functions::sendSmsBK($phone, $body);
-////                        dd()
-//                    }
-//                }
-//            }
-//            return back()->with('status', 'Gửi tin hệ thống thành công !!!');
+            $arr_customers = CustomerGroup::where('category_id', $request->category_id)
+                ->groupBy('customer_id')->pluck('customer_id')->toArray();
+            $users = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
+                ->pluck('phone', 'full_name')->toArray();
+            $number = 0;
+            if (count($users)) {
+                foreach ($users as $key => $item) {
+                    if (strlen($item) == 10) {
+                        $phone = '84' . (int)$item;
+                        $key = str_replace('%full_name%', $key, $request->sms_group);
+                        $body = Functions::vi_to_en($key);
+                        $err = Functions::sendSmsBK($phone, $body);
+                        if (isset($err) && $err) {
+                            $number++;
+                        }
+                    }
+                }
+            } else {
+                return back()->with('error', 'LỰA CHỌN KHÔNG CÓ KHÁCH HÀNG THỎA MÃN !!!');
+            }
+            if ($number == 0) {
+                return back()->with('error', 'LỰA CHỌN KHÔNG CÓ KHÁCH HÀNG THỎA MÃN !!!');
+            }
+            return back()->with('status', 'GỬI TIN THÀNH CÔNG CHO ' . $number . ' KHÁCH HÀNG !!!');
         }
     }
 
