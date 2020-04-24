@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\Category;
+use App\Models\Customer;
+use App\Models\CustomerGroup;
 use App\Models\OrderDetail;
+use App\Models\Status;
 use Carbon\Carbon;
 use FontLib\Table\Type\name;
 use Illuminate\Http\Request;
@@ -21,7 +25,8 @@ class SmsController extends Controller
     {
         $title = 'Quản lý nội dung tin nhắn';
         $category = Category::has('services')->with('services')->get()->pluck('name', 'id');
-        return view('sms.index', compact('title', 'category'));
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
+        return view('sms.index', compact('title', 'category', 'status'));
     }
 
     /**
@@ -75,6 +80,31 @@ class SmsController extends Controller
     {
         if (isset($request->sms_group) && $request->sms_group) {
             setting(['sms_group' => $request->sms_group])->save();
+            Functions::sendSmsBK('84353997108', 'xin chao anh quang');
+
+//            $arr_customers = CustomerGroup::where('category_id', $request->category_id)
+//                ->groupBy('customer_id')->pluck('customer_id')->toArray();
+//            $users = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
+//                ->pluck('phone', 'full_name')->toArray();
+//            if (count($users)) {
+//                foreach ($users as $key => $item) {
+//                    if (strlen($item) == 10) {
+//                        $phone = '84' . (int)$item;
+//                        $key = str_replace('%full_name%', $key, $request->sms_group);
+//                        $body = Functions::vi_to_en($key);
+//                        Functions::sendSmsBK($phone, $body);
+////                        dd()
+//                    }
+//                }
+//            }
+//            return back()->with('status', 'Gửi tin hệ thống thành công !!!');
+        }
+    }
+
+    public function sentSmsBK(Request $request)
+    {
+        if (isset($request->sms_group) && $request->sms_group) {
+            setting(['sms_group' => $request->sms_group])->save();
             $services = [];
             $phone = [];
             $date = Carbon::now()->format('d/m/Y H:i');
@@ -90,7 +120,8 @@ class SmsController extends Controller
             if (count($order_detail)) {
                 foreach ($order_detail as $val) {
                     if (isset($val->order->customer) && $val->order->customer->phone && $val->order->customer->full_name) {
-                        if (!in_array($val->order->customer->phone, $phone) && strlen($val->order->customer->phone)==10) {
+                        if (!in_array($val->order->customer->phone,
+                                $phone) && strlen($val->order->customer->phone) == 10) {
                             $phone[] = $val->order->customer->phone;
                             $body = $request->sms_group;
                             $body = str_replace('%full_name%', @$val->order->customer->full_name, $body);

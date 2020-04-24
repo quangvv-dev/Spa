@@ -307,7 +307,6 @@
                 </tr>
 `);
             }
-
             $('.select2').select2({ //apply select2 to my element
                 placeholder: "-Chọn sản phẩm-",
                 allowClear: true

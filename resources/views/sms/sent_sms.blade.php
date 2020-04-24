@@ -1,16 +1,27 @@
+<style>
+    label.required:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="col-md-12 col-lg-12">
     <div class="card">
         {!! Form::open(array('url' => route('sms.sent'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','class'=>'sent-sms')) !!}
         <div class="col row">
             <div class="col-md-6 col-xs-12">
-                <div class="col-xs-12">
-                    {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('category_id', 'Nhóm khách hàng', array('class' => ' required control-label')) !!}
                     {!! Form::select('category_id', $category, null, array('class' => 'form-control select2', 'required' => true, 'placeholder'=>'Nhóm dịch vụ',)) !!}
                     <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
                 </div>
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('status_id', 'Trạng thái', array('class' => ' required control-label')) !!}
+                    {!! Form::select('status_id', $status, null, array('class' => 'form-control select2', 'required' => true, 'placeholder'=>'Trạng thái',)) !!}
+                    <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
+                </div>
                 <div class="col-xs-12">
                     {!! Form::label('sms_group', 'Nội dung tin nhắn KH đặt lịch', array('class' => ' required')) !!}
-                    {!! Form::textArea('sms_group', setting('sms_group'), array('class' => 'form-control','maxlength'=>160)) !!}
+                    {!! Form::textArea('sms_group', setting('sms_group'), array('class' => 'form-control','maxlength'=>152)) !!}
                     <span class="help-block">Lưu ý nội dung tin nhắn không dấu</span>
                 </div>
                 <div class="col bot" style="margin-top: 5px">
@@ -28,7 +39,7 @@
                     <tbody>
                     <tr>
                         <td class="text-center">%full_name%</td>
-                        <td class="text-center">Tên người nhận</td>
+                        <td class="text-center">Tên khách hàng</td>
                     </tr>
                     </tbody>
                 </table>

@@ -43,6 +43,7 @@ class Functions
      * convert sdt
      *
      * @param $phone
+     *
      * @return string
      */
     public static function convertPhone($phone)
@@ -82,7 +83,7 @@ class Functions
      *
      * @param UploadedFile $file
      * @param              $path
-     * @param string $namevalidate
+     * @param string       $namevalidate
      *
      * @return null
      */
@@ -232,10 +233,10 @@ class Functions
         }
         $result = $client->call('BulkSendSms',
             [
-                'msisdn' => $phone,
-                'alias' => 'VMGtest',
-                'message' => $sms_text,
-                'sendTime' => $send_after,
+                'msisdn'           => $phone,
+                'alias'            => 'VMGtest',
+                'message'          => $sms_text,
+                'sendTime'         => $send_after,
                 //                'sendTime'         => '15/08/2019 15:32',
                 'authenticateUser' => 'vmgtest1',
                 'authenticatePass' => 'vmG@123b',
@@ -277,34 +278,23 @@ class Functions
         }
         $result = $client->call('wsCpMt',
             [
-                'User' => 'smsbrand_royal_spa',
-                'Password' => '123456a@',
-                'CPCode' => 'ROYAL_SPA',
-                'UserID' => $phone,
-                'RequestID' => '1',
-                'ReceiverID' => $phone,
-                'ServiceID' => 'ROYAL-SPA',
+                'User'        => 'smsbrand_royal_spa',
+                'Password'    => '123456a@',
+                'CPCode'      => 'ROYAL_SPA',
+                'UserID'      => $phone,
+                'RequestID'   => '1',
+                'ReceiverID'  => $phone,
+                'ServiceID'   => 'ROYAL-SPA',
                 'CommandCode' => 'bulksms',
                 'ContentType' => '0',
-                'Content' => $sms_text,
+                'Content'     => $sms_text,
             ], '', '', ''
         );
 
-        // Check for a fault
-//        if ($client->fault) {
-//            echo 'Loi';
-//            print_r($result);
-//            echo '</pre>';
-//        } else {
-//            // Check for errors
-//            $err = $client->getError();
-//            if ($err) {
-//                // Display the error
-//                echo '<h2>Error</h2><pre>' . $err . '</pre>';
-//            } else {
-//                // Display the result
-//                print_r($result);
-//            }
-//        }
+        $err = $client->getError();
+        if (!$err) {
+            return 1;
+        }
+
     }
 }
