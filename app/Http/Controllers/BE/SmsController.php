@@ -80,8 +80,8 @@ class SmsController extends Controller
     {
         if (isset($request->sms_group) && $request->sms_group) {
             setting(['sms_group' => $request->sms_group])->save();
-            Functions::sendSmsBK('84353997108', 'xin chao anh quang');
-
+            $err = Functions::sendSmsBK('84353997108', 'xin chao anh quang');
+            dd($err);
 //            $arr_customers = CustomerGroup::where('category_id', $request->category_id)
 //                ->groupBy('customer_id')->pluck('customer_id')->toArray();
 //            $users = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
