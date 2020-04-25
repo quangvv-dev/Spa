@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('update-type-orders/{id}', 'OrderController@updateType');
         Route::any('updatePostion', 'StatusController@updatePostion');
         Route::any('updateColor', 'StatusController@updateColor');
+        Route::get('count-customer', 'SmsController@getCountCustomer');//sms count customer
     });
 
     Route::resource('rules', 'RuleController');//Automation

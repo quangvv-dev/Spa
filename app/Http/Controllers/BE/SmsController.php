@@ -24,9 +24,31 @@ class SmsController extends Controller
     public function index()
     {
         $title = 'Quản lý nội dung tin nhắn';
-        $category = Category::has('services')->with('services')->get()->pluck('name', 'id');
+        $category = Category::select('id', 'name')->has('services')->with('services')->get()
+            ->map(function ($item) {
+                $count = CustomerGroup::where('category_id', $item->id)
+                    ->groupBy('customer_id')->get()->count();
+                $item->name = $item->name . ' (' . $count . ')';
+                return $item;
+            })->pluck('name', 'id')->toArray();
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
         return view('sms.index', compact('title', 'category', 'status'));
+    }
+
+    /**
+     * Đếm số customers thuộc nhóm
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function getCountCustomer(Request $request)
+    {
+        $arr_customers = CustomerGroup::where('category_id', $request->category_id)
+            ->groupBy('customer_id')->pluck('customer_id')->toArray();
+        $count = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
+            ->get()->count();
+        return $count;
     }
 
     /**
@@ -94,6 +116,9 @@ class SmsController extends Controller
                         $err = Functions::sendSmsBK($phone, $body);
                         if (isset($err) && $err) {
                             $number++;
+                            if (isset($request->limit) && $request->limit && $request->limit <= $number) {
+                                break;
+                            }
                         }
                     }
                 }

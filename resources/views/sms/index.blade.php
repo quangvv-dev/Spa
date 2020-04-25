@@ -37,6 +37,4 @@
         </div>
     </div>
 @endsection
-@section('_script')
-@endsection
 
