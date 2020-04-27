@@ -102,6 +102,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('customer-export', 'CustomerController@exportCustomer')->name('customer.export');
     Route::post('customer-import', 'CustomerController@importCustomer');
     Route::post('import-orders', 'OrderController@importDataByExcel');
+    Route::get('product-export', 'ProductController@exportData')->name('product.export');
+    Route::post('product-import', 'ProductController@importData')->name('product.import');
     //Chart doanh số
     Route::get('chart-revenue', 'ChartController@index');
     //Trao đổi với khách hàng

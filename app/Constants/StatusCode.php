@@ -44,4 +44,7 @@ class StatusCode
 
     const PRODUCT = 2; //sản phẩm
     const SERVICE = 1;//dịch vụ
+
+    const PAGINATE_10 = 10;
+    const PAGINATE_20 = 20;
 }
