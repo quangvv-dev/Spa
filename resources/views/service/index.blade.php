@@ -5,10 +5,12 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col">
+                    @if(\Request::is('products'))
                     <a title="Download Data" style="position: absolute;right: 16%" class="btn" href="{{route('product.export')}}">
                         <i class="fas fa-download"></i></a>
                     <a title="Upload Data" class="btn" style="position: absolute;right: 13%" href="#" data-toggle="modal" data-target="#myModalImport">
                         <i class="fas fa-upload"></i></a>
+                    @endif
                     <a class="right btn btn-primary btn-flat" href="{{request()->url().'/create' }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
