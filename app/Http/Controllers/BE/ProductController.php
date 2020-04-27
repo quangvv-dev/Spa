@@ -220,20 +220,21 @@ class ProductController extends Controller
                         $category = Category::where('name', 'like', '%' . $row['danh_muc'] . '%')->first();
                         if (isset($category) && $category) {
                             $input['category_id'] = $category->id;
-                        }
-                        $input['name'] = $row['ten'];
-                        $input['description'] = $row['mo_ta'] ?: null;
-                        $input['price_sell'] = @(int)$row['gia_ban'];
-                        $input['type'] = StatusCode::PRODUCT;
-                        $input['enable'] = UserConstant::ACTIVE;
-                        if (!$row['ma_san_pham']) {
-                            $service = Service::create($input);
-                            $service->update(['code' => $service->id]);
-                        } else {
-                            $service = Service::find($row['ma_san_pham']);
-                            $service ? $service->update($input) : '';
+                            $input['name'] = $row['ten'];
+                            $input['description'] = $row['mo_ta'] ?: null;
+                            $input['price_sell'] = @(int)$row['gia_ban'];
+                            $input['type'] = StatusCode::PRODUCT;
+                            $input['enable'] = UserConstant::ACTIVE;
+                            if (!$row['ma_san_pham']) {
+                                $service = Service::create($input);
+                                $service->update(['code' => $service->id]);
+                            } else {
+                                $service = Service::find($row['ma_san_pham']);
+                                $service ? $service->update($input) : '';
+                            }
                         }
                     }
+
                 }
             });
         }
