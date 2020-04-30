@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,7 +35,7 @@ class Services extends Model
 
     public static function handleChart()
     {
-        $data = self::with('orders')
+        $data = self::where('type',StatusCode::PRODUCT)->with('orders')
             ->get();
         return $data;
     }

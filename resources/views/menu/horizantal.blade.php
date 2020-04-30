@@ -72,10 +72,10 @@
                             <a href="#">Doanh thu</a>
                         </li>
                         <li>
-                            <a href="{{url('report/customers')}}">Khách hàng</a>
+{{--                            <a href="{{url('report/customers')}}">Khách hàng</a>--}}
                         </li>
                         <li>
-                            <a href="{!! url('statistics')!!}">Nhân viên</a>
+{{--                            <a href="{!! url('statistics')!!}">Nhân viên</a>--}}
                         </li>
                         <li>
                             <a href="#">Chiến dịch</a>

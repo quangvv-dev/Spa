@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Services as Service;
 use Carbon\Carbon;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
@@ -47,7 +48,7 @@ class ProductController extends Controller
         if ($request->ajax()) {
             return Response::json(view('service.ajax', compact('docs', 'title'))->render());
         }
-        return view('service.index', compact('title', 'docs'));
+        return view('product.index', compact('title', 'docs'));
     }
 
     /**
@@ -58,7 +59,7 @@ class ProductController extends Controller
     public function create()
     {
         $title = 'Thêm sản phẩm';
-        return view('service._form', compact('title'));
+        return view('product._form', compact('title'));
     }
 
     /**
@@ -89,7 +90,8 @@ class ProductController extends Controller
         $data->update([
             'code' => $data->id,
         ]);
-        return redirect(route('services.create'))->with('status', 'Tạo dịch vụ thành công');
+
+        return redirect(route('products.create'))->with('status', 'Tạo sản phẩm thành công');
 
     }
 
@@ -112,11 +114,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Service $service)
+    public function edit(Service $product)
     {
-        $doc = $service;
+        $doc = $product;
         $title = 'Cập nhật sản phẩm';
-        return view('service._form', compact('title', 'doc'));
+        return view('product._form', compact('title', 'doc'));
     }
 
     /**
@@ -127,16 +129,16 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Service $service)
+    public function update(Request $request, Service $product)
     {
         $request->merge([
             'price_buy'       => $request->price_buy ? str_replace(',', '', $request->price_buy) : 0,
             'price_sell'      => $request->price_sell ? str_replace(',', '', $request->price_sell) : 0,
             'promotion_price' => $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0,
         ]);
-        $image = Functions::checkUploadImage($request, $service, 'services');
-        $service->update($request->except('img_file', 'image'));
-        return redirect('services/' . $service->id . '/edit')->with('status', 'Cập nhật dịch vụ thành công');
+        $image = Functions::checkUploadImage($request, $product, 'services');
+        $product->update($request->except('img_file', 'image'));
+        return redirect('products/' . $product->id . '/edit')->with('status', 'Cập nhật sản phẩm thành công');
 
     }
 
@@ -147,14 +149,14 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Service $service)
+    public function destroy(Request $request, Service $product)
     {
-        if ($service->images) {
-            foreach ($service->images as $k => $v) {
+        if ($product->images) {
+            foreach ($product->images as $k => $v) {
                 Functions::unlinkUpload('services', @$v);
             }
         }
-        $service->delete();
+        $product->delete();
     }
 
     /**
