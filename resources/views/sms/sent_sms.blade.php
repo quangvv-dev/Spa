@@ -11,6 +11,11 @@
             <div class="col-md-6 col-xs-12">
                 <div class="col row">
                     <div class="col-6 form-group">
+                        {!! Form::label('campaign_id', 'Chiến dịch', array('class' => ' required control-label')) !!}
+                        {!! Form::select('campaign_id', $campaign_arr, null, array('class' => 'form-control select2','id'=>'campaign_id', 'required' => true, 'placeholder'=>'Chiến dịch',)) !!}
+                        <span class="help-block">{{ $errors->first('campaign_id', ':message') }}</span>
+                    </div>
+                    <div class="col-6 form-group">
                         {!! Form::label('category_id', 'Nhóm khách hàng', array('class' => ' required control-label')) !!}
                         {!! Form::select('category_id', $category, null, array('class' => 'form-control select2','id'=>'category_id', 'required' => true, 'placeholder'=>'Nhóm khách hàng',)) !!}
                         <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
@@ -20,7 +25,7 @@
                         {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status_id', 'required' => true, 'placeholder'=>'Trạng thái',)) !!}
                         <span class="help-block" id="message_status">{{ $errors->first('status_id', ':message') }}</span>
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-6 form-group">
                         {!! Form::label('limit', 'Giới hạn tin gửi (để trống nếu gửi tất cả )', array('class' => 'control-label')) !!}
                         {!! Form::number('limit',null, array('class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('limit', ':message') }}</span>

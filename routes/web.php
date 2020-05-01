@@ -112,7 +112,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('group-comments/{id}/edit', 'GroupCommentController@edit');
     Route::post('group-comments/{id}/edit', 'GroupCommentController@update');
     Route::delete('group-comments/{id}/delete', 'GroupCommentController@destroy');
-    Route::group(['prefix' => 'report'], function () {
+    Route::group(['prefix' => 'report'], function () {//Chart doanh số
         Route::get('customers', 'CustomerController@reportCustomer');
         Route::get('products', 'OrderController@reportProduct');
     });

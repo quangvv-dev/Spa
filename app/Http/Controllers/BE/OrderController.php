@@ -340,7 +340,8 @@ class OrderController extends Controller
     public function reportProduct()
     {
         $title = "THỐNG KÊ SẢN PHẨM";
-        $services = Services::handleChart();
+        $arr = Services::getIdServiceType(StatusCode::SERVICE);
+        $services = Services::handleChart($arr);
         return view('report_products.chart', compact('title', 'services'));
     }
 

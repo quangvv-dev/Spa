@@ -14,18 +14,19 @@
                     <div class="tabs-menu1 ">
                         <!-- Tabs -->
                         <ul class="nav panel-tabs">
-{{--                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Nội dung tin Automation</a>--}}
-{{--                            </li>--}}
-                            <li><a href="#tab7" class="active" data-toggle="tab">Gủi tin hệ thống</a></li>
+                            <li class=""><a href="#tab5" class="active"
+                                            data-toggle="tab">Chiến dịch nhắn tin</a>
+                            </li>
+                            <li><a href="#tab7" class="" data-toggle="tab">Gủi tin hệ thống</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="panel-body tabs-menu-body">
                     <div class="tab-content">
-{{--                        <div class="tab-pane active " id="tab5">--}}
-{{--                            @include('sms.content_automation')--}}
-{{--                        </div>--}}
-                        <div class="tab-pane active" id="tab7">
+                        <div class="tab-pane active " id="tab5">
+                            @include('sms.content_automation')
+                        </div>
+                        <div class="tab-pane" id="tab7">
                             @include('sms.sent_sms')
                         </div>
 
