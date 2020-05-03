@@ -16,6 +16,7 @@ class CreateCampaignsTable extends Migration
         Schema::create('campaigns', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('name')->comment('tên chiến dịch');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

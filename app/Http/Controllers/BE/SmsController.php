@@ -61,6 +61,12 @@ class SmsController extends Controller
         $arr_customers = CustomerGroup::where('category_id', $request->category_id)
             ->groupBy('customer_id')->pluck('customer_id')->toArray();
         $count = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
+            ->when($request->time_from && $request->time_to, function ($q) use ($request) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($request->time_from) . " 00:00:00",
+                    Functions::yearMonthDay($request->time_to) . " 23:59:59",
+                ]);
+            })
             ->get()->count();
         return $count;
     }
@@ -125,7 +131,7 @@ class SmsController extends Controller
             if (count($users)) {
                 foreach ($users as $key => $item) {
                     if (strlen($item) == 10) {
-                        $phone = '84' . (int)$item;
+                        $phone= Functions::convertPhone($item);
                         $key = str_replace('%full_name%', $key, $request->sms_group);
                         $body = Functions::vi_to_en($key);
                         $err = Functions::sendSmsBK($phone, $body);
@@ -207,7 +213,9 @@ class SmsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = Campaign::findOrFail($id);
+        $data->update($request->all());
+        return $data;
     }
 
     /**
@@ -219,6 +227,8 @@ class SmsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Campaign::findOrFail($id);
+        $data->delete();
+        return 1;
     }
 }

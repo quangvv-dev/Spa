@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Department;
 use App\Models\GroupComment;
+use App\Models\HistorySms;
 use App\Models\Order;
 use App\Models\Schedule;
 use App\Models\Status;
@@ -75,9 +76,6 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-//        if (Auth::user()->role == UserConstant::TELESALES) {
-//            $input['member_sale'] = Auth::user()->id;
-//        }
         $statuses = Status::getRelationshipByCustomer($input);
         $customers = Customer::search($input);
         $categories = Category::with('customers')->get();
@@ -197,12 +195,19 @@ class CustomerController extends Controller
         $status = TaskStatus::pluck('name', 'id')->toArray();
         $progress = Task::PROGRESS;
         $departments = Department::pluck('name', 'id');
-
         //EndTask
+        //History SMS
+        $history = [];
+        if ($request->history_sms) {
+            $history = HistorySms::where('phone', $request->history_sms)->paginate(StatusCode::PAGINATE_20);
+            return Response::json(view('sms.history',
+                compact('history'))->render());
+        }
+        //END
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments'));
+                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history'));
     }
 
     /**

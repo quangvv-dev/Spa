@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\HistorySms;
 use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -292,7 +293,13 @@ class OrderController extends Controller
                     $text = @array_values($sms)[0]->configs->content;
                     $phone = Functions::convertPhone(@$check3->order->customer->phone);
                     $text = Functions::vi_to_en($text);
-                    Functions::sendSmsBK($phone, @$text);
+                    $err = Functions::sendSmsBK($phone, @$text);
+                    if (isset($err) && $err) {
+                        $input['phone'] = $phone;
+                        $input['campaign_id'] = 0;
+                        $input['message'] = $text;
+                        HistorySms::create($input);
+                    }
                 }
                 $job = Functions::checkRuleJob($config);
                 if (count($job)) {
