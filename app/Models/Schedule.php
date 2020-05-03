@@ -154,8 +154,7 @@ class Schedule extends Model
         if (!empty($request['date'])) {
             $docs = $docs->where('date', $request['date']);
         } else {
-            $docs = $docs->whereYear('date', Carbon::now()->format('Y'))
-                ->whereMonth('date', Carbon::now()->format('m'));
+            $docs = $docs->whereYear('date', Carbon::now()->format('Y'));
         }
         if (!empty($request['user'])) {
             $docs = $docs->where('creator_id', $request['user']);
