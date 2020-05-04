@@ -209,7 +209,7 @@ class ScheduleController extends Controller
     public function homePage(Request $request)
     {
         $now = Carbon::now()->format('Y-m-d');
-        $docs = Schedule::search($request->all());
+        $docs = Schedule::search($request->all())->has('customer')->with('customer');
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
             $check = Schedule::orderBy('id', 'desc')->where('date', $now)->with('creator')
