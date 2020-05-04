@@ -62,16 +62,16 @@
         <div class="card">
             <div class="card-header">
                 <div class="col-md-6 no-padd font16"><a class="avatar a45 fl mr10 pic"> <img
-                            src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png"> </a> <span
-                        class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
+                                src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png"> </a> <span
+                            class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
                     <div class="display" id="toolbox" style="width: 28px; height: 20px">
                         <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
-                                class="fas fa-edit"></i></a>
+                                    class="fas fa-edit"></i></a>
                         <a id="btn_del_account" rel="tooltip"
                            data-placement="bottom"
                            data-original-title="Xóa" class="ml5">
                             <i
-                                class="gf-icon-hover icon-remove mr5"></i>
+                                    class="gf-icon-hover icon-remove mr5"></i>
                         </a>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                                                      src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png">
                         </div>
                         <div class="info-avatar"><p class="account_manager_name"><a
-                                    class="gfname">{{ @$customer->telesale->full_name }}</a>
+                                        class="gfname">{{ @$customer->telesale->full_name }}</a>
                             </p>
                             <p class="gray1 font12">Người phụ trách</p></div>
                     </div>
@@ -110,28 +110,28 @@
                     <div class="full2 pb20 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
                             <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i
-                                    class="fa fa-random mr5 gray margin-left-10">&nbsp;{{ @$customer->source_customer->name }}</i>
+                                        class="fa fa-random mr5 gray margin-left-10">&nbsp;{{ @$customer->source_customer->name }}</i>
                             </h3>
                             <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo:<i
-                                    class="fa fa-user mr5 gray margin-left-10">&nbsp;{{ @$customer->marketing->full_name }}</i>
+                                        class="fa fa-user mr5 gray margin-left-10">&nbsp;{{ @$customer->marketing->full_name }}</i>
                             </h3>
                             <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo:<i
-                                    class="fa fa-calendar mr5 gray margin-left-10">&nbsp;{{ $customer->created_at }}</i>
+                                        class="fa fa-calendar mr5 gray margin-left-10">&nbsp;{{ $customer->created_at }}</i>
                             </h3>
                             <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua:<i
-                                    class="fa fa-shopping-cart mr5 gray margin-left-10">&nbsp;{{ $customer->orders->count() }}</i>
+                                        class="fa fa-shopping-cart mr5 gray margin-left-10">&nbsp;{{ $customer->orders->count() }}</i>
                             </h3>
                         </div>
                     </div>
                     <div class="border padding infor-list-ct ml2 mt10"><h3
-                            class="uppercase pb5 mb10 font12 bold mg0">Liên hệ</h3>
+                                class="uppercase pb5 mb10 font12 bold mg0">Liên hệ</h3>
                         <div class="box-cont">
                             <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">
                                 <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i
-                                            class="icon-user mr5 mt2 fl"></i> <b
-                                            class="blue">&nbsp;{{ $customer->full_name }}</b> <i
-                                            data-original-title="Liên hệ chính" rel="tooltip"
-                                            class="fa orange fa-star" aria-hidden="true"></i></p>
+                                                class="icon-user mr5 mt2 fl"></i> <b
+                                                class="blue">&nbsp;{{ $customer->full_name }}</b> <i
+                                                data-original-title="Liên hệ chính" rel="tooltip"
+                                                class="fa orange fa-star" aria-hidden="true"></i></p>
                                     <p></p>
                                     <p class="clearfix">&nbsp;{{ $customer->phone }}</p>
                                 </div>
@@ -139,8 +139,8 @@
                                                                           class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>
                                     <a><i data-task-type="3"
                                           class="tc new_popup_task icon-group style-icon-group mr10 fl"></i></a> <a><i
-                                            data-task-type="4"
-                                            class="tc new_popup_task icon-envelope-alt style-icon-envelope mr10 fl"></i></a>
+                                                data-task-type="4"
+                                                class="tc new_popup_task icon-envelope-alt style-icon-envelope mr10 fl"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -217,6 +217,9 @@
                                             <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
                                             <li><a href="#tab6" data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
+                                            <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
+                                                   data-toggle="tab">Tin
+                                                    nhắn</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -240,17 +243,17 @@
                                                             <div class="fileupload fileupload-new"
                                                                  data-provides="fileupload">
                                                                 <div
-                                                                    class="fileupload-preview fileupload-exists thumbnail"
-                                                                    style="max-width: 150px">
+                                                                        class="fileupload-preview fileupload-exists thumbnail"
+                                                                        style="max-width: 150px">
 
                                                                 </div>
                                                                 <div>
                                                                     <button type="button"
                                                                             class="btn btn-default btn-file">
                                                                         <span class="fileupload-new"><i
-                                                                                class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                                                                    class="fa fa-paper-clip"></i> Chọn ảnh</span>
                                                                         <span class="fileupload-exists"><i
-                                                                                class="fa fa-undo"></i> Thay đổi</span>
+                                                                                    class="fa fa-undo"></i> Thay đổi</span>
                                                                         <input type="file" name="image_contact"
                                                                                accept="image/*"
                                                                                class="btn-default upload"/>
@@ -278,7 +281,8 @@
                                                 <h3 class="card-title">Danh sách đơn hàng bán</h3></br>
                                                 <div class="col relative">
                                                     <a class="right btn btn-primary btn-flat" data-toggle="modal"
-                                                       data-target="#roleTypeModal"><i class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                                                       data-target="#roleTypeModal"><i class="fa fa-plus-circle"></i>Thêm
+                                                        mới</a></div>
                                                 @include('order.role_type_modal')
 
 
@@ -294,6 +298,11 @@
                                                data-target="#task"><i class="fa fa-plus-circle"></i>Thêm mới CV</a>
                                             @include('tasks.ajax')
                                             @include('tasks._form_customer')
+                                        </div>
+                                        <div class="tab-pane " id="tab9">
+                                            @if(count($history))
+                                                @include('sms.history')
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -315,6 +324,18 @@
 
     <script type="text/javascript">
         // $(document).ready(function () {
+        $(document).on('click', '#click_tab_9', function () {
+            const phone = $(this).data('phone');
+            $('#tab9').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data:{history_sms:phone}
+            }).done(function (data) {
+                $('#tab9').html(data);
+            });
+        })
         $(document).on('dblclick', '.order-type', function () {
             const id = $(this).data('id');
             let target = $(this);
@@ -468,8 +489,8 @@
 
                 let html = `
             {!! Form::open(array('method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-                <div class="col-md-12">
-                    <textarea name="messages" class="form-control message" rows="3" data-id="` + data.id + `">` + data.messages + `</textarea>
+                    <div class="col-md-12">
+                        <textarea name="messages" class="form-control message" rows="3" data-id="` + data.id + `">` + data.messages + `</textarea>
                     </div>
                     <div class="col-xs-12 col-md-12 file-upload">
                         <div class="form-group required">

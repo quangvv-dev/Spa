@@ -4,9 +4,11 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
+use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\HistorySms;
 use App\Models\OrderDetail;
 use App\Models\Status;
 use Carbon\Carbon;
@@ -16,6 +18,16 @@ use App\Http\Controllers\Controller;
 
 class SmsController extends Controller
 {
+
+    public function __construct()
+    {
+        $campaign_arr = Campaign::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+        view()->share([
+            'campaign_arr' => $campaign_arr,
+        ]);
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +44,9 @@ class SmsController extends Controller
                 return $item;
             })->pluck('name', 'id')->toArray();
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
-        return view('sms.index', compact('title', 'category', 'status'));
+        $campaign = Campaign::orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_10);
+
+        return view('sms.index', compact('title', 'category', 'status', 'campaign'));
     }
 
     /**
@@ -47,6 +61,12 @@ class SmsController extends Controller
         $arr_customers = CustomerGroup::where('category_id', $request->category_id)
             ->groupBy('customer_id')->pluck('customer_id')->toArray();
         $count = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
+            ->when($request->time_from && $request->time_to, function ($q) use ($request) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($request->time_from) . " 00:00:00",
+                    Functions::yearMonthDay($request->time_to) . " 23:59:59",
+                ]);
+            })
             ->get()->count();
         return $count;
     }
@@ -70,13 +90,14 @@ class SmsController extends Controller
      */
     public function store(Request $request)
     {
-        setting([
-            'sms_cskh'         => $request->sms_cskh,
-            'sms_csnv'         => $request->sms_csnv,
-            'sms_birthday_kh'  => $request->sms_birthday_kh,
-            'sms_cskh_booking' => $request->sms_cskh_booking,
-        ])->save();
-        return redirect()->back();
+        Campaign::create($request->all());
+//        setting([
+//            'sms_cskh'         => $request->sms_cskh,
+//            'sms_csnv'         => $request->sms_csnv,
+//            'sms_birthday_kh'  => $request->sms_birthday_kh,
+//            'sms_cskh_booking' => $request->sms_cskh_booking,
+//        ])->save();
+        return redirect()->back()->with('status', 'TẠO CHIẾN DỊCH THÀNH CÔNG !!!');
     }
 
     /**
@@ -100,7 +121,7 @@ class SmsController extends Controller
      */
     public function sentSms(Request $request)
     {
-        if (isset($request->sms_group) && $request->sms_group) {
+        if (isset($request->sms_group) && $request->sms_group && !empty($request->campaign_id)) {
             setting(['sms_group' => $request->sms_group])->save();
             $arr_customers = CustomerGroup::where('category_id', $request->category_id)
                 ->groupBy('customer_id')->pluck('customer_id')->toArray();
@@ -110,12 +131,16 @@ class SmsController extends Controller
             if (count($users)) {
                 foreach ($users as $key => $item) {
                     if (strlen($item) == 10) {
-                        $phone = '84' . (int)$item;
+                        $phone= Functions::convertPhone($item);
                         $key = str_replace('%full_name%', $key, $request->sms_group);
                         $body = Functions::vi_to_en($key);
                         $err = Functions::sendSmsBK($phone, $body);
                         if (isset($err) && $err) {
                             $number++;
+                            $input['phone'] = $item;
+                            $input['campaign_id'] = $request->campaign_id ?: 0;
+                            $input['message'] = $body;
+                            HistorySms::create($input);
                             if (isset($request->limit) && $request->limit && $request->limit <= $number) {
                                 break;
                             }
@@ -188,7 +213,9 @@ class SmsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = Campaign::findOrFail($id);
+        $data->update($request->all());
+        return $data;
     }
 
     /**
@@ -200,6 +227,8 @@ class SmsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Campaign::findOrFail($id);
+        $data->delete();
+        return 1;
     }
 }

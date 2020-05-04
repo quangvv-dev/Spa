@@ -11,6 +11,11 @@
             <div class="col-md-6 col-xs-12">
                 <div class="col row">
                     <div class="col-6 form-group">
+                        {!! Form::label('campaign_id', 'Chiến dịch', array('class' => ' required control-label')) !!}
+                        {!! Form::select('campaign_id', $campaign_arr, null, array('class' => 'form-control select2','id'=>'campaign_id', 'required' => true, 'placeholder'=>'Chiến dịch',)) !!}
+                        <span class="help-block">{{ $errors->first('campaign_id', ':message') }}</span>
+                    </div>
+                    <div class="col-6 form-group">
                         {!! Form::label('category_id', 'Nhóm khách hàng', array('class' => ' required control-label')) !!}
                         {!! Form::select('category_id', $category, null, array('class' => 'form-control select2','id'=>'category_id', 'required' => true, 'placeholder'=>'Nhóm khách hàng',)) !!}
                         <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
@@ -20,7 +25,34 @@
                         {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status_id', 'required' => true, 'placeholder'=>'Trạng thái',)) !!}
                         <span class="help-block" id="message_status">{{ $errors->first('status_id', ':message') }}</span>
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-6 form-group required {{ $errors->has('time_from') ? 'has-error' : '' }}">
+                        {!! Form::label('time_from', 'Ngày tạo KH (từ ngày)') !!}
+                        <div class="wd-200 mg-b-30">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
+                                    </div>
+                                </div>
+                                {!! Form::text('time_from', null, array('class' => 'form-control fc-datepicker','id'=>'time_from')) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 form-group required {{ $errors->has('time_from') ? 'has-error' : '' }}">
+                        {!! Form::label('time_to', 'Ngày tạo KH (tới ngày) ') !!}
+                        <div class="wd-200 mg-b-30">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
+                                    </div>
+                                </div>
+                                {!! Form::text('time_to', null, array('class' => 'form-control fc-datepicker','id'=>'time_to')) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 form-group">
                         {!! Form::label('limit', 'Giới hạn tin gửi (để trống nếu gửi tất cả )', array('class' => 'control-label')) !!}
                         {!! Form::number('limit',null, array('class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('limit', ':message') }}</span>
@@ -76,15 +108,19 @@
                 })
             });
 
-            $('#status_id,#category_id').change(function () {
+            $('#status_id,#category_id,#time_to,#time_from').change(function () {
                 const status = $('#status_id').val();
                 const category = $('#category_id').val();
+                const time_from = $('#time_from').val();
+                const time_to = $('#time_to').val();
                 $.ajax({
                     url: "{{ Url('ajax/count-customer') }}",
                     method: "get",
                     data: {
                         status_id: status,
                         category_id: category,
+                        time_from: time_from,
+                        time_to: time_to,
                     }
                 }).done(function (data) {
                     console.log(data)
