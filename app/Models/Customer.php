@@ -282,9 +282,9 @@ class Customer extends Model
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
             })->when(isset($input['user_id']), function ($query) use ($input) {
-                $query->where(function ($query) use ($input) {
+//                $query->where(function ($query) use ($input) {
                     $query->where('mkt_id', $input['user_id']);
-                });
+//                });
             })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -293,6 +293,6 @@ class Customer extends Model
             });
         }
 
-        return $data->get();
+        return $data->count();
     }
 }

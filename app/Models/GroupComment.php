@@ -47,7 +47,7 @@ class GroupComment extends Model
             });
         }
 
-        $data = $data->get();
+        $data = $data->count();
 
         return $data;
     }

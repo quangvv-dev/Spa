@@ -1,12 +1,12 @@
-<div class="row">
-    <div class="col-md-6">
-        <div id="chart-sracked" class="chartsh c3"
-             style="max-height: 256px; position: relative;"></div>
-    </div>
-    <div class="col-md-6">
-        <div id="chart-pie2" style="width: 500px; height: 300px;"></div>
-    </div>
-</div>
+{{--<div class="row">--}}
+{{--    <div class="col-md-6">--}}
+{{--        <div id="chart-sracked" class="chartsh c3"--}}
+{{--             style="max-height: 256px; position: relative;"></div>--}}
+{{--    </div>--}}
+{{--    <div class="col-md-6">--}}
+{{--        <div id="chart-pie2" style="width: 500px; height: 300px;"></div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
@@ -20,11 +20,12 @@
         </thead>
         <tbody>
         <tr>
-            <td class="text-center"><h2>{{ count($countCustomer) }}</h2></td>
-            <td class="text-center"><h2>{{ count($groupComments) }}</h2></td>
-            <td class="text-center"><h2>{{ count($books) }}</h2></td>
+            <td class="text-center"><h2>{{ $countCustomer }}</h2></td>
+            <td class="text-center"><h2>{{ $groupComments }}</h2></td>
+            <td class="text-center"><h2>{{ $books }}</h2></td>
             <td class="text-center"><h2>{{ count($orders) }}</h2></td>
-            <td class="text-center"><h2>{{ number_format($orders->sum('gross_revenue')) }} </h2></td>
+            <td class="text-center"><h2>{{ number_format($orders->sum('total_price')) }} </h2>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -33,21 +34,46 @@
     <div class="col-md-6">
         <div id="piechart-1"></div>
     </div>
-    <div class="col-md-6">
-        <div id="piechart-2"></div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div id="piechart-3"></div>
-    </div>
+    {{--    <div class="col-md-6">--}}
+    {{--        <div id="piechart-3"></div>--}}
+    {{--    </div>--}}
+    {{--    <div class="col-md-6">--}}
+    {{--        <div id="piechart-2"></div>--}}
+    {{--    </div>--}}
+    {{--    <div class="col-md-6">--}}
+    {{--        <div id="piechart-5"></div>--}}
+    {{--    </div>--}}
     <div class="col-md-6">
         <div id="piechart-4"></div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-6">
-        <div id="piechart-5"></div>
+<div class="col-md-2" style="margin-bottom: 7px;">
+    {!! Form::select('type',[2=>'Sản phẩm',1=>'Dịch vụ'], $type, array( 'id'=>'type','class' => 'form-control','required'=>true)) !!}
+</div>
+<div class="table-responsive">
+    <table class="table card-table table-vcenter text-nowrap table-primary" id="revenue_product">
+        <thead class="bg-primary text-white">
+        <tr>
+            <th class="text-white text-center">STT</th>
+            <th class="text-white text-center">Sản phẩm/ Dịch vụ</th>
+            <th class="text-white text-center">Doanh thu</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($services as $k =>$service)
+            @if($service->count >0)
+                <tr>
+                    <td class="text-center">{{$k+1}}</td>
+                    <td class="text-center">{{ @$service->service->name}}</td>
+                    <td class="text-center"><h3>{{@number_format($service->count)}}</h3></td>
+                </tr>
+            @endif
+        @endforeach
+
+        </tbody>
+    </table>
+    <div class="pull-right">
+        {{ $services->appends(['search' => request()->search ])->links() }}
     </div>
 </div>
 @include('customers.script')

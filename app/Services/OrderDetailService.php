@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\OrderDetail;
 use App\Models\Services;
+use Carbon\Carbon;
 
 class OrderDetailService
 {
@@ -17,20 +19,22 @@ class OrderDetailService
     {
         $dataArr = [];
 
-        if (empty($data) && is_array($data) == false)
+        if (empty($data) && is_array($data) == false) {
             return false;
+        }
 
         foreach ($data['service_id'] as $key => $value) {
             $dataArr[] = [
-                'order_id'         => $orderId,
-                'user_id'          => $data['user_id'],
-                'booking_id'       => $data['service_id'][$key],
-                'quantity'         => $data['quantity'][$key],
-                'price'            => replaceNumberFormat($data['price'][$key]),
-                'vat'              => $data['vat'][$key],
-                'address'          => $data['address'],
-                'number_discount'  => replaceNumberFormat($data['number_discount'][$key]),
-                'total_price'      => replaceNumberFormat($data['total_price'][$key]),
+                'created_at'      => Carbon::now()->format('Y-m-d H:i'),
+                'order_id'        => $orderId,
+                'user_id'         => $data['user_id'],
+                'booking_id'      => $data['service_id'][$key],
+                'quantity'        => $data['quantity'][$key],
+                'price'           => replaceNumberFormat($data['price'][$key]),
+                'vat'             => $data['vat'][$key],
+                'address'         => $data['address'],
+                'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
+                'total_price'     => replaceNumberFormat($data['total_price'][$key]),
             ];
 
             $service = Services::where('id', $data['service_id'][$key])->first();
@@ -47,22 +51,24 @@ class OrderDetailService
 
     public function update($data, $orderId)
     {
-        if (empty($data) && is_array($data) == false)
+        if (empty($data) && is_array($data) == false) {
             return false;
+        }
         $dataArr = [];
 
         foreach ($data['service_id'] as $key => $value) {
             $dataArr[] = [
-                'id'               => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key]: '',
-                'order_id'         => $orderId,
-                'user_id'          => $data['user_id'],
-                'booking_id'       => $data['service_id'][$key],
-                'quantity'         => $data['quantity'][$key],
-                'price'            => replaceNumberFormat($data['price'][$key]),
-                'vat'              => $data['vat'][$key],
-                'address'          => $data['address'],
-                'number_discount'  => replaceNumberFormat($data['number_discount'][$key]),
-                'total_price'      => replaceNumberFormat($data['total_price'][$key]),
+                'id'              => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key] : '',
+                'order_id'        => $orderId,
+                'user_id'         => $data['user_id'],
+                'booking_id'      => $data['service_id'][$key],
+                'quantity'        => $data['quantity'][$key],
+                'price'           => replaceNumberFormat($data['price'][$key]),
+                'vat'             => $data['vat'][$key],
+                'address'         => $data['address'],
+                'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
+                'total_price'     => replaceNumberFormat($data['total_price'][$key]),
+                'created_at'      => Carbon::now()->format('Y-m-d H:i'),
             ];
 
             $service = Services::where('id', $data['service_id'][$key])->first();
@@ -81,7 +87,6 @@ class OrderDetailService
                 $orderDetail = OrderDetail::create($item);
             }
         }
-
 
 
         return $orderDetail;

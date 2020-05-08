@@ -14,6 +14,7 @@ use App\Models\GroupComment;
 use App\Models\HistorySms;
 use App\Models\Order;
 use App\Models\Schedule;
+use App\Models\Services;
 use App\Models\Status;
 use App\Models\Task;
 use App\Models\TaskStatus;
@@ -447,53 +448,61 @@ class CustomerController extends Controller
         $input = $request->all();
 
         $input['order_id'] = null;
-        $input['data_time'] = $request->data_time ?: 'THIS_MONTH';
+        $input['data_time'] = $request->data_time ?: 'TODAY';
 
-        $customer = Customer::getDataOfYears($input);
+//        $customer = Customer::getDataOfYears($input);
+//        $statuses = Status::getRelationship($input);
+//        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
+//        $schedules = Schedule::countStatus($input);
         $countCustomer = Customer::count($input);
         $statusRevenues = Status::getRevenueSource($input);
-        $statuses = Status::getRelationship($input);
-        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
-
         $categoryRevenues = Category::getRevenue($input);
         $customerRevenueByGenders = Customer::getRevenueByGender($input);
 
-        $orders = Order::getAll($input);
         $groupComments = GroupComment::getAll($input);
         $books = Schedule::getBooks($input);
-        $schedules = Schedule::countStatus($input);
+        $type = $request->type ?: StatusCode::PRODUCT;
+        $arr = Services::getIdServiceType($type);
+        $services = Services::handleChart($arr, $input);
+        $orders = $services->groupBy('order_id')->get();
+        $services = $services->paginate(StatusCode::PAGINATE_10);
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax_chart', compact(
                 'title',
-                'statuses',
-                'customer',
+                'services',
+                'type',
+//                'statuses',
+//                'customer',
+//                'statusRevenueByRelations',
+//                'schedules'
+                'services',
                 'orders',
                 'statusRevenues',
-                'statusRevenueByRelations',
                 'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
                 'books',
-                'countCustomer',
-                'schedules'
+                'countCustomer'
             ))->render());
         }
 
 
         return view('customers.chart', compact(
                 'title',
-                'statuses',
-                'customer',
+//                'statuses',
+//                'customer',
+//                'schedules'
+//                'statusRevenueByRelations',
+                'type',
+                'services',
                 'orders',
                 'statusRevenues',
-                'statusRevenueByRelations',
                 'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
                 'books',
-                'countCustomer',
-                'schedules'
+                'countCustomer'
             )
         );
     }

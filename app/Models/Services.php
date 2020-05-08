@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -41,10 +42,12 @@ class Services extends Model
         return $data;
     }
 
-    public static function handleChart($arr, $input = [])
+    public static function handleChart($arr=null, $input = [])
     {
-        $data = OrderDetail::select("*", DB::raw("SUM(total_price) as count"))
-            ->whereIn('booking_id', $arr)->groupBy('booking_id')
+        $data = OrderDetail::select('*',DB::raw("SUM(total_price) as count"))->groupBy('booking_id')
+            ->when(isset($arr) && $arr, function ($q) use ($arr) {
+                $q->whereIn('booking_id', $arr);
+            })
             ->when(isset($input['data_time']), function ($query) use ($input) {
                 $query->when($input['data_time'] == 'TODAY' ||
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
@@ -64,12 +67,7 @@ class Services extends Model
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                 ]);
             });
-//            ->when(empty($input['data_time']) && empty($input['start_date']) && empty($input['end_date']),
-//                function ($q) use ($input) {
-//                    $q->whereMonth('created_at',Carbon::now()->format('m'))->whereYear('created_at',Carbon::now()->format('y'));
-//                });
 
-        $data = $data->get();
         return $data;
     }
 }

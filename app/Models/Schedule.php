@@ -111,7 +111,7 @@ class Schedule extends Model
                 });
         }
 
-        $data = $data->get();
+        $data = $data->count();
 
         return $data;
     }

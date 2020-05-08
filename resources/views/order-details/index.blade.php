@@ -171,9 +171,11 @@
             const role_type = $('#role_type').val();
             const phone = $('.phone').val();
 
-            if (class_name === 'display pl5')
+            if (class_name === 'display pl5') {
                 var data_time = $(target).find('.choose_time').data('time');
-            else {
+                $('a.choose_time').removeClass('border b-gray');
+                $(target).find('.choose_time').addClass('border b-gray');
+            } else {
                 var data_time = $('#choose_time').val();
             }
             if (class_name === 'btn-group ml5') {

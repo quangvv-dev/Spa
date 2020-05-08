@@ -68,11 +68,11 @@
                 <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
                 <div class="sub-item">
                     <ul>
+{{--                        <li>--}}
+{{--                            <a href="#">Doanh thu</a>--}}
+{{--                        </li>--}}
                         <li>
-                            <a href="#">Doanh thu</a>
-                        </li>
-                        <li>
-{{--                            <a href="{{url('report/customers')}}">Khách hàng</a>--}}
+                            <a href="{{url('report/customers')}}">Doanh thu</a>
                         </li>
                         <li>
 {{--                            <a href="{!! url('statistics')!!}">Nhân viên</a>--}}
@@ -80,9 +80,9 @@
                         <li>
                             <a href="#">Chiến dịch</a>
                         </li>
-                        <li>
-                            <a href="{{url('report/products')}}">Sản phẩm</a>
-                        </li>
+{{--                        <li>--}}
+{{--                            <a href="{{url('report/products')}}">Sản phẩm</a>--}}
+{{--                        </li>--}}
                         <li>
                             <a href="{{route('tasks.index')}}">Công việc</a>
                         </li>
