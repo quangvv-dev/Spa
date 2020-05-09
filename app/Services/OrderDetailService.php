@@ -68,20 +68,20 @@ class OrderDetailService
                 'address'         => $data['address'],
                 'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
                 'total_price'     => replaceNumberFormat($data['total_price'][$key]),
-                'created_at'      => Carbon::now()->format('Y-m-d H:i'),
+                'updated_at'      => Carbon::now()->format('Y-m-d H:i:s'),
             ];
-
             $service = Services::where('id', $data['service_id'][$key])->first();
 
             $service->update(['description' => $data['service_note'][$key]]);
         }
 
         OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
-
         foreach ($dataArr as $item) {
             if (!empty($item['id'])) {
                 $orderDetail = OrderDetail::where('id', $item['id'])->first();
                 $orderDetail->update($item);
+//                dd($dataArr);
+
             }
             if (empty($item['id'])) {
                 $orderDetail = OrderDetail::create($item);

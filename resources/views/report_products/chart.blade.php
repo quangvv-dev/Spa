@@ -63,71 +63,71 @@
         }]);
     </script>
     {{----}}
-    {{--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>--}}
-    {{--    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>--}}
-    {{--<script>--}}
-        {{--google.charts.load('current', {--}}
-            {{--callback: drawBasic,--}}
-            {{--packages: ['corechart']--}}
-        {{--});--}}
-        {{--var heights = {{count($services)*30}}--}}
-        {{--function drawBasic() {--}}
-            {{--var data = google.visualization.arrayToDataTable([--}}
-                {{--['City', 'Doanh thu'],--}}
-                    {{--@foreach($services as $service)--}}
-                    {{--@if($service->count >0)--}}
-                        {{--['{{ @$service->service->name }}', {{ $service->count }}],--}}
-                    {{--@endif--}}
-                {{--@endforeach--}}
-            {{--]);--}}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+    <script>
+        google.charts.load('current', {
+            callback: drawBasic,
+            packages: ['corechart']
+        });
+        var heights = {{count($services)*30}}
+        function drawBasic() {
+            var data = google.visualization.arrayToDataTable([
+                ['City', 'Doanh thu'],
+                    @foreach($services as $service)
+                    @if($service->count >0)
+                        ['{{ @$service->service->name }}', {{ $service->count }}],
+                    @endif
+                @endforeach
+            ]);
 
-            {{--var options = {--}}
-                {{--// backgroundColor: 'cyan',--}}
-                {{--title: 'Biểu đồ doanh thu sản phẩm dịch vụ',--}}
+            var options = {
+                // backgroundColor: 'cyan',
+                title: 'Biểu đồ doanh thu sản phẩm dịch vụ',
 
-                {{--// total size of chart--}}
-                {{--height: heights,--}}
-                {{--width: '100%',--}}
-                {{--// titleFontSize:12,--}}
-                {{--// adjust size of chart area--}}
-                {{--chartArea: {--}}
+                // total size of chart
+                height: heights,
+                width: '100%',
+                // titleFontSize:12,
+                // adjust size of chart area
+                chartArea: {
 
-                    {{--height: '100%',--}}
+                    height: '100%',
 
-                    {{--// allow 200px for vAxis title and ticks--}}
-                    {{--left: 300,--}}
+                    // allow 200px for vAxis title and ticks
+                    left: 300,
 
-                    {{--// allow 50px for chart title--}}
-                    {{--top: 50,--}}
+                    // allow 50px for chart title
+                    top: 50,
 
-                    {{--// allow 200px for legend on right--}}
-                    {{--// width: 500--}}
-                {{--},--}}
+                    // allow 200px for legend on right
+                    // width: 500
+                },
 
-                {{--colors: ['#62c9c3'],--}}
-                {{--hAxis: {--}}
-                    {{--title: 'Doanh thu dich vu',--}}
-                    {{--minValue: 0,--}}
-                    {{--titleTextStyle: {--}}
-                        {{--fontSize: 66 // or the number you want--}}
-                    {{--}--}}
-                {{--},--}}
-                {{--vAxis: {--}}
-                    {{--title: 'SP/DV',--}}
-                    {{--titleTextStyle: {--}}
-                        {{--color: "#000",--}}
-                        {{--fontName: "sans-serif",--}}
-                        {{--fontSize: 11,--}}
-                        {{--bold: true,--}}
-                        {{--italic: false--}}
-                    {{--}--}}
-                {{--}--}}
-            {{--};--}}
+                colors: ['#62c9c3'],
+                hAxis: {
+                    title: 'Doanh thu dich vu',
+                    minValue: 0,
+                    titleTextStyle: {
+                        fontSize: 66 // or the number you want
+                    }
+                },
+                vAxis: {
+                    title: 'SP/DV',
+                    titleTextStyle: {
+                        color: "#000",
+                        fontName: "sans-serif",
+                        fontSize: 11,
+                        bold: true,
+                        italic: false
+                    }
+                }
+            };
 
-            {{--var chart = new google.visualization.BarChart(document.getElementById('chart_div'));--}}
-            {{--chart.draw(data, options);--}}
-        {{--}--}}
-    {{--</script>--}}
+            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
     <!-- Index Scripts -->
 @endsection
 
