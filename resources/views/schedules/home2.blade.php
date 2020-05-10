@@ -10,14 +10,16 @@
     button.status.btn.white.account_relation.position {
         text-align: left;
     }
-    .left-click{
+
+    .left-click {
         position: absolute;
         display: flex;
         flex-direction: column;
         left: -12.5%;
         top: 2%;
     }
-    @media (max-width: 1366px){
+
+    @media (max-width: 1366px) {
         .btn.white.account_relation.position {
             font-size: 12px;
         }
@@ -30,7 +32,7 @@
             <div class="card-header">
                 <div class="left-click">
                     @foreach($color as $k => $item)
-                        <div  data-id="{{$k}}" class="btn white account_relation position"
+                        <div data-id="{{$k}}" class="btn white account_relation position"
                              style="background: @switch($k)
                              @case(1)
                              {{'#63cff9'}}
@@ -137,7 +139,7 @@
             var arr = [];
             $('.left-click').delegate('.account_relation', 'click', function () {
                 var data = $(this).attr('data-id');
-                $('#'+data).click();
+                $('#' + data).click();
             });
             $('body').delegate('.status', 'click', function () {
                 var data = $(this).attr('id');
@@ -244,7 +246,7 @@
                 if (status == 1)
                     return '#63cff9'
                 else if (status == 2)
-                    var col = '#dccf34'
+                    return '#dccf34'
                 else if (status == 3)
                     return '#d03636'
                 else if (status == 4)
