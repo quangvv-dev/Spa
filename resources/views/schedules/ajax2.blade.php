@@ -14,6 +14,11 @@
                 <script src='{{asset('assets/plugins/fullcalendar/vi.js')}}'></script>
                 <script src="{{asset('assets/js/bootstrap-clockpicker.min.js')}}"></script>
                 <script>
+                    function formatYMDtoDMY(dateStr) {
+                        dArr = dateStr.split("-");  // ex input "2010-01-18"
+                        return dArr[2] + "/" + dArr[1] + "/" + dArr[0]; //ex out: "18/01/10"
+                    }
+
                     function reformatDate(dateStr) {
                         dArr = dateStr.split("-");  // ex input "2010-01-18"
                         return dArr[0] + "/" + dArr[1] + "/" + dArr[2]; //ex out: "2010-01-18"
@@ -53,25 +58,33 @@
                                 {
                                     id: '{{$item->id}}',
                                     title: '{!! 'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note !!}',
-                                    description: '{{$item->note}}',
+                                    note: '{{$item->note}}',
+                                    full_name: '{{@$item->customer->full_name}}',
+                                    phone: '{{@$item->customer->phone}}',
+                                    creator_id: '{{@$item->creator_id}}',
+                                    time_from: '{{$item->time_from}}',
+                                    time_to: '{{$item->time_to}}',
+                                    category_id: '{{@$item->category_id}}',
+                                    date: '{{$item->date_schedule}}',
+                                    status: '{{$item->status}}',
                                     @switch($item->status)
-                                        @case(1)
+                                            @case(1)
                                     color: '#63cff9',
                                     @break
-                                        @case(2)
+                                            @case(2)
                                     color: '#dccf34',
                                     @break
-                                        @case(3)
+                                            @case(3)
                                     color: '#d03636',
                                     @break
-                                        @case(4)
+                                            @case(4)
                                     color: '#4bcc4b',
                                     @break
-                                        @case(5)
+                                            @case(5)
                                     color: '#808080',
                                     @break
-                                        @endswitch
-                                        {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
+                                            @endswitch
+                                            {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
                                     start: '{{$item->date.'T'.$item->time_from.':00'}}',
                                     end: '{{$item->date.'T'.$item->time_to.':00'}}'
                                 },
@@ -79,8 +92,19 @@
                             ],
                             //Su kien click
                             eventClick: function (info) {
-                                console.log(info);
                                 let id = info.id;
+                                console.log(info);
+                                $('#update_id').val(info.id).change();
+                                $('#update_date').val(info.date).change();
+                                $('#update_time1').val(info.time_to).change();
+                                $('#update_time2').val(info.time_from).change();
+                                $('#update_status').val(info.status).change();
+                                $('#update_category').val(info.category_id).change();
+                                $('#update_note').html(info.note).change();
+                                $('#full_name').val(info.full_name).change();
+                                $('#phone').val(info.phone).change();
+                                $('#action').val(info.creator_id).change();
+                                $('.modal.fade').attr('id', 'modal_' + id).change();
                                 $('#modal_' + id).modal('show');
                             },
                             // editable: true,
@@ -110,79 +134,87 @@
                         ;
                     })
                 </script>
-                @foreach($docs as $item)
+                {{--                @foreach($docs as $item)--}}
 
-                    <div class="modal fade" id="modal_{{$item->id}}" role="dialog">
-                        <div class="modal-dialog">
-                            <!-- Modal content-->
-                            <div class="modal-content" style="height: 80%">
-                                <div class="modal-header">
-                                    <h4>Cập nhật lịch hẹn</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    {!! Form::open(array('url' => url('schedules/'.$item->user_id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate','autocomplete'=>'off')) !!}
+                <div class="modal fade" id="" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content" style="height: 80%">
+                            <div class="modal-header">
+                                <h4>Cập nhật lịch hẹn</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                {{--                                    {!! Form::open(array('url' => url('schedules/'.$item->user_id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate','autocomplete'=>'off')) !!}--}}
 
-                                    <div class="row">
-                                        {!! Form::hidden('id', $item->id, array('class' => 'form-control','id'=>'update_id')) !!}
-                                        <div class="col-md-6">
-                                            {!! Form::label('full_name', 'Khách Hàng', array('class' => ' required')) !!}
-                                            <input class="form-control" readonly
-                                                   value="{{@$item->customer->full_name}}">
-                                        </div>
-                                        <div class="col-md-6 col-xs-12">
-                                            {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                                            <input class="form-control" readonly value="{{@$item->customer->phone}}">
-                                        </div>
-                                        <div class="col-md-6 col-xs-12">
-                                            {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
-                                            <input class="form-control {{'date-'.$item->id}}" id="update_date"
-                                                   data-toggle="datepicker" value="{{$item->date_schedule}}"
-                                                   name="date">
-                                        </div>
-                                        <div class="col-md-6 col-xs-12">
-                                            {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
-                                            {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true,'disabled'=>true)) !!}
-                                        </div>
-                                        <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
-                                             data-align="top"
-                                             data-autoclose="true">
-                                            {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
-                                            {!! Form::text('time_from', $item->time_from, array('class' => 'form-control','id'=>'update_time1')) !!}
-                                        </div>
-                                        <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
-                                             data-align="top"
-                                             data-autoclose="true">
-                                            {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
-                                            {!! Form::text('time_to', $item->time_to, array('class' => 'form-control','id'=>'update_time2')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                                            {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), @$item->status, array('class' => 'form-control','id'=>'update_status')) !!}
-                                        </div>
-                                        <div class="col-md-12">
-                                            {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
-                                            {!! Form::select('category_id',$category, @$item->category_id, array('class' => 'form-control'))!!}
-                                        </div>
-                                        <div class="col-md-12 ">
-                                            {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
-                                            {!! Form::textArea('note', $item->note, array('class' => 'form-control','id'=>'update_note','rows'=>5)) !!}
-                                            <span class="help-block">{{ $errors->first('note', ':message') }}</span>
-                                        </div>
-                                        <div class="col-md-12" style="padding-top: 10px">
-                                            <button type="submit" class="btn btn-success">Lưu</button>
-                                            <a class="btn btn-secondary btn-flat delete"data-url="{{url('schedules/'.$item->id)}}"
-                                               href="javascript:"><i class="fa fa-arrow-"></i>Xoá lịch hẹn</a>
-                                        </div>
+                                <div class="row">
+                                    {!! Form::hidden('id',null, array('class' => 'form-control','id'=>'update_id')) !!}
+                                    {{--                                        {!! Form::hidden('id', $item->user_id, array('class' => 'form-control','id'=>'update_user_id')) !!}--}}
+                                    <div class="col-md-6">
+                                        {!! Form::label('full_name', 'Khách Hàng', array('class' => ' required')) !!}
+                                        <input class="form-control" readonly
+                                               value="" id="full_name">
                                     </div>
-                                    {{ Form::close() }}
+                                    <div class="col-md-6 col-xs-12">
+                                        {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
+                                        <input class="form-control" readonly value=""
+                                               id="phone">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
+                                        <input class="form-control {{'date-'.$item->id}}" id="update_date"
+                                               data-toggle="datepicker" value=""
+                                               name="date">
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
+                                        {!! Form::select('person_action',@$staff,null, array('id'=>'action','class' => 'form-control','required'=>true,'disabled'=>true)) !!}
+                                    </div>
+                                    <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
+                                         data-align="top"
+                                         data-autoclose="true">
+                                        {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
+                                        {!! Form::text('time_from', null, array('class' => 'form-control','id'=>'update_time1')) !!}
+                                    </div>
+                                    <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
+                                         data-align="top"
+                                         data-autoclose="true">
+                                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
+                                        {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2')) !!}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
+                                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                                        {!! Form::select('category_id',$category, null, array('class' => 'form-control','id'=>'update_category'))!!}
+                                    </div>
+                                    <div class="col-md-12 ">
+                                        {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
+                                        {!! Form::textArea('note', null, array('class' => 'form-control','id'=>'update_note','rows'=>5)) !!}
+                                        <span class="help-block">{{ $errors->first('note', ':message') }}</span>
+                                    </div>
+                                    <div class="col-md-12" style="padding-top: 10px">
+                                        <button type="button" class="btn btn-success" id="update_schedule">Lưu
+                                        </button>
+                                        <a class="btn btn-secondary btn-flat delete"
+                                           data-url="{{url('schedules/'.$item->id)}}"
+                                           href="javascript:"><i class="fa fa-arrow-"></i>Xoá lịch hẹn</a>
+                                    </div>
                                 </div>
+                                {{--                                    {{ Form::close() }}--}}
                             </div>
                         </div>
                     </div>
-                @endforeach
+                </div>
+                {{--                @endforeach--}}
 
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+</script>

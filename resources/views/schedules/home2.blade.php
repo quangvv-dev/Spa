@@ -91,9 +91,10 @@
                 }).done(function (data) {
                     var b = [];
                     $.each(data, function (index, value) {
+
                         switch (value.status) {
                             case 1:
-                                var col = '#f39b4f'
+                                var col = '#63cff9'
                                 break;
                             case 2:
                                 var col = '#dccf34'
@@ -113,10 +114,19 @@
                         b.push({
                             id: value.id,
                             title: 'KH: ' + value.customer.full_name + ', SĐT: ' + value.customer.phone + ' Lưu ý: ' + value.note,
-                            description: value.note,
                             start: value.date + 'T' + value.time_from + ':00',
                             end: value.date + 'T' + value.time_to + ':00',
                             color: col,
+                            //data bonus
+                            note: value.note,
+                            full_name: value.customer.full_name,
+                            phone: value.customer.phone,
+                            creator_id: value.creator_id,
+                            time_from: value.time_from,
+                            time_to: value.time_to,
+                            category_id: value.category_id,
+                            date: formatYMDtoDMY(value.date),
+                            status: value.status,
                         });
                     });
                     $('#calendar1').fullCalendar('removeEvents');
@@ -180,7 +190,73 @@
                 autoHide: true,
                 zIndex: 2048,
             });
+
+            $('#update_schedule').click(function () {
+                let id = $('#update_id').val();
+                let date = $('#update_date').val();
+                let time_from = $('#update_time1').val();
+                let time_to = $('#update_time2').val();
+                let status = $('#update_status').val();
+                let category_id = $('#update_category').val();
+                let note = $('#update_note').val();
+
+                $.ajax({
+                    url: "/schedules/" + id,
+                    method: "put",
+                    data: {
+                        id: id,
+                        date: date,
+                        time_from: time_from,
+                        time_to: time_to,
+                        status: status,
+                        category_id: category_id,
+                        note: note,
+                    }
+                }).done(function (data) {
+                    $('#modal_' + id).modal('toggle');
+                    var b = [];
+                    var col = chooseColor(data.status);
+                    b.push({
+                        id: data.id,
+                        title: 'KH: ' + data.customer.full_name + ', SĐT: ' + data.customer.phone + ' Lưu ý: ' + data.note,
+                        description: data.note,
+                        start: data.date + 'T' + data.time_from + ':00',
+                        end: data.date + 'T' + data.time_to + ':00',
+                        color: col,
+                        //data bonus
+                        note: data.note,
+                        full_name: data.customer.full_name,
+                        phone: data.customer.phone,
+                        creator_id: data.creator_id,
+                        time_from: data.time_from,
+                        time_to: data.time_to,
+                        category_id: data.category_id,
+                        date: formatYMDtoDMY(data.date),
+                        status: data.status,
+                    })
+                    $('#calendar1').fullCalendar('removeEvents', [id]);
+                    $('#calendar1').fullCalendar('addEventSource', b);
+                    console.log(data);
+                })
+            })
+
+            function chooseColor(status) {
+                if (status == 1)
+                    return '#63cff9'
+                else if (status == 2)
+                    var col = '#dccf34'
+                else if (status == 3)
+                    return '#d03636'
+                else if (status == 4)
+                    return '#4bcc4b'
+                else if (status == 5)
+                    return '#808080'
+                else
+                    return ''
+
+            }
         });
+
     </script>
 
 @endsection

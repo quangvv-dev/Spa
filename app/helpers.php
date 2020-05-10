@@ -57,3 +57,28 @@ function getUser($id)
     $data = \App\User::select('id', 'full_name')->find($id);
     return isset($data) && $data ? $data : [];
 }
+
+function chooseColorPHP($status)
+{
+    switch ($status) {
+        case 1:
+            $color = '#63cff9';
+            break;
+        case 2:
+            $color = '#dccf34';
+            break;
+        case 3:
+            $color = '#d03636';
+            break;
+        case 4:
+            $color = '#4bcc4b';
+            break;
+        case 5:
+            $color = '#808080';
+            break;
+        default:
+//            code to be executed if n is different from all labels;
+    }
+    return $color ?: '';
+
+}

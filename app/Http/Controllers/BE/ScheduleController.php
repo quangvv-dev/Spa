@@ -32,11 +32,11 @@ class ScheduleController extends Controller
         $staff2 = $user->prepend('Tất cả người tạo', 0)->toArray();
         $color = [
 //            1 => 'Chưa qua',
-            2 => 'Đặt lịch',
-            3 => 'Đến/mua',
-            4 => 'Đến/chưa mua',
-            5 => 'Hủy lịch',
-            //            6 => 'Tất cả',
+                2 => 'Đặt lịch',
+                3 => 'Đến/mua',
+                4 => 'Đến/chưa mua',
+                5 => 'Hủy lịch',
+//            6 => 'Tất cả',
         ];
         view()->share([
             'staff'    => $staff,
@@ -189,8 +189,11 @@ class ScheduleController extends Controller
             $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
         }
         $request->merge(['date' => $date]);
-        $data = Schedule::find($request->id);
+        $data = Schedule::with('customer')->find($request->id);
         $data->update($request->except('id', 'format_date'));
+        if ($request->ajax()) {
+            return $data;
+        }
         return redirect()->back();
     }
 
