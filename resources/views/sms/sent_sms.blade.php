@@ -17,13 +17,14 @@
                     </div>
                     <div class="col-6 form-group">
                         {!! Form::label('category_id', 'Nhóm khách hàng', array('class' => ' required control-label')) !!}
-                        {!! Form::select('category_id', $category, null, array('class' => 'form-control select2','id'=>'category_id', 'required' => true, 'placeholder'=>'Nhóm khách hàng',)) !!}
+                        {!! Form::select('category_id', $category, null, array('class' => 'form-control select2','multiple'=>true,'id'=>'category_id', 'required' => true, 'data-placeholder'=>'Nhóm KH',)) !!}
                         <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
                     </div>
                     <div class="col-6 form-group">
                         {!! Form::label('status_id', 'Trạng thái', array('class' => ' required control-label')) !!}
-                        {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status_id', 'required' => true, 'placeholder'=>'Trạng thái',)) !!}
-                        <span class="help-block" id="message_status">{{ $errors->first('status_id', ':message') }}</span>
+                        {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','multiple'=>true,'id'=>'status_id', 'required' => true, 'data-placeholder'=>'Trạng thái',)) !!}
+                        <span class="help-block"
+                              id="message_status">{{ $errors->first('status_id', ':message') }}</span>
                     </div>
                     <div class="col-6 form-group required {{ $errors->has('time_from') ? 'has-error' : '' }}">
                         {!! Form::label('time_from', 'Ngày tạo KH (từ ngày)') !!}
@@ -111,6 +112,7 @@
             $('#status_id,#category_id,#time_to,#time_from').change(function () {
                 const status = $('#status_id').val();
                 const category = $('#category_id').val();
+                console.log(status,category);
                 const time_from = $('#time_from').val();
                 const time_to = $('#time_to').val();
                 $.ajax({

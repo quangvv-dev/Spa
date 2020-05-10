@@ -86,7 +86,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     Route::get('orders-payment', 'OrderController@listOrderPayment')->name('order.index_payment');//đã thu trong kỳ
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
-    Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
+    Route::get('list-orders', 'OrderController@count-customer')->name('order.list');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');
     Route::get('orders/{id}/edit', 'OrderController@edit')->name('order.edit');

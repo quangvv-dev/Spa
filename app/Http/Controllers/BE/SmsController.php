@@ -58,9 +58,9 @@ class SmsController extends Controller
      */
     public function getCountCustomer(Request $request)
     {
-        $arr_customers = CustomerGroup::where('category_id', $request->category_id)
+        $arr_customers = CustomerGroup::whereIn('category_id', $request->category_id)
             ->groupBy('customer_id')->pluck('customer_id')->toArray();
-        $count = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
+        $count = Customer::whereIn('id', $arr_customers)->whereIn('status_id', $request->status_id)
             ->when($request->time_from && $request->time_to, function ($q) use ($request) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($request->time_from) . " 00:00:00",
@@ -123,9 +123,9 @@ class SmsController extends Controller
     {
         if (isset($request->sms_group) && $request->sms_group && !empty($request->campaign_id)) {
             setting(['sms_group' => $request->sms_group])->save();
-            $arr_customers = CustomerGroup::where('category_id', $request->category_id)
+            $arr_customers = CustomerGroup::whereIn('category_id', $request->category_id)
                 ->groupBy('customer_id')->pluck('customer_id')->toArray();
-            $users = Customer::whereIn('id', $arr_customers)->where('status_id', $request->status_id)
+            $users = Customer::whereIn('id', $arr_customers)->whereIn('status_id', $request->status_id)
                 ->when($request->time_from && $request->time_to, function ($q) use ($request) {
                     $q->whereBetween('created_at', [
                         Functions::yearMonthDay($request->time_from) . " 00:00:00",
