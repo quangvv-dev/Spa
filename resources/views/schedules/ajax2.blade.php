@@ -59,6 +59,7 @@
                                     id: '{{$item->id}}',
                                     title: '{!! 'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note !!}',
                                     note: '{{$item->note}}',
+                                    description: '{{$item->note}}',
                                     full_name: '{{@$item->customer->full_name}}',
                                     phone: '{{@$item->customer->phone}}',
                                     creator_id: '{{@$item->creator_id}}',
@@ -93,14 +94,14 @@
                             //Su kien click
                             eventClick: function (info) {
                                 let id = info.id;
-                                console.log(info);
+                                console.log(info,'info');
                                 $('#update_id').val(info.id).change();
                                 $('#update_date').val(info.date).change();
                                 $('#update_time1').val(info.time_to).change();
                                 $('#update_time2').val(info.time_from).change();
                                 $('#update_status').val(info.status).change();
                                 $('#update_category').val(info.category_id).change();
-                                $('#update_note').html(info.note).change();
+                                $('#update_note').val(info.note).change();
                                 $('#full_name').val(info.full_name).change();
                                 $('#phone').val(info.phone).change();
                                 $('#action').val(info.creator_id).change();
