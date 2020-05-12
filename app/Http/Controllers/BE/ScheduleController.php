@@ -93,7 +93,7 @@ class ScheduleController extends Controller
         ]);
         if ($request->note) {
             $note = str_replace("\r\n", ' ', $request->note);
-            $note = str_replace("\n", ' ', $request->note);
+            $note = str_replace("\n", ' ', $note);
             $request->merge(['note' => $note]);
         }
         $data = Schedule::create($request->all());
@@ -180,10 +180,9 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        dd($request->all());
         if ($request->note) {
             $note = str_replace("\r\n", ' ', $request->note);
-            $note = str_replace("\n", ' ', $request->note);
+            $note = str_replace("\n", ' ', $note);
             $request->merge(['note' => $note]);
         }
         if (!empty($request->format_date)) {
