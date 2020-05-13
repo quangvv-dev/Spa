@@ -222,7 +222,7 @@ class Functions
      * @param        $sms_text
      * @param string $send_after
      */
-    public static function sendSms($phone, $sms_text, $send_after = '')
+    public static function sendSmsV2($phone, $sms_text, $send_after = '')
     {
         $client = new nusoap_client("http://brandsms.vn:8018/VMGAPI.asmx?wsdl", 'wsdl', '', '', '', '');
         $client->soap_defencoding = 'UTF-8';
@@ -249,16 +249,16 @@ class Functions
         }
     }
 
-    public static function smsPush()
+    public static function sendSmsV3($phone, $sms_text, $send_after = '')
     {
         $data = [
-            'to' => "0353997108",
+            'to' => $phone,
             'from' => "ROYAL SPA",
-            'message' => "Tin nhan test",
-            'scheduled' => "",
+            'message' => $sms_text,
+            'scheduled' => $send_after,//15-01-2019 16:05
             'requestId' => "",
-            'useUnicode' => 0,
-            'type' => 1
+            'useUnicode' => 0,//sử dụng có dấu hay k dấu
+            'type' => 1 // CSKH hay QC
         ];
         $data = json_encode((object)$data);
         $base_url = 'http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
@@ -281,8 +281,8 @@ class Functions
         ));
         $response = curl_exec($curl);
         curl_close($curl);
-        dd($response);
-        echo $response;
+        $error_code = json_decode($response)->errorCode;
+        return $error_code;
     }
 
     /**
