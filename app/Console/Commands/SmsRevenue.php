@@ -57,7 +57,8 @@ class  SmsRevenue extends Command
         $text = request()->getHttpHost() . ' trong ngay ' . Carbon::now()->format('d/m/Y') . ' co DS: ' . @number_format($all_total) . ' DT: ' . @number_format($grossRevenue) . ' DTTK: ' . @number_format($total) . ' VND';
 //        Functions::sendSmsBK('84986898662', $text);//chithuan
 //        Functions::sendSmsBK('84989996738', $text);//Athien
-        Functions::sendSmsV3('0353997108', $text);
+        $time = '13-05-2020 14:52';;
+        Functions::sendSmsV3('0353997108', $text, $time);
 //        Functions::sendSmsBK('84334299996', $text);//Sy
     }
 }
