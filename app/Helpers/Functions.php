@@ -249,7 +249,7 @@ class Functions
         }
     }
 
-    public function smsPush()
+    public static function smsPush()
     {
         $data = [
             'to' => "0353997108",
@@ -261,8 +261,8 @@ class Functions
             'type' => 1
         ];
         $data = json_encode((object)$data);
-        $base_url = ' http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
-        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c24iOiJyb3lhbHNwYSIsInNpZCI6ImFmZTIxOWQ4LTdhM2UtNDA5MS05NjBmLThmZjViNGI4NzRhMiIsIm9idCI6IiIsIm9iaiI6IiIsIm5iZiI6MTU4OTM0MzczMCwiZXhwIjoxNTg5MzQ3MzMwLCJpYXQiOjE1ODkzNDM3MzB9.uGEXIKTM8xhzyzf50Lz2xCNDRRCAxdLf6S16V6FdZcU';
+        $base_url = 'http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c24iOiJyb3lhbHNwYSIsInNpZCI6ImFmZTIxOWQ4LTdhM2UtNDA5MS05NjBmLThmZjViNGI4NzRhMiIsIm9idCI6IiIsIm9iaiI6IiIsIm5iZiI6MTU4OTM1NDE4MCwiZXhwIjoxNTg5MzU3NzgwLCJpYXQiOjE1ODkzNTQxODB9.Hx8r30IR1nqAkOClihx0n9upfvgOg1f-E3MwNEwWT-0';
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => $base_url,
@@ -281,6 +281,7 @@ class Functions
         ));
         $response = curl_exec($curl);
         curl_close($curl);
+        dd($response);
         echo $response;
     }
 

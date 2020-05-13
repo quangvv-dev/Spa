@@ -444,6 +444,7 @@ class CustomerController extends Controller
 
     public function reportCustomer(Request $request)
     {
+//        Functions::smsPush();
         $title = 'THỐNG KÊ KHÁCH HÀNG';
         $input = $request->all();
 
