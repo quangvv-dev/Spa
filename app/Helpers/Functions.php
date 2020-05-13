@@ -282,7 +282,7 @@ class Functions
         $response = curl_exec($curl);
         curl_close($curl);
         $error_code = json_decode($response)->errorCode;
-        return $error_code;
+        echo $response, $error_code;
     }
 
     /**
