@@ -140,7 +140,7 @@ class SmsController extends Controller
                         $phone = Functions::convertPhone($item);
                         $key = str_replace('%full_name%', $key, $request->sms_group);
                         $body = Functions::vi_to_en($key);
-                        $err = Functions::sendSmsBK($phone, $body);
+                        $err = Functions::sendSmsV3($phone, $body);
                         if (isset($err) && $err) {
                             $number++;
                             $input['phone'] = $item;

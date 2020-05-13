@@ -293,7 +293,7 @@ class OrderController extends Controller
                     $text = @array_values($sms)[0]->configs->content;
                     $phone = Functions::convertPhone(@$check3->order->customer->phone);
                     $text = Functions::vi_to_en($text);
-                    $err = Functions::sendSmsBK($phone, @$text);
+                    $err = Functions::sendSmsV3($phone, @$text);
                     if (isset($err) && $err) {
                         $input['phone'] = $phone;
                         $input['campaign_id'] = 0;

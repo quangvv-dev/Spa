@@ -282,7 +282,9 @@ class Functions
         $response = curl_exec($curl);
         curl_close($curl);
         $error_code = json_decode($response)->errorCode;
-        echo $response, $error_code;
+        if ($error_code == '000') {
+            return 1;
+        }
     }
 
     /**
