@@ -45,7 +45,7 @@ class  SmsRevenue extends Command
 //        Functions::sendSmsBK();
         $input = [
             'start_date' => Carbon::now()->format('Y-m-d'),
-            'end_date'   => Carbon::now()->format('Y-m-d'),
+            'end_date' => Carbon::now()->format('Y-m-d'),
         ];
         $detail = PaymentHistory::search($input);
         $total = $detail->sum('price');
@@ -58,6 +58,7 @@ class  SmsRevenue extends Command
         $text = request()->getHttpHost() . ' trong ngay ' . Carbon::now()->format('d/m/Y') . ' co DS: ' . @number_format($all_total) . ' DT: ' . @number_format($grossRevenue) . ' DTTK: ' . @number_format($total) . ' VND';
 //        Functions::sendSmsBK('84986898662', $text);//chithuan
 //        Functions::sendSmsBK('84989996738', $text);//Athien
-        Functions::sendSmsBK('84334299996', $text);//Sy
+        Functions::smsPush();
+//        Functions::sendSmsBK('84334299996', $text);//Sy
     }
 }

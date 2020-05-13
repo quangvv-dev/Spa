@@ -57,11 +57,11 @@ class CustomerController extends Controller
             return $item;
         });
         view()->share([
-            'status'         => $status,
-            'group'          => $group,
-            'source'         => $source,
-            'branch'         => $branch,
-            'telesales'      => $telesales,
+            'status' => $status,
+            'group' => $group,
+            'source' => $source,
+            'branch' => $branch,
+            'telesales' => $telesales,
             'marketingUsers' => $marketingUsers,
         ]);
     }
@@ -128,7 +128,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'fb_name'   => $request->full_name,
+            'fb_name' => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
         ]);
         $input = $request->except(['group_id', 'image']);
@@ -231,7 +231,7 @@ class CustomerController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -376,20 +376,20 @@ class CustomerController extends Controller
                     if (empty($check)) {
                         if ($row['so_dien_thoai']) {
                             $data = Customer::create([
-                                'full_name'    => $row['ten_khach_hang'],
+                                'full_name' => $row['ten_khach_hang'],
                                 'account_code' => $row['ma_khach_hang'],
-                                'mkt_id'       => @Auth::user()->id,
+                                'mkt_id' => @Auth::user()->id,
                                 'telesales_id' => isset($telesale) ? $telesale->id : 1,
-                                'status_id'    => isset($status) ? $status->id : 1,
-                                'source_id'    => isset($source) ? $source->id : 18,
-                                'phone'        => $row['so_dien_thoai'],
-                                'birthday'     => $row['sinh_nhat'],
-                                'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
-                                'address'      => $row['dia_chi'] ?: '',
-                                'facebook'     => $row['link_facebook'] ?: '',
-                                'description'  => $row['mo_ta'],
-                                'created_at'   => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
-                                'updated_at'   => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
+                                'status_id' => isset($status) ? $status->id : 1,
+                                'source_id' => isset($source) ? $source->id : 18,
+                                'phone' => $row['so_dien_thoai'],
+                                'birthday' => $row['sinh_nhat'],
+                                'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                                'address' => $row['dia_chi'] ?: '',
+                                'facebook' => $row['link_facebook'] ?: '',
+                                'description' => $row['mo_ta'],
+                                'created_at' => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
+                                'updated_at' => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
                             ]);
 
                             if (count($category)) {
@@ -559,7 +559,7 @@ class CustomerController extends Controller
 
         return [
             'customer' => $customer,
-            'data'     => $telesales,
+            'data' => $telesales,
         ];
     }
 }

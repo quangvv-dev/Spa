@@ -83,7 +83,7 @@ class Functions
      *
      * @param UploadedFile $file
      * @param              $path
-     * @param string       $namevalidate
+     * @param string $namevalidate
      *
      * @return null
      */
@@ -233,10 +233,10 @@ class Functions
         }
         $result = $client->call('BulkSendSms',
             [
-                'msisdn'           => $phone,
-                'alias'            => 'VMGtest',
-                'message'          => $sms_text,
-                'sendTime'         => $send_after,
+                'msisdn' => $phone,
+                'alias' => 'VMGtest',
+                'message' => $sms_text,
+                'sendTime' => $send_after,
                 //                'sendTime'         => '15/08/2019 15:32',
                 'authenticateUser' => 'vmgtest1',
                 'authenticatePass' => 'vmG@123b',
@@ -247,23 +247,41 @@ class Functions
         if (!$err) {
             return 1;
         }
+    }
 
-        // Check for a fault
-//        if ($client->fault) {
-//            echo 'Loi';
-//            print_r($result);
-//            echo '</pre>';
-//        } else {
-//            // Check for errors
-//            $err = $client->getError();
-//            if ($err) {
-//                // Display the error
-//                echo '<h2>Error</h2><pre>' . $err . '</pre>';
-//            } else {
-//                // Display the result
-//                print_r($result);
-//            }
-//        }
+    public function smsPush()
+    {
+        $data = [
+            'to' => "0353997108",
+            'from' => "ROYAL SPA",
+            'message' => "Tin nhan test",
+            'scheduled' => "",
+            'requestId' => "",
+            'useUnicode' => 0,
+            'type' => 1
+        ];
+        $data = json_encode((object)$data);
+        $base_url = ' http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c24iOiJyb3lhbHNwYSIsInNpZCI6ImFmZTIxOWQ4LTdhM2UtNDA5MS05NjBmLThmZjViNGI4NzRhMiIsIm9idCI6IiIsIm9iaiI6IiIsIm5iZiI6MTU4OTM0MzczMCwiZXhwIjoxNTg5MzQ3MzMwLCJpYXQiOjE1ODkzNDM3MzB9.uGEXIKTM8xhzyzf50Lz2xCNDRRCAxdLf6S16V6FdZcU';
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $base_url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "token: $token"
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        echo $response;
     }
 
     /**
@@ -283,16 +301,16 @@ class Functions
         }
         $result = $client->call('wsCpMt',
             [
-                'User'        => 'smsbrand_royal_spa',
-                'Password'    => '123456a@',
-                'CPCode'      => 'ROYAL_SPA',
-                'UserID'      => $phone,
-                'RequestID'   => '1',
-                'ReceiverID'  => $phone,
-                'ServiceID'   => 'ROYAL-SPA',
+                'User' => 'smsbrand_royal_spa',
+                'Password' => '123456a@',
+                'CPCode' => 'ROYAL_SPA',
+                'UserID' => $phone,
+                'RequestID' => '1',
+                'ReceiverID' => $phone,
+                'ServiceID' => 'ROYAL-SPA',
                 'CommandCode' => 'bulksms',
                 'ContentType' => '0',
-                'Content'     => $sms_text,
+                'Content' => $sms_text,
             ], '', '', ''
         );
 
