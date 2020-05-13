@@ -229,7 +229,7 @@ class Functions
         $client->decode_utf8 = false;
         $err = $client->getError();
         if ($err) {
-//            echo '<h2>Test-Constructor error</h2><pre>' . $err . '</pre>';
+            echo '<h2>Test-Constructor error</h2><pre>' . $err . '</pre>';
         }
         $result = $client->call('BulkSendSms',
             [
@@ -242,6 +242,11 @@ class Functions
                 'authenticatePass' => 'vmG@123b',
             ], '', '', ''
         );
+
+        $err = $client->getError();
+        if (!$err) {
+            return 1;
+        }
 
         // Check for a fault
 //        if ($client->fault) {
