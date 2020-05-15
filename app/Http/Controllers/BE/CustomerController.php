@@ -455,10 +455,10 @@ class CustomerController extends Controller
 //        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
 //        $schedules = Schedule::countStatus($input);
 //        $categoryRevenues = Category::getRevenue($input);
+//        $statusRevenues = OrderDetail::getCustomerSearch($input);
 
         $countCustomer = Customer::count($input);
         $statusRevenues = Status::getRevenueSource($input);
-//        $statusRevenues = OrderDetail::getCustomerSearch($input);
 
 
         $customerRevenueByGenders = Customer::getRevenueByGender($input);

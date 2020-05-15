@@ -129,8 +129,10 @@ class OrderService
                         $revenue += $customer->order_detail->sum('total_price');
                     }
                 }
-                $status[$item->id]['revenue'] = $revenue;
-                $status[$item->id]['name'] = @$item->service->name;
+                if ($revenue >0){
+                    $status[$item->id]['revenue'] = $revenue;
+                    $status[$item->id]['name'] = @$item->name;
+                }
             }
         }
 
