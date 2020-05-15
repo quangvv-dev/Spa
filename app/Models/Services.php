@@ -44,7 +44,8 @@ class Services extends Model
 
     public static function handleChart($arr=null, $input = [])
     {
-        $data = OrderDetail::select('*',DB::raw("SUM(total_price) as count"))->groupBy('booking_id')
+        $data = OrderDetail::select('*',DB::raw("SUM(total_price) as count"),DB::raw("count(order_id) as count_order"))
+            ->groupBy('booking_id')
             ->when(isset($arr) && $arr, function ($q) use ($arr) {
                 $q->whereIn('booking_id', $arr);
             })
@@ -54,7 +55,6 @@ class Services extends Model
                     $q->whereDate('created_at', getTime(($input['data_time'])));
                 })
                     ->when($input['data_time'] == 'THIS_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
                         $input['data_time'] == 'LAST_WEEK' ||
                         $input['data_time'] == 'THIS_MONTH' ||
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {

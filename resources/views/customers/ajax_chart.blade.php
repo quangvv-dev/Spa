@@ -23,8 +23,8 @@
             <td class="text-center"><h2>{{ $countCustomer }}</h2></td>
             <td class="text-center"><h2>{{ $groupComments }}</h2></td>
             <td class="text-center"><h2>{{ $books }}</h2></td>
-            <td class="text-center"><h2>{{ count($orders) }}</h2></td>
-            <td class="text-center"><h2>{{ number_format($orders->sum('total_price')) }} </h2>
+            <td class="text-center"><h2>{{ $orders['sum'] }}</h2></td>
+            <td class="text-center"><h2>{{ number_format($orders['count']) }} </h2>
             </td>
         </tr>
         </tbody>
@@ -56,15 +56,17 @@
         <tr>
             <th class="text-white text-center">STT</th>
             <th class="text-white text-center">Sản phẩm/ Dịch vụ</th>
+            <th class="text-white text-center">Số đơn</th>
             <th class="text-white text-center">Doanh thu</th>
         </tr>
         </thead>
         <tbody>
-        @foreach($services as $k =>$service)
+        @foreach($service1 as $k =>$service)
             @if($service->count >0)
                 <tr>
                     <td class="text-center">{{$k+1}}</td>
-                    <td class="text-center">{{ @$service->service->name}}</td>
+                    <td class="text-center">{{ @$service->service->name.'- '.@$service->booking_id }}</td>
+                    <td class="text-center">{{ @$service->count_order}}</td>
                     <td class="text-center"><h3>{{@number_format($service->count)}}</h3></td>
                 </tr>
             @endif
@@ -73,7 +75,7 @@
         </tbody>
     </table>
     <div class="pull-right">
-        {{ $services->appends(['search' => request()->search ])->links() }}
+        {{ $service1->appends(['search' => request()->search ])->links() }}
     </div>
 </div>
 @include('customers.script')

@@ -125,10 +125,12 @@ class OrderService
             $revenue = 0;
             if (isset($item->customerSources)) {
                 foreach ($item->customerSources as $customer) {
-                    $revenue += $customer->orders->sum('gross_revenue');
+                    if (count($customer->order_detail)){
+                        $revenue += $customer->order_detail->sum('total_price');
+                    }
                 }
                 $status[$item->id]['revenue'] = $revenue;
-                $status[$item->id]['name'] = $item->name;
+                $status[$item->id]['name'] = @$item->service->name;
             }
         }
 

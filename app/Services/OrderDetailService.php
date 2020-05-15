@@ -36,7 +36,6 @@ class OrderDetailService
                 'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
                 'total_price'     => replaceNumberFormat($data['total_price'][$key]),
             ];
-
             $service = Services::where('id', $data['service_id'][$key])->first();
 
             $service->update(['description' => $data['service_note'][$key]]);
@@ -80,8 +79,6 @@ class OrderDetailService
             if (!empty($item['id'])) {
                 $orderDetail = OrderDetail::where('id', $item['id'])->first();
                 $orderDetail->update($item);
-//                dd($dataArr);
-
             }
             if (empty($item['id'])) {
                 $orderDetail = OrderDetail::create($item);

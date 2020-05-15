@@ -7,8 +7,8 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @foreach($statusRevenues as $statusRevenue)
-            ['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],
+                @foreach($statusRevenues as $k =>$statusRevenue)
+            ['{{ $k }}', {{ (int)array_sum($statusRevenue) }}],
             @endforeach
         ]);
 

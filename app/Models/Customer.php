@@ -40,7 +40,7 @@ class Customer extends Model
         'created_at',
     ];
 
-    const VIP_STATUS = 8000000;
+    const VIP_STATUS = 10000000;
 
     public static function applySearchConditions($builder, $conditions)
     {
@@ -126,6 +126,11 @@ class Customer extends Model
     public function orders()
     {
         return $this->hasMany(Order::class, 'member_id', 'id')->orderBy('created_at', 'DESC');
+    }
+
+    public function order_detail()
+    {
+        return $this->hasMany(OrderDetail::class, 'user_id', 'id')->orderBy('created_at', 'DESC');
     }
 
     public function getGenderTextAttribute()

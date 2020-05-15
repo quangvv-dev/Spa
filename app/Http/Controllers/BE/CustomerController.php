@@ -13,6 +13,7 @@ use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\Models\Status;
@@ -447,16 +448,19 @@ class CustomerController extends Controller
         $title = 'THỐNG KÊ KHÁCH HÀNG';
         $input = $request->all();
 
-        $input['order_id'] = null;
+//        $input['order_id'] = null;
         $input['data_time'] = $request->data_time ?: 'TODAY';
-
 //        $customer = Customer::getDataOfYears($input);
 //        $statuses = Status::getRelationship($input);
 //        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
 //        $schedules = Schedule::countStatus($input);
+//        $categoryRevenues = Category::getRevenue($input);
+
         $countCustomer = Customer::count($input);
-        $statusRevenues = Status::getRevenueSource($input);
-        $categoryRevenues = Category::getRevenue($input);
+//        $statusRevenues = Status::getRevenueSource($input);
+        $statusRevenues = OrderDetail::getCustomerSearch($input);
+
+
         $customerRevenueByGenders = Customer::getRevenueByGender($input);
 
         $groupComments = GroupComment::getAll($input);
@@ -464,22 +468,25 @@ class CustomerController extends Controller
         $type = $request->type ?: StatusCode::PRODUCT;
         $arr = Services::getIdServiceType($type);
         $services = Services::handleChart($arr, $input);
-        $orders = $services->groupBy('order_id')->get();
-        $services = $services->paginate(StatusCode::PAGINATE_10);
+        $service1= $services->orderBy('count_order','desc')->paginate(10);
+        $orders =[
+            'sum'=>$services->get()->sum('count_order'),
+            'count'=>$services->get()->sum('count'),
+        ];
 
         if ($request->ajax()) {
             return Response::json(view('customers.ajax_chart', compact(
                 'title',
-                'services',
+                'service1',
                 'type',
 //                'statuses',
 //                'customer',
 //                'statusRevenueByRelations',
 //                'schedules'
+//                'categoryRevenues',
                 'services',
                 'orders',
                 'statusRevenues',
-                'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
                 'books',
@@ -494,11 +501,11 @@ class CustomerController extends Controller
 //                'customer',
 //                'schedules'
 //                'statusRevenueByRelations',
+//                'categoryRevenues',
                 'type',
-                'services',
+                'service1',
                 'orders',
                 'statusRevenues',
-                'categoryRevenues',
                 'customerRevenueByGenders',
                 'groupComments',
                 'books',

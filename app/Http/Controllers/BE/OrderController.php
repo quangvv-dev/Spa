@@ -248,7 +248,6 @@ class OrderController extends Controller
         $now = Carbon::now()->format('d-m-Y');
         $order->now = $now;
         $data = $order->paymentHistories;
-
         return view('order.order', compact('order', 'data'));
     }
 
@@ -457,7 +456,6 @@ class OrderController extends Controller
             }
 
             $orderDetail = $this->orderDetailService->update($input, $id);
-
             if (!$orderDetail) {
                 DB::rollBack();
             }
