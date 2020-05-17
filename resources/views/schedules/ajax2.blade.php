@@ -57,11 +57,11 @@
                                     @foreach($docs as $item)
                                 {
                                     id: '{{$item->id}}',
-                                    title: '{!! 'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note !!}',
-                                    note: '{{$item->note}}',
-                                    description: '{{$item->note}}',
+                                    title: "{!! 'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note !!}",
+                                    note: "{{$item->note}}",
+                                    description: "{{$item->note}}",
                                     full_name: '{{@$item->customer->full_name}}',
-                                    phone: '{{@$item->customer->phone}}',
+                                    phone: "{{@$item->customer->phone}}",
                                     creator_id: '{{@$item->creator_id}}',
                                     time_from: '{{$item->time_from}}',
                                     time_to: '{{$item->time_to}}',
