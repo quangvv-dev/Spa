@@ -464,6 +464,8 @@ class CustomerController extends Controller
         $customerRevenueByGenders = Customer::getRevenueByGender($input);
 
         $groupComments = GroupComment::getAll($input);
+
+
         $books = Schedule::getBooks($input);
         $type = $request->type ?: StatusCode::PRODUCT;
         $arr = Services::getIdServiceType($type);
