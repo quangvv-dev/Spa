@@ -218,9 +218,9 @@ class Customer extends Model
     public static function getRevenueByGender($input)
     {
         $data = self::with([
-            'orders' => function ($query) use ($input) {
-                $query->when(isset($input['order_id']), function ($query) use ($input) {
-                    $query->whereIn('id', $input['order_id']);
+            'order_detail' => function ($query) use ($input) {
+                $query->when(count($input['list_booking']), function ($query) use ($input) {
+                    $query->whereIn('booking_id', $input['list_booking']);
                 })
                     ->when(isset($input['data_time']), function ($query) use ($input) {
                         $query->when($input['data_time'] == 'TODAY' ||
@@ -228,7 +228,6 @@ class Customer extends Model
                             $q->whereDate('created_at', getTime(($input['data_time'])));
                         })
                             ->when($input['data_time'] == 'THIS_WEEK' ||
-                                $input['data_time'] == 'LAST_WEEK' ||
                                 $input['data_time'] == 'LAST_WEEK' ||
                                 $input['data_time'] == 'THIS_MONTH' ||
                                 $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
@@ -242,28 +241,27 @@ class Customer extends Model
                         ]);
                     });
             },
-        ])
-            ->has('orders');
+        ]);
 
-        $data = $data->get();
+        $data = $data->has('order_detail')->get();
         $revenueMale = 0;
         $revenueFemale = 0;
-
+//        dd($data);
         foreach ($data as $item) {
             if ($item->gender == UserConstant::MALE) {
-                $revenueMale += $item->orders->sum('gross_revenue');
+                $revenueMale += $item->order_detail->sum('total_price');
             } else {
-                $revenueFemale += $item->orders->sum('gross_revenue');
+                $revenueFemale += $item->order_detail->sum('total_price');
             }
         }
 
         return $result = [
             [
-                'name'    => 'Nam',
+                'name' => 'Nam',
                 'revenue' => $revenueMale,
             ],
             [
-                'name'    => 'Nữ',
+                'name' => 'Nữ',
                 'revenue' => $revenueFemale,
             ],
         ];
@@ -288,7 +286,7 @@ class Customer extends Model
                     });
             })->when(isset($input['user_id']), function ($query) use ($input) {
 //                $query->where(function ($query) use ($input) {
-                    $query->where('mkt_id', $input['user_id']);
+                $query->where('mkt_id', $input['user_id']);
 //                });
             })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [

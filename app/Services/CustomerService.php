@@ -81,7 +81,7 @@ class CustomerService
             }
         }
 
-        $vip = Status::where('type', StatusCode::RELATIONSHIP)->where('name', 'Vip 1')->first();
+        $vip = Status::where('type', StatusCode::RELATIONSHIP)->where('code', 'vip')->first();
 
         $customers = $this->customer->whereIn('id', $id)->update(['status_id' => $vip->id]);
 

@@ -36,7 +36,6 @@ class Status extends Model
                         })
                             ->when($input['data_time'] == 'THIS_WEEK' ||
                                 $input['data_time'] == 'LAST_WEEK' ||
-                                $input['data_time'] == 'LAST_WEEK' ||
                                 $input['data_time'] == 'THIS_MONTH' ||
                                 $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                                 $q->whereBetween('orders.created_at', getTime(($input['data_time'])));
@@ -80,7 +79,10 @@ class Status extends Model
             'customerSources' => function ($query) use ($input) {
                 $query->with([
                     'order_detail' => function ($query) use ($input) {
-                        $query->when(isset($input['data_time']), function ($query) use ($input) {
+                        $query->when(count($input['list_booking']), function ($query) use ($input) {
+                            $query->whereIn('booking_id', $input['list_booking']);
+                        })
+                        ->when(isset($input['data_time']), function ($query) use ($input) {
 //                            $query->when(isset($input['order_id']), function ($query) use ($input) {
 //                                $query->whereIn('id', $input['order_id']);
 //                            })

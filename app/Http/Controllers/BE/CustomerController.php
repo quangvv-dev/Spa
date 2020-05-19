@@ -457,18 +457,14 @@ class CustomerController extends Controller
 //        $categoryRevenues = Category::getRevenue($input);
 //        $statusRevenues = OrderDetail::getCustomerSearch($input);
 
-        $countCustomer = Customer::count($input);
-        $statusRevenues = Status::getRevenueSource($input);
-
-
-        $customerRevenueByGenders = Customer::getRevenueByGender($input);
-
-        $groupComments = GroupComment::getAll($input);
-
-
-        $books = Schedule::getBooks($input);
         $type = $request->type ?: StatusCode::PRODUCT;
         $arr = Services::getIdServiceType($type);
+        $input['list_booking'] = $arr;
+        $countCustomer = Customer::count($input);
+        $statusRevenues = Status::getRevenueSource($input);
+        $customerRevenueByGenders = Customer::getRevenueByGender($input);
+        $groupComments = GroupComment::getAll($input);
+        $books = Schedule::getBooks($input);
         $services = Services::handleChart($arr, $input);
         $service1= $services->orderBy('count_order','desc')->paginate(10);
         $orders =[
