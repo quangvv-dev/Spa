@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use nusoap_client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Carbon\Carbon;
 
 class Functions
 {
@@ -25,6 +26,12 @@ class Functions
         return $randomString;
     }
 
+    /**
+     * check action sendsms in array Rules
+     *
+     * @param $config
+     * @return array
+     */
     public static function checkRuleSms($config)
     {
         return array_filter($config, function ($k) {
@@ -32,11 +39,42 @@ class Functions
         });
     }
 
+    /**
+     * check action create job in array Rules
+     *
+     * @param $config
+     * @return array
+     */
     public static function checkRuleJob($config)
     {
         return array_filter($config, function ($k) {
             return $k->type == 'action' && $k->value == 'create_job';
         });
+    }
+
+    /**
+     * get time action in rules
+     *
+     * @param $sms
+     * @return string
+     */
+    public static function getExactlyTime($sms)
+    {
+        $exactly_value = '';
+        $time_type = @array_values($sms)[0]->configs->time_type;
+        if ($time_type == 'exactly') {
+            $exactly_value = Carbon::parse(@array_values($sms)[0]->configs->exactly_value)->format('d-m-Y H:s');
+        } elseif ($time_type == 'delay') {
+            $delay_unit = @array_values($sms)[0]->configs->delay_unit;
+            $delay_value = @array_values($sms)[0]->configs->delay_value;
+            if ($delay_unit == 'hours') {
+                $exactly_value = Carbon::now('Asia/Ho_Chi_Minh')->addHour((int)$delay_value)->format('d-m-Y H:s');
+            } else {
+                $exactly_value = Carbon::now('Asia/Ho_Chi_Minh')->addDays((int)$delay_value)->format('d-m-Y H:s');
+            }
+
+        }
+        return $exactly_value;
     }
 
     /**

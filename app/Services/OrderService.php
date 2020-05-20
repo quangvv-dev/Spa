@@ -126,7 +126,7 @@ class OrderService
             if (isset($item->customerSources)) {
                 foreach ($item->customerSources as $customer) {
                     if (count($customer->order_detail)){
-                        $revenue += $customer->order_detail->sum('total_price');
+                            $revenue += $customer->order_detail->sum('total_price');
                     }
                 }
                 if ($revenue >0){
