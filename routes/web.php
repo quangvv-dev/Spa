@@ -115,6 +115,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::group(['prefix' => 'report'], function () {//Chart doanh số
         Route::get('customers', 'CustomerController@reportCustomer');
         Route::get('products', 'OrderController@reportProduct');
+        Route::get('sales', 'SalesController@index');
     });
     Route::resource('tasks', 'TaskController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');
