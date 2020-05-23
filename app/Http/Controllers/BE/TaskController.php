@@ -35,10 +35,11 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $input['type1'] = isset($input['type1']) ? $input['type1']: 'qf1';
+        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
-        $customers = Customer::pluck('full_name', 'id');
+//        $customers = Customer::pluck('full_name', 'id');
+        $customers = [];
         $departments = Department::pluck('name', 'id');
         $priority = Task::PRIORITY;
         $tasks = Task::getAll($input);
@@ -92,6 +93,7 @@ class TaskController extends Controller
 
         return redirect('tasks')->with('status', 'Tạo người dùng thành công');
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -141,14 +143,14 @@ class TaskController extends Controller
         $progress = Task::PROGRESS;
         $departments = Department::pluck('name', 'id');
 
-        return view('tasks._form-edit', compact('users', 'departments', 'users2','task', 'user', 'customers', 'type', 'priority', 'title', 'status', 'progress'));
+        return view('tasks._form-edit', compact('users', 'departments', 'users2', 'task', 'user', 'customers', 'type', 'priority', 'title', 'status', 'progress'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

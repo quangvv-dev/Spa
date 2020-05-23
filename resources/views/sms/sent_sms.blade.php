@@ -17,12 +17,12 @@
                     </div>
                     <div class="col-6 form-group">
                         {!! Form::label('category_id', 'Nhóm khách hàng', array('class' => ' required control-label')) !!}
-                        {!! Form::select('category_id', $category, null, array('class' => 'form-control select2','multiple'=>true,'id'=>'category_id', 'required' => true, 'data-placeholder'=>'Nhóm KH',)) !!}
+                        {!! Form::select('category_id[]', $category, null, array('class' => 'form-control select2','multiple'=>true,'id'=>'category_id', 'required' => true, 'data-placeholder'=>'Nhóm KH',)) !!}
                         <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
                     </div>
                     <div class="col-6 form-group">
                         {!! Form::label('status_id', 'Trạng thái', array('class' => ' required control-label')) !!}
-                        {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','multiple'=>true,'id'=>'status_id', 'required' => true, 'data-placeholder'=>'Trạng thái',)) !!}
+                        {!! Form::select('status_id[]', $status, null, array('class' => 'form-control select2','multiple'=>true,'id'=>'status_id', 'required' => true, 'data-placeholder'=>'Trạng thái',)) !!}
                         <span class="help-block"
                               id="message_status">{{ $errors->first('status_id', ':message') }}</span>
                     </div>

@@ -14,11 +14,11 @@
                         <label for="" class="form-label">Thời gian hết hạn</label>
                         <div class="custom-controls-stacked">
                             {{--<div>--}}
-                                {{--<label class="custom-control custom-radio">--}}
-                                    {{--<input class="condition-activator custom-control-input" type="radio"--}}
-                                           {{--name="time_type" id="immediately" value="immediately">--}}
-                                    {{--<span class="custom-control-label">Ngay lập tức</span>--}}
-                                {{--</label>--}}
+                            {{--<label class="custom-control custom-radio">--}}
+                            {{--<input class="condition-activator custom-control-input" type="radio"--}}
+                            {{--name="time_type" id="immediately" value="immediately">--}}
+                            {{--<span class="custom-control-label">Ngay lập tức</span>--}}
+                            {{--</label>--}}
                             {{--</div>--}}
                             <div>
                                 <label class="custom-control custom-radio">
@@ -49,6 +49,9 @@
                         <div class="conditional-input form-group exactly">
                             <input name="exactly_value" class="form-control datetimepicker" type="text">
                         </div>
+                        {{--check--}}
+
+                        {{--end check--}}
                     </div>
                 </form>
             </main>
