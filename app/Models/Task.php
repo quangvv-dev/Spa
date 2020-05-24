@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Task extends Model
 {
+//    protected $guarded=['id'];
     /**
      * The attributes that are mass assignable.
      *
@@ -33,6 +34,8 @@ class Task extends Model
         'progress',
         'taskmaster_id',
         'department_id',
+        'sms_content',
+//        'all_day'
     ];
 
     const TYPE = [

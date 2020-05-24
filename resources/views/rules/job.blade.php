@@ -22,7 +22,7 @@
                             {{--</div>--}}
                             <div>
                                 <label class="custom-control custom-radio">
-                                    <input class="condition-activator custom-control-input" type="radio"
+                                    <input checked class="condition-activator custom-control-input job-input" type="radio"
                                            name="time_type" id="delay" value="delay">
                                     <span class="custom-control-label">Chờ</span>
                                 </label>
@@ -46,9 +46,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="conditional-input form-group exactly">
+                        <div class="conditional-input form-group exactly" style="display: none;">
                             <input name="exactly_value" class="form-control datetimepicker" type="text">
                         </div>
+                        <div class="form-group exactly">
+                            <label>Nội dung sms báo lịch</label>
+                            <textarea name="sms_content" class="form-control"></textarea>
+                        </div>
+{{--                        <div class="conditional-input form-group repeat">--}}
+{{--                            <label>Nội dung sms báo lịch</label>--}}
+{{--                            <textarea name="repeat" class="form-control"></textarea>--}}
+{{--                        </div>--}}
                         {{--check--}}
 
                         {{--end check--}}
@@ -64,3 +72,6 @@
         </div>
     </div>
 </div>
+<script>
+
+</script>

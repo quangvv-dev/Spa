@@ -119,7 +119,7 @@ function cxcommand(event, val) {
         case "configs": {
             let data = diagram.selection.first().data
             appendDataToModal(`.modal-${data.type}-${data.value}`, data.configs)
-            console.log(`.modal-${data.type}-${data.value}`, data)
+            console.log(data)
             MicroModal.show(document.querySelector(`.modal-${data.type}-${data.value}`).id);
             break;
         }
@@ -130,7 +130,7 @@ function cxcommand(event, val) {
                 if (appliedModel) {
                     let hasNode = diagram.findPartForData(appliedModel) !== null ? true : false
                     if (hasNode) {
-                        appliedModel = ({key, title, color, type} = appliedModel, {key, title, color, type})
+                        appliedModel = ({key, title, color, type, value} = appliedModel, {key, title, color, type , value})
                         appliedModel.key = new Date().getUTCMilliseconds()
                     }
                     addNewModel(diagram, appliedModel);
@@ -203,6 +203,7 @@ $(document).ready(() => {
         let a = $('.modal.is-open form').serializeArray()
         let newConfigs = {}
         a.forEach((item) => {
+            console.log(item)
             if (item.name.indexOf('[]') > -1) { // IS multi select
                 let name = item.name.replace('[]', '')
                 if (typeof newConfigs[name] === 'undefined') {
@@ -216,6 +217,7 @@ $(document).ready(() => {
         })
         let diagram = myDiagram;
         let data = diagram.selection.first().data
+        console.log(newConfigs,a)
         data.configs = newConfigs
         MicroModal.close();
     })

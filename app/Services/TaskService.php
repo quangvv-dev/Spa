@@ -34,18 +34,27 @@ class TaskService
 
     public function create(array $data)
     {
-        if (empty($data)) return false;
+        if (empty($data)) {
+            return false;
+        }
         $data['task_status_id'] = 1;
 
         $handleData = $this->data($data);
-
         $task = $this->task->fill($handleData);
-
         $task->save();
         return $task;
-
-
     }
+
+//    public function create2(array $data)
+//    {
+//        if (empty($data)) {
+//            return false;
+//        }
+//        $data['task_status_id'] = 1;
+//        $a = Task::create($data);
+//        dd($a);
+//        return $a;
+//    }
 
     public function data(array $data)
     {

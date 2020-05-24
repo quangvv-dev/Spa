@@ -23,7 +23,7 @@
                             </div>
                             <div>
                                 <label class="custom-control custom-radio">
-                                    <input class="condition-activator custom-control-input" type="radio"
+                                    <input checked class="condition-activator custom-control-input" type="radio"
                                            name="time_type" id="delay" value="delay">
                                     <span class="custom-control-label">Chờ</span>
                                 </label>
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="conditional-input form-group exactly">
+                        <div class="conditional-input form-group exactly" style="display: none;">
                             <input name="exactly_value" class="form-control datetimepicker" type="text">
                         </div>
                     </div>
