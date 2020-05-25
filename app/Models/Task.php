@@ -9,34 +9,34 @@ use Illuminate\Support\Facades\Auth;
 
 class Task extends Model
 {
-//    protected $guarded=['id'];
+    protected $guarded=['id'];
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id',
-        'customer_id',
-        'parent_id',
-        'name',
-        'code',
-        'type',
-        'amount_of_work',
-        'date_from',
-        'date_to',
-        'time_from',
-        'time_to',
-        'document',
-        'description',
-        'priority',
-        'task_status_id',
-        'progress',
-        'taskmaster_id',
-        'department_id',
-        'sms_content',
-//        'all_day'
-    ];
+//    protected $fillable = [
+//        'user_id',
+//        'customer_id',
+//        'parent_id',
+//        'name',
+//        'code',
+//        'type',
+//        'amount_of_work',
+//        'date_from',
+//        'date_to',
+//        'time_from',
+//        'time_to',
+//        'document',
+//        'description',
+//        'priority',
+//        'task_status_id',
+//        'progress',
+//        'taskmaster_id',
+//        'department_id',
+//        'sms_content',
+////        'all_day'
+//    ];
 
     const TYPE = [
        1 => 'Gọi điện',

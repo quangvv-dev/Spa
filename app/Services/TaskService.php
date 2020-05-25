@@ -38,7 +38,7 @@ class TaskService
             return false;
         }
         $data['task_status_id'] = 1;
-
+        unset($data['all_day']);
         $handleData = $this->data($data);
         $task = $this->task->fill($handleData);
         $task->save();
