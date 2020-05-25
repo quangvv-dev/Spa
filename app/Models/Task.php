@@ -35,7 +35,6 @@ class Task extends Model
 //        'taskmaster_id',
 //        'department_id',
 //        'sms_content',
-////        'all_day'
 //    ];
 
     const TYPE = [

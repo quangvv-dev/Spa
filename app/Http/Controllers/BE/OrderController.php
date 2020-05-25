@@ -284,8 +284,7 @@ class OrderController extends Controller
 
             $check = PaymentHistory::where('order_id', $id)->get();
             $check2 = RuleOutput::where('event', 'add_order')->first();
-
-            if (count($check) == 1 && isset($check_action) && count($check_action)) {
+            if (count($check) <= 1 && isset($check2) && $check2) {
                 $check3 = PaymentHistory::where('order_id', $id)->first();
                 $rule = $check2->rules;
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
@@ -332,7 +331,7 @@ class OrderController extends Controller
             }
             return $order; //comment
         } catch (\Exception $e) {
-            DB::rollBack();
+//            DB::rollBack();
             Log::error($e);
             $debug = 'Try catch exception : ' . $e->getMessage() . 'LINE : ___' . $e->getLine() . '___FILE___' . $e->getFile();
             return ApiResult(500, 'Insert failed', null, null, $debug);
