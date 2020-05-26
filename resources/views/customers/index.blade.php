@@ -125,25 +125,26 @@
                         <div class="white-space" style="display: flex; align-items: center;justify-content: space-around;">
                             <img width="50" height="50" class="fl mr10 a40 border"
                                  src="{{asset('default/no-image.png')}}" style="border-radius:100%">
-                            <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
-                            <span>` + (data.customer.fb_name ? data.customer.fb_name : data.customer.full_name) + `</span><br>
-                            <span>@` + (data.customer.telesale ? data.customer.telesale.full_name : "") + `</span>
-                            </a>
+
                             <div class="mt10 pb10" style="height:86px">
-                            <div class="col-md-10 info-avatar padding5 last_contacthover box_last">
+                            <div class="col-md-10 info-avatar padding5 last_contacthover box_last bold">
                             <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
                                 <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
                             </p>
-                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue" data-contact-id="5678"
+                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue bold" data-contact-id="5678"
                                                           rel="tooltip" data-original-title="Click để gọi"
                                                           data-placement="right" data-flag="1"
                                                           data-type="crm"> ` + data.customer.phone + `</a></p>
                             <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>`+category+`</p>
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
+                        <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
+                            <span>` + (data.customer.fb_name ? data.customer.fb_name : data.customer.full_name) + `</span><br>
+                            <span>@` + (data.customer.telesale ? data.customer.telesale.full_name : "") + `</span>
+                            </a>
                         </div>
 
-                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
+                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }} "style="margin-top: 20px;">
                             {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}` +
                         `<select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `" style="font-size: 14px;">`;
                     data.status.forEach(function (item) {
