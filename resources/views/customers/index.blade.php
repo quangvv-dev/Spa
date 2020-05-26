@@ -126,7 +126,7 @@
                             <img width="50" height="50" class="fl mr10 a40 border"
                                  src="{{asset('default/no-image.png')}}" style="border-radius:100%">
 
-                            <div class="mt10 pb10" style="height:86px">
+                            <div class="mt10 pb10" style="height:86px ; color:black">
                             <div class="col-md-10 info-avatar padding5 last_contacthover box_last">
                             <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
                                 <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
