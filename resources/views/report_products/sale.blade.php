@@ -67,7 +67,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="bxh bxh-container" style="border:1px solid transparent;">
             <div
-                style="transform: rotate(-12.5deg); height: 8px; width: 100%; background-color: #fff; position: absolute; top: 13.5%;"></div>
+                style="transform: rotate(-12.5deg); height: 8px; width: 100%; background-color: #cecece; position: absolute; top: 13.5%;"></div>
 
             @for($i=0;$i<10;$i++)
                 <div class="item-rank" style="right: {{$i*9}}%;top: {{$i*2}}%" title="adam.sale68">
@@ -91,36 +91,27 @@
         <div style="width: 100%; overflow: hidden; overflow-x: auto">
             <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
                 <tbody>
-                <tr>
+                <thead class="bg-primary text-white">
                     <th class="text-center" rowspan="2" colspan="1" style="width: 50px;">STT</th>
                     <th class="text-center" rowspan="2" colspan="1" style="width: 10%">SALE</th>
-                    <th class="text-center" rowspan="1" colspan="5">KHÁCH HÀNG MỚI</th>
+                    <th class="text-center" rowspan="1" colspan="4">KHÁCH HÀNG MỚI</th>
                     <th class="text-center" rowspan="1" colspan="5">KHÁCH HÀNG CŨ</th>
                     <th class="text-center" rowspan="1" colspan="6" style="width: 36%;">TỔNG CHUNG</th>
-                </tr>
+                </thead>
                 <tr>
 
-                    <th class="text-center">Contact</th>
-                    <th class="text-center">Chốt đơn</th>
-                    <th class="text-center no-wrap">% chốt</th>
-                    <th class="text-center" title="Số sản phẩm">Số SP</th>
-                    <th class="text-center">
-                        Doanh số
-                        <span class="">
-                                                    <br>sau CK
-                                                </span>
-                    </th>
+                    <th class="text-center"></th>
+                    <th class="text-center">Nhan vien</th>
+                    <th class="text-center no-wrap">CONTACT</th>
+                    <th class="text-center" title="Số sản phẩm">Don chot</th>
+                    <th class="text-center">% chốt</th>
+                    <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
 
 
-                    <th class="text-center">Contact</th>
-                    <th class="text-center">Chốt đơn</th>
-                    <th class="text-center no-wrap">% chốt</th>
-                    <th class="text-center" title="Số sản phẩm">Số SP</th>
-                    <th class="text-center">Doanh số
-                        <span class="">
-                                                    <br>sau CK
-                                                </span>
-                    </th>
+                    <th class="text-center no-wrap">CONTACT</th>
+                    <th class="text-center" title="Số sản phẩm">Don chot</th>
+                    <th class="text-center">% chốt</th>
+                    <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
 
 
                     <th class="text-center" style="width: 7%;">Doanh số

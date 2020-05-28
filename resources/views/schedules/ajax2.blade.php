@@ -69,23 +69,23 @@
                                     date: '{{$item->date_schedule}}',
                                     status: '{{$item->status}}',
                                     @switch($item->status)
-                                            @case(1)
+                                        @case(1)
                                     color: '#63cff9',
                                     @break
-                                            @case(2)
+                                        @case(2)
                                     color: '#dccf34',
                                     @break
-                                            @case(3)
+                                        @case(3)
                                     color: '#d03636',
                                     @break
-                                            @case(4)
+                                        @case(4)
                                     color: '#4bcc4b',
                                     @break
-                                            @case(5)
+                                        @case(5)
                                     color: '#808080',
                                     @break
-                                            @endswitch
-                                            {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
+                                        @endswitch
+                                        {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
                                     start: '{{$item->date.'T'.$item->time_from.':00'}}',
                                     end: '{{$item->date.'T'.$item->time_to.':00'}}'
                                 },
@@ -94,7 +94,7 @@
                             //Su kien click
                             eventClick: function (info) {
                                 let id = info.id;
-                                console.log(info,'info');
+                                console.log(info, 'info');
                                 $('#update_id').val(info.id).change();
                                 $('#update_date').val(info.date).change();
                                 $('#update_time1').val(info.time_to).change();
@@ -106,6 +106,7 @@
                                 $('#phone').val(info.phone).change();
                                 $('#action').val(info.creator_id).change();
                                 $('.modal.fade').attr('id', 'modal_' + id).change();
+                                $('.delete').data('url', 'schedules/' + id).change();
                                 $('#modal_' + id).modal('show');
                             },
                             // editable: true,
@@ -199,8 +200,7 @@
                                     <div class="col-md-12" style="padding-top: 10px">
                                         <button type="button" class="btn btn-success" id="update_schedule">Lưu
                                         </button>
-                                        <a class="btn btn-secondary btn-flat delete"
-                                           data-url="{{url('schedules/'.$item->id)}}"
+                                        <a class="btn btn-secondary btn-flat delete" data-url=""
                                            href="javascript:"><i class="fa fa-arrow-"></i>Xoá lịch hẹn</a>
                                     </div>
                                 </div>
@@ -216,6 +216,3 @@
     </div>
 </div>
 
-<script>
-
-</script>
