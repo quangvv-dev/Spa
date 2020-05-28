@@ -44,10 +44,9 @@ class SalesController extends Controller
             $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('total_price');
             $item->revenue_old = $order_old->sum('total_price');
-//            $item->revenue_total = (int)$item->revenue_new + (int)$item->revenue_old;
+            $item->revenue_total = (int)$item->revenue_new + (int)$item->revenue_old;
             return $item;
-        });
-//        dd($users);
+        })->sortByDesc('revenue_total');
         return view('report_products.sale', compact('users'));
     }
 }
