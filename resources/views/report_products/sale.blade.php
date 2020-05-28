@@ -134,8 +134,8 @@
                             <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
                             <td class="text-center pdr10">{{$item->order_old}}</td>
                             <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
-                            <td class="text-center pdr10">{{$item->revenue_new&&$item->revenue_old ?round($item->revenue_new/(int)($item->revenue_new + $item->revenue_old)*100) ."%":'0%'}}</td>
-                            <td class="text-center pdr10">{{$item->revenue_new&&$item->revenue_old ?round($item->revenue_old/(int)($item->revenue_new + $item->revenue_old)*100) ."%":'0%'}}</td>
+                            <td class="text-center pdr10">{{$item->revenue_new ?round($item->revenue_new/(int)($item->revenue_new + $item->revenue_old)*100) ."%":'0%'}}</td>
+                            <td class="text-center pdr10">{{$item->revenue_old ?round($item->revenue_old/(int)($item->revenue_new + $item->revenue_old)*100) ."%":'0%'}}</td>
                             <td class="text-center pdr10">{{@number_format((int)$item->revenue_new + (int)$item->revenue_old)}}</td>
                         </tr>
                         @endforeach
