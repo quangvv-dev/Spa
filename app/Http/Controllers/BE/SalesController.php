@@ -23,11 +23,18 @@ class SalesController extends Controller
      */
     public function __construct(TaskService $taskService)
     {
-        
+
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $input = $request->all();
+        $users = User::get();
+        dd($users);
+        $countCustomer = Customer::groupBy('telesales_id')->get()->map(function ($item) {
+        });
+        dd($countCustomer);
+//        $data =
         return view('report_products.sale');
     }
 }

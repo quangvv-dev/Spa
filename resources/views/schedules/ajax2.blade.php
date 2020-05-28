@@ -97,8 +97,8 @@
                                 console.log(info, 'info');
                                 $('#update_id').val(info.id).change();
                                 $('#update_date').val(info.date).change();
-                                $('#update_time1').val(info.time_to).change();
-                                $('#update_time2').val(info.time_from).change();
+                                $('#update_time1').val(info.time_from).change();
+                                $('#update_time2').val(info.time_to).change();
                                 $('#update_status').val(info.status).change();
                                 $('#update_category').val(info.category_id).change();
                                 $('#update_note').val(info.note).change();
