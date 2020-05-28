@@ -210,10 +210,8 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Schedule $id)
     {
-        $schedule = Schedule::find($id);
-        dd($schedule);
         $id->delete();
     }
 
