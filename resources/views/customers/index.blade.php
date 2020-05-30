@@ -111,12 +111,12 @@
                     url: "{{ Url('/group_comments/') }}" + '/' + id,
                     method: "get",
                 }).done(function (data) {
-                    console.log(data.customer.categories,'dadada');
+                    console.log(data.customer.categories, 'dadada');
                     let category = '';
 
                     data.customer.categories.forEach(function (item) {
                         console.log(item);
-                        category += item.name+`, `;
+                        category += item.name + `, `;
                     });
 
                     let html = '';
@@ -135,7 +135,7 @@
                                                           rel="tooltip" data-original-title="Click để gọi"
                                                           data-placement="right" data-flag="1"
                                                           data-type="crm"> ` + data.customer.phone + `</a></p>
-                            <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>`+category+`</p>
+                            <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>` + category + `</p>
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
                         <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
@@ -158,7 +158,7 @@
                 </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
-                    <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
+                        <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -874,7 +874,7 @@
                 });
             });
 
-            @if(\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::TELESALES)
+            @if(\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510')
             $(document).on('dblclick', '.telesale-customer', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.telesale-customer').empty();
