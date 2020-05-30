@@ -10,6 +10,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Services\TaskService;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -30,12 +31,13 @@ class SalesController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::where('role', UserConstant::TELESALES)->get()->map(function ($item) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereMonth('created_at', '5')
-                ->whereYear('created_at', '2020');
-            $data_old = Customer::select('id')->where('telesales_id', $item->id)->whereMonth('created_at', '<=', '5')
-                ->whereYear('created_at', '2020');
-            $order_new = OrderDetail::whereIn('user_id', $data_new->pluck('id')->toArray());
+        $now = Carbon::now();
+        $users = User::where('role', UserConstant::TELESALES)->get()->map(function ($item) use ($now) {
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereMonth('created_at', $now->format('m'))
+                ->whereYear('created_at', $now->format('Y'));
+            $data_old = Customer::select('id')->where('telesales_id', $item->id)->whereMonth('created_at', '<=', $now->format('m'))
+                ->whereYear('created_at', $now->format('Y'));
+            $order_new = OrderDetail::whereIn('user_id', $data_new->pluck('id')->toArray());//doanh so
             $order_old = OrderDetail::whereMonth('created_at', '5')
                 ->whereYear('created_at', '2020')->whereIn('user_id', $data_old->pluck('id')->toArray());
 
