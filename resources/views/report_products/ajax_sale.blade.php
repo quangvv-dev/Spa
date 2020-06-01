@@ -95,8 +95,8 @@
             <th colspan="11" class="text-center"></th>
 
             <th class="text-center bold">Tổng cộng</th>
-            <th class="text-center bold">{{number_format($allTotal)}}</th>
-            <th class="text-center bold">{{number_format($grossRevenue)}}</th>
+            <th class="bold">{{number_format($allTotal)}}</th>
+            <th class="bold">{{number_format($grossRevenue)}}</th>
             {{--<th class="text-center">(+(13)</th>--}}
         </tr>
 
