@@ -2,6 +2,7 @@
 
 function getTime($dataTime)
 {
+
     $today = Carbon\Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
 
     if ($dataTime == 'TODAY') {

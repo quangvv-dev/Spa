@@ -61,6 +61,52 @@
             background-color: #fff;
         }
     </style>
+    <style>
+
+        .tableFixHead {
+            overflow-y: auto;
+            height: 800px;
+        }
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+        }.tableFixHead tbody tr {
+            position: sticky;
+            top: 0;
+        }
+
+        .tableFixHead tbody .fixed th {
+            position: sticky;
+            bottom: 0;
+        }
+
+        .tableFixHead tbody .fixed2 td {
+            position: sticky;
+            bottom: 46px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            background: #3b8fec;
+        }
+
+        .tableFixHead tbody .fixed th {
+            background: #3b8fec;
+        }
+
+        .tableFixHead tbody .fixed2 td {
+            background: #3b8fec;
+        }
+
+        .form-control {
+            font-size: 14px;
+        }
+    </style>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 
 @endsection

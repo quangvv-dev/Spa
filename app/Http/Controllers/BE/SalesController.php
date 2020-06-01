@@ -6,6 +6,7 @@ use App\Constants\UserConstant;
 use App\Models\Customer;
 use App\Models\Department;
 use App\Models\GroupComment;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
@@ -34,49 +35,43 @@ class SalesController extends Controller
 
     public function index(Request $request)
     {
-        $now = Carbon::now();
-        $current_year = $now->format('Y');
-        if ($request->data_time == 'LAST_MONTH') {
-            $current_month = Carbon::today()->subMonth()->startOfMonth()->format('m');
-        } else {
-            $current_month = $now->format('m');
+        if (empty($request->data_time)){
+            $request->merge(['data_time' => 'THIS_MONTH']);
         }
 
-        $users = User::where('role', UserConstant::TELESALES)->get()->map(function ($item) use ($current_month, $current_year) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereMonth('created_at', $current_month)
-                ->whereYear('created_at', $current_year);
-            $data_old = Customer::select('id')->where('telesales_id', $item->id)->whereMonth('created_at', '<=', $current_month)
-                ->whereYear('created_at', $current_year);
-            $order_new = OrderDetail::whereIn('user_id', $data_new->pluck('id')->toArray());//doanh so
-            $order_old = OrderDetail::whereMonth('created_at', $current_month)
-                ->whereYear('created_at', $current_year)->whereIn('user_id', $data_old->pluck('id')->toArray());
-            $order_old_before = OrderDetail::whereMonth('created_at', '<', $current_month)
-                ->whereYear('created_at', $current_year)->whereIn('user_id', $data_old->pluck('id')->toArray())
-                ->groupBy('order_id')->pluck('order_id')->toArray();
+        $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', getTime($request->data_time))->withTrashed();
+            $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('created_at', '<', getTime($request->data_time)[0])->withTrashed();
+            $data = Customer::select('id')->where('telesales_id', $item->id)->withTrashed();
 
-            $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $data_new->pluck('id')->toArray())->whereMonth('created_at', $current_month)
-                ->whereYear('created_at', $current_year)->get()->count();// trao doi moi
-            $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $data_old->pluck('id')->toArray())->whereMonth('created_at', $current_month)
-                ->whereYear('created_at', $current_year)->get()->count(); // trao doi cu
-            $item->schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereMonth('created_at', $current_month)
-                ->whereYear('created_at', $current_year)->get()->count();//lich hen
+            $order = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
+            $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');//doanh so
+            $order_old = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+
+            $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();// trao doi moi
+            $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $data_old->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count(); // trao doi cu
+
+            $item->schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
+
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
             $item->order_old = $order_old->count();
-            $item->revenue_new = $order_new->sum('total_price');
-            $item->revenue_old = $order_old->sum('total_price');
-            $arr_order_new = $order_new->groupBy('order_id')->pluck('order_id')->toArray();
-            $arr_order_old = $order_old->groupBy('order_id')->pluck('order_id')->toArray();
-            $item->payment_new = PaymentHistory::whereIn('order_id', $arr_order_new)->sum('price');//da thu trong ky
-            $item->payment_old = PaymentHistory::whereIn('order_id', $arr_order_old)->whereMonth('payment_date', $current_month)
-                ->whereYear('payment_date', $current_year)->sum('price'); //da thu trong ky
-            $item->payment_rest = PaymentHistory::whereMonth('payment_date', $current_month)
-                ->whereYear('payment_date', $current_year)->whereIn('order_id', $order_old_before)->sum('price');//da thu trong ky thu thêm
+            $item->revenue_new = $order_new->sum('all_total');
+            $item->revenue_old = $order->sum('all_total') - $order_new->sum('all_total');
+            $item->payment_revenue = $order->sum('gross_revenue');
+            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
+            $item->payment_old = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
+//            $item->payment_rest = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');//da thu trong ky thu thêm
 
-            $item->revenue_total = (int)$item->revenue_new + (int)$item->revenue_old;
+            $item->revenue_total = $order->sum('all_total');
             return $item;
         })->sortByDesc('revenue_total');
-//        dd($users);
+        \View::share([
+            'allTotal' => $users->sum('revenue_total'),
+            'grossRevenue' => $users->sum('payment_revenue'),
+        ]);
+
+
         if ($request->ajax()) {
             return view('report_products.ajax_sale', compact('users'));
         }
