@@ -87,7 +87,7 @@
                             <a href="{{route('tasks.index')}}">Công việc</a>
                         </li>
                         <li>
-                            <a href="#">Báo cáo Telesale</a>
+                            <a href="{{url('report/sales')}}">Xếp hạng Telasales</a>
                         </li>
                         <li>
                             <a href="#">Người bán hàng Xuất sắc</a>

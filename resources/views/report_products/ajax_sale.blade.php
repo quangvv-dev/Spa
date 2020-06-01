@@ -26,24 +26,29 @@
         <thead class="bg-primary text-white">
         <th class="text-center" rowspan="2" colspan="1">STT</th>
         <th class="text-center" rowspan="2" colspan="1">SALE</th>
-        <th class="text-center" rowspan="1" colspan="3">KHÁCH HÀNG MỚI</th>
-        <th class="text-center" rowspan="1" colspan="2">KHÁCH HÀNG CŨ</th>
+        <th class="text-center" rowspan="1" colspan="6">KHÁCH HÀNG MỚI</th>
+        <th class="text-center" rowspan="1" colspan="4">KHÁCH HÀNG CŨ</th>
+        <th class="text-center" rowspan="1" colspan="1">TT nợ</th>
         <th class="text-center" rowspan="1" colspan="3">TỔNG CHUNG</th>
         </thead>
         <tr>
 
             <th class="text-center"></th>
             <th class="text-center">Nhân viên</th>
-            <th class="text-center no-wrap">Khách mới</th>
+            <th class="text-center no-wrap">SĐT</th>
+            <th class="text-center" title="Số sản phẩm">Trao đổi</th>
+            <th class="text-center" title="Số sản phẩm">Lịch hẹn</th>
             <th class="text-center" title="Số sản phẩm">Số đơn chốt</th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
+            <th class="text-center">Thực thu</th>
 
+            <th class="text-center no-wrap">Trao đổi</th>
             <th class="text-center no-wrap">Đơn chốt</th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-
-            <th class="text-center">Doanh số<span class=""><br>KH mới (%)</span></th>
-            <th class="text-center">Doanh số<span class=""><br>KH cũ (%)</span></th>
-            <th class="text-center">Tổng doanh số</th>
+            <th class="text-center">Thực thu</th>
+            <th class="text-center">Thanh toán<span class=""><br>thêm</span></th>
+            <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
+            <th class="text-center">Tổng thực thu</th>
         </tr>
         <tr style="font-size:11px;">
             <th class="text-center">(1)</th>
@@ -53,9 +58,14 @@
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
             <th class="text-center">(7)</th>
-            <th class="text-center">(5)/(5+7)</th>
-            <th class="text-center">(7)/(5+7)</th>
-            <th class="text-center">(5)+(7)</th>
+            <th class="text-center">(8)</th>
+            <th class="text-center">(9)</th>
+            <th class="text-center">(10)</th>
+            <th class="text-center">(11)</th>
+            <th class="text-center">(12)</th>
+            <th class="text-center">(13)</th>
+            <th class="text-center">(7)+(11)</th>
+            <th class="text-center">(8)+(12)+(13)</th>
         </tr>
         @if(count($users))
             @foreach($users as $item)
@@ -64,13 +74,18 @@
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->full_name}}
                     <td class="text-center pdr10">{{$item->customer_new}}</td>
+                    <td class="text-center pdr10">{{$item->comment_new}}</td>
+                    <td class="text-center pdr10">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
+                    <td class="text-center pdr10">{{$item->comment_old}}</td>
                     <td class="text-center pdr10">{{$item->order_old}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
-                    <td class="text-center pdr10">{{$item->revenue_new ?round($item->revenue_new/$item->revenue_total*100) ."%":'0%'}}</td>
-                    <td class="text-center pdr10">{{$item->revenue_old ?round($item->revenue_old/$item->revenue_total*100) ."%":'0%'}}</td>
+                    <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->payment_rest)}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old+$item->payment_rest)}}</td>
                 </tr>
                 @endforeach
                 @endif

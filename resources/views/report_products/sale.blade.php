@@ -68,22 +68,15 @@
 
     <div class="col-md-12">
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow" style="width: 100%; padding: 10px;">
-            <div class="col-md-4 no-padd">
-            </div>
             <div class="col-md-8 no-padd">
                 <ul class="fr mg0 pt10 no-padd">
-                    <li class="display pl5"><a data-time="TODAY" class="btn_choose_time border b-gray bg-gray active">Hôm nay</a>
-                    </li>
-                    <li class="display pl5"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần
-                            này</a></li>
-                    <li class="display pl5"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần
-                            trước</a></li>
-                    <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time padding0-5">Tháng
+                    {{--<li class="display pl5"><a data-time="TODAY" class="btn_choose_time border b-gray bg-gray active">Hôm--}}
+                            {{--nay</a>--}}
+                    {{--</li>--}}
+                    <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time padding0-5 b-gray bg-gray active">Tháng
                             này</a></li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
                             trước</a></li>
-                    <li class="display pl5"><a data-time="THIS_YEAR" class="btn_choose_time">Năm nay</a>
-                    </li>
                 </ul>
                 <input type="hidden" id="time_choose" value="TODAY">
             </div>
@@ -95,23 +88,23 @@
 
 @endsection
 @section('_script')
-<script>
-    $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
-        let target = $(e.target).parent();
-        $('a.btn_choose_time').removeClass('border b-gray bg-gray');
-        $(target).find('.btn_choose_time').addClass('border b-gray bg-gray');
-        const data_time = $(target).find('.btn_choose_time').data('time');
-        console.log(data_time,'data');
-        $.ajax({
-            url: "{{ Url('report/sales') }}",
-            method: "get",
-            data: {
-                data_time: data_time,
-            }
-        }).done(function (data) {
-            $('.list-data').html(data);
+    <script>
+        $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
+            let target = $(e.target).parent();
+            $('a.btn_choose_time').removeClass('border b-gray bg-gray');
+            $(target).find('.btn_choose_time').addClass('border b-gray bg-gray');
+            const data_time = $(target).find('.btn_choose_time').data('time');
+            console.log(data_time, 'data');
+            $.ajax({
+                url: "{{ Url('report/sales') }}",
+                method: "get",
+                data: {
+                    data_time: data_time,
+                }
+            }).done(function (data) {
+                $('.list-data').html(data);
+            });
         });
-    });
-</script>
+    </script>
 @endsection
 
