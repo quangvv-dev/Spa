@@ -89,7 +89,7 @@
                     <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0}}
                         %
                     </td>
-                    <td class="text-center pdr10">{{$item->order_new>0&&$item->schedules_new >0 ?round(($item->schedules_new/$item->order_new)*100):0}}
+                    <td class="text-center pdr10">{{$item->order_new>0&&$item->schedules_new >0 ?round(($item->order_new/$item->schedules_new)*100):0}}
                         %
                     </td>
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
