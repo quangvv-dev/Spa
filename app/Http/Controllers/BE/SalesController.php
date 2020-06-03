@@ -52,6 +52,7 @@ class SalesController extends Controller
             $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $data_old->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count(); // trao doi cu
 
             $item->schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
+            $item->schedules_old = Schedule::select('id')->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
 
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
