@@ -32,7 +32,7 @@
         {{--<th class="text-center" rowspan="1" colspan="1">TT nợ</th>--}}
         <th class="text-center" rowspan="1" colspan="3">TỔNG CHUNG</th>
         </thead>
-        <tr>
+        <tr style="text-transform:unset">
 
             <th class="text-center"></th>
             <th class="text-center">Nhân viên</th>
@@ -54,7 +54,7 @@
             <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
             <th class="text-center">Tổng thực thu</th>
         </tr>
-        <tr style="font-size:11px;">
+        <tr class="number_index">
             <th class="text-center">(1)</th>
             <th class="text-center">(2)</th>
             <th class="text-center">(3)</th>
@@ -106,7 +106,7 @@
             @endforeach
         @endif
         <tr class="fixed">
-            <th colspan="13" class="text-center"></th>
+            <th colspan="14" class="text-center"></th>
 
             <th class="text-center bold">Tổng cộng</th>
             <th class="bold">{{number_format($allTotal)}}</th>

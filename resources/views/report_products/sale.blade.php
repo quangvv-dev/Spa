@@ -68,10 +68,11 @@
             height: 800px;
         }
 
-        .tableFixHead thead th {
-            position: sticky;
-            top: 0;
-        }.tableFixHead tbody tr {
+        /*.tableFixHead thead th {*/
+            /*position: sticky;*/
+            /*top: 0;*/
+        /*}*/
+        .tableFixHead tbody tr {
             position: sticky;
             top: 0;
         }
@@ -107,8 +108,11 @@
             font-size: 14px;
         }
         .table th, .text-wrap table th {
-             text-transform: lowercase;
+             text-transform: unset;
             color: white;
+        }
+        tr.number_index th {
+            font-size: 12px;
         }
     </style>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
