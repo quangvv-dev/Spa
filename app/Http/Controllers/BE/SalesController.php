@@ -40,7 +40,6 @@ class SalesController extends Controller
         }
 
         $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->withTrashed()->get()->map(function ($item) use ($request) {
-            if ($item->id == 27) {
                 $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', getTime($request->data_time))->withTrashed();
                 $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('created_at', '<', getTime($request->data_time)[0])->withTrashed();
                 $data = Customer::select('id')->where('telesales_id', $item->id)->withTrashed();
@@ -66,7 +65,6 @@ class SalesController extends Controller
 //            $item->payment_rest = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');//da thu trong ky thu thêm
 
                 $item->revenue_total = $order->sum('all_total');
-            }
             return $item;
         })->sortByDesc('revenue_total');
         \View::share([
