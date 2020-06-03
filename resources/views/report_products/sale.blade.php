@@ -106,6 +106,10 @@
         .form-control {
             font-size: 14px;
         }
+        .table th, .text-wrap table th {
+             text-transform: lowercase;
+            color: white;
+        }
     </style>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 
