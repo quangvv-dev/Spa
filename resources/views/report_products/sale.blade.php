@@ -75,7 +75,13 @@
 
         .tableFixHead thead .number_index th {
             position: sticky;
-            top: 21%;
+            top: 118px;
+        }
+        @media(min-width:1681px)  {
+            .tableFixHead thead .number_index th {
+                position: sticky;
+                top: 97px;
+            }
         }
 
         .tableFixHead thead .tr1 th{
