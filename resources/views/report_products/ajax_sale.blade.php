@@ -25,55 +25,57 @@
 <div style="width: 100%; overflow: hidden; overflow-y: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
-        <th class="text-center" rowspan="2" colspan="1">STT</th>
-        <th class="text-center" rowspan="2" colspan="1">SALE</th>
-        <th class="text-center" rowspan="1" colspan="8">KHÁCH HÀNG MỚI</th>
-        <th class="text-center" rowspan="1" colspan="5">KHÁCH HÀNG CŨ</th>
-        {{--<th class="text-center" rowspan="1" colspan="1">TT nợ</th>--}}
-        <th class="text-center" rowspan="1" colspan="3">TỔNG CHUNG</th>
+       <tr>
+           <th class="text-center" colspan="1">STT</th>
+           <th class="text-center" colspan="1">SALE</th>
+           <th class="text-center" colspan="8">KHÁCH HÀNG MỚI</th>
+           <th class="text-center" colspan="5">KHÁCH HÀNG CŨ</th>
+           {{--<th class="text-center" rowspan="1" colspan="1">TT nợ</th>--}}
+           <th class="text-center" colspan="2">TỔNG CHUNG</th>
+       </tr>
+       <tr class="tr1" style="text-transform:unset">
+           <th class="text-center"></th>
+           <th class="text-center">Nhân viên</th>
+           <th class="text-center no-wrap">SĐT</th>
+           <th class="text-center">Trao đổi</th>
+           <th class="text-center">Lịch hẹn</th>
+           <th class="text-center">Đơn chốt</th>
+           <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
+           <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
+           <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
+           <th class="text-center">Thực thu</th>
+
+           <th class="text-center no-wrap">Lịch hẹn</th>
+           <th class="text-center no-wrap">Trao đổi</th>
+           <th class="text-center no-wrap">Đơn chốt</th>
+           <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
+           <th class="text-center">Thực thu</th>
+           {{--<th class="text-center">Thanh toán<span class=""><br>thêm</span></th>--}}
+           <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
+           <th class="text-center">Tổng thực thu</th>
+       </tr>
+       <tr class="number_index">
+           <th class="text-center">(1)</th>
+           <th class="text-center">(2)</th>
+           <th class="text-center">(3)</th>
+           <th class="text-center">(4)</th>
+           <th class="text-center">(5)</th>
+           <th class="text-center">(6)</th>
+           <th class="text-center">(5)/(3)</th>
+           <th class="text-center">(6)/(5)</th>
+           <th class="text-center">(7)</th>
+           <th class="text-center">(8)</th>
+           <th class="text-center">(9)</th>
+           <th class="text-center">(10)</th>
+           <th class="text-center">(11)</th>
+           <th class="text-center">(12)</th>
+           <th class="text-center">(13)</th>
+           <th class="text-center">(7)+(12)</th>
+           <th class="text-center">(8)+(13)</th>
+           {{--<th class="text-center">(+(13)</th>--}}
+       </tr>
         </thead>
-        <tr style="text-transform:unset">
 
-            <th class="text-center"></th>
-            <th class="text-center">Nhân viên</th>
-            <th class="text-center no-wrap">SĐT</th>
-            <th class="text-center">Trao đổi</th>
-            <th class="text-center">Lịch hẹn</th>
-            <th class="text-center">Đơn chốt</th>
-            <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
-            <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
-            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-            <th class="text-center">Thực thu</th>
-
-            <th class="text-center no-wrap">Lịch hẹn</th>
-            <th class="text-center no-wrap">Trao đổi</th>
-            <th class="text-center no-wrap">Đơn chốt</th>
-            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-            <th class="text-center">Thực thu</th>
-            {{--<th class="text-center">Thanh toán<span class=""><br>thêm</span></th>--}}
-            <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
-            <th class="text-center">Tổng thực thu</th>
-        </tr>
-        <tr class="number_index">
-            <th class="text-center">(1)</th>
-            <th class="text-center">(2)</th>
-            <th class="text-center">(3)</th>
-            <th class="text-center">(4)</th>
-            <th class="text-center">(5)</th>
-            <th class="text-center">(6)</th>
-            <th class="text-center">(5)/(3)</th>
-            <th class="text-center">(6)/(5)</th>
-            <th class="text-center">(7)</th>
-            <th class="text-center">(8)</th>
-            <th class="text-center">(9)</th>
-            <th class="text-center">(10)</th>
-            <th class="text-center">(11)</th>
-            <th class="text-center">(12)</th>
-            <th class="text-center">(13)</th>
-            <th class="text-center">(7)+(12)</th>
-            <th class="text-center">(8)+(13)</th>
-            {{--<th class="text-center">(+(13)</th>--}}
-        </tr>
         <tbody>
 
         @if(count($users))
@@ -86,12 +88,8 @@
                     <td class="text-center pdr10">{{$item->comment_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
-                    <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0}}
-                        %
-                    </td>
-                    <td class="text-center pdr10">{{$item->order_new>0&&$item->schedules_new >0 ?round(($item->order_new/$item->schedules_new)*100):0}}
-                        %
-                    </td>
+                    <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0}}%</td>
+                    <td class="text-center pdr10">{{$item->order_new>0&&$item->schedules_new >0 ?round(($item->order_new/$item->schedules_new)*100):0}}%</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
                     <td class="text-center pdr10">{{$item->schedules_old}}</td>

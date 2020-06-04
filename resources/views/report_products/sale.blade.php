@@ -68,10 +68,22 @@
             height: 800px;
         }
 
-        /*.tableFixHead thead th {*/
-            /*position: sticky;*/
-            /*top: 0;*/
-        /*}*/
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+        }
+
+        .tableFixHead thead .number_index th {
+            position: sticky;
+            top: 21%;
+        }
+
+        .tableFixHead thead .tr1 th{
+            position: sticky;
+            top: 38px;
+        }
+
+
         .tableFixHead tbody tr {
             position: sticky;
             top: 0;
@@ -107,10 +119,12 @@
         .form-control {
             font-size: 14px;
         }
+
         .table th, .text-wrap table th {
-             text-transform: unset;
+            text-transform: unset;
             color: white;
         }
+
         tr.number_index th {
             font-size: 12px;
         }
@@ -125,9 +139,10 @@
             <div class="col-md-8 no-padd">
                 <ul class="fr mg0 pt10 no-padd">
                     {{--<li class="display pl5"><a data-time="TODAY" class="btn_choose_time border b-gray bg-gray active">Hôm--}}
-                            {{--nay</a>--}}
+                    {{--nay</a>--}}
                     {{--</li>--}}
-                    <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time padding0-5 b-gray bg-gray active">Tháng
+                    <li class="display pl5"><a data-time="THIS_MONTH"
+                                               class="btn_choose_time padding0-5 b-gray bg-gray active">Tháng
                             này</a></li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
                             trước</a></li>
