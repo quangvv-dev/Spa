@@ -2,22 +2,25 @@
 <div class="ren-navbar fixed-header" id="headerMenuCollapse">
     <div class="container">
         <ul class="nav">
-            {{--            <li class="nav-item" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>--}}
-            {{--                <a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>--}}
-            {{--            </li>--}}
-            <li class="nav-item with-sub" {{ Request::is('customers*') ? 'active' : '' }}>
+            <li class="nav-item" {{ Request::is('schedules*')||Request::is('schedules*') ? 'active' : '' }}>
+                <a class="nav-link" href="{!! url('schedules') !!}"><i class="fas fa-newspaper"></i><span>Lịch hẹn</span></a>
+            </li>
+            <li class="nav-item" {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}>
                 <a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
-                <div class="sub-item">
-                    <ul>
-                        <li>
-                            <a href="{!! route('customers.index') !!}">Khách hàng </a>
-                        </li>
+            </li>
+            {{--<li class="nav-item with-sub" {{ Request::is('customers*') ? 'active' : '' }}>--}}
+                {{--<a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>--}}
+                {{--<div class="sub-item">--}}
+                    {{--<ul>--}}
+                        {{--<li>--}}
+                        {{--<a href="{!! route('customers.index') !!}">Khách hàng </a>--}}
+                        {{--</li>--}}
                         {{--                        <li>--}}
                         {{--                            <a href="{{url('schedules')}}">Lịch hẹn </a>--}}
                         {{--                        </li>--}}
-                    </ul>
-                </div>
-            </li>
+                    {{--</ul>--}}
+                {{--</div>--}}
+            {{--</li>--}}
             <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
                 <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Marketing</span></a>
                 <div class="sub-item">
@@ -68,21 +71,21 @@
                 <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
                 <div class="sub-item">
                     <ul>
-{{--                        <li>--}}
-{{--                            <a href="#">Doanh thu</a>--}}
-{{--                        </li>--}}
+                        {{--                        <li>--}}
+                        {{--                            <a href="#">Doanh thu</a>--}}
+                        {{--                        </li>--}}
                         <li>
                             <a href="{{url('report/customers')}}">Doanh thu</a>
                         </li>
                         <li>
-{{--                            <a href="{!! url('statistics')!!}">Nhân viên</a>--}}
+                            {{--                            <a href="{!! url('statistics')!!}">Nhân viên</a>--}}
                         </li>
                         <li>
                             <a href="#">Chiến dịch</a>
                         </li>
-{{--                        <li>--}}
-{{--                            <a href="{{url('report/products')}}">Sản phẩm</a>--}}
-{{--                        </li>--}}
+                        {{--                        <li>--}}
+                        {{--                            <a href="{{url('report/products')}}">Sản phẩm</a>--}}
+                        {{--                        </li>--}}
                         <li>
                             <a href="{{route('tasks.index')}}">Công việc</a>
                         </li>

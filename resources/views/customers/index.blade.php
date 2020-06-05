@@ -64,7 +64,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col relative">
+                <div class="col relative" {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}}>
                     <a title="Upload Data" style="position: absolute;right: 50%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>

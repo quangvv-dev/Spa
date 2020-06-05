@@ -58,8 +58,8 @@
                     <a title="Upload Data" style="position: absolute;right: 14%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
-                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i
-                                class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                    <a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
+                </div>
             </div>
             <div class="card-header col-md-12">
                 <div class="col-md-3">
