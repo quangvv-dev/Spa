@@ -68,7 +68,7 @@
                     <a title="Upload Data" style="position: absolute;right: 50%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
-                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}} title="Download Data" style="position: absolute;right: 42%" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
+                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}}status-db title="Download Data" style="position: absolute;right: 42%" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
                     @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::MARKETING ||
 \Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)

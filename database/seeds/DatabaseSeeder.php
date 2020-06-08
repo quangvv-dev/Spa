@@ -17,12 +17,18 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
         Element::truncate();
-        \App\Models\Rule::truncate();
+        \App\Models\Element::truncate();
         DB::table('elements')->insert([
             'title' => 'Tạo đơn',
             'type'  => 'event',
             'value'  => 'add_order',
             'color' => '#40bfc1'
+        ]);
+        DB::table('elements')->insert([
+            'title' => 'Chuyển trang thái KH',
+            'type'  => 'event',
+            'value'  => 'change_relation',
+            'color' => '#ff0100'
         ]);
 
         DB::table('elements')->insert([

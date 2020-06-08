@@ -21,6 +21,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Services\CustomerService;
 use App\Services\OrderService;
+use App\Models\RuleOutput;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -138,8 +139,8 @@ class CustomerController extends Controller
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
         }
-        if (Auth::user()->role == UserConstant::WAITER){
-            $request->merge(['telesales_id'=>Auth::user()->id]);
+        if (Auth::user()->role == UserConstant::WAITER) {
+            $request->merge(['telesales_id' => Auth::user()->id]);
         }
         $customer = $this->customerService->create($input);
         $update = $this->update_code($customer);
@@ -433,7 +434,36 @@ class CustomerController extends Controller
     public function ajaxUpdate(Request $request, $id)
     {
         $input = $request->except('category_ids');
+        $before = $this->customerService->find($id);
         $customer = $this->customerService->update($input, $id);
+        $check2 = RuleOutput::where('event', 'change_relation')->first();
+
+        if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
+            $rule = $check2->rules;
+            $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
+            $rule_status = Functions::checkRuleStatusCustomer($config);
+            foreach (array_values($rule_status) as $k1 => $item) {
+                $list_status = $item->configs->group;
+                if (in_array($customer->status_id,$list_status)){
+                    $sms_ws = Functions::checkRuleSms($config);
+                    if (count($sms_ws)) {
+                        foreach (@array_values($sms_ws) as $k2 =>$sms) {
+                            $exactly_value = Functions::getExactlyTime($sms);
+                            $text = $sms->configs->content;
+                            $phone = Functions::convertPhone(@$customer->phone);
+                            $text = Functions::vi_to_en($text);
+                            $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
+                            if (isset($err) && $err) {
+                                $input['phone'] = $phone;
+                                $input['campaign_id'] = 0;
+                                $input['message'] = $text;
+                                HistorySms::create($input);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         if (isset($request->category_ids) && $request->category_ids) {
             $customer->categories()->sync($request->category_ids);
         }
@@ -469,10 +499,10 @@ class CustomerController extends Controller
         $groupComments = GroupComment::getAll($input);
         $books = Schedule::getBooks($input);
         $services = Services::handleChart($arr, $input);
-        $service1= $services->orderBy('count_order','desc')->paginate(10);
-        $orders =[
-            'sum'=>$services->get()->sum('count_order'),
-            'count'=>$services->get()->sum('count'),
+        $service1 = $services->orderBy('count_order', 'desc')->paginate(10);
+        $orders = [
+            'sum' => $services->get()->sum('count_order'),
+            'count' => $services->get()->sum('count'),
         ];
 
         if ($request->ajax()) {
