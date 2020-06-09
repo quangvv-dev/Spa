@@ -29,7 +29,7 @@
                 <td class="text-center">
                     <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></td>
                 <td class="text-center">
-                    @if($task->user->avatar)
+                    @if(@$task->user->avatar)
                         <img src="{{ @$task->user->avatar }}"
                              style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover">
                     @else
@@ -42,7 +42,7 @@
                 <td class="text-center">{{$task->name_priority}}</td>
                 <td class="text-center">{{$task->date_from}}</td>
                 <td class="text-center">{{$task->date_to}}</td>
-                @if($task->task_status_id == 6)
+                @if(@$task->task_status_id == 6)
 
                     <td class="text-center bold" style="color: red !important;">{{ @$task->taskStatus->name }}</td>
                 @elseif($task->task_status_id == 3)
