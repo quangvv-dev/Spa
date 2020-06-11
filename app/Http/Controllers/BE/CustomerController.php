@@ -435,6 +435,7 @@ class CustomerController extends Controller
     {
         $input = $request->except('category_ids');
         $before = $this->customerService->find($id);
+        $category = CustomerGroup::where('customer_id', $before->id)->pluck('category_id')->toArray();
         $customer = $this->customerService->update($input, $id);
         $check2 = RuleOutput::where('event', 'change_relation')->first();
 
@@ -443,11 +444,13 @@ class CustomerController extends Controller
             $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
             $rule_status = Functions::checkRuleStatusCustomer($config);
             foreach (array_values($rule_status) as $k1 => $item) {
-                $list_status = $item->configs->group;
-                if (in_array($customer->status_id,$list_status)){
+                $list_status = $item->configs->group1;
+                $list_relation = $item->configs->group;
+                $relation = array_intersect($category, $list_relation);
+                if (in_array($customer->status_id, $list_status) && count($relation)) {
                     $sms_ws = Functions::checkRuleSms($config);
                     if (count($sms_ws)) {
-                        foreach (@array_values($sms_ws) as $k2 =>$sms) {
+                        foreach (@array_values($sms_ws) as $k2 => $sms) {
                             $exactly_value = Functions::getExactlyTime($sms);
                             $text = $sms->configs->content;
                             $phone = Functions::convertPhone(@$customer->phone);

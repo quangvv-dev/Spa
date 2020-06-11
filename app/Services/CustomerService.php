@@ -33,6 +33,13 @@ class CustomerService
         return $customer;
     }
 
+    public function findWith($id)
+    {
+        $customer = $this->customer->where('id', $id)->with('category')->first();
+
+        return $customer;
+    }
+
     public function create($input)
     {
         $userLogin = Auth::user()->id;

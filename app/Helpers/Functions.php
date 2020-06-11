@@ -35,7 +35,7 @@ class Functions
     public static function checkRuleStatusCustomer($config)
     {
         return array_filter($config, function ($k) {
-            return $k->type == 'actor' && $k->value == 'staff';
+            return $k->type == 'actor' && $k->value == 'staff_customer';
         });
     }
 
