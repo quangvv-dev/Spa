@@ -43,6 +43,12 @@ class DatabaseSeeder extends Seeder
             'value'  => 'staff',
             'color' => '#5f6caf'
         ]);
+        DB::table('elements')->insert([
+            'title' => 'Tổng hợp nhóm -- trạng thái',
+            'type'  => 'actor',
+            'value'  => 'staff_customer',
+            'color' => '#5fceef'
+        ]);
 
 //        DB::table('elements')->insert([
 //            'title' => 'Thêm ',
