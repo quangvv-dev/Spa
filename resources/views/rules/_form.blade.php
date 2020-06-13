@@ -279,13 +279,13 @@
                                        value="{{!empty($rule->title) ? $rule->title : '' }}">
                             </div>
                         </div>
-                        <div class="col-md-8 col-lg-8 offset-md-2">
-                            <div class="form-group">
-                                <label class="form-label">Bắt đầu</label>
-                                <textarea class="form-control autocomplete-textarea" name="content" id="" cols="30"
-                                          rows="10"></textarea>
-                            </div>
-                        </div>
+                        {{--<div class="col-md-8 col-lg-8 offset-md-2">--}}
+                            {{--<div class="form-group">--}}
+                                {{--<label class="form-label">Bắt đầu</label>--}}
+                                {{--<textarea class="form-control autocomplete-textarea" name="content" id="" cols="30"--}}
+                                          {{--rows="10"></textarea>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         {{--<div class="col-md-8 col-lg-8 offset-md-2">--}}
                         {{--<div class="form-group">--}}
                         {{--<label class="form-label">Kết thúc</label>--}}
