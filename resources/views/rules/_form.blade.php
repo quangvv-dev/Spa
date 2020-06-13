@@ -238,7 +238,9 @@
     .micromodal-slide .modal__container, .micromodal-slide .modal__overlay {
         will-change: transform;
     }
-
+    ul.dropdown-menu.textcomplete-dropdown {
+        z-index: 99999 !important;
+    }
 </style>
 
 <script>
@@ -277,19 +279,19 @@
                                        value="{{!empty($rule->title) ? $rule->title : '' }}">
                             </div>
                         </div>
+                        <div class="col-md-8 col-lg-8 offset-md-2">
+                            <div class="form-group">
+                                <label class="form-label">Bắt đầu</label>
+                                <textarea class="form-control autocomplete-textarea" name="content" id="" cols="30"
+                                          rows="10"></textarea>
+                            </div>
+                        </div>
                         {{--<div class="col-md-8 col-lg-8 offset-md-2">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label class="form-label">Bắt đầu</label>--}}
-                                {{--<input type="text" name="start_at" class="form-control datetimepicker"--}}
-                                       {{--value="{{!empty($rule->start_at) ? $rule->start_at : '' }}">--}}
-                            {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                        {{--<label class="form-label">Kết thúc</label>--}}
+                        {{--<input type="text" name="end_at" class="form-control datetimepicker"--}}
+                        {{--value="{{!empty($rule->end_at) ? $rule->end_at : '' }}">--}}
                         {{--</div>--}}
-                        {{--<div class="col-md-8 col-lg-8 offset-md-2">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label class="form-label">Kết thúc</label>--}}
-                                {{--<input type="text" name="end_at" class="form-control datetimepicker"--}}
-                                       {{--value="{{!empty($rule->end_at) ? $rule->end_at : '' }}">--}}
-                            {{--</div>--}}
                         {{--</div>--}}
                         <div class="col-md-8 col-lg-8 offset-md-2">
                             <div class="form-group">
@@ -425,7 +427,8 @@
                 </div>
             </div>
 
-            <div class="modal micromodal-slide modal-actor-staff_customer" id="modal-actor-staff_customer" aria-hidden="true">
+            <div class="modal micromodal-slide modal-actor-staff_customer" id="modal-actor-staff_customer"
+                 aria-hidden="true">
                 <div class="modal__overlay" tabindex="-1" data-micromodal-close>
                     <div class="modal__container" role="dialog" aria-modal="true"
                          aria-labelledby="modal-action-email-title">
@@ -469,6 +472,7 @@
     </div>
 @endsection
 @section('_script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
     <script src="{{url('app.js')}}"></script>
     <script>
         $(document).ready(function () {
@@ -480,5 +484,36 @@
                 }
             });
         })
+    </script>
+    <script>
+        // $('body').delegate('.autocomplete-textarea', 'keyup', function () {
+        //     console.log($(this).val());
+            $('.autocomplete-textarea').textcomplete([{
+                match: /(^|\s)@(\w*(?:\s*\w*))$/,
+
+                search: function (query, callback) {
+                    let data = [{
+                        name: "Tên khách hàng",
+                        value: " %full_name%"
+                    }];
+                    callback(data);
+                },
+
+                template: function (hit) {
+                    // phan hien thi o dropdown
+                    let html = `
+            <a class="tag-item" href="">
+            <span class="label">${hit.name} <img width="40" src='http://spa.test/assets/images/brand/logo.png'/></span>
+            </a>`;
+                    return html;
+                },
+
+                replace: function (hit) {
+                    // phan hien thi khi
+                    return hit.value.trim();
+                }
+            }]);
+        // })
+
     </script>
 @endsection

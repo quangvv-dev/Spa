@@ -451,9 +451,11 @@ class CustomerController extends Controller
                     $sms_ws = Functions::checkRuleSms($config);
                     if (count($sms_ws)) {
                         foreach (@array_values($sms_ws) as $k2 => $sms) {
+                            $input_raw['full_name'] = @$customer->full_name;
                             $exactly_value = Functions::getExactlyTime($sms);
                             $text = $sms->configs->content;
                             $phone = Functions::convertPhone(@$customer->phone);
+                            $text = Functions::replaceTextForUser($input_raw, $text);
                             $text = Functions::vi_to_en($text);
                             $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
                             if (isset($err) && $err) {

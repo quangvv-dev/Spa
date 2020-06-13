@@ -53,6 +53,21 @@ class Functions
     }
 
     /**
+     * replace variable to data
+     *
+     * @param $input
+     * @param $text
+     * @return mixed
+     */
+    public static function replaceTextForUser($input, $text)
+    {
+        $text = str_replace('%full_name%', $input['full_name'], $text);
+        $text = str_replace('%phone%', $input['phone'], $text);
+        return $text;
+
+    }
+
+    /**
      * check action create job in array Rules
      *
      * @param $config

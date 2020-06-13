@@ -291,9 +291,12 @@ class OrderController extends Controller
                 $sms_ws = Functions::checkRuleSms($config);
                 if (count($sms_ws)) {
                     foreach ($sms_ws as $sms) {
+                        $input_raw['full_name'] = $check3->order->customer->full_name;
+                        $input_raw['phone'] = @$check3->order->customer->phone;
                         $exactly_value = Functions::getExactlyTime($sms);
                         $text = $sms->configs->content;
-                        $phone = Functions::convertPhone(@$check3->order->customer->phone);
+                        $phone = Functions::convertPhone($input_raw['phone']);
+                        $text = Functions::replaceTextForUser($input_raw, $text);
                         $text = Functions::vi_to_en($text);
                         $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
                         if (isset($err) && $err) {

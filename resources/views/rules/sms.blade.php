@@ -65,7 +65,7 @@
                     {{--</div>--}}
                     <div class="form-group">
                         <label for="" class="form-label">Nội dung</label>
-                        <textarea class="form-control" name="content" id="" cols="30" rows="10"></textarea>
+                        <textarea class="form-control autocomplete-textarea" name="content" id="" cols="30" rows="10"></textarea>
                     </div>
                 </form>
             </main>

@@ -141,6 +141,7 @@ function cxcommand(event, val) {
         }
     }
     diagram.currentTool.stopTool();
+
     console.log(nodeDataArray)
 }
 
