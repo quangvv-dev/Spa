@@ -59,6 +59,9 @@
                             <a href="{!! route('products.index') !!}">Danh sách sản phẩm</a>
                         </li>
                         <li>
+                            <a href="{!! route('combos.index') !!}">Danh sách combo</a>
+                        </li>
+                        <li>
                             <a href="{!! route('order.list') !!}">Danh sách đơn hàng</a>
                         </li>
                         <li>

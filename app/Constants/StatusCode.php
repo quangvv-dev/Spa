@@ -42,6 +42,7 @@ class StatusCode
     const TYPE_ORDER_GUARANTEE = 1; //Đã bảo
     const TYPE_ORDER_RESERVE = 2; //Đang bảo lưu
 
+    const COMBOS = 3; //Gói
     const PRODUCT = 2; //sản phẩm
     const SERVICE = 1;//dịch vụ
 

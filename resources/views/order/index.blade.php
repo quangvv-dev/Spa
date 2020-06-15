@@ -93,11 +93,17 @@
                                                         <option value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
                                                             - {{$service->name}}</option>
                                                     @endforeach
-                                                @else
+                                                @elseif($role_type == \App\Constants\StatusCode::PRODUCT)
                                                     <option>-Chọn sản phẩm-</option>
                                                     @foreach($products as $product)
                                                         <option value="{{$product->id}}" {{$product->id == $orderDetail->booking_id ? "selected": ""}} >{{@$product->category->name}}
                                                             - {{$product->name}}</option>
+                                                    @endforeach
+                                                @else
+                                                    <option>-Chọn combo-</option>
+                                                    @foreach($combo as $comb)
+                                                        <option value="{{$comb->id}}" {{$comb->id == $orderDetail->booking_id ? "selected": ""}} >{{@$comb->category->name}}
+                                                            - {{$comb->name}}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -143,11 +149,17 @@
                                                     <option value="{{@$product->id}}">{{@$product->category->name}}
                                                         - {{@$product->name}}</option>
                                                 @endforeach
-                                            @else
+                                            @elseif(request()->get('type')=='services')
                                                 <option>-Chọn dịch vụ-</option>
                                                 @foreach($services as $service)
                                                     <option value="{{$service->id}}">{{@$service->category->name}}
                                                         - {{$service->name}}</option>
+                                                @endforeach
+                                            @else
+                                                <option>-Chọn combo-</option>
+                                                @foreach($combo as $comb)
+                                                    <option value="{{$comb->id}}">{{@$comb->category->name}}
+                                                        - {{$comb->name}}</option>
                                                 @endforeach
                                             @endif
 
@@ -272,7 +284,7 @@
                     <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
                 </tr>
 `);
-            } else {
+            } else if (param === 'services' || param2 === 1) {
 
                 $('.order').append(`
                 <tr>
@@ -307,6 +319,40 @@
                 </tr>
 `);
             }
+            else if (param === 'combos' || param2 === 3) {
+                    $('.order').append(`
+                <tr>
+                    <td width="350" class="row">
+                    <div class="col-xs-12 col-md-10">
+                        <select class="select2 form-control service" required id="service" name="service_id[]">
+                            <option>-Chọn combo-</option>
+                            @foreach($combo as $comb)
+                        <option value="{{@$comb->id}}">{{@$comb->category->name}} - {{@$comb->name}} </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+                    <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
+                    </td>
+                    <td class="text-center" width="50">
+{!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                        </td>
+                        <td class="text-center">
+{!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                        </td>
+                        <td class="text-center">
+{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                        </td>
+                        <td class="text-center">
+{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                        </td>
+                        <td class="text-center">
+{!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                        </td>
+                        <td class="tc vertical-middle remove_row"><button class='btn btn-danger'>X</button></td>
+                    </tr>
+`);
+                }
             $('.select2').select2({ //apply select2 to my element
                 placeholder: "-Chọn sản phẩm-",
                 allowClear: true
@@ -318,8 +364,10 @@
             let id = $(this).val();
             if (param === 'products') {
                 $('#role_type').val({{\App\Constants\StatusCode::PRODUCT}}).change();
-            } else {
+            } else if(param === 'services'){
                 $('#role_type').val({{\App\Constants\StatusCode::SERVICE}}).change();
+            }else {
+                $('#role_type').val({{\App\Constants\StatusCode::COMBOS}}).change();
             }
             $.ajax({
                 url: "{{ Url('ajax/info-service') }}",

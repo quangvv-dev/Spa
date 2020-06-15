@@ -5,11 +5,14 @@
             <div class="modal-body">
 
                 <div class="row">
-                    <div class="col-md-6 text-center">
+                    <div class="col-md-4 text-center">
                         <a href="{{ route('orders.create', $customer->id) }}?type=services" class="btn btn-success">Đơn dịch vụ</a>
                     </div>
-                    <div class="col-md-6 text-center">
+                    <div class="col-md-4 text-center">
                         <a href="{{ route('orders.create', $customer->id) }}?type=products" class="btn btn-danger">Đơn sản phẩm</a>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <a href="{{ route('orders.create', $customer->id) }}?type=combos" class="btn btn-info">Đơn combo</a>
                     </div>
                 </div>
             </div>

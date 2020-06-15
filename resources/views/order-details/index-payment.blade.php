@@ -43,6 +43,7 @@
         .tableFixHead tbody .fixed2 td {
             background: #cbdbf2;
         }
+
         .form-control {
             font-size: 14px;
         }
@@ -106,6 +107,7 @@
 @section('_script')
     <script type="text/javascript">
         function searchAjax(data) {
+            $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
                 url: "{{ Url('orders-payment/') }}",
                 method: "get",
@@ -123,9 +125,11 @@
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
 
-            if (class_name === 'display pl5')
+            if (class_name === 'display pl5') {
                 var data_time = $(target).find('.choose_time').data('time');
-            else {
+                $('a.choose_time').removeClass('border b-gray');
+                $(target).find('.choose_time').addClass('border b-gray');
+            } else {
                 var data_time = $('#choose_time').val();
             }
             if (class_name === 'btn-group ml5') {

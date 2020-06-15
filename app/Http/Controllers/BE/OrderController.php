@@ -77,8 +77,9 @@ class OrderController extends Controller
         $title = 'Tạo đơn hàng';
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services', 'products'));
+        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services', 'products','combo'));
     }
 
     public function getInfoService(Request $request)
@@ -439,10 +440,11 @@ class OrderController extends Controller
         $customer = Customer::where('id', $customerId)->first();
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
         $role_type = $order->role_type;
 
         return view('order.index',
-            compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services', 'products', 'role_type'));
+            compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services', 'products', 'role_type','combo'));
     }
 
     public function update(Request $request, $id)
