@@ -25,15 +25,17 @@
             @foreach($orders as $order)
                 <tr>
                     <td class="text-center">
-                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
-                            <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
+                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
+                            <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)"
+                               data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
                     </td>
                     <td class="text-center">{{ $rank++ }}</td>
                     <td class="text-center">{{ isset($order->created_at) ? date("d-m-Y", strtotime($order->created_at)) : '' }}</td>
                     <td class="text-center">{{ $order->code }}</td>
                     <td class="text-center">
-                        <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal" data-order-id="{{ $order->id }}" href="#">
+                        <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal"
+                           data-order-id="{{ $order->id }}" href="#">
                             <i class="fas fa-info-circle"></i>
                         </a>
                         {{ @$order->customer->account_code }}</td>
@@ -50,7 +52,7 @@
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
-{{--                    <td class="text-center">{{ @$history_payment[$order->id]?@number_format($history_payment[$order->id]):0  }}</td>--}}
+                    {{--                    <td class="text-center">{{ @$history_payment[$order->id]?@number_format($history_payment[$order->id]):0  }}</td>--}}
                     <td class="text-center">{{ $order->name_payment_type }}</td>
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
                 </tr>
