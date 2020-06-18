@@ -33,11 +33,11 @@
                     </div>
                 @endif
                 {{--<div class="col-xs-12 col-md-6">--}}
-                    {{--<div class="form-group required {{ $errors->has('price_buy') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('price_buy', 'Giá nhập', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::text('price_buy',@number_format($doc->price_buy), array('class' => 'form-control price')) !!}--}}
-                        {{--<span class="help-block">{{ $errors->first('price_buy', ':message') }}</span>--}}
-                    {{--</div>--}}
+                {{--<div class="form-group required {{ $errors->has('price_buy') ? 'has-error' : '' }}">--}}
+                {{--{!! Form::label('price_buy', 'Giá nhập', array('class' => ' required')) !!}--}}
+                {{--{!! Form::text('price_buy',@number_format($doc->price_buy), array('class' => 'form-control price')) !!}--}}
+                {{--<span class="help-block">{{ $errors->first('price_buy', ':message') }}</span>--}}
+                {{--</div>--}}
                 {{--</div>--}}
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('price_sell') ? 'has-error' : '' }}">
@@ -54,18 +54,18 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('trademark') ? 'has-error' : '' }}">
-                        {!! Form::label('trademark', 'Nhà cung cấp', array('class' => ' required')) !!}
-                        <input type="text" class="form-control" id="datepicker" data-toggle="datepicker" name="payment_date">
-                        <span class="help-block">{{ $errors->first('trademark', ':message') }}</span>
+                    <div class="form-group required {{ $errors->has('hsd') ? 'has-error' : '' }}">
+                        {!! Form::label('hsd', 'Thời hạn sử dụng (tháng)', array('class' => ' required')) !!}
+                        {!! Form::number('hsd',null, array('class' => 'form-control' ,'required'=>true, 'min'=>1)) !!}
+                        <span class="help-block">{{ $errors->first('hsd', ':message') }}</span>
                     </div>
                 </div>
                 {{--<div class="col-xs-12 col-md-6">--}}
-                    {{--<div class="form-group required {{ $errors->has('trademark') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('trademark', 'Nhà cung cấp', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::text('trademark',null, array('class' => 'form-control')) !!}--}}
-                        {{--<span class="help-block">{{ $errors->first('trademark', ':message') }}</span>--}}
-                    {{--</div>--}}
+                {{--<div class="form-group required {{ $errors->has('trademark') ? 'has-error' : '' }}">--}}
+                {{--{!! Form::label('trademark', 'Nhà cung cấp', array('class' => ' required')) !!}--}}
+                {{--{!! Form::text('trademark',null, array('class' => 'form-control')) !!}--}}
+                {{--<span class="help-block">{{ $errors->first('trademark', ':message') }}</span>--}}
+                {{--</div>--}}
                 {{--</div>--}}
 
                 <div class="col-xs-12 col-md-6">
@@ -81,6 +81,9 @@
                         {!! Form::select('category_id',$category_pluck, @$doc->category_id, array('class' => 'form-control select2','required'=>true)) !!}
                         <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
                     </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">

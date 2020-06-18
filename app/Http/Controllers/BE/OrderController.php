@@ -79,7 +79,7 @@ class OrderController extends Controller
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services', 'products','combo'));
+        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services', 'products', 'combo'));
     }
 
     public function getInfoService(Request $request)
@@ -104,6 +104,11 @@ class OrderController extends Controller
     {
         $customer = Customer::find($request->user_id);
         $param = $request->all();
+        if ($param['role_type'] == StatusCode::COMBOS) {
+            $combo = Services::find($param['service_id'][0]);
+            $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
+        }
+
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 
         DB::beginTransaction();
@@ -444,12 +449,19 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.index',
-            compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services', 'products', 'role_type','combo'));
+            compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services', 'products', 'role_type', 'combo'));
     }
 
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        if ($input['role_type'] == StatusCode::COMBOS) {
+            $check = $this->orderService->find($id);
+            $combo = Services::find($input['service_id'][0]);
+            $date = strtotime('+' . $combo->hsd . ' months', strtotime($check->created_at));
+            $date = date("Y-m-d", $date);
+            $input['hsd'] = $date;
+        }
         $customer = Customer::find($request->user_id);
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 

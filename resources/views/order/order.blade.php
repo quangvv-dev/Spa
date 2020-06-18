@@ -37,7 +37,11 @@
                                 <b>Điện thoại:</b>&nbsp;{{ @$order->customer->phone }} -
                             </td>
                             <td style="width:50%">
-                                <b>Ngày đặt hàng:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}
+                                <b>Ngày tạo đơn:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}&emsp;
+                                @if($order->hsd)
+                                    <b>Ngày hết hạn:</b>&nbsp; {{ date('d-m-Y', strtotime($order->hsd)) }}
+                                @endif
+
                             </td>
                         </tr>
                         <tr>

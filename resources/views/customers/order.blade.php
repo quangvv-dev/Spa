@@ -1,9 +1,15 @@
+<style>
+    th.text-white.text-center {
+        text-transform: unset;
+    }
+</style>
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">Trừ liệu trình</th>
             <th class="text-white text-center">Ngày tạo</th>
+            <th class="text-white text-center">Ng.hết hạn</th>
             <th class="text-white text-center">Tên SP</th>
             <th class="text-white text-center">Loại đơn</th>
             <th class="text-white text-center">Người thực hiện</th>
@@ -26,6 +32,7 @@
                         @endif
                     </td>
                     <td class="text-center">{{ @$order->created_at }}</td>
+                    <td class="text-center">{{ @$order->hsd}}</td>
                     <td class="text-center">
                         <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">
                                 @foreach($order->orderDetails as $orderDetail)

@@ -5,6 +5,7 @@
             <th class="text-white text-center">Thao tác</th>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Ngày đặt hàng</th>
+            <th class="text-white text-center">Ng.Hết hạn</th>
             <th class="text-white text-center">Mã ĐH</th>
             <th class="text-white text-center">Mã KH</th>
             <th class="text-white text-center">Tên KH</th>
@@ -32,6 +33,7 @@
                     </td>
                     <td class="text-center">{{ $rank++ }}</td>
                     <td class="text-center">{{ isset($order->created_at) ? date("d-m-Y", strtotime($order->created_at)) : '' }}</td>
+                    <td class="text-center">{{ isset($order->hsd) ? date("d-m-Y", strtotime($order->hsd)) : '' }}</td>
                     <td class="text-center">{{ $order->code }}</td>
                     <td class="text-center">
                         <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal"
