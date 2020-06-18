@@ -32,12 +32,11 @@ class OrderService
         if (!empty($data['spa_therapisst_id']) && !empty($data['count_day'])) {
             $countDay = $data['count_day'] - 1;
         }
-
         $input = [
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
             'role_type'         => $data['role_type'],
-            'hsd'               => $data['hsd'],
+            'hsd'               => isset($data['hsd'])?$data['hsd']:null,
             'count_day'         => $countDay,
             'type'              => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => $theRest,
@@ -171,7 +170,7 @@ class OrderService
             'member_id'         => $attibutes['user_id'],
             'the_rest'          => $theRest,
             'role_type'         => $attibutes['role_type'],
-            'hsd'               => $attibutes['hsd'],
+            'hsd'               => isset($attibutes['hsd'])?$attibutes['hsd']:null,
             'count_day'         => $attibutes['count_day'],
             'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])),
