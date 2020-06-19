@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
@@ -90,8 +92,13 @@ class Customer extends Model
 
     public static function search($param)
     {
-//
-        $data = self::with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+        $user = Auth::user();
+        $data = self::latest();
+        if ($user->role == UserConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
+            $data = $data->where('telesales_id', $user->id);
+        } else {
+            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+        }
         if (count($param)) {
             static::applySearchConditions($data, $param);
         }
@@ -100,7 +107,7 @@ class Customer extends Model
             return $data->latest()->paginate($param['limit']);
         }
 
-        return $data->latest()->paginate(20);
+        return $data->paginate(20);
     }
 
     public function status()
@@ -305,12 +312,12 @@ class Customer extends Model
 //                $q->whereDate('created_at', getTime(($input['data_time'])));
 //            })
             $query->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                });
+                $input['data_time'] == 'LAST_WEEK' ||
+                $input['data_time'] == 'LAST_WEEK' ||
+                $input['data_time'] == 'THIS_MONTH' ||
+                $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                $q->whereBetween('created_at', getTime(($input['data_time'])));
+            });
         });
         return $data;
     }

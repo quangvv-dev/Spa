@@ -48,4 +48,7 @@ class StatusCode
 
     const PAGINATE_10 = 10;
     const PAGINATE_20 = 20;
+
+    const ON = 1;
+    const OFF = 0;
 }

@@ -151,6 +151,13 @@
                             <a class="dropdown-item" href="{!! route('department.index') !!}"><i class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
                             <a class="dropdown-item" href="{!! route('sms.index') !!}"><i class="dropdown-icon fas fa-envelope"></i>  Quản lý tin nhắn</a>
                             <a class="dropdown-item" href="{!! route('status.index') !!}"><i class="dropdown-icon mdi mdi-account-card-details"></i>  Quản lý CRM</a>
+                           <div class="col" style="color: #7490BD;font-weight: 400">
+                               <label class="switch">
+                                   <input name="checkbox" class="check" type="checkbox" {{setting('view_customer_sale')==\App\Constants\StatusCode::ON?'checked':''}}>
+                                   <span class="slider round"></span>
+                               </label>
+                               Sale xem tất cả KH
+                           </div>
                             @endif
                             <div class="dropdown-divider"></div>
                             <a href="{!! url('/logout') !!}" class="dropdown-item"
@@ -172,3 +179,21 @@
         </div>
     </div>
 </header>
+<script>
+$('.check').change(function () {
+    if (this.checked){
+        var value = 1;
+    }else {
+        var value = 0;
+    }
+    $.ajax({
+        url: "{{url('ajax/settings')}}",
+        method: "get",
+        data: {
+            value: value,
+        }
+    }).done(function (data) {
+
+    });
+})
+</script>

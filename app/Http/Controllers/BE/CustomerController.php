@@ -83,7 +83,6 @@ class CustomerController extends Controller
         $customers = Customer::search($input);
         $categories = Category::with('customers')->get();
         $rank = $customers->firstItem();
-
         if ($request->ajax()) {
             return Response::json(view('customers.ajax',
                 compact('customers', 'statuses', 'rank', 'categories'))->render());

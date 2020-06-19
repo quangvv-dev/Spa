@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::any('updatePostion', 'StatusController@updatePostion');
         Route::any('updateColor', 'StatusController@updateColor');
         Route::get('count-customer', 'SmsController@getCountCustomer');//sms count customer
+        Route::get('settings', 'SettingController@store');
     });
 
     Route::resource('rules', 'RuleController');//Automation
