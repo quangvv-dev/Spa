@@ -49,7 +49,7 @@
                     <td class="text-center">
                         <a title="Thanh toán" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
                                     class="fas fa-file-invoice-dollar"></i></a>
-                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
+                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
                             <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
                     </td>
