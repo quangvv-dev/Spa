@@ -38,26 +38,28 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
-                        {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                        {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
-                        <span class="help-block">{{ $errors->first('role', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
                         {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
                         {!! Form::select('gender',[0 => 'Nữ', 1 => 'Nam'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn giới tính')) !!}
                         <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
-                        {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}
-                        {!! Form::select('department_id', $departments, null, array('class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}
-                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
+                            {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
+                            {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
+                            <span class="help-block">{{ $errors->first('role', ':message') }}</span>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
+                            {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}
+                            {!! Form::select('department_id', $departments, null, array('class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}
+                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                        </div>
+                    </div>
+                @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('password') ? 'has-error' : '' }}">
                         {!! Form::label('password', 'Mật khẩu', array('class' => ' required')) !!}
