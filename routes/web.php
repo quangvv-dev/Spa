@@ -15,7 +15,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('services', 'ServiceController');
     Route::resource('products', 'ProductController');
     Route::resource('combos', 'CombosController');
-    Route::resource('users', 'UserController')->middleware('admin');
+    Route::resource('users', 'UserController');
+//    Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::get('customers-group', 'CustomerController@createGroup')->name('customers.indexGroup');
     Route::post('customers-group', 'CustomerController@storeGroup')->name('customers.storeGroup');
