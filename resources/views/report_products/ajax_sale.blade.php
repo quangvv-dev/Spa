@@ -77,10 +77,41 @@
         </thead>
 
         <tbody>
+        @php
+            $customer_new = 0;
+            $comment_new = 0;
+            $schedules_new = 0;
+            $order_new = 0;
+            $schedules_percent = 0;
+            $order_percent = 0;
+
+            $revenue_new = 0;
+            $payment_new = 0;
+            $schedules_old = 0;
+            $comment_old = 0;
+            $order_old = 0;
+            $revenue_old = 0;
+            $payment_old = 0;
+        @endphp
 
         @if(count($users))
             @foreach($users as $item)
-                @php $i++ @endphp
+                @php $i++ ;
+                $customer_new += $item->customer_new;
+                $comment_new += $item->comment_new;
+                $schedules_new += $item->schedules_new;
+                $order_new += $item->order_new;
+                $schedules_percent += $item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0;
+                $order_percent += $item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0;
+                $revenue_new += $item->revenue_new;
+                $payment_new += $item->payment_new;
+                $schedules_old += $item->schedules_old;
+                $comment_old += $item->comment_old;
+                $order_old += $item->order_old;
+                $revenue_old += $item->revenue_old;
+                $payment_old += $item->payment_old;
+
+                @endphp
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->full_name}}
@@ -104,11 +135,26 @@
             @endforeach
         @endif
         <tr class="fixed">
-            {{--<th class="text-center"></th>--}}
-            {{--<th class="text-center bold">Tổng cộng</th>--}}
-            <th colspan="14" class="text-center"></th>
-
+            <th class="text-center"></th>
             <th class="text-center bold">Tổng cộng</th>
+            {{--<th colspan="14" class="text-center"></th>--}}
+
+            <th class="text-center bold">{{@number_format($customer_new)}}</th>
+            <th class="text-center bold">{{@number_format($comment_new)}}</th>
+            <th class="text-center bold">{{@number_format($schedules_new)}}</th>
+            <th class="text-center bold">{{@number_format($order_new)}}</th>
+            <th class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</th>
+            <th class="text-center bold">{{@number_format($order_percent/count($users))}}%</th>
+            <th class="text-center bold">{{@number_format($revenue_new)}}</th>
+            <th class="text-center bold">{{@number_format($payment_new)}}</th>
+            <th class="text-center bold">{{@number_format($schedules_old)}}</th>
+            <th class="text-center bold">{{@number_format($comment_old)}}</th>
+            <th class="text-center bold">{{@number_format($order_old)}}</th>
+            <th class="text-center bold">{{@number_format($revenue_old)}}</th>
+            <th class="text-center bold">{{@number_format($payment_old)}}</th>
+            {{--<th class="text-center bold">{{@number_format()}}</th>--}}
+
+
             <th class="bold">{{number_format($allTotal)}}</th>
             <th class="bold">{{number_format($grossRevenue)}}</th>
             {{--<th class="text-center">(+(13)</th>--}}
