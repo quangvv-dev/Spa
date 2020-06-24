@@ -62,7 +62,7 @@
            <th class="text-center">(5)</th>
            <th class="text-center">(6)</th>
            <th class="text-center">(5)/(3)</th>
-           <th class="text-center">(6)/(5)</th>
+           <th class="text-center">(6)/(3)</th>
            <th class="text-center">(7)</th>
            <th class="text-center">(8)</th>
            <th class="text-center">(9)</th>
@@ -89,7 +89,7 @@
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0}}%</td>
-                    <td class="text-center pdr10">{{$item->order_new>0&&$item->schedules_new >0 ?round(($item->order_new/$item->schedules_new)*100):0}}%</td>
+                    <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0}}%</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
                     <td class="text-center pdr10">{{$item->schedules_old}}</td>
@@ -104,6 +104,8 @@
             @endforeach
         @endif
         <tr class="fixed">
+            {{--<th class="text-center"></th>--}}
+            {{--<th class="text-center bold">Tổng cộng</th>--}}
             <th colspan="14" class="text-center"></th>
 
             <th class="text-center bold">Tổng cộng</th>

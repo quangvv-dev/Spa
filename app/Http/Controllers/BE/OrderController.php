@@ -287,10 +287,9 @@ class OrderController extends Controller
             }
             DB::commit();
 
-
             $check = PaymentHistory::where('order_id', $id)->get();
             $check2 = RuleOutput::where('event', 'add_order')->first();
-            if (count($check) <= 1 && isset($check2) && $check2) {
+            if (count($check) <= 1 && isset($check2) && $check2 && @$check2->rules->status == StatusCode::ON) {
                 $check3 = PaymentHistory::where('order_id', $id)->first();
                 $rule = $check2->rules;
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
