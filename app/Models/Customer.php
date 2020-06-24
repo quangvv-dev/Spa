@@ -95,7 +95,11 @@ class Customer extends Model
         $user = Auth::user();
         $data = self::latest();
         if ($user->role == UserConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
-            $data = $data->where('telesales_id', $user->id);
+            if ($user->phone == '0977508510' || $user->phone == '0776904396') {
+                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            } else {
+                $data = $data->where('telesales_id', $user->id);
+            }
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
