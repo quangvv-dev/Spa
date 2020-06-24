@@ -1,6 +1,4 @@
 <div class="bxh bxh-container" style="border:1px solid transparent;">
-    {{--<div--}}
-    {{--style="transform: rotate(-5deg); height: 8px; width: 100%; background-color: #cecece; position: absolute; top: 13.5%;"></div>--}}
     @php $int =0;$i =0; @endphp
     @foreach($users as $value)
         @php $int++ ;
@@ -30,7 +28,6 @@
            <th class="text-center" colspan="1">SALE</th>
            <th class="text-center" colspan="8">KHÁCH HÀNG MỚI</th>
            <th class="text-center" colspan="5">KHÁCH HÀNG CŨ</th>
-           {{--<th class="text-center" rowspan="1" colspan="1">TT nợ</th>--}}
            <th class="text-center" colspan="2">TỔNG CHUNG</th>
        </tr>
        <tr class="tr1" style="text-transform:unset">
@@ -44,13 +41,11 @@
            <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
            <th class="text-center">Thực thu</th>
-
            <th class="text-center no-wrap">Lịch hẹn</th>
            <th class="text-center no-wrap">Trao đổi</th>
            <th class="text-center no-wrap">Đơn chốt</th>
            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
            <th class="text-center">Thực thu</th>
-           {{--<th class="text-center">Thanh toán<span class=""><br>thêm</span></th>--}}
            <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
            <th class="text-center">Tổng thực thu</th>
        </tr>
@@ -72,7 +67,6 @@
            <th class="text-center">(13)</th>
            <th class="text-center">(7)+(12)</th>
            <th class="text-center">(8)+(13)</th>
-           {{--<th class="text-center">(+(13)</th>--}}
        </tr>
         </thead>
 
@@ -84,7 +78,6 @@
             $order_new = 0;
             $schedules_percent = 0;
             $order_percent = 0;
-
             $revenue_new = 0;
             $payment_new = 0;
             $schedules_old = 0;
@@ -128,7 +121,6 @@
                     <td class="text-center pdr10">{{$item->order_old}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
-                    {{--<td class="text-center pdr10">{{@number_format($item->payment_rest)}}</td>--}}
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old)}}</td>
                 </tr>
@@ -137,8 +129,6 @@
         <tr class="fixed">
             <th class="text-center"></th>
             <th class="text-center bold">Tổng cộng</th>
-            {{--<th colspan="14" class="text-center"></th>--}}
-
             <th class="text-center bold">{{@number_format($customer_new)}}</th>
             <th class="text-center bold">{{@number_format($comment_new)}}</th>
             <th class="text-center bold">{{@number_format($schedules_new)}}</th>
@@ -152,12 +142,8 @@
             <th class="text-center bold">{{@number_format($order_old)}}</th>
             <th class="text-center bold">{{@number_format($revenue_old)}}</th>
             <th class="text-center bold">{{@number_format($payment_old)}}</th>
-            {{--<th class="text-center bold">{{@number_format()}}</th>--}}
-
-
             <th class="bold">{{number_format($allTotal)}}</th>
             <th class="bold">{{number_format($grossRevenue)}}</th>
-            {{--<th class="text-center">(+(13)</th>--}}
         </tr>
 
         </tbody>

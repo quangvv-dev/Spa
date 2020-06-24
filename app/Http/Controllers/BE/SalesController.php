@@ -39,7 +39,7 @@ class SalesController extends Controller
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
 
-        $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->withTrashed()->get()->map(function ($item) use ($request) {
+        $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', getTime($request->data_time))->withTrashed();
             $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('created_at', '<', getTime($request->data_time)[0])->withTrashed();
             $data = Customer::select('id')->where('telesales_id', $item->id)->withTrashed();
