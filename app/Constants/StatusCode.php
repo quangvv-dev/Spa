@@ -51,4 +51,7 @@ class StatusCode
 
     const ON = 1;
     const OFF = 0;
+
+    const EXCHANGE_POINT = 100000;
+    const EXCHANGE_MONEY = 2000;
 }

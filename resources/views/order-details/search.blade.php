@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-md-6 col-xs-12">
                         <div class="form-group">
-                            {!! Form::select('payment_type',[1 => "Tiền mặt", 2 => 'Thẻ'], null, array('class' => 'form-control payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
+                            {!! Form::select('payment_type',[1 => "Tiền mặt", 2 => 'Thẻ',3 => 'Điểm'], null, array('class' => 'form-control payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12">

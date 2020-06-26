@@ -6,6 +6,7 @@ use App\Models\GroupComment;
 use App\Models\Order;
 use App\Helpers\Functions;
 use App\Models\PaymentHistory;
+use App\Constants\StatusCode;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,8 +67,8 @@ class OrderService
         if ($data['gross_revenue'] > $model->all_total) {
             $data['gross_revenue'] = $model->all_total;
         }
-
         $model->update($data);
+
 
         $model->gross_revenue = number_format($model->gross_revenue);
         $model->all_total = number_format($model->all_total);
@@ -187,13 +188,21 @@ class OrderService
     public function deletePayment($id)
     {
         $paymentHistory = PaymentHistory::where('id', $id)->first();
-
         $order = $this->find($paymentHistory->order_id);
 
         $order->update([
             'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
             'the_rest'      => $order->the_rest + $paymentHistory->price,
         ]);
+        if ($paymentHistory->payment_type !=3){
+            $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
+            $point = ($order->customer->wallet + $point) > 0?$order->customer->wallet + $point:0;
+        }else{
+            $point = $order->customer->wallet + $paymentHistory->price;
+        }
+
+        $order->customer->wallet = $point;
+        $order->customer->save();
 
         $paymentHistory->delete();
 

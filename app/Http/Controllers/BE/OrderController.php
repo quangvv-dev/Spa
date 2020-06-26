@@ -278,9 +278,16 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
-            $input = $request->all();
-
+            $input = $request->except('customer_id');
             $paymentHistory = PaymentHistoryService::create($input, $id);
+            $customer = Customer::find($request->customer_id);
+            if ($paymentHistory->payment_type != 3) {
+                $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
+            } else {
+                $point = ($customer->wallet - $paymentHistory->price) > 0 ? $customer->wallet - $paymentHistory->price : 0;
+            }
+            $customer->wallet = $point;
+            $customer->save();
             $order = $this->orderService->updatePayment($input, $id);
             if (!$paymentHistory || !$order) {
                 DB::rollBack();

@@ -220,6 +220,7 @@
             let paymentType = $('.payment-type').val();
             let grossRevenue = $('.gross-revenue').val();
             let description = $('.description').val();
+            let customer_id = '{{@$order->customer->id}}';
 
             $.ajax({
                 url: "{{ Url('order/'.$order->id. '/show') }}",
@@ -228,10 +229,11 @@
                     payment_date: paymentDate,
                     payment_type: paymentType,
                     gross_revenue: grossRevenue,
-                    description: description
+                    description: description,
+                    customer_id: customer_id,
                 }
             }).done(function () {
-                // window.location.reload();
+                window.location.reload();
             });
         });
 

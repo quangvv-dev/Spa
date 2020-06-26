@@ -3,7 +3,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thanh toán đơn hàng</h5>
+                <h5 class="modal-title" id="exampleModalLabel" style="width: 100%">Thanh toán đơn hàng</h5>
+                <br>
+                <p style="width: 100%; color: red">Số tiền tích lũy: {{ number_format(@$order->customer->wallet) }}</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
