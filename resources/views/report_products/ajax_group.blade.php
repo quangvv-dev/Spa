@@ -1,4 +1,4 @@
-<div style="width: 100%; overflow: hidden; overflow-y: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
+<div style="width: 100%; overflow-y: auto;margin-top: 20px;height: 900px;font-size: 12px" class="tableFixHead">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
        <tr>
