@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('customers', 'CustomerController@reportCustomer');
         Route::get('products', 'OrderController@reportProduct');
         Route::get('sales', 'SalesController@index');
+        Route::get('group-sale', 'SalesController@indexGroupCategory');
     });
     Route::resource('tasks', 'TaskController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');
