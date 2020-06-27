@@ -21,7 +21,7 @@
         @media (min-width: 1681px) {
             .tableFixHead thead .number_index th {
                 position: sticky;
-                top: 110px;
+                top: 91px;
             }
         }
 

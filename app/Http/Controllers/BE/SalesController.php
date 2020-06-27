@@ -99,12 +99,13 @@ class SalesController extends Controller
             $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
 
             if ($request->telesale_id) {
-                $data_new = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->whereBetween('created_at', getTime($request->data_time))->withTrashed();
-                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->where('created_at', '<', getTime($request->data_time)[0])->withTrashed();
-                $data = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->withTrashed();
+                $data_new = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->whereBetween('created_at', getTime($request->data_time));
+                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->where('created_at', '<', getTime($request->data_time)[0]);
+                $data = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id);
+//                ->withTrashed()
             } else {
-                $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time))->withTrashed();
-                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0])->withTrashed();
+                $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time));
+                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0]);
                 $data = Customer::select('id')->whereIn('id', $arr_customer)->withTrashed();
             }
 
