@@ -77,14 +77,15 @@
             position: sticky;
             top: 118px;
         }
-        @media(min-width:1681px)  {
+
+        @media (min-width: 1681px) {
             .tableFixHead thead .number_index th {
                 position: sticky;
                 top: 97px;
             }
         }
 
-        .tableFixHead thead .tr1 th{
+        .tableFixHead thead .tr1 th {
             position: sticky;
             top: 38px;
         }
@@ -132,6 +133,14 @@
         }
 
         tr.number_index th {
+            font-size: 12px;
+        }
+
+        tr.fixed th {
+            font-size: 12px;
+        }
+
+        td.text-center {
             font-size: 12px;
         }
     </style>

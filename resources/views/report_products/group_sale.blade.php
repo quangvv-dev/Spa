@@ -18,6 +18,11 @@
             top: 110px;
         }
 
+        .tableFixHead thead .number_index2 th {
+            position: sticky;
+            top: 122px;
+        }
+
         @media (min-width: 1681px) {
             .tableFixHead thead .number_index th {
                 position: sticky;
@@ -106,7 +111,18 @@
     <div class="col-md-12 col-lg-12 list-data">
         @include('report_products.ajax_group')
     </div>
+    {{--<div class="fixed-bottom">--}}
+        {{--<div class="list_task_footer col-md-12 padding menu-footer">--}}
 
+
+
+            {{--<div class="fl task_footer_box cancel_order">--}}
+                {{--<button class="btn btn-default fr ml5">--}}
+                    {{--<a href="http://spa.test/list-orders">Trở lại</a>--}}
+                {{--</button>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
 @endsection
 @section('_script')
     <script>
