@@ -44,7 +44,7 @@ class SalesController extends Controller
     public function index(Request $request)
     {
         if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_WEEK']);
+            $request->merge(['data_time' => 'THIS_MONTH']);
         }
 
         $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
@@ -90,7 +90,7 @@ class SalesController extends Controller
     public function indexGroupCategory(Request $request)
     {
         if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+            $request->merge(['data_time' => 'THIS_WEEK']);
         }
 
         $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
@@ -105,7 +105,6 @@ class SalesController extends Controller
 
                 $item->schedules_new = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
                 $item->schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
-
 //                ->withTrashed()
             } else {
                 $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time));

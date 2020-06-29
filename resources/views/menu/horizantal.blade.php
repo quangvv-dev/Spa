@@ -3,23 +3,24 @@
     <div class="container">
         <ul class="nav">
             <li class="nav-item" {{ Request::is('schedules*')||Request::is('schedules*') ? 'active' : '' }}>
-                <a class="nav-link" href="{!! url('schedules') !!}"><i class="fas fa-newspaper"></i><span>Lịch hẹn</span></a>
+                <a class="nav-link" href="{!! url('schedules') !!}"><i
+                        class="fas fa-newspaper"></i><span>Lịch hẹn</span></a>
             </li>
             <li class="nav-item" {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}>
                 <a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
             </li>
             {{--<li class="nav-item with-sub" {{ Request::is('customers*') ? 'active' : '' }}>--}}
-                {{--<a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>--}}
-                {{--<div class="sub-item">--}}
-                    {{--<ul>--}}
-                        {{--<li>--}}
-                        {{--<a href="{!! route('customers.index') !!}">Khách hàng </a>--}}
-                        {{--</li>--}}
-                        {{--                        <li>--}}
-                        {{--                            <a href="{{url('schedules')}}">Lịch hẹn </a>--}}
-                        {{--                        </li>--}}
-                    {{--</ul>--}}
-                {{--</div>--}}
+            {{--<a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>--}}
+            {{--<div class="sub-item">--}}
+            {{--<ul>--}}
+            {{--<li>--}}
+            {{--<a href="{!! route('customers.index') !!}">Khách hàng </a>--}}
+            {{--</li>--}}
+            {{--                        <li>--}}
+            {{--                            <a href="{{url('schedules')}}">Lịch hẹn </a>--}}
+            {{--                        </li>--}}
+            {{--</ul>--}}
+            {{--</div>--}}
             {{--</li>--}}
             <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
                 <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Marketing</span></a>
@@ -96,7 +97,7 @@
                             <a href="{{url('report/sales')}}">Xếp hạng Telasales</a>
                         </li>
                         <li>
-                            <a href="#">Người bán hàng Xuất sắc</a>
+                            <a href="{{url('report/group-sale')}}">Doanh thu nhóm DV</a>
                         </li>
                         <li>
                             <a href="#">Quà tặng</a>
