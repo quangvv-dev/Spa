@@ -44,7 +44,7 @@ class SalesController extends Controller
     public function index(Request $request)
     {
         if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+            $request->merge(['data_time' => 'THIS_WEEK']);
         }
 
         $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
@@ -102,11 +102,19 @@ class SalesController extends Controller
                 $data_new = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->whereBetween('created_at', getTime($request->data_time));
                 $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->where('created_at', '<', getTime($request->data_time)[0]);
                 $data = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id);
+
+                $item->schedules_new = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
+                $item->schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
+
 //                ->withTrashed()
             } else {
                 $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time));
                 $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0]);
-                $data = Customer::select('id')->whereIn('id', $arr_customer)->withTrashed();
+                $data = Customer::select('id')->whereIn('id', $arr_customer);
+
+                $item->schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
+                $item->schedules_old = Schedule::select('id')->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
+
             }
 
             $order = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
@@ -115,9 +123,6 @@ class SalesController extends Controller
 
             $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();// trao doi moi
             $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $data_old->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count(); // trao doi cu
-
-            $item->schedules_new = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
-            $item->schedules_old = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
 
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();

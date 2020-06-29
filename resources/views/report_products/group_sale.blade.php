@@ -89,18 +89,14 @@
 
     <div class="col-md-12">
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow" style="width: 100%; padding: 10px;">
-            <div class="col-md-2 no-padd">
+            <div class="col-md-4 no-padd">
                 <ul class="fr mg0 pt10 no-padd">
-                    {{--<li class="display pl5"><a data-time="TODAY" class="btn_choose_time border b-gray bg-gray active">Hôm--}}
-                    {{--nay</a>--}}
-                    {{--</li>--}}
-                    <li class="display pl5"><a data-time="THIS_MONTH"
-                                               class="btn_choose_time padding0-5 b-gray bg-gray active">Tháng
-                            này</a></li>
-                    <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
-                            trước</a></li>
+                    <li class="display pl5"><a data-time="THIS_WEEK" class="btn_choose_time border b-gray bg-gray active">Tuần này</a></li>
+                    <li class="display pl5"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần trước</a></li>
+                    <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time ">Tháng này</a></li>
+                    <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng trước</a></li>
                 </ul>
-                <input type="hidden" id="time_choose" value="THIS_MONTH">
+                <input type="hidden" id="time_choose" value="THIS_WEEK">
             </div>
             <div class="col-md-2">
                 {{Form::select('type',$telesales, null, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Tất cả nhân viên'))}}
