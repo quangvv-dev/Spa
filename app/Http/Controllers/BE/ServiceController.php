@@ -18,7 +18,7 @@ class ServiceController extends Controller
     public function __construct()
     {
         $this->list[0] = ('category.parent');
-        $categories = Category::orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
+        $categories = Category::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
         view()->share([
             'category_pluck' => $categories,
         ]);
@@ -119,15 +119,15 @@ class ServiceController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Service $service)
     {
         $request->merge([
-            'price_buy'       => $request->price_buy ? str_replace(',', '', $request->price_buy) : 0,
-            'price_sell'      => $request->price_sell ? str_replace(',', '', $request->price_sell) : 0,
+            'price_buy' => $request->price_buy ? str_replace(',', '', $request->price_buy) : 0,
+            'price_sell' => $request->price_sell ? str_replace(',', '', $request->price_sell) : 0,
             'promotion_price' => $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0,
         ]);
         $image = Functions::checkUploadImage($request, $service, 'services');

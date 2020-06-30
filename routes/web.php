@@ -11,7 +11,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 //    Route::get('demo/data-system', 'DBController@index');
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
     Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
-    Route::resource('category', 'CategoryController');
+    Route::resource('category', 'CategoryServiceController');
+    Route::resource('category-product', 'CategoryProductController');
     Route::resource('services', 'ServiceController');
     Route::resource('products', 'ProductController');
     Route::resource('combos', 'CombosController');

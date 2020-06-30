@@ -54,6 +54,9 @@
                             <a href="{!! route('category.index') !!}">Nhóm dịch vụ</a>
                         </li>
                         <li>
+                            <a href="{!! route('category.index') !!}">Nhóm sản phẩm</a>
+                        </li>
+                        <li>
                             <a href="{!! route('services.index') !!}">Danh sách dịch vụ</a>
                         </li>
                         <li>
@@ -75,9 +78,6 @@
                 <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
                 <div class="sub-item">
                     <ul>
-                        {{--                        <li>--}}
-                        {{--                            <a href="#">Doanh thu</a>--}}
-                        {{--                        </li>--}}
                         <li>
                             <a href="{{url('report/customers')}}">Doanh thu</a>
                         </li>

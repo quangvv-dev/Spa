@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
 use Illuminate\Support\Facades\Response;
 
-class CategoryController extends Controller
+class CategoryProductController extends Controller
 {
 
     var $list;
@@ -19,8 +19,8 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->list[0] = ('category.parent');
-        $categories = Category::orderBy('parent_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
-            'id')->prepend('Danh mục cha ...', 0)->toArray();
+        $categories = Category::where('type', StatusCode::PRODUCT)->orderBy('parent_id', 'asc')->orderBy('id', 'desc')
+            ->get()->pluck('name', 'id')->prepend('Danh mục cha ...', 0)->toArray();
         view()->share([
             'category_pluck' => $categories,
         ]);
@@ -50,11 +50,13 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $title = 'Quản lý danh mục';
-        $docs = Category::search($request->all());
+        $input = $request->all();
+        $input['type_category'] = StatusCode::PRODUCT;
+        $docs = Category::search($input);
 
         if ($request->ajax()) return Response::json(view('category.ajax', compact('docs', 'title'))->render());
 
-        return view('category.index', compact('title', 'docs'));
+        return view('category-product.index', compact('title', 'docs'));
     }
 
     /**
@@ -64,8 +66,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
+
         $title = 'Thêm mới danh mục';
-        return view('category._form', compact('title'));
+        return view('category-product._form', compact('title'));
     }
 
     /**
@@ -77,10 +80,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
         $text = Functions::vi_to_en(@$request->name);
-        $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
+        $request->merge([
+            'code' => str_replace(' ', '_', strtolower($text)),
+            'type' => StatusCode::PRODUCT
+        ]);
         Category::create($request->all());
-        return redirect(route('category.create'))->with('status', 'Tạo danh mục thành công');
+        return redirect(route('category-product.create'))->with('status', 'Tạo danh mục thành công');
     }
 
     /**
@@ -106,14 +113,14 @@ class CategoryController extends Controller
     {
         $doc = $category;
         $title = 'Cập nhật danh mục';
-        return view('category._form', compact('title', 'doc'));
+        return view('category-product._form', compact('title', 'doc'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -151,7 +158,7 @@ class CategoryController extends Controller
 
         return $data = [
             'customer_id' => $customerId,
-            'categories'  => $categories,
+            'categories' => $categories,
             'category_id' => $categoryId
         ];
     }
