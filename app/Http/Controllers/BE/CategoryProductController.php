@@ -109,9 +109,9 @@ class CategoryProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit(Category $category_product)
     {
-        $doc = $category;
+        $doc = $category_product;
         $title = 'Cập nhật danh mục';
         return view('category-product._form', compact('title', 'doc'));
     }
@@ -124,12 +124,12 @@ class CategoryProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Category $category_product)
     {
         $text = Functions::vi_to_en(@$request->name);
         $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
-        $category->update($request->all());
-        return redirect(route('category.index'))->with('status', 'Cập nhật danh mục thành công');
+        $category_product->update($request->all());
+        return redirect(route('category-product.index'))->with('status', 'Cập nhật danh mục thành công');
     }
 
     /**
