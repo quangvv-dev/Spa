@@ -129,7 +129,7 @@
         function searchAjax(data) {
             $('.list-data').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
-                url: "{{ Url('report/group-sale') }}",
+                url: window.location.href ,
                 method: "get",
                 data: data,
             }).done(function (data) {

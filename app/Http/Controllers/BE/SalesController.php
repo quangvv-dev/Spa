@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Customer;
@@ -87,15 +88,16 @@ class SalesController extends Controller
     }
 
 
-    public function indexGroupCategory(Request $request)
+    public function indexGroupCategory(Request $request, $type)
     {
         if (empty($request->data_time)) {
             $request->merge(['data_time' => 'THIS_WEEK']);
         }
+        $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
 
         $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
 
-        $users = Category::get()->map(function ($item) use ($request) {
+        $users = Category::where('type', $type)->get()->map(function ($item) use ($request) {
             $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
 
             if ($request->telesale_id) {

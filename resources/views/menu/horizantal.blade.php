@@ -54,7 +54,7 @@
                             <a href="{!! route('category.index') !!}">Nhóm dịch vụ</a>
                         </li>
                         <li>
-                            <a href="{!! route('category.index') !!}">Nhóm sản phẩm</a>
+                            <a href="{!! route('category-product.index') !!}">Nhóm sản phẩm</a>
                         </li>
                         <li>
                             <a href="{!! route('services.index') !!}">Danh sách dịch vụ</a>
@@ -84,9 +84,9 @@
                         <li>
                             {{--                            <a href="{!! url('statistics')!!}">Nhân viên</a>--}}
                         </li>
-                        <li>
-                            <a href="#">Chiến dịch</a>
-                        </li>
+                        {{--<li>--}}
+                            {{--<a href="#">Chiến dịch</a>--}}
+                        {{--</li>--}}
                         {{--                        <li>--}}
                         {{--                            <a href="{{url('report/products')}}">Sản phẩm</a>--}}
                         {{--                        </li>--}}
@@ -97,7 +97,10 @@
                             <a href="{{url('report/sales')}}">Xếp hạng Telasales</a>
                         </li>
                         <li>
-                            <a href="{{url('report/group-sale')}}">Doanh thu nhóm DV</a>
+                            <a href="{{url('report/group-sale/services')}}">Doanh thu nhóm DV</a>
+                        </li>
+                        <li>
+                            <a href="{{url('report/group-sale/products')}}">Doanh thu nhóm SP</a>
                         </li>
                         <li>
                             <a href="#">Quà tặng</a>
