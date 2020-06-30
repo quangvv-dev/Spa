@@ -7,7 +7,7 @@
             <th class="text-white text-center">Ngày thanh toán</th>
             <th class="text-white text-center">Mã ĐH</th>
             <th class="text-white text-center">Tên KH</th>
-            <th class="text-white text-center">SĐT</th>}
+            <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Số tiền</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Phương thức thanh toán</th>
