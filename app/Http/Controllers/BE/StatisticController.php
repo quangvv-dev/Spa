@@ -37,109 +37,51 @@ class StatisticController extends Controller
         ]);
     }
 
+    /**
+     * Thống kê hệ thống
+     *
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
     public function index(Request $request)
     {
         $input = $request->all();
-        $input['user_id'] = $request->user_id ?: Auth::user()->id;
-        $input['data_time'] = $request->data_time ?: 'THIS_MONTH';
-        $title = 'Nhân viên';
-
-        $order_arr = [];
-        $commissions = Commission::where('user_id', $input['user_id'])->get();
-        foreach ($commissions as $commiss) {
-            $order_arr[] = $commiss->order_id;
+        if (empty($request->data_time)) {
+            $input['data_time'] = 'THIS_MONTH';
         }
 
-        $input['order_id'] = $order_arr;
+        $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
 
-        $orders = Order::whereIn('id', $order_arr);
-        $orders = $orders->when(isset($input['data_time']), function ($query) use ($input) {
-            $query->when($input['data_time'] == 'TODAY' ||
-                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                $q->whereDate('created_at', getTime(($input['data_time'])));
-            })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                });
-            })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
-            })
-            ->get();
+        $orders = Order::returnRawData($input);
+        $orders2 = Order::returnRawData($input);
 
-        $orders = $orders->map(function ($order) use ($request, $input) {
-            $check = Commission::where('order_id', $order->id)->where('user_id', $input['user_id'])->first();
-            if (isset($check) && $check) {
-                $order->rose_price = !empty($check->earn) ? $check->earn : 0;
-            }
-            return $order;
-        });
+        $data = [
+            'all_total' => $orders->sum('all_total'),
+            'gross_revenue' => $orders->sum('gross_revenue'),
+            'the_rest' => $orders->sum('the_rest'),
+            'orders' => $orders->count(),
+            'customers' => $customers->count(),
+        ];
+        $products = [
+            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+            'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'the_rest' => $orders->where('role_type', StatusCode::PRODUCT)->sum('the_rest'),
+        ];
+        $services = [
+            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->get()->count(),
+            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+            'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'the_rest' => $orders2->where('role_type', StatusCode::SERVICE)->sum('the_rest'),
+        ];
 
-        $statusRevenues = Status::getRevenueSource($input);
-        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
-
-        $categoryRevenues = Category::getRevenue($input);
-        $customerRevenueByGenders = Customer::getRevenueByGender($input);
-        $customer = Customer::count($input);
-        $groupComments = GroupComment::getAll($input);
-
-        $schedule = Schedule::orderBy('id', 'DESC');
-        $schedule->when(isset($input['data_time']), function ($query) use ($input) {
-            $query->when($input['data_time'] == 'TODAY' ||
-                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                $q->whereDate('created_at', getTime(($input['data_time'])));
-            })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                });
-        })
-        ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-            $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date'])." 00:00:00", Functions::yearMonthDay($input['end_date'])." 23:59:59"]);
-        });
-        $books = $schedule->where('status', StatusCode::BOOK)->where('creator_id', $input['user_id'])->get();
-        $receive = $schedule->where('status', StatusCode::RECEIVE)->where('creator_id', $input['user_id'])->get();
-        $comment = $schedule->where('user_id', $input['user_id'])
-            ->where('status', '<>', StatusCode::BOOK)
-            ->where('status', '<>', StatusCode::RECEIVE)->get();
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax_home',
-                compact('customer',
-                    'books',
-                    'receive',
-                    'comment',
-                    'commissions',
-                    'title',
-                    'statusRevenues',
-                    'statusRevenueByRelations',
-                    'categoryRevenues',
-                    'customerRevenueByGenders',
-                    'orders',
-                    'groupComments'
-                ))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products'))->render());
         }
-        return view('statistics.index',
-            compact(
-                'customer',
-                'books',
-                'receive',
-                'comment',
-                'commissions',
-                'title',
-                'orders',
-                'statusRevenues',
-                'statusRevenueByRelations',
-                'categoryRevenues',
-                'customerRevenueByGenders',
-                'groupComments'
-            ));
+        return view('statistics.index', compact('data', 'services', 'products'));
     }
 
     public function show($id)

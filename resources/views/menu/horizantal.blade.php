@@ -79,7 +79,8 @@
                 <div class="sub-item">
                     <ul>
                         <li>
-                            <a href="{{url('report/customers')}}">Doanh thu</a>
+                            {{--<a href="{{url('report/customers')}}">Doanh thu</a>--}}
+                            <a href="{{url('statistics')}}">Doanh thu</a>
                         </li>
                         <li>
                             {{--                            <a href="{!! url('statistics')!!}">Nhân viên</a>--}}
