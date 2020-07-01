@@ -31,7 +31,7 @@
     </table>
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div id="piechart-1"></div>
     </div>
     {{--    <div class="col-md-6">--}}

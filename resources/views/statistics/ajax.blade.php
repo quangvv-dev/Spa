@@ -2,6 +2,7 @@
     .font-30 {
         font-size: 20px;
     }
+
     .h4.text-center {
         color: cornflowerblue;
         font-weight: 600;
@@ -181,7 +182,7 @@
 
 <div class="h4 text-center">BIỂU ĐỒ</div>
 <div class="row row-cards">
-    <div id="piechart-1"></div>
+    <div id="piechart-1" style="margin-left: 15px"></div>
 </div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -200,7 +201,9 @@
         ]);
 
         var options = {
-            title: 'DOANH THU THEO NGUỒN'
+            title: 'DOANH THU THEO NGUỒN',
+            width: 500,
+            height: 450,
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
