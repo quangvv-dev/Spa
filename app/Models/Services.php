@@ -36,9 +36,9 @@ class Services extends Model
         return @json_decode($images, true);
     }
 
-    public static function getIdServiceType($type)
+    public static function getIdServiceType()
     {
-        $data = self::where('type', $type)->pluck('id')->toArray();
+        $data = self::pluck('id')->toArray();
         return $data;
     }
 

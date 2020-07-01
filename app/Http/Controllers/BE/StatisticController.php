@@ -3,21 +3,15 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
-use App\Constants\UserConstant;
-use App\Helpers\Functions;
-use App\Models\Category;
-use App\Models\Commission;
 use App\Models\Customer;
-use App\Models\GroupComment;
 use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Schedule;
+use App\Models\PaymentHistory;
 use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Services;
 
 class StatisticController extends Controller
 {
@@ -53,14 +47,19 @@ class StatisticController extends Controller
         }
 
         $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
+        $payment = PaymentHistory::search($input);
 
         $orders = Order::returnRawData($input);
         $orders2 = Order::returnRawData($input);
 
+        $arr = Services::getIdServiceType();
+        $input['list_booking'] = $arr;
+        $statusRevenues = Status::getRevenueSource($input);
+
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
-            'the_rest' => $orders->sum('the_rest'),
+            'payment' => $payment->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
         ];
@@ -79,9 +78,9 @@ class StatisticController extends Controller
 
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products'))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues'));
     }
 
     public function show($id)

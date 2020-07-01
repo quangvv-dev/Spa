@@ -62,8 +62,8 @@
     <div class="col">
         <div class="card  overflow-hidden">
             <div class="card-body text-center bg-gradient-indigo text-white">
-                <div class="h5">Số tiền còn nợ</div>
-                <div class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['the_rest'])}}</div>
+                <div class="h5">Đã thu trong kỳ</div>
+                <div class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment'])}}</div>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
                 </div>
@@ -179,4 +179,33 @@
     </div>
 </div>
 
+<div class="h4 text-center">BIỂU ĐỒ</div>
+<div class="row row-cards">
+    <div id="piechart-1"></div>
+</div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @foreach($statusRevenues as $k =>$statusRevenue)
+            ['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],
+            {{--['{{ $k }}', {{ (int)array_sum($statusRevenue) }}],--}}
+            @endforeach
+        ]);
+
+        var options = {
+            title: 'DOANH THU THEO NGUỒN'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
+
+        chart.draw(data, options);
+    }
+</script>
 {{--counter--}}
