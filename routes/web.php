@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('schedules/{id}', 'ScheduleController@ajaxUpdate');
         Route::get('statuses', 'StatusController@getList');
         Route::get('/status-schedules', 'ScheduleController@getList');
-        Route::get('categories', 'CategoryController@getListApi');
+        Route::get('categories', 'CategoryServiceController@getListApi');
         Route::put('orders/{id}', 'OrderController@updateCountDay')->name('order.update_count_day');
         Route::put('orders_sum/{id}', 'OrderController@sumCountDay')->name('order.sum_count_day');
         Route::get('orders/{id}', 'OrderController@getOrderById');

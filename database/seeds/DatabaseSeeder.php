@@ -83,7 +83,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-
 //        DB::table('elements')->insert([
 //            'title' => 'Thêm ',
 //            'type'  => 'event',
