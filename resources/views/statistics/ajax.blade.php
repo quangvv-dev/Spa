@@ -168,7 +168,7 @@
     <div class="col-3">
         <div class="card overflow-hidden">
             <div class="card-body text-center bg-gradient-teal text-white">
-                <div class="h5">Còn lại</div>
+                <div class="h5">Còn nợ</div>
                 <div class="h3 font-weight-bold mb-4 font-30"><span
                         class="">{{@number_format($services['the_rest'])}}</span></div>
                 <div class="progress progress-sm">
