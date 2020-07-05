@@ -89,4 +89,23 @@ class Category extends Model
 
         return $status;
     }
+
+    /**
+     * Lấy tổng doanh số danh mục
+     *
+     * @param $input
+     * @param $type
+     * @param $paginate
+     * @return mixed
+     */
+    public static function getTotalPrice($input, $type, $paginate)
+    {
+        $data = self::where('type', $type)->get()->map(function ($item) use ($input) {
+            $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
+            $order = Order::whereIn('member_id', $arr_customer)->whereBetween('created_at', getTime($input['data_time']))->with('orderDetails');//doanh so
+            $item->all_total = $order->sum('all_total');
+            return $item;
+        })->sortByDesc('all_total')->take($paginate);
+        return $data;
+    }
 }

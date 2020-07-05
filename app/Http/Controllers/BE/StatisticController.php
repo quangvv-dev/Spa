@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Status;
 use App\User;
@@ -12,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use App\Models\Services;
+use App\Models\CustomerGroup;
+use App\Models\Category;
 
 class StatisticController extends Controller
 {
@@ -56,12 +59,17 @@ class StatisticController extends Controller
         $input['list_booking'] = $arr;
         $statusRevenues = Status::getRevenueSource($input);
 
+        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
+        $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
+
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
             'payment' => $payment->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
+            'category_service' => $category_service,
+            'category_product' => $category_product,
         ];
         $products = [
             'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),

@@ -83,3 +83,21 @@ function chooseColorPHP($status)
     return $color ?: '';
 
 }
+
+/**
+ * Random màu
+ *
+ * @param int $length
+ *
+ * @return string
+ */
+function generateRandomColor($length = 6)
+{
+    $characters = '0123456789ABCDEF';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return '#' . $randomString;
+}

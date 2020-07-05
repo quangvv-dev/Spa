@@ -182,10 +182,23 @@
 
 <div class="h4 text-center">BIỂU ĐỒ</div>
 <div class="row row-cards">
-    <div id="piechart-1" style="margin-left: 15px"></div>
+    <div class="col-md-6">
+        <div id="piechart-1" style="margin-left: 15px"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="piechart-2"></div>
+        {{--<div id="barchart"style="overflow-x: scroll;overflow-y: hidden;"></div>--}}
+    </div>
+</div>
+<div class="row row-cards">
+    <div class="col-md-6">
+        <div id="piechart-3" style="margin-left: 15px"></div>
+    </div>
 </div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
@@ -203,7 +216,10 @@
         var options = {
             title: 'DOANH THU THEO NGUỒN',
             width: 500,
-            height: 450,
+            height: 300,
+            hAxis: {
+                width:200
+            }
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
@@ -211,4 +227,104 @@
         chart.draw(data, options);
     }
 </script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @foreach($data['category_service'] as $k =>$item)
+            ['{{$item->name}}', {{$item->all_total}}],
+            @endforeach
+        ]);
+
+        var options = {
+            title: 'TOP 5 NHÓM DICH VỤ CÓ DOANH THU CAO NHẤT',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @foreach($data['category_product'] as $k =>$item)
+            ['{{$item->service->name}}', {{$item->total}}],
+            @endforeach
+        ]);
+
+        var options = {
+            title: 'TOP 10 SẢN PHẨM BÁN CHẠY NHẤT',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-3'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+{{--<script>--}}
+    {{--google.charts.load('current', {callback: drawBasic, packages: ['corechart']});--}}
+    {{--var heights = {{count($data['category_service'])*50}}--}}
+    {{--function drawBasic() {--}}
+        {{--var data = google.visualization.arrayToDataTable([--}}
+                {{--@if(count($data['category_service']))--}}
+            {{--['Năm', 'Doanh số', {role: 'style'}],--}}
+                {{--@foreach($data['category_service'] as $item)--}}
+            {{--['{{$item->name}}', {{$item->all_total}}, '{{generateRandomColor()}}'],--}}
+                {{--@endforeach--}}
+                {{--@else--}}
+            {{--['Năm', 0, '#fffff'],--}}
+            {{--@endif--}}
+        {{--]);--}}
+
+        {{--var options = {--}}
+            {{--title: 'Top 5 nhóm DV có doanh số cao nhất',--}}
+            {{--height: heights,--}}
+            {{--width: '100%',--}}
+            {{--// titleFontSize:12,--}}
+            {{--chartArea: {--}}
+                {{--height: '100%',--}}
+                {{--left: 200,--}}
+                {{--top: 70,--}}
+            {{--},--}}
+            {{--colors: ['#62c9c3'],--}}
+            {{--hAxis: {--}}
+                {{--title: 'Doanh thu dich vu',--}}
+                {{--minValue: 0,--}}
+                {{--titleTextStyle: {--}}
+                    {{--fontSize: 66 // or the number you want--}}
+                {{--}--}}
+            {{--},--}}
+            {{--// vAxis: {--}}
+            {{--//     title: 'Khoá hoc',--}}
+            {{--//     titleTextStyle: {--}}
+            {{--//         color: "#000",--}}
+            {{--//         fontName: "sans-serif",--}}
+            {{--//         fontSize: 11,--}}
+            {{--//         bold: true,--}}
+            {{--//         italic: false--}}
+            {{--//     }--}}
+            {{--// }--}}
+        {{--};--}}
+
+        {{--var chart = new google.visualization.BarChart(document.getElementById('barchart'));--}}
+        {{--chart.draw(data, options);--}}
+    {{--};--}}
+    {{--// column chart--}}
+{{--</script>--}}
 {{--counter--}}

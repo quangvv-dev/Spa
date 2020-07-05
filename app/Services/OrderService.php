@@ -80,7 +80,6 @@ class OrderService
     public function find($id)
     {
         $data = $this->order->where('id', $id)->first();
-
         return $data;
     }
 
@@ -114,6 +113,7 @@ class OrderService
             'user_id'     => Auth::user()->id,
             'messages'    => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . $order->all_total,
         ]);
+
         return $order->delete();
     }
 
