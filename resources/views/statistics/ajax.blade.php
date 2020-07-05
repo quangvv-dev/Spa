@@ -195,6 +195,11 @@
         <div id="piechart-3" style="margin-left: 15px"></div>
     </div>
 </div>
+<div class="row row-cards">
+    <div class="col-md-12">
+        <div id="column" style="margin-left: 15px"></div>
+    </div>
+</div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -218,7 +223,7 @@
             width: 500,
             height: 300,
             hAxis: {
-                width:200
+                width: 200
             }
         };
 
@@ -266,7 +271,7 @@
         ]);
 
         var options = {
-            title: 'TOP 10 SẢN PHẨM BÁN CHẠY NHẤT',
+            title: 'TOP 5 SẢN PHẨM BÁN CHẠY NHẤT',
             width: 500,
             height: 300,
         };
@@ -277,54 +282,82 @@
     }
 </script>
 
+<script>
+    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
+
+    function drawBasic() {
+        var data = google.visualization.arrayToDataTable([
+            ['Ngày', 'Doanh số', 'Doanh thu'],
+                @foreach($data['revenue_month'] as $k =>$item)
+            ['{{substr($item->payment_date, -2)}}', {{$item->total}},{{$item->revenue}}],
+            @endforeach
+            // ['2020', 16, 22],
+        ]);
+        var options = {
+            title: 'Doanh số & doanh thu theo từng ngày',
+            width: '100%',
+            height: 500,
+            hAxis: {title: 'Các ngày trong (tuần || tháng)'},
+            seriesType: 'bars',
+            series: {1: {type: 'line'}},
+            bar: {groupWidth: '75%'},
+            isStacked: true,
+        };
+
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('column'));
+        chart.draw(data, options);
+    }
+</script>
+
 {{--<script>--}}
-    {{--google.charts.load('current', {callback: drawBasic, packages: ['corechart']});--}}
-    {{--var heights = {{count($data['category_service'])*50}}--}}
-    {{--function drawBasic() {--}}
-        {{--var data = google.visualization.arrayToDataTable([--}}
-                {{--@if(count($data['category_service']))--}}
-            {{--['Năm', 'Doanh số', {role: 'style'}],--}}
-                {{--@foreach($data['category_service'] as $item)--}}
-            {{--['{{$item->name}}', {{$item->all_total}}, '{{generateRandomColor()}}'],--}}
-                {{--@endforeach--}}
-                {{--@else--}}
-            {{--['Năm', 0, '#fffff'],--}}
-            {{--@endif--}}
-        {{--]);--}}
+{{--google.charts.load('current', {callback: drawBasic, packages: ['corechart']});--}}
+{{--var heights = {{count($data['category_service'])*50}}--}}
+{{--function drawBasic() {--}}
+{{--var data = google.visualization.arrayToDataTable([--}}
+{{--@if(count($data['category_service']))--}}
+{{--['Năm', 'Doanh số', {role: 'style'}],--}}
+{{--@foreach($data['category_service'] as $item)--}}
+{{--['{{$item->name}}', {{$item->all_total}}, '{{generateRandomColor()}}'],--}}
+{{--@endforeach--}}
+{{--@else--}}
+{{--['Năm', 0, '#fffff'],--}}
+{{--@endif--}}
+{{--]);--}}
 
-        {{--var options = {--}}
-            {{--title: 'Top 5 nhóm DV có doanh số cao nhất',--}}
-            {{--height: heights,--}}
-            {{--width: '100%',--}}
-            {{--// titleFontSize:12,--}}
-            {{--chartArea: {--}}
-                {{--height: '100%',--}}
-                {{--left: 200,--}}
-                {{--top: 70,--}}
-            {{--},--}}
-            {{--colors: ['#62c9c3'],--}}
-            {{--hAxis: {--}}
-                {{--title: 'Doanh thu dich vu',--}}
-                {{--minValue: 0,--}}
-                {{--titleTextStyle: {--}}
-                    {{--fontSize: 66 // or the number you want--}}
-                {{--}--}}
-            {{--},--}}
-            {{--// vAxis: {--}}
-            {{--//     title: 'Khoá hoc',--}}
-            {{--//     titleTextStyle: {--}}
-            {{--//         color: "#000",--}}
-            {{--//         fontName: "sans-serif",--}}
-            {{--//         fontSize: 11,--}}
-            {{--//         bold: true,--}}
-            {{--//         italic: false--}}
-            {{--//     }--}}
-            {{--// }--}}
-        {{--};--}}
+{{--var options = {--}}
+{{--title: 'Top 5 nhóm DV có doanh số cao nhất',--}}
+{{--height: heights,--}}
+{{--width: '100%',--}}
+{{--// titleFontSize:12,--}}
+{{--chartArea: {--}}
+{{--height: '100%',--}}
+{{--left: 200,--}}
+{{--top: 70,--}}
+{{--},--}}
+{{--colors: ['#62c9c3'],--}}
+{{--hAxis: {--}}
+{{--title: 'Doanh thu dich vu',--}}
+{{--minValue: 0,--}}
+{{--titleTextStyle: {--}}
+{{--fontSize: 66 // or the number you want--}}
+{{--}--}}
+{{--},--}}
+{{--// vAxis: {--}}
+{{--//     title: 'Khoá hoc',--}}
+{{--//     titleTextStyle: {--}}
+{{--//         color: "#000",--}}
+{{--//         fontName: "sans-serif",--}}
+{{--//         fontSize: 11,--}}
+{{--//         bold: true,--}}
+{{--//         italic: false--}}
+{{--//     }--}}
+{{--// }--}}
+{{--};--}}
 
-        {{--var chart = new google.visualization.BarChart(document.getElementById('barchart'));--}}
-        {{--chart.draw(data, options);--}}
-    {{--};--}}
-    {{--// column chart--}}
+{{--var chart = new google.visualization.BarChart(document.getElementById('barchart'));--}}
+{{--chart.draw(data, options);--}}
+{{--};--}}
+{{--// column chart--}}
 {{--</script>--}}
 {{--counter--}}

@@ -62,6 +62,10 @@ class StatisticController extends Controller
         $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
+        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'),\DB::raw('SUM(gross_revenue) AS revenue'))->whereBetween('payment_date', getTime($input['data_time']))
+            ->whereNotNull('payment_date')->orderBy('payment_date','asc')->groupBy('payment_date')->get();
+
+
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
@@ -70,6 +74,7 @@ class StatisticController extends Controller
             'customers' => $customers->count(),
             'category_service' => $category_service,
             'category_product' => $category_product,
+            'revenue_month' => $revenue_month,
         ];
         $products = [
             'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
