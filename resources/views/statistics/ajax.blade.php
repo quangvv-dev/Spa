@@ -266,7 +266,9 @@
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
                 @foreach($data['category_product'] as $k =>$item)
-            ['{{!empty($item->service)?$item->service->name:'Sản phẩm khác'}}', {{$item->total}}],
+                @if(!empty($item))
+                ['{{$item->service->name}}', {{$item->total}}],
+                @endif
             @endforeach
         ]);
 
