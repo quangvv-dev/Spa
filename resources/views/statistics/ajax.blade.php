@@ -294,7 +294,7 @@
             // ['2020', 16, 22],
         ]);
         var options = {
-            title: 'Doanh số & doanh thu theo từng ngày',
+            title: 'Doanh số & doanh thu theo từng ngày ⭐⭐⭐⭐',
             width: '100%',
             height: 500,
             hAxis: {title: 'Các ngày trong (tuần || tháng)'},
