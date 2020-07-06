@@ -266,7 +266,7 @@
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
                 @foreach($data['category_product'] as $k =>$item)
-            ['{{$item->service->name}}', {{$item->total}}],
+            ['{{!empty($item->service)?$item->service->name:'Sản phẩm khác'}}', {{$item->total}}],
             @endforeach
         ]);
 
@@ -294,7 +294,7 @@
             // ['2020', 16, 22],
         ]);
         var options = {
-            title: 'Doanh số & doanh thu theo từng ngày ⭐⭐⭐⭐',
+            title: 'Doanh số & doanh thu theo từng ngày',
             width: '100%',
             height: 500,
             hAxis: {title: 'Các ngày trong (tuần || tháng)'},
