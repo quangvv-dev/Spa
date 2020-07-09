@@ -39,7 +39,7 @@ class  JobQuery extends Command
      */
     public function handle()
     {
-        $input['data_time'] = 'THIS_MONTH';
+        $input['data_time'] = 'LAST_MONTH';
         $query = Order::returnRawData($input)->get();
         foreach ($query as $item) {
             Commission::where('order_id', $item->id)->update(['created_at' => $item->created_at]);
