@@ -48,6 +48,11 @@ class Order extends Model
         return $this->belongsTo(User::class, 'spa_therapisst_id', 'id');
     }
 
+    public function support()
+    {
+        return $this->belongsTo(User::class, 'spa_therapisst_id', 'id');
+    }
+
     public static function search($input)
     {
         $data = self::with('orderDetails');
@@ -280,7 +285,7 @@ class Order extends Model
 
     public static function returnRawData($input)
     {
-        $data = self::select('id', 'all_total', 'gross_revenue', 'the_rest')
+        $data = self::select('id', 'all_total', 'gross_revenue', 'the_rest', 'created_at')
             ->when(isset($input['data_time']), function ($query) use ($input) {
                 $query->when($input['data_time'] == 'TODAY' ||
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {

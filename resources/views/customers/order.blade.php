@@ -13,6 +13,7 @@
             <th class="text-white text-center">Tên SP</th>
             <th class="text-white text-center">Loại đơn</th>
             <th class="text-white text-center">Người thực hiện</th>
+            <th class="text-white text-center">Tư vấn viên</th>
             <th class="text-white text-center">Buổi còn lại</th>
             <th class="text-white text-center">Số tiền DH</th>
             <th class="text-white text-center">Đã thanh toán</th>
@@ -42,6 +43,7 @@
                     </td>
                     <td class="text-center order-type" data-id="{{ $order->id }}">{{ $order->name_type }}</td>
                     <td class="text-center">{{ @$customer->marketing->full_name }}</td>
+                    <td class="text-center">{{@getUser($order->support_id)->full_name}}</td>
                     <td class="text-center">{{ $order->count_day }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>

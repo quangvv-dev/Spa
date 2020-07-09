@@ -154,7 +154,7 @@
                     {{--nay</a>--}}
                     {{--</li>--}}
                     <li class="display pl5"><a data-time="THIS_MONTH"
-                                               class="btn_choose_time padding0-5 b-gray bg-gray active">Tháng
+                                               class="btn_choose_time padding0-5 b-gray active">Tháng
                             này</a></li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
                             trước</a></li>
@@ -172,8 +172,8 @@
     <script>
         $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
             let target = $(e.target).parent();
-            $('a.btn_choose_time').removeClass('border b-gray bg-gray');
-            $(target).find('.btn_choose_time').addClass('border b-gray bg-gray');
+            $('a.btn_choose_time').removeClass('border b-gray');
+            $(target).find('.btn_choose_time').addClass('border b-gray');
             const data_time = $(target).find('.btn_choose_time').data('time');
             console.log(data_time, 'data');
             $.ajax({

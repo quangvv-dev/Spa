@@ -8,7 +8,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     });
 
     Route::resource('status', 'StatusController');
-//    Route::get('demo/data-system', 'DBController@index');
+    Route::get('demo/data-system', 'DBController@index');
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
     Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryServiceController');
@@ -111,6 +111,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('products', 'OrderController@reportProduct');
         Route::get('sales', 'SalesController@index');
         Route::get('group-sale/{type}', 'SalesController@indexGroupCategory');
+        Route::get('commission', 'CommissionController@statistical');
+
     });
     Route::resource('tasks', 'TaskController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');

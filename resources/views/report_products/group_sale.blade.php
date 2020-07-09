@@ -1,92 +1,5 @@
 @extends('layout.app')
 @section('_style')
-    {{--<link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>--}}
-    <style>
-
-        .tableFixHead {
-            overflow-y: auto;
-            height: 800px;
-        }
-
-        .tableFixHead thead th {
-            position: sticky;
-            top: 0;
-        }
-
-        .tableFixHead thead .number_index th {
-            position: sticky;
-            top: 110px;
-        }
-
-        .tableFixHead thead .number_index2 th {
-            position: sticky;
-            top: 122px;
-        }
-
-        @media (min-width: 1681px) {
-            .tableFixHead thead .number_index th {
-                position: sticky;
-                top: 91px;
-            }
-        }
-
-        .tableFixHead thead .tr1 th {
-            position: sticky;
-            top: 36px;
-        }
-
-
-        .tableFixHead tbody tr {
-            position: sticky;
-            top: 0;
-        }
-
-        .tableFixHead tbody .fixed th {
-            position: sticky;
-            bottom: 0;
-        }
-
-        .tableFixHead tbody .fixed2 td {
-            position: sticky;
-            bottom: 46px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th {
-            background: #3b8fec;
-        }
-
-        .tableFixHead tbody .fixed th {
-            background: #3b8fec;
-        }
-
-        .tableFixHead tbody .fixed2 td {
-            background: #3b8fec;
-        }
-
-        .form-control {
-            font-size: 14px;
-        }
-
-        .table th, .text-wrap table th {
-            text-transform: unset;
-            color: white;
-        }
-
-        tr.number_index th {
-            font-size: 12px;
-        }
-        th.text-center {
-            font-size: 13px;
-        }
-        tr.fixed th {
-            font-size: 12px;
-        }
-    </style>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 
 @endsection
@@ -111,18 +24,6 @@
     <div class="col-md-12 col-lg-12 list-data">
         @include('report_products.ajax_group')
     </div>
-    {{--<div class="fixed-bottom">--}}
-        {{--<div class="list_task_footer col-md-12 padding menu-footer">--}}
-
-
-
-            {{--<div class="fl task_footer_box cancel_order">--}}
-                {{--<button class="btn btn-default fr ml5">--}}
-                    {{--<a href="http://spa.test/list-orders">Trở lại</a>--}}
-                {{--</button>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
 @endsection
 @section('_script')
     <script>
@@ -139,8 +40,8 @@
 
         $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
             let target = $(e.target).parent();
-            $('a.btn_choose_time').removeClass('border b-gray bg-gray');
-            $(target).find('.btn_choose_time').addClass('border b-gray bg-gray');
+            $('a.btn_choose_time').removeClass('border b-gray');
+            $(target).find('.btn_choose_time').addClass('border b-gray');
             const data_time = $(target).find('.btn_choose_time').data('time');
             $('#time_choose').val(data_time).change();
             const telesales = $('#telesales').val();

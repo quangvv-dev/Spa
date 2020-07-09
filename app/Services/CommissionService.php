@@ -10,6 +10,7 @@ namespace App\Services;
 
 
 use App\Models\Commission;
+use Carbon\Carbon;
 
 class CommissionService
 {
@@ -36,7 +37,8 @@ class CommissionService
                     'user_id'  => $data['user_id'][$key],
                     'percent'  => $data['percent'][$key],
                     'note'     => $data['note'][$key],
-                    'earn'     => $data['earn'][$key]
+                    'earn'     => $data['earn'][$key],
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s')
                 ]);
             } else {
                 $dataArr[] = [
@@ -44,7 +46,8 @@ class CommissionService
                     'percent'  => $data['percent'][$key],
                     'note'     => $data['note'][$key],
                     'order_id' => $orderId,
-                    'earn'     => $data['earn'][$key]
+                    'earn'     => $data['earn'][$key],
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s')
                 ];
             }
         }

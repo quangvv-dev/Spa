@@ -45,11 +45,7 @@ class OrderController extends Controller
      * @param OrderService $orderService
      * @param OrderDetailService $orderDetailService
      */
-    public function __construct(
-        OrderService $orderService,
-        OrderDetailService $orderDetailService,
-        TaskService $taskService
-    )
+    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService, TaskService $taskService)
     {
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
@@ -74,12 +70,13 @@ class OrderController extends Controller
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
         $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name', 'id');
         $title = 'Tạo đơn hàng';
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'services', 'products', 'combo'));
+        return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'products', 'combo'));
     }
 
     public function getInfoService(Request $request)
@@ -260,9 +257,7 @@ class OrderController extends Controller
 
     public function destroy(Request $request, $id)
     {
-
         $order = $this->orderService->delete($id);
-
         $request->session()->flash('error', 'Xóa đơn hàng thành công!');
     }
 
@@ -275,7 +270,6 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
-
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
@@ -445,6 +439,7 @@ class OrderController extends Controller
         $order = $this->orderService->find($id);
 
         $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name', 'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
@@ -455,7 +450,7 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.index',
-            compact('order', 'spaTherapissts', 'title', 'customers', 'customer', 'services', 'products', 'role_type', 'combo'));
+            compact('order', 'spaTherapissts', 'customer_support', 'title', 'customers', 'customer', 'services', 'products', 'role_type', 'combo'));
     }
 
     public function update(Request $request, $id)

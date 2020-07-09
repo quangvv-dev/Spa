@@ -18,6 +18,6 @@ class Commission extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

@@ -213,6 +213,10 @@
                             {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
                         </div>
                         <div class="col-md-2">
+                            {!! Form::label('support_id', 'người tư vấn (nếu có)') !!}
+                            {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
+                        </div>
+                        <div class="col-md-2">
                             <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
                                 {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
                                 <div class="wd-200 mg-b-30">

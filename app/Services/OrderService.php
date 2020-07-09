@@ -38,6 +38,7 @@ class OrderService
             'the_rest'          => $theRest,
             'role_type'         => $data['role_type'],
             'hsd'               => isset($data['hsd'])?$data['hsd']:null,
+            'support_id'        => isset($data['support_id'])?$data['support_id']:0,
             'count_day'         => $countDay,
             'type'              => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => $theRest,
@@ -68,7 +69,6 @@ class OrderService
             $data['gross_revenue'] = $model->all_total;
         }
         $model->update($data);
-
 
         $model->gross_revenue = number_format($model->gross_revenue);
         $model->all_total = number_format($model->all_total);
@@ -172,6 +172,7 @@ class OrderService
             'the_rest'          => $theRest,
             'role_type'         => $attibutes['role_type'],
             'hsd'               => isset($attibutes['hsd'])?$attibutes['hsd']:null,
+            'support_id'        => isset($attibutes['support_id'])?$attibutes['support_id']:0,
             'count_day'         => $attibutes['count_day'],
             'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])),

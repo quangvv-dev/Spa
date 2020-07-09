@@ -280,9 +280,11 @@
                                             <div class="card-header">
                                                 <h3 class="card-title">Danh sách đơn hàng bán</h3></br>
                                                 <div class="col relative">
-                                                    <a class="right btn btn-primary btn-flat" data-toggle="modal"
-                                                       data-target="#roleTypeModal"><i class="fa fa-plus-circle"></i>Thêm
-                                                        mới</a></div>
+                                                    @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
+                                                        <a class="right btn btn-primary btn-flat" data-toggle="modal"
+                                                           data-target="#roleTypeModal"><i class="fa fa-plus-circle"></i>Thêm mới</a>
+                                                    @endif
+                                                </div>
                                                 @include('order.role_type_modal')
 
 

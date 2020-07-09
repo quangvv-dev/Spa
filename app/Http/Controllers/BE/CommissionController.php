@@ -7,8 +7,10 @@ use App\Models\Commission;
 use App\Models\Order;
 use App\Services\CommissionService;
 use App\User;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class CommissionController extends Controller
 {
@@ -61,5 +63,24 @@ class CommissionController extends Controller
     {
         $this->commissionService->delete($id);
         $request->session()->flash('error', 'Xóa thành công!');
+    }
+
+    public function statistical(Request $request)
+    {
+        if (empty($request->data_time)) {
+            $request->merge(['data_time' => 'THIS_MONTH']);
+        }
+
+        $data = Commission::select('user_id', 'order_id', DB::raw('SUM(earn) AS total'))->groupBy('user_id')
+            ->with('users')->whereBetween('created_at', getTime($request->data_time))->get()->map(function ($item) use ($request) {
+                $orders = Order::select('all_total', 'gross_revenue')->where('id',$item->order_id)->whereBetween('created_at', getTime($request->data_time));
+                $item->all_total = $orders->sum('all_total');
+                $item->gross_revenue = $orders->sum('gross_revenue');
+                return $item;
+            })->sortByDesc('all_total');
+        if ($request->ajax()) {
+            return Response::json(view('report_products.ajax_commision', compact('data'))->render());
+        }
+        return view('report_products.index_commision', compact('data'));
     }
 }
