@@ -13,7 +13,7 @@ class  JobQuery extends Command
      *
      * @var string
      */
-    protected $signature = 'job:action';
+    protected $signature = 'job:query';
 
     /**
      * The console command description.
