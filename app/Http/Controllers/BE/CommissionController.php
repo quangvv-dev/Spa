@@ -96,7 +96,7 @@ class CommissionController extends Controller
     public function getCommissionWithUser(Request $request)
     {
         $data = Commission::where('user_id', $request->user_id)->whereBetween('created_at', getTime($request->data_time))
-            ->has('orders')->with('orders')->paginate(1);
+            ->has('orders')->with('orders')->paginate(StatusCode::PAGINATE_10);
         return response()->json($data);
     }
 }
