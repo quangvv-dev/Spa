@@ -1,7 +1,70 @@
 @extends('layout.app')
 @section('_style')
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
+    <style>
+        .bxh-container {
+            position: relative;
+            margin-bottom: 14%;
+            margin-top: 3%;
+        }
 
+        .item-tennv {
+            font-size: 12px;
+        }
+
+        .bxh .item-rank {
+            width: 6.5%;
+            height: 6.5%;
+            display: inline-block;
+            position: absolute;
+        }
+
+        .bxh .item-rank1 .king-sale {
+            display: block;
+        }
+
+        .bxh .item-rank .avatar-container {
+            border: 6px solid #f49000;
+        }
+
+        .bxh .item-rank .avatar-container {
+            display: inline-block;
+            height: 88px;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 50%;
+            border: 6px solid #53628e;
+        }
+
+        .bxh .item-rank .king-sale {
+            display: block;
+        }
+
+        .bxh .king-sale {
+            display: none;
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            margin-top: -40%;
+        }
+
+        .bxh .item-rank .item-info {
+            text-align: center;
+        }
+
+        .item-info1 {
+            color: #da0e35;
+            font-weight: 600;
+        }
+
+        .item-info {
+            text-align: center;
+        }
+
+        .page-main {
+            background-color: #fff;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="card">
@@ -87,7 +150,7 @@
                 let html_paginate = `<li class="page-item" aria-disabled="true" aria-label="« Previous">
                                 <a class="page-link" href="javascript:void(0)" data-url="` + pev + `" rel="next" aria-label="Next »">‹</a>
                             </li>
-                            <li class="page-item active" aria-current="page"><span class="page-link">`+data.current_page+`</span></li>
+                            <li class="page-item active" aria-current="page"><span class="page-link">` + data.current_page + `</span></li>
                             <li class="page-item">
                                 <a class="page-link" href="javascript:void(0)" data-url="` + next + `" rel="next" aria-label="Next »">›</a>
                             </li>`;
@@ -123,7 +186,7 @@
                 let html_paginate = `<li class="page-item" aria-disabled="true" aria-label="« Previous">
                                 <a class="page-link" href="javascript:void(0)" data-url="` + pev + `" rel="next" aria-label="Next »">‹</a>
                             </li>
-                            <li class="page-item active" aria-current="page"><span class="page-link">`+data.current_page+`</span></li>
+                            <li class="page-item active" aria-current="page"><span class="page-link">` + data.current_page + `</span></li>
                             <li class="page-item">
                                 <a class="page-link" href="javascript:void(0)" data-url="` + next + `" rel="next" aria-label="Next »">›</a>
                             </li>`;

@@ -85,7 +85,8 @@ class CommissionController extends Controller
                 $item->all_total = $orders->sum('all_total');
                 $item->gross_revenue = $orders->sum('gross_revenue');
                 return $item;
-            })->sortByDesc('all_total');
+            })->sortByDesc('total');
+
         if ($request->ajax()) {
             return Response::json(view('report_products.ajax_commision', compact('data'))->render());
         }

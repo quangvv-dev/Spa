@@ -1,8 +1,30 @@
+<div class="bxh bxh-container" style="border:1px solid transparent;">
+    @php $int =0;$i =0; @endphp
+    @foreach($data as $value)
+        @php $int++ ;
+        if ($int>=10)
+        @endphp
+        <div {{$int>10?'style=display:none':''}} class="item-rank" style="right: {{$int*9}}%;top: {{$int*2}}%">
+            <div class="king-sale">
+                <img src="{{$int==1?'https://pushsale.vn/Portals/_default/Skins/APP/images/bxh/bxh2.png':''}}">
+            </div>
+            <div class="avatar-container  blink">
+                <img class="avatar-img" src="{{asset(@$value->users->avatar)}}">
+            </div>
+            <div class="item-info {{'item-info'.($int)}}">
+                <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
+                <div class="item-tennv">{{@$value->users->full_name}}</div>
+                <div class="">{{number_format($value->total)}}</div>
+            </div>
+        </div>
+    @endforeach
+
+</div>
+
 <div class="table-responsive">
     <table class="table card-table table-center text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-white">STT</th>
             <th class="text-white text-center">Nhân viên</th>
             <th class="text-white text-center">Hoa hồng</th>
             <th class="text-white text-center">Tổng doanh số đơn hàng</th>
@@ -13,7 +35,6 @@
         @if(@count($data))
             @foreach($data as $k => $s)
                 <tr>
-                    <th scope="row">{{$k+1}}</th>
                     <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s->user_id}}">
                             <i class="fas fa-info-circle"></i>
                             {{@$s->users->full_name}}</a>
