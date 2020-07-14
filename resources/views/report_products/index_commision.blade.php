@@ -21,9 +21,13 @@
                 </ul>
             </div>
         </div>
+        <input type="hidden" id="time_choose" value="THIS_MONTH">
+        <input type="hidden" id="user_id" value="0">
+        <input type="hidden" id="user_id" value="0">
         <div id="registration-form">
             @include('report_products.ajax_commision')
         </div>
+        @include('report_products.commision_modal')
     </div>
 @endsection
 @section('_script')
@@ -39,6 +43,16 @@
             });
         }
 
+        function urlParam(name, url) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
+            console.log(results, 'results')
+            if (results == null) {
+                return null;
+            } else {
+                return results[1] || 0;
+            }
+        }
+
         $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
             let target = $(e.target).parent();
             $('a.btn_choose_time').removeClass('border b-gray');
@@ -47,6 +61,78 @@
             $('#time_choose').val(data_time).change();
             searchAjax({data_time: data_time})
         });
+
+        $(document).on('click', '#click_detail', function (e) {
+            let id = $(this).data('id');
+            $('#user_id').val(id).change();
+            let time = $('#time_choose').val();
+            var html = "";
+            $.ajax({
+                url: '/ajax/commission',
+                method: "get",
+                data: {user_id: id, data_time: time},
+            }).done(function (data) {
+                $.each(data.data, function (index, value) {
+                    html += ` <tr>
+                    <th scope="row">` + index + `</th>
+                    <td class="text-center">` + value.orders.created_at + `</td>
+                    <td class="text-center">` + value.earn.toLocaleString('ja-JP') + `</td>
+                    <td class="text-center">` + value.orders.all_total.toLocaleString('ja-JP') + `</td>
+                    <td class="text-center">` + value.orders.gross_revenue.toLocaleString('ja-JP') + `</td>
+                </tr>`;
+                });
+
+                let next = urlParam('page', data.next_page_url);
+                let pev = urlParam('page', data.prev_page_url);
+                let html_paginate = `<li class="page-item" aria-disabled="true" aria-label="« Previous">
+                                <a class="page-link" href="javascript:void(0)" data-url="` + pev + `" rel="next" aria-label="Next »">‹</a>
+                            </li>
+                            <li class="page-item active" aria-current="page"><span class="page-link">`+data.current_page+`</span></li>
+                            <li class="page-item">
+                                <a class="page-link" href="javascript:void(0)" data-url="` + next + `" rel="next" aria-label="Next »">›</a>
+                            </li>`;
+                $('.pagination').html(html_paginate);
+                $('#get_data').html(html);
+                $('#myModal').modal('show');
+            });
+        })
+
+        $(document).on('click', '.page-link', function (e) {
+            let page = $(this).data('url');
+            let user_id = $('#user_id').val();
+            let time = $('#time_choose').val();
+
+            var html = "";
+            $.ajax({
+                url: '/ajax/commission',
+                method: "get",
+                data: {page: page, user_id: user_id, data_time: time},
+            }).done(function (data) {
+                $.each(data.data, function (index, value) {
+                    html += ` <tr>
+                    <th scope="row">` + index + `</th>
+                    <td class="text-center">` + value.orders.created_at + `</td>
+                    <td class="text-center">` + value.earn.toLocaleString('ja-JP') + `</td>
+                    <td class="text-center">` + value.orders.all_total.toLocaleString('ja-JP') + `</td>
+                    <td class="text-center">` + value.orders.gross_revenue.toLocaleString('ja-JP') + `</td>
+                </tr>`;
+                });
+
+                let next = urlParam('page', data.next_page_url);
+                let pev = urlParam('page', data.prev_page_url);
+                let html_paginate = `<li class="page-item" aria-disabled="true" aria-label="« Previous">
+                                <a class="page-link" href="javascript:void(0)" data-url="` + pev + `" rel="next" aria-label="Next »">‹</a>
+                            </li>
+                            <li class="page-item active" aria-current="page"><span class="page-link">`+data.current_page+`</span></li>
+                            <li class="page-item">
+                                <a class="page-link" href="javascript:void(0)" data-url="` + next + `" rel="next" aria-label="Next »">›</a>
+                            </li>`;
+                $('.pagination').html(html_paginate);
+                $('#get_data').html(html);
+                $('#myModal').modal('show');
+            })
+        })
+
     </script>
 @endsection
 

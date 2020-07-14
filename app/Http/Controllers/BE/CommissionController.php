@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Commission;
 use App\Models\Order;
@@ -65,6 +66,13 @@ class CommissionController extends Controller
         $request->session()->flash('error', 'Xóa thành công!');
     }
 
+    /**
+     * Thong ke hoa hong nhan vien
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
     public function statistical(Request $request)
     {
         if (empty($request->data_time)) {
@@ -73,7 +81,7 @@ class CommissionController extends Controller
 
         $data = Commission::select('user_id', 'order_id', DB::raw('SUM(earn) AS total'))->groupBy('user_id')
             ->with('users')->whereBetween('created_at', getTime($request->data_time))->get()->map(function ($item) use ($request) {
-                $orders = Order::select('all_total', 'gross_revenue')->where('id',$item->order_id)->whereBetween('created_at', getTime($request->data_time));
+                $orders = Order::select('all_total', 'gross_revenue')->where('id', $item->order_id)->whereBetween('created_at', getTime($request->data_time));
                 $item->all_total = $orders->sum('all_total');
                 $item->gross_revenue = $orders->sum('gross_revenue');
                 return $item;
@@ -82,5 +90,12 @@ class CommissionController extends Controller
             return Response::json(view('report_products.ajax_commision', compact('data'))->render());
         }
         return view('report_products.index_commision', compact('data'));
+    }
+
+    public function getCommissionWithUser(Request $request)
+    {
+        $data = Commission::where('user_id', $request->user_id)->whereBetween('created_at', getTime($request->data_time))
+            ->has('orders')->with('orders')->paginate(1);
+        return response()->json($data);
     }
 }

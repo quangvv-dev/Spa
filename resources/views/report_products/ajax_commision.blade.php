@@ -14,7 +14,10 @@
             @foreach($data as $k => $s)
                 <tr>
                     <th scope="row">{{$k+1}}</th>
-                    <td class="text-center">{{@$s->users->full_name}}</td>
+                    <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s->user_id}}">
+                            <i class="fas fa-info-circle"></i>
+                            {{@$s->users->full_name}}</a>
+                    </td>
                     <td class="text-center">{{@number_format($s->total)}}</td>
                     <td class="text-center">{{@number_format($s->all_total)}}</td>
                     <td class="text-center">{{@number_format($s->gross_revenue)}}</td>

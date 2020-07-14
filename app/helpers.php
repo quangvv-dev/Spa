@@ -101,3 +101,7 @@ function generateRandomColor($length = 6)
     }
     return '#' . $randomString;
 }
+
+//if (!function_exists('getPaging')) {
+//
+//}

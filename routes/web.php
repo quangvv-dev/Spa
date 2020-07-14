@@ -8,7 +8,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     });
 
     Route::resource('status', 'StatusController');
-//    Route::get('demo/data-system', 'DBController@index');
+//    Route::get('demo/data-system', 'DBController@index');commission
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
     Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryServiceController');
@@ -73,6 +73,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::any('updateColor', 'StatusController@updateColor');
         Route::get('count-customer', 'SmsController@getCountCustomer');//sms count customer
         Route::get('settings', 'SettingController@store');
+        Route::get('commission', 'CommissionController@getCommissionWithUser');
+
     });
 
     Route::resource('rules', 'RuleController');//Automation
