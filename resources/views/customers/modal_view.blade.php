@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="modal-content" >
             <div class="modal-header">
-                <h4>Trao đổi nhanh</h4>
+                <h4 style="font-weight: 900;color: #0fa2e8;">Trao đổi nhanh</h4>
                 <i style="color: red"> </i>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
