@@ -1,5 +1,5 @@
 <div class="modal fade" id="view_chat" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" >
             <div class="modal-header">

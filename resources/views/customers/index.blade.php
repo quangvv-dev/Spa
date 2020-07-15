@@ -122,7 +122,7 @@
                     html += `<div class="row" style="padding-bottom: 10px;">
                     <div class="chat-flash col-md-12">
                         <div class="white-space" style="display: flex; align-items: center;justify-content: space-around;">
-                            <img width="90" height="90" class="fl mr10 a40 border"
+                            <img width="50" height="50" class="fl mr10 a40 border"
                                  src="{{asset('default/no-image.png')}}" style="border-radius:100%">
 
                             <div class="mt10 pb10" style="height:86px ; color:black">
@@ -143,21 +143,18 @@
                             </a>
                         </div>
 
-                         <div class="row required {{ $errors->has('status_id') ? 'has-error' : '' }} "style="margin-top: 20px;">
-                         <div class="col-md-6">
+                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }} "style="margin-top: 20px;">
                             {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}` +
-                        `<select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `" style="font-size: 14px;margin-left: 2.5px;">`;
+                        `<select name="status_id" class="form-control status-result select2" data-id="` + data.customer.id + `" style="font-size: 14px;">`;
                     data.status.forEach(function (item) {
                         html += `<option value="` + item.id + `"  ` + (item.id === data.customer.status_id ? "selected" : "") + `>` + item.name + `</option>`;
                     });
-                    html += `</select></div>`;
+                    html += `</select>`;
                     html += `
-                 <div class="col-md-6">
-                 <div class="row mt10" style="color:black;"> <div class="col-md-6">Nguồn khách hàng:</div> <div class="col-md-6 word-break">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-6">Liên hệ lần cuối:</div> <div class="col-md-6 word-break">` + (data.last_contact ? data.last_contact : "") + `</div> </div>
-                <div class="row mt10" style="color:black;"> <div class="col-md-6">Giá trị:</div> <div class="col-md-6 word-break" style="color:orange;">` + data.order_revenue + ` VND</div> </div>
-                 </div>
-                 </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Nguồn khách hàng:</div> <div class="col-md-7 word-break">` + (data.customer.source_customer ? data.customer.source_customer.name : "") + `</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Liên hệ lần cuối:</div> <div class="col-md-7 word-break">` + (data.last_contact ? data.last_contact : "") + `</div> </div>
+                <div class="row mt10" style="color:black;"> <div class="col-md-5">Giá trị:</div> <div class="col-md-7 word-break" style="color:orange;">` + data.order_revenue + ` VND</div> </div>
+                </div>
                         <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                             {!! Form::textArea('messages', null, array('class' => 'form-control message', 'rows'=> 3, 'required' => 'required')) !!}
                         <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
