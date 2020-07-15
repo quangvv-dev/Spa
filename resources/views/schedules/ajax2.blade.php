@@ -1,5 +1,9 @@
 <div class="">
-    {{--    <a class="col spin" style="display: flex;justify-content: center;"><i class="fa fa-2x fa-spinner fa-spin"></i></a>--}}
+    <style>
+        label.required {
+            font-size: 14px;
+        }
+    </style>
     <div class="card">
         <div class="card-status bg-primary br-tr-3 br-tl-3"></div>
         <div class="card-body">
@@ -138,7 +142,7 @@
                 </script>
 
                 <div class="modal fade" id="" role="dialog">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-md">
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">
@@ -160,10 +164,6 @@
                                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
                                         <input class="form-control {{'date-'.$item->id}}" id="update_date" data-toggle="datepicker" value="" name="date">
                                     </div>
-                                    <div class="col-md-4 col-xs-12">
-                                        {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
-                                        {!! Form::select('person_action',@$staff,null, array('id'=>'action','class' => 'form-control','required'=>true,'disabled'=>true)) !!}
-                                    </div>
                                     <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
                                         {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
                                         {!! Form::text('time_from', null, array('class' => 'form-control','id'=>'update_time1')) !!}
@@ -176,9 +176,13 @@
                                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                                         {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
                                         {!! Form::select('category_id',$category, null, array('class' => 'form-control','id'=>'update_category'))!!}
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+                                        {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
+                                        {!! Form::select('person_action',@$staff,null, array('id'=>'action','class' => 'form-control','required'=>true,'disabled'=>true)) !!}
                                     </div>
                                     <div class="col-md-12 ">
                                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
