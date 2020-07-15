@@ -1,7 +1,7 @@
 <div class="modal fade" id="view_chat" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <!-- Modal content-->
-        <div class="modal-content" style="height: 25%">
+        <div class="modal-content" >
             <div class="modal-header">
                 <h4>Trao đổi nhanh</h4>
                 <i style="color: red"> </i>

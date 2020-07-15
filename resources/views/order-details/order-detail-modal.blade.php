@@ -7,7 +7,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <div>Xem nhanh đơn hàng</div>
+                <h4 style="font-weight: 900;color: #0fa2e8;">Xem nhanh đơn hàng</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body list-order-detail">

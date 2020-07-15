@@ -136,59 +136,47 @@
                         ;
                     })
                 </script>
-                {{--                @foreach($docs as $item)--}}
 
                 <div class="modal fade" id="" role="dialog">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <!-- Modal content-->
-                        <div class="modal-content" style="height: 95%">
+                        <div class="modal-content">
                             <div class="modal-header">
-                                <h4>Cập nhật lịch hẹn</h4>
+                                <h4 style="font-weight: 900;color: #0fa2e8;">Cập nhật lịch hẹn</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                {{--                                    {!! Form::open(array('url' => url('schedules/'.$item->user_id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate','autocomplete'=>'off')) !!}--}}
-
                                 <div class="row">
                                     {!! Form::hidden('id',null, array('class' => 'form-control','id'=>'update_id')) !!}
-                                    {{--                                        {!! Form::hidden('id', $item->user_id, array('class' => 'form-control','id'=>'update_user_id')) !!}--}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         {!! Form::label('full_name', 'Khách Hàng', array('class' => ' required')) !!}
-                                        <input class="form-control" readonly
-                                               value="" id="full_name">
+                                        <input class="form-control" readonly value="" id="full_name">
                                     </div>
-                                    <div class="col-md-6 col-xs-12">
+                                    <div class="col-md-4 col-xs-12">
                                         {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                                        <input class="form-control" readonly value=""
-                                               id="phone">
+                                        <input class="form-control" readonly value="" id="phone">
                                     </div>
-                                    <div class="col-md-6 col-xs-12">
+                                    <div class="col-md-4 col-xs-12">
                                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
-                                        <input class="form-control {{'date-'.$item->id}}" id="update_date"
-                                               data-toggle="datepicker" value=""
-                                               name="date">
+                                        <input class="form-control {{'date-'.$item->id}}" id="update_date" data-toggle="datepicker" value="" name="date">
                                     </div>
-                                    <div class="col-md-6 col-xs-12">
+                                    <div class="col-md-4 col-xs-12">
                                         {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
                                         {!! Form::select('person_action',@$staff,null, array('id'=>'action','class' => 'form-control','required'=>true,'disabled'=>true)) !!}
                                     </div>
-                                    <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
-                                         data-align="top"
-                                         data-autoclose="true">
+                                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
                                         {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
                                         {!! Form::text('time_from', null, array('class' => 'form-control','id'=>'update_time1')) !!}
                                     </div>
-                                    <div class="col-md-6 col-xs-12 clockpicker" data-placement="left"
-                                         data-align="top"
-                                         data-autoclose="true">
+                                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
                                         {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
                                         {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2')) !!}
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                                         {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-4">
                                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
                                         {!! Form::select('category_id',$category, null, array('class' => 'form-control','id'=>'update_category'))!!}
                                     </div>
@@ -204,7 +192,6 @@
                                            href="javascript:"><i class="fa fa-arrow-"></i>Xoá lịch hẹn</a>
                                     </div>
                                 </div>
-                                {{--                                    {{ Form::close() }}--}}
                             </div>
                         </div>
                     </div>
