@@ -85,14 +85,11 @@
                         <li>
                             {{--                            <a href="{!! url('statistics')!!}">Nhân viên</a>--}}
                         </li>
-                        {{--<li>--}}
-                            {{--<a href="#">Chiến dịch</a>--}}
-                        {{--</li>--}}
-                        {{--                        <li>--}}
-                        {{--                            <a href="{{url('report/products')}}">Sản phẩm</a>--}}
-                        {{--                        </li>--}}
                         <li>
-                            {{--<a href="{{route('tasks.index')}}">Công việc</a>--}}
+                            <a href="{{route('tasks.index')}}">Công việc</a>
+                            {{--<a href="{{url('report/products')}}">Sản phẩm</a>--}}
+                        </li>
+                        <li>
                             <a href="{{url('report/commission')}}">Hoa hồng nhân viên</a>
                         </li>
                         <li>

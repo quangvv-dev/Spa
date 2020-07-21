@@ -89,10 +89,10 @@ class Task extends Model
         if ($this->attributes['priority'] == 3) return 'Thấp';
     }
 
-    public function getDateFromAttribute()
-    {
-        return Carbon::parse($this->attributes['date_from'])->format('d-m-Y');
-    }
+//    public function getDateFromAttribute()
+//    {
+//        return Carbon::parse($this->attributes['date_from'])->format('d-m-Y');
+//    }
 
     public function getDateToAttribute()
     {
@@ -111,6 +111,9 @@ class Task extends Model
                     })
                     ->when(isset($input['name']), function ($query) use ($input) {
                         $query->where('name', 'LIKE', '%'. $input['name'] . '%');
+                    })
+                    ->when(isset($input['status']), function ($query) use ($input) {
+                        $query->whereIn('task_status_id', $input['status']);
                     })
                     ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
                         $query->where('type', $input['type']);
@@ -135,5 +138,10 @@ class Task extends Model
     public function taskStatus()
     {
         return $this->belongsTo(TaskStatus::class, 'task_status_id', 'id');
+    }
+
+    public function getDateScheduleAttribute()
+    {
+        return Carbon::parse($this->attributes['date_from'])->format('d/m/Y');
     }
 }

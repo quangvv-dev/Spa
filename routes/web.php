@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('count-customer', 'SmsController@getCountCustomer');//sms count customer
         Route::get('settings', 'SettingController@store');
         Route::get('commission', 'CommissionController@getCommissionWithUser');
+        Route::put('tasks/{id}', 'TaskController@ajaxUpdate');
 
     });
 

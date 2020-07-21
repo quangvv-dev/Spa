@@ -313,30 +313,30 @@ class OrderController extends Controller
                         }
                     }
                 }
-                $jobs = Functions::checkRuleJob($config);
-                if (count($jobs)) {
-                    foreach ($jobs as $job) {
-                        $day = $job->configs->delay_value;
-                        $sms_content = $job->configs->sms_content;
-                        $input = [
-                            'customer_id' => @$check3->order->customer->id,
-                            'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
-                            'time_from' => '07:00',
-                            'date_to' => Carbon::now()->addDays($day)->format('Y-m-d'),
-                            'time_to' => '16:00',
-                            'code' => 'CV-CSKH',
-                            'user_id' => @$check3->order->customer->telesales_id,
-                            'all_day' => 'on',
-                            'priority' => 1,
-                            'amount_of_work' => 1,
-                            'type' => 2,
-                            'sms_content' => Functions::vi_to_en($sms_content),
-                            'name' => 'Công việc chăm sóc khách hàng',
-                            'description' => 'Bạn có công việc CSKH sau' . $day . 'ngày sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
-                        ];
-                        $this->taskService->create($input);
-                    }
-                }
+//                $jobs = Functions::checkRuleJob($config);
+//                if (count($jobs)) {
+//                    foreach ($jobs as $job) {
+//                        $day = $job->configs->delay_value;
+//                        $sms_content = $job->configs->sms_content;
+//                        $input = [
+//                            'customer_id' => @$check3->order->customer->id,
+//                            'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+//                            'time_from' => '07:00',
+//                            'date_to' => Carbon::now()->addDays($day)->format('Y-m-d'),
+//                            'time_to' => '16:00',
+//                            'code' => 'CV-CSKH',
+//                            'user_id' => @$check3->order->customer->telesales_id,
+//                            'all_day' => 'on',
+//                            'priority' => 1,
+//                            'amount_of_work' => 1,
+//                            'type' => 2,
+//                            'sms_content' => Functions::vi_to_en($sms_content),
+//                            'name' => 'Công việc chăm sóc khách hàng',
+//                            'description' => 'Bạn có công việc CSKH sau' . $day . 'ngày sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
+//                        ];
+//                        $this->taskService->create($input);
+//                    }
+//                }
             }
             return $order; //comment
         } catch (\Exception $e) {

@@ -40,6 +40,7 @@ class TaskService
         $data['task_status_id'] = 1;
         unset($data['all_day']);
         $handleData = $this->data($data);
+//        dd($handleData,'HandData');
         $task = $this->task->fill($handleData);
         $task->save();
         return $task;
@@ -58,10 +59,11 @@ class TaskService
 
     public function data(array $data)
     {
-        $data['date_from'] = isset($data['date_from']) ? Functions::yearMonthDay($data['date_from']) : '';
-        $data['date_to'] = isset($data['date_to']) ? Functions::yearMonthDay($data['date_to']) : '';
+        if (isset($data['date_from'])) {
+            $data['date_from'] = Functions::yearMonthDay($data['date_from']);
+        }
+//        $data['date_to'] = isset($data['date_to']) ? Functions::yearMonthDay($data['date_to']) : '';
         $data['taskmaster_id'] = Auth::user()->id;
-
         $data['code'] = $this->genderCode();
 
         if (!empty($data['file_document'])) {
@@ -74,7 +76,7 @@ class TaskService
 
     public function genderCode()
     {
-        $today = Carbon::parse(Carbon::now())->format('Y-m');
+        $today = Carbon::parse(Carbon::now())->format('Y-m-d');
 
         $task = $this->task->count() + 1;
 
@@ -106,7 +108,6 @@ class TaskService
 
         $task = $this->find($id);
         $data['code'] = $task->code;
-
         $task->update($data);
 
         return $task;

@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Services\TaskService;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -35,35 +36,23 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
+        $now = Carbon::now()->format('Y-m-d');
+        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf2';
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
-//        $customers = Customer::pluck('full_name', 'id');
-        $customers = [];
-        $departments = Department::pluck('name', 'id');
-        $priority = Task::PRIORITY;
-        $tasks = Task::getAll($input);
-        $taskStatus = TaskStatus::getAll($input);
+        $user = $request->user ?: 0;
+        $docs = Task::getAll($input);
+        $taskStatus = TaskStatus::getAll($input)->pluck('name', 'id')->toArray();
 
-        if ($request->ajax()) return Response::json(view('tasks.ajax', compact(
-            'type',
-            'users',
-            'customers',
-            'priority',
-            'tasks',
-            'taskStatus',
-            'departments'
-        ))->render());
-
+        if ($request->ajax()) {
+            return $docs;
+        }
 
         return view('tasks.index', compact(
-            'type',
+            'type', 'now', 'user',
             'users',
-            'customers',
-            'priority',
-            'tasks',
-            'taskStatus',
-            'departments'
+            'docs',
+            'taskStatus'
         ));
     }
 
@@ -87,6 +76,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $input = $request->except('user_id2');
+//        dd($input);
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
@@ -103,7 +93,8 @@ class TaskController extends Controller
      */
     public function storeCustomer(Request $request)
     {
-        $input = $request->except('user_id2');
+        $input = $request->except('user_id2', 'status_name');
+//        dd($input);
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
@@ -156,7 +147,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $input = $request->except('user_id2');
+        $input = $request->except('user_id2', 'status_name');
 
         $task = $this->taskService->update($input, $id);
         $task->users()->sync($request->user_id2);
@@ -181,8 +172,21 @@ class TaskController extends Controller
         $taskStatus = TaskStatus::where('name', 'Hoàn thành')->first();
         $input = $request->all();
         $input['task_status_id'] = $taskStatus->id;
-
         $task = $this->taskService->find($request->id);
         $task->update($input);
+    }
+
+    /**
+     * Update task
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function ajaxUpdate(Request $request, $id)
+    {
+        $input = $request->except('user_id2', 'status_name');
+        $task = $this->taskService->update($input, $id);
+        return $task;
     }
 }

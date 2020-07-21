@@ -59,7 +59,7 @@ class ScheduleController extends Controller
                 ->orwhere('code', 'like', '%' . $request->search . '%')
                 ->orwhere('parent_id', 'like', '%' . $request->search . '%');
         }
-        $docs = $docs->paginate(10);
+        $docs = $docs->paginate(StatusCode::PAGINATE_10);
         $title = 'Danh sách lịch hẹn';
         if ($request->ajax()) {
             return Response::json(view('schedules.ajax', compact('docs', 'title', 'id'))->render());

@@ -1,6 +1,6 @@
 <!-- The Modal -->
 <div class="modal fade" id="task">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             @if (isset($task))
                 {!! Form::model($task, array('url' => url('tasks/'.$task->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
@@ -8,6 +8,7 @@
                 {!! Form::open(array('url' => route('tasks.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="modal-body">
+                <h4>Tạo mới công việc</h4>
                 <div class="col row">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
@@ -32,6 +33,21 @@
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
+                            {!! Form::label('date_from', 'Ngày hẹn(Từ)', array('class' => ' required')) !!}
+                            {!! Form::text('date_from', null, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}
+                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                        {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
+                        {!! Form::text('time_from', null, array('class' => 'form-control','id'=>'update_time1')) !!}
+                    </div>
+                    <div class="col-md-2 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
+                        {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2')) !!}
+                    </div>
                     {{--<div class="col-xs-12 col-md-4">--}}
                         {{--<div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">--}}
                             {{--{!! Form::label('customer_id', 'Khách hàng liên quan', array('class' => ' required')) !!}--}}
@@ -41,20 +57,9 @@
                     {{--</div>--}}
                 </div>
                 <div class="col row">
-                    <div class="col-xs-12 col-md-3">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('date_from', 'Ngày hẹn(Từ)', array('class' => ' required')) !!}
-                            {!! Form::text('date_from', null, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-xs-12 clockpicker" data-placement="left"
-                         data-align="top"
-                         data-autoclose="true">
-                        {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
-                        {!! Form::text('time_from', null, array('class' => 'form-control','id'=>'update_time1')) !!}
-                    </div>
-                    <div class="col-md-1 no-padd tc mt5 font20"><i class="fa fa-arrow-right"></i></div>
+
+
+                    {{--<div class="col-md-1 no-padd tc mt5 font20"><i class="fa fa-arrow-right"></i></div>--}}
                     {{--<div class="col-xs-12 col-md-3">--}}
                         {{--<div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">--}}
                             {{--{!! Form::label('date_to', 'Ngày hẹn(Tới)', array('class' => ' required')) !!}--}}
@@ -62,14 +67,11 @@
                             {{--<span class="help-block">{{ $errors->first('name', ':message') }}</span>--}}
                         {{--</div>--}}
                     {{--</div>--}}
-                    <div class="col-md-2 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
-                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
-                        {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2')) !!}
-                    </div>
-                    <div class="col-md-1 col-xs-12">
-                        {!! Form::label('all_day', 'Cả ngày', array('class' => ' required')) !!}
-                        {!! Form::checkbox('all_day', null, null) !!}
-                    </div>
+
+                    {{--<div class="col-md-1 col-xs-12">--}}
+                        {{--{!! Form::label('all_day', 'Cả ngày', array('class' => ' required')) !!}--}}
+                        {{--{!! Form::checkbox('all_day', null, null) !!}--}}
+                    {{--</div>--}}
                 </div>
                 <div class="col row">
                     <div class="col-md-12 col-xs-12">
@@ -83,7 +85,7 @@
                     {{--</div>--}}
                 {{--</div>--}}
                 <div class="col row">
-                    <div class="col-xs-12 col-md-3">
+                    <div class="col-xs-12 col-md-5">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('user_id', 'Người thực hiện', array('class' => ' required')) !!}
                             {!! Form::select('user_id', $users, null, array('class' => 'form-control select2', 'required' => true, 'placeholder'=>'Người thực hiện',)) !!}
@@ -97,7 +99,7 @@
                             {{--<span class="help-block">{{ $errors->first('name', ':message') }}</span>--}}
                         {{--</div>--}}
                     {{--</div>--}}
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-xs-12 col-md-7">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('users', 'Người tham gia', array('class' => ' required')) !!}
                             {!! Form::select('user_id2[]', $users, null, array('class' => 'form-control select2', 'multiple' => 'multiple' , 'data-placeholder'=>'Người tham gia')) !!}
