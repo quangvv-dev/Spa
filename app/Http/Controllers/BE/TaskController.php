@@ -36,8 +36,9 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
+//        dd($input['status']);
         $now = Carbon::now()->format('Y-m-d');
-        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf2';
+        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
         $user = $request->user ?: 0;
@@ -76,7 +77,6 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $input = $request->except('user_id2');
-//        dd($input);
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
@@ -94,7 +94,6 @@ class TaskController extends Controller
     public function storeCustomer(Request $request)
     {
         $input = $request->except('user_id2', 'status_name');
-//        dd($input);
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);

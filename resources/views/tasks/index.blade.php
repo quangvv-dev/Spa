@@ -24,11 +24,13 @@
             font-size: 12px;
         }
     }
-
 </style>
 @section('content')
     <div class="col-md-12 col-lg-12" style="margin-left: 6%">
         <div class="card">
+            <div class="card-header">
+                <h3 style="color: #1f8ccc;">Lịch công việc</h3><br>
+            </div>
             <div class="card-header">
                 <div class="left-click">
                     @foreach($taskStatus as $k => $item)
@@ -58,21 +60,16 @@
                         </div>
                     @endforeach
                 </div>
+                <div class="col-md-2">
+                    {!! Form::select('type1',['qf1'=>'Bạn thực hiện','qf3'=>'Bạn tham gia'], null, array( 'id'=>'choose_type','class' => 'form-control','required'=>true)) !!}
+                </div>
+                {{--<div class="col-md-2">--}}
+                    {{--{!! Form::select('type1',@$users, $user, array( 'id'=>'person_action','class' => 'form-control','placeholder'=>'Tất cả nhân viên','required'=>true)) !!}--}}
+                {{--</div>--}}
 
-                <div class="col-md-2">
-                    {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
-                </div>
-                <div class="col-md-2">
-                    {!! Form::select('person_action',@$users, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
-                </div>
-                {{--<div class="col-md-2">--}}
-                {{--{!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}--}}
-                {{--</div>--}}
-                {{--<div class="col-md-2">--}}
-                {{--{!! Form::select('category_id', $category,null, array( 'id'=>'category','class' => 'form-control','placeholder'=>'Nhóm DV')) !!}--}}
-                {{--</div>--}}
             </div>
             <input type="hidden" id="status_val">
+            <input type="hidden" id="type1">
             <div class="side-app">
                 @include('tasks.ajax2')
             </div>
@@ -110,6 +107,37 @@
                 $('#calendar1').fullCalendar('removeEvents', [id]);
                 $('#calendar1').fullCalendar('addEventSource', b);
                 console.log(data);
+            })
+        }
+
+        function searchAjax(value) {
+            $.ajax({
+                url: "/tasks/",
+                method: "get",
+                data: value
+            }).done(function (data) {
+                var b = [];
+                $.each(data, function (index, data) {
+
+                    var col = chooseColor(data.task_status_id);
+                    b.push({
+                        id: data.id,
+                        title: data.name + ' ' + data.description,
+                        user_id: data.user_id,
+                        start: data.date_from + 'T' + data.time_from + ':00',
+                        end: data.date_from + 'T' + data.time_to + ':00',
+                        type: data.type,
+                        color: col,
+                        //data bonus
+                        description: data.description,
+                        time_from: data.time_from,
+                        time_to: data.time_to,
+                        date: formatYMDtoDMY(data.date_from),
+                        status: data.task_status_id,
+                    });
+                });
+                $('#calendar1').fullCalendar('removeEvents');
+                $('#calendar1').fullCalendar('addEventSource', b);
             })
         }
 
@@ -151,6 +179,15 @@
             $('#' + data).click();
         });
 
+        $('#choose_type').change(function () {
+            var data = $(this).val();
+            $('#type1').val(data).change();
+            let status = $('#status_val').val();
+            status = status ? status.split(',') : null;
+            console.log(status);
+            searchAjax({type1: data, status: status});
+        })
+
         $('body').delegate('.status', 'click', function () {
             var data = $(this).attr('id');
             if (!$(this).is(":checked")) {
@@ -158,42 +195,10 @@
             } else { // if the checkbox is checked
                 arr.push(data);
             }
-            console.log(arr, 'arrrrr');
-            // let category = $('#category').val();
-            // let date = $('#search').val();
-            // let user = $('#person_action').val();
-            // let customer = $('#customer_plus').val();
-            $.ajax({
-                url: "/tasks/",
-                method: "get",
-                data: {
-                    status: arr
-                }
-            }).done(function (data) {
-                var b = [];
-                $.each(data, function (index, data) {
-
-                    var col = chooseColor(data.task_status_id);
-                    b.push({
-                        id: data.id,
-                        title: data.name + ' ' + data.description,
-                        user_id: data.user_id,
-                        start: data.date_from + 'T' + data.time_from + ':00',
-                        end: data.date_from + 'T' + data.time_to + ':00',
-                        type: data.type,
-                        color: col,
-                        //data bonus
-                        description: data.description,
-                        time_from: data.time_from,
-                        time_to: data.time_to,
-                        date: formatYMDtoDMY(data.date_from),
-                        status: data.task_status_id,
-                    });
-                });
-                $('#calendar1').fullCalendar('removeEvents');
-                $('#calendar1').fullCalendar('addEventSource', b);
-                console.log(data);
-            })
+            $('#status_val').val(arr).change();
+            let type = $('#type1').val();
+            // arr = arr.length > 0 ? arr : [];
+            searchAjax({status: arr, type1: type});
         });
     </script>
 @endsection

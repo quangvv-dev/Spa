@@ -15,7 +15,7 @@
         position: absolute;
         display: flex;
         flex-direction: column;
-        left: -12.5%;
+        left: -13.5%;
         top: 2%;
     }
 

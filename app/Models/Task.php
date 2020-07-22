@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Task extends Model
 {
-    protected $guarded=['id'];
+    protected $guarded = ['id'];
     /**
      * The attributes that are mass assignable.
      *
@@ -38,33 +38,33 @@ class Task extends Model
 //    ];
 
     const TYPE = [
-       1 => 'Gọi điện',
-       2 => 'Chăm sóc',
+        1 => 'Gọi điện',
+        2 => 'Chăm sóc',
     ];
 
     const PRIORITY = [
-       1 => 'Cao',
-       2 => 'Trung bình',
-       3 => 'Thấp',
+        1 => 'Cao',
+        2 => 'Trung bình',
+        3 => 'Thấp',
     ];
 
     const PROGRESS = [
-       0 => '0 %',
-       1 => '10 %',
-       2 => '20 %',
-       3 => '30 %',
-       4 => '40 %',
-       5 => '50 %',
-       6 => '60 %',
-       7 => '70 %',
-       8 => '80 %',
-       9 => '90 %',
-       10 => '100 %',
+        0 => '0 %',
+        1 => '10 %',
+        2 => '20 %',
+        3 => '30 %',
+        4 => '40 %',
+        5 => '50 %',
+        6 => '60 %',
+        7 => '70 %',
+        8 => '80 %',
+        9 => '90 %',
+        10 => '100 %',
     ];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_tasks', 'user_id', 'task_id');
+        return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'user_id');
     }
 
     public function user()
@@ -105,32 +105,34 @@ class Task extends Model
         $user = User::where('id', $idlogin)->first();
         $data = self::with('user', 'taskStatus', 'customer', 'department');
 
-            if (isset($input)) {
-                $data = $data->when(isset($input['task_id']), function ($query) use ($input){
-                        $query->where('task_status_id', $input['task_id']);
+        if (isset($input)) {
+            $data = $data->when(isset($input['task_id']), function ($query) use ($input) {
+                $query->where('task_status_id', $input['task_id']);
+            })
+                ->when(isset($input['name']), function ($query) use ($input) {
+                    $query->where('name', 'LIKE', '%' . $input['name'] . '%');
+                })
+                ->when(isset($input['status']), function ($query) use ($input) {
+                    $query->whereIn('task_status_id', $input['status']);
+                })
+                ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
+                    $query->where('type', $input['type']);
+                })->when(isset($input['type1']), function ($query) use ($input, $user) {
+                    $query->when($input['type1'] == 'qf1', function ($q) {
+                        $q->where('user_id', Auth::user()->id);
                     })
-                    ->when(isset($input['name']), function ($query) use ($input) {
-                        $query->where('name', 'LIKE', '%'. $input['name'] . '%');
-                    })
-                    ->when(isset($input['status']), function ($query) use ($input) {
-                        $query->whereIn('task_status_id', $input['status']);
-                    })
-                    ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
-                        $query->where('type', $input['type']);
-                    })->when(isset($input['type1']), function ($query) use ($input, $user) {
-                        $query->when($input['type1'] == 'qf1', function ($q) {
-                            $q->where('user_id', Auth::user()->id);
-                        })->when($input['type1'] == 'qf2', function ($q) use($user) {
+                        ->when($input['type1'] == 'qf2', function ($q) use ($user) {
                             $q->where('department_id', $user->department_id);
-                        })->when($input['type1'] == 'qf3', function ($q) {
-                            $q->with(['users', function ($q) {
-                                $q->where('users.id', Auth::user()->id);
-                            }]);
+                        })
+                        ->when($input['type1'] == 'qf3', function ($q) {
+                            $task = \DB::table('user_tasks')->where('user_id', Auth::user()->id)->pluck('task_id')
+                                ->toArray();
+                            $q->find($task);
                         });
-                    });
-            }
+                });
+        }
 
-            $data = $data->orderBy('id', 'DESC')->get();
+        $data = $data->orderBy('id', 'DESC')->get();
 
         return $data;
     }

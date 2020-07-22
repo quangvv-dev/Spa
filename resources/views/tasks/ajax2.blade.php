@@ -153,12 +153,12 @@
                                 <div class="row">
                                     {!! Form::hidden('id',null, array('class' => 'form-control','id'=>'update_id')) !!}
                                     <div class="col-md-12">
-                                        {!! Form::label('full_name', 'Công việc', array('class' => ' required')) !!}
+                                        {!! Form::label('full_name', 'Công việc', array('class' => 'required')) !!}
                                         <input class="form-control" readonly value="" id="full_name">
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
-                                        <input class="form-control {{'date-'.$item->id}}" id="update_date"
+                                        <input class="form-control" id="update_date"
                                                data-toggle="datepicker" value="" >
                                     </div>
                                     <div class="col-md-3 col-xs-12 clockpicker" data-placement="left" data-align="top"
@@ -172,7 +172,7 @@
                                         {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2')) !!}
                                     </div>
                                     <div class="col-md-3">
-                                        {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
+                                        {!! Form::label('status', 'Trạng thái công việc', array('class' => ' required')) !!}
                                         {!! Form::select('status',$taskStatus, null, array('class' => 'form-control','id'=>'update_status')) !!}
                                     </div>
                                     <div class="col-md-6">

@@ -1,18 +1,14 @@
-{{--<div class="title padding5-10 col-md-12 mt10">--}}
-    {{--<div class="col-md-12 fl mt2 no-padd"><a--}}
-            {{--class="display filter_all mr20 text-filter bold" data-task-id=""><span>Tất cả({{count($tasks)}})</span></a>--}}
-        {{--@foreach ($taskStatus as $item)--}}
-            {{--<a class="display filter_all mr20 text-filter bold" data-task-id="{{$item->id}}"> {{ $item->name}}--}}
-                {{--({{$item->tasks->count()}})</a>--}}
-        {{--@endforeach--}}
-    {{--</div>--}}
-{{--</div>--}}
+<style>
+    td.text-center.update-status {
+        cursor: pointer;
+    }
+</style>
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">Thao tác</th>
-            <th class="text-white">Công việc</th>
+            <th class="text-white text-center">Công việc</th>
             <th class="text-white text-center">Thực hiện</th>
             <th class="text-white text-center">Ngày thực hiện</th>
             <th class="text-white text-center">Khoảng thời gian</th>
@@ -23,16 +19,15 @@
         @foreach($tasks as $task)
             <tr>
                 @if($task->task_status_id ==1)
-                    <td class="text-center update-status" data-id="{{$task->id}}"><i class="fas fa-edit"></i></td>
+                    <td class="text-center update-status" data-id="{{$task->id}}">
+                        <i class="fa fa-check-square text-primary" aria-hidden="true"></i></td>
                 @else
                     <td class="text-center">
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                        <i class="fa fa-check-square text-success" aria-hidden="true"></i>
                     </td>
-
-
                 @endif
                 <td class="text-center">
-                    <a href="{{ route('tasks.edit', $task->id) }}">{{$task->name}}</a></td>
+                    <a style="color:#0c85d0;font-weight: 600" href="{{ route('tasks.edit', $task->id) }}">{{str_limit($task->name,30,'...')}}</a></td>
                 <td class="text-center">
                     @if(@$task->user->avatar)
                         <img src="{{ @$task->user->avatar }}"
