@@ -38,8 +38,8 @@ class Task extends Model
 //    ];
 
     const TYPE = [
-        1 => 'Gọi điện',
         2 => 'Chăm sóc',
+        1 => 'Gọi điện',
     ];
 
     const PRIORITY = [
@@ -115,7 +115,7 @@ class Task extends Model
                 ->when(isset($input['status']), function ($query) use ($input) {
                     $query->whereIn('task_status_id', $input['status']);
                 })
-                ->when(isset($input['type']), function ($query) use ($input, $idlogin) {
+                ->when(isset($input['type']), function ($query) use ($input) {
                     $query->where('type', $input['type']);
                 })->when(isset($input['type1']), function ($query) use ($input, $user) {
                     $query->when($input['type1'] == 'qf1', function ($q) {

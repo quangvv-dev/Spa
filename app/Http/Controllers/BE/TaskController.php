@@ -36,7 +36,6 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-//        dd($input['status']);
         $now = Carbon::now()->format('Y-m-d');
         $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
         $type = Task::TYPE;

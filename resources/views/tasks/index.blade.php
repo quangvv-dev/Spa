@@ -63,13 +63,14 @@
                 <div class="col-md-2">
                     {!! Form::select('type1',['qf1'=>'Bạn thực hiện','qf3'=>'Bạn tham gia'], null, array( 'id'=>'choose_type','class' => 'form-control','required'=>true)) !!}
                 </div>
-                {{--<div class="col-md-2">--}}
-                    {{--{!! Form::select('type1',@$users, $user, array( 'id'=>'person_action','class' => 'form-control','placeholder'=>'Tất cả nhân viên','required'=>true)) !!}--}}
-                {{--</div>--}}
+                <div class="col-md-2">
+                    {!! Form::select('type',@$type, null, array( 'id'=>'category_job','class' => 'form-control','placeholder'=>'Tất cả công việc','required'=>true)) !!}
+                </div>
 
             </div>
             <input type="hidden" id="status_val">
             <input type="hidden" id="type1">
+            <input type="hidden" id="category">
             <div class="side-app">
                 @include('tasks.ajax2')
             </div>
@@ -184,8 +185,16 @@
             $('#type1').val(data).change();
             let status = $('#status_val').val();
             status = status ? status.split(',') : null;
-            console.log(status);
-            searchAjax({type1: data, status: status});
+            let category = $('#category').val();
+            searchAjax({type1: data, status: status, type: category});
+        })
+        $('#category_job').change(function () {
+            var data = $(this).val();
+            $('#category').val(data).change();
+            let status = $('#status_val').val();
+            status = status ? status.split(',') : null;
+            let type = $('#type1').val();
+            searchAjax({type: data, status: status, type1: type});
         })
 
         $('body').delegate('.status', 'click', function () {
@@ -197,8 +206,8 @@
             }
             $('#status_val').val(arr).change();
             let type = $('#type1').val();
-            // arr = arr.length > 0 ? arr : [];
-            searchAjax({status: arr, type1: type});
+            let category = $('#category').val();
+            searchAjax({status: arr, type1: type, type: category});
         });
     </script>
 @endsection
