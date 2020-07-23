@@ -34,6 +34,10 @@
                     }
 
                     $('document').ready(function () {
+                        var status = $('#update_status').val();
+                        if (status != 1) {
+                            $('#update_status').attr('disabled', true)
+                        }
                         $('.clockpicker').clockpicker();
                         $('#calendar1').fullCalendar({
                             header: {
@@ -102,8 +106,8 @@
                                 $('#update_time2').val(info.time_to).change();
                                 $('#update_status').val(info.status).change();
                                 $('#update_category').val(info.type).change();
-                                if (info.status==6)
-                                    $('#update_status').attr('disabled',true).change();
+                                if (info.status == 6)
+                                    $('#update_status').attr('disabled', true).change();
                                 $('#update_note').val(info.description).change();
                                 $('#full_name').val(info.title).change();
                                 $('#phone').val(info.phone).change();
@@ -159,7 +163,7 @@
                                     <div class="col-md-3 col-xs-12">
                                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
                                         <input class="form-control" id="update_date"
-                                               data-toggle="datepicker" value="" >
+                                               data-toggle="datepicker" value="">
                                     </div>
                                     <div class="col-md-3 col-xs-12 clockpicker" data-placement="left" data-align="top"
                                          data-autoclose="true">

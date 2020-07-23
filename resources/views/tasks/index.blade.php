@@ -82,11 +82,11 @@
 
         function searchAjaxClick(datas) {
             $.ajax({
-                url: "/ajax/tasks/" + id,
+                url: "/ajax/tasks/" + datas.id,
                 method: "put",
                 data: datas
             }).done(function (data) {
-                $('#modal_' + id).modal('toggle');
+                $('#modal_' + datas.id).modal('toggle');
                 var b = [];
                 var col = chooseColor(data.task_status_id);
                 b.push({
@@ -105,7 +105,7 @@
                     status: data.task_status_id,
 
                 })
-                $('#calendar1').fullCalendar('removeEvents', [id]);
+                $('#calendar1').fullCalendar('removeEvents', [data.id]);
                 $('#calendar1').fullCalendar('addEventSource', b);
                 console.log(data);
             })

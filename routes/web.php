@@ -115,6 +115,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('sales', 'SalesController@index');
         Route::get('group-sale/{type}', 'SalesController@indexGroupCategory');
         Route::get('commission', 'CommissionController@statistical');
+        Route::get('tasks', 'TaskController@statistical');
 
     });
     Route::resource('tasks', 'TaskController');

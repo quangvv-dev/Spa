@@ -102,7 +102,8 @@
                             <a href="{{url('report/group-sale/products')}}">Doanh thu nhóm SP</a>
                         </li>
                         <li>
-                            <a href="#">Quà tặng</a>
+                            <a href="{{url('report/group-sale/tasks')}}">Hiệu quả công việc</a>
+                            {{--<a href="#">Quà tặng</a>--}}
                         </li>
                         {{--<li class="sub-with-sub">--}}
                         {{--<a href="#">KPI </a>--}}
