@@ -177,6 +177,10 @@ class Customer extends Model
     {
         return $this->hasMany(GroupComment::class, 'customer_id', 'id');
     }
+    public function groupCustomer()
+    {
+        return $this->hasMany(CustomerGroup::class, 'customer_id', 'id');
+    }
 
     public function getStatisticsUsers()
     {

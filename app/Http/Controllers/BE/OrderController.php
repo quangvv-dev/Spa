@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
 use App\Models\HistorySms;
 use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
@@ -288,8 +289,9 @@ class OrderController extends Controller
             }
             DB::commit();
 
+            $group_customer = CustomerGroup::where('customer_id',$customer->id)->pluck('category_id')->toArray();
             $check = PaymentHistory::where('order_id', $id)->get();
-            $check2 = RuleOutput::where('event', 'add_order')->first();
+            $check2 = RuleOutput::where('event', 'add_order')->whereIn('category_id',$group_customer)->first();
             if (count($check) <= 1 && isset($check2) && $check2 && @$check2->rules->status == StatusCode::ON) {
                 $check3 = PaymentHistory::where('order_id', $id)->first();
                 $rule = $check2->rules;

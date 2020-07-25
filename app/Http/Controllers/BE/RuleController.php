@@ -10,6 +10,7 @@ use App\Models\Rule;
 use App\Models\Status;
 use App\Models\Category;
 use App\Models\RuleOutput;
+use App\Helpers\Functions;
 
 class RuleController extends Controller
 {
@@ -38,7 +39,7 @@ class RuleController extends Controller
     public function index()
     {
         $title = 'Automation';
-        $docs = Rule::orderBy('id','desc');
+        $docs = Rule::orderBy('id', 'desc');
         $docs = $docs->paginate(10);
         $total = $docs->total();
         return view('rules.index', compact('docs', 'title', 'total'));
@@ -164,18 +165,26 @@ class RuleController extends Controller
                 array_push($link_nodes, $link);
             }
         }
+        $key = array_keys(array_column((array)$configs->nodeDataArray, 'key'), 3);
+        $category_data = $configs->nodeDataArray[$key[0]];
+        $category_ids = $category_data->configs->group;
         foreach ($link_nodes as $key => $record) {
             $new = [];
-            $new['rule_id'] = $rule->id;
-            $new['status'] = $rule->status;
-            $new['event'] = $nodes[$record[0]]->value;
-            $new['action'] = $nodes[$record[2]]->value;
-            $new['configs'] = isset($nodes[$record[2]]->configs) ? json_encode($nodes[$record[2]]->configs) : null;
+            if (count($category_ids)){
+                foreach ($category_ids as $item){
+                    $new['rule_id'] = $rule->id;
+                    $new['category_id'] = $item;
+                    $new['status'] = $rule->status;
+                    $new['event'] = $nodes[$record[0]]->value;
+                    $new['action'] = $nodes[$record[2]]->value;
+                    $new['configs'] = isset($nodes[$record[2]]->configs) ? json_encode($nodes[$record[2]]->configs) : null;
 
-            if (isset($nodes[$record[1]]->configs) && isset($nodes[$record[1]]->configs->group) && count($nodes[$record[1]]->configs->group)) {
-                foreach ($nodes[$record[1]]->configs->group as $key => $gr) {
-                    $new['actor'] = $gr;
-                    array_push($arr, $new);
+                    if (isset($nodes[$record[1]]->configs) && isset($nodes[$record[1]]->configs->group) && count($nodes[$record[1]]->configs->group)) {
+                        foreach ($nodes[$record[1]]->configs->group as $key => $gr) {
+                            $new['actor'] = $gr;
+                            array_push($arr, $new);
+                        }
+                    }
                 }
             }
         }

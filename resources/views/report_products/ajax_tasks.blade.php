@@ -4,9 +4,9 @@
         <tr>
             <th class="text-white text-center">Nhân viên</th>
             <th class="text-white text-center">Tổng số công việc</th>
-            <th class="text-white text-center">Công việc mới</th>
-            <th class="text-white text-center">Công việc hoàn thành</th>
-            <th class="text-white text-center">Công việc quá hạn</th>
+            <th class="text-white text-center">Mới</th>
+            <th class="text-white text-center">Hoàn thành</th>
+            <th class="text-white text-center">Quá hạn</th>
         </tr>
         </thead>
         <tbody>

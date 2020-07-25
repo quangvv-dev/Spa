@@ -102,6 +102,9 @@ function generateRandomColor($length = 6)
     return '#' . $randomString;
 }
 
+function findIndexOfKey($key_to_index,$array){
+    return array_search($key_to_index,array_keys($array));
+}
 //if (!function_exists('getPaging')) {
 //
 //}
