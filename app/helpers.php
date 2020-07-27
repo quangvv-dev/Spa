@@ -102,8 +102,17 @@ function generateRandomColor($length = 6)
     return '#' . $randomString;
 }
 
-function findIndexOfKey($key_to_index,$array){
-    return array_search($key_to_index,array_keys($array));
+function findIndexOfKey($key_to_index, $array)
+{
+    return array_search($key_to_index, array_keys($array));
+}
+
+function replaceVariable($content, $name = '', $phone = '')
+{
+    $content = str_replace('%full_name%', $name, $content);
+    $content = str_replace('%phone%', $phone, $content);
+    return $content;
+
 }
 //if (!function_exists('getPaging')) {
 //

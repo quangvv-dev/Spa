@@ -289,9 +289,9 @@ class OrderController extends Controller
             }
             DB::commit();
 
-            $group_customer = CustomerGroup::where('customer_id',$customer->id)->pluck('category_id')->toArray();
+            $group_customer = CustomerGroup::where('customer_id', $customer->id)->pluck('category_id')->toArray();
             $check = PaymentHistory::where('order_id', $id)->get();
-            $check2 = RuleOutput::where('event', 'add_order')->whereIn('category_id',$group_customer)->first();
+            $check2 = RuleOutput::where('event', 'add_order')->whereIn('category_id', $group_customer)->first();
             if (count($check) <= 1 && isset($check2) && $check2 && @$check2->rules->status == StatusCode::ON) {
                 $check3 = PaymentHistory::where('order_id', $id)->first();
                 $rule = $check2->rules;
@@ -334,10 +334,11 @@ class OrderController extends Controller
                             'type' => 2,
                             'sms_content' => Functions::vi_to_en($sms_content),
                             'name' => 'CSKH ' . @$check3->order->customer->full_name . ' ' . @$check3->order->customer->phone,
-                            'description' => 'Bạn có công việc CSKH sau' . $day . 'ngày sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
+//                            'description' => 'Bạn có công việc CSKH sau' . $day . 'ngày sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
+                            'description' => replaceVariable($sms_content, @$check3->order->customer->full_name, @$check3->order->customer->phone),
                         ];
                         $task = $this->taskService->create($input);
-                        $follow = User::whereIn('phone', ['0977508510', '0776904396', '0975091435'])->get();
+                        $follow = User::whereIn('phone', ['0977508510', '0776904396', '0975091435', '0334299996'])->get();
                         $task->users()->attach($follow);
                     }
                 }

@@ -494,8 +494,12 @@
                 search: function (query, callback) {
                     let data = [{
                         name: "Tên khách hàng",
-                        value: " %full_name%"
-                    }];
+                        value: "%full_name%"
+                    },{
+                        name: "SĐT khách hàng",
+                        value: "%phone%"
+                    }
+                    ];
                     callback(data);
                 },
 

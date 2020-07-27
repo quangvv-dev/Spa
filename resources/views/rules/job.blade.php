@@ -50,8 +50,8 @@
                             <input name="exactly_value" class="form-control datetimepicker" type="text">
                         </div>
                         <div class="form-group exactly">
-                            <label>Nội dung sms báo lịch</label>
-                            <textarea name="sms_content" class="form-control"></textarea>
+                            <label>Nội dung công việc</label>
+                            <textarea name="sms_content" class="form-control autocomplete-textarea"></textarea>
                         </div>
 {{--                        <div class="conditional-input form-group repeat">--}}
 {{--                            <label>Nội dung sms báo lịch</label>--}}

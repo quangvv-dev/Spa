@@ -41,18 +41,19 @@ class  ActionJob extends Command
      */
     public function handle()
     {
-        $now = Carbon::now()->format('Y-m-d');
-        $task = Task::where('date_from', $now)->with('customer', 'user')->get();
-        if (count($task)) {
-            foreach ($task as $item) {
-                $err = Functions::sendSmsV3(@$item->customer->phone, @$item->sms_content);
-                if (isset($err) && $err) {
-                    $input['phone'] = @$item->customer->phone;
-                    $input['campaign_id'] = 0;
-                    $input['message'] = @$item->sms_content;
-                    HistorySms::create($input);
-                }
-            }
-        }
+        $yesterday = Carbon::yesterday('Asia/Ho_Chi_Minh')->format('Y-m-d');
+        Task::where('date_from', $yesterday)->with('customer', 'user')->where('task_status_id', 1)
+            ->update(['task_status_id' => 6]);
+//        if (count($task)) {
+//            foreach ($task as $item) {
+//                $err = Functions::sendSmsV3(@$item->customer->phone, @$item->sms_content);
+//                if (isset($err) && $err) {
+//                    $input['phone'] = @$item->customer->phone;
+//                    $input['campaign_id'] = 0;
+//                    $input['message'] = @$item->sms_content;
+//                    HistorySms::create($input);
+//                }
+//            }
+//        }
     }
 }
