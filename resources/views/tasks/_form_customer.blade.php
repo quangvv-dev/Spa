@@ -6,20 +6,21 @@
             {!! Form::open(array('url' => route('task.customer'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
 
             <div class="modal-body">
-                <div class="col row">
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('name', 'Tên công việc', array('class' => ' required')) !!}
-                            {!! Form::text('name', null, array('class' => 'form-control', 'required' => true)) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                </div>
+                {{--<div class="col row">--}}
+                {{--<div class="col-xs-12 col-md-12">--}}
+                {{--<div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">--}}
+                {{--{!! Form::label('name', 'Tên công việc', array('class' => ' required')) !!}--}}
+                {{--{!! Form::text('name', null, array('class' => 'form-control', 'required' => true)) !!}--}}
+                {{--<span class="help-block">{{ $errors->first('name', ':message') }}</span>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {!! Form::hidden('name', null, array('class' => 'form-control','id'=>'name', 'required' => true)) !!}
                 <div class="col row">
                     <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('type') ? 'has-error' : '' }}">
                             {!! Form::label('type', 'Loại công việc', array('class' => ' required')) !!}
-                            {!! Form::select('type', $type, null, array('class' => 'form-control select2','placeholder'=>'Loại công việc', 'required' => true)) !!}
+                            {!! Form::select('type', $type, null, array('class' => 'form-control select2','id'=>'status_type','placeholder'=>'Loại công việc', 'required' => true)) !!}
                             <span class="help-block">{{ $errors->first('type', ':message') }}</span>
                         </div>
                     </div>
@@ -90,3 +91,9 @@
         {{ Form::close() }}
     </div>
 </div>
+<script>
+    $("#status_type").change(function () {
+        let val = $(this).children("option").filter(":selected").text();
+        $('#name').val(val).change();
+    })
+</script>
