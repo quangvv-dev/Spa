@@ -2,7 +2,7 @@
 <div class="modal fade" id="wallet">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            {!! Form::open(array('url' => route('tasks.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+            {{--{!! Form::open(array('url' => route('tasks.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}--}}
             <div class="modal-body">
                 <h4>Nạp tiền vào ví</h4>
                 <div class="col row">
@@ -24,6 +24,6 @@
             </div>
 
         </div>
-        {{ Form::close() }}
+        {{--{{ Form::close() }}--}}
     </div>
 </div>
