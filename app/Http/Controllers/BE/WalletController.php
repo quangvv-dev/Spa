@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers\BE;
 
-use App\Models\Customer;
-use App\Models\Department;
-use App\Models\Task;
-use App\Models\TaskStatus;
 use App\Services\TaskService;
 use App\User;
 use Carbon\Carbon;
@@ -14,7 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
-class TaskController extends Controller
+class WalletController extends Controller
 {
     private $taskService;
 
@@ -94,13 +90,6 @@ class TaskController extends Controller
     public function storeCustomer(Request $request)
     {
         $input = $request->except('user_id2', 'status_name');
-        $customer = Customer::find($input['customer_id']);
-        $text = [];
-        if (isset($customer->categories)) {
-            foreach ($customer->categories as $item)
-                $text[] = $item->name;
-        }
-        $input['name'] = $input['name'] . ' - ' . $customer->full_name . ' - ' . $customer->phone . ' nhóm ' . implode($text);
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
@@ -171,55 +160,5 @@ class TaskController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function updateStatus(Request $request)
-    {
-        $taskStatus = TaskStatus::where('name', 'Hoàn thành')->first();
-        $input = $request->all();
-        $input['task_status_id'] = $taskStatus->id;
-        $task = $this->taskService->find($request->id);
-        $task->update($input);
-    }
-
-    /**
-     * Update task
-     *
-     * @param Request $request
-     * @param $id
-     * @return mixed
-     */
-    public function ajaxUpdate(Request $request, $id)
-    {
-        $input = $request->except('user_id2', 'status_name');
-        $task = $this->taskService->update($input, $id);
-        return $task;
-    }
-
-    /**
-     * Thong ke hieu qua cong viec
-     *
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
-     * @throws \Throwable
-     */
-    public function statistical(Request $request)
-    {
-        if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
-        }
-
-        $data = Task::select('user_id', \DB::raw('count(id) as count'))->whereBetWeen('date_from', getTime($request->data_time))
-            ->with('user')->groupBy('user_id')->get()->map(function ($item) use ($request) {
-                $item->new = Task::where('user_id', $item->user_id)->where('task_status_id', 1)->whereBetWeen('date_from', getTime($request->data_time))->count();
-                $item->success = Task::where('user_id', $item->user_id)->where('task_status_id', 3)->whereBetWeen('date_from', getTime($request->data_time))->count();
-                return $item;
-            })->sortByDesc('count');
-
-        if ($request->ajax()) {
-            return Response::json(view('report_products.ajax_tasks', compact('data'))->render());
-        }
-
-        return view('report_products.index_tasks', compact('data'));
     }
 }

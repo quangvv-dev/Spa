@@ -14,11 +14,13 @@ use App\Models\GroupComment;
 use App\Models\HistorySms;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\PackageWallet;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\Models\Status;
 use App\Models\Task;
 use App\Models\TaskStatus;
+use App\Models\WalletHistory;
 use App\Services\CustomerService;
 use App\Services\OrderService;
 use App\Models\RuleOutput;
@@ -185,7 +187,6 @@ class CustomerController extends Controller
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
-
         //Task
         $input['type'] = $request->type ?: 'qf1';
         $type = Task::TYPE;
@@ -203,16 +204,23 @@ class CustomerController extends Controller
         //EndTask
         //History SMS
         $history = [];
+        $wallet = [];
+        $package = [];
         if ($request->history_sms) {
             $history = HistorySms::where('phone', $request->history_sms)->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('sms.history',
                 compact('history'))->render());
         }
+        if ($request->history_wallet) {
+            $wallet = WalletHistory::where('customer_id', $request->history_wallet)->paginate(StatusCode::PAGINATE_20);
+            $package = PackageWallet::pluck('name', 'id')->toArray();
+            return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
+        }
         //END
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history'));
+                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet', 'package'));
     }
 
     /**

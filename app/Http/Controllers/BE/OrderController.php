@@ -320,6 +320,13 @@ class OrderController extends Controller
                     foreach ($jobs as $job) {
                         $day = $job->configs->delay_value;
                         $sms_content = $job->configs->sms_content;
+                        $category = @$check3->order->customer->categories;
+                        $text_category = [];
+                        if (count($category)) {
+                            foreach ($category as $item)
+                                $text_category[] = $item->name;
+                        }
+
                         $input = [
                             'customer_id' => @$check3->order->customer->id,
                             'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
@@ -333,8 +340,9 @@ class OrderController extends Controller
                             'amount_of_work' => 1,
                             'type' => 2,
                             'sms_content' => Functions::vi_to_en($sms_content),
-                            'name' => 'CSKH ' . @$check3->order->customer->full_name . ' ' . @$check3->order->customer->phone,
-//                            'description' => 'Bạn có công việc CSKH sau' . $day . 'ngày sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
+                            'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category, ','),
+                            //'description' => 'Bạn có công việc CSKH sau' . $day . 'ngày sử dụng dịch vụ: ' . @$check3->order->customer->full_name . '---' . @$check3->order->customer->phone,
+//                            'name' => 'CSKH',
                             'description' => replaceVariable($sms_content, @$check3->order->customer->full_name, @$check3->order->customer->phone),
                         ];
                         $task = $this->taskService->create($input);
