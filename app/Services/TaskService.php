@@ -28,7 +28,6 @@ class TaskService
     public function find($id)
     {
         $task = $this->task->where('id', $id)->first();
-
         return $task;
     }
 

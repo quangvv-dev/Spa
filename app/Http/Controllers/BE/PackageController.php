@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Models\Customer;
 use App\Models\PackageWallet;
-use App\Services\WalletService;
+use App\Services\PackageService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
-class WalletController extends Controller
+class PackageController extends Controller
 {
     private $walletService;
 
@@ -22,7 +23,7 @@ class WalletController extends Controller
      *
      * @param TaskService $taskService
      */
-    public function __construct(WalletService $walletService)
+    public function __construct(PackageService $walletService)
     {
 
         $this->walletService = $walletService;
@@ -35,7 +36,16 @@ class WalletController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $input = $request->all();
+        $title = "Quản lý gói nạp";
+        $docs = PackageWallet::search($input)->paginate(StatusCode::PAGINATE_10);
+
+        if ($request->ajax()) {
+//            dd($docs);
+            return Response::json(view('package.ajax', compact('docs', 'title'))->render());
+        }
+
+        return view('package.index', compact('docs', 'title'));
     }
 
     /**
@@ -45,7 +55,8 @@ class WalletController extends Controller
      */
     public function create()
     {
-
+        $title = 'Thêm mới gói nạp';
+        return view('package._form', compact('title'));
     }
 
     /**
@@ -57,19 +68,12 @@ class WalletController extends Controller
      */
     public function store(Request $request)
     {
-        $package = PackageWallet::findOrFail($request->package_id);
-        $customer = Customer::findOrFail($request->customer_id);
-        $input = [
-            'package_id' => $package->id,
-            'customer_id' => $customer->id,
-            'user_id' => Auth::user()->id,
-            'price' => $package->price,
-            'order_price' => $package->order_price,
-        ];
+        $input = $request->all();
+        $input['price'] = $request->price ? str_replace(',', '', $request->price) : 0;
+        $input['order_price'] = $request->order_price ? str_replace(',', '', $request->order_price) : 0;
+
         $this->walletService->create($input);
-        $customer->wallet = $customer->wallet + $package->price;
-        $customer->save();
-        return back()->with('status', 'Nạp tiền thành công');
+        return redirect(route('package.index'))->with('status', 'Thêm mới gói thành công');
     }
 
     /**
@@ -93,7 +97,10 @@ class WalletController extends Controller
      */
     public function edit($id)
     {
-        //
+        $doc = $this->walletService->find($id);
+        $title = 'Cập nhật gói nạp';
+
+        return view('package._form', compact('doc', 'title'));
     }
 
     /**
@@ -106,7 +113,13 @@ class WalletController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $input['price'] = $request->price ? str_replace(',', '', $request->price) : 0;
+        $input['order_price'] = $request->order_price ? str_replace(',', '', $request->order_price) : 0;
+
+        $this->walletService->update($input, $id);
+
+        return redirect(route('package.index'))->with('status', 'Cập nhật gói thành công');
     }
 
     /**
@@ -118,6 +131,7 @@ class WalletController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->walletService->delete($id);
+        return 1;
     }
 }

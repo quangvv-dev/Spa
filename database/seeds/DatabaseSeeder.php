@@ -17,9 +17,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-//        Model::unguard();
+        Model::unguard();
 //        Element::truncate();
 //        \App\Models\Element::truncate();
+        \App\Models\PackageWallet::truncate();
+        DB::table('package_wallets')->insert(
+            [
+                'name' => 'Gói 30 triệu nhận 40 triệu',
+                'order_price' => 30000000,
+                'price' => 40000000,
+            ]
+
+        );
+        DB::table('package_wallets')->insert(
+            [
+                'name' => 'Gói 50 triệu nhận 65 triệu',
+                'order_price' => 50000000,
+                'price' => 65000000,
+            ]
+        );
+        DB::table('package_wallets')->insert(
+            ['name' => 'Gói 70 triệu nhận 90 triệu',
+                'order_price' => 70000000,
+                'price' => 90000000,
+            ]
+        );
 //        DB::table('elements')->insert([
 //            'title' => 'Tạo đơn',
 //            'type'  => 'event',
@@ -52,36 +74,36 @@ class DatabaseSeeder extends Seeder
 //            'color' => '#5fceef'
 //        ]);
 
-        $value = [
-            '1. SP Tế bào gốc',
-            '2. SP Hồng bikini',
-            '3. SP Dưỡng da',
-            '4. SP Sữa rửa mặt',
-            '5. SP Trị Hôi Nách',
-            '6. SP Trị thâm',
-            '7. SP Nước rửa vệ sinh',
-            '8. SP Trị Mụn',
-            '9. SP Tiêm',
-            '10. SP Tẩy da chểt',
-            '11. SP Viên uống nám',
-            '12. SP Tắm trắng',
-            '13. SP Dầu gội',
-            '14. SP giảm béo',
-            '15. SP Thâm Nách',
-            '16. Sp Dụng cụ',
-            '17. SP Trị Nám',
-            '18. SP Viên uống',
-            '19. SP Dưỡng mi',
-            '20. SP Trị Viêm Nang Lông',
-        ];
+//        $value = [
+//            '1. SP Tế bào gốc',
+//            '2. SP Hồng bikini',
+//            '3. SP Dưỡng da',
+//            '4. SP Sữa rửa mặt',
+//            '5. SP Trị Hôi Nách',
+//            '6. SP Trị thâm',
+//            '7. SP Nước rửa vệ sinh',
+//            '8. SP Trị Mụn',
+//            '9. SP Tiêm',
+//            '10. SP Tẩy da chểt',
+//            '11. SP Viên uống nám',
+//            '12. SP Tắm trắng',
+//            '13. SP Dầu gội',
+//            '14. SP giảm béo',
+//            '15. SP Thâm Nách',
+//            '16. Sp Dụng cụ',
+//            '17. SP Trị Nám',
+//            '18. SP Viên uống',
+//            '19. SP Dưỡng mi',
+//            '20. SP Trị Viêm Nang Lông',
+//        ];
 
-        foreach ($value as $item) {
-            DB::table('categories')->insert([
-                'code' => str_replace(' ', '_', strtolower($item)),
-                'type' => StatusCode::PRODUCT,
-                'name' => $item,
-            ]);
-        }
+//        foreach ($value as $item) {
+//            DB::table('categories')->insert([
+//                'code' => str_replace(' ', '_', strtolower($item)),
+//                'type' => StatusCode::PRODUCT,
+//                'name' => $item,
+//            ]);
+//        }
 
 //        DB::table('elements')->insert([
 //            'title' => 'Thêm ',

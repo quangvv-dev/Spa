@@ -10,8 +10,10 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">STT</th>
+            <th class="text-white text-center">Ngày nạp</th>
             <th class="text-white text-center">Gói nạp</th>
             <th class="text-white text-center">Số tiền nạp</th>
+            <th class="text-white text-center">Số tiền được hưởng</th>
             <th class="text-white text-center">Nhân viên nạp</th>
         </tr>
         </thead>
@@ -19,7 +21,9 @@
         @foreach($wallet as $k => $item)
             <tr>
                 <td class="text-center">{{$k+1}}</td>
+                <td class="text-center">{{$item->created_at}}</td>
                 <td class="text-center">{{@$item->package->name}}</td>
+                <td class="text-center">{{@number_format($item->order_price)}}</td>
                 <td class="text-center">{{@number_format($item->price)}}</td>
                 <td class="text-center">{{@$item->user->full_name}}</td>
             </tr>

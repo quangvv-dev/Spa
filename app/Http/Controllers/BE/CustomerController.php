@@ -207,12 +207,12 @@ class CustomerController extends Controller
         $wallet = [];
         $package = [];
         if ($request->history_sms) {
-            $history = HistorySms::where('phone', $request->history_sms)->paginate(StatusCode::PAGINATE_20);
+            $history = HistorySms::where('phone', $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('sms.history',
                 compact('history'))->render());
         }
         if ($request->history_wallet) {
-            $wallet = WalletHistory::where('customer_id', $request->history_wallet)->paginate(StatusCode::PAGINATE_20);
+            $wallet = WalletHistory::where('customer_id', $request->history_wallet)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             $package = PackageWallet::pluck('name', 'id')->toArray();
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }

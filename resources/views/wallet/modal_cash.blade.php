@@ -9,7 +9,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('package_id', 'Gói nạp', array('class' => ' required')) !!}
-                            {!! Form::select('package_id',$package, null, array('class' => 'form-control select2','required'=>true,'data-placeholder'=>'Chọn gói nạp')) !!}
+                            {!! Form::select('package_id',$package, null, array('class' => 'form-control select2','required'=>true,'placeholder'=>'Chọn gói nạp')) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                         <input type="hidden" name="customer_id" value="{{request()->segment(2)}}">
