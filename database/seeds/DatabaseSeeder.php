@@ -20,28 +20,28 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 //        Element::truncate();
 //        \App\Models\Element::truncate();
-        \App\Models\PackageWallet::truncate();
-        DB::table('package_wallets')->insert(
-            [
-                'name' => 'Gói 30 triệu nhận 40 triệu',
-                'order_price' => 30000000,
-                'price' => 40000000,
-            ]
-
-        );
-        DB::table('package_wallets')->insert(
-            [
-                'name' => 'Gói 50 triệu nhận 65 triệu',
-                'order_price' => 50000000,
-                'price' => 65000000,
-            ]
-        );
-        DB::table('package_wallets')->insert(
-            ['name' => 'Gói 70 triệu nhận 90 triệu',
-                'order_price' => 70000000,
-                'price' => 90000000,
-            ]
-        );
+//        \App\Models\PackageWallet::truncate();
+//        DB::table('package_wallets')->insert(
+//            [
+//                'name' => 'Gói 30 triệu nhận 40 triệu',
+//                'order_price' => 30000000,
+//                'price' => 40000000,
+//            ]
+//
+//        );
+//        DB::table('package_wallets')->insert(
+//            [
+//                'name' => 'Gói 50 triệu nhận 65 triệu',
+//                'order_price' => 50000000,
+//                'price' => 65000000,
+//            ]
+//        );
+//        DB::table('package_wallets')->insert(
+//            ['name' => 'Gói 70 triệu nhận 90 triệu',
+//                'order_price' => 70000000,
+//                'price' => 90000000,
+//            ]
+//        );
 //        DB::table('elements')->insert([
 //            'title' => 'Tạo đơn',
 //            'type'  => 'event',
