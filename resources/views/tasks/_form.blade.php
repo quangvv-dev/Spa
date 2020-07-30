@@ -19,13 +19,6 @@
                     </div>
                 </div>
                 <div class="col row">
-                    {{--<div class="col-xs-12 col-md-4">--}}
-                        {{--<div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">--}}
-                            {{--{!! Form::label('project_id', 'Chọn phòng ban', array('class' => ' required')) !!}--}}
-                            {{--{!! Form::select('department_id',$departments, null, array('class' => 'form-control select2','placeholder'=>'Chọn phòng ban')) !!}--}}
-                            {{--<span class="help-block">{{ $errors->first('name', ':message') }}</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
                     <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('type', 'Loại công việc', array('class' => ' required')) !!}
@@ -48,30 +41,8 @@
                         {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
                         {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2')) !!}
                     </div>
-                    {{--<div class="col-xs-12 col-md-4">--}}
-                        {{--<div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">--}}
-                            {{--{!! Form::label('customer_id', 'Khách hàng liên quan', array('class' => ' required')) !!}--}}
-                            {{--{!! Form::select('customer_id',$customers, null, array('class' => 'form-control select2')) !!}--}}
-                            {{--<span class="help-block">{{ $errors->first('name', ':message') }}</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
                 </div>
                 <div class="col row">
-
-
-                    {{--<div class="col-md-1 no-padd tc mt5 font20"><i class="fa fa-arrow-right"></i></div>--}}
-                    {{--<div class="col-xs-12 col-md-3">--}}
-                        {{--<div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">--}}
-                            {{--{!! Form::label('date_to', 'Ngày hẹn(Tới)', array('class' => ' required')) !!}--}}
-                            {{--{!! Form::text('date_to', null, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}--}}
-                            {{--<span class="help-block">{{ $errors->first('name', ':message') }}</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-
-                    {{--<div class="col-md-1 col-xs-12">--}}
-                        {{--{!! Form::label('all_day', 'Cả ngày', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::checkbox('all_day', null, null) !!}--}}
-                    {{--</div>--}}
                 </div>
                 <div class="col row">
                     <div class="col-md-12 col-xs-12">
@@ -92,13 +63,6 @@
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
-                    {{--<div class="col-xs-12 col-md-3">--}}
-                        {{--<div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">--}}
-                            {{--{!! Form::label('priority', 'Độ ưu tiên', array('class' => ' required')) !!}--}}
-                            {{--{!! Form::select('priority', $priority, null, array('class' => 'form-control select2', 'required' => true ,'placeholder'=>'Độ ưu tiên',)) !!}--}}
-                            {{--<span class="help-block">{{ $errors->first('name', ':message') }}</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
                     <div class="col-xs-12 col-md-7">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('users', 'Người tham gia', array('class' => ' required')) !!}

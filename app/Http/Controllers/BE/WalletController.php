@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers\BE;
 
-use App\Services\TaskService;
+use App\Models\Customer;
+use App\Models\PackageWallet;
+use App\Services\WalletService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class WalletController extends Controller
 {
-    private $taskService;
+    private $walletService;
 
     /**
      * TaskController constructor.
      *
      * @param TaskService $taskService
      */
-    public function __construct(TaskService $taskService)
+    public function __construct(WalletService $walletService)
     {
 
-        $this->taskService = $taskService;
+        $this->walletService = $walletService;
     }
 
     /**
@@ -72,12 +75,18 @@ class WalletController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->except('user_id2');
-        $task = $this->taskService->create($input);
-        $user = User::find($request->user_id2);
-        $task->users()->attach($user);
-
-        return redirect('tasks')->with('status', 'Tạo người dùng thành công');
+        $package = PackageWallet::findOrFail($request->package_id);
+        $customer = Customer::findOrFail($request->customer_id);
+        $input = [
+            'package_id' => $package->id,
+            'customer_id' => $customer->id,
+            'user_id' => Auth::user()->id,
+            'price' => $package->price,
+        ];
+        $this->walletService->create($input);
+        $customer->wallet = $customer->wallet + $package->price;
+        $customer->save();
+        return back()->with('status', 'Nạp tiền thành công');
     }
 
     /**

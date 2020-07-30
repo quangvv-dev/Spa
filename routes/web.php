@@ -120,5 +120,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     });
     Route::resource('tasks', 'TaskController');
     Route::resource('wallet', 'WalletController');
+    Route::resource('package', 'WalletController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');
 });

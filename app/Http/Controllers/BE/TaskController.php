@@ -76,6 +76,13 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->description) {
+            $note = str_replace("\r\n", ' ', $request->description);
+            $note = str_replace("\n", ' ', $note);
+            $note = str_replace('"', ' ', $note);
+            $note = str_replace("'", ' ', $note);
+            $request->merge(['description' => $note]);
+        }
         $input = $request->except('user_id2');
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
@@ -93,6 +100,13 @@ class TaskController extends Controller
      */
     public function storeCustomer(Request $request)
     {
+        if ($request->description) {
+            $note = str_replace("\r\n", ' ', $request->description);
+            $note = str_replace("\n", ' ', $note);
+            $note = str_replace('"', ' ', $note);
+            $note = str_replace("'", ' ', $note);
+            $request->merge(['description' => $note]);
+        }
         $input = $request->except('user_id2', 'status_name');
         $customer = Customer::find($input['customer_id']);
         $text = [];
@@ -153,6 +167,13 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if ($request->description) {
+            $note = str_replace("\r\n", ' ', $request->description);
+            $note = str_replace("\n", ' ', $note);
+            $note = str_replace('"', ' ', $note);
+            $note = str_replace("'", ' ', $note);
+            $request->merge(['description' => $note]);
+        }
         $input = $request->except('user_id2', 'status_name');
 
         $task = $this->taskService->update($input, $id);
@@ -191,6 +212,13 @@ class TaskController extends Controller
      */
     public function ajaxUpdate(Request $request, $id)
     {
+        if ($request->description) {
+            $note = str_replace("\r\n", ' ', $request->description);
+            $note = str_replace("\n", ' ', $note);
+            $note = str_replace('"', ' ', $note);
+            $note = str_replace("'", ' ', $note);
+            $request->merge(['description' => $note]);
+        }
         $input = $request->except('user_id2', 'status_name');
         $task = $this->taskService->update($input, $id);
         return $task;

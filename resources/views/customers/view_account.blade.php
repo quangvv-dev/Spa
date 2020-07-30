@@ -61,7 +61,7 @@
     <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
         <div class="card">
             <div class="card-header">
-                <div class="col-md-6 no-padd font16"><a class="avatar a45 fl mr10 pic"> <img
+                <div class="col-md-3 no-padd font16"><a class="avatar a45 fl mr10 pic"> <img
                             src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png"> </a> <span
                         class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
                     <div class="display" id="toolbox" style="width: 28px; height: 20px">
@@ -75,6 +75,14 @@
                         </a>
                     </div>
                 </div>
+                <div class="col-md-3 position" rel="tooltip">
+                    <div class="no-padd tc mg0">
+                        <h1 style="font-size:25px;color: #dc3011;" class="bold mg0">{{number_format($customer->wallet)}}
+                            VNĐ</h1>
+                        <p>Số dư ví</p></div>
+                </div>
+                <div class="col-md-1 position" rel="tooltip"></div>
+
                 <div class="col-md-2 no-padd bor-l pl20 mg0 pt10 position hoverlastactive" rel="tooltip"
                      data-original-title="Click thay đổi người phụ trách" data-placement="bottom">
                     <div class="show_change_am" style="cursor:pointer">
@@ -87,12 +95,10 @@
                             <p class="gray1 font12">Người phụ trách</p></div>
                     </div>
                 </div>
-                <div class="col-md-1 no-padd bor-l mg0 position hoverlastactive" rel="tooltip"
-                     data-original-title="Click thay đổi liên hệ lần cuối" data-placement="bottom">
-                </div>
-                <div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:30px" class="bold mg0">0</h1>
-                    <p>Tương tác</p></div>
-                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:30px"
+                <div class="col-md-1 no-padd tc bor-l mg0"></div>
+                {{--<div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011" class="bold mg0">0</h1>--}}
+                    {{--<p>Tương tác</p></div>--}}
+                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011"
                                                                class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
                         VNĐ</h1>
                     <p>Giá trị</p></div>
