@@ -98,50 +98,7 @@ class ScheduleController extends Controller
             $note = str_replace("'", ' ', $note);
             $request->merge(['note' => $note]);
         }
-        $data = Schedule::create($request->all());
-        $customer = Customer::find($id);
-//        $person_action = User::find($request->person_action);
-        $now = Carbon::now()->format('Y-m-d');
-        if ($now != $data->date) {
-            $date = Carbon::parse($data->date)->format('d/m/Y') . ' 07:00';
-        } else {
-            $date = '';
-        }
-//        if (isset($customer) && $customer) {
-//            $body = setting('sms_cskh');
-//            $body = str_replace('%full_name%', $customer->full_name, $body);
-//            $body = str_replace('%time_from%', $data->time_from, $body);
-//            $body = str_replace('%time_to%', $data->time_to, $body);
-//            $body = Functions::vi_to_en($body);
-//            Functions::sendSms(@$customer->phone, $body, $date);
-//        }
-//        if (isset($person_action) && $person_action) {
-//            $body = setting('sms_csnv');
-//            $body = str_replace('%full_name%', $person_action->full_name, $body);
-//            $body = str_replace('%time_from%', $data->time_from, $body);
-//            $body = str_replace('%time_to%', $data->time_to, $body);
-//            $body = Functions::vi_to_en($body);
-//            Functions::sendSms(@$person_action->phone, $body, $date);
-//        }
-        $input = [
-            'customer_id'    => $id,
-            'date_from'      => Carbon::now()->format('Y-m-d'),
-            'time_from'      => '07:00',
-            'date_to'        => $request->date,
-            'time_to'        => $request->time_from,
-            'code'           => 'CV-CSKH',
-            'user_id'        => $request->person_action,
-            'all_day'        => 'on',
-            'priority'       => 1,
-            'amount_of_work' => 1,
-            'type'           => 2,
-            'name'           => 'Công việc chăm sóc khách hàng',
-            'description'    => 'Bạn có công việc CSKH với khách hàng ' . $customer->full_name . '---' . $customer->phone . ' đặt lịch hẹn. Trao đổi với KH : ' . $request->note,
-        ];
-
-        $task = $this->taskService->create($input);
-        $user = User::find($request->user_id2);
-        $task->users()->attach($user);
+        Schedule::create($request->all());
         return redirect()->back();
     }
 
