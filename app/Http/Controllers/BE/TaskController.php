@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\NotificationConstant;
 use App\Models\Customer;
 use App\Models\Department;
+use App\Models\Notification;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Services\TaskService;
@@ -118,6 +120,19 @@ class TaskController extends Controller
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
+
+        $title = $task->type == NotificationConstant::CALL ? '📅📅📅 Bạn có công việc chăm sóc mới !'
+            : '💬💬💬 Bạn có công việc gọi điện mới !';
+        Notification::insert([
+//            'title' => 'CV ' . $request->name . ' đã đến giờ thực hiện',
+            'title' => $title,
+            'user_id' => $task->user_id,
+            'type' => $task->type,
+            'task_id' => $task->id,
+            'status' => NotificationConstant::HIDDEN,
+            'created_at' => $task->date_from . ' ' . $task->time_from,
+            'data' => json_encode((array)['task_id' => $task->id]),
+        ]);
         return back();
     }
 
@@ -179,6 +194,8 @@ class TaskController extends Controller
         $task = $this->taskService->update($input, $id);
         $task->users()->sync($request->user_id2);
 
+        Notification::where('task_id', $task->id)->update(['created_at' => $task->date_from . ' ' . $task->time_from]);
+
         return redirect(route('tasks.index'))->with('status', 'Cập nhật công việc thành công');
     }
 
@@ -221,6 +238,9 @@ class TaskController extends Controller
         }
         $input = $request->except('user_id2', 'status_name');
         $task = $this->taskService->update($input, $id);
+
+        Notification::where('task_id', $task->id)->update(['created_at' => $task->date_from . ' ' . $task->time_from]);
+
         return $task;
     }
 

@@ -15,7 +15,7 @@ use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Services;
 use App\Models\Status;
-use App\Services\CustomerService;
+use App\Models\Notification;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use App\Services\PaymentHistoryService;
@@ -23,16 +23,15 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Models\RuleOutput;
 use App\Services\TaskService;
-use App\Models\Rule;
 use Illuminate\Support\Facades\Response;
 use DB;
 use Excel;
 use Exception;
 use Log;
 use Illuminate\Support\Facades\View;
+use App\Constants\NotificationConstant;
 
 class OrderController extends Controller
 {
@@ -157,7 +156,7 @@ class OrderController extends Controller
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest' => $orders->sum('the_rest'),
             ]);
-            $orders = $orders->orderBy('id', 'desc')->paginate(20);
+            $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
                 'allTotalPage' => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
@@ -174,7 +173,7 @@ class OrderController extends Controller
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest' => $orders->sum('the_rest'),
             ]);
-            $orders = $orders->paginate(20);
+            $orders = $orders->paginate(StatusCode::PAGINATE_20);
             View::share([
                 'allTotalPage' => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
@@ -214,7 +213,7 @@ class OrderController extends Controller
             View::share([
                 'allTotal' => $detail->sum('price'),
             ]);
-            $detail = $detail->orderBy('id', 'desc')->paginate(20);
+            $detail = $detail->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
                 'allTotalPage' => $detail->sum('price'),
             ]);
@@ -229,7 +228,7 @@ class OrderController extends Controller
             View::share([
                 'allTotal' => $detail->sum('price'),
             ]);
-            $detail = $detail->paginate(20);
+            $detail = $detail->paginate(StatusCode::PAGINATE_20);
             View::share([
                 'allTotalPage' => $detail->sum('price'),
             ]);
@@ -348,6 +347,17 @@ class OrderController extends Controller
                         $task = $this->taskService->create($input);
                         $follow = User::whereIn('phone', ['0977508510', '0776904396', '0975091435', '0334299996'])->get();
                         $task->users()->attach($follow);
+                        $title = $task->type == NotificationConstant::CALL ? '📅📅📅 Bạn có công việc chăm sóc mới !'
+                            : '💬💬💬 Bạn có công việc gọi điện mới !';
+                        Notification::insert([
+                            'title' => $title,
+                            'user_id' => $task->user_id,
+                            'type' => $task->type,
+                            'task_id' => $task->id,
+                            'status' => NotificationConstant::HIDDEN,
+                            'created_at' => $task->date_from . ' ' . $task->time_from,
+                            'data' => json_encode((array)['task_id' => $task->id]),
+                        ]);
                     }
                 }
             }

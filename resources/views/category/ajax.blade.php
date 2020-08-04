@@ -25,13 +25,13 @@
                            data-url="{{ url('category/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
-        </tbody>
-        @endforeach
+            @endforeach
         @else
             <tr>
                 <td id="no-data" class="text-center" colspan="7">Không tồn tại dữ liệu</td>
             </tr>
         @endif
+        </tbody>
     </table>
     <div class="pull-left">
         <div class="page-info">

@@ -75,6 +75,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('settings', 'SettingController@store');
         Route::get('commission', 'CommissionController@getCommissionWithUser');
         Route::put('tasks/{id}', 'TaskController@ajaxUpdate');
+        Route::get('count-notifications', 'AjaxController@countNotification');
+        Route::get('notifications', 'AjaxController@getNotification');
+        Route::get('change-notification/{id}', 'AjaxController@updateNotification');
 
     });
 
@@ -116,9 +119,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('group-sale/{type}', 'SalesController@indexGroupCategory');
         Route::get('commission', 'CommissionController@statistical');
         Route::get('tasks', 'TaskController@statistical');
-
     });
     Route::resource('tasks', 'TaskController');
+    Route::get('notifications', 'AjaxController@getNotificationOutView')->name('notifications.index');
     Route::resource('wallet', 'WalletController');
     Route::resource('package', 'PackageController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');

@@ -88,8 +88,9 @@
                     </div>
                     <div class="col-xs-12 col-md-3">
                         <div class="form-group required">
-                            {!! Form::label('status_name', 'Trạng thái', array('class' => ' required')) !!}
-                            {!! Form::text('status_name',@$task->taskStatus->name, array('class' => 'form-control', 'required' => true,'readonly'=>true)) !!}
+                            {!! Form::label('task_status_id', 'Trạng thái', array('class' => ' required')) !!}
+                            {{--{!! Form::text('status_name',@$task->taskStatus->name, array('class' => 'form-control', 'required' => true,'readonly'=>true)) !!}--}}
+                            {!! Form::select('task_status_id',$status, null, array('class' => 'form-control select2','id'=>'update_status')) !!}
                         </div>
                     </div>
                 </div>
@@ -121,5 +122,9 @@
             autoHide: true,
             zIndex: 2048,
         });
+        var status = $('#update_status').val();
+        if (status != 1) {
+            $('#update_status').attr('disabled', true)
+        }
     </script>
 @endsection
