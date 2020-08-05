@@ -6,12 +6,21 @@ use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use App\Services\ImageService;
 
 class AjaxController extends Controller
 {
+
+    private $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
 
     /**
      * Đếm số thông báo chưa đọc
@@ -62,6 +71,24 @@ class AjaxController extends Controller
         $docs = Notification::where('user_id', Auth::user()->id)->where('status', '<>', NotificationConstant::HIDDEN)
             ->orderByDesc('created_at')->paginate(StatusCode::PAGINATE_10);
         return view('notifications.index', compact('docs'));
+    }
+
+    public function indexPost()
+    {
+        return view('post.index');
+    }
+
+    public function store(Request $request)
+    {
+        $fileName = $this->imageService->store($request->image, $request->folder);
+        return $request->folder . '/' . $fileName;
+    }
+
+    public function destroy(Request $request)
+    {
+        Log::info('AjaxController.delete() ' . $request->url);
+        File::delete($request->url);
+        return 1;
     }
 
 }

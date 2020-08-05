@@ -1,6 +1,7 @@
 <?php
 
 Auth::routes();
+Route::get('post', 'BE\AjaxController@indexPost');
 
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
@@ -79,6 +80,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('notifications', 'AjaxController@getNotification');
         Route::get('change-notification/{id}', 'AjaxController@updateNotification');
 
+        Route::post('image/store', 'AjaxController@store');
+        Route::post('image/destroy', 'AjaxController@destroy');
+
     });
 
     Route::resource('rules', 'RuleController');//Automation
@@ -125,4 +129,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('wallet', 'WalletController');
     Route::resource('package', 'PackageController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');
+    Route::resource('posts', 'PostsController');
+
 });
