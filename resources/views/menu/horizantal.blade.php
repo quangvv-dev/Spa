@@ -37,11 +37,11 @@
                                 <a href="{{url('rules')}}">Automation </a>
                             </li>
                         @endif
+                        {{--<li>--}}
+                        {{--<a href="#">Optin Form</a>--}}
+                        {{--</li>--}}
                         <li>
-                            <a href="#">Optin Form</a>
-                        </li>
-                        <li>
-                            <a href="#">Landing Page</a>
+                            <a href="{{route('posts.index')}}">Landing Page</a>
                         </li>
                     </ul>
                 </div>
