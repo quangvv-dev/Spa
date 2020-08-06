@@ -8,21 +8,27 @@
     <title>Royal Spa</title>
     <!-- Begin Builder -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{--<style>[data-key] {--}}
-            {{--visibility: hidden--}}
-        {{--}</style>--}}
-    <script src="{{asset('laningpage/frontend/js/builder.js')}}"></script>
-    <!-- End Builder -->
+    <style>
+        .error {
+            color: #fff;
+        }
+    </style>
+{{--<script src="{{asset('laningpage/frontend/js/builder.js')}}"></script>--}}
+<!-- End Builder -->
     <link rel="stylesheet" type="text/css" href="{{asset('laningpage/frontend/css/main.css')}}">
     <link rel="stylesheet" href="{{asset('laningpage/frontend/css/drawer.min.css')}}">
     <style>
         @media (max-width: 768px) {
-            .content {
+            .contents {
                 margin-top: 20% !important;
             }
 
-            .content img {
+            .contents img {
                 width: 100% !important;
+            }
+
+            .add {
+                height: 30px;
             }
         }
 
@@ -50,7 +56,8 @@
             </li>
             <li class="navigation-item">
                 <a class="navigation-link" href="#">
-                    <img class="navigation-image" src="/laningpage/frontend/Icon/gioithieu.png" alt="royal icon introduce"/>
+                    <img class="navigation-image" src="/laningpage/frontend/Icon/gioithieu.png"
+                         alt="royal icon introduce"/>
                     <p>Giới thiệu</p>
                 </a>
             </li>
@@ -62,14 +69,15 @@
                     Dịch vụ
                 </button>
                 {{--<ul class="dropdown-menu navigation-sub" aria-labelledby="dLabel">--}}
-                    {{--<li><a class="dropdown-item" href="#">Trị mụn, sẹo</a></li>--}}
-                    {{--<li><a class="dropdown-item" href="#">Trị viêm nang lông</a></li>--}}
-                    {{--<li><a class="dropdown-item" href="#">Trị hôi nách</a></li>--}}
+                {{--<li><a class="dropdown-item" href="#">Trị mụn, sẹo</a></li>--}}
+                {{--<li><a class="dropdown-item" href="#">Trị viêm nang lông</a></li>--}}
+                {{--<li><a class="dropdown-item" href="#">Trị hôi nách</a></li>--}}
                 {{--</ul>--}}
             </li>
             <li class="navigation-item">
                 <a class="navigation-link" href="#">
-                    <img class="navigation-image" src="/laningpage/frontend/Icon/datlich.png" alt="royal icon calendar"/>
+                    <img class="navigation-image" src="/laningpage/frontend/Icon/datlich.png"
+                         alt="royal icon calendar"/>
                     <p>Đặt lịch</p>
                 </a>
             </li>
@@ -81,12 +89,13 @@
             </li>
             <li class="navigation-item">
                 <a class="navigation-link" href="#">
-                    <img class="navigation-image edu" src="/laningpage/frontend/Icon/daotao.png" alt="royal icon educate"/>
+                    <img class="navigation-image edu" src="/laningpage/frontend/Icon/daotao.png"
+                         alt="royal icon educate"/>
                     <p>Đào tạo</p>
                 </a>
             </li>
             <li class="navigation-item-more">
-                <a class="navigation-more-link" href="tel:0982966663">Liên Hệ</a>
+                <a class="navigation-more-link" href="tel:{{$post->phone}}">Liên Hệ</a>
                 <a class="navigation-button-container" href="#dang-ky">
                     <button class="navigation-button btn-royal">
                         <p class="navigation-button-content">Đăng ký tư vấn</p>
@@ -116,14 +125,16 @@
             <ul class="drawer-menu">
                 <li class="navigation-item">
                     <a class="navigation-link" href="/">
-                        <img class="navigation-image" src="/laningpage/frontend/Icon/gioithieu.png" alt="royal icon introduce"/>
+                        <img class="navigation-image" src="/laningpage/frontend/Icon/gioithieu.png"
+                             alt="royal icon introduce"/>
                         <p>Giới thiệu</p>
                     </a>
                 </li>
                 <li class="navigation-item">
                     <button class="btn navigation-link" type="button" data-toggle="collapse" data-target="#services"
                             aria-expanded="false" aria-controls="services">
-                        <img class="navigation-image" src="/laningpage/frontend/Icon/dichvu.png" alt="royal icon person"/>
+                        <img class="navigation-image" src="/laningpage/frontend/Icon/dichvu.png"
+                             alt="royal icon person"/>
                         <p>Dịch vụ</p>
                     </button>
                     <div class="collapse navigation-collapse" id="services">
@@ -136,7 +147,8 @@
                 </li>
                 <li class="navigation-item">
                     <a class="navigation-link" href="#dang-ky">
-                        <img class="navigation-image" src="/laningpage/frontend/Icon/datlich.png" alt="royal icon calendar"/>
+                        <img class="navigation-image" src="/laningpage/frontend/Icon/datlich.png"
+                             alt="royal icon calendar"/>
                         <p>Đặt lịch</p>
                     </a>
                 </li>
@@ -159,10 +171,10 @@
 </div>
 <div class="container">
     <div class="row">
-        {{--<section class="content col-md-12 col-sm-12">--}}
-        {{--<h2 class="content-title">{{$post->title}}</h2>--}}
-        {{--{!! $post->content !!}--}}
-        {{--</section>--}}
+        <section class="contents col-md-12 col-sm-12">
+            <h2 class="content-title">{{@$post->title}}</h2>
+            {!! @$post->content !!}
+        </section>
     </div>
 </div>
 <section class="register">
@@ -183,13 +195,17 @@
                 <img class="register-girl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
                      data-scroll="/laningpage/frontend/images/register-girl.png" alt="royal girl face"/>
             </div>
-            <div class="col-12 col-md-5 register-form-container">
-                <form id="dang-ky" class="register-form" method="post" action="dang-ky">
+            <div class="col-12 col-md-5 register-form-container" id="dang-ky">
+                <div class="add"></div>
+                <form id="my_Form" class="register-form" method="post" action="">
                     <h2 class="register-title" data-key="customer-432">ĐĂNG KÝ TƯ VẤN</h2>
-                    <input class="register-input" type="text" name="name" placeholder="Họ tên khách hàng" required/>
+                    <input class="register-input" type="text" name="full_name" placeholder="Họ tên khách hàng"
+                           required/>
                     <input class="register-input" type="text" name="phone" placeholder="Số điện thoại" required/>
-                    <input class="register-input" type="text" name="content" placeholder="Dịch vụ cần tư vấn" required/>
-                    <input id="js-register-button" class="register-button-submit btn-royal" type="submit" value="ĐĂNG KÝ NGAY"/>
+                    <input class="register-input" type="text" name="note" placeholder="Dịch vụ cần tư vấn"/>
+                    <input class="register-input" type="hidden" name="slug" value="{{request()->segment(2)}}"/>
+                    <input id="js-register-button" class="register-button-submit btn-royal" type="submit"
+                           value="ĐĂNG KÝ NGAY"/>
                 </form>
             </div>
         </div>
@@ -199,21 +215,21 @@
 
 <!-- modal -->
 {{--<div class="modal fade" id="customer-book" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}}
-    {{--<div class="modal-dialog modal-layout">--}}
-        {{--<!--Modal content-->--}}
-        {{--<div class="modal-content modal-container">--}}
-            {{--<h3 class="home-modal-title" data-key="model-1">Viện Thẩm Mỹ Royal xứng đáng là lựa chọn hoàn hảo nhất giúp--}}
-                {{--nét đẹp Việt được thăng--}}
-                {{--hoa.</h3>--}}
-            {{--<input id="province-popup" type="hidden" class="modal-input" name="province" placeholder="Khu vực"/>--}}
-            {{--<input type="text" class="modal-input" name="name" placeholder="Họ tên Khách hàng"/>--}}
-            {{--<input type="text" class="modal-input" name="phone" placeholder="Số điện thoại"/>--}}
-            {{--<input type="text" class="modal-input" name="content" placeholder="Dịch vụ cần tư vấn"/>--}}
-            {{--<button id="js-customer-book-button" type="button" class="register-button-submit btn-royal"--}}
-                    {{--data-dismiss="modal">ĐẶT LỊCH GIỮ CHỖ--}}
-            {{--</button>--}}
-        {{--</div>--}}
-    {{--</div>--}}
+{{--<div class="modal-dialog modal-layout">--}}
+{{--<!--Modal content-->--}}
+{{--<div class="modal-content modal-container">--}}
+{{--<h3 class="home-modal-title" data-key="model-1">Viện Thẩm Mỹ Royal xứng đáng là lựa chọn hoàn hảo nhất giúp--}}
+{{--nét đẹp Việt được thăng--}}
+{{--hoa.</h3>--}}
+{{--<input id="province-popup" type="hidden" class="modal-input" name="province" placeholder="Khu vực"/>--}}
+{{--<input type="text" class="modal-input" name="name" placeholder="Họ tên Khách hàng"/>--}}
+{{--<input type="text" class="modal-input" name="phone" placeholder="Số điện thoại"/>--}}
+{{--<input type="text" class="modal-input" name="content" placeholder="Dịch vụ cần tư vấn"/>--}}
+{{--<button id="js-customer-book-button" type="button" class="register-button-submit btn-royal"--}}
+{{--data-dismiss="modal">ĐẶT LỊCH GIỮ CHỖ--}}
+{{--</button>--}}
+{{--</div>--}}
+{{--</div>--}}
 {{--</div>--}}
 <!-- contact buttons -->
 <div class="contact-button">
@@ -225,12 +241,13 @@
             <p class="contact-button-text messenger-text">Messenger</p>
         </div>
     </button>
-    <a href="tel:0982966663" class="btn button-container call-now-container">
+    <a href="tel:{{$post->phone}}" class="btn button-container call-now-container">
         <img class="contact-icon call-now" src="/laningpage/frontend/Icon/phone-call.png" alt="royal call"/>
         <p class="contact-button-text call-now-text">Gọi ngay</p>
     </a>
     <button class="btn button-container book-appointment-container">
-        <img class="contact-icon book-appointment-icon" src="/laningpage/frontend/Icon/calendar-fill.png" alt="royal call"/>
+        <img class="contact-icon book-appointment-icon" src="/laningpage/frontend/Icon/calendar-fill.png"
+             alt="royal call"/>
         <a href="#dang-ky" class="contact-button-text book-appointment-text">Đăng ký tư vấn</a>
     </button>
 </div>
@@ -288,33 +305,39 @@
                 <div class="business-item">
                     <h4 class="business-name" data-key="3">Cơ sở 1</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-3" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-3" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="4">Số 38 - Ngõ 12 Láng Hạ - Đống Đa - Hà Nội</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-5" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-5"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="5">Hotline: 0982 966 663</p>
                     </div>
                 </div>
                 <div class="business-item">
                     <h4 class="business-name" data-key="6">Cơ sở 2</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-6" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-6" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="7">Số 251 Hai Bà Trưng - Cát Dài - Hải Phòng</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-7" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-7"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="8">Hotline: 0982 592 663</p>
                     </div>
                 </div>
                 <div class="business-item">
                     <h4 class="business-name" data-key="9">Cơ sở 3</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-8" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-8" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="10">Số 458 Hoàng Minh Thảo - Lê Chân - Hải Phòng</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-9" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-9"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="11">Hotline : 0981 693 266</p>
                     </div>
                 </div>
@@ -323,33 +346,39 @@
                 <div class="business-item">
                     <h4 class="business-name none-after-title" data-key="12">Cơ sở 4</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-10" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-10" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="13">CS4: 183 Hoàng Văn Thụ - TP Bắc Giang</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-11" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-11"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="14">Hotline: 0971 523 633</p>
                     </div>
                 </div>
                 <div class="business-item">
                     <h4 class="business-name" data-key="15">Cơ sở 5</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-12" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-12" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="16">Số 286/3 Tô Hiến Thành - Q10 - TP Hồ Chí Minh</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-13" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-13"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="17">Hotline: 0982 196 288</p>
                     </div>
                 </div>
                 <div class="business-item">
                     <h4 class="business-name" data-key="18">Cơ sở 6</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-14" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-14" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="19">Số 22 Hùng Vương - Vĩnh Yên - Vĩnh Phúc</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-15" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-15"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="20">Hotline : 0981 693 266</p>
                     </div>
                 </div>
@@ -358,33 +387,39 @@
                 <div class="business-item">
                     <h4 class="business-name none-after-title" data-key="21">Cơ sở 7</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-16" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-16" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="22">Số 172 Nguyễn Gia Thiều - TP Bắc Ninh</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-17" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-17"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="23">Hotline: 0982 488 663</p>
                     </div>
                 </div>
                 <div class="business-item">
                     <h4 class="business-name" data-key="24">Cơ sở 8</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-18" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-18" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="25">Số 580 Nguyễn Trãi - TP Bắc Ninh</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-19" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-19"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="26">Hotline: 0981 665 299</p>
                     </div>
                 </div>
                 <div class="business-item">
                     <h4 class="business-name" data-key="27">Cơ sở 9</h4>
                     <div class="business-info">
-                        <img class="icon-address" data-key="image-20" src="/laningpage/frontend/images/icon-map.png" alt="Address">
+                        <img class="icon-address" data-key="image-20" src="/laningpage/frontend/images/icon-map.png"
+                             alt="Address">
                         <p class="content" data-key="28">Số 67 Minh Cầu - TP Thái Nguyên</p>
                     </div>
                     <div class="business-info">
-                        <img class="icon-hotline" data-key="image-21" src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
+                        <img class="icon-hotline" data-key="image-21"
+                             src="/laningpage/frontend/images/icon-call-gold.png" alt="Phone">
                         <p class="content" data-key="29">Hotline: 0968 922 611</p>
                     </div>
                 </div>
@@ -403,6 +438,9 @@
 <script src="{{asset('laningpage/frontend/js/iscroll.min.js')}}"></script>
 <!-- drawer.js -->
 <script src="{{asset('laningpage/frontend/js/drawer.min.js')}}"></script>
+
+<script src="{{asset('assets/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-validation/js/additional-methods.min.js')}}"></script>
 <script async defer
         src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v7.0&appId=1721885251448704&autoLogAppEvents=1"></script>
 
@@ -422,37 +460,32 @@
             const imgBtn = $('.drawer-hamburger').children().find('img')
             imgBtn.replaceWith('<img src="/laningpage/frontend/Icon/icon-burger.png" alt="royal icon burger">')
         })
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        let arrayBookAppointment = document.getElementsByClassName("book-table-row");
-        document.getElementById("book-appointment-view-more").addEventListener("click", () => {
-            for (let i = 6; i < arrayBookAppointment.length - 1; i++) {
-                arrayBookAppointment[i].classList.toggle("book-table-row-hidden");
-            }
-            setTimeout(() => {
-                const isHidden = !$('.book-table-row-hidden').length
-                if (isHidden) {
-                    $('.link-see-more').text('Ẩn')
-                } else {
-                    $('.link-see-more').text('Xem thêm')
-                }
-            }, 300);
-            document.getElementById("icon-view-more").classList.toggle("rotate-icon-view-more");
-        });
 
-        // See more services
-        $('.service-button').click((e) => {
-            const isOpen = $('.service-button').attr('aria-expanded') === 'true'
-            if (isOpen) {
-                $('.service-button').text('Xem thêm dịch vụ')
-            } else {
-                $('.service-button').text('Ẩn dịch vụ')
+        jQuery.validator.addMethod("phone", function (phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, "");
+            return this.optional(element) || phone_number.length > 9 &&
+                phone_number.match(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
+        }, "Số điện thoại không hợp lệ");
+
+        $('form#my_Form').validate({
+            rules: {
+                phone: {
+                    required: true,
+                    phone: 'phone'
+                },
+                full_name: 'required',
+            },
+            messages: {
+                full_name: "Vui lòng nhập tên quý khách !!!",
+                phone: {
+                    required: 'Vui lòng nhập số điện thoại !!!',
+                    phone: 'Số điện thoại không hợp lệ !!!'
+                },
             }
         });
     });
 </script>
+
 <script>
     $.ajaxSetup({
         headers: {
@@ -460,7 +493,7 @@
         }
     });
 
-    $("#dang-ky").submit(function (event) {
+    $("#my_Form").submit(function (event) {
         event.preventDefault();
         var $form = $(this);
         sendMail($form, $("#js-register-button"))
@@ -474,25 +507,20 @@
         sendMail($('#register'), $(this));
     });
 
-    $('.js-customer-province-book').on('click', function () {
-        $('#province-popup').val($(this).parents('.book-table-row').find('.clm-area').text().trim());
-    });
-
     function sendMail($form, $button) {
-        var name = $form.find("input[name='name']").val();
+        var name = $form.find("input[name='full_name']").val();
         var phone = $form.find("input[name='phone']").val();
         if (!phone) {
             return;
         }
-        var content = $form.find("[name='content']").val();
-        var province = $form.find("[name='province']").val();
-        $form.find("input[name='name']").attr('disabled', true);
+        var slug = $form.find("[name='slug']").val();
+        var note = $form.find("[name='note']").val();
+        $form.find("input[name='full_name']").attr('disabled', true);
         $form.find("input[name='phone']").attr('disabled', true);
-        $form.find("[name='content']").attr('disabled', true);
-        $form.find("[name='province']").attr('disabled', true);
+        $form.find("[name='slug']").attr('disabled', true);
+        $form.find("[name='note']").attr('disabled', true);
         $button.attr('disabled', true);
-        var posting = $.post('/dang-ky', {name: name, phone: phone, content: content, province: province});
-        $('#province-popup').val('');
+        var posting = $.post('/customer-post', {full_name: name, phone: phone, slug: slug, note: note});
         posting.done(function (data) {
             if ($button.prop('tagName').toLowerCase() === 'input') {
                 $button.val(data);

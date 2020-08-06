@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Components\Filesystem\Filesystem;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\CustomerPost;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Customer;
@@ -204,12 +205,18 @@ class CustomerController extends Controller
         //EndTask
         //History SMS
         $history = [];
+        $customer_post = [];
         $wallet = [];
         $package = [];
         if ($request->history_sms) {
             $history = HistorySms::where('phone', $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('sms.history',
                 compact('history'))->render());
+        }
+        if ($request->post) {
+            $customer_post = CustomerPost::where('phone', $request->post)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            return Response::json(view('post.history',
+                compact('customer_post'))->render());
         }
         if ($request->history_wallet) {
             $wallet = WalletHistory::where('customer_id', $request->history_wallet)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
@@ -219,7 +226,7 @@ class CustomerController extends Controller
         //END
 
         return view('customers.view_account',
-            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
+            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus','customer_post',
                 'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet', 'package'));
     }
 

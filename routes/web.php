@@ -1,7 +1,8 @@
 <?php
 
 Auth::routes();
-Route::get('post', 'BE\AjaxController@indexPost');
+Route::get('post/{slug}', 'BE\AjaxController@indexPost');
+Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
 
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {

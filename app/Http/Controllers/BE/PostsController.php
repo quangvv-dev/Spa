@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Campaign;
@@ -26,7 +27,9 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view('post.index');
+        $title = 'Danh sách bài đăng';
+        $docs = Post::orderByDesc('id')->paginate(StatusCode::PAGINATE_10);
+        return view('post.list', compact('title', 'docs'));
     }
 
     /**
@@ -36,7 +39,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        $title = 'Tạo laningpage';
+        $title = 'Tạo bài đăng';
         return view('post._form', compact('title'));
     }
 
@@ -49,6 +52,7 @@ class PostsController extends Controller
     public function store(PostRequest $request)
     {
         Post::create($request->all());
+        return redirect(route('posts.index'))->with('Thêm mới thành công');
     }
 
     /**
@@ -59,7 +63,8 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        return view('post.index');
+        $post = Post::where('slug', $id)->first();
+        return view('post.index', compact('post'));
     }
 
     /**
@@ -68,9 +73,11 @@ class PostsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        $title = 'Tạo bài đăng';
+        $doc = $post;
+        return view('post._form', compact('doc', 'title'));
     }
 
     /**
@@ -80,9 +87,10 @@ class PostsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $post->update($request->all());
+        return redirect(route('posts.edit', $post->id))->with('chỉnh sửa thành công');
     }
 
     /**
@@ -91,8 +99,9 @@ class PostsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return 1;
     }
 }

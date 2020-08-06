@@ -4,15 +4,15 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
-                <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('category.create') }}"><i
+                <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('posts.create') }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
-            <div class="card-header">
-                <input class="form-control name col-md-2" name="search" placeholder="Tìm kiếm" tabindex="1"
-                       type="search">
-            </div>
+            {{--<div class="card-header">--}}
+                {{--<input class="form-control name col-md-2" name="search" placeholder="Tìm kiếm" tabindex="1"--}}
+                       {{--type="search">--}}
+            {{--</div>--}}
             <div id="registration-form">
-                @include('category.ajax')
+                @include('post.ajax')
             </div>
             <!-- table-responsive -->
         </div>
@@ -22,7 +22,7 @@
     <script type="text/javascript">
         function searchCategory(data) {
             $.ajax({
-                url: "{{ Url('category/') }}",
+                url: "{{ Url('posts/') }}",
                 method: "get",
                 data: data
             }).done(function (data) {
@@ -41,17 +41,22 @@
 
             searchCategory(data)
         });
-
-        $(document).on('change', '.type', function () {
-            const name = $('.name').val();
-            const type = $('.type').val();
-
-            const data = {
-                name: name,
-                type: type
-            };
-
-            searchCategory(data)
-        });
+        $('.coppy').click(function () {
+            $('#slug').focus();
+            $('#slug').select();
+            document.execCommand('copy');
+        })
+        //
+        // $(document).on('change', '.type', function () {
+        //     const name = $('.name').val();
+        //     const type = $('.type').val();
+        //
+        //     const data = {
+        //         name: name,
+        //         type: type
+        //     };
+        //
+        //     searchCategory(data)
+        // });
     </script>
 @endsection

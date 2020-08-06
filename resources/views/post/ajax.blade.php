@@ -3,9 +3,10 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
-            <th class="text-white text-center">Tên nhóm</th>
-            <th class="text-white text-center">Mã nhóm</th>
-            <th class="text-white text-center">Nhóm cha</th>
+            <th class="text-white text-center">Chiến dịch</th>
+            <th class="text-white text-center">Tiêu đề</th>
+            <th class="text-white text-center">SĐT tư vấn</th>
+            <th class="text-white text-center">Đường dẫn</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -14,14 +15,20 @@
             @foreach($docs as $k => $s)
                 <tr>
                     <th scope="row">{{$k}}</th>
-                    <td class="text-center">{{$s->name}}</td>
-                    <td class="text-center">{{$s->code}}</td>
-                    <td class="text-center">{{@$s->categories->name}}</td>
+                    <td class="text-center">{{@$s->campaign->name}}</td>
+                    <td class="text-center">{{$s->title}}</td>
+                    <td class="text-center">{{@$s->phone}}</td>
                     <td class="text-center">
-                        <a class="btn" href="{{ url('category/' . $s->id . '/edit') }}"><i
-                                    class="fas fa-edit"></i></a>
+                        <input title="Coppy" class="form-control" id="slug" type="text"
+                               value="{{@url('post/'.$s->slug)}}">
+                    </td>
+                    <td class="text-center">
+                        <a class="btn coppy" href="javascript:void(0)"><i
+                                class="fas fa-copy"></i></a>
+                        <a class="btn" href="{{ url('posts/' . $s->id . '/edit') }}"><i
+                                class="fas fa-edit"></i></a>
                         <a class="btn delete" href="javascript:void(0)"
-                           data-url="{{ url('category/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
+                           data-url="{{ url('posts/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
             @endforeach

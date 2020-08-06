@@ -4,8 +4,10 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
+use App\CustomerPost;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -73,22 +75,50 @@ class AjaxController extends Controller
         return view('notifications.index', compact('docs'));
     }
 
-    public function indexPost()
+    /**
+     * Display post FrontEnd
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function indexPost($id)
     {
-        return view('post.index');
+        $post = Post::where('slug', $id)->first();
+        return view('post.index', compact('post'));
     }
 
+    /**
+     * Store img summerNote
+     *
+     * @param Request $request
+     * @return string
+     */
     public function store(Request $request)
     {
         $fileName = $this->imageService->store($request->image, $request->folder);
         return $request->folder . '/' . $fileName;
     }
 
+    /**
+     * delete img summerNote
+     *
+     * @param Request $request
+     * @return int
+     */
     public function destroy(Request $request)
     {
         Log::info('AjaxController.delete() ' . $request->url);
         File::delete($request->url);
         return 1;
+    }
+
+    public function storeCustomerPost(Request $request)
+    {
+        $post = Post::where('slug', $request->slug)->first();
+        $input = $request->except('slug');
+        $input['post_id'] = $post->id;
+        CustomerPost::create($input);
+        return 'Đăng ký thành công';
     }
 
 }

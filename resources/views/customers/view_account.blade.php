@@ -227,6 +227,8 @@
                                                    data-toggle="tab">Ví tiền</a></li>
                                             <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Tin nhắn</a></li>
+                                            <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
+                                                   data-toggle="tab">Khuyến mại</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -319,6 +321,11 @@
                                                 @include('sms.history')
                                             @endif
                                         </div>
+                                        <div class="tab-pane " id="tab11">
+                                            @if(count($customer_post))
+                                                @include('post.history')
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -353,7 +360,7 @@
         })
         $(document).on('click', '#click_tab_10', function () {
             const id = $(this).data('id');
-            $('#tab9').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $('#tab10').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
 
             $.ajax({
                 url: "{{url()->current() }}",
@@ -361,6 +368,18 @@
                 data: {history_wallet: id}
             }).done(function (data) {
                 $('#tab10').html(data);
+            });
+        })
+        $(document).on('click', '#click_tab_11', function () {
+            const phone = $(this).data('phone');
+            $('#tab11').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {post: phone}
+            }).done(function (data) {
+                $('#tab11').html(data);
             });
         })
         $(document).on('dblclick', '.order-type', function () {

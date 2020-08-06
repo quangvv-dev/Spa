@@ -39,7 +39,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('slug') ? 'has-error' : '' }}">
                         {!! Form::label('slug', 'Đường dẫn', array('class' => ' required')) !!}
-                        {!! Form::text('slug',null, array('class' => 'form-control slug', 'readonly' => true)) !!}
+                        {!! Form::text('slug',old('slug')?:null, array('class' => 'form-control slug', 'readonly' => true)) !!}
                         <span class="help-block">{{ $errors->first('slug', ':message') }}</span>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
         </div>
         <div class="col bot">
             <button type="submit" class="btn btn-success">Lưu</button>
-            {{--<a href="{{route('category.index')}}" class="btn btn-danger">Về danh sách</a>--}}
+            <a href="{{route('posts.index')}}" class="btn btn-danger">Về danh sách</a>
         </div>
         {{ Form::close() }}
 
@@ -62,27 +62,6 @@
     </div>
 @endsection
 @section('_script')
-    {{--<script>--}}
-    {{--$(document).ready(function () {--}}
-    {{--$('.title').change(function () {--}}
-    {{--var Text = $(this).stringToSlug();--}}
-    {{--// Text = Text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');--}}
-    {{--$(".slug").val(Text).change();--}}
-    {{--})--}}
-    {{--// $('form#fvalidate').validate({--}}
-    {{--//     rules: {--}}
-    {{--//         name: 'required',--}}
-    {{--//     },--}}
-    {{--//     messages: {--}}
-    {{--//         name: "vui lòng nhâp tên danh mục",--}}
-    {{--//     }--}}
-    {{--// });--}}
-    {{--// jQuery('.select2').select2({ //apply select2 to my element--}}
-    {{--//     placeholder: "-Chọn sản phẩm-",--}}
-    {{--//     allowClear: true--}}
-    {{--// });--}}
-    {{--})--}}
-    {{--</script>--}}
     <script src="{{asset('/laningpage/frontend/js/codebase.core.min.js')}}"></script>
     <script src="{{asset('/laningpage/frontend/js/summernote-bs4.min.js')}}"></script>
     <script src="{{asset('/laningpage/frontend/js/speakingurl.min.js')}}"></script>
