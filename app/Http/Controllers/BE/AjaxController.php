@@ -6,6 +6,7 @@ use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\CustomerPost;
 use App\Http\Controllers\Controller;
+use App\Models\Campaign;
 use App\Models\Notification;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use App\Services\ImageService;
+use Illuminate\Support\Facades\Response;
+
 
 class AjaxController extends Controller
 {
@@ -112,6 +115,12 @@ class AjaxController extends Controller
         return 1;
     }
 
+    /**
+     * create Customer Post FE
+     *
+     * @param Request $request
+     * @return string
+     */
     public function storeCustomerPost(Request $request)
     {
         $post = Post::where('slug', $request->slug)->first();
@@ -119,6 +128,18 @@ class AjaxController extends Controller
         $input['post_id'] = $post->id;
         CustomerPost::create($input);
         return 'Đăng ký thành công';
+    }
+
+    public function ListCustomerPost(Request $request)
+    {
+        $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
+        $title = 'Danh sách khách hàng đăng ký form';
+        $input = $request->all();
+        $docs = CustomerPost::search($input);
+
+        if ($request->ajax()) return Response::json(view('post.ajax_customer', compact('docs', 'title'))->render());
+
+        return view('post.indexCustomer', compact('title', 'docs', 'campaigns'));
     }
 
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Models\Category;
 use App\Models\Customer;
-use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Functions;

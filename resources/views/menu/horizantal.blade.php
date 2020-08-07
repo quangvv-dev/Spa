@@ -32,16 +32,16 @@
                         <li>
                             <a href="#">SMS</a>
                         </li>
-                        @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
+                        @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'||\Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
                             <li>
                                 <a href="{{url('rules')}}">Automation </a>
                             </li>
                         @endif
-                        {{--<li>--}}
-                        {{--<a href="#">Optin Form</a>--}}
-                        {{--</li>--}}
                         <li>
                             <a href="{{route('posts.index')}}">Landing Page</a>
+                        </li>
+                        <li>
+                            <a href="{{route('post.customer')}}">Khách hàng từ form</a>
                         </li>
                     </ul>
                 </div>
