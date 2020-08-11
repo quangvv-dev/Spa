@@ -829,18 +829,18 @@
             });
             // anheasy
             $('.table-responsive .table-primary').floatThead({
-                top: 183,
+                top: 196,
                 scrollContainer: function ($table) {
                     return $table.closest('');
                 },
                 position: 'absolute'
             });
             $('.table-ajax .table-primary').floatThead({
-                top: 183,
+                top: 196,
                 position: 'absolute'
             });
             $(window).on("scroll", function (e) {
-                if ($(window).scrollTop() >= 150) {
+                if ($(window).scrollTop() >= 66) {
                     $('.search-box').addClass('searchbox-sticky');
                     $('.filter-box').addClass('filterbox-sticky');
                 } else {

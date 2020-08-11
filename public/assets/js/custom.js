@@ -1,7 +1,7 @@
 (function($) {
     "use strict";
 	$(window).on("scroll", function(e){
-    if ($(window).scrollTop() >= 150) {
+    if ($(window).scrollTop() >= 66) {
         $('.ren-navbar').addClass('fixed-header');
         $('.ren-navbar').addClass('visible-title');
     }
