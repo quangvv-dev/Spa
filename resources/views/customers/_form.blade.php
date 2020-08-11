@@ -36,14 +36,15 @@
                             <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
-                            {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
-                            <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
-                        </div>
-                    </div>
+
                     @if (isset($customer))
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('membership') ? 'has-error' : '' }}">
+                                {!! Form::label('membership', 'Mã thành viên (MEMBERSHIP)') !!}
+                                {!! Form::text('membership', null, array('id' => 'membership','maxLength'=>9,'class' => 'form-control')) !!}
+                                <span class="help-block">{{ $errors->first('membership', ':message') }}</span>
+                            </div>
+                        </div>
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
                                 {!! Form::label('fb_name', 'Tên Facebook') !!}
@@ -117,6 +118,13 @@
                             {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}
                             {!! Form::select('status_id', $status, @$customer->status_id, array('class' => 'form-control select2')) !!}
                             <span class="help-block">{{ $errors->first('status_id', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
+                            {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
+                            {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">

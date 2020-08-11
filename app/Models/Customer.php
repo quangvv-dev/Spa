@@ -37,6 +37,7 @@ class Customer extends Model
         'facebook',
         'avatar',
         'fb_name',
+        'membership',
         'deleted_at',
         'updated_at',
         'created_at',
@@ -49,7 +50,8 @@ class Customer extends Model
         $builder->when(isset($conditions['search']), function ($query) use ($conditions) {
             $query->where(function ($q) use ($conditions) {
                 $q->where('full_name', 'like', '%' . $conditions['search'] . '%')
-                    ->orWhere('phone', 'like', '%' . $conditions['search'] . '%');
+                    ->orWhere('phone', 'like', '%' . $conditions['search'] . '%')
+                    ->orWhere('membership', $conditions['search']);
             });
         })
             ->when(isset($conditions['status']), function ($query) use ($conditions) {
@@ -177,6 +179,7 @@ class Customer extends Model
     {
         return $this->hasMany(GroupComment::class, 'customer_id', 'id');
     }
+
     public function groupCustomer()
     {
         return $this->hasMany(CustomerGroup::class, 'customer_id', 'id');

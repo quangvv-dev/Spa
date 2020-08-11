@@ -99,6 +99,7 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
+        $( "#search" ).focus();
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
                 e.preventDefault();
