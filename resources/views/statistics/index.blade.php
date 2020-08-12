@@ -8,7 +8,10 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Thống kê tổng quan</h3>
-                <div class="col-md-10">
+                <div class="col-md-2 form-group">
+                    {!! Form::select('tower', $towers, null, array('class' => 'form-control select-gear tower','placeholder'=>'Chọn chi nhánh')) !!}
+                </div>
+                <div class="col-md-9">
                     <ul class="col-md-9 no-padd mt5 tr right">
                         {{--<li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>--}}
                         {{--<li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>--}}
@@ -51,11 +54,16 @@
     <input type="hidden" id="search-user">
     </div>
 @endsection
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.css" integrity="sha512-WUYSspsMSeZ5Rh9CMn8wP9W+8/1ukN1r0CJjw5ZNCCZkM49nig92GzbOur5CpoDcnT+4gVMbPZB5P3su7Z799Q==" crossorigin="anonymous" />
 @section('_script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/selectize.min.js" integrity="sha512-F7O0WjUWT+8qVnkKNDeXPt+uwW51fA8QLbqEYiyZfyG8cR0oaodl2oOFWODnV3zZvcy0IruaTosDiSDSeS9LIA==" crossorigin="anonymous"></script>t>
     <script type="text/javascript">
-        // $(document).ready(function () {
+       $(document).ready(function () {
+           $('.select-gear').selectize({
+               sortField: 'text'
+           });
         //     $(".fc-datepicker").datepicker({dateFormat: 'dd-mm-yy'});
-        // });
+        });
 
         function searchAjax(data) {
             $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
@@ -93,6 +101,13 @@
                 user_id: user_id,
             });
         });
+
+        $('.tower').change(function () {
+            var value = $(this).val();
+            searchAjax({
+                tower: value,
+            });
+        })
 
         // $(document).on('change.select2', '.search-user', function () {
         //     const user_id = $('.search-user').val();

@@ -15,10 +15,21 @@ use Illuminate\Support\Facades\Response;
 use App\Models\Services;
 use App\Models\CustomerGroup;
 use App\Models\Category;
+use nusoap_client;
 
 class StatisticController extends Controller
 {
     private $customer;
+    protected $tower = [
+        'https://royalspalh.adamtech.vn/api/statistics' => 'Láng Hạ',
+        'https://royalspabn.adamtech.vn/api/statistics' => 'Bắc Ninh 1',
+        'https://royalspabn2.adamtech.vn/api/statistics'=> 'Bắc Ninh 2',
+        'https://royalspabg.adamtech.vn/api/statistics' => 'Bắc Giang',
+        'https://royalspahp.adamtech.vn/api/statistics' => 'Hải Phòng',
+        'https://royalspavp.adamtech.vn/api/statistics' => 'Vĩnh Phúc',
+        'https://royalspatn.adamtech.vn/api/statistics' => 'Thái Nguyên',
+        'https://royalspasg.adamtech.vn/api/statistics' => 'Sài Gòn',
+    ];
 
     /**
      * StatisticController constructor.
@@ -44,56 +55,54 @@ class StatisticController extends Controller
      */
     public function index(Request $request)
     {
+        $towers = $this->tower;
         $input = $request->all();
         if (empty($request->data_time)) {
             $input['data_time'] = 'THIS_MONTH';
         }
+        if (empty($request->tower)) {
+            $input['tower'] = 'https://royalspabg.adamtech.vn/api/statistics';
+        }
+        $params = [
+            'query' => [
+                'data_time' => $input['data_time'],
+            ]
+        ];
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', $input['tower'], $params);
 
-        $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
-        $payment = PaymentHistory::search($input);
-
-        $orders = Order::returnRawData($input);
-        $orders2 = Order::returnRawData($input);
-
-        $arr = Services::getIdServiceType();
-        $input['list_booking'] = $arr;
-        $statusRevenues = Status::getRevenueSource($input);
-
-        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
-        $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
-
-        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'),\DB::raw('SUM(gross_revenue) AS revenue'))->whereBetween('payment_date', getTime($input['data_time']))
-            ->whereNotNull('payment_date')->orderBy('payment_date','asc')->groupBy('payment_date')->get();
-
-
+        if ($res->getStatusCode() == 200) { // 200 OK
+            $response_data = $res->getBody()->getContents();
+        }
+        $datas = json_decode($response_data)->data;
+        $statusRevenues = $datas->statusRevenues;
         $data = [
-            'all_total' => $orders->sum('all_total'),
-            'gross_revenue' => $orders->sum('gross_revenue'),
-            'payment' => $payment->sum('price'),
-            'orders' => $orders->count(),
-            'customers' => $customers->count(),
-            'category_service' => $category_service,
-            'category_product' => $category_product,
-            'revenue_month' => $revenue_month,
+            'all_total' => $datas->data->all_total,
+            'gross_revenue' => $datas->data->gross_revenue,
+            'payment' => $datas->data->payment,
+            'orders' => $datas->data->orders,
+            'customers' => $datas->data->customers,
+            'category_service' => $datas->data->category_service,
+            'category_product' => $datas->data->category_product,
+            'revenue_month' => $datas->data->revenue_month,
         ];
         $products = [
-            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
-            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
-            'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'the_rest' => $orders->where('role_type', StatusCode::PRODUCT)->sum('the_rest'),
+            'orders' => $datas->products->orders,
+            'all_total' => $datas->products->all_total,
+            'gross_revenue' => $datas->products->gross_revenue,
+            'the_rest' => $datas->products->the_rest,
         ];
         $services = [
-            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->get()->count(),
-            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
-            'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-            'the_rest' => $orders2->where('role_type', StatusCode::SERVICE)->sum('the_rest'),
+            'orders' => $datas->services->orders,
+            'all_total' => $datas->services->all_total,
+            'gross_revenue' => $datas->services->gross_revenue,
+            'the_rest' => $datas->services->the_rest,
         ];
 
-
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues'))->render());
+            return Response::json(view('statistics.ajax', compact('towers', 'data', 'services', 'products', 'statusRevenues'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues'));
+        return view('statistics.index', compact('towers', 'data', 'services', 'products', 'statusRevenues'));
     }
 
     public function show($id)
