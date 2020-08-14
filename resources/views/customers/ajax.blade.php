@@ -264,4 +264,17 @@
 </div>
 @include('customers.modal_view')
 <!-- table-responsive -->
-
+<script>
+    $('.table-responsive .table-primary').floatThead({
+        top: 196,
+        scrollContainer: function ($table) {
+            return $table.closest('');
+        },
+        position: 'absolute'
+    });
+    $('.table-ajax .table-primary').floatThead({
+        top: 196,
+        position: 'absolute'
+    });
+    $('html, body').animate({scrollTop: '0px'}, 300);
+</script>
