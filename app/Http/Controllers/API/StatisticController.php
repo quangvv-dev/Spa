@@ -45,8 +45,7 @@ class StatisticController extends BaseApiController
     public function index(Request $request)
     {
         $input = $request->all();
-        if (empty($request->data_time)) {
-//            $input['data_time'] = 'LAST_MONTH';
+        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
             $input['data_time'] = 'THIS_MONTH';
         }
 
