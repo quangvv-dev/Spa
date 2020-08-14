@@ -2,34 +2,24 @@
 
 namespace App\Http\Controllers\BE;
 
-use App\Constants\StatusCode;
 use App\Models\Customer;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\PaymentHistory;
-use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
-use App\Models\Services;
-use App\Models\CustomerGroup;
-use App\Models\Category;
-use nusoap_client;
 
 class StatisticController extends Controller
 {
     private $customer;
     protected $tower = [
-        'http://spa.test/api/' => 'TEST',
         'https://royalspalh.adamtech.vn/api/' => 'Láng Hạ',
-//        'https://royalspabn.adamtech.vn/api/' => 'Bắc Ninh 1',
-//        'https://royalspabn2.adamtech.vn/api/' => 'Bắc Ninh 2',
-//        'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
-//        'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
-//        'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
-//        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
-//        'https://royalspasg.adamtech.vn/api/' => 'Sài Gòn',
+        'https://royalspabn.adamtech.vn/api/' => 'Bắc Ninh 1',
+        'https://royalspabn2.adamtech.vn/api/' => 'Bắc Ninh 2',
+        'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
+        'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
+        'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
+        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
+        'https://royalspasg.adamtech.vn/api/' => 'Sài Gòn',
     ];
 
     /**
