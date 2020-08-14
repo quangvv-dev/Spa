@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::delete('schedules/{id}', 'ScheduleController@destroy')->name('schedules.destroy');
 
     Route::get('/statistics/', 'StatisticController@index')->name('statistics.index');
+    Route::get('/statistics-branch/', 'StatisticController@getBranch')->name('statistics.branch');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
     //Order
     Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');

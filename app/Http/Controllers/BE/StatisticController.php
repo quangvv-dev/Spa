@@ -21,14 +21,15 @@ class StatisticController extends Controller
 {
     private $customer;
     protected $tower = [
-        'https://royalspalh.adamtech.vn/api/statistics' => 'Láng Hạ',
-        'https://royalspabn.adamtech.vn/api/statistics' => 'Bắc Ninh 1',
-        'https://royalspabn2.adamtech.vn/api/statistics'=> 'Bắc Ninh 2',
-        'https://royalspabg.adamtech.vn/api/statistics' => 'Bắc Giang',
-        'https://royalspahp.adamtech.vn/api/statistics' => 'Hải Phòng',
-        'https://royalspavp.adamtech.vn/api/statistics' => 'Vĩnh Phúc',
-        'https://royalspatn.adamtech.vn/api/statistics' => 'Thái Nguyên',
-        'https://royalspasg.adamtech.vn/api/statistics' => 'Sài Gòn',
+        'http://spa.test/api/' => 'TEST',
+        'https://royalspalh.adamtech.vn/api/' => 'Láng Hạ',
+//        'https://royalspabn.adamtech.vn/api/' => 'Bắc Ninh 1',
+//        'https://royalspabn2.adamtech.vn/api/' => 'Bắc Ninh 2',
+//        'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
+//        'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
+//        'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
+//        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
+//        'https://royalspasg.adamtech.vn/api/' => 'Sài Gòn',
     ];
 
     /**
@@ -61,7 +62,7 @@ class StatisticController extends Controller
             $input['data_time'] = 'THIS_MONTH';
         }
         if (empty($request->tower)) {
-            $input['tower'] = 'https://royalspabg.adamtech.vn/api/statistics';
+            $input['tower'] = 'https://royalspabg.adamtech.vn/api/';
         }
         $params = [
             'query' => [
@@ -69,7 +70,7 @@ class StatisticController extends Controller
             ]
         ];
         $client = new \GuzzleHttp\Client();
-        $res = $client->request('GET', $input['tower'], $params);
+        $res = $client->request('GET', $input['tower'] . 'statistics', $params);
 
         if ($res->getStatusCode() == 200) { // 200 OK
             $response_data = $res->getBody()->getContents();
@@ -112,5 +113,46 @@ class StatisticController extends Controller
         $detail = $this->customer->getStatisticsUsers()->where('mkt_id', $id)->first();
 
         return view('statistics.detail', compact('detail', 'title', 'total'));
+    }
+
+    /**
+     * Thống kê tất cả chi nhánh.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
+    public function getBranch(Request $request)
+    {
+        $towers = $this->tower;
+
+        $input = $request->all();
+        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+        $params = [
+            'query' => [
+                'data_time' => @$input['data_time'],
+                'start_date' => @$input['start_date'],
+                'end_date' => @$input['end_date'],
+            ]
+        ];
+
+        $response = [];
+        foreach ($towers as $k => $item) {
+            $client = new \GuzzleHttp\Client();
+            $res = $client->request('GET', $k . 'statistics-all', $params);
+
+            if ($res->getStatusCode() == 200) { // 200 OK
+                $response_data = $res->getBody()->getContents();
+            }
+            $datas = json_decode($response_data)->data;
+            $response[$item] = $datas;
+        }
+        if ($request->ajax()) {
+            return Response::json(view('statistics.ajax_branch', compact('response'))->render());
+        }
+        return view('statistics.index_branch', compact('response'));
+
     }
 }

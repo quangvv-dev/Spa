@@ -46,7 +46,6 @@ class StatisticController extends BaseApiController
     {
         $input = $request->all();
         if (empty($request->data_time)) {
-//            $input['data_time'] = 'LAST_MONTH';
             $input['data_time'] = 'THIS_MONTH';
         }
 
@@ -127,7 +126,6 @@ class StatisticController extends BaseApiController
 
         $data = [
             'all_total' => $orders->sum('all_total'),
-//            'gross_revenue' => $orders->sum('gross_revenue'),
             'payment' => $payment->sum('price')
         ];
 
