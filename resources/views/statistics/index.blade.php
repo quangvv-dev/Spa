@@ -21,7 +21,7 @@
                                 này</a>
                         </li>
                         <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                        <li class="display position"><a class="other_time choose_time ">Khác</a>
+                        <li class="display position"><a class="other_time ">Khác</a>
                             <div class="add-drop add-d-right other_time_panel"
                                  style="left: auto; right: 0px; z-index: 999; display: none;"><s
                                     class="gf-icon-neotop"></s>
@@ -34,7 +34,7 @@
                                            data-toggle="datepicker" name="payment_date">
                                 </div>
                                 <div class="padding5-10 tl mb5">
-                                    <button class="btn btn-info submit_other_time">Tìm kiếm</button>
+                                    <button class="btn btn-info" id="submit_other_time">Tìm kiếm</button>
                                     <button class="btn btn-default cancel_other_time">Đóng</button>
                                 </div>
                             </div>
@@ -76,8 +76,15 @@
             });
         }
 
-        $(document).on('click', '.choose_time, .submit_other_time', function (e) {
+        $(document).on('click', '.choose_time, #submit_other_time', function (e) {
             e.preventDefault();
+
+            if (e.target.id == 'submit_other_time') {
+                $('#data-time').val('').change();
+            } else {
+                $('#start-date').val('').change();
+                $('#end-date').val('').change();
+            }
             let target = $(e.target).parent();
             const data_time = $(target).find('.choose_time').data('time');
             $('a.choose_time').removeClass('border b-gray');
