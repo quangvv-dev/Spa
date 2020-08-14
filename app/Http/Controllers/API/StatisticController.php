@@ -109,4 +109,28 @@ class StatisticController extends BaseApiController
 
         return view('statistics.detail', compact('detail', 'title', 'total'));
     }
+
+    /**
+     * Doanh so, da thu trong ky
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllBranch(Request $request)
+    {
+        $input = $request->all();
+        if (empty($request->data_time)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+        $payment = PaymentHistory::search($input);
+        $orders = Order::returnRawData($input);
+
+        $data = [
+            'all_total' => $orders->sum('all_total'),
+//            'gross_revenue' => $orders->sum('gross_revenue'),
+            'payment' => $payment->sum('price')
+        ];
+
+        return $this->responseApi(200, 'SUCCESS', $data);
+    }
 }
