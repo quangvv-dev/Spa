@@ -118,7 +118,7 @@ class StatisticController extends BaseApiController
     public function getAllBranch(Request $request)
     {
         $input = $request->all();
-        if (empty($request->data_time)) {
+        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
             $input['data_time'] = 'THIS_MONTH';
         }
         $payment = PaymentHistory::search($input);
