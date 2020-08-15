@@ -52,7 +52,7 @@ class StatisticController extends Controller
             $input['data_time'] = 'THIS_MONTH';
         }
         if (empty($request->tower)) {
-            $input['tower'] = 'https://royalspabg.adamtech.vn/api/';
+            $input['tower'] = 'https://royalspalh.adamtech.vn/api/';
         }
         $params = [
             'query' => [

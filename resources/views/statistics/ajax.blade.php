@@ -10,7 +10,7 @@
     }
 </style>
 
-<div class="h4 text-center">TOÀN HỆ THỐNG</div>
+<div class="h4 text-center">TOÀN CHI NHÁNH</div>
 <div class="row row-cards">
     <div class="col">
         <div class="card  overflow-hidden bg-gradient-indigo text-white">

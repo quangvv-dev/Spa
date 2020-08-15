@@ -29,7 +29,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        return redirect('/customers');
+        return redirect('/statistics');
     }
 
     /**

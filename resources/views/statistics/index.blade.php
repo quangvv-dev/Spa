@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h3 class="card-title">Thống kê tổng quan</h3>
                 <div class="col-md-2 form-group">
-                    {!! Form::select('tower', $towers, null, array('class' => 'form-control select-gear tower','placeholder'=>'Chọn chi nhánh')) !!}
+                    {!! Form::select('tower', $towers, null, array('class' => 'form-control select-gear tower')) !!}
                 </div>
                 <div class="col-md-9">
                     <ul class="col-md-9 no-padd mt5 tr right">
