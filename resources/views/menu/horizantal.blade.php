@@ -2,12 +2,12 @@
 <div class="ren-navbar fixed-header" id="headerMenuCollapse">
     <div class="container">
         <ul class="nav">
-            <li class="nav-item" {{ Request::is('schedules*')||Request::is('schedules*') ? 'active' : '' }}>
-                <a class="nav-link" href="{!! url('schedules') !!}"><i
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('schedules*')||Request::is('schedules*') ? 'active' : '' }}" href="{!! url('schedules') !!}"><i
                         class="fas fa-newspaper"></i><span>Lịch hẹn</span></a>
             </li>
-            <li class="nav-item" {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}>
-                <a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>
             </li>
             {{--<li class="nav-item with-sub" {{ Request::is('customers*') ? 'active' : '' }}>--}}
             {{--<a class="nav-link" href="{!! route('customers.index') !!}"><i class="fas fa-newspaper"></i><span>Quản lý khách hàng</span></a>--}}
@@ -22,8 +22,8 @@
             {{--</ul>--}}
             {{--</div>--}}
             {{--</li>--}}
-            <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
-                <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Marketing</span></a>
+            <li class="nav-item with-sub">
+                <a class="nav-link {{ Request::is('fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}" href="#"><i class="fas fa-newspaper"></i><span>Marketing</span></a>
                 <div class="sub-item">
                     <ul>
                         <li>
@@ -46,8 +46,8 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item with-sub" {{ Request::is('category*')||Request::is('services*') ? 'active' : '' }}>
-                <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Quản lý bán hàng</span></a>
+            <li class="nav-item with-sub">
+                <a class="nav-link {{ Request::is('category*')||Request::is('orders-payment')||Request::is('list-orders*')||Request::is('combos*')||Request::is('services*')||Request::is('products*')||Request::is('category-product*') ? 'active' : '' }}" href="#"><i class="fas fa-newspaper"></i><span>Quản lý bán hàng</span></a>
                 <div class="sub-item">
                     <ul>
                         <li>
@@ -74,8 +74,8 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item with-sub" {{ Request::is('statistics*') ? 'active' : '' }}>
-                <a class="nav-link" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
+            <li class="nav-item with-sub">
+                <a class="nav-link {{ Request::is('statistics*')||Request::is('report*')||Request::is('tasks*') ? 'active' : '' }}" href="#"><i class="fas fa-newspaper"></i><span>Thống kê</span></a>
                 <div class="sub-item">
                     <ul>
                         <li>
