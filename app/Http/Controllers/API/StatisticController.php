@@ -128,6 +128,10 @@ class StatisticController extends BaseApiController
             })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
                 $query->whereBetween('payment_date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             })->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
+        $revenue = [];
+        foreach ($revenue_month as $item) {
+            $revenue[$item->payment_date] = (int)$item->total;
+        }
 
         $customers = Customer::select('id')
             ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
@@ -144,7 +148,7 @@ class StatisticController extends BaseApiController
             'customers' => $customers->count(),
             'revenue_products' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
             'revenue_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-            'revenue_month' => $revenue_month,
+            'revenue_month' => $revenue,
         ];
 
         return $this->responseApi(200, 'SUCCESS', $data);
