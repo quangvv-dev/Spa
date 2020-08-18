@@ -12,6 +12,7 @@
 @php
     $all_total = [];
     $payment = [];
+    $gross_revenue = [];
     $orders = [];
     $customers = [];
         foreach($response as $k =>$item){
@@ -19,6 +20,7 @@
         $payment[]=(int)$item->payment;
         $orders[]=(int)$item->orders;
         $customers[]=(int)$item->customers;
+        $gross_revenue[]=(int)$item->gross_revenue;
         }
 @endphp
 
@@ -77,7 +79,7 @@
             <div class="card-body text-center  bg-gradient-indigo text-white">
                 <div class="h5">Tổng doanh thu</div>
                 <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">444</span></div>
+                        class="">{{number_format(array_sum($gross_revenue))}}</span></div>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
                 </div>
