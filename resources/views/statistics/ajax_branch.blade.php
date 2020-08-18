@@ -16,12 +16,14 @@
     $orders = [];
     $customers = [];
     $revenue_month = [];
+    $total_month = [];
         foreach($response as $k =>$item){
         $all_total[]=(int)$item->all_total;
         $payment[]=(int)$item->payment;
         $orders[]=(int)$item->orders;
         $customers[]=(int)$item->customers;
         $gross_revenue[]=(int)$item->gross_revenue;
+        dd($item);
             foreach ((array)$item->revenue_month as $key => $value){
                 if (array_key_exists($key, $revenue_month) ==false){
                     $revenue_month[$key] = $value;
@@ -29,21 +31,17 @@
                     $revenue_month[$key] = $revenue_month[$key] + $value;
                 }
             }
+            foreach ((array)$item->total_month as $key => $value){
+                if (array_key_exists($key, $total_month) ==false){
+                    $total_month[$key] = $value;
+                }else{
+                    $total_month[$key] = $total_month[$key] + $value;
+                }
+            }
         }
 @endphp
 
 {{--<div class="h4 text-center">TOÀN HỆ THỐNG</div>--}}
-
-<div class="h4 text-center">BIỂU ĐỒ</div>
-<div class="row row-cards">
-    <div class="col-md-6">
-        <div id="barchart" style="overflow-x: scroll;overflow-y: hidden"></div>
-    </div>
-    <div class="col-md-6">
-        <div id="chart_payment" style="overflow-x: scroll;overflow-y: hidden"></div>
-    </div>
-</div>
-
 <div class="h4 text-center">THÔNG SỐ CHI TIẾT</div>
 <div class="row row-cards">
     <div class="col">
@@ -107,6 +105,16 @@
         </div>
     </div>
 </div>
+<div class="h4 text-center">BIỂU ĐỒ</div>
+<div class="row row-cards">
+    <div class="col-md-6">
+        <div id="barchart" style="overflow-x: scroll;overflow-y: hidden"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chart_payment" style="overflow-x: scroll;overflow-y: hidden"></div>
+    </div>
+</div>
+
 <div class="row row-cards">
     <div class="col-md-12">
         <div id="column" style="margin-left: 15px"></div>
@@ -219,9 +227,9 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Ngày', 'Doanh số'],
+            ['Ngày', 'Doanh số','Doanh thu'],
                 @foreach($revenue_month as $k =>$item)
-            ['{{substr($k, -2)}}', {{$item}}],
+            ['{{substr($k, -2)}}',{{$total_month[$k]}},{{$item}}],
             @endforeach
             // ['2020', 16, 22],
         ]);
