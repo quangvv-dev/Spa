@@ -15,12 +15,20 @@
     $gross_revenue = [];
     $orders = [];
     $customers = [];
+    $revenue_month = [];
         foreach($response as $k =>$item){
         $all_total[]=(int)$item->all_total;
         $payment[]=(int)$item->payment;
         $orders[]=(int)$item->orders;
         $customers[]=(int)$item->customers;
         $gross_revenue[]=(int)$item->gross_revenue;
+            foreach ((array)$item->revenue_month as $key => $value){
+                if (array_key_exists($key, $revenue_month) ==false){
+                    $revenue_month[$key] = $value;
+                }else{
+                    $revenue_month[$key] = $revenue_month[$key] + $value;
+                }
+            }
         }
 @endphp
 
@@ -54,7 +62,8 @@
         <div class="card  overflow-hidden bg-gradient-indigo text-white">
             <div class="card-body text-center">
                 <div class="h5">Tổng số đơn hàng</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span class="">{{number_format(array_sum($orders))}}</span>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">{{number_format(array_sum($orders))}}</span>
                 </div>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
@@ -98,7 +107,11 @@
         </div>
     </div>
 </div>
-
+<div class="row row-cards">
+    <div class="col-md-12">
+        <div id="column" style="margin-left: 15px"></div>
+    </div>
+</div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
@@ -200,4 +213,31 @@
         chart.draw(data, options);
     };
     // column chart
+</script>
+<script>
+    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
+
+    function drawBasic() {
+        var data = google.visualization.arrayToDataTable([
+            ['Ngày', 'Doanh số'],
+                @foreach($revenue_month as $k =>$item)
+            ['{{substr($k, -2)}}', {{$item}}],
+            @endforeach
+            // ['2020', 16, 22],
+        ]);
+        var options = {
+            title: 'Doanh số & doanh thu theo từng ngày',
+            width: '100%',
+            height: 500,
+            hAxis: {title: 'Các ngày trong (tuần || tháng)'},
+            seriesType: 'bars',
+            series: {1: {type: 'line'}},
+            bar: {groupWidth: '75%'},
+            isStacked: true,
+        };
+
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('column'));
+        chart.draw(data, options);
+    }
 </script>
