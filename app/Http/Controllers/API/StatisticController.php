@@ -123,10 +123,13 @@ class StatisticController extends BaseApiController
         }
         $payment = PaymentHistory::search($input);
         $orders = Order::returnRawData($input);
+        $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
 
         $data = [
             'all_total' => $orders->sum('all_total'),
-            'payment' => $payment->sum('price')
+            'payment' => $payment->sum('price'),
+            'orders' => $orders->count(),
+            'customers' => $customers->count(),
         ];
 
         return $this->responseApi(200, 'SUCCESS', $data);
