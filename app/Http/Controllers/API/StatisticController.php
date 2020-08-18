@@ -10,11 +10,9 @@ use App\Models\PaymentHistory;
 use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Response;
 use App\Models\Services;
-use App\Models\CustomerGroup;
 use App\Models\Category;
+use App\Helpers\Functions;
 
 class StatisticController extends BaseApiController
 {
@@ -123,10 +121,16 @@ class StatisticController extends BaseApiController
         }
         $payment = PaymentHistory::search($input);
         $orders = Order::returnRawData($input);
-        $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
+        $customers = Customer::select('id')
+            ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
+                $query->whereBetween('created_at', getTime($input['data_time']));
+            })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
+                $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);;
+            });
 
         $data = [
             'all_total' => $orders->sum('all_total'),
+            'gross_revenue' => $orders->sum('gross_revenue'),
             'payment' => $payment->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
