@@ -9,16 +9,91 @@
         margin-top: 10px;
     }
 </style>
+@php
+    $all_total = [];
+    $payment = [];
+    $orders = [];
+    $customers = [];
+        foreach($response as $k =>$item){
+        $all_total[]=(int)$item->all_total;
+        $payment[]=(int)$item->payment;
+        $orders[]=(int)$item->orders;
+        $customers[]=(int)$item->customers;
+        }
+@endphp
 
 {{--<div class="h4 text-center">TOÀN HỆ THỐNG</div>--}}
 
 <div class="h4 text-center">BIỂU ĐỒ</div>
 <div class="row row-cards">
     <div class="col-md-6">
-        <div id="barchart"style="overflow-x: scroll;overflow-y: hidden"></div>
+        <div id="barchart" style="overflow-x: scroll;overflow-y: hidden"></div>
     </div>
     <div class="col-md-6">
-        <div id="chart_payment"style="overflow-x: scroll;overflow-y: hidden"></div>
+        <div id="chart_payment" style="overflow-x: scroll;overflow-y: hidden"></div>
+    </div>
+</div>
+
+<div class="h4 text-center">THÔNG SỐ CHI TIẾT</div>
+<div class="row row-cards">
+    <div class="col">
+        <div class="card  overflow-hidden bg-gradient-indigo text-white">
+            <div class="card-body text-center">
+                <div class="h5">Tổng số SĐT</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">{{number_format(array_sum($customers))}}</span></div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card  overflow-hidden bg-gradient-indigo text-white">
+            <div class="card-body text-center">
+                <div class="h5">Tổng số đơn hàng</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span class="">{{number_format(array_sum($orders))}}</span>
+                </div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card  overflow-hidden bg-gradient-indigo text-white">
+            <div class="card-body text-center">
+                <div class="h5">Tổng doanh số</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">{{number_format(array_sum($all_total))}}</span></div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card overflow-hidden">
+            <div class="card-body text-center  bg-gradient-indigo text-white">
+                <div class="h5">Tổng doanh thu</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">444</span></div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card  overflow-hidden">
+            <div class="card-body text-center bg-gradient-indigo text-white">
+                <div class="h5">Đã thu trong kỳ</div>
+                <div class="h3 font-weight-bold mb-4 font-30 ">{{number_format(array_sum($payment))}}</div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -35,7 +110,7 @@
             ['{{$k}}', {{$item->all_total}}, '{{number_format($item->all_total)}}'],
                 @endforeach
                 @else
-            [       'Năm', 0, '#fffff', '0%'],
+            ['Năm', 0, '#fffff', '0%'],
             @endif
         ]);
 
@@ -80,12 +155,12 @@
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
                 @if(count($response))
-            ['Năm', 'Doanh thu',{role: 'annotation'}],
+            ['Năm', 'Doanh thu', {role: 'annotation'}],
                 @foreach($response as $k =>$item)
             ['{{$k}}', {{$item->payment}}, '{{number_format($item->payment)}}'],
                 @endforeach
                 @else
-            [       'Năm', 0, '#fffff', '0%'],
+            ['Năm', 0, '#fffff', '0%'],
             @endif
         ]);
 
