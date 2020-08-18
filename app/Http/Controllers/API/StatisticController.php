@@ -121,11 +121,19 @@ class StatisticController extends BaseApiController
         }
         $payment = PaymentHistory::search($input);
         $orders = Order::returnRawData($input);
+        $orders2 = Order::returnRawData($input);
+        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+            ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
+                $query->whereBetween('payment_date', getTime($input['data_time']));
+            })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
+                $query->whereBetween('payment_date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+            })->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
+
         $customers = Customer::select('id')
             ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
                 $query->whereBetween('created_at', getTime($input['data_time']));
             })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
-                $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);;
+                $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             });
 
         $data = [
@@ -134,6 +142,9 @@ class StatisticController extends BaseApiController
             'payment' => $payment->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
+            'revenue_products' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'revenue_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'revenue_month' => $revenue_month,
         ];
 
         return $this->responseApi(200, 'SUCCESS', $data);
