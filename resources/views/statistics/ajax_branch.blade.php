@@ -23,7 +23,6 @@
         $orders[]=(int)$item->orders;
         $customers[]=(int)$item->customers;
         $gross_revenue[]=(int)$item->gross_revenue;
-        dd($item);
             foreach ((array)$item->revenue_month as $key => $value){
                 if (array_key_exists($key, $revenue_month) ==false){
                     $revenue_month[$key] = $value;
