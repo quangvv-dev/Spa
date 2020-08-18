@@ -32,7 +32,7 @@
                         <li>
                             <a href="#">SMS</a>
                         </li>
-                        @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510')
+                        @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
                             <li>
                                 <a href="{{url('rules')}}">Automation </a>
                             </li>
