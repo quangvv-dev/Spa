@@ -324,7 +324,7 @@
         ]);
 
         var options = {
-            title: 'Tỷ lệ chốt đơn từ SALE toàn hệ thống',
+            title: 'Tỷ lệ chốt đơn khách hàng mới từ SALE toàn hệ thống',
             height: height1,
             width: '100%',
             titleFontSize:13,
