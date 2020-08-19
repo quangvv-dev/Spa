@@ -158,12 +158,19 @@ class StatisticController extends BaseApiController
                     $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
                 })->with('orderDetails');//doanh so
 
+            $order = Order::when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
+                    $query->whereBetween('payment_date', getTime($input['data_time']));
+                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
+                    $query->whereBetween('payment_date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                })->with(['customer' => function ($query) use ($item) {
+                $query->where('telesales_id', $item->id);
+            }]);
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
+            $item->order_all = $order->sum('gross_revenue');//da thu trong ky
             return $item;
         })->sortByDesc('gross_revenue');
-
 
         $data = [
             'all_total' => $orders->sum('all_total'),
@@ -207,7 +214,6 @@ class StatisticController extends BaseApiController
                 })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
                     $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
                 })->with('orderDetails');//doanh so
-
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
