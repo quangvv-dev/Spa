@@ -143,6 +143,28 @@ class StatisticController extends BaseApiController
                 $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             });
 
+        $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)
+                ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
+                    $query->whereBetween('created_at', getTime($input['data_time']));
+                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
+                    $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                });
+
+            $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())
+                ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
+                    $query->whereBetween('created_at', getTime($input['data_time']));
+                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
+                    $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                })->with('orderDetails');//doanh so
+
+            $item->customer_new = $data_new->get()->count();
+            $item->order_new = $order_new->count();
+            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
+            return $item;
+        })->sortByDesc('gross_revenue');
+
+
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
@@ -153,6 +175,7 @@ class StatisticController extends BaseApiController
             'revenue_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
             'revenue_month' => $revenue,
             'total_month' => $total,
+            'users' => $users,
         ];
 
         return $this->responseApi(200, 'SUCCESS', $data);
