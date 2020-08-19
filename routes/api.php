@@ -22,3 +22,4 @@ Route::post('/check-unique-customers', 'BE\CustomerController@checkUniquePhone')
 Route::post('/check-unique-code-orders', 'BE\OrderController@checkUniqueCode');
 Route::get('/statistics', 'API\StatisticController@index');
 Route::get('/statistics-all', 'API\StatisticController@getAllBranch');
+Route::get('/sales', 'API\StatisticController@sales');
