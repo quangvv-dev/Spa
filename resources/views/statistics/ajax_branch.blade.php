@@ -290,10 +290,10 @@
         ]);
 
         var options = {
-            title: 'Doanh thu khách hàng mới từ SALE toàn hệ thống(VNĐ)',
+            title: 'Thực thu khách hàng theo SALE toàn hệ thống(VNĐ)',
             height: height1,
             width: '100%',
-            titleFontSize:13,
+            titleFontSize: 13,
             chartArea: {
                 height: '100%',
                 left: 200,
@@ -316,7 +316,7 @@
                 @if(count($users))
             ['Năm', 'Tỷ lệ chốt (%)', {role: 'annotation'}],
                 @foreach($users as $k =>$item2)
-            ['{{$item2['full_name']}}', {{round($item2['order_new']/$item2['customer_new']*100)}}, '{{round($item2['order_new']/$item2['customer_new']*100)}}%'],
+            ['{{$item2['full_name']}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}, '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
                 @endforeach
                 @else
             ['Năm', 0, '#fffff', '0%'],
@@ -327,7 +327,7 @@
             title: 'Tỷ lệ chốt đơn khách hàng mới từ SALE toàn hệ thống',
             height: height1,
             width: '100%',
-            titleFontSize:13,
+            titleFontSize: 13,
             chartArea: {
                 height: '100%',
                 left: 200,
