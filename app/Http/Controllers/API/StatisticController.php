@@ -144,31 +144,22 @@ class StatisticController extends BaseApiController
             });
 
         $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)
-                ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
-                    $query->whereBetween('created_at', getTime($input['data_time']));
-                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
-                    $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                });
+            if (isset($input['data_time']) && $input['data_time']) {
+                $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', getTime($input['data_time']));
+                $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('created_at', '<', getTime($request->data_time)[0]);
+                $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($input['data_time']))->with('orderDetails');
+                $order_old = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+            } else {
+                $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->with('orderDetails');
+                $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('created_at', '<', Functions::yearMonthDay($input['start_date']));
+                $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+            }
 
-            $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())
-                ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
-                    $query->whereBetween('created_at', getTime($input['data_time']));
-                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
-                    $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                })->with('orderDetails');//doanh so
 
-            $order = Order::when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
-                    $query->whereBetween('payment_date', getTime($input['data_time']));
-                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
-                    $query->whereBetween('payment_date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                })->with(['customer' => function ($query) use ($item) {
-                $query->where('telesales_id', $item->id);
-            }]);
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
-            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
-            $item->order_all = $order->sum('gross_revenue');//da thu trong ky
+            $item->payment_new = $order_new->sum('gross_revenue') + $order_old->sum('gross_revenue');//da thu trong ky
             return $item;
         })->sortByDesc('gross_revenue');
 
@@ -186,39 +177,5 @@ class StatisticController extends BaseApiController
         ];
 
         return $this->responseApi(200, 'SUCCESS', $data);
-    }
-
-    /**
-     * thong ke doanh thu, doanh so sale
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function sales(Request $request)
-    {
-        $input = $request->all();
-        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
-            $input['data_time'] = 'THIS_MONTH';
-        }
-        $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)
-                ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
-                    $query->whereBetween('created_at', getTime($input['data_time']));
-                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
-                    $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                });
-
-            $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())
-                ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
-                    $query->whereBetween('created_at', getTime($input['data_time']));
-                })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
-                    $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                })->with('orderDetails');//doanh so
-            $item->customer_new = $data_new->get()->count();
-            $item->order_new = $order_new->count();
-            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
-            return $item;
-        })->sortByDesc('gross_revenue');
-        return $this->responseApi(200, 'SUCCESS', $users);
     }
 }
