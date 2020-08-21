@@ -143,6 +143,7 @@ class AjaxController extends Controller
      */
     public function ListCustomerPost(Request $request)
     {
+        $status = [0 => "Chưa gọi", 1 => "Đã gọi", 2 => "Đã đến"];
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id');
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $title = 'Danh sách khách hàng đăng ký form';
@@ -151,7 +152,7 @@ class AjaxController extends Controller
 
         if ($request->ajax()) return Response::json(view('post.ajax_customer', compact('docs', 'title'))->render());
 
-        return view('post.indexCustomer', compact('title', 'docs', 'campaigns', 'telesales'));
+        return view('post.indexCustomer', compact('title', 'docs', 'campaigns', 'telesales', 'status'));
     }
 
     public function updateCustomerPost(Request $request)
@@ -173,45 +174,31 @@ class AjaxController extends Controller
     public function exportCustomer(Request $request)
     {
         $input = $request->all();
+        $campaign = $input['campaign'] ?: 'Tất cả chiến dịch';
         $data = CustomerPost::search($input)->get();
-        Excel::create('Khách hàng ()', function ($excel) use ($data) {
+        Excel::create('Khách hàng ' . $campaign, function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
                 $sheet->cell('A1:Q1', function ($row) {
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
                 $sheet->row(1, [
+                    'STT',
                     'Tên khách hàng',
                     'Số điện thoại',
-                    'Tư vấn thêm'
+                    'Tư vấn thêm',
+                    'Trạng thái'
                 ]);
                 $i = 1;
                 if ($data) {
                     foreach ($data as $k => $ex) {
-                        $categoryName = '';
                         $i++;
-                        foreach ($ex->categories as $category) {
-                            $categoryName .= $category->name . ', ';
-                        }
                         $sheet->row($i, [
-                            @$ex->id,
+                            @$i,
                             @$ex->full_name,
-                            @$ex->account_code,
                             @$ex->phone,
-                            @$ex->birthday,
-                            @$ex->GenderText,
-                            @$ex->facebook,
-                            @$ex->address,
-                            @$ex->created_at,
-                            @$ex->orders->count(),
-                            @(int)$ex->orders->sum('all_total'),
-                            @$ex->marketing->full_name,
-                            @$ex->telesale->full_name,
-                            @$categoryName,
-                            @$ex->source_customer->name,
-                            @$ex->status->name,
-                            @$ex->description,
-                            // (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
+                            @$ex->note,
+                            (@$ex->status == 0) ? 'Chưa gọi' : ($ex->status == 1 ? 'Đã gọi' : 'Đã đến'),
                         ]);
                     }
                 }
