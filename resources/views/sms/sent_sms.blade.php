@@ -8,7 +8,7 @@
     <div class="card">
         {!! Form::open(array('url' => route('sms.sent'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','class'=>'sent-sms')) !!}
         <div class="col row">
-            <div class="col-md-6 col-xs-12">
+            <div class="col-md-8 col-xs-12">
                 <div class="col row">
                     <div class="col-6 form-group">
                         {!! Form::label('campaign_id', 'Chiến dịch', array('class' => ' required control-label')) !!}
@@ -84,8 +84,6 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-2 col-xs-12"></div>
-
         </div>
 
         {{ Form::close() }}

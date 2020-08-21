@@ -13,8 +13,8 @@ use App\Models\CustomerGroup;
 use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
-use App\Models\Order;
-use App\Models\OrderDetail;
+//use App\Models\Order;
+//use App\Models\OrderDetail;
 use App\Models\PackageWallet;
 use App\Models\Schedule;
 use App\Models\Services;
@@ -23,7 +23,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\WalletHistory;
 use App\Services\CustomerService;
-use App\Services\OrderService;
+//use App\Services\OrderService;
 use App\Models\RuleOutput;
 use App\User;
 use Carbon\Carbon;
@@ -601,7 +601,7 @@ class CustomerController extends Controller
 
         if (isset($request->telesales_id)) {
             $customer->update([
-                'telesales_id' => $request->telesales_id,
+                'telesales_id' => (int)$request->telesales_id,
             ]);
         }
     }

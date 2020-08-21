@@ -156,8 +156,8 @@
             @foreach($customers as $key => $customer)
                 <tr>
                     <td class="text-center"
-                        style="background: {{isset($customer->status)?$customer->status->color :''}}"><input
-                                type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
+                        style="background: {{isset($customer->status)?$customer->status->color :''}}">
+                        <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                     <td class="text-center"></td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center">

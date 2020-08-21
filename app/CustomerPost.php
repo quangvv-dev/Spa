@@ -26,6 +26,12 @@ class CustomerPost extends Model
             });
         }
 
-        return $data->paginate(StatusCode::PAGINATE_20);
+        return $data;
+    }
+
+    public function telesales()
+    {
+        return $this->belongsTo(User::class, 'telesales_id');
+
     }
 }

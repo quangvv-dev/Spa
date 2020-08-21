@@ -9,12 +9,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\Models\Notification;
 use App\Models\Post;
+use App\User;
+use App\Constants\UserConstant;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Response;
+use Excel;
 
 
 class AjaxController extends Controller
@@ -130,16 +134,90 @@ class AjaxController extends Controller
         return 'Đăng ký thành công';
     }
 
+    /**
+     * Danh  sach KH nhan form
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
     public function ListCustomerPost(Request $request)
     {
+        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id');
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $title = 'Danh sách khách hàng đăng ký form';
         $input = $request->all();
-        $docs = CustomerPost::search($input);
+        $docs = CustomerPost::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) return Response::json(view('post.ajax_customer', compact('docs', 'title'))->render());
 
-        return view('post.indexCustomer', compact('title', 'docs', 'campaigns'));
+        return view('post.indexCustomer', compact('title', 'docs', 'campaigns', 'telesales'));
     }
+
+    public function updateCustomerPost(Request $request)
+    {
+        $data = CustomerPost::whereIn('id', $request->ids);
+        if (isset($request->telesales_id)) {
+            $data->update([
+                'telesales_id' => (int)$request->telesales_id,
+            ]);
+        }
+
+        if (isset($request->status)) {
+            $data->update([
+                'status' => (int)$request->status,
+            ]);
+        }
+    }
+
+    public function exportCustomer(Request $request)
+    {
+        $input = $request->all();
+        $data = CustomerPost::search($input)->get();
+        Excel::create('Khách hàng ()', function ($excel) use ($data) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($data) {
+                $sheet->cell('A1:Q1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->row(1, [
+                    'Tên khách hàng',
+                    'Số điện thoại',
+                    'Tư vấn thêm'
+                ]);
+                $i = 1;
+                if ($data) {
+                    foreach ($data as $k => $ex) {
+                        $categoryName = '';
+                        $i++;
+                        foreach ($ex->categories as $category) {
+                            $categoryName .= $category->name . ', ';
+                        }
+                        $sheet->row($i, [
+                            @$ex->id,
+                            @$ex->full_name,
+                            @$ex->account_code,
+                            @$ex->phone,
+                            @$ex->birthday,
+                            @$ex->GenderText,
+                            @$ex->facebook,
+                            @$ex->address,
+                            @$ex->created_at,
+                            @$ex->orders->count(),
+                            @(int)$ex->orders->sum('all_total'),
+                            @$ex->marketing->full_name,
+                            @$ex->telesale->full_name,
+                            @$categoryName,
+                            @$ex->source_customer->name,
+                            @$ex->status->name,
+                            @$ex->description,
+                            // (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
+                        ]);
+                    }
+                }
+            });
+        })->export('xlsx');
+    }
+
 
 }

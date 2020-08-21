@@ -2,33 +2,39 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-white">STT</th>
+            <th><input type="checkbox" class="selectall myCheck"></th>
+            <th class="text-white">Thao tác</th>
             <th class="text-white text-center">Ngày tạo</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Khách hàng</th>
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">ghi chú</th>
-            {{--<th class="text-white text-center">Thao tác</th>--}}
+            <th class="text-white text-center">Người phụ trách</th>
+            <th class="text-white text-center">T.T</th>
         </tr>
         </thead>
         <tbody>
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
+                    <td>
+                        <input type="checkbox" name="delete[]" class="myCheck" value="{{$s->id}}"/>
+                    </td>
+                    @if($s->status == 0)
+                        <td class="text-center update-status" data-id="{{$s->id}}">
+                            <i class="fa fa-check-square text-primary" aria-hidden="true"></i></td>
+                    @else
+                        <td class="text-center">
+                            <i class="fa fa-check-square text-success" aria-hidden="true"></i>
+                        </td>
+                    @endif
                     <td class="text-center">{{@$s->created_at}}</td>
                     <td class="text-center">{{@$s->post->campaign->name}}</td>
                     <td class="text-center">{{@$s->full_name}}</td>
                     <td class="text-center">{{@$s->phone}}</td>
-                    <td class="text-center">
-                        {{@$s->note}}
-                    </td>
-                    {{--<td class="text-center">--}}
-                        {{--<a class="btn" href="{{ url('posts/' . $s->id . '/edit') }}"><i--}}
-                                {{--class="fas fa-edit"></i></a>--}}
-                        {{--<a class="btn delete" href="javascript:void(0)"--}}
-                           {{--data-url="{{ url('posts/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
-                    {{--</td>--}}
+                    <td class="text-center">{{@$s->note}}</td>
+                    <td class="text-center">{{@$s->telesales->full_name}}</td>
+                    <td class="text-center">{{@$s->status==0?'Chưa gọi':($s->status==1?'Đã gọi':'Đã đến')}}</td>
                 </tr>
             @endforeach
         @else
