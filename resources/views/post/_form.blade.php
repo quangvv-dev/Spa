@@ -21,13 +21,13 @@
                         <span class="help-block">{{ $errors->first('campaign_id', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
-                        {!! Form::label('phone', 'SĐT tư vấn', array('class' => ' required')) !!}
-                        {!! Form::text('phone',null, array('class' => 'form-control', 'required' => true)) !!}
-                        <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
-                    </div>
-                </div>
+                {{--<div class="col-xs-12 col-md-6">--}}
+                    {{--<div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('phone', 'SĐT tư vấn') !!}--}}
+                        {{--{!! Form::text('phone',null, array('class' => 'form-control')) !!}--}}
+                        {{--<span class="help-block">{{ $errors->first('phone', ':message') }}</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('title') ? 'has-error' : '' }}">
                         {!! Form::label('title', 'Tiêu đề tin', array('class' => ' required')) !!}
