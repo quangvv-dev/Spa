@@ -229,25 +229,25 @@
 {{--</div>--}}
 {{--</div>--}}
 <!-- contact buttons -->
-<div class="contact-button">
-    <button class="btn button-container messenger-container" onclick="openMessenger();">
-        <a id="open-messenger" target="_blank" href="https://www.messenger.com/t/vtmroyal" class="hidden"></a>
-        <img class="contact-icon" src="/laningpage/frontend/Icon/messenger-icon.png" alt="royal messenger"/>
-        <div>
-            <p class="chat-now">Chat ngay</p>
-            <p class="contact-button-text messenger-text">Messenger</p>
-        </div>
-    </button>
-    <a href="tel:{{$post->phone}}" class="btn button-container call-now-container">
-        <img class="contact-icon call-now" src="/laningpage/frontend/Icon/phone-call.png" alt="royal call"/>
-        <p class="contact-button-text call-now-text">Gọi ngay</p>
-    </a>
-    <button class="btn button-container book-appointment-container">
-        <img class="contact-icon book-appointment-icon" src="/laningpage/frontend/Icon/calendar-fill.png"
-             alt="royal call"/>
-        <a href="#dang-ky" class="contact-button-text book-appointment-text">Đăng ký tư vấn</a>
-    </button>
-</div>
+{{--<div class="contact-button">--}}
+    {{--<button class="btn button-container messenger-container" onclick="openMessenger();">--}}
+        {{--<a id="open-messenger" target="_blank" href="https://www.messenger.com/t/vtmroyal" class="hidden"></a>--}}
+        {{--<img class="contact-icon" src="/laningpage/frontend/Icon/messenger-icon.png" alt="royal messenger"/>--}}
+        {{--<div>--}}
+            {{--<p class="chat-now">Chat ngay</p>--}}
+            {{--<p class="contact-button-text messenger-text">Messenger</p>--}}
+        {{--</div>--}}
+    {{--</button>--}}
+    {{--<a href="tel:{{$post->phone}}" class="btn button-container call-now-container">--}}
+        {{--<img class="contact-icon call-now" src="/laningpage/frontend/Icon/phone-call.png" alt="royal call"/>--}}
+        {{--<p class="contact-button-text call-now-text">Gọi ngay</p>--}}
+    {{--</a>--}}
+    {{--<button class="btn button-container book-appointment-container">--}}
+        {{--<img class="contact-icon book-appointment-icon" src="/laningpage/frontend/Icon/calendar-fill.png"--}}
+             {{--alt="royal call"/>--}}
+        {{--<a href="#dang-ky" class="contact-button-text book-appointment-text">Đăng ký tư vấn</a>--}}
+    {{--</button>--}}
+{{--</div>--}}
 <!-- modal register -->
 <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-layout modal-register">
