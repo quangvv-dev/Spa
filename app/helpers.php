@@ -114,6 +114,13 @@ function replaceVariable($content, $name = '', $phone = '')
     return $content;
 
 }
+
+function usort_key($data, $key)
+{
+    usort($data, function ($a, $b) use ($key) {
+        return $a[$key] <=> $b[$key];
+    });
+}
 //if (!function_exists('getPaging')) {
 //
 //}
