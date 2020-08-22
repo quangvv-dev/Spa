@@ -172,7 +172,7 @@ class AjaxController extends Controller
 
         if (count($request->ids) == 1) {
             $data = $data->first()->telesales->full_name;
-            return \response($data);
+                return \response($data);
         }
     }
 
