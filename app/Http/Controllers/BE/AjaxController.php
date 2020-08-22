@@ -144,7 +144,7 @@ class AjaxController extends Controller
     public function ListCustomerPost(Request $request)
     {
         $status = [0 => "Chưa gọi", 1 => "Đã gọi", 2 => "Đã đến"];
-        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id');
+        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id');
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $title = 'Danh sách khách hàng đăng ký form';
         $input = $request->all();
@@ -180,7 +180,7 @@ class AjaxController extends Controller
     public function findCustomerPost(Request $request)
     {
         $data = CustomerPost::find($request->id);
-        $telesales = User::select('full_name', 'id')->where('role', UserConstant::TELESALES)->get();
+        $telesales = User::select('full_name', 'id')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get();
 
         $response = [
             'customer' => $data,
