@@ -13,9 +13,11 @@
                         <li class="dropdown_action" id="show_manager_account"><a>Người phụ trách</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control sales select-gear','placeholder'=>'Tất cả sales')) !!}
-                </div>
+                @if(\Illuminate\Support\Facades\Auth::user()->role != \App\Constants\UserConstant::TELESALES)
+                    <div class="col-md-3 col-sm-6">
+                        {!! Form::select('telesales', $telesales, null, array('class' => 'form-control sales select-gear','placeholder'=>'Tất cả sales')) !!}
+                    </div>
+                @endif
                 <div class="col-md-2 col-sm-6">
                     {!! Form::select('status', $status, null, array('class' => 'form-control select-gear status','placeholder'=>'Trạng thái')) !!}
                 </div>
