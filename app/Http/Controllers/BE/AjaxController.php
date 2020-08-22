@@ -7,6 +7,7 @@ use App\Constants\StatusCode;
 use App\CustomerPost;
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
+use App\Models\Customer;
 use App\Models\Notification;
 use App\Models\Post;
 use App\User;
@@ -129,6 +130,8 @@ class AjaxController extends Controller
     {
         $post = Post::where('slug', $request->slug)->first();
         $input = $request->except('slug');
+        $customer = Customer::where('phone', $input['phone'])->first();
+        $input['telesales_id'] = isset($customer) && $customer ? $customer->telesales_id : 0;
         $input['post_id'] = $post->id;
         CustomerPost::create($input);
         return 'Đăng ký thành công';
@@ -148,7 +151,7 @@ class AjaxController extends Controller
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $title = 'Danh sách khách hàng đăng ký form';
         $input = $request->all();
-        $input['telesales_id'] = Auth::user()->role == UserConstant::TELESALES ? Auth::user()->id : null;
+//        $input['telesales_id'] = Auth::user()->role == UserConstant::TELESALES ? Auth::user()->id : null;
         $docs = CustomerPost::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) return Response::json(view('post.ajax_customer', compact('docs', 'title'))->render());
