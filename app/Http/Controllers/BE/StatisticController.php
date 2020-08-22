@@ -145,4 +145,37 @@ class StatisticController extends Controller
         return view('statistics.index_branch', compact('response'));
 
     }
+
+    public function sales(Request $request)
+    {
+        $towers = $this->tower;
+
+        $input = $request->all();
+        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+        $params = [
+            'query' => [
+                'data_time' => @$input['data_time'],
+                'start_date' => @$input['start_date'],
+                'end_date' => @$input['end_date'],
+            ]
+        ];
+
+        $response = [];
+        foreach ($towers as $k => $item) {
+            $client = new \GuzzleHttp\Client();
+            $res = $client->request('GET', $k . 'statistics-all', $params);
+
+            if ($res->getStatusCode() == 200) { // 200 OK
+                $response_data = $res->getBody()->getContents();
+            }
+            $datas = json_decode($response_data)->data;
+            $response[$item] = $datas;
+        }
+        if ($request->ajax()) {
+            return Response::json(view('statistics.ajax_branch', compact('response'))->render());
+        }
+        return view('statistics.index_sales', compact('response'));
+    }
 }
