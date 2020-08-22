@@ -148,6 +148,7 @@ class AjaxController extends Controller
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $title = 'Danh sách khách hàng đăng ký form';
         $input = $request->all();
+        $input['telesales_id'] = Auth::user()->role == UserConstant::TELESALES ? Auth::user()->id : null;
         $docs = CustomerPost::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) return Response::json(view('post.ajax_customer', compact('docs', 'title'))->render());
@@ -172,7 +173,7 @@ class AjaxController extends Controller
 
         if (count($request->ids) == 1) {
             $data = $data->first()->telesales->full_name;
-                return \response($data);
+            return \response($data);
         }
     }
 
