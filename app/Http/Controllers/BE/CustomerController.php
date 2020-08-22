@@ -214,7 +214,7 @@ class CustomerController extends Controller
                 compact('history'))->render());
         }
         if ($request->post) {
-            $customer_post = CustomerPost::where('phone', $request->post)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            $customer_post = CustomerPost::where('phone', $request->post)->where('status','<>', 0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('post.history',
                 compact('customer_post'))->render());
         }

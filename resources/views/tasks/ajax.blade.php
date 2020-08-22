@@ -68,7 +68,7 @@
             type: "success",
             showCancelButton: true,
             cancelButtonClass: 'btn-secondary waves-effect',
-            confirmButtonClass: 'btn-danger waves-effect waves-light',
+            confirmButtonClass: 'btn-success waves-effect waves-light',
             confirmButtonText: 'OK'
         }, function () {
             $.ajax({

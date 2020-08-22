@@ -23,6 +23,10 @@
                     @if($s->status == 0)
                         <td class="text-center update-status" data-id="{{$s->id}}" style="cursor: pointer">
                             <i class="fa fa-check-square text-primary" aria-hidden="true"></i></td>
+                    @elseif($s->status == 1)
+                        <td class="text-center">
+                            <i class="fa fa-check-square text-danger" aria-hidden="true"></i>
+                        </td>
                     @else
                         <td class="text-center">
                             <i class="fa fa-check-square text-success" aria-hidden="true"></i>

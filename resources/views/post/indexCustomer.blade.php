@@ -190,9 +190,9 @@
                 title: 'Bạn đã gọi điện CSKH ?',
                 type: "success",
                 cancelButtonClass: 'btn-secondary waves-effect',
-                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonClass: 'btn-success waves-effect waves-light',
                 confirmButtonText: 'Đồng ý',
-                CancelButtonText: 'Từ chối',
+                cancelButtonText: 'Từ chối',
                 showCancelButton: true,
             }, function () {
                 $.ajax({
