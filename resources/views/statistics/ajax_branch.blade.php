@@ -38,26 +38,6 @@
                     $total_month[$key] = $total_month[$key] + $value;
                 }
             }
-
-            foreach ((array)$item->users as $value1){
-                if ($value1->phone >9 && $value1->payment_new>0){
-                    if (array_key_exists($value1->phone, $users) ==true){
-                            $users[$value1->phone] = [
-                            'full_name'     =>$value1->full_name  ,
-                            'customer_new'  =>(int) $value1->customer_new + $users[$value1->phone]['customer_new'],
-                            'order_new'     =>(int)$value1->order_new + $users[$value1->phone]['order_new'],
-                            'payment_new'   =>(int)$value1->payment_new + $users[$value1->phone]['payment_new'],
-                            ];
-                        }else{
-                            $users[$value1->phone] = [
-                            'full_name'     =>$value1->full_name,
-                            'customer_new'  =>(int)$value1->customer_new,
-                            'order_new'     =>(int)$value1->order_new,
-                            'payment_new'   =>(int)$value1->payment_new,
-                            ];
-                        }
-                }
-            }
         }
 
 @endphp
@@ -133,18 +113,6 @@
     </div>
     <div class="col-md-6">
         <div id="chart_payment" style="overflow-x: scroll;overflow-y: hidden"></div>
-    </div>
-</div>
-
-<div class="row row-cards">
-    <div class="col-md-12">
-        <div id="user_revenue"></div>
-    </div>
-</div>
-
-<div class="row row-cards">
-    <div class="col-md-12">
-        <div id="percent"></div>
     </div>
 </div>
 
@@ -272,72 +240,4 @@
         var chart = new google.visualization.ColumnChart(document.getElementById('column'));
         chart.draw(data, options);
     }
-</script>
-
-<script>
-    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var height1 = {{count($users)*30}}
-    function drawBasic() {
-        var data = google.visualization.arrayToDataTable([
-                @if(count($users))
-            ['Năm', 'Doanh thu', {role: 'annotation'}],
-                @foreach($users as $k =>$item1)
-            ['{{$item1['full_name']}}', {{$item1['payment_new']}}, '{{number_format($item1['payment_new'])}}'],
-                @endforeach
-                @else
-            ['Năm', 0, '#fffff', '0%'],
-            @endif
-        ]);
-
-        var options = {
-            title: 'Thực thu khách hàng theo SALE toàn hệ thống(VNĐ)',
-            height: height1,
-            width: '100%',
-            titleFontSize: 13,
-            chartArea: {
-                height: '100%',
-                left: 200,
-                top: 70,
-            },
-            colors: ['#0f89d0']
-        };
-
-        var chart = new google.visualization.BarChart(document.getElementById('user_revenue'));
-        chart.draw(data, options);
-    };
-    // column chart
-</script>
-
-<script>
-    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var height1 = {{count($users)*40}}
-    function drawBasic() {
-        var data = google.visualization.arrayToDataTable([
-                @if(count($users))
-            ['Năm', 'Tỷ lệ chốt (%)', {role: 'annotation'}],
-                @foreach($users as $k =>$item2)
-            ['{{$item2['full_name']}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}, '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
-                @endforeach
-                @else
-            ['Năm', 0, '#fffff', '0%'],
-            @endif
-        ]);
-
-        var options = {
-            title: 'Tỷ lệ chốt đơn khách hàng mới từ SALE toàn hệ thống',
-            height: height1,
-            width: '100%',
-            titleFontSize: 13,
-            chartArea: {
-                height: '100%',
-                left: 200,
-                top: 70,
-            },
-            colors: ['#0f89d0']
-        };
-
-        var chart = new google.visualization.BarChart(document.getElementById('percent'));
-        chart.draw(data, options);
-    };
-    // column chart
 </script>

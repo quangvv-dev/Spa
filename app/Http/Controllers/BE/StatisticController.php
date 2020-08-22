@@ -165,7 +165,7 @@ class StatisticController extends Controller
         $response = [];
         foreach ($towers as $k => $item) {
             $client = new \GuzzleHttp\Client();
-            $res = $client->request('GET', $k . 'statistics-all', $params);
+            $res = $client->request('GET', $k . 'sales', $params);
 
             if ($res->getStatusCode() == 200) { // 200 OK
                 $response_data = $res->getBody()->getContents();

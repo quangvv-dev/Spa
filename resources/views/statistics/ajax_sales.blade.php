@@ -10,21 +10,8 @@
     }
 </style>
 @php
-    $all_total = [];
-    $payment = [];
-    $gross_revenue = [];
-    $orders = [];
-    $customers = [];
-    $revenue_month = [];
-    $total_month = [];
     $users = [];
-        foreach($response as $k =>$item){
-        $all_total[]=(int)$item->all_total;
-        $payment[]=(int)$item->payment;
-        $orders[]=(int)$item->orders;
-        $customers[]=(int)$item->customers;
-        $gross_revenue[]=(int)$item->gross_revenue;
-
+        foreach($response as $k =>$item){;
             foreach ((array)$item->users as $value1){
                 if ($value1->phone >9 && $value1->payment_new>0){
                     if (array_key_exists($value1->phone, $users) ==true){
@@ -63,40 +50,7 @@
     </div>
 </div>
 
-<div class="row row-cards">
-    <div class="col-md-12">
-        <div id="column" style="margin-left: 15px"></div>
-    </div>
-</div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script>
-    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-
-    function drawBasic() {
-        var data = google.visualization.arrayToDataTable([
-            ['Ngày', 'Doanh số', 'Doanh thu'],
-                @foreach($revenue_month as $k =>$item)
-            ['{{substr($k, -2)}}',{{$total_month[$k]}},{{$item}}],
-            @endforeach
-            // ['2020', 16, 22],
-        ]);
-        var options = {
-            title: 'Doanh số & doanh thu theo từng ngày',
-            width: '100%',
-            height: 500,
-            hAxis: {title: 'Các ngày trong (tuần || tháng)'},
-            seriesType: 'bars',
-            series: {1: {type: 'line'}},
-            bar: {groupWidth: '75%'},
-            isStacked: true,
-        };
-
-
-        var chart = new google.visualization.ColumnChart(document.getElementById('column'));
-        chart.draw(data, options);
-    }
-</script>
 
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
