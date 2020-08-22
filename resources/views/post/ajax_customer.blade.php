@@ -3,7 +3,7 @@
         <thead class="bg-primary text-white">
         <tr>
             <th><input type="checkbox" class="selectall myCheck"></th>
-            <th class="text-white">Thao tác</th>
+            <th class="text-white"><i class="fa fa-save"></i></th>
             <th class="text-white text-center">Ngày tạo</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Khách hàng</th>
@@ -21,7 +21,7 @@
                         <input type="checkbox" name="delete[]" class="myCheck" value="{{$s->id}}"/>
                     </td>
                     @if($s->status == 0)
-                        <td class="text-center update-status" data-id="{{$s->id}}">
+                        <td class="text-center update-status" data-id="{{$s->id}}" style="cursor: pointer">
                             <i class="fa fa-check-square text-primary" aria-hidden="true"></i></td>
                     @else
                         <td class="text-center">
@@ -29,11 +29,12 @@
                         </td>
                     @endif
                     <td class="text-center">{{@$s->created_at}}</td>
-                    <td class="text-center">{{@$s->post->campaign->name}}</td>
+                    <td class="text-center">{{@str_limit($s->post->campaign->name,40)}}</td>
                     <td class="text-center">{{@$s->full_name}}</td>
                     <td class="text-center">{{@$s->phone}}</td>
                     <td class="text-center">{{@$s->note}}</td>
-                    <td class="text-center">{{@$s->telesales->full_name}}</td>
+                    <td class="text-center telesale-customer"
+                        data-customer-id="{{@$s->id}}">{{@$s->telesales->full_name}}</td>
                     <td class="text-center">{{@$s->status==0?'Chưa gọi':($s->status==1?'Đã gọi':'Đã đến')}}</td>
                 </tr>
             @endforeach

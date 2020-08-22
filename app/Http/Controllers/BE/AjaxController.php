@@ -169,16 +169,38 @@ class AjaxController extends Controller
                 'status' => (int)$request->status,
             ]);
         }
+
+        if (count($request->ids) == 1) {
+            $data = $data->first()->telesales->full_name;
+            return \response($data);
+        }
     }
 
+    public function findCustomerPost(Request $request)
+    {
+        $data = CustomerPost::find($request->id);
+        $telesales = User::select('full_name', 'id')->where('role', UserConstant::TELESALES)->get();
+
+        $response = [
+            'customer' => $data,
+            'data' => $telesales,
+        ];
+        return \response($response);
+    }
+
+    /**
+     * Export customer post
+     *
+     * @param Request $request
+     */
     public function exportCustomer(Request $request)
     {
         $input = $request->all();
         $campaign = $input['campaign'] ?: 'Tất cả chiến dịch';
         $data = CustomerPost::search($input)->get();
-        Excel::create('Khách hàng ' . $campaign, function ($excel) use ($data) {
+        Excel::create($campaign, function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
-                $sheet->cell('A1:Q1', function ($row) {
+                $sheet->cell('A1:G1', function ($row) {
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
@@ -187,9 +209,11 @@ class AjaxController extends Controller
                     'Tên khách hàng',
                     'Số điện thoại',
                     'Tư vấn thêm',
-                    'Trạng thái'
+                    'Người phụ trách',
+                    'Trạng thái',
+                    'Chiến dịch'
                 ]);
-                $i = 1;
+                $i = 0;
                 if ($data) {
                     foreach ($data as $k => $ex) {
                         $i++;
@@ -198,13 +222,14 @@ class AjaxController extends Controller
                             @$ex->full_name,
                             @$ex->phone,
                             @$ex->note,
+                            @$ex->telesales->full_name,
                             (@$ex->status == 0) ? 'Chưa gọi' : ($ex->status == 1 ? 'Đã gọi' : 'Đã đến'),
+                            @$ex->post->campaign->name
                         ]);
                     }
                 }
             });
         })->export('xlsx');
     }
-
 
 }

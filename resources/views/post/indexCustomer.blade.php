@@ -89,13 +89,51 @@
             const campaign_id = $('#campaign_id').val();
             const sales = $('#telesales_id').val();
             var opts = document.querySelector('.campaign option:checked').text;
-            $.ajax({
-                url: "{{ route('customer_post.export') }}",
-                method: "post",
-                data: {campaign_id: campaign_id, status: status, telesales_id: sales,campaign: opts}
-            })
-
+            var hrefs = "{{ route('customer_post.export') }}?campaign_id=" + campaign_id + '&status=' + status + '&telesales_id=' + sales + '&campaign=' + opts;
+            location.href = hrefs;
         });
+
+        $(document).on('dblclick', '.telesale-customer', function (e) {
+            let target = $(e.target).parent();
+            $(target).find('.telesale-customer').empty();
+            let id = $(this).data('customer-id');
+            let html = '';
+
+            $.ajax({
+                url: "{{route('customer_post.find')}}",
+                method: "get",
+                data: {id: id}
+            }).done(function (data) {
+                html +=
+                    '<select class="telesales-result form-control select2" data-id="' + data.customer.id + '" name="telesale_id" style="font-size: 14px;">';
+                data.data.forEach(function (item) {
+                    html +=
+                        '<option value="' + item.id + '" ' + (item.id === data.customer.telesales_id ? "selected" : "") + '>' + item.full_name + '</option>';
+                });
+
+                html += '</select>';
+
+                $(target).find(".telesale-customer").append(html);
+            });
+        });
+
+        $(document).on('change', '.telesales-result', function (e) {
+            let target = $(e.target).parent();
+            const telesales_id = $(target).find('.telesales-result').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "{{route('customer_post.update')}}",
+                method: "put",
+                data: {
+                    ids: [id],
+                    telesales_id: telesales_id,
+                }
+            }).done(function (data) {
+                $(target).parent().find(".telesale-customer").html(data);
+            });
+        });
+
         $(document).on('click', '.selectall', function () {
             if ($(this).hasClass('active')) {
                 $(':checkbox').each(function () {
