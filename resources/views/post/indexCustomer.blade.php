@@ -95,7 +95,7 @@
             location.href = hrefs;
         });
 
-        @if(\Illuminate\Support\Facades\Auth::user()->role != \App\Constants\UserConstant::TELESALES)
+        @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN && \Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::MARKETING)
         $(document).on('dblclick', '.telesale-customer', function (e) {
             let target = $(e.target).parent();
             $(target).find('.telesale-customer').empty();
@@ -119,21 +119,12 @@
                 $(target).find(".telesale-customer").append(html);
             });
         });
-        $(document).on('change', '.telesales-result', function (e) {
-            let target = $(e.target).parent();
-            const telesales_id = $(target).find('.telesales-result').val();
-            let id = $(this).data('id');
 
-            $.ajax({
-                url: "{{route('customer_post.update')}}",
-                method: "put",
-                data: {
-                    ids: [id],
-                    telesales_id: telesales_id,
-                }
-            }).done(function (data) {
-                $(target).parent().find(".telesale-customer").html(data);
-            });
+        $(document).on('click', '.myCheck', function () {
+            if ($(this).is(':checked'))
+                $("#btn_tool_group").css({'display': 'block'});
+            else
+                $("#btn_tool_group").css({'display': 'none'});
         });
         @endif
 
@@ -171,12 +162,7 @@
             }
         });
 
-        $(document).on('click', '.myCheck', function () {
-            if ($(this).is(':checked'))
-                $("#btn_tool_group").css({'display': 'block'});
-            else
-                $("#btn_tool_group").css({'display': 'none'});
-        });
+
         $(document).on('click', '#show_manager_account', function () {
             $('#show-manager-account').modal("show");
         });
