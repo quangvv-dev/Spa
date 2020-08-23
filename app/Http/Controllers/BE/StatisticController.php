@@ -181,8 +181,43 @@ class StatisticController extends Controller
             $response[$item] = $datas;
         }
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax_branch', compact('response'))->render());
+            return Response::json(view('statistics.ajax_sales', compact('response'))->render());
         }
         return view('statistics.index_sales', compact('response'));
+    }
+
+    public function saleWithBranch(Request $request)
+    {
+        $towers = $this->tower;
+        $input = $request->all();
+        if (empty($request->data_time)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+        if (empty($request->tower)) {
+            $input['tower'] = 'https://royalspalh.adamtech.vn/api/';
+        }
+
+        $select_tower = str_replace('/api/','',$input['tower']);
+
+        $params = [
+            'query' => [
+                'data_time' => @$input['data_time'],
+                'start_date' => @$input['start_date'],
+                'end_date' => @$input['end_date'],
+            ]
+        ];
+
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', $input['tower'] . 'sales-with-branch', $params);
+
+        if ($res->getStatusCode() == 200) { // 200 OK
+            $response_data = $res->getBody()->getContents();
+        }
+        $response = json_decode($response_data)->data;
+
+        if ($request->ajax()) {
+            return Response::json(view('report_products.ajax_sale', compact('response','select_tower'))->render());
+        }
+        return view('report_products.sale', compact('response', 'towers','select_tower'));
     }
 }

@@ -66,7 +66,7 @@
         function searchAjax(data) {
             $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
-                url: "{{ Url('statistics-branch/') }}",
+                url: "{{ Url('statistics-sales/') }}",
                 method: "get",
                 data: data
             }).done(function (data) {

@@ -122,7 +122,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::group(['prefix' => 'report'], function () {//Chart doanh số
         Route::get('customers', 'CustomerController@reportCustomer');
         Route::get('products', 'OrderController@reportProduct');
-        Route::get('sales', 'SalesController@index');
+        Route::get('sales', 'StatisticController@saleWithBranch');
         Route::get('group-sale/{type}', 'SalesController@indexGroupCategory');
         Route::get('commission', 'CommissionController@statistical');
         Route::get('tasks', 'TaskController@statistical');
