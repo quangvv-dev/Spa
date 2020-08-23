@@ -191,10 +191,10 @@ class StatisticController extends BaseApiController
             $item->payment_new = $order_new->sum('gross_revenue') + $order_old->sum('gross_revenue');//da thu trong ky
             return $item;
         })->sortByDesc('gross_revenue');
-        $data = [
-            'users' => $users,
-        ];
-        return $this->responseApi(200, 'SUCCESS', $data);
+//        $data = [
+//            'users' => $users,
+//        ];
+        return $this->responseApi(200, 'SUCCESS', $users);
 
     }
 }
