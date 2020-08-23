@@ -20,6 +20,7 @@
                             'customer_new'  =>(int) $value1->customer_new + $users[$value1->phone]['customer_new'],
                             'order_new'     =>(int)$value1->order_new + $users[$value1->phone]['order_new'],
                             'payment_new'   =>(int)$value1->payment_new + $users[$value1->phone]['payment_new'],
+                            'comment'       =>(int)$value1->comment + $users[$value1->phone]['comment'],
                             ];
                         }else{
                             $users[$value1->phone] = [
@@ -27,24 +28,28 @@
                             'customer_new'  =>(int)$value1->customer_new,
                             'order_new'     =>(int)$value1->order_new,
                             'payment_new'   =>(int)$value1->payment_new,
+                            'comment'       =>(int)$value1->comment,
                             ];
                         }
                 }
             }
         }
+        $users2 = $users;
         $price = array_column($users, 'payment_new');
         array_multisort($price, SORT_DESC, $users);
 
+        $comment = array_column($users2, 'comment');
+        array_multisort($comment, SORT_DESC, $users2);
+
 @endphp
 
-{{--<div class="h4 text-center">TOÀN HỆ THỐNG</div>--}}
 <div class="h4 text-center">BIỂU ĐỒ</div>
 
 <div class="row row-cards">
     <div class="col-md-12">
         <div id="user_revenue"></div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div id="percent"></div>
     </div>
 </div>
@@ -61,9 +66,9 @@
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
                 @if(count($users))
-            ['Năm', 'Doanh thu', {role: 'annotation'},'Tỷ lệ chốt đơn(%)',{role: 'annotation'}],
+            ['Năm', 'Doanh thu', {role: 'annotation'}],
                 @foreach($users as $k =>$item1)
-            ['{{$item1['full_name']}}', {{$item1['payment_new']}}, '{{number_format($item1['payment_new'])}}',10000,{{$item1['order_new']>0&&$item1['customer_new']>0?round($item1['order_new']/$item1['customer_new']*100):0}}],
+            ['{{$item1['full_name']}}',{{$item1['payment_new']}} ,'{{number_format($item1['payment_new'])}}'],
                 @endforeach
                 @else
             ['Năm', 0, '#fffff', '0%'],
@@ -98,13 +103,15 @@
 
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var height1 = {{count($users)*40}}
+    var height1 = {{count($users2)*40}}
     function drawBasic() {
+        {{--{{dd($users)}}--}}
         var data = google.visualization.arrayToDataTable([
-                @if(count($users))
-            ['Năm', 'Tỷ lệ chốt (%)', {role: 'annotation'}],
-                @foreach($users as $k =>$item2)
-            ['{{$item2['full_name']}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}, '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
+                @if(count($users2))
+            ['Năm','Tương tác',{role: 'annotation'}, 'Tỷ lệ chốt (%)', {role: 'annotation'}],
+                @foreach($users2 as $k =>$item2)
+            ['{{$item2['full_name']}}',{{$item2['comment']}},'{{number_format($item2['comment'])}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}},
+                '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
                 @endforeach
                 @else
             ['Năm', 0, '#fffff', '0%'],
@@ -112,16 +119,16 @@
         ]);
 
         var options = {
-            title: 'Tỷ lệ chốt đơn khách hàng mới từ SALE toàn hệ thống',
+            title: 'Biểu đồ tương tác và tỷ lệ chốt của SALE toàn hệ thống.',
             height: height1,
             width: '100%',
             titleFontSize: 13,
             chartArea: {
                 height: '100%',
-                left: 100,
+                left: 200,
                 top: 70,
             },
-            colors: ['#0f89d0'],
+            // colors: ['#0f89d0'],
             hAxis: {
                 title: 'Doanh thu dich vu',
                 minValue: 0,
@@ -131,7 +138,7 @@
             },
             vAxis: {
                 textStyle: {
-                    fontSize: 9,
+                    // fontSize: 12,
                     bold: true,
                     color: '#848484'
                 },
