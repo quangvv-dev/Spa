@@ -146,6 +146,13 @@ class StatisticController extends Controller
 
     }
 
+    /**
+     * Thong ke sale
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
     public function sales(Request $request)
     {
         $towers = $this->tower;
