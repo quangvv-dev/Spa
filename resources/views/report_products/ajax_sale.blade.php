@@ -14,7 +14,7 @@
             <div class="item-info {{'item-info'.($int)}}">
                 <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
                 <div class="item-tennv">{{$value->full_name}}</div>
-                <div class="">{{number_format($value->revenue_total)}}</div>
+                <div class="">{{number_format($value->payment_new+$value->payment_old)}}</div>
             </div>
         </div>
     @endforeach
