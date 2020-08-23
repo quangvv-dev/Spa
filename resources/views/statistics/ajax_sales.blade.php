@@ -76,7 +76,7 @@
         ]);
 
         var options = {
-            title: 'Sale toàn hệ thống(VNĐ)',
+            title: 'Doanh thu SALE toàn hệ thống (VNĐ)',
             height: height1,
             width: '100%',
             titleFontSize: 13,
@@ -119,7 +119,7 @@
         ]);
 
         var options = {
-            title: 'Biểu đồ tương tác và tỷ lệ chốt của SALE toàn hệ thống.',
+            title: 'Biểu đồ tương tác và tỷ lệ chốt của SALE toàn hệ thống',
             height: height1,
             width: '100%',
             titleFontSize: 13,

@@ -156,7 +156,7 @@
                 <h3 class="card-title">Thống kê chi tiết Telesales</h3>
             </div>
             <div class="col-md-2 form-group">
-                {!! Form::select('tower', $towers, null, array('class' => 'form-control select-gear tower')) !!}
+                {!! Form::select('tower', $towers, null, array('class' => 'form-control tower')) !!}
             </div>
             <div class="col-md-2 no-padd right tr">
                 <ul class="fr mg0 pt10 no-padd">
