@@ -6,7 +6,7 @@
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Thống kê tổng quan</h3>
+                <h3 class="card-title">Thống kê Telesales toàn hệ thống</h3>
                 {{--<div class="col-md-2 form-group">--}}
                 {{--{!! Form::select('tower', $towers, null, array('class' => 'form-control select-gear tower','placeholder'=>'Chọn chi nhánh')) !!}--}}
                 {{--</div>--}}
