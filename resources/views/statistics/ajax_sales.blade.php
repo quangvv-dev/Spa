@@ -11,8 +11,8 @@
 </style>
 @php
     $users = [];
-        foreach($response as $k =>$item){;
-            foreach ((array)$item->users as $value1){
+        foreach($response as $k =>$item){
+            foreach ((array)$item as $value1){
                 if ($value1->phone >9 && $value1->payment_new>0){
                     if (array_key_exists($value1->phone, $users) ==true){
                             $users[$value1->phone] = [
