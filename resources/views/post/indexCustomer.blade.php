@@ -95,7 +95,7 @@
             location.href = hrefs;
         });
 
-        @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN && \Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::MARKETING)
+        @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN || \Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::MARKETING)
         $(document).on('dblclick', '.telesale-customer', function (e) {
             let target = $(e.target).parent();
             $(target).find('.telesale-customer').empty();
