@@ -119,6 +119,22 @@
                 $(target).find(".telesale-customer").append(html);
             });
         });
+        $(document).on('change', '.telesales-result', function (e) {
+            let target = $(e.target).parent();
+            const telesales_id = $(target).find('.telesales-result').val();
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: "{{route('customer_post.update')}}",
+                method: "put",
+                data: {
+                    ids: [id],
+                    telesales_id: telesales_id,
+                }
+            }).done(function (data) {
+                $(target).parent().find(".telesale-customer").html(data);
+            });
+        });
         @endif
 
         $(document).on('change', '.telesales-result', function (e) {
