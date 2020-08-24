@@ -108,11 +108,8 @@
 </div>
 <div class="h4 text-center">BIỂU ĐỒ</div>
 <div class="row row-cards">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div id="barchart" style="overflow-x: scroll;overflow-y: hidden"></div>
-    </div>
-    <div class="col-md-6">
-        <div id="chart_payment" style="overflow-x: scroll;overflow-y: hidden"></div>
     </div>
 </div>
 
@@ -125,90 +122,50 @@
 
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var heights = {{count($response)*50}}
+    var heights = {{count($response)*70}}
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
                 @if(count($response))
-            ['Năm', 'Doanh số', {role: 'annotation'}],
-                @foreach($response as $k =>$item)
-            ['{{$k}}', {{$item->all_total}}, '{{number_format($item->all_total)}}'],
+            {{--{{dd(count($response))}}--}}
+            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],
+            @foreach($response as $k =>$item1)
+            ['{{$k}}',{{$item1->all_total}}, '{{number_format($item1->all_total)}}',{{$item1->gross_revenue}}, '{{number_format($item1->gross_revenue)}}',{{$item1->payment}} , '{{number_format($item1->payment)}}'],
                 @endforeach
                 @else
             ['Năm', 0, '#fffff', '0%'],
             @endif
+
+
         ]);
 
         var options = {
-            title: 'Thống kê doanh số toàn hệ thống (VNĐ)',
+            title: 'THỐNG KÊ NGUỒN THU TOÀN HỆ THỐNG (VNĐ)',
             height: heights,
             width: '100%',
-            // titleFontSize:12,
+            titleFontSize: 13,
             chartArea: {
                 height: '100%',
-                left: 100,
+                left: 150,
                 top: 70,
             },
-            colors: ['#62c9c3'],
-            hAxis: {
-                title: 'Doanh thu dich vu',
-                minValue: 0,
-                titleTextStyle: {
-                    fontSize: 66 // or the number you want
+            // colors: ['#0f89d0'],
+            vAxis: {
+                textStyle: {
+                    bold: true,
+                    // fontSize: 15,
+                },
+            },
+            annotations: {
+                highContrast: false,
+                textStyle: {
+                    color: '#000000',
+                    fontSize: 11,
+                    bold: true
                 }
             },
-            // vAxis: {
-            //     title: 'Khoá hoc',
-            //     titleTextStyle: {
-            //         color: "#000",
-            //         fontName: "sans-serif",
-            //         fontSize: 11,
-            //         bold: true,
-            //         italic: false
-            //     }
-            // }
         };
 
         var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-        chart.draw(data, options);
-    };
-    // column chart
-</script>
-<script>
-    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var heights = {{count($response)*50}}
-    function drawBasic() {
-        var data = google.visualization.arrayToDataTable([
-                @if(count($response))
-            ['Năm', 'Doanh thu', {role: 'annotation'}],
-                @foreach($response as $k =>$item)
-            ['{{$k}}', {{$item->payment}}, '{{number_format($item->payment)}}'],
-                @endforeach
-                @else
-            ['Năm', 0, '#fffff', '0%'],
-            @endif
-        ]);
-
-        var options = {
-            title: 'Thống kê thực thu toàn hệ thống (VNĐ)',
-            height: heights,
-            width: '100%',
-            // titleFontSize:12,
-            chartArea: {
-                height: '100%',
-                left: 100,
-                top: 70,
-            },
-            colors: ['#0e980c'],
-            hAxis: {
-                // title: 'Doanh thu dich vu',
-                minValue: 0,
-                titleTextStyle: {
-                    fontSize: 66 // or the number you want
-                }
-            },
-        };
-
-        var chart = new google.visualization.BarChart(document.getElementById('chart_payment'));
         chart.draw(data, options);
     };
     // column chart
