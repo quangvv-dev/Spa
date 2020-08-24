@@ -185,6 +185,7 @@ class StatisticController extends BaseApiController
                 $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
                 $comment = GroupComment::select('id')->where('user_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->get()->count();// trao doi
             }
+            $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input);
             $item->comment = $comment;
             $item->customer_new = $data_new->get()->count();
