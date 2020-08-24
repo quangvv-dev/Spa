@@ -190,6 +190,8 @@ class StatisticController extends BaseApiController
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
             $item->payment_new = $order_new->sum('gross_revenue') + $order_old->sum('gross_revenue');//da thu trong ky
+            $item->gross_revenue = $order_new->sum('gross_revenue');//doanh thu
+            $item->all_total = $order_new->sum('all_total');//doanh so
             return $item;
         })->sortByDesc('gross_revenue');
 
@@ -237,11 +239,6 @@ class StatisticController extends BaseApiController
             return $item;
         })->sortByDesc('revenue_total');
 
-        $data = [
-            'allTotal' => $users->sum('revenue_total'),
-            'grossRevenue' => $users->sum('payment_revenue'),
-            'user' => $users,
-        ];
         return $this->responseApi(200, 'SUCCESS', $users);
 
     }
