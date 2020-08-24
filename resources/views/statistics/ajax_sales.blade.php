@@ -21,6 +21,8 @@
                             'order_new'     =>(int)$value1->order_new + $users[$value1->phone]['order_new'],
                             'payment_new'   =>(int)$value1->payment_new + $users[$value1->phone]['payment_new'],
                             'comment'       =>(int)$value1->comment + $users[$value1->phone]['comment'],
+                            'all_total'     =>(int)$value1->all_total + $users[$value1->phone]['all_total'],
+                            'gross_revenue' =>(int)$value1->gross_revenue + $users[$value1->phone]['gross_revenue'],
                             ];
                         }else{
                             $users[$value1->phone] = [
@@ -29,6 +31,8 @@
                             'order_new'     =>(int)$value1->order_new,
                             'payment_new'   =>(int)$value1->payment_new,
                             'comment'       =>(int)$value1->comment,
+                            'all_total'     =>(int)$value1->all_total,
+                            'gross_revenue' =>(int)$value1->gross_revenue,
                             ];
                         }
                 }
@@ -61,14 +65,14 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
-    google.charts.load('current', {callback: drawBasic, packages: ['corechart','bar']});
-    var height1 = {{count($users)*30}}
+    google.charts.load('current', {callback: drawBasic, packages: ['corechart', 'bar']});
+    var height = {{count($users)*70}}
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
                 @if(count($users))
-            ['Năm', 'Doanh thu', {role: 'annotation'}],
+            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],
                 @foreach($users as $k =>$item1)
-            ['{{$item1['full_name']}}',{{$item1['payment_new']}} ,'{{number_format($item1['payment_new'])}}'],
+            ['{{$item1['full_name']}}',{{$item1['all_total']}}, '{{number_format($item1['all_total'])}}',{{$item1['gross_revenue']}}, '{{number_format($item1['gross_revenue'])}}',{{$item1['payment_new']}} , '{{number_format($item1['payment_new'])}}'],
                 @endforeach
                 @else
             ['Năm', 0, '#fffff', '0%'],
@@ -76,9 +80,9 @@
         ]);
 
         var options = {
-            title: 'Doanh thu SALE toàn hệ thống (VNĐ)',
-            height: height1,
-            width: '100%',
+            title: 'BĐ DOANH THU THEO SALE TOÀN HỆ THỐNG (VNĐ)',
+            height: height,
+            width: '900px',
             titleFontSize: 13,
             chartArea: {
                 height: '100%',
@@ -88,11 +92,18 @@
             // colors: ['#0f89d0'],
             vAxis: {
                 textStyle: {
-                    // fontSize: 10,
                     bold: true,
-                    color: '#848484'
+                    fontSize: 15,
                 },
-            }
+            },
+            annotations: {
+                highContrast: false,
+                textStyle: {
+                    color: '#000000',
+                    fontSize: 11,
+                    bold: true
+                }
+            },
         };
 
         var chart = new google.visualization.BarChart(document.getElementById('user_revenue'));
@@ -105,21 +116,20 @@
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
     var height1 = {{count($users2)*40}}
     function drawBasic() {
-        {{--{{dd($users)}}--}}
         var data = google.visualization.arrayToDataTable([
-                @if(count($users2))
-            ['Năm','Tương tác',{role: 'annotation'}, 'Tỷ lệ chốt (%)', {role: 'annotation'}],
-                @foreach($users2 as $k =>$item2)
-            ['{{$item2['full_name']}}',{{$item2['comment']}},'{{number_format($item2['comment'])}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}},
-                '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
-                @endforeach
-                @else
-            ['Năm', 0, '#fffff', '0%'],
-            @endif
-        ]);
+                    @if(count($users2))
+                ['Năm', 'Tương tác', {role: 'annotation'}, 'Tỷ lệ chốt (%)', {role: 'annotation'}],
+                    @foreach($users2 as $k =>$item2)
+                ['{{$item2['full_name']}}',{{$item2['comment']}}, '{{number_format($item2['comment'])}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}},
+                    '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
+                    @endforeach
+                    @else
+                ['Năm', 0, '#fffff', '0%'],
+                @endif
+            ]);
 
         var options = {
-            title: 'Biểu đồ tương tác và tỷ lệ chốt của SALE toàn hệ thống',
+            title: 'BĐ TƯƠNG TÁC & TỶ LỆ CHỐT THEO SALE',
             height: height1,
             width: '100%',
             titleFontSize: 13,
@@ -138,11 +148,18 @@
             },
             vAxis: {
                 textStyle: {
-                    // fontSize: 12,
                     bold: true,
-                    color: '#848484'
+                    fontSize: 15,
                 },
-            }
+            },
+            annotations: {
+                highContrast: false,
+                textStyle: {
+                    color: '#000000',
+                    fontSize: 11,
+                    bold: true
+                }
+            },
         };
 
         var chart = new google.visualization.BarChart(document.getElementById('percent'));
