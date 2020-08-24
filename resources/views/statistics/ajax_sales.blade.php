@@ -11,7 +11,7 @@
 </style>
 @php
     $users = [];
-        foreach($response as $k =>$item){
+        foreach($response as $k =>$item){;
             foreach ((array)$item as $value1){
                 if ($value1->phone >9 && $value1->payment_new>0&& $value1->order_new>0){
                     if (array_key_exists($value1->phone, $users) ==true){
@@ -22,7 +22,7 @@
                             'payment_new'   =>(int)$value1->payment_new + $users[$value1->phone]['payment_new'],
                             'comment'       =>(int)$value1->comment + $users[$value1->phone]['comment'],
                             'all_total'     =>(int)$value1->all_total + $users[$value1->phone]['all_total'],
-                            'gross_revenue' =>(int)$value1->gross_revenue + $users[$value1->phone]['gross_revenue'],
+                            'all_payment'   =>(int)$value1->all_payment + $users[$value1->phone]['all_payment'],
                             ];
                         }else{
                             $users[$value1->phone] = [
@@ -32,7 +32,7 @@
                             'payment_new'   =>(int)$value1->payment_new,
                             'comment'       =>(int)$value1->comment,
                             'all_total'     =>(int)$value1->all_total,
-                            'gross_revenue' =>(int)$value1->gross_revenue,
+                            'all_payment'   =>(int)$value1->all_payment,
                             ];
                         }
                 }
@@ -70,9 +70,9 @@
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
                 @if(count($users))
-            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}],
+            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],
                 @foreach($users as $k =>$item1)
-            ['{{$item1['full_name']}}',{{$item1['all_total']}}, '{{number_format($item1['all_total'])}}',{{$item1['payment_new']}}, '{{number_format($item1['payment_new'])}}'],
+            ['{{$item1['full_name']}}',{{$item1['all_total']}}, '{{number_format($item1['all_total'])}}',{{$item1['payment_new']}}, '{{number_format($item1['payment_new'])}}',{{$item1['all_payment']}}, '{{number_format($item1['all_payment'])}}'],
                 @endforeach
                 @else
             ['Năm', 0, '#fffff', '0%'],
@@ -117,16 +117,16 @@
     var height1 = {{count($users2)*40}}
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-                    @if(count($users2))
-                ['Năm', 'Tương tác', {role: 'annotation'}, 'Tỷ lệ chốt (%)', {role: 'annotation'}],
-                    @foreach($users2 as $k =>$item2)
-                ['{{$item2['full_name']}}',{{$item2['comment']}}, '{{number_format($item2['comment'])}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}},
-                    '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
-                    @endforeach
-                    @else
-                ['Năm', 0, '#fffff', '0%'],
-                @endif
-            ]);
+                @if(count($users2))
+            ['Năm', 'Tương tác', {role: 'annotation'}, 'Tỷ lệ chốt (%)', {role: 'annotation'}],
+                @foreach($users2 as $k =>$item2)
+            ['{{$item2['full_name']}}',{{$item2['comment']}}, '{{number_format($item2['comment'])}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}},
+                '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
+                @endforeach
+                @else
+            ['Năm', 0, '#fffff', '0%'],
+            @endif
+        ]);
 
         var options = {
             title: 'BĐ TƯƠNG TÁC & TỶ LỆ CHỐT THEO SALE',
