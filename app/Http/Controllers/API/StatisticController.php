@@ -185,13 +185,13 @@ class StatisticController extends BaseApiController
                 $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
                 $comment = GroupComment::select('id')->where('user_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->get()->count();// trao doi
             }
-
+            $detail = PaymentHistory::search($input);
             $item->comment = $comment;
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
             $item->payment_new = $order_new->sum('gross_revenue') + $order_old->sum('gross_revenue');//da thu trong ky
-            $item->gross_revenue = $order_new->sum('gross_revenue');//doanh thu
             $item->all_total = $order_new->sum('all_total');//doanh so
+            $item->all_payment = $detail->sum('price');//da thu trong ky
             return $item;
         })->sortByDesc('gross_revenue');
 
