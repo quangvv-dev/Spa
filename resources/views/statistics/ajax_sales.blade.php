@@ -70,9 +70,9 @@
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
                 @if(count($users))
-            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],
+            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}],
                 @foreach($users as $k =>$item1)
-            ['{{$item1['full_name']}}',{{$item1['all_total']}}, '{{number_format($item1['all_total'])}}',{{$item1['gross_revenue']}}, '{{number_format($item1['gross_revenue'])}}',{{$item1['payment_new']}} , '{{number_format($item1['payment_new'])}}'],
+            ['{{$item1['full_name']}}',{{$item1['all_total']}}, '{{number_format($item1['all_total'])}}',{{$item1['payment_new']}}, '{{number_format($item1['payment_new'])}}'],
                 @endforeach
                 @else
             ['Năm', 0, '#fffff', '0%'],
