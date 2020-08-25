@@ -241,7 +241,7 @@ class StatisticController extends BaseApiController
 
             $item->revenue_total = $order->sum('all_total');
             return $item;
-        })->sortByDesc('revenue_total');
+        })->sortByDesc('all_payment');
 
         return $this->responseApi(200, 'SUCCESS', $users);
 
