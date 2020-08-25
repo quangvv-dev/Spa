@@ -10,7 +10,7 @@
                 <img src="{{$int==1?'https://pushsale.vn/Portals/_default/Skins/APP/images/bxh/bxh2.png':''}}">
             </div>
             <div class="avatar-container  blink">
-                <img class="avatar-img" src="{{asset($select_tower.@$value->avatar)}}">
+                <img class="avatar-img" src="{{asset(isset($value->avatar)?$select_tower.@$value->avatar:$select_tower.'/assets/images/brand/logo.png')}}">
             </div>
             <div class="item-info {{'item-info'.($int)}}">
                 <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
