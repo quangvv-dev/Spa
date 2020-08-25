@@ -27,7 +27,7 @@ class PostRequest extends FormRequest
         return [
             'title' => 'required',
             'slug' => 'required',
-            'phone' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:10',
+//            'phone' => 'required|regex:/(0)[0-9]/|not_regex:/[a-z]/|min:10',
         ];
     }
 }

@@ -20,7 +20,7 @@
     @endforeach
 
 </div>
-<div style="width: 100%; overflow: hidden; overflow-y: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
+<div style="width: 100%; overflow: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
        <tr>
@@ -48,7 +48,7 @@
            <th class="text-center">Doanh thu</th>
            <th class="text-center">Doanh<span class=""><br>số</span></th>
            <th class="text-center">Doanh<span class=""><br>thu</span></th>
-           {{--<th class="text-center">Đã thu T.kỳ</th>--}}
+           <th class="text-center">Đã thu T.kỳ</th>
        </tr>
        <tr class="number_index">
            <th class="text-center">(1)</th>
@@ -68,7 +68,7 @@
            <th class="text-center">(13)</th>
            <th class="text-center">(7)+(12)</th>
            <th class="text-center">(8)+(13)</th>
-           {{--<th class="text-center"></th>--}}
+           <th class="text-center"></th>
        </tr>
         </thead>
 
@@ -87,6 +87,7 @@
             $order_old = 0;
             $revenue_old = 0;
             $payment_old = 0;
+            $all_payment = 0;
 
         @endphp
 
@@ -106,6 +107,7 @@
                 $order_old += $item->order_old;
                 $revenue_old += $item->revenue_old;
                 $payment_old += $item->payment_old;
+                $all_payment += $item->all_payment;
 
                 @endphp
                 <tr class="">
@@ -126,7 +128,7 @@
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old)}}</td>
-                    {{--<td class="text-center pdr10">{{number_format($item->all_payment)}}</td>--}}
+                    <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
                 </tr>
             @endforeach
         @endif
@@ -148,7 +150,7 @@
             <th class="text-center bold">{{@number_format($payment_old)}}</th>
             <th class="bold">{{number_format($allTotal)}}</th>
             <th class="bold">{{number_format($grossRevenue)}}</th>
-            {{--<th class="bold">{{number_format($all_payment)}}</th>--}}
+            <th class="bold">{{number_format($all_payment)}}</th>
         </tr>
 
         </tbody>
