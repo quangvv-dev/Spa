@@ -40,14 +40,14 @@
            <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
            <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-           <th class="text-center">Thực thu</th>
+           <th class="text-center">Doanh thu</th>
            <th class="text-center no-wrap">Lịch hẹn</th>
            <th class="text-center no-wrap">Trao đổi</th>
            <th class="text-center no-wrap">Đơn chốt</th>
            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
            <th class="text-center">Doanh thu</th>
-           <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
-           <th class="text-center">Tổng doanh thu</th>
+           <th class="text-center">Doanh<span class=""><br>số</span></th>
+           <th class="text-center">Doanh<span class=""><br>thu</span></th>
            <th class="text-center">Đã thu T.kỳ</th>
        </tr>
        <tr class="number_index">
