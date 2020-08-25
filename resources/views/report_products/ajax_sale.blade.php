@@ -28,7 +28,7 @@
            <th class="text-center" colspan="1">SALE</th>
            <th class="text-center" colspan="8">KHÁCH HÀNG MỚI</th>
            <th class="text-center" colspan="5">KHÁCH HÀNG CŨ</th>
-           <th class="text-center" colspan="2">TỔNG CHUNG</th>
+           <th class="text-center" colspan="3">TỔNG CHUNG</th>
        </tr>
        <tr class="tr1" style="text-transform:unset">
            <th class="text-center"></th>
