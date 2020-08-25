@@ -91,7 +91,7 @@
             $all_payment = 0;
         @endphp
 
-        @if(count($response))
+        @if(count((array)$response))
             @foreach($response as $i => $item)
                 @php $i++ ;
                 $customer_new += $item->customer_new;
