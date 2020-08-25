@@ -87,7 +87,6 @@
             $order_old = 0;
             $revenue_old = 0;
             $payment_old = 0;
-            $all_payment = 0;
 
         @endphp
 
@@ -107,7 +106,6 @@
                 $order_old += $item->order_old;
                 $revenue_old += $item->revenue_old;
                 $payment_old += $item->payment_old;
-                $all_payment += $item->all_payment;
 
                 @endphp
                 <tr class="">
@@ -128,7 +126,7 @@
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
+                    {{--<td class="text-center pdr10">{{number_format($item->all_payment)}}</td>--}}
                 </tr>
             @endforeach
         @endif
