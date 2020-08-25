@@ -13,6 +13,9 @@
                         <li>
                             <a href="{!! route('statistics.index') !!}">Doanh thu</a>
                         </li>
+                        <li>
+                            <a href="{{url('report/sales')}}">Telesales</a>
+                        </li>
                         {{--<li>--}}
                         {{--<a href="{!! route('statistics.sales') !!}">Sale</a>--}}
                         {{--</li>--}}
