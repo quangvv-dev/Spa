@@ -28,7 +28,7 @@
            <th class="text-center" colspan="1">SALE</th>
            <th class="text-center" colspan="8">KHÁCH HÀNG MỚI</th>
            <th class="text-center" colspan="5">KHÁCH HÀNG CŨ</th>
-           <th class="text-center" colspan="3">TỔNG CHUNG</th>
+           <th class="text-center" colspan="2">TỔNG CHUNG</th>
        </tr>
        <tr class="tr1" style="text-transform:unset">
            <th class="text-center"></th>
@@ -48,7 +48,7 @@
            <th class="text-center">Doanh thu</th>
            <th class="text-center">Doanh<span class=""><br>số</span></th>
            <th class="text-center">Doanh<span class=""><br>thu</span></th>
-           <th class="text-center">Đã thu T.kỳ</th>
+           {{--<th class="text-center">Đã thu T.kỳ</th>--}}
        </tr>
        <tr class="number_index">
            <th class="text-center">(1)</th>
@@ -68,7 +68,7 @@
            <th class="text-center">(13)</th>
            <th class="text-center">(7)+(12)</th>
            <th class="text-center">(8)+(13)</th>
-           <th class="text-center"></th>
+           {{--<th class="text-center"></th>--}}
        </tr>
         </thead>
 
@@ -150,7 +150,7 @@
             <th class="text-center bold">{{@number_format($payment_old)}}</th>
             <th class="bold">{{number_format($allTotal)}}</th>
             <th class="bold">{{number_format($grossRevenue)}}</th>
-            <th class="bold">{{number_format($all_payment)}}</th>
+            {{--<th class="bold">{{number_format($all_payment)}}</th>--}}
         </tr>
 
         </tbody>
