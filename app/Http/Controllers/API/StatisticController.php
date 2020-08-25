@@ -226,6 +226,10 @@ class StatisticController extends BaseApiController
             $item->schedules_new = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
             $item->schedules_old = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
 
+            $request->merge(['telesales' => $item->id]);
+            $detail = PaymentHistory::search($request->all());
+
+            $item->all_payment = $detail->sum('price');
             $item->customer_new = $data_new->get()->count();
             $item->order_new = $order_new->count();
             $item->order_old = $order_old->count();
@@ -234,7 +238,6 @@ class StatisticController extends BaseApiController
             $item->payment_revenue = $order->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
             $item->payment_old = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
-//            $item->payment_rest = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');//da thu trong ky thu thêm
 
             $item->revenue_total = $order->sum('all_total');
             return $item;

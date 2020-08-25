@@ -14,7 +14,7 @@
             <div class="item-info {{'item-info'.($int)}}">
                 <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
                 <div class="item-tennv">{{$value->full_name}}</div>
-                <div class="">{{number_format($value->payment_new+$value->payment_old)}}</div>
+                <div class="">{{number_format($value->all_payment)}}</div>
             </div>
         </div>
     @endforeach
@@ -28,7 +28,7 @@
            <th class="text-center" colspan="1">SALE</th>
            <th class="text-center" colspan="8">KHÁCH HÀNG MỚI</th>
            <th class="text-center" colspan="5">KHÁCH HÀNG CŨ</th>
-           <th class="text-center" colspan="2">TỔNG CHUNG</th>
+           <th class="text-center" colspan="3">TỔNG CHUNG</th>
        </tr>
        <tr class="tr1" style="text-transform:unset">
            <th class="text-center"></th>
@@ -45,9 +45,10 @@
            <th class="text-center no-wrap">Trao đổi</th>
            <th class="text-center no-wrap">Đơn chốt</th>
            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-           <th class="text-center">Thực thu</th>
+           <th class="text-center">Doanh thu</th>
            <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
-           <th class="text-center">Tổng thực thu</th>
+           <th class="text-center">Tổng doanh thu</th>
+           <th class="text-center">Đã thu T.kỳ</th>
        </tr>
        <tr class="number_index">
            <th class="text-center">(1)</th>
@@ -67,6 +68,7 @@
            <th class="text-center">(13)</th>
            <th class="text-center">(7)+(12)</th>
            <th class="text-center">(8)+(13)</th>
+           <th class="text-center"></th>
        </tr>
         </thead>
 
@@ -85,6 +87,8 @@
             $order_old = 0;
             $revenue_old = 0;
             $payment_old = 0;
+            $all_payment = 0;
+
         @endphp
 
         @if(count($users))
@@ -103,6 +107,7 @@
                 $order_old += $item->order_old;
                 $revenue_old += $item->revenue_old;
                 $payment_old += $item->payment_old;
+                $all_payment += $item->all_payment;
 
                 @endphp
                 <tr class="">
@@ -123,6 +128,7 @@
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
                 </tr>
             @endforeach
         @endif
@@ -144,6 +150,7 @@
             <th class="text-center bold">{{@number_format($payment_old)}}</th>
             <th class="bold">{{number_format($allTotal)}}</th>
             <th class="bold">{{number_format($grossRevenue)}}</th>
+            <th class="bold">{{number_format($all_payment)}}</th>
         </tr>
 
         </tbody>
