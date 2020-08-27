@@ -180,6 +180,7 @@ class StatisticController extends Controller
             $datas = json_decode($response_data)->data;
             $response[$item] = $datas;
         }
+
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_sales', compact('response'))->render());
         }

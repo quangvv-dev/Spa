@@ -13,7 +13,7 @@
     $users = [];
         foreach($response as $k =>$item){;
             foreach ((array)$item as $value1){
-                if ($value1->phone >9 && $value1->payment_new>0&& $value1->order_new>0){
+                if ($value1->all_payment>0){
                     if (array_key_exists($value1->phone, $users) ==true){
                             $users[$value1->phone] = [
                             'full_name'     =>$value1->full_name  ,
