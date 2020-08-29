@@ -39,7 +39,7 @@
             }
         }
         $users2 = $users;
-        $price = array_column($users, 'payment_new');
+        $price = array_column($users, 'all_payment');
         array_multisort($price, SORT_DESC, $users);
 
         $comment = array_column($users2, 'comment');
