@@ -874,7 +874,7 @@
                 });
             });
 
-            @if(\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
+            @if(\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510')
             $(document).on('dblclick', '.telesale-customer', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.telesale-customer').empty();
