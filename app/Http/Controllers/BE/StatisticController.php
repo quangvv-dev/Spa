@@ -59,6 +59,7 @@ class StatisticController extends Controller
                 'data_time' => $input['data_time'],
             ]
         ];
+
         $client = new \GuzzleHttp\Client();
         $res = $client->request('GET', $input['tower'] . 'statistics', $params);
 
