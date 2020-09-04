@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
+use App\CustomerPost;
+use App\Models\Campaign;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
+use App\Models\Post;
 use App\Models\Status;
 use App\User;
 use App\Models\Schedule;
@@ -245,5 +249,32 @@ class StatisticController extends BaseApiController
 
         return $this->responseApi(200, 'SUCCESS', $users);
 
+    }
+
+    /**
+     * Thống kê chiến dịch
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function campaign(Request $request)
+    {
+        if (empty($request->data_time)) {
+            $request->merge(['data_time' => 'THIS_MONTH']);
+        }
+        $input = $request->all();
+        $campaign = Campaign::search($input)->count();
+        $post = Post::search($input)->count();
+        $customer = CustomerPost::search($input);
+        $customer2 = CustomerPost::search($input);
+
+        $response = [
+            'campaign' => $campaign,
+            'posts' => $post,
+            'all_customer' => $customer->count(),
+            'call' => $customer->where('status', StatusConstant::CALL)->count(),
+            'receive' => $customer2->where('status', StatusConstant::RECEIVE)->count(),
+        ];
+        return $this->responseApi(200, 'SUCCESS', $response);
     }
 }

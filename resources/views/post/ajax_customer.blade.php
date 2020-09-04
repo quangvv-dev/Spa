@@ -39,7 +39,7 @@
                     <td class="text-center">{{@$s->note}}</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{@$s->id}}">{{@$s->telesales->full_name}}</td>
-                    <td class="text-center">{{@$s->status==0?'Chưa gọi':($s->status==1?'Đã gọi':'Đã đến')}}</td>
+                    <td class="text-center">{{@$s->status==\App\Constants\StatusConstant::NOT_CALL?'Chưa gọi':($s->status==\App\Constants\StatusConstant::CALL?'Đã gọi':'Đã đến')}}</td>
                 </tr>
             @endforeach
         @else
