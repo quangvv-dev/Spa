@@ -188,6 +188,14 @@ class StatisticController extends Controller
         return view('statistics.index_sales', compact('response'));
     }
 
+    /**
+     * Sale theo từng chi nhánh
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Throwable
+     */
     public function saleWithBranch(Request $request)
     {
         $towers = $this->tower;
@@ -221,5 +229,39 @@ class StatisticController extends Controller
             return Response::json(view('report_products.ajax_sale', compact('response','select_tower'))->render());
         }
         return view('report_products.sale', compact('response', 'towers','select_tower'));
+    }
+
+    public function campaign(Request $request)
+    {
+        $towers = $this->tower;
+        $input = $request->all();
+        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+
+        $params = [
+            'query' => [
+                'data_time' => @$input['data_time'],
+                'start_date' => @$input['start_date'],
+                'end_date' => @$input['end_date'],
+            ]
+        ];
+
+        $response = [];
+        foreach ($towers as $k => $item) {
+            $client = new \GuzzleHttp\Client();
+            $res = $client->request('GET', $k . 'campaigns', $params);
+
+            if ($res->getStatusCode() == 200) { // 200 OK
+                $response_data = $res->getBody()->getContents();
+            }
+            $datas = json_decode($response_data)->data;
+            $response[$item] = $datas;
+        }
+
+        if ($request->ajax()) {
+            return Response::json(view('statistics.ajax_campaign', compact('response'))->render());
+        }
+        return view('statistics.campaign', compact('response'));
     }
 }

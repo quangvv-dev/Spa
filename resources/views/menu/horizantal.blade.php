@@ -32,6 +32,9 @@
                         <li>
                             <a href="{!! route('statistics.sales') !!}">Telesales</a>
                         </li>
+                        <li>
+                            <a href="{!! route('statistics.campaign') !!}">Chiến dịch</a>
+                        </li>
                     </ul>
                 </div>
             </li>
