@@ -50,6 +50,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/statistics-sales/', 'StatisticController@sales')->name('statistics.sales');
     Route::get('/statistics-branch/', 'StatisticController@getBranch')->name('statistics.branch');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
+    Route::get('/statistics-campaigns/', 'StatisticController@campaigns')->name('statistics.campaigns');
+
     //Order
     Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');
     Route::group(['prefix' => 'ajax',], function () {

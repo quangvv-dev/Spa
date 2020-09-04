@@ -114,13 +114,13 @@
 
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var height1 = {{count($users2)*40}}
+    var height1 = {{count($users2)*60}}
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
                 @if(count($users2))
-            ['Năm', 'Tương tác', {role: 'annotation'}, 'Tỷ lệ chốt (%)', {role: 'annotation'}],
+            ['Năm', 'SĐT nhận', {role: 'annotation'},'Tương tác', {role: 'annotation'}, 'Tỷ lệ chốt (%)', {role: 'annotation'}],
                 @foreach($users2 as $k =>$item2)
-            ['{{$item2['full_name']}}',{{$item2['comment']}}, '{{number_format($item2['comment'])}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}},
+            ['{{$item2['full_name']}}',{{$item2['customer_new']}}, '{{number_format($item2['customer_new'])}}',{{$item2['comment']}}, '{{number_format($item2['comment'])}}', {{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}},
                 '{{$item2['order_new']>0&&$item2['customer_new']>0?round($item2['order_new']/$item2['customer_new']*100):0}}%'],
                 @endforeach
                 @else
