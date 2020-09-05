@@ -26,8 +26,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('customers/delete-multiple', 'CustomerController@deleteMultiple');
     Route::post('customers/restore', 'CustomerController@restore');
     Route::post('customers/force-delete', 'CustomerController@forceDelete');
-    Route::post('customers/update-multiple-status',
-        'CustomerController@updateMultipleStatus')->name('customers.update-multiple-status');
+    Route::post('customers/update-multiple-status', 'CustomerController@updateMultipleStatus')->name('customers.update-multiple-status');
 //    Route::post('customers/update-multiple-account-manager', 'CustomerController@updateMultipleAccountManager')->name('customers.update-multiple-status');
     //sms
     Route::resource('sms', 'SmsController');
@@ -50,6 +49,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/statistics-sales/', 'StatisticController@sales')->name('statistics.sales');
     Route::get('/statistics-branch/', 'StatisticController@getBranch')->name('statistics.branch');
     Route::get('/statistics-campaigns', 'StatisticController@campaign')->name('statistics.campaign');
+    Route::get('/campaigns-branch', 'StatisticController@campaignWithBranch')->name('statistics.campaign_branch');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
 
     //Order

@@ -10,11 +10,10 @@ use App\Models\PaymentHistory;
 use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Response;
 use App\Models\Services;
-use App\Models\CustomerGroup;
 use App\Models\Category;
+use App\Models\Campaign;
+use App\CustomerPost;
 
 class StatisticController extends BaseApiController
 {
@@ -130,5 +129,23 @@ class StatisticController extends BaseApiController
         ];
 
         return $this->responseApi(200, 'SUCCESS', $data);
+    }
+
+    public function campaignWithBranch(Request $request)
+    {
+        if (empty($request->data_time)) {
+            $request->merge(['data_time' => 'THIS_MONTH']);
+        }
+        $input = $request->all();
+        $campaign = Campaign::search($input)->get()->map(function ($item) use ($input) {
+            $input['campaign_id'] = $item->id;
+            $customer = CustomerPost::search($input);
+            $customer2 = CustomerPost::search($input);
+            $item->all_customer = $customer->count();
+            $item->call = $customer->where('status', 1)->count();
+            $item->receive = $customer2->where('status', 2)->count();
+            return $item;
+        });
+        return $this->responseApi(200, 'SUCCESS', $campaign);
     }
 }

@@ -6,21 +6,22 @@
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Thống kê doanh thu chi nhánh</h3>
+                <h3 class="card-title">Thống kê chiến dịch chi nhánh</h3>
                 <div class="col-md-2 form-group">
                     {!! Form::select('tower', $towers, null, array('class' => 'form-control select-gear tower')) !!}
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <ul class="col-md-9 no-padd mt5 tr right">
                         <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
                         <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
-                        <li class="display pl5"><a data-time="THIS_MONTH" class="display padding0-5 choose_time border b-gray">Tháng này</a></li>
+                        <li class="display pl5"><a data-time="THIS_MONTH" class="display padding0-5 choose_time border b-gray">Tháng này</a>
+                        </li>
                         <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
                     </ul>
                 </div>
             </div>
             <div id="registration-form">
-                @include('statistics.ajax')
+                @include('statistics.ajax_campaign_branch')
             </div>
         </div>
         <!-- table-responsive -->
@@ -32,21 +33,13 @@
     <input type="hidden" id="tower">
     </div>
 @endsection
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.css" integrity="sha512-WUYSspsMSeZ5Rh9CMn8wP9W+8/1ukN1r0CJjw5ZNCCZkM49nig92GzbOur5CpoDcnT+4gVMbPZB5P3su7Z799Q==" crossorigin="anonymous" />
 @section('_script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/selectize.min.js" integrity="sha512-F7O0WjUWT+8qVnkKNDeXPt+uwW51fA8QLbqEYiyZfyG8cR0oaodl2oOFWODnV3zZvcy0IruaTosDiSDSeS9LIA==" crossorigin="anonymous"></script>t>
     <script type="text/javascript">
-       // $(document).ready(function () {
-       //     $('.select-gear').selectize({
-       //         sortField: 'text'
-       //     });
-       //  //     $(".fc-datepicker").datepicker({dateFormat: 'dd-mm-yy'});
-       //  });
 
         function searchAjax(data) {
             $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
-                url: "{{ Url('statistics/') }}",
+                url: "{{ Url('campaigns-branch/') }}",
                 method: "get",
                 data: data
             }).done(function (data) {

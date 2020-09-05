@@ -12,14 +12,15 @@ class StatisticController extends Controller
 {
     private $customer;
     protected $tower = [
-        'https://royalspalh.adamtech.vn/api/' => 'Láng Hạ',
-        'https://royalspabn.adamtech.vn/api/' => 'Bắc Ninh 1',
-        'https://royalspabn2.adamtech.vn/api/' => 'Bắc Ninh 2',
-        'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
-        'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
-        'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
-        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
-        'https://royalspasg.adamtech.vn/api/' => 'Sài Gòn',
+//        'https://royalspalh.adamtech.vn/api/' => 'Láng Hạ',
+//        'https://royalspabn.adamtech.vn/api/' => 'Bắc Ninh 1',
+//        'https://royalspabn2.adamtech.vn/api/' => 'Bắc Ninh 2',
+//        'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
+//        'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
+//        'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
+//        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
+//        'https://royalspasg.adamtech.vn/api/' => 'Sài Gòn',
+        'http://spa.test/api/' => 'Spa TEST',
     ];
 
     /**
@@ -207,7 +208,7 @@ class StatisticController extends Controller
             $input['tower'] = 'https://royalspalh.adamtech.vn/api/';
         }
 
-        $select_tower = str_replace('/api/','',$input['tower']);
+        $select_tower = str_replace('/api/', '', $input['tower']);
 
         $params = [
             'query' => [
@@ -226,11 +227,19 @@ class StatisticController extends Controller
         $response = json_decode($response_data)->data;
 
         if ($request->ajax()) {
-            return Response::json(view('report_products.ajax_sale', compact('response','select_tower'))->render());
+            return Response::json(view('report_products.ajax_sale', compact('response', 'select_tower'))->render());
         }
-        return view('report_products.sale', compact('response', 'towers','select_tower'));
+        return view('report_products.sale', compact('response', 'towers', 'select_tower'));
     }
 
+    /**
+     * thong ke chien dịch toàn hệ thống
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Throwable
+     */
     public function campaign(Request $request)
     {
         $towers = $this->tower;
@@ -264,4 +273,40 @@ class StatisticController extends Controller
         }
         return view('statistics.campaign', compact('response'));
     }
+
+    public function campaignWithBranch(Request $request)
+    {
+        $towers = $this->tower;
+        $input = $request->all();
+        if (empty($request->data_time)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+        if (empty($request->tower)) {
+            $input['tower'] = 'https://royalspalh.adamtech.vn/api/';
+        }
+
+        $select_tower = str_replace('/api/', '', $input['tower']);
+
+        $params = [
+            'query' => [
+                'data_time' => @$input['data_time'],
+                'start_date' => @$input['start_date'],
+                'end_date' => @$input['end_date'],
+            ]
+        ];
+
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', $input['tower'] . 'campaign-with-branch', $params);
+
+        if ($res->getStatusCode() == 200) { // 200 OK
+            $response_data = $res->getBody()->getContents();
+        }
+        $response = json_decode($response_data)->data;
+
+        if ($request->ajax()) {
+            return Response::json(view('statistics.ajax_campaign_branch', compact('response', 'select_tower'))->render());
+        }
+        return view('statistics.campaign_branch', compact('response', 'towers', 'select_tower'));
+    }
+
 }
