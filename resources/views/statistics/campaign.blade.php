@@ -7,13 +7,8 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Thống kê chiến dịch toàn hệ thống</h3>
-                {{--<div class="col-md-2 form-group">--}}
-                {{--{!! Form::select('tower', $towers, null, array('class' => 'form-control select-gear tower','placeholder'=>'Chọn chi nhánh')) !!}--}}
-                {{--</div>--}}
                 <div class="col-md-9">
                     <ul class="col-md-9 no-padd mt5 tr right">
-                        {{--<li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>--}}
-                        {{--<li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>--}}
                         <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
                         <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
                         <li class="display pl5"><a data-time="THIS_MONTH"

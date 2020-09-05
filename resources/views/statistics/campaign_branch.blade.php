@@ -1,6 +1,12 @@
 @extends('layout.app')
 @section('_style')
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
+    {{--<style>--}}
+        {{--.tableFixHead tbody .fixed th {--}}
+            {{--position: sticky;--}}
+            {{--bottom: 0;--}}
+        {{--}--}}
+    {{--</style>--}}
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">

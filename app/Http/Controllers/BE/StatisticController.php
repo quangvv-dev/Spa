@@ -12,15 +12,14 @@ class StatisticController extends Controller
 {
     private $customer;
     protected $tower = [
-//        'https://royalspalh.adamtech.vn/api/' => 'Láng Hạ',
-//        'https://royalspabn.adamtech.vn/api/' => 'Bắc Ninh 1',
-//        'https://royalspabn2.adamtech.vn/api/' => 'Bắc Ninh 2',
-//        'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
-//        'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
-//        'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
-//        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
-//        'https://royalspasg.adamtech.vn/api/' => 'Sài Gòn',
-        'http://spa.test/api/' => 'Spa TEST',
+        'https://royalspalh.adamtech.vn/api/' => 'Láng Hạ',
+        'https://royalspabn.adamtech.vn/api/' => 'Bắc Ninh 1',
+        'https://royalspabn2.adamtech.vn/api/' => 'Bắc Ninh 2',
+        'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
+        'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
+        'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
+        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
+        'https://royalspasg.adamtech.vn/api/' => 'Sài Gòn',
     ];
 
     /**
@@ -302,7 +301,6 @@ class StatisticController extends Controller
             $response_data = $res->getBody()->getContents();
         }
         $response = json_decode($response_data)->data;
-
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_campaign_branch', compact('response', 'select_tower'))->render());
         }

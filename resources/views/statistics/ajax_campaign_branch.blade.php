@@ -1,72 +1,58 @@
-<style>
-    .font-30 {
-        font-size: 20px;
-    }
-
-    .h4.text-center {
-        color: cornflowerblue;
-        font-weight: 600;
-        margin-top: 10px;
-    }
-</style>
-
-{{--<div class="h4 text-center">TOÀN HỆ THỐNG</div>--}}
-<div class="h4 text-center">BIỂU ĐỒ</div>
-<div class="row row-cards">
-    <div class="col-md-12">
-        <div id="barchart" style="overflow-x: scroll;overflow-y: hidden"></div>
-    </div>
+@php
+    $all_customer = 0;
+    $call = 0;
+    $receive = 0;
+@endphp
+<div class="table-responsive">
+    <table class="table card-table table-vcenter text-nowrap table-primary">
+        <thead class="bg-primary text-white">
+        <tr>
+            <th class="text-white">STT</th>
+            <th class="text-white text-center">Ngày tạo</th>
+            <th class="text-white text-center">Chiến dịch</th>
+            <th class="text-white text-center">Tổng khách nhận được</th>
+            <th class="text-white text-center">Khách đã gọi</th>
+            <th class="text-white text-center">Khách đã đến</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(@count($response))
+            @foreach($response as $k => $s)
+                @php
+                    $all_customer   += $s->all_customer;
+                    $call           += $s->call;
+                    $receive        += $s->receive;
+                @endphp
+                <tr>
+                    <th scope="row">{{$k+1}}</th>
+                    <td class="text-center">{{@$s->created_at}}</td>
+                    <td class="text-center">{{@$s->name}}</td>
+                    <td class="text-center">{{@$s->all_customer}}</td>
+                    <td class="text-center">{{@$s->call}}</td>
+                    <td class="text-center">{{@$s->receive}}</td>
+                </tr>
+            @endforeach
+            <tr class="fixed">
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center bold">Tổng cộng</td>
+                <td class="text-center bold">{{@number_format($all_customer)}}</td>
+                <td class="text-center bold">{{@number_format($call)}}</td>
+                <td class="text-center bold">{{@number_format($receive)}}</td>
+            </tr>
+        @else
+            <tr>
+                <td id="no-data" class="text-center" colspan="6">Không tồn tại dữ liệu</td>
+            </tr>
+        @endif
+        </tbody>
+    </table>
+    {{--<div class="pull-left">--}}
+    {{--<div class="page-info">--}}
+    {{--{{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="pull-right">--}}
+    {{--{{ $docs->appends(['search' => request()->search ])->links() }}--}}
+    {{--</div>--}}
 </div>
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script>
-    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    {{--var heights = {{count($response)*70}}--}}
-    function drawBasic() {
-        var data = google.visualization.arrayToDataTable([
-                @if(count($response))
-            ['Năm', 'Số nhận được', {role: 'annotation'},'SĐT đã gọi', {role: 'annotation'}, 'SĐT đã đến', {role: 'annotation'}],
-                @foreach($response as $k =>$item1)
-            ['{{$item1->name}}',{{$item1->all_customer}}, '{{number_format($item1->all_customer)}}',{{$item1->call}}, '{{number_format($item1->call)}}',{{$item1->receive}} , '{{number_format($item1->receive)}}'],
-                @endforeach
-            ['Năm', 0, '0', 0,'0',0,'0'],
-                @else
-            ['Năm', 0, '#fffff', '0%'],
-            @endif
-
-        ]);
-
-        var options = {
-            title: 'THỐNG KÊ NGUỒN DATA THEO CHIẾN DỊCH',
-            // height: heights,
-            width: '100%',
-            titleFontSize: 13,
-            chartArea: {
-                height: '100%',
-                left: 100,
-                top: 70,
-            },
-            // colors: ['#0f89d0'],
-            vAxis: {
-                textStyle: {
-                    bold: true,
-                    // fontSize: 15,
-                },
-            },
-            annotations: {
-                highContrast: false,
-                textStyle: {
-                    color: '#000000',
-                    fontSize: 11,
-                    bold: true
-                }
-            },
-        };
-
-        var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-        chart.draw(data, options);
-    };
-    // column chart
-</script>
-

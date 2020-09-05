@@ -16,9 +16,9 @@
                         <li>
                             <a href="{{url('report/sales')}}">Telesales</a>
                         </li>
-                        {{--<li>--}}
-                        {{--<a href="{!! route('statistics.sales') !!}">Sale</a>--}}
-                        {{--</li>--}}
+                        <li>
+                        <a href="{!! route('statistics.campaign_branch') !!}">Chiến dịch</a>
+                        </li>
                     </ul>
                 </div>
             </li>
