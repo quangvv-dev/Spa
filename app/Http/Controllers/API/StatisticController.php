@@ -277,4 +277,16 @@ class StatisticController extends BaseApiController
         ];
         return $this->responseApi(200, 'SUCCESS', $response);
     }
+
+    public function campaignWithBranch(Request $request)
+    {
+        if (empty($request->data_time)) {
+            $request->merge(['data_time' => 'THIS_MONTH']);
+        }
+        $input = $request->all();
+        $campaign = Campaign::search($input)->count();
+        $post = Post::search($input)->count();
+        $customer = CustomerPost::search($input);
+        $customer2 = CustomerPost::search($input);
+    }
 }
