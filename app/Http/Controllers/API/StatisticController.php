@@ -278,15 +278,27 @@ class StatisticController extends BaseApiController
         return $this->responseApi(200, 'SUCCESS', $response);
     }
 
+    /**
+     * Thống kê chiến dịch từng chi nhánh
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function campaignWithBranch(Request $request)
     {
         if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+            $request->merge(['data_time' => 'LAST_MONTH']);
         }
         $input = $request->all();
-        $campaign = Campaign::search($input)->count();
-        $post = Post::search($input)->count();
-        $customer = CustomerPost::search($input);
-        $customer2 = CustomerPost::search($input);
+        $campaign = Campaign::search($input)->get()->map(function ($item) use ($input) {
+            $input['campaign_id'] = $item->id;
+            $customer = CustomerPost::search($input);
+            $customer2 = CustomerPost::search($input);
+            $item->all_customer = $customer->count();
+            $item->call = $customer->where('status', StatusConstant::CALL)->count();
+            $item->receive = $customer2->where('status', StatusConstant::RECEIVE)->count();
+            return $item;
+        });
+        return $this->responseApi(200, 'SUCCESS', $campaign);
     }
 }
