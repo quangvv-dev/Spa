@@ -287,7 +287,7 @@ class StatisticController extends BaseApiController
     public function campaignWithBranch(Request $request)
     {
         if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'LAST_MONTH']);
+            $request->merge(['data_time' => 'THIS_MONTH']);
         }
         $input = $request->all();
         $campaign = Campaign::search($input)->get()->map(function ($item) use ($input) {
