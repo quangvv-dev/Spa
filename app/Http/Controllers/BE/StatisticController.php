@@ -273,6 +273,14 @@ class StatisticController extends Controller
         return view('statistics.campaign', compact('response'));
     }
 
+    /**
+     * Thống kê chiến dịch từng chi nhánh
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Throwable
+     */
     public function campaignWithBranch(Request $request)
     {
         $towers = $this->tower;
@@ -305,6 +313,40 @@ class StatisticController extends Controller
             return Response::json(view('statistics.ajax_campaign_branch', compact('response', 'select_tower'))->render());
         }
         return view('statistics.campaign_branch', compact('response', 'towers', 'select_tower'));
+    }
+
+    public function taskSchedule(Request $request)
+    {
+        $towers = $this->tower;
+        $input = $request->all();
+        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+
+        $params = [
+            'query' => [
+                'data_time' => @$input['data_time'],
+                'start_date' => @$input['start_date'],
+                'end_date' => @$input['end_date'],
+            ]
+        ];
+
+        $response = [];
+        foreach ($towers as $k => $item) {
+            $client = new \GuzzleHttp\Client();
+            $res = $client->request('GET', $k . 'task-schedules', $params);
+
+            if ($res->getStatusCode() == 200) { // 200 OK
+                $response_data = $res->getBody()->getContents();
+            }
+            $datas = json_decode($response_data)->data;
+            $response[$item] = $datas;
+        }
+
+        if ($request->ajax()) {
+            return Response::json(view('statistics.ajax_task_schedule', compact('response'))->render());
+        }
+        return view('statistics.task_schedules', compact('response'));
     }
 
 }

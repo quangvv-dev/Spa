@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/statistics-sales/', 'StatisticController@sales')->name('statistics.sales');
     Route::get('/statistics-branch/', 'StatisticController@getBranch')->name('statistics.branch');
     Route::get('/statistics-campaigns', 'StatisticController@campaign')->name('statistics.campaign');
+    Route::get('/task-schedules', 'StatisticController@taskSchedule')->name('statistics.task_schedule');
     Route::get('/campaigns-branch', 'StatisticController@campaignWithBranch')->name('statistics.campaign_branch');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
 
