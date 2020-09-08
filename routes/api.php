@@ -26,3 +26,4 @@ Route::get('/sales', 'API\StatisticController@sales');
 Route::get('/sales-with-branch', 'API\StatisticController@saleWithBranch');
 Route::get('/campaigns', 'API\StatisticController@campaign');
 Route::get('/campaign-with-branch', 'API\StatisticController@campaignWithBranch');
+Route::get('/task-schedules', 'API\StatisticController@TaskScheduleSale');

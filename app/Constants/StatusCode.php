@@ -54,6 +54,9 @@ class StatusCode
 
     const EXCHANGE_POINT = 100000;
     const EXCHANGE_MONEY = 2000;
-
+// trạng thái công việc
+    const NEW_TASK = 1;
+    const DONE_TASK = 3;
+    const FAILED_TASK = 6;
 
 }
