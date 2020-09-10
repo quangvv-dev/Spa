@@ -51,7 +51,7 @@
                         class="fas fa-tasks"></i><span>Công việc</span></a>
             </li>
             <li class="nav-item with-sub">
-                <a class="nav-link {{ Request::is('statistics*')||Request::is('report*')||Request::is('tasks*') ? 'active' : '' }}"
+                <a class="nav-link {{ Request::is('statistics*')||Request::is('report*') ? 'active' : '' }}"
                    href="#"><i class="fas fa-search"></i><span>Thống kê</span></a>
                 <div class="sub-item">
                     <ul>
