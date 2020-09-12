@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //sms
     Route::resource('sms', 'SmsController');
     Route::post('sent-sms', 'SmsController@sentSms')->name('sms.sent');
+    Route::get('history-sms', 'SmsController@history')->name('sms.history');
 
     Route::resource('department', 'DepartmentController');
     Route::get('position/{id}', 'PositionController@index')->name('position.index');
@@ -88,8 +89,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('update-customer-post', 'AjaxController@updateCustomerPost')->name('customer_post.update');
         Route::get('export-customer-post', 'AjaxController@exportCustomer')->name('customer_post.export');
         Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');
-
-
     });
 
     Route::resource('rules', 'RuleController');//Automation

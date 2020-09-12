@@ -72,6 +72,12 @@
             e.preventDefault();
             let target = $(e.target).parent();
             const data_time = $(target).find('.choose_time').data('time');
+            const class_name = target.attr('class');
+            if (class_name === 'display pl5') {
+                console.log('done');
+                $('.filter_start_date').val('');
+                $('.filter_end_date').val('');
+            }
             $('a.choose_time').removeClass('border b-gray');
             $(target).find('.choose_time').addClass('border b-gray');
             const start_date = $('.filter_start_date').val();
@@ -93,21 +99,6 @@
                 user_id: user_id,
             });
         });
-
-        // $(document).on('change.select2', '.search-user', function () {
-        //     const user_id = $('.search-user').val();
-        //     const data_time = $('#data-time').val();
-        //     const start_date = $('#start-date').val();
-        //     const end_date = $('#end-date').val();
-        //     $('#search-user').val(user_id);
-        //
-        //     searchAjax({
-        //         data_time: data_time,
-        //         start_date: start_date,
-        //         end_date: end_date,
-        //         user_id: user_id,
-        //     })
-        // });
 
         $(document).on('click', '.other_time', function () {
             $(".other_time_panel").css({'display': ''});

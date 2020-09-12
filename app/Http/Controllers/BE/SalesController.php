@@ -77,7 +77,7 @@ class SalesController extends Controller
             $item->revenue_total    = $order->sum('all_total');
             $item->all_payment      = $detail->sum('price');
             return $item;
-        })->sortByDesc('revenue_total');
+        })->sortByDesc('all_payment');
         \View::share([
             'allTotal' => $users->sum('revenue_total'),
             'grossRevenue' => $users->sum('payment_revenue'),

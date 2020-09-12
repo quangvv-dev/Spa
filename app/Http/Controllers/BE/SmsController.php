@@ -12,7 +12,7 @@ use App\Models\HistorySms;
 use App\Models\OrderDetail;
 use App\Models\Status;
 use Carbon\Carbon;
-use FontLib\Table\Type\name;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -236,5 +236,20 @@ class SmsController extends Controller
         $data = Campaign::findOrFail($id);
         $data->delete();
         return 1;
+    }
+
+    public function history(Request $request)
+    {
+        $input = $request->all();
+        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+        $title = 'Lich sử gửi tin nhắn';
+        $docs = HistorySms::search($input)->paginate(StatusCode::PAGINATE_20);
+        if ($request->ajax()) {
+            return Response::json(view('history_sms.ajax', compact('docs'))->render());
+        }
+        return view('history_sms.index', compact('docs', 'title'));
+
     }
 }

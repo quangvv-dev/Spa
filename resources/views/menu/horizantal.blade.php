@@ -51,7 +51,7 @@
                         class="fas fa-tasks"></i><span>Công việc</span></a>
             </li>
             <li class="nav-item with-sub">
-                <a class="nav-link {{ Request::is('statistics*')||Request::is('report*') ? 'active' : '' }}"
+                <a class="nav-link {{ Request::is('statistics*')||Request::is('report*')||Request::is('history-sms') ? 'active' : '' }}"
                    href="#"><i class="fas fa-search"></i><span>Thống kê</span></a>
                 <div class="sub-item">
                     <ul>
@@ -60,6 +60,7 @@
                         <li><a href="{{url('statistics')}}">Doanh thu</a></li>
                         <li><a href="{{url('report/group-sale/services')}}">Doanh thu nhóm DV</a></li>
                         <li><a href="{{url('report/group-sale/products')}}">Doanh thu nhóm SP</a></li>
+                        <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
                         @endif
                         <li><a href="{{url('report/group-sale/tasks')}}">Hiệu quả công việc</a></li>
                         <li><a href="{{url('report/commission')}}">Hoa hồng nhân viên</a></li>
