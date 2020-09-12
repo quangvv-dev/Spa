@@ -310,7 +310,8 @@ class OrderController extends Controller
                             $input['phone'] = $phone;
                             $input['campaign_id'] = 0;
                             $input['message'] = $text;
-                            HistorySms::create($input);
+                            $input['created_at'] = Carbon::parse($exactly_value)->format('Y-m-d H:i');
+                            HistorySms::insert($input);
                         }
                     }
                 }

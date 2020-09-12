@@ -13,6 +13,7 @@ use App\Models\CustomerGroup;
 use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
+
 //use App\Models\Order;
 //use App\Models\OrderDetail;
 use App\Models\PackageWallet;
@@ -214,7 +215,7 @@ class CustomerController extends Controller
                 compact('history'))->render());
         }
         if ($request->post) {
-            $customer_post = CustomerPost::where('phone', $request->post)->where('status','<>', 0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            $customer_post = CustomerPost::where('phone', $request->post)->where('status', '<>', 0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('post.history',
                 compact('customer_post'))->render());
         }
@@ -226,7 +227,7 @@ class CustomerController extends Controller
         //END
 
         return view('customers.view_account',
-            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus','customer_post',
+            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus', 'customer_post',
                 'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet', 'package'));
     }
 
@@ -476,7 +477,8 @@ class CustomerController extends Controller
                                 $input['phone'] = $phone;
                                 $input['campaign_id'] = 0;
                                 $input['message'] = $text;
-                                HistorySms::create($input);
+                                $input['created_at'] = Carbon::parse($exactly_value)->format('Y-m-d H:i');
+                                HistorySms::insert($input);
                             }
                         }
                     }
