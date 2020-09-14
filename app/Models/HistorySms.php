@@ -23,6 +23,8 @@ class HistorySms extends Model
     {
         $data = self::when(isset($input['campaign_id']) && $input['campaign_id'], function ($query) use ($input) {
             $query->where('campaign_id', $input['campaign_id']);
+        })->when(isset($input['search']) && $input['search'], function ($query) use ($input) {
+            $query->where('phone', 'like', '%' . $input['search'] . '%');
         })->when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {

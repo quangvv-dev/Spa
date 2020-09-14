@@ -9,10 +9,13 @@
                 <h3 class="card-title">{{$title}}</h3></br>
             </div>
             <div class="card-header">
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-5 col-sm-6">
                     {!! Form::select('campaign_id', $campaign_arr, null, array('class' => 'form-control campaign select-gear', 'placeholder' => 'Tất cả chiến dịch')) !!}
                 </div>
-                <ul class="col-md-6 no-padd mt5 tr right">
+                <div class="col-md-2 col-sm-6">
+                    {!! Form::text('campaign_id', null, array('class' => 'form-control' ,'id'=>'search', 'placeholder' => 'Nhập SĐT ...')) !!}
+                </div>
+                <ul class="col-md-5 no-padd mt5 tr right">
                     <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
                     <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
                     <li class="display pl5"><a data-time="THIS_MONTH" class="choose_time border b-gray">Tháng này</a>
@@ -78,15 +81,34 @@
             });
         }
 
+        $(document).on('keyup', '#search', delay(function () {
+            const search = $('#search').val();
+            const start_date = $('.filter_start_date').val();
+            const end_date = $('.filter_end_date').val();
+            const data_time = $('#data-time').val();
+            const campaign_id = $('#campaign_id').val();
+
+            let data = {
+                search: search,
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                campaign_id: campaign_id
+            };
+            searchCategory(data);
+
+        }, 500));
+
         $(document).on('change', '.campaign', function (e) {
             const id = $(this).val();
             // const opt = document.querySelector('.campaign option:checked');
+            const search = $('#search').val();
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
             const data_time = $('#data-time').val();
             $('#campaign_id').val(id);
             searchCategory({campaign_id: id,start_date: start_date,
-                end_date: end_date,data_time:data_time})
+                end_date: end_date,data_time:data_time,search:search})
         });
 
         $(document).on('click', '.choose_time, #submit_other_time', function (e) {
@@ -104,6 +126,7 @@
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
             const campaign_id = $('#campaign_id').val();
+            const search = $('#search').val();
 
             if (typeof data_time === "undefined") {
                     $('#data-time').val();
@@ -118,6 +141,7 @@
                 start_date: start_date,
                 end_date: end_date,
                 campaign_id: campaign_id,
+                search:search
             });
         });
 
