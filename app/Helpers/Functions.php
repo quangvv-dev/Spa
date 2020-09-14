@@ -89,12 +89,12 @@ class Functions
     public static function getExactlyTime($sms)
     {
         $exactly_value = '';
-        $time_type = @array_values($sms)[0]->configs->time_type;
+        $time_type = @$sms->configs->time_type;
         if ($time_type == 'exactly') {
-            $exactly_value = Carbon::parse(@array_values($sms)[0]->configs->exactly_value)->format('d-m-Y H:s');
+            $exactly_value = Carbon::parse(@$sms->configs->exactly_value)->format('d-m-Y H:s');
         } elseif ($time_type == 'delay') {
-            $delay_unit = @array_values($sms)[0]->configs->delay_unit;
-            $delay_value = @array_values($sms)[0]->configs->delay_value;
+            $delay_unit = @$sms->configs->delay_unit;
+            $delay_value = @$sms->configs->delay_value;
             if ($delay_unit == 'hours') {
                 $exactly_value = Carbon::now('Asia/Ho_Chi_Minh')->addHour((int)$delay_value)->format('d-m-Y H:s');
             } else {

@@ -474,10 +474,13 @@ class CustomerController extends Controller
                             $text = Functions::vi_to_en($text);
                             $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
                             if (isset($err) && $err) {
-                                $input['phone'] = $phone;
-                                $input['campaign_id'] = 0;
-                                $input['message'] = $text;
-                                $input['created_at'] = Carbon::parse($exactly_value)->format('Y-m-d H:i');
+                                HistorySms::insert([
+                                    'phone' => $phone,
+                                    'campaign_id' => 0,
+                                    'message' => $text,
+                                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                    'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                ]);
                                 HistorySms::insert($input);
                             }
                         }
