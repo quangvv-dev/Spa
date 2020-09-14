@@ -475,7 +475,7 @@ class CustomerController extends Controller
                             $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
                             if (isset($err) && $err) {
                                 HistorySms::insert([
-                                    'phone' => $phone,
+                                    'phone' => @$customer->phone,
                                     'campaign_id' => 0,
                                     'message' => $text,
                                     'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
