@@ -56,6 +56,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/selectize.min.js"
             crossorigin="anonymous"></script>
     <script type="text/javascript">
+        function delay(callback, ms) {
+            // alert(ms);
+            var timer = 0;
+            return function () {
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    callback.apply(context, args);
+                }, ms || 0);
+            };
+        }
         $(document).ready(function () {
             $('.select-gear').selectize({
                 sortField: 'text'
