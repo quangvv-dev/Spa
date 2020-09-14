@@ -15,7 +15,7 @@
                     <td class="text-center">{{@$s->created_at}}</td>
                     <td class="text-center">{{isset($s->campaign)?$s->campaign->name:'Tin Automation'}}</td>
                     <td class="text-center">{{@$s->phone}}</td>
-                    <td class="text-center">{{@str_limit($s->message,70)}}</td>
+                    <td class="text-center">{{@str_limit($s->message,90)}}</td>
                    </tr>
             @endforeach
         @else
