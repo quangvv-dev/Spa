@@ -2,7 +2,8 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-white text-center">Ngày tạo</th>
+            <th class="text-white text-center">Hệ thống gửi</th>
+            <th class="text-white text-center">KH nhận</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Khách hàng</th>
             <th class="text-white text-center">Nội dung</th>
@@ -12,7 +13,8 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <td class="text-center">{{@$s->created_at}}</td>
+                    <td class="text-center">{{@formatYMD($s->created_at)}}</td>
+                    <td class="text-center">{{@formatYMD($s->updated_at)}}</td>
                     <td class="text-center">{{isset($s->campaign)?$s->campaign->name:'Tin Automation'}}</td>
                     <td class="text-center">{{@$s->phone}}</td>
                     <td class="text-center">{{@str_limit($s->message,90)}}</td>

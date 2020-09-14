@@ -3,8 +3,8 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">STT</th>
-            <th class="text-white text-center">Ngày gửi</th>
-            <th class="text-white text-center">Ngày nhận</th>
+            <th class="text-white text-center">Hệ thống gửi</th>
+            <th class="text-white text-center">KH nhận</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Nội dung tin</th>
         </tr>
@@ -13,8 +13,8 @@
         @foreach($history as $k => $item)
             <tr>
                 <td class="text-center">{{$k+1}}</td>
-                <td class="text-center">{{$item->created_at}}</td>
-                <td class="text-center">{{@$item->updated_at}}</td>
+                <td class="text-center">{{@formatYMD($item->created_at)}}</td>
+                <td class="text-center">{{@formatYMD($item->updated_at)}}</td>
                 <td class="text-center">{{@$item->campaign->name?:'Tin Automation'}}</td>
                 <td class="text-center">{{@$item->message}}</td>
             </tr>

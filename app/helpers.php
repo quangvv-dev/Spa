@@ -121,6 +121,9 @@ function usort_key($data, $key)
         return $a[$key] <=> $b[$key];
     });
 }
-//if (!function_exists('getPaging')) {
-//
-//}
+if (!function_exists('formatYMD')) {
+    function formatYMD($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
+}
