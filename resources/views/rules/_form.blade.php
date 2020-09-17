@@ -498,6 +498,15 @@
                     },{
                         name: "SĐT khách hàng",
                         value: "%phone%"
+                    },{
+                        name: "Ngày đặt lịch",
+                        value: "%date_schedules%"
+                    },{
+                        name: "Giờ bắt đầu",
+                        value: "%time_from%"
+                    },{
+                        name: "Giờ kết thúc",
+                        value: "%time_from%"
                     }
                     ];
                     callback(data);
