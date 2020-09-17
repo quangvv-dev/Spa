@@ -162,7 +162,7 @@
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
-                                        <input class="form-control {{'date-'.$item->id}}" id="update_date" data-toggle="datepicker" value="" name="date">
+                                        <input class="form-control {{'date-'.@$item->id}}" id="update_date" data-toggle="datepicker" value="" name="date">
                                     </div>
                                     <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
                                         {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
