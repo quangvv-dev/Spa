@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //sms
     Route::resource('sms', 'SmsController');
     Route::post('sent-sms', 'SmsController@sentSms')->name('sms.sent');
+    Route::post('save-sms', 'SmsController@saveSmsSchedules')->name('sms.saveSchedules');
     Route::get('history-sms', 'SmsController@history')->name('sms.history');
 
     Route::resource('department', 'DepartmentController');

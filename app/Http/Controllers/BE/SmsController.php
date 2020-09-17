@@ -238,6 +238,13 @@ class SmsController extends Controller
         return 1;
     }
 
+    /**
+     * Lịch sử tin nhắn
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
     public function history(Request $request)
     {
         $input = $request->all();
@@ -251,5 +258,19 @@ class SmsController extends Controller
         }
         return view('history_sms.index', compact('docs', 'title'));
 
+    }
+
+    /**
+     * lưu nội dung gửi tin nhắn lịch hẹn
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function saveSmsSchedules(Request $request)
+    {
+        if (isset($request->sms_schedules) && $request->sms_schedules) {
+            setting(['sms_schedules' => $request->sms_schedules])->save();
+        }
+        return back()->with('status', 'LƯU NỘI DUNG THÀNH CÔNG !!!');
     }
 }

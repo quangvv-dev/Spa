@@ -59,7 +59,7 @@
                         <span class="help-block">{{ $errors->first('limit', ':message') }}</span>
                     </div>
                     <div class="col-12 form-group">
-                        {!! Form::label('sms_group', 'Nội dung tin nhắn KH đặt lịch', array('class' => ' required')) !!}
+                        {!! Form::label('sms_group', 'Nội dung tin nhắn', array('class' => ' required')) !!}
                         {!! Form::textArea('sms_group', setting('sms_group'), array('class' => 'form-control','id'=>'sms_group','maxlength'=>152)) !!}
                         <span class="help-block">Lưu ý nội dung tin nhắn không dấu</span>
                     </div>
