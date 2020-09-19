@@ -481,7 +481,6 @@ class CustomerController extends Controller
                                     'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                                     'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
                                 ]);
-                                HistorySms::insert($input);
                             }
                         }
                     }

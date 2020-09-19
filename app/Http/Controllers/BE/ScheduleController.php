@@ -6,7 +6,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
-use App\Models\Customer;
+use App\Models\HistorySms;
 use App\Services\TaskService;
 use App\User;
 use DateTime;
@@ -98,7 +98,27 @@ class ScheduleController extends Controller
             $note = str_replace("'", ' ', $note);
             $request->merge(['note' => $note]);
         }
-        Schedule::create($request->all());
+        $data = Schedule::create($request->all());
+        if(!empty(setting('sms_schedules'))){
+            $date = Functions::dayMonthYear($data->date);
+            $text = setting('sms_schedules');
+            $text = Functions::vi_to_en($text);
+            $text = str_replace("%full_name%", @$data->customer->full_name, $text);
+            $text = str_replace("%time_from%", @$data->time_from, $text);
+            $text = str_replace("%time_to%", @$data->time_to, $text);
+            $text = str_replace("%date%", @$date, $text);
+            $phone = Functions::convertPhone(@$data->customer->phone);
+            $err = Functions::sendSmsV3($phone, @$text);
+            if (isset($err) && $err) {
+                HistorySms::insert([
+                    'phone' => @$data->customer->phone,
+                    'campaign_id' => 0,
+                    'message' => $text,
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                    'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                ]);
+            }
+        }
         return redirect()->back();
     }
 
@@ -154,6 +174,7 @@ class ScheduleController extends Controller
         $request->merge(['date' => $date]);
         $data = Schedule::with('customer')->find($request->id);
         $data->update($request->except('id', 'format_date'));
+
         if ($request->ajax()) {
             return $data;
         }
