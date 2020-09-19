@@ -102,11 +102,11 @@ class ScheduleController extends Controller
         if(!empty(setting('sms_schedules'))){
             $date = Functions::dayMonthYear($data->date);
             $text = setting('sms_schedules');
-            $text = Functions::vi_to_en($text);
             $text = str_replace("%full_name%", @$data->customer->full_name, $text);
             $text = str_replace("%time_from%", @$data->time_from, $text);
             $text = str_replace("%time_to%", @$data->time_to, $text);
             $text = str_replace("%date%", @$date, $text);
+            $text = Functions::vi_to_en($text);
             $err = Functions::sendSmsV3($data->customer->phone, @$text);
             if (isset($err) && $err) {
                 HistorySms::insert([
