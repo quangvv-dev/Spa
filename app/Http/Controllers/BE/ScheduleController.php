@@ -107,7 +107,6 @@ class ScheduleController extends Controller
             $text = str_replace("%time_from%", @$data->time_from, $text);
             $text = str_replace("%time_to%", @$data->time_to, $text);
             $text = str_replace("%date%", @$date, $text);
-//            $phone = Functions::convertPhone(@$data->customer->phone);
             $err = Functions::sendSmsV3($data->customer->phone, @$text);
             if (isset($err) && $err) {
                 HistorySms::insert([
