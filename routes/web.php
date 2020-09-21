@@ -132,6 +132,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('tasks', 'TaskController@statistical');
     });
     Route::resource('tasks', 'TaskController');
+    Route::get('tasks-employee', 'TaskController@statisticIndex');
     Route::get('notifications', 'AjaxController@getNotificationOutView')->name('notifications.index');
     Route::resource('wallet', 'WalletController');
     Route::resource('package', 'PackageController');

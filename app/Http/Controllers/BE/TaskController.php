@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\NotificationConstant;
+use App\Constants\StatusCode;
 use App\Models\Customer;
 use App\Models\Department;
 use App\Models\Notification;
@@ -269,5 +270,22 @@ class TaskController extends Controller
         }
 
         return view('report_products.index_tasks', compact('data'));
+    }
+
+
+    public function statisticIndex(Request $request)
+    {
+        if (empty($request->data_time)) {
+            $request->merge(['data_time' => 'THIS_MONTH']);
+        }
+        $title = 'Danh sách công việc';
+        $input = $request->all();
+        $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
+
+        if ($request->ajax()) {
+            return Response::json(view('tasks.ajax_statistical', compact('data','docs'))->render());
+        }
+
+        return view('tasks.statistical', compact('data', 'title','docs'));
     }
 }
