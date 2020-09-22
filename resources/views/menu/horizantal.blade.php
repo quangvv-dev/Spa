@@ -49,6 +49,13 @@
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}" href="{{route('tasks.index')}}"><i
                         class="fas fa-tasks"></i><span>Công việc</span></a>
+                @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
+                    <div class="sub-item">
+                        <ul>
+                            <li><a href="{!! url('tasks-employee') !!}">Công việc theo sale</a></li>
+                        </ul>
+                    </div>
+                @endif
             </li>
             <li class="nav-item with-sub">
                 <a class="nav-link {{ Request::is('statistics*')||Request::is('report*')||Request::is('history-sms') ? 'active' : '' }}"
@@ -57,15 +64,15 @@
                     <ul>
                         {{--<a href="{{url('report/customers')}}">Doanh thu</a>--}}
                         @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
-                        <li><a href="{{url('statistics')}}">Doanh thu</a></li>
-                        <li><a href="{{url('report/group-sale/services')}}">Doanh thu nhóm DV</a></li>
-                        <li><a href="{{url('report/group-sale/products')}}">Doanh thu nhóm SP</a></li>
-                        <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
+                            <li><a href="{{url('statistics')}}">Doanh thu</a></li>
+                            <li><a href="{{url('report/group-sale/services')}}">Doanh thu nhóm DV</a></li>
+                            <li><a href="{{url('report/group-sale/products')}}">Doanh thu nhóm SP</a></li>
+                            <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
                         @endif
                         <li><a href="{{url('report/group-sale/tasks')}}">Hiệu quả công việc</a></li>
                         <li><a href="{{url('report/commission')}}">Hoa hồng nhân viên</a></li>
                         <li><a href="{{url('report/sales')}}">Xếp hạng Telasales</a></li>
-                        <li><a href="{{url('statistics-task')}}">Công việc & lịch hẹn</a></li>
+                        <li><a href="{{url('statistics-task')}}">BĐ C.việc & lịch hẹn</a></li>
                     </ul>
                 </div>
             </li>

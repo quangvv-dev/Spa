@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
+use App\Constants\UserConstant;
 use App\Models\Customer;
 use App\Models\Department;
 use App\Models\Notification;
@@ -272,20 +273,27 @@ class TaskController extends Controller
         return view('report_products.index_tasks', compact('data'));
     }
 
-
+    /**
+     * Công việc theo sale
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function statisticIndex(Request $request)
     {
-        if (empty($request->data_time)) {
+        if (empty($request->data_time) && empty($request->start_date)&& empty($request->end_date)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
+        $users = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+
         $title = 'Danh sách công việc';
         $input = $request->all();
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) {
-            return Response::json(view('tasks.ajax_statistical', compact('data','docs'))->render());
+            return view('tasks.ajax_statistical', compact('data', 'docs'));
         }
 
-        return view('tasks.statistical', compact('data', 'title','docs'));
+        return view('tasks.statistical', compact('data', 'title', 'docs','users'));
     }
 }

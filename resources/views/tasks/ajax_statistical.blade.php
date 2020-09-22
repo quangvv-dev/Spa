@@ -21,8 +21,14 @@
                     <td class="text-center">{{@$s->customer->full_name}}</td>
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{$s->type==\App\Constants\NotificationConstant::CALL?'Gọi điên':'CSKH'}}</td>
-                    <td class="text-center">{{$s->task_status_id}}
-                    <span class="tag tag-azure">123123</span>
+                    <td class="text-center">
+                        @if($s->task_status_id ==  \App\Constants\StatusCode::NEW_TASK)
+                            <span class="tag tag-azure">Mới</span>
+                        @elseif($s->task_status_id ==  \App\Constants\StatusCode::DONE_TASK)
+                            <span class="tag tag-success">Hoàn thành</span>
+                        @else
+                            <span class="tag tag-danger">Quá hạn</span>
+                        @endif
                     </td>
                 </tr>
             @endforeach

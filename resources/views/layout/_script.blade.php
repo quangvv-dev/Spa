@@ -5,6 +5,15 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        $("#gridForm").submit(function (e, page) {
+            $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.get($(this).attr('action'), $(this).serialize(), function (data) {
+                $('#registration-form').html(data);
+            });
+            return false;
+        });
+
         // delete action
         $(document).on('click', '.delete', function (e) {
             var url = $(this).data('url');
