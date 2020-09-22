@@ -159,7 +159,7 @@ class Task extends Model
                     $input['data_time'] == 'LAST_WEEK' ||
                     $input['data_time'] == 'THIS_MONTH' ||
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('date_from', getTime(($input['date_from'])));
+                    $q->whereBetween('date_from', getTime(($input['data_time'])));
                 });
         })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('date_from', [
