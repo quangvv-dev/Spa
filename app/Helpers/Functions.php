@@ -426,7 +426,7 @@ class Functions
         $silver = setting('silver') ?: 0;
         $gold = setting('gold') ?: 0;
         $platinum = setting('platinum') ?: 0;
-        if ($silver > 0 && $gold > 0 && $platinum > 0) {
+        if (isset($silver) && isset($gold) && isset($platinum) && $silver > 0 && $gold > 0 && $platinum > 0) {
             if ($silver <= $total && $total < $gold) {
                 $status = Functions::getStatusWithCode('silver');
 
@@ -435,7 +435,9 @@ class Functions
             } elseif ($platinum <= $total) {
                 $status = Functions::getStatusWithCode('platinum');
             }
-            if ($status) { Customer::find($customer_id)->update(['status_id' => $status]); }
+            if ($status) {
+                Customer::find($customer_id)->update(['status_id' => $status]);
+            }
         }
         return 1;
     }
