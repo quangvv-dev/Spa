@@ -298,7 +298,7 @@ class CustomerController extends Controller
 
     public function checkUniquePhone(Request $request)
     {
-        $customer = Customer::where('phone', $request->phone)->first();
+        $customer = Customer::where('phone', $request->phone)->withTrashed()->first();
 
         if ($customer) {
             return $customer->id == $request->id ? 'true' : 'false';

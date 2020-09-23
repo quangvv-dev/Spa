@@ -5,6 +5,10 @@ namespace App\Helpers;
 use nusoap_client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Carbon\Carbon;
+use App\Models\Order;
+use App\Models\WalletHistory;
+use App\Models\Status;
+use App\Models\Customer;
 
 class Functions
 {
@@ -388,5 +392,51 @@ class Functions
             return 1;
         }
 
+    }
+
+    /**
+     * tong tien KH da thanh toan
+     *
+     * @param $id
+     * @return int
+     */
+    public static function sumRevenues($id)
+    {
+        $payment = Order::where('member_id', $id)->sum('gross_revenue');
+        $wallet = WalletHistory::where('customer_id', $id)->sum('order_price');
+        $total = (int)$payment + (int)$wallet;
+        return $total;
+    }
+
+    public static function getStatusWithCode($code)
+    {
+        $status = Status::where('code', 'like', '%' . $code . '%')->first();
+        return isset($status) && $status ? $status->id : 0;
+    }
+
+    /**
+     * Update hang khach hang
+     *
+     * @param $customer_id
+     * @return int
+     */
+    public static function updateRank($customer_id)
+    {
+        $total = Functions::sumRevenues($customer_id);
+        $silver = setting('silver') ?: 0;
+        $gold = setting('gold') ?: 0;
+        $platinum = setting('platinum') ?: 0;
+        if ($silver > 0 && $gold > 0 && $platinum > 0) {
+            if ($silver <= $total && $total < $gold) {
+                $status = Functions::getStatusWithCode('silver');
+
+            } elseif ($gold <= $total && $total < $platinum) {
+                $status = Functions::getStatusWithCode('gold');
+            } elseif ($platinum <= $total) {
+                $status = Functions::getStatusWithCode('platinum');
+            }
+            if ($status) { Customer::find($customer_id)->update(['status_id' => $status]); }
+        }
+        return 1;
     }
 }

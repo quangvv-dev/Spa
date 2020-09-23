@@ -369,6 +369,7 @@ class OrderController extends Controller
                 }
             }
             DB::commit();
+            Functions::updateRank($customer->id);
             return $order; //comment
         } catch (\Exception $e) {
 //            DB::rollBack();
