@@ -51,6 +51,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/statistics/', 'StatisticController@index')->name('statistics.index');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
     Route::get('/statistics-task', 'StatisticController@taskSchedules')->name('statistics.taskSchedules');
+    Route::get('settings', 'SettingController@index')->name('settings.index');
+    Route::post('settings', 'SettingController@storeRank')->name('settings.storeRank');
 
     //Order
     Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');

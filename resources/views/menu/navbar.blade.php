@@ -115,7 +115,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
-                                    class="dropdown-icon mdi mdi-settings"></i> Cài đặt tài khoản</a>
+                                    class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
                             @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
                                 <a class="dropdown-item" href="{!! route('users.index') !!}"><i
                                         class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
@@ -127,6 +127,8 @@
                                         class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
                                 <a class="dropdown-item" href="{!! route('package.index') !!}"><i
                                         class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
+                                <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
+                                        class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
                             @endif
                             @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
                                 <div class="col" style="color: #7490BD;font-weight: 400">
