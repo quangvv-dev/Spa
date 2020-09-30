@@ -435,7 +435,7 @@ class Functions
             } elseif ($platinum <= $total) {
                 $status = Functions::getStatusWithCode('platinum');
             }
-            if ($status) {
+            if (isset($status) && $status) {
                 Customer::find($customer_id)->update(['status_id' => $status]);
             }
         }
