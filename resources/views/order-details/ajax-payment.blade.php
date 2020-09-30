@@ -26,7 +26,7 @@
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer) ? @$order->order->customer->phone :''}}</td>
                     <td class="text-center">{{ @number_format($order->price) }}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->telesale)? @$order->order->customer->telesale->full_name:'' }}</td>
-                    <td class="text-center">{{ isset($order->order) ? $order->order->name_payment_type:' ' }}</td>
+                    <td class="text-center">{{ isset($order->payment_type) ? $order->name_payment_type:' ' }}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->marketing)? @$order->order->customer->marketing->full_name:'' }}</td>
                 </tr>
             @endforeach

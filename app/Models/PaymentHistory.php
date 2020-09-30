@@ -16,6 +16,19 @@ class PaymentHistory extends Model
         return $this->belongsTo(Order::class, 'order_id');
     }
 
+    public function getNamePaymentTypeAttribute()
+    {
+        if ($this->payment_type === 1) {
+            return "Tiền mặt";
+        }
+        elseif ($this->payment_type === 2) {
+            return "Thẻ";
+        }
+        else {
+            return "Điểm";
+        }
+    }
+
     public static function search($input)
     {
 

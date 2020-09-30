@@ -225,9 +225,11 @@ class Order extends Model
         if ($this->payment_type === 1) {
             return "Tiền mặt";
         }
-
-        if ($this->payment_type === 2) {
+        elseif ($this->payment_type === 2) {
             return "Thẻ";
+        }
+        else {
+            return "Điểm";
         }
     }
 
