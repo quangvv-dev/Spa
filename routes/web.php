@@ -9,7 +9,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         return view('dashboard.index');
     });
 
-    Route::get('demo/data-system/{id}', 'DBController@index');
+    Route::get('demo/data-system', 'DBController@index');
 
     Route::resource('status', 'StatusController');
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');

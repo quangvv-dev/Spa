@@ -9,9 +9,9 @@ use App\Models\Commission;
 
 class DBController extends Controller
 {
-    public function index($phone)
+    public function index()
     {
-//        Customer::update([]);
+        Customer::whereNotIn('telesales_id', [68, 98])->update(['telesales_id' => 91]);
         return 1;
     }
 }
