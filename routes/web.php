@@ -9,8 +9,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         return view('dashboard.index');
     });
 
+    Route::get('demo/data-system/{id}', 'DBController@index');
+
     Route::resource('status', 'StatusController');
-//    Route::get('demo/data-system', 'DBController@index');commission
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
     Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryServiceController');
@@ -28,7 +29,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('customers/force-delete', 'CustomerController@forceDelete');
     Route::post('customers/update-multiple-status',
         'CustomerController@updateMultipleStatus')->name('customers.update-multiple-status');
-//    Route::post('customers/update-multiple-account-manager', 'CustomerController@updateMultipleAccountManager')->name('customers.update-multiple-status');
     //sms
     Route::resource('sms', 'SmsController');
     Route::post('sent-sms', 'SmsController@sentSms')->name('sms.sent');
@@ -42,7 +42,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('position/edit/{id}', 'PositionController@edit')->name('position.edit');
 
     Route::get('schedules', 'ScheduleController@homePage')->name('schedules.index');
-//    Route::get('schedules/{id}', 'ScheduleController@index')->name('schedules.index');
     Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');
     Route::get('schedules/edit/{id}', 'ScheduleController@edit')->name('schedules.edit');

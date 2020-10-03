@@ -39,6 +39,11 @@ class TaskService
         $data['task_status_id'] = 1;
         unset($data['all_day']);
         $handleData = $this->data($data);
+        $note = str_replace("\r\n", ' ', $handleData['description']);
+        $note = str_replace("\n", ' ', $note);
+        $note = str_replace('"', ' ', $note);
+        $note = str_replace("'", ' ', $note);
+        $handleData['description'] = $note;
         $model = $this->task->create($handleData);
         return $model;
     }
@@ -46,6 +51,11 @@ class TaskService
     public function insert(array $data)
     {
         if (empty($data)) return false;
+        $note = str_replace("\r\n", ' ', $data['description']);
+        $note = str_replace("\n", ' ', $note);
+        $note = str_replace('"', ' ', $note);
+        $note = str_replace("'", ' ', $note);
+        $data['description'] = $note;
         $model = $this->task->create($data);
         return $model;
     }
