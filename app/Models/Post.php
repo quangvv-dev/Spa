@@ -38,4 +38,24 @@ class Post extends Model
 
         return $data;
     }
+
+    public function setGroupAttribute($group)
+    {
+        $this->attributes['group']= json_encode($group);
+    }
+
+    public function getGroupAttribute($group)
+    {
+        return json_decode($group);
+    }
+
+    public function setSaleIdAttribute($sale_id)
+    {
+        $this->attributes['sale_id']= json_encode($sale_id);
+    }
+
+    public function getSaleIdAttribute($sale_id)
+    {
+        return json_decode($sale_id);
+    }
 }

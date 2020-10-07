@@ -91,8 +91,8 @@ class AjaxController extends Controller
      */
     public function indexPost($id)
     {
-        $post = Post::where('slug', $id)->first();
-        return view('post.index', compact('post'));
+        $post = Post::find($id);
+        return view('optin_form.index', compact('post'));
     }
 
     /**
@@ -128,10 +128,20 @@ class AjaxController extends Controller
      */
     public function storeCustomerPost(Request $request)
     {
-        $post = Post::where('slug', $request->slug)->first();
+        $post = Post::find($request->id);
         $input = $request->except('slug');
         $customer = Customer::where('phone', $input['phone'])->first();
-        $input['telesales_id'] = isset($customer) && $customer ? $customer->telesales_id : 0;
+        if (isset($customer) && $customer) {
+            $input['telesales_id'] = $customer->telesales_id;
+        } else {
+            $new_position = 0;
+            if ($post->position < count($post->sale_id) - 1 && count($post->sale_id) > 1) {
+                $new_position = $post->position + 1;
+            }
+            $post->position = $new_position;
+            $post->save();
+            $input['telesales_id'] = $post->sale_id[$post->position];
+        }
         $input['post_id'] = $post->id;
         CustomerPost::create($input);
         return 'Đăng ký thành công';

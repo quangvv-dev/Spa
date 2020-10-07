@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
+use App\Constants\UserConstant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Campaign;
+use App\Models\Category;
 use App\Models\Post;
+use App\User;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -15,8 +18,13 @@ class PostsController extends Controller
     public function __construct()
     {
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
+        $category = Category::orderByDesc('id')->pluck('name', 'id')->toArray();
+        $sale = User::where('role', UserConstant::TELESALES)->where('active', UserConstant::ACTIVE)->orderByDesc('id')
+            ->pluck('full_name', 'id')->toArray();
         \View::share([
-            'campaigns' => $campaigns
+            'campaigns' => $campaigns,
+            'category' => $category,
+            'sale' => $sale
         ]);
     }
 
@@ -65,6 +73,19 @@ class PostsController extends Controller
     {
         $post = Post::where('slug', $id)->first();
         return view('post.index', compact('post'));
+    }
+
+    /**
+     * View hiển thị form
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showForm($id)
+    {
+        $title = 'Cấu hình Form';
+        $post = Post::find($id);
+        return view('optin_form._form', compact('post', 'title'));
     }
 
     /**

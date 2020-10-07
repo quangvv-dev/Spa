@@ -17,7 +17,7 @@
                     <th scope="row">{{$k}}</th>
                     <td class="text-center">{{@$s->campaign->name}}</td>
                     <td class="text-center">{{$s->title}}</td>
-                    <td class="text-center">{{@$s->phone}}</td>
+                    <td class="text-center"><a href="{{url('form/'.$s->id)}}"><i class="fa fa-edit"></i> Kết nối</a></td>
                     <td class="text-center">
                         <input title="Coppy" class="form-control" id="slug" type="text"
                                value="{{@url('post/'.$s->slug)}}">

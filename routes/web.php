@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('package', 'PackageController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');
     Route::resource('posts', 'PostsController');
+    Route::get('form/{id}', 'PostsController@showForm');
     Route::get('customer-post', 'AjaxController@ListCustomerPost')->name('post.customer');
 
 });

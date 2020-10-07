@@ -44,7 +44,6 @@
 
 <!-- Select2 js -->
 <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-
 <!-- Custom js -->
 <script src="{{asset('assets/js/custom.js')}}"></script>
 <!-- User js -->
