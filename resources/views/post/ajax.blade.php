@@ -5,8 +5,8 @@
             <th class="text-white">STT</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Tiêu đề</th>
-            <th class="text-white text-center">SĐT tư vấn</th>
-            <th class="text-white text-center">Đường dẫn</th>
+            <th class="text-white text-center">Optin form</th>
+            {{--<th class="text-white text-center">Đường dẫn</th>--}}
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -18,10 +18,6 @@
                     <td class="text-center">{{@$s->campaign->name}}</td>
                     <td class="text-center">{{$s->title}}</td>
                     <td class="text-center"><a href="{{url('form/'.$s->id)}}"><i class="fa fa-edit"></i> Kết nối</a></td>
-                    <td class="text-center">
-                        <input title="Coppy" class="form-control" id="slug" type="text"
-                               value="{{@url('post/'.$s->slug)}}">
-                    </td>
                     <td class="text-center">
                         <a class="btn coppy" href="javascript:void(0)"><i
                                 class="fas fa-copy"></i></a>

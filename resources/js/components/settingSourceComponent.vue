@@ -222,10 +222,12 @@
                         <div class="col-12 mb-1">
                             <input type="text" class="form-control" name="full_name" v-if="source.is_name_form"
                                    :placeholder="source.name_form">
+                            <span class="email-error"></span>
                         </div>
                         <div class="col-12 mb-1">
-                            <input type="text" class="form-control" name="email" v-if="source.is_email_form"
+                            <input type="email" class="form-control" name="email" v-if="source.is_email_form"
                                    :placeholder="source.email_form">
+                            <span class="email-error"></span>
                         </div>
                         <div class="col-12 mb-1">
                             <input type="text" class="form-control" name="phone" v-if="source.is_phone_form"

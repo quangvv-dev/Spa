@@ -29,7 +29,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('group') ? 'has-error' : '' }}">
                         {!! Form::label('group','Nhóm khách hàng', array('class' => 'required')) !!}
-                        {!! Form::select('group[]',$category, null, array('class' => 'form-control select2','multiple'=>true,'data-placeholder'=>'Chọn nhóm KH')) !!}
+                        {!! Form::select('group[]',$category, null, array('class' => 'form-control select2','required'=>true,'multiple'=>true,'data-placeholder'=>'Chọn nhóm KH')) !!}
                         <span class="help-block">{{ $errors->first('group', ':message') }}</span>
                     </div>
                 </div>

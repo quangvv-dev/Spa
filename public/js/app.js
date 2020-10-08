@@ -1994,6 +1994,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 var pathArray = window.location.pathname.split("/");
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -39374,7 +39376,9 @@ var render = function() {
                           placeholder: _vm.source.name_form
                         }
                       })
-                    : _vm._e()
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "email-error" })
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-12 mb-1" }, [
@@ -39382,12 +39386,14 @@ var render = function() {
                     ? _c("input", {
                         staticClass: "form-control",
                         attrs: {
-                          type: "text",
+                          type: "email",
                           name: "email",
                           placeholder: _vm.source.email_form
                         }
                       })
-                    : _vm._e()
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "email-error" })
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-12 mb-1" }, [
