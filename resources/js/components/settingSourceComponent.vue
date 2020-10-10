@@ -190,7 +190,7 @@
                         <input type="text" class="form-control square h30" v-model="source.notification">
                     </div>
                 </div>
-                <button class="btn btn-info" @click="ngonngay"><i class="fa fa-save"></i> Lưu</button>
+                <button class="btn btn-info" @click="ngonngay"><i class="fa fa-save"></i> Lấy mã</button>
 
             </div>
 

@@ -39281,7 +39281,7 @@ var render = function() {
         _c(
           "button",
           { staticClass: "btn btn-info", on: { click: _vm.ngonngay } },
-          [_c("i", { staticClass: "fa fa-save" }), _vm._v(" Lưu")]
+          [_c("i", { staticClass: "fa fa-save" }), _vm._v(" Lấy mã")]
         )
       ]),
       _vm._v(" "),

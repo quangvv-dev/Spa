@@ -55,7 +55,7 @@
                         button.val('Đăng ký thành công');
                     } else {
                         button.text('Đăng ký thành công');
-                        alertify.success(data);
+                        // alertify.success(data);
                     }
 
                 }

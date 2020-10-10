@@ -11,6 +11,7 @@
                             aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li class="dropdown_action" id="show_manager_account"><a>Người phụ trách</a></li>
+                        <li class="dropdown_action" id="convert_customer"><a>Chuyển sang khách hàng</a></li>
                     </ul>
                 </div>
                 @if(\Illuminate\Support\Facades\Auth::user()->role != \App\Constants\UserConstant::TELESALES)
@@ -22,8 +23,11 @@
                     {!! Form::select('status', $status, null, array('class' => 'form-control select-gear status','placeholder'=>'Trạng thái')) !!}
                 </div>
                 <div class="col-md-6 col-sm-6">
-                    {!! Form::select('campaign_id', $campaigns, null, array('class' => 'form-control campaign select-gear', 'placeholder' => 'Tất cả chiến dịch')) !!}
+                    {!! Form::select('post_id', $posts, null, array('class' => 'form-control post select-gear', 'placeholder' => 'Tất cả Form')) !!}
                 </div>
+                {{--<div class="col-md-6 col-sm-6">--}}
+                    {{--{!! Form::select('campaign_id', $campaigns, null, array('class' => 'form-control campaign select-gear', 'placeholder' => 'Tất cả chiến dịch')) !!}--}}
+                {{--</div>--}}
                 <div class="col-md-1 col-sm-6">
                     <a title="Download Data" class="btn export" href="#">
                         <i class="fas fa-download"></i></a>
@@ -34,6 +38,7 @@
                 @include('post.modal-update-account')
             </div>
             <input type="hidden" id="campaign_id">
+            <input type="hidden" id="post_id">
             <input type="hidden" id="status_id">
             <input type="hidden" id="telesales_id">
             <!-- table-responsive -->
@@ -49,7 +54,6 @@
             $('.select-gear').selectize({
                 sortField: 'text'
             });
-            //     $(".fc-datepicker").datepicker({dateFormat: 'dd-mm-yy'});
         });
 
         function searchCategory(data) {
@@ -63,35 +67,43 @@
             });
         }
 
-        $(document).on('change', '.campaign', function (e) {
+        // $(document).on('change', '.campaign', function (e) {
+        //     const id = $(this).val();
+        //     // const opt = document.querySelector('.campaign option:checked');
+        //     $('#campaign_id').val(id);
+        //     const status = $('#status_id').val();
+        //     const sales = $('#telesales_id').val();
+        //     searchCategory({campaign_id: id, status: status, telesales_id: sales})
+        // });
+        $(document).on('change', '.post', function (e) {
             const id = $(this).val();
             // const opt = document.querySelector('.campaign option:checked');
-            $('#campaign_id').val(id);
+            $('#post').val(id);
             const status = $('#status_id').val();
             const sales = $('#telesales_id').val();
-            searchCategory({campaign_id: id, status: status, telesales_id: sales})
+            searchCategory({post: id, status: status, telesales_id: sales})
         });
         $(document).on('change', '.sales', function (e) {
             const id = $(this).val();
             $('#telesales_id').val(id);
             const status = $('#status_id').val();
-            const campaign_id = $('#campaign_id').val();
-            searchCategory({campaign_id: campaign_id, status: status, telesales_id: id})
+            const post = $('#post').val();
+            searchCategory({campaign_id: post, status: status, telesales_id: id})
         });
         $(document).on('change', '.status', function (e) {
             const id = $(this).val();
             $('#status_id').val(id);
-            const campaign_id = $('#campaign_id').val();
+            const post = $('#post').val();
             const sales = $('#telesales_id').val();
-            searchCategory({campaign_id: campaign_id, status: id, telesales_id: sales})
+            searchCategory({post: post, status: id, telesales_id: sales})
         });
 
         $(document).on('click', '.export', function () {
-            const status = $('#status_id').val();
-            const campaign_id = $('#campaign_id').val();
-            const sales = $('#telesales_id').val();
-            var opts = document.querySelector('.campaign option:checked').text;
-            var hrefs = "{{ route('customer_post.export') }}?campaign_id=" + campaign_id + '&status=' + status + '&telesales_id=' + sales + '&campaign=' + opts;
+            let status = $('#status_id').val();
+            let post = $('#post').val() > 0?$('#post').val():'';
+            let sales = $('#telesales_id').val();
+            let opts = document.querySelector('.post option:checked').text;
+            let hrefs = "{{ route('customer_post.export') }}?post=" + post + '&status=' + status + '&telesales_id=' + sales + '&campaign=' + opts;
             location.href = hrefs;
         });
 
@@ -167,6 +179,22 @@
             $('#show-manager-account').modal("show");
         });
         var ids = [];
+        $(document).on('click', '#convert_customer', function () {
+            const id = $('td .myCheck:checked');
+            $.each(id, function () {
+                ids.push($(this).val());
+            });
+
+            $.ajax({
+                url: "{{route('customer_post.convert')}}",
+                method: "put",
+                data: {
+                    ids: ids,
+                }
+            }).done(function () {
+                window.location.reload();
+            });
+        })
         $(document).on('click', '.update-multiple-account-manager', function () {
             const id = $('td .myCheck:checked');
             const account_manager = $('#manager-account').val();

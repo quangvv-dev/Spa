@@ -21,9 +21,8 @@ class CustomerPost extends Model
         $data = self::orderByDesc('id');
 
         if (isset($input)) {
-            $data = $data->when(isset($input['campaign_id']) && $input['campaign_id'], function ($query) use ($input) {
-                $post = Post::where('campaign_id', $input['campaign_id'])->pluck('id')->toArray();
-                $query->whereIn('post_id', $post);
+            $data = $data->when(isset($input['post']) && $input['post'], function ($query) use ($input) {
+                $query->where('post_id', $input['post']);
             })->when(isset($input['telesales_id']) && $input['telesales_id'], function ($query) use ($input) {
                 $query->where('telesales_id', $input['telesales_id']);
             })->when(isset($input['status']), function ($query) use ($input) {
@@ -47,6 +46,10 @@ class CustomerPost extends Model
                         Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                     ]);
                 });
+//            ->when(isset($input['campaign_id']) && $input['campaign_id'], function ($query) use ($input) {
+//                $post = Post::where('campaign_id', $input['campaign_id'])->pluck('id')->toArray();
+//                $query->whereIn('post_id', $post);
+//            })
         }
 
         return $data;
@@ -56,5 +59,15 @@ class CustomerPost extends Model
     {
         return $this->belongsTo(User::class, 'telesales_id');
 
+    }
+
+    public function setGroupAttribute($group)
+    {
+        $this->attributes['group'] = json_encode($group);
+    }
+
+    public function getGroupAttribute($group)
+    {
+        return json_decode($group);
     }
 }

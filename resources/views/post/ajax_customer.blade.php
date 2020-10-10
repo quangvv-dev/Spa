@@ -5,9 +5,10 @@
             <th><input type="checkbox" class="selectall myCheck"></th>
             <th class="text-white"><i class="fa fa-save"></i></th>
             <th class="text-white text-center">Ngày tạo</th>
-            <th class="text-white text-center">Chiến dịch</th>
+            {{--<th class="text-white text-center">Chiến dịch</th>--}}
+            <th class="text-white text-center">Optin Form</th>
             <th class="text-white text-center">Khách hàng</th>
-            <th class="text-white text-center">SĐT</th>
+            {{--<th class="text-white text-center">SĐT</th>--}}
             <th class="text-white text-center">ghi chú</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">T.T</th>
@@ -33,9 +34,9 @@
                         </td>
                     @endif
                     <td class="text-center">{{@$s->created_at}}</td>
-                    <td class="text-center">{{@str_limit($s->post->campaign->name,40)}}</td>
-                    <td class="text-center">{{@$s->full_name}}</td>
-                    <td class="text-center">{{@$s->phone}}</td>
+                    {{--<td class="text-center">{{@str_limit($s->post->campaign->name,40)}}</td>--}}
+                    <td class="text-center">{{@str_limit($s->post->title,40)}}</td>
+                    <td class="text-center">{{@$s->full_name}} ( {{@$s->phone}} )</td>
                     <td class="text-center">{{@$s->note}}</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{@$s->id}}">{{@$s->telesales->full_name}}</td>

@@ -143,6 +143,7 @@ class AjaxController extends Controller
             $input['telesales_id'] = $post->sale_id[$post->position];
         }
         $input['post_id'] = $post->id;
+        $input['group'] = $post->group;
         CustomerPost::create($input);
         return 'Đăng ký thành công';
     }
@@ -158,15 +159,15 @@ class AjaxController extends Controller
     {
         $status = [0 => "Chưa gọi", 1 => "Đã gọi", 2 => "Đã đến"];
         $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id');
-        $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
+//        $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
+        $posts = Post::orderByDesc('id')->pluck('title', 'id')->toArray();
         $title = 'Danh sách khách hàng đăng ký form';
         $input = $request->all();
-//        $input['telesales_id'] = Auth::user()->role == UserConstant::TELESALES ? Auth::user()->id : null;
         $docs = CustomerPost::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) return Response::json(view('post.ajax_customer', compact('docs', 'title'))->render());
 
-        return view('post.indexCustomer', compact('title', 'docs', 'campaigns', 'telesales', 'status'));
+        return view('post.indexCustomer', compact('title', 'docs', 'posts', 'telesales', 'status'));
     }
 
     public function updateCustomerPost(Request $request)
@@ -202,6 +203,19 @@ class AjaxController extends Controller
         return \response($response);
     }
 
+
+    public function convertCustomerPost(Request $request)
+    {
+        dd($request->all());
+        $data = CustomerPost::whereIn('id',$request->ids);
+
+//        $response = [
+//            'customer' => $data,
+//            'data' => $telesales,
+//        ];
+//        return \response($response);
+    }
+
     /**
      * Export customer post
      *
@@ -210,7 +224,7 @@ class AjaxController extends Controller
     public function exportCustomer(Request $request)
     {
         $input = $request->all();
-        $campaign = $input['campaign'] ?: 'Tất cả chiến dịch';
+        $campaign = $input['campaign'] ?: 'Tất cả form';
         $data = CustomerPost::search($input)->get();
         Excel::create($campaign, function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
@@ -225,7 +239,7 @@ class AjaxController extends Controller
                     'Tư vấn thêm',
                     'Người phụ trách',
                     'Trạng thái',
-                    'Chiến dịch'
+                    'Từ Optin form'
                 ]);
                 $i = 0;
                 if ($data) {
@@ -238,7 +252,7 @@ class AjaxController extends Controller
                             @$ex->note,
                             @$ex->telesales->full_name,
                             (@$ex->status == 0) ? 'Chưa gọi' : ($ex->status == 1 ? 'Đã gọi' : 'Đã đến'),
-                            @$ex->post->campaign->name
+                            @$ex->post->title
                         ]);
                     }
                 }
