@@ -26,7 +26,7 @@
                     {!! Form::select('post_id', $posts, null, array('class' => 'form-control post select-gear', 'placeholder' => 'Tất cả Form')) !!}
                 </div>
                 {{--<div class="col-md-6 col-sm-6">--}}
-                    {{--{!! Form::select('campaign_id', $campaigns, null, array('class' => 'form-control campaign select-gear', 'placeholder' => 'Tất cả chiến dịch')) !!}--}}
+                {{--{!! Form::select('campaign_id', $campaigns, null, array('class' => 'form-control campaign select-gear', 'placeholder' => 'Tất cả chiến dịch')) !!}--}}
                 {{--</div>--}}
                 <div class="col-md-1 col-sm-6">
                     <a title="Download Data" class="btn export" href="#">
@@ -100,7 +100,7 @@
 
         $(document).on('click', '.export', function () {
             let status = $('#status_id').val();
-            let post = $('#post').val() > 0?$('#post').val():'';
+            let post = $('#post').val() > 0 ? $('#post').val() : '';
             let sales = $('#telesales_id').val();
             let opts = document.querySelector('.post option:checked').text;
             let hrefs = "{{ route('customer_post.export') }}?post=" + post + '&status=' + status + '&telesales_id=' + sales + '&campaign=' + opts;
@@ -179,17 +179,18 @@
             $('#show-manager-account').modal("show");
         });
         var ids = [];
+        var id_customer = [];
+
         $(document).on('click', '#convert_customer', function () {
             const id = $('td .myCheck:checked');
             $.each(id, function () {
-                ids.push($(this).val());
+                id_customer.push($(this).val());
             });
-
             $.ajax({
                 url: "{{route('customer_post.convert')}}",
-                method: "put",
+                method: "post",
                 data: {
-                    ids: ids,
+                    ids: id_customer,
                 }
             }).done(function () {
                 window.location.reload();

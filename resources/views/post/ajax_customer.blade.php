@@ -36,7 +36,13 @@
                     <td class="text-center">{{@$s->created_at}}</td>
                     {{--<td class="text-center">{{@str_limit($s->post->campaign->name,40)}}</td>--}}
                     <td class="text-center">{{@str_limit($s->post->title,40)}}</td>
-                    <td class="text-center">{{@$s->full_name}} ( {{@$s->phone}} )</td>
+                    <td class="text-center">
+                        @if(isset($s->customer))
+                            <a href="{{url('customers/'.@$s->customer->id)}}">{{@$s->full_name}}</a>
+                        @else
+                            {{@$s->full_name}}
+                        @endif
+                        ( {{@$s->phone}} )</td>
                     <td class="text-center">{{@$s->note}}</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{@$s->id}}">{{@$s->telesales->full_name}}</td>

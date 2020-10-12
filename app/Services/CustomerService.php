@@ -94,4 +94,12 @@ class CustomerService
 
         return $customers;
     }
+
+    public function update_code($customer)
+    {
+        $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
+        $code = 'KH' . $customer_id;
+        $customer->update(['account_code' => $code]);
+        return $customer;
+    }
 }

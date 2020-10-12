@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Customer;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Functions;
@@ -14,6 +15,11 @@ class CustomerPost extends Model
     public function post()
     {
         return $this->belongsTo(Post::class, 'post_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'phone', 'phone');
     }
 
     public static function search($input)

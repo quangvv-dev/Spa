@@ -10,7 +10,10 @@ use App\Models\Campaign;
 use App\Models\Customer;
 use App\Models\Notification;
 use App\Models\Post;
+use App\Models\Status;
+use App\Models\Category;
 use App\User;
+use App\Services\CustomerService;
 use App\Constants\UserConstant;
 use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
@@ -26,10 +29,12 @@ class AjaxController extends Controller
 {
 
     private $imageService;
+    private $customerService;
 
-    public function __construct(ImageService $imageService)
+    public function __construct(ImageService $imageService, CustomerService $customerService)
     {
         $this->imageService = $imageService;
+        $this->customerService = $customerService;
     }
 
     /**
@@ -203,11 +208,38 @@ class AjaxController extends Controller
         return \response($response);
     }
 
-
+    /**
+     * Chuyen data sang customer
+     *
+     * @param Request $request
+     * @return int
+     */
     public function convertCustomerPost(Request $request)
     {
-        dd($request->all());
-        $data = CustomerPost::whereIn('id',$request->ids);
+        $data = CustomerPost::whereIn('id', $request->ids)->doesntHave('customer')->get();
+        $status = Status::where('code', 'like', '%optin_form%')->first();
+        $moi = Status::where('code', 'moi')->first();
+        if (count($data)) {
+            foreach ($data as $item) {
+                $input = [
+                    'phone' => $item->phone,
+                    'full_name' => $item->full_name,
+                    'telesales_id' => $item->telesales_id,
+                    'mkt_id' => Auth::user()->id,
+                    'source_id' => isset($status) && $status ? $status->id : 0,
+                    'status_id' => $moi->id,
+                    'gender' => 0,
+                    'fb_name' => $item->full_name,
+                ];
+                $customer = $this->customerService->create($input);
+                $this->customerService->update_code($customer);
+                $category = Category::find($item->group);
+                $customer->categories()->attach($category);
+                CustomerPost::where('id', $item->id)->delete();
+            }
+        }
+        return 1;
+
 
 //        $response = [
 //            'customer' => $data,

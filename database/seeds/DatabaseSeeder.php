@@ -18,6 +18,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
+        DB::table('status')->insert(
+            [
+                'name' => 'Optin Form',
+                'code' => 'optin_form',
+                'color' => '#dd00dd',
+                'type' => 2,
+                'position' => 0,
+            ]
+
+        );
 //        Element::truncate();
 //        \App\Models\Element::truncate();
 //        \App\Models\PackageWallet::truncate();
