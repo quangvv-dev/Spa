@@ -346,13 +346,12 @@
 
         $('body').on('keyup', '.price, .VAT, .CK1, .CK2', function (e) {
             let target = $(e.target).parent().parent();
+            // let quantity = $(target).find('.quantity').val();
             let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
             let CK2 = $(target).find('.CK2').val();
-
             price = replaceNumber(price);
-
-            let total_service = price  + price *  (VAT / 100) - replaceNumber(CK2);
+            let total_service = parseInt(price)  + parseInt(price) * (VAT / 100) - parseInt(replaceNumber(CK2));
             $(target).find('.price').val(formatNumber(price));
             $(target).find('.CK2').val(formatNumber(CK2));
             $(target).find('.total').val(formatNumber(total_service));
