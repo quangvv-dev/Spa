@@ -21,6 +21,16 @@
     label {
         font-weight: 600;
     }
+    thead > tr th {
+        background: #3b8fec;
+    }
+    tr th,td {
+        background: #fff;
+    }
+    tr th,td {
+        /*border-right: 1px solid #e7effc !important;*/
+        border: 1px solid #e7effc !important;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">

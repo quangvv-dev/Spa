@@ -24,6 +24,9 @@
             font-size: 12px;
         }
     }
+    thead > tr th {
+         background: #fff !important;
+    }
 
 </style>
 @section('content')
