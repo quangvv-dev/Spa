@@ -79,28 +79,12 @@
                                             {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                             <select class="select2 form-control service" required id="service"
                                                     name="service_id[]">
-                                                @if($role_type == \App\Constants\StatusCode::COMBOS)
-                                                    <option>-Chọn combo-</option>
-                                                    @foreach($combo as $comb)
-                                                        <option
-                                                            value="{{$comb->id}}" {{$comb->id == $orderDetail->booking_id ? "selected": ""}} >{{@$comb->category->name}}
-                                                            - {{$comb->name}}</option>
-                                                    @endforeach
-                                                @elseif($role_type == \App\Constants\StatusCode::PRODUCT)
-                                                    <option>-Chọn sản phẩm-</option>
-                                                    @foreach($products as $product)
-                                                        <option
-                                                            value="{{$product->id}}" {{$product->id == $orderDetail->booking_id ? "selected": ""}} >{{@$product->category->name}}
-                                                            - {{$product->name}}</option>
-                                                    @endforeach
-                                                @else
-                                                    <option>-Chọn dịch vụ-</option>
-                                                    @foreach($services as $service)
-                                                        <option
-                                                            value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
-                                                            - {{$service->name}}</option>
-                                                    @endforeach
-                                                @endif
+                                                <option>-Chọn sản phẩm-</option>
+                                                @foreach($products as $product)
+                                                    <option
+                                                        value="{{$product->id}}" {{$product->id == $orderDetail->booking_id ? "selected": ""}} >{{@$product->category->name}}
+                                                        - {{$product->name}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <span class="btn btn-default col-md-2 no-padd add_note"
@@ -126,47 +110,34 @@
                                         {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total','readonly'=>true)) !!}
                                     </td>
                                     <td class="tc vertical-middle remove_row">
-                                        <button class='btn btn-danger'><i class="fa-trash fa"></i></button>
+                                        <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
                         @else
 
                             <tr>
-                                <td width="350" class="row">
-                                    <div class="col-xs-12 col-md-10">
+                                <td width="350">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-10">
 
-                                        <select class="select2 form-control service" required id="service"
-                                                name="service_id[]">
-                                            @if( request()->get('type')=='products')
-                                                <option>-Chọn sản phẩm-</option>
-                                                @foreach($products as $product)
-                                                    <option value="{{@$product->id}}">{{@$product->category->name}}
-                                                        - {{@$product->name}}</option>
-                                                @endforeach
-                                            @elseif(request()->get('type')=='combos')
-                                                <option>-Chọn combo-</option>
-                                                @foreach($combo as $comb)
-                                                    <option value="{{$comb->id}}">{{@$comb->category->name}}
-                                                        - {{$comb->name}}</option>
-                                                @endforeach
-                                            @else
-                                                <option>-Chọn dịch vụ-</option>
-                                                @foreach($services as $service)
-                                                    <option value="{{$service->id}}">{{@$service->category->name}}
-                                                        - {{$service->name}}</option>
-                                                @endforeach
-                                            @endif
+                                            <select class="select2 form-control service" required id="service"
+                                                    name="service_id[]">
+                                                    @foreach($products as $product)
+                                                        <option value="{{@$product->id}}">{{@$product->category->name}}
+                                                            - {{@$product->name}}</option>
+                                                    @endforeach
+                                            </select>
 
-                                        </select>
-
+                                        </div>
+                                        <span class="btn btn-default col-md-1 no-padd add_note"
+                                              style="height:34px; background-color: #ffffff;"> <i
+                                                class="fa fa-plus font16"
+                                                aria-hidden="true"></i> </span>
+                                        <textarea class="product_note form-control pt5 italic"
+                                                  style="margin-left: 12px; display: none" placeholder="Ghi chú"
+                                                  name="service_note[]"></textarea>
                                     </div>
-                                    <span class="btn btn-default col-md-2 no-padd add_note"
-                                          style="height:34px; background-color: #ffffff;"> <i class="fa fa-plus font16"
-                                                                                              aria-hidden="true"></i> </span>
-                                    <textarea class="product_note form-control pt5 italic"
-                                              style="margin-left: 12px; display: none" placeholder="Ghi chú"
-                                              name="service_note[]"></textarea>
                                 </td>
                                 <td class="text-center" width="50">
                                     {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
@@ -184,7 +155,7 @@
                                     {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                                 </td>
                                 <td class="tc vertical-middle remove_row">
-                                    <button class='btn btn-danger'><i class="fa-trash fa"></i></button>
+                                    <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
                                 </td>
                             </tr>
                         @endif
@@ -245,7 +216,8 @@
 
             $('.order').append(`
                 <tr>
-                    <td width="350" class="row">
+                    <td width="350">
+                    <div class="row">
                     <div class="col-xs-12 col-md-10">
                         <select class="select2 form-control service" required id="service" name="service_id[]">
                             <option>-Chọn sản phẩm-</option>
@@ -254,8 +226,9 @@
                             @endforeach
                 </select>
             </div>
-            <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+            <span class="btn btn-default col-md-1 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
             <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
+            </div>
             </td>
             <td class="text-center" width="50">
             {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
@@ -272,7 +245,7 @@
                 <td class="text-center">
             {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                 </td>
-                <td class="tc vertical-middle remove_row"><button class='btn btn-danger'><i class="fa-trash fa"></i></button></td>
+                <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
             </tr>
 `);
 

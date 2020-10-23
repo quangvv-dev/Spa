@@ -28,8 +28,8 @@
         background: #fff;
     }
     tr th,td {
-        /*border-right: 1px solid #e7effc !important;*/
-        border: 1px solid #e7effc !important;
+        border-right: 1px solid #e7effc !important;
+        border-left: 1px solid #e7effc !important;
     }
 </style>
 <div id="global-loader">

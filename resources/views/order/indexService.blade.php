@@ -131,7 +131,7 @@
                                         {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total','readonly'=>true)) !!}
                                     </td>
                                     <td class="tc vertical-middle remove_row">
-                                        <button class='btn btn-danger'><i class="fa-trash fa"></i></button>
+                                        <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -184,7 +184,7 @@
                                     {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                                 </td>
                                 <td class="tc vertical-middle remove_row">
-                                    <button class='btn btn-danger'><i class="fa-trash fa"></i></button>
+                                    <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
                                 </td>
                             </tr>
                         @endif
@@ -282,7 +282,7 @@
                     <td class="text-center">
 {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                     </td>
-                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'><i class="fa-trash fa"></i></button></td>
+                    <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
                 </tr>
 `);
             }
@@ -317,7 +317,7 @@
                     <td class="text-center">
 {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                     </td>
-                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'><i class="fa-trash fa"></i></button></td>
+                    <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
                 </tr>
 `);
             }
