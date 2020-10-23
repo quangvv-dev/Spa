@@ -26,8 +26,6 @@
     }
     tr th,td {
         background: #fff;
-    }
-    tr th,td {
         border-right: 1px solid #e7effc !important;
         border-left: 1px solid #e7effc !important;
     }

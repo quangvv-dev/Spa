@@ -37,11 +37,11 @@
         }
 
         .tableFixHead tbody .fixed td {
-            background: #cbdbf2;
+            background: #3b8fec;
         }
 
         .tableFixHead tbody .fixed2 td {
-            background: #cbdbf2;
+            background: #3b8fec;
         }
 
         .form-control {
