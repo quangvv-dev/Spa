@@ -79,6 +79,25 @@ class OrderController extends Controller
         return view('order.index', compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'products', 'combo'));
     }
 
+    /**
+     * Tao đơn dịch vụ
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function indexService(Request $request)
+    {
+        $customerId = $request->customer_id;
+        $customer = Customer::find($customerId);
+        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name', 'id');
+        $title = 'Tạo đơn hàng';
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
+        $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
+        $customers = Customer::pluck('full_name', 'id');
+        return view('order.indexService', compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'combo'));
+    }
+
     public function getInfoService(Request $request)
     {
         $id = $request->id ? $request->id : '';
@@ -101,6 +120,7 @@ class OrderController extends Controller
     {
         $customer = Customer::find($request->user_id);
         $param = $request->all();
+        $param['count_day'] = isset($param['days']) && count($param['days'])?array_sum($param['days']):0;
         if ($param['role_type'] == StatusCode::COMBOS) {
             $combo = Services::find($param['service_id'][0]);
             $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
@@ -118,10 +138,16 @@ class OrderController extends Controller
             }
 
             if (isset($request->spa_therapisst_id)) {
-                HistoryUpdateOrder::create([
-                    'user_id' => $request->spa_therapisst_id,
-                    'order_id' => $order->id,
-                ]);
+                foreach ($param['days'] as $k => $item) {
+                    if ($item > 0) {
+                        HistoryUpdateOrder::create([
+                            'user_id' => $request->spa_therapisst_id,
+                            'order_id' => $order->id,
+                            'service_id' => $param['service_id'][$k] ?: 0,
+                        ]);
+                    }
+                }
+
             }
 
             $orderDetail = $this->orderDetailService->create($param, $order->id);
@@ -253,6 +279,21 @@ class OrderController extends Controller
         $order->now = $now;
         $data = $order->paymentHistories;
         return view('order.order', compact('order', 'data'));
+    }
+
+    /**
+     * Hiển thị đơn dịch vụ
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showService($id)
+    {
+        $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
+        $now = Carbon::now()->format('d-m-Y');
+        $order->now = $now;
+        $data = $order->paymentHistories;
+        return view('order.orderService', compact('order', 'data'));
     }
 
     public function destroy(Request $request, $id)
@@ -482,6 +523,31 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.index',
+            compact('order', 'spaTherapissts', 'customer_support', 'title', 'customers', 'customer', 'services', 'products', 'role_type', 'combo'));
+    }
+
+    /**
+     * Hiển thị đơn Dịch vụ & combos
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function editService($id)
+    {
+        $order = $this->orderService->find($id);
+
+        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name', 'id');
+        $title = 'Cập nhật đơn hàng';
+        $customers = Customer::pluck('full_name', 'id');
+        $customerId = $order->member_id;
+        $customer = Customer::where('id', $customerId)->first();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
+        $role_type = $order->role_type;
+
+        return view('order.indexService',
             compact('order', 'spaTherapissts', 'customer_support', 'title', 'customers', 'customer', 'services', 'products', 'role_type', 'combo'));
     }
 

@@ -18,7 +18,7 @@
                         <tr class="trfirst">
                             <td style="width:50%">
                                 <b>Tên khách hàng:</b>&nbsp; <a class="blue"
-                                                                href="#/crm/view_account/877">{{ @$order->customer->full_name }}</a>
+                                                                href="{{url('customers/'.$order->customer->id)}}">{{ @$order->customer->full_name }}</a>
                             </td>
                             <td style="width:50%">
                                 <b>Người thực hiện:</b>&nbsp;{{ @$order->customer->marketing->full_name }}

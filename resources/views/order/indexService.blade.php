@@ -12,10 +12,21 @@
                 {!! Form::open(array('url' => route('order-detail.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col row">
-                @if(isset($customer))
-                    {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control quantity', 'required' => true)) !!}
-                @endif
-                {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
+                {{--<div class="col-xs-12 col-md-3">--}}
+                    {{--<div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('user_id', 'Khách hàng', array('class' => ' required')) !!}--}}
+                        @if(isset($customer))
+                            {{--<select class="form-control select2 user" name="user_id" required="required"--}}
+                                    {{--data-placeholder="Chọn khách hàng">--}}
+                                {{--<option value="{{ $customer->id }}" selected>{{ $customer->full_name }}</option>--}}
+                            {{--</select>--}}
+                            {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control quantity', 'required' => true)) !!}
+                            {{--{!! Form::select('user_id', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn khách hàng')) !!}--}}
+                        @endif
+                {{--<span class="help-block">{{ $errors->first('user_id', ':message') }}</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
@@ -61,7 +72,7 @@
                         <thead style="width: 100%" class="bg-primary text-white">
                         <tr>
                             <th class="text-white text-center">Dịch vụ</th>
-                            <th class="text-white text-center">Số lượng</th>
+                            <th class="text-white text-center">Số buổi(nếu có)</th>
                             <th class="text-white text-center">Đơn giá</th>
                             <th class="text-white text-center">VAT (%)</th>
                             <th class="text-white text-center">CK (đ)</th>
@@ -86,13 +97,6 @@
                                                             value="{{$comb->id}}" {{$comb->id == $orderDetail->booking_id ? "selected": ""}} >{{@$comb->category->name}}
                                                             - {{$comb->name}}</option>
                                                     @endforeach
-                                                @elseif($role_type == \App\Constants\StatusCode::PRODUCT)
-                                                    <option>-Chọn sản phẩm-</option>
-                                                    @foreach($products as $product)
-                                                        <option
-                                                            value="{{$product->id}}" {{$product->id == $orderDetail->booking_id ? "selected": ""}} >{{@$product->category->name}}
-                                                            - {{$product->name}}</option>
-                                                    @endforeach
                                                 @else
                                                     <option>-Chọn dịch vụ-</option>
                                                     @foreach($services as $service)
@@ -111,7 +115,8 @@
                                                   name="service_note[]">{{$orderDetail->service->description}}</textarea>
                                     </td>
                                     <td class="text-center" width="50">
-                                        {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                        {!! Form::text('days[]', @$orderDetail->days, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                        {!! Form::hidden('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
                                     </td>
                                     <td class="text-center">
                                         {!! Form::text('price[]', number_format($orderDetail->price), array('class' => 'form-control price', 'required' => true)) !!}
@@ -138,13 +143,7 @@
 
                                         <select class="select2 form-control service" required id="service"
                                                 name="service_id[]">
-                                            @if( request()->get('type')=='products')
-                                                <option>-Chọn sản phẩm-</option>
-                                                @foreach($products as $product)
-                                                    <option value="{{@$product->id}}">{{@$product->category->name}}
-                                                        - {{@$product->name}}</option>
-                                                @endforeach
-                                            @elseif(request()->get('type')=='combos')
+                                            @if(request()->get('type')=='combos')
                                                 <option>-Chọn combo-</option>
                                                 @foreach($combo as $comb)
                                                     <option value="{{$comb->id}}">{{@$comb->category->name}}
@@ -169,7 +168,8 @@
                                               name="service_note[]"></textarea>
                                 </td>
                                 <td class="text-center" width="50">
-                                    {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                    {!! Form::text('days[]', 0, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                    {!! Form::hidden('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
                                 </td>
                                 <td class="text-center">
                                     {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
@@ -191,13 +191,19 @@
                         </tbody>
                     </table>
                     <div class="col bot">
-                        <a href="javascript:void(0)" id="add_row" class="red">(+) Thêm sản phẩm</a>
+                        <a href="javascript:void(0)" id="add_row" class="red">(+) Thêm dịch vụ</a>
                     </div>
                     <div class="col row">
                         {{--<div class="col-md-2">--}}
-                        {{--{!! Form::label('spa_therapisst_id', 'Kỹ thuật viên') !!}--}}
-                        {{--{!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}--}}
+                            {{--{!! Form::label('count_day', 'Số buổi liệu trình (nếu có)') !!}--}}
+                            {{--{!! Form::number('count_day', null, array('class' => 'form-control')) !!}--}}
                         {{--</div>--}}
+                        {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
+
+                        <div class="col-md-2">
+                            {!! Form::label('spa_therapisst_id', 'Kỹ thuật viên') !!}
+                            {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
+                        </div>
                         <div class="col-md-2">
                             {!! Form::label('support_id', 'người tư vấn (nếu có)') !!}
                             {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
@@ -240,42 +246,81 @@
     <script>
         var searchParams = new URLSearchParams(window.location.search)
         var param = searchParams.get('type');
-        $('#role_type').val({{\App\Constants\StatusCode::PRODUCT}}).change();
+        var param2 = {{@$role_type?:0}};
+        // $(".fc-datepicker").datepicker().datepicker("setDate", new Date());
         $(document).on('click', '#add_row', function () {
 
-            $('.order').append(`
+            if (param === 'services' || param2 === 1) {
+
+                $('.order').append(`
                 <tr>
                     <td width="350" class="row">
                     <div class="col-xs-12 col-md-10">
                         <select class="select2 form-control service" required id="service" name="service_id[]">
                             <option>-Chọn sản phẩm-</option>
-                            @foreach($products as $product)
-                <option value="{{@$product->id}}">{{@$product->category->name}} - {{@$product->name}} </option>
+                            @foreach($services as $service)
+                    <option value="{{@$service->id}}">{{@$service->category->name}} - {{@$service->name}} </option>
                             @endforeach
-                </select>
-            </div>
-            <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
-            <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
-            </td>
-            <td class="text-center" width="50">
-            {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                    </select>
+                </div>
+                <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+                <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
                 </td>
-                <td class="text-center">
-            {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                </td>
-                <td class="text-center">
-            {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                </td>
-                <td class="text-center">
-            {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                </td>
-                <td class="text-center">
-            {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                </td>
-                <td class="tc vertical-middle remove_row"><button class='btn btn-danger'><i class="fa-trash fa"></i></button></td>
-            </tr>
+                <td class="text-center" width="50">
+{!! Form::text('days[]', 0, array('class' => 'form-control quantity', 'required' => true)) !!}
+{!! Form::hidden('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                    </td>
+                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'><i class="fa-trash fa"></i></button></td>
+                </tr>
 `);
-
+            }
+            else if (param === 'combos' || param2 === 3) {
+                $('.order').append(`
+                <tr>
+                    <td width="350" class="row">
+                    <div class="col-xs-12 col-md-10">
+                        <select class="select2 form-control service" required id="service" name="service_id[]">
+                            <option>-Chọn combo-</option>
+                            @foreach($combo as $comb)
+                    <option value="{{@$comb->id}}">{{@$comb->category->name}} - {{@$comb->name}} </option>
+                            @endforeach
+                    </select>
+                </div>
+                <span class="btn btn-default col-md-2 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+                <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
+                </td>
+                <td class="text-center" width="50">
+{!! Form::text('days[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+{!! Form::hidden('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                    </td>
+                    <td class="text-center">
+{!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                    </td>
+                    <td class="tc vertical-middle remove_row"><button class='btn btn-danger'><i class="fa-trash fa"></i></button></td>
+                </tr>
+`);
+            }
             $('.select2').select2({ //apply select2 to my element
                 allowClear: true
             });
@@ -284,6 +329,11 @@
         $(document).on('change', '.service', function (e) {
             let target = $(e.target).parent().parent().parent();
             let id = $(this).val();
+            if (param === 'services') {
+                $('#role_type').val({{\App\Constants\StatusCode::SERVICE}}).change();
+            } else {
+                $('#role_type').val({{\App\Constants\StatusCode::COMBOS}}).change();
+            }
             $.ajax({
                 url: "{{ Url('ajax/info-service') }}",
                 method: "get",
@@ -294,34 +344,33 @@
             });
         });
 
-        $('body').on('keyup', '.price, .VAT, .CK1, .CK2, .quantity', function (e) {
+        $('body').on('keyup', '.price, .VAT, .CK1, .CK2', function (e) {
             let target = $(e.target).parent().parent();
-            let quantity = $(target).find('.quantity').val();
             let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
             let CK2 = $(target).find('.CK2').val();
 
             price = replaceNumber(price);
 
-            let total_service = price * quantity + price * quantity * (VAT / 100) - replaceNumber(CK2);
+            let total_service = price  + price *  (VAT / 100) - replaceNumber(CK2);
             $(target).find('.price').val(formatNumber(price));
             $(target).find('.CK2').val(formatNumber(CK2));
             $(target).find('.total').val(formatNumber(total_service));
         });
 
-        $('.user').change(function () {
-            var id = $(this).val();
-            $.ajax({
-                url: "{{ Url('ajax/info-customer') }}",
-                method: "get",
-                data: {id: id}
-            }).done(function (data) {
-                $('.full_name').val(data['full_name']);
-                $('.phone').val(data['phone']);
-                $('.address').val(data['address']);
-                $('#status').val(data['status_id']).trigger("change");
-            });
-        });
+        {{--$('.user').change(function () {--}}
+            {{--var id = $(this).val();--}}
+            {{--$.ajax({--}}
+                {{--url: "{{ Url('ajax/info-customer') }}",--}}
+                {{--method: "get",--}}
+                {{--data: {id: id}--}}
+            {{--}).done(function (data) {--}}
+                {{--$('.full_name').val(data['full_name']);--}}
+                {{--$('.phone').val(data['phone']);--}}
+                {{--$('.address').val(data['address']);--}}
+                {{--$('#status').val(data['status_id']).trigger("change");--}}
+            {{--});--}}
+        {{--});--}}
 
         $(document).on('click', '.remove_row', function (e) {
             $(e.target).parent().parent().remove();

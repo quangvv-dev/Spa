@@ -99,7 +99,7 @@
                     <div class="btn-group ml5" id="more_filters">
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                 aria-expanded="false"><span
-                                    class="filter_name">Lọc bổ sung</span> <span class="caret"></span></button>
+                                class="filter_name">Lọc bổ sung</span> <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a class="tl filter_advanced bor-none" data-filter="unpaid">Chưa thanh toán</a></li>
                             <li><a class="tl filter_paid bor-none" data-filter="paid">Đã thanh toán</a></li>
@@ -330,7 +330,11 @@
                     <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Sửa đổi</a>
                     </button>
                 `);
-                $(".link-order").attr("href", "orders/" + data.order.id + "/edit");
+                if (data.order.id != 2) {
+                    $(".link-order").attr("href", "orders-service/" + data.order.id + "/edit");
+                } else {
+                    $(".link-order").attr("href", "orders/" + data.order.id + "/edit");
+                }
                 $('#orderDetailModal').modal("show");
             });
         });

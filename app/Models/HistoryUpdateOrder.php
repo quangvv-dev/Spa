@@ -16,12 +16,17 @@ class HistoryUpdateOrder extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function service()
+    {
+        return $this->belongsTo(Services::class, 'service_id', 'id');
+    }
+
     public function getNameTypeAttribute()
     {
         $map = [
-            StatusCode::TYPE_ORDER_PROCESS   => 'Trừ liệu trình',
+            StatusCode::TYPE_ORDER_PROCESS => 'Trừ liệu trình',
             StatusCode::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
-            StatusCode::TYPE_ORDER_RESERVE   => 'Đang bảo lưu',
+            StatusCode::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
         ];
 
         return $map[$this->type] ?? null;

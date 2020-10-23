@@ -55,6 +55,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     //Order
     Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');
+    Route::get('orders-service/{customer_id?}', 'OrderController@indexService')->name('ordersService.create');
+
     Route::group(['prefix' => 'ajax'], function () {
         Route::get('info-service', 'OrderController@getInfoService');
         Route::get('info-customer', 'OrderController@getInfoCustomer');
@@ -101,7 +103,11 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
+//    Route::get('order-service/{id}/show', 'OrderController@showService')->name('orderService.show');
+
+
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');
+    Route::get('orders-service/{id}/edit', 'OrderController@editService')->name('orderService.edit');
     Route::get('orders/{id}/edit', 'OrderController@edit')->name('order.edit');
     Route::put('orders/{id}/edit', 'OrderController@update')->name('order.update');
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');

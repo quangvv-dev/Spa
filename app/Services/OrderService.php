@@ -42,13 +42,15 @@ class OrderService
             'count_day'         => $countDay,
             'type'              => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => $theRest,
-            'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : "",
+            'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : 0,
             'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
         ];
         $model = $this->order->fill($input);
+
         $model->save();
         $model->code = $model->id < 10 ? 'DH0' . $model->id : 'DH' . $model->id;
         $model->save();
+
         return $model;
 
     }
