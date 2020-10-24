@@ -26,8 +26,7 @@
             @foreach($customer->orders as $order)
                 <tr>
                     <td class="text-center">
-                        <a class="btn" href="{{url('/orders/'.$order->id.'/edit')}}" title="Chỉnh sửa"><i
-                                    class="fas fa-edit"></i></a>
+                        <a class="btn" href="{{$order->type!=2 ?url('/orders-service/'.$order->id.'/edit'):url('/orders/'.$order->id.'/edit')}}" title="Chỉnh sửa"><i class="fas fa-edit"></i></a>
                         @if($order->count_day > 0 )
                             <a title="Trừ liệu trình" class="btn edit-order" data-toggle="modal" data-target="#updateHistoryOrderModal" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                         @endif
