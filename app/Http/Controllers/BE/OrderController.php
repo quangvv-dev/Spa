@@ -120,7 +120,7 @@ class OrderController extends Controller
     {
         $customer = Customer::find($request->user_id);
         $param = $request->all();
-        $param['count_day'] = isset($param['days']) && count($param['days'])?array_sum($param['days']):0;
+        $param['count_day'] = isset($param['days']) && count($param['days']) ? array_sum($param['days']) : 0;
         if ($param['role_type'] == StatusCode::COMBOS) {
             $combo = Services::find($param['service_id'][0]);
             $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
@@ -645,6 +645,7 @@ class OrderController extends Controller
                                 'percent_discount' => $row['ck'],
                                 'number_discount' => $row['ckd'],
                                 'price' => $row['gia_ban'],
+                                'days' => 0,
                             ]);
 
                             PaymentHistory::create([
