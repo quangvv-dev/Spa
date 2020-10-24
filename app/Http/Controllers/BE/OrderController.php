@@ -554,6 +554,8 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        $input['count_day'] = isset($input['days']) && count($input['days']) ? array_sum($input['days']) : 0;
+
         if ($input['role_type'] == StatusCode::COMBOS) {
             $check = $this->orderService->find($id);
             $combo = Services::find($input['service_id'][0]);

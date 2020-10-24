@@ -60,10 +60,10 @@
                         <tbody>
                         <tr class="bold b-gray">
                             <td class="padding5">STT</td>
-                            <td class="padding5">Mã sản phẩm</td>
-                            <td class="padding5">Tên sản phẩm</td>
+                            <td class="padding5">Mã</td>
+                            <td class="padding5">Sản phẩm|Dịch vụ</td>
                             <td class="padding5">Đơn vị tính</td>
-                            <td class="padding5">Số lượng</td>
+                            <td class="padding5">Số lượng|Số buổi</td>
                             <td class="padding5">Đơn giá</td>
                             <td class="padding5">VAT (%)</td>
                             <td class="padding5">CK (%)</td>
@@ -74,11 +74,10 @@
                             <tr><input type="hidden" class="product_id" value="16">
                                 <td class="tc">{{ $key + 1 }}</td>
                                 <td class="tc"></td>
-                                <td class="tl position"><a class="blue"
-                                                           href="#/crm/product/16/detail">{{ @$orderDetail->service->name }}</a>
+                                <td class="tl position"><a class="blue" href="#">{{ @$orderDetail->service->name }}</a>
                                 </td>
                                 <td class="tc"></td>
-                                <td class="tc">{{ $orderDetail->quantity }}</td>
+                                <td class="tc">{{$order->type==2? $orderDetail->quantity:$orderDetail->days }}</td>
                                 <td class="tc">{{ number_format(@$orderDetail->service->price_sell) }}</td>
                                 <td class="tc">{{ $orderDetail->vat }}</td>
                                 <td class="tc">{{ $orderDetail->percent_discount }}</td>
