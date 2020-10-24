@@ -15,7 +15,7 @@
                 @if(isset($customer))
                     {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control quantity', 'required' => true)) !!}
                 @endif
-                {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
+                {!! Form::hidden('role_type', isset($order)&&$order->role_type?$order->role_type:\App\Constants\StatusCode::PRODUCT, array('id' => 'role_type')) !!}
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
@@ -211,7 +211,9 @@
     <script>
         var searchParams = new URLSearchParams(window.location.search)
         var param = searchParams.get('type');
-        $('#role_type').val({{\App\Constants\StatusCode::PRODUCT}}).change();
+        $(document).ready(function () {
+            $('#role_type').val({{\App\Constants\StatusCode::PRODUCT}}).change();
+        })
         $(document).on('click', '#add_row', function () {
 
             $('.order').append(`
