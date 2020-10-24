@@ -292,4 +292,9 @@ class AjaxController extends Controller
         })->export('xlsx');
     }
 
+    public function listOrderWithCustomer()
+    {
+
+    }
+
 }

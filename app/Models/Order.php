@@ -91,6 +91,9 @@ class Order extends Model
                 ->when(isset($input['order_type']), function ($query) use ($input) {
                     $query->where('type', $input['order_type']);
                 })
+                ->when(isset($input['member_id']), function ($query) use ($input) {
+                    $query->where('member_id', $input['member_id']);
+                })
                 ->when(isset($input['role_type']), function ($query) use ($input) {
                     $query->where('role_type', $input['role_type']);
                 })
@@ -224,11 +227,9 @@ class Order extends Model
     {
         if ($this->payment_type === 1) {
             return "Tiền mặt";
-        }
-        elseif ($this->payment_type === 2) {
+        } elseif ($this->payment_type === 2) {
             return "Thẻ";
-        }
-        else {
+        } else {
             return "Điểm";
         }
     }

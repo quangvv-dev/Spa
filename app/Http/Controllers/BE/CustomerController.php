@@ -16,6 +16,7 @@ use App\Models\HistorySms;
 
 //use App\Models\Order;
 //use App\Models\OrderDetail;
+use App\Models\Order;
 use App\Models\PackageWallet;
 use App\Models\Schedule;
 use App\Models\Services;
@@ -47,8 +48,7 @@ class CustomerController extends Controller
     public function __construct(CustomerService $customerService)
     {
         $this->customerService = $customerService;
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->prepend('Tất cả',
-            0)->toArray();//mối quan hệ
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
@@ -183,8 +183,7 @@ class CustomerController extends Controller
     public function show(Request $request, $id)
     {
         $title = 'Trao đổi';
-        $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer',
-            'orders')->findOrFail($id);
+        $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer')->findOrFail($id);
         $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
@@ -209,6 +208,7 @@ class CustomerController extends Controller
         $customer_post = [];
         $wallet = [];
         $package = [];
+        $orders = [];
         if ($request->history_sms) {
             $history = HistorySms::where('phone', $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('sms.history',
@@ -224,11 +224,17 @@ class CustomerController extends Controller
             $package = PackageWallet::pluck('name', 'id')->toArray();
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
+
+        if ($request->member_id || $request->role_type) {
+            $params = $request->only('member_id', 'role_type');
+            $orders = Order::search($params);
+            return Response::json(view('customers.order', compact('orders','waiters'))->render());
+        }
         //END
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus', 'customer_post',
-                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet', 'package'));
+                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet', 'package', 'orders'));
     }
 
     /**

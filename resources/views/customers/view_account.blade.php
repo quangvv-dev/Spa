@@ -221,7 +221,7 @@
                                             <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
                                             </li>
                                             <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
-                                            <li><a href="#tab6" data-toggle="tab">Đơn hàng</a></li>
+                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}" data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
                                             <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Ví tiền</a></li>
@@ -287,7 +287,11 @@
                                         </div>
                                         <div class="tab-pane " id="tab6">
                                             <div class="card-header">
-                                                <h3 class="card-title">Danh sách đơn hàng bán</h3></br>
+                                               <div class="col">
+                                                   <a href="javascript:void(0)" data-value="1" class="type-order btn btn-success">Dịch vụ</a>
+                                                   <a href="javascript:void(0)" data-value="2" class="type-order btn btn-danger">Sản phẩm</a>
+                                                   <a href="javascript:void(0)" data-value="3" class="type-order btn btn-info">Combo</a>
+                                               </div>
                                                 <div class="col relative">
                                                     @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
                                                         <a class="right btn btn-primary btn-flat" data-toggle="modal"
@@ -299,7 +303,9 @@
 
 
                                             </div>
-                                            @include('customers.order')
+                                            <div id="order_customer">
+                                                @include('customers.order')
+                                            </div>
                                         </div>
                                         <div class="tab-pane" id="tab7">
                                             @include('schedules.index')
@@ -346,6 +352,32 @@
 
     <script type="text/javascript">
         // $(document).ready(function () {
+        $(document).on('click', '#click_tab_6', function () {
+            const id = $(this).data('id');
+            $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {member_id: id}
+            }).done(function (data) {
+                $('#order_customer').html(data);
+            });
+        })
+
+        $(document).on('click', '.type-order', function () {
+            const id = $(this).data('value');
+            let urls = location.href.split('/');
+            let customer = urls[urls.length-1];
+            $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {role_type: id,member_id: customer}
+            }).done(function (data) {
+                $('#order_customer').html(data);
+            });
+        })
+
         $(document).on('click', '#click_tab_9', function () {
             const phone = $(this).data('phone');
             $('#tab9').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
