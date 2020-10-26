@@ -441,18 +441,23 @@ class OrderController extends Controller
         if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day === 0) {
             return "Failed";
         }
+        HistoryUpdateOrder::create([
+            'user_id' => $request->user_id,
+            'order_id' => $order->id,
+            'service_id' => $request->service_id,
+            'type' => $request->type_delete,
+            'description' => $request->description,
+        ]);
+
         if ($request->type_delete == StatusCode::TYPE_ORDER_PROCESS) {
             $order->update([
                 'count_day' => $order->count_day - 1,
             ]);
-        }
 
-        HistoryUpdateOrder::create([
-            'user_id' => $request->user_id,
-            'order_id' => $order->id,
-            'type' => $request->type_delete,
-            'description' => $request->description,
-        ]);
+            $order_detail = OrderDetail::where('order_id', $order->id)->where('booking_id', $request->service_id)->first();
+            $order_detail->days = $order_detail->days - 1 > 0 ? $order_detail->days - 1 : 0;
+            $order_detail->save();
+        }
 
         return "Success";
     }
@@ -494,7 +499,7 @@ class OrderController extends Controller
      */
     public function getOrderById(Request $request, $id)
     {
-        $order = Order::with('historyUpdateOrders.user', 'customer', 'orderDetails.service')->find($id);
+        $order = Order::with('historyUpdateOrders.user','historyUpdateOrders.service', 'customer', 'orderDetails.service')->find($id);
 
         return Response::json($order);
 

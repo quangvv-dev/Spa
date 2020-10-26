@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"></div>
                 {{--<div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011" class="bold mg0">0</h1>--}}
-                    {{--<p>Tương tác</p></div>--}}
+                {{--<p>Tương tác</p></div>--}}
                 <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011"
                                                                class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
                         VNĐ</h1>
@@ -221,7 +221,8 @@
                                             <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
                                             </li>
                                             <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
-                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}" data-toggle="tab">Đơn hàng</a></li>
+                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
                                             <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Ví tiền</a></li>
@@ -287,11 +288,16 @@
                                         </div>
                                         <div class="tab-pane " id="tab6">
                                             <div class="card-header">
-                                               <div class="col">
-                                                   <a href="javascript:void(0)" data-value="1" class="type-order btn btn-success">Dịch vụ</a>
-                                                   <a href="javascript:void(0)" data-value="2" class="type-order btn btn-danger">Sản phẩm</a>
-                                                   <a href="javascript:void(0)" data-value="3" class="type-order btn btn-info">Combo</a>
-                                               </div>
+                                                <div class="col">
+                                                    <a href="javascript:void(0)" data-value=""
+                                                       class="type-order btn">Tất cả</a>
+                                                    <a href="javascript:void(0)" data-value="1"
+                                                       class="type-order btn btn-success">Dịch vụ</a>
+                                                    <a href="javascript:void(0)" data-value="2"
+                                                       class="type-order btn btn-danger">Sản phẩm</a>
+                                                    <a href="javascript:void(0)" data-value="3"
+                                                       class="type-order btn btn-info">Combo</a>
+                                                </div>
                                                 <div class="col relative">
                                                     @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
                                                         <a class="right btn btn-primary btn-flat" data-toggle="modal"
@@ -365,14 +371,14 @@
         })
 
         $(document).on('click', '.type-order', function () {
-            const id = $(this).data('value');
+            const id = $(this).data('value') > 0 ? $(this).data('value') : "";
             let urls = location.href.split('/');
-            let customer = urls[urls.length-1];
+            let customer = urls[urls.length - 1];
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
                 url: "{{url()->current() }}",
                 method: "get",
-                data: {role_type: id,member_id: customer}
+                data: {role_type: id, member_id: customer}
             }).done(function (data) {
                 $('#order_customer').html(data);
             });
@@ -482,6 +488,8 @@
             }).done(function (data) {
                 let html = '';
                 data.history_update_orders.forEach(function (item, index) {
+                    console.log(item.service,'item');
+                    let name = item.service!=null ? item.service.name:'';
                     var name_type = '';
                     if (item.type == 0) {
                         name_type = 'Trừ liệu trình';
@@ -495,6 +503,7 @@
                     html += '<tr>' + '<td class="text-center">' + index + '</td>' +
                         '<td class="text-center">' + item.created_at + '</td>' +
                         '<td class="text-center">' + item.user.full_name + '</td>' +
+                        '<td class="text-center">' + name + '</td>' +
                         '<td class="text-center">' + (item.description ? item.description : '') + '</td>' +
                         '<td class="text-center">' + (name_type ? name_type : '') + '</td>' +
                         '<td class="text-center"><a class="sum_history_order" href="javascript:void(0)" data-id="' + item.id + '"data-type="' + item.type + '"data-order="' + item.order_id + '"> <i class="fas fa-trash-alt"></i></a></td>' + '</tr>';
@@ -526,8 +535,22 @@
 
         });
 
-        $('.edit-order').click(function () {
-            const id = $(this).data('order-id');
+        $(document).on('click', '.edit-order', function () {
+            let id = $(this).data('order-id');
+            let html = "";
+            //
+            $.ajax({
+                type: 'get',
+                url: "{{ Url('ajax/services-with-order/') }}" + "/" + id,
+                success: function (res) {
+                    res.forEach(element => {
+                        html += `<option value="` + element.id + `">` + element.name + `</option>`;
+                    });
+                    $('#service_modal').html(html);
+                    $('#updateHistoryOrderModal').modal('show');
+                }
+            })
+            //
             $('.save-update-history-order').click(function () {
                 swal({
                     title: 'Bạn có muốn xử  liệu trình ?',

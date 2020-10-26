@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\Models\Customer;
 use App\Models\Notification;
+use App\Models\OrderDetail;
 use App\Models\Post;
+use App\Models\Services;
 use App\Models\Status;
 use App\Models\Category;
 use App\User;
@@ -292,9 +294,10 @@ class AjaxController extends Controller
         })->export('xlsx');
     }
 
-    public function listOrderWithCustomer()
+    public function getServiceWithOrder($id)
     {
-
+        $array = OrderDetail::select('booking_id')->where('order_id', $id)->pluck('booking_id')->toArray();
+        return  Services::whereIn('id', $array)->get();
     }
 
 }

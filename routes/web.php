@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('orders-service/{customer_id?}', 'OrderController@indexService')->name('ordersService.create');
 
     Route::group(['prefix' => 'ajax'], function () {
+        Route::get('services-with-order/{id}', 'AjaxController@getServiceWithOrder');
         Route::get('info-service', 'OrderController@getInfoService');
         Route::get('info-customer', 'OrderController@getInfoCustomer');
         Route::get('info-order-payment/{id}', 'OrderController@infoPayment');

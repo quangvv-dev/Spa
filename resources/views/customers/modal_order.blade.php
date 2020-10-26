@@ -1,6 +1,6 @@
 <!-- Large Modal -->
 <div id="largeModal" class="modal fade">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content history-update-order">
             <div class="modal-header pd-x-20">
                 <h6 class="modal-title">Lịch sử liệu trình </h6>
@@ -16,6 +16,7 @@
                             <th class="text-white text-center">STT</th>
                             <th class="text-white text-center">Ngày thực hiện</th>
                             <th class="text-white text-center">Người thực hiện</th>
+                            <th class="text-white text-center">Dịch vụ</th>
                             <th class="text-white text-center">Mô tả</th>
                             <th class="text-white text-center">Loại</th>
                             <th class="text-white text-center">thao tác</th>
