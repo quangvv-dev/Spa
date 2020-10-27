@@ -290,7 +290,7 @@
                                             <div class="card-header">
                                                 <div class="col">
                                                     <a href="javascript:void(0)" data-value=""
-                                                       class="type-order btn">Tất cả</a>
+                                                       class="type-order btn btn-warning">Tất cả</a>
                                                     <a href="javascript:void(0)" data-value="1"
                                                        class="type-order btn btn-success">Dịch vụ</a>
                                                     <a href="javascript:void(0)" data-value="2"
