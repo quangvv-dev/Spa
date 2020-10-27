@@ -477,19 +477,33 @@
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(ga, s);
         })();
+        var historys = '';
+        var order_details = '';
 
         $(document).on('click', '#edit-history-order', function (e) {
             e.preventDefault();
             $('.data-history-update-order').empty();
-            const id = $(this).data('order-id');
+            let id = $(this).data('order-id');
+            let html = `<option value="0" >Tất cả</option>`;
+            $.ajax({
+                type: 'get',
+                url: "{{ Url('ajax/services-with-order/') }}" + "/" + id,
+                success: function (res) {
+                    res.forEach(element => {
+                        html += `<option value="` + element.id + `">` + element.name + `</option>`;
+                    });
+                    $('#list_service').html(html);
+                }
+            })
             $.ajax({
                 url: "{{ Url('ajax/orders/') }}" + '/' + id,
                 method: "get",
             }).done(function (data) {
                 let html = '';
+                historys = data.history_update_orders;
+                order_details = data.order_details;
                 data.history_update_orders.forEach(function (item, index) {
-                    console.log(item.service,'item');
-                    let name = item.service!=null ? item.service.name:'';
+                    let name = item.service != null ? item.service.name : '';
                     var name_type = '';
                     if (item.type == 0) {
                         name_type = 'Trừ liệu trình';
@@ -500,7 +514,7 @@
                     if (item.type == 2) {
                         name_type = 'Đang bảo lưu';
                     }
-                    html += '<tr>' + '<td class="text-center">' + index + '</td>' +
+                    html += '<tr >' + '<td class="text-center">' + index + '</td>' +
                         '<td class="text-center">' + item.created_at + '</td>' +
                         '<td class="text-center">' + item.user.full_name + '</td>' +
                         '<td class="text-center">' + name + '</td>' +
@@ -511,6 +525,40 @@
                 $('.data-history-update-order').append(html);
                 $('#largeModal').modal("show");
             });
+
+            $(document).change('#list_service',function () {
+                let id = $('#list_service').val();
+                let html = '';
+                console.log(id,'idđ');
+                historys.forEach(function (item, index) {
+                    let name = item.service != null ? item.service.name : '';
+                    let service_id = item.service != null ? item.service.id : 0;
+                    var name_type = '';
+                    if (item.type == 0) {
+                        name_type = 'Trừ liệu trình';
+                    }
+                    if (item.type == 1) {
+                        name_type = 'Đã bảo hành';
+                    }
+                    if (item.type == 2) {
+                        name_type = 'Đang bảo lưu';
+                    }
+                    if (service_id == id || id == 0){
+                        html += '<tr >' + '<td class="text-center">' + index + '</td>' +
+                            '<td class="text-center">' + item.created_at + '</td>' +
+                            '<td class="text-center">' + item.user.full_name + '</td>' +
+                            '<td class="text-center">' + name + '</td>' +
+                            '<td class="text-center">' + (item.description ? item.description : '') + '</td>' +
+                            '<td class="text-center">' + (name_type ? name_type : '') + '</td>' +
+                            '<td class="text-center"><a class="sum_history_order" href="javascript:void(0)" data-id="' + item.id + '"data-type="' + item.type + '"data-order="' + item.order_id + '"> <i class="fas fa-trash-alt"></i></a></td>' + '</tr>';
+                    }
+                });
+                let detail = order_details.filter(f=>f.booking_id == id);
+                $('#count_service').html(detail.length>0?'Số buổi còn lại: '+detail[0].days:'');
+                $('.data-history-update-order').html(html);
+
+            });
+
             $('body').delegate('.sum_history_order', 'click', function () {
                 const order_id = $(this).data('order');
                 const id = $(this).data('id');

@@ -4,6 +4,14 @@
         <div class="modal-content history-update-order">
             <div class="modal-header pd-x-20">
                 <h6 class="modal-title">Lịch sử liệu trình </h6>
+                <div class="col-md-3">
+                    {!! Form::select('list_service', [], null, array('id'=>'list_service','class' => 'form-control')) !!}
+                </div>
+
+                <div class="col-md-3">
+                    {!! Form::label('count_service','Số buổi còn lại: ', array('id'=>'count_service')) !!}
+                </div>
+
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

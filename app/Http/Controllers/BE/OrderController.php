@@ -499,7 +499,7 @@ class OrderController extends Controller
      */
     public function getOrderById(Request $request, $id)
     {
-        $order = Order::with('historyUpdateOrders.user','historyUpdateOrders.service', 'customer', 'orderDetails.service')->find($id);
+        $order = Order::with('historyUpdateOrders.user','historyUpdateOrders.service', 'customer', 'orderDetails.service','orderDetails')->find($id);
 
         return Response::json($order);
 
