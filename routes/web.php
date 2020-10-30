@@ -140,6 +140,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('commission', 'CommissionController@statistical');
         Route::get('tasks', 'TaskController@statistical');
     });
+    Route::resource('promotions', 'PromotionController');
     Route::resource('tasks', 'TaskController');
     Route::get('tasks-employee', 'TaskController@statisticIndex');
     Route::get('notifications', 'AjaxController@getNotificationOutView')->name('notifications.index');

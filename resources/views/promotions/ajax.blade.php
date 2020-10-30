@@ -3,9 +3,10 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
-            <th class="text-white text-center">Tên nhóm</th>
-            <th class="text-white text-center">Mã nhóm</th>
-            <th class="text-white text-center">Nhóm cha</th>
+            <th class="text-white text-center">Voucher</th>
+            <th class="text-white text-center">Loại</th>
+            <th class="text-white text-center">Mã voucher</th>
+            <th class="text-white text-center">Số lượng</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -13,16 +14,17 @@
         @if(@count($docs))
             @foreach($docs as $k => $s)
                 <tr>
-                    <th scope="row">{{$k}}</th>
-                    <td class="text-center">{{$s->name}}</td>
+                    <th scope="row">{{$k+1}}</th>
+                    <td class="text-center">{{$s->title}}</td>
+                    <td class="text-center">{{$s->type}}</td>
                     <td class="text-center">{{$s->code}}</td>
-                    <td class="text-center">{{@$s->categories->name}}
+                    <td class="text-center">{{$s->quantity}}</td>
                     </td>
                     <td class="text-center">
-                        <a class="btn" href="{{ url('category/' . $s->id . '/edit') }}"><i
-                                    class="fas fa-edit"></i></a>
+                        <a class="btn" href="{{ route('promotions.edit',$s->id) }}"><i
+                                class="fas fa-edit"></i></a>
                         <a class="btn delete" href="javascript:void(0)"
-                           data-url="{{ url('category/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
+                           data-url="{{ route('promotions.destroy',$s->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
             @endforeach

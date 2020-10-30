@@ -29,6 +29,10 @@
         border-right: 1px solid #e7effc !important;
         border-left: 1px solid #e7effc !important;
     }
+    label.required:after {
+        content: " *";
+        color: red;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">
