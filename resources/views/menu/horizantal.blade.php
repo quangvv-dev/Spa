@@ -23,9 +23,9 @@
                             <li>
                                 <a href="{{url('rules')}}">Automation </a>
                             </li>
-                            <li>
-                                <a href="{{route('posts.index')}}">Landing Page</a>
-                            </li>
+                            {{--<li>--}}
+                                {{--<a href="{{route('posts.index')}}">Landing Page</a>--}}
+                            {{--</li>--}}
                         @endif
                         <li><a href="{{route('post.customer')}}">Khách hàng từ form</a></li>
                     </ul>
