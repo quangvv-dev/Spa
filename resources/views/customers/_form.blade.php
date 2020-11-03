@@ -55,7 +55,7 @@
                     @endif
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
-                            {!! Form::label('birthday', 'Ngày sinh', array('class' => ' required')) !!}
+                            {!! Form::label('birthday', 'Ngày sinh') !!}
                             <div class="wd-200 mg-b-30">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('description') ? 'has-error' : '' }}">
-                            {!! Form::label('description', 'Mô tả', array('class' => ' required')) !!}
+                            {!! Form::label('description', 'Mô tả') !!}
                             {!! Form::text('description', null, array('id' => 'description','class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('description', ':message') }}</span>
                         </div>
@@ -85,7 +85,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                            {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
+                            {!! Form::label('address', 'Địa chỉ') !!}
                             {!! Form::text('address', null, array('id' => 'address','class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('address', ':message') }}</span>
                         </div>
@@ -122,7 +122,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('facebook', 'Link Facebook', array('class' => 'required')) !!}
+                            {!! Form::label('facebook', 'Link Facebook') !!}
                             {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
                         </div>
@@ -153,7 +153,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
-                            {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
+                            {!! Form::label('avatar', 'Ảnh đại diện') !!}
                             <div class="fileupload fileupload-{{isset($customer) ? 'exists' : 'new' }}"
                                  data-provides="fileupload">
                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">

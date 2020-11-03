@@ -34,7 +34,7 @@
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('price_buy') ? 'has-error' : '' }}">
-                        {!! Form::label('price_buy', 'Giá nhập', array('class' => ' required')) !!}
+                        {!! Form::label('price_buy', 'Giá nhập') !!}
                         {!! Form::text('price_buy',@number_format($doc->price_buy), array('class' => 'form-control price')) !!}
                         <span class="help-block">{{ $errors->first('price_buy', ':message') }}</span>
                     </div>
@@ -48,14 +48,14 @@
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('promotion_price') ? 'has-error' : '' }}">
-                        {!! Form::label('promotion_price', 'Giá khuyến mại', array('class' => ' required')) !!}
+                        {!! Form::label('promotion_price', 'Giá khuyến mại') !!}
                         {!! Form::text('promotion_price',@number_format($doc->promotion_price), array('class' => 'form-control price')) !!}
                         <span class="help-block">{{ $errors->first('promotion_price', ':message') }}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('trademark') ? 'has-error' : '' }}">
-                        {!! Form::label('trademark', 'Nhà cung cấp', array('class' => ' required')) !!}
+                        {!! Form::label('trademark', 'Nhà cung cấp') !!}
                         {!! Form::text('trademark',null, array('class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('trademark', ':message') }}</span>
                     </div>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
-                        {!! Form::label('description', 'Mô tả', array('class' => ' required')) !!}
+                        {!! Form::label('description', 'Mô tả') !!}
                         {!! Form::textArea('description', null, array('class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                     </div>
