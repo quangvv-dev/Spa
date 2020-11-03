@@ -26,6 +26,9 @@
                             <li>
                                 <a href="{{route('posts.index')}}">Landing Page</a>
                             </li>
+                            <li>
+                                <a href="{{route('promotions.index')}}">Voucher khuyến mãi</a>
+                            </li>
                         @endif
                         <li><a href="{{route('post.customer')}}">Khách hàng từ form</a></li>
                     </ul>

@@ -18,7 +18,7 @@
                     <td class="text-center">{{$s->title}}</td>
                     <td class="text-center">{{$s->type== \App\Constants\PromotionConstant::PERCENT?'THEO % ĐƠN HÀNG':'THEO SỐ TIỀN'}}</td>
                     <td class="text-center">{{$s->code}}</td>
-                    <td class="text-center">{{$s->quantity}}</td>
+                    <td class="text-center">{{@number_format($s->current_quantity)}}</td>
                     </td>
                     <td class="text-center">
                         <a class="btn" href="{{ route('promotions.edit',$s->id) }}"><i

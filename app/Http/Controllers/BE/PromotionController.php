@@ -138,4 +138,6 @@ class PromotionController extends Controller
     {
         $promotion->delete();
     }
+
+
 }
