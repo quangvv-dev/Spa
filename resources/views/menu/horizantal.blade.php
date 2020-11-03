@@ -20,9 +20,9 @@
                     <ul>
                         <li><a href="{{route('fanpage.index')}}">Fanpage </a></li>
                         @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
-                            {{--<li>--}}
-                                {{--<a href="{{url('rules')}}">Automation </a>--}}
-                            {{--</li>--}}
+                            <li>
+                                <a href="{{url('rules')}}">Automation </a>
+                            </li>
                             <li>
                                 <a href="{{route('posts.index')}}">Landing Page</a>
                             </li>
@@ -66,7 +66,7 @@
                             <li><a href="{{url('statistics')}}">Doanh thu</a></li>
                             <li><a href="{{url('report/group-sale/services')}}">Doanh thu nhóm DV</a></li>
                             <li><a href="{{url('report/group-sale/products')}}">Doanh thu nhóm SP</a></li>
-                            {{--<li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>--}}
+                            <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
                         @endif
                         <li><a href="{{url('report/group-sale/tasks')}}">Hiệu quả công việc</a></li>
                         <li><a href="{{url('report/commission')}}">Hoa hồng nhân viên</a></li>
