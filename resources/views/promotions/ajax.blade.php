@@ -16,7 +16,7 @@
                 <tr>
                     <th scope="row">{{$k+1}}</th>
                     <td class="text-center">{{$s->title}}</td>
-                    <td class="text-center">{{$s->type}}</td>
+                    <td class="text-center">{{$s->type== \App\Constants\PromotionConstant::PERCENT?'THEO % ĐƠN HÀNG':'THEO SỐ TIỀN'}}</td>
                     <td class="text-center">{{$s->code}}</td>
                     <td class="text-center">{{$s->quantity}}</td>
                     </td>

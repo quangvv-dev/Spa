@@ -59,10 +59,10 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
-                                    <div class="form-group required {{ $errors->has('group') ? 'has-error' : '' }}">
-                                        {!! Form::label('group', 'Trạng thái khác hàng áp dụng', array('class' => 'required')) !!}
-                                        {!! Form::select('group', $status, null, array('class' => 'form-control select2 group','multiple'=>true,'data-placeholder'=>'Đối tượng áp dụng')) !!}
-                                        <span class="help-block">{{ $errors->first('group', ':message') }}</span>
+                                    <div class="form-group required {{ $errors->has('group[]') ? 'has-error' : '' }}">
+                                        {!! Form::label('group[]', 'Trạng thái khác hàng áp dụng', array('class' => 'required')) !!}
+                                        {!! Form::select('group[]', $status, null, array('class' => 'form-control select2 group','multiple'=>true,'data-placeholder'=>'Đối tượng áp dụng')) !!}
+                                        <span class="help-block">{{ $errors->first('group[]', ':message') }}</span>
                                     </div>
                                 </div>
                                 <input type="hidden" name="type" value="2" >
@@ -104,10 +104,10 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
-                                    <div class="form-group required {{ $errors->has('group') ? 'has-error' : '' }}">
-                                        {!! Form::label('group', 'Trạng thái khác hàng áp dụng', array('class' => 'required')) !!}
-                                        {!! Form::select('group', $status, null, array('class' => 'form-control select2 group','multiple'=>true,'data-placeholder'=>'Đối tượng áp dụng')) !!}
-                                        <span class="help-block">{{ $errors->first('group', ':message') }}</span>
+                                    <div class="form-group required {{ $errors->has('group[]') ? 'has-error' : '' }}">
+                                        {!! Form::label('group[]', 'Trạng thái khác hàng áp dụng', array('class' => 'required')) !!}
+                                        {!! Form::select('group[]', $status, null, array('class' => 'form-control select2 group','multiple'=>true,'data-placeholder'=>'Đối tượng áp dụng')) !!}
+                                        <span class="help-block">{{ $errors->first('group[]', ':message') }}</span>
                                     </div>
                                 </div>
                                 <input type="hidden" name="type" value="1" >

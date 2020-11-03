@@ -123,7 +123,7 @@ class PromotionController extends Controller
         $input['max_discount'] = $request->max_discount ? str_replace(',', '', $request->max_discount) : '';
         $input['current_quantity'] = $request->current_quantity ? str_replace(',', '', $request->current_quantity) : 0;
         $promotion->update($input);
-        return redirect(route('promotions.edit',$promotion->id))->with('status', 'Cập nhật thành công');
+        return redirect(route('promotions.edit', $promotion->id))->with('status', 'Cập nhật thành công');
 
 
     }
@@ -131,17 +131,11 @@ class PromotionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Promotion $promotion
+     * @throws \Exception
      */
-    public function destroy(Request $request, Service $service)
+    public function destroy(Promotion $promotion)
     {
-        if ($service->images) {
-            foreach ($service->images as $k => $v) {
-                Functions::unlinkUpload('services', @$v);
-            }
-        }
-        $service->delete();
+        $promotion->delete();
     }
 }

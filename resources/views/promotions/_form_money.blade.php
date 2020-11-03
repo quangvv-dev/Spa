@@ -39,29 +39,29 @@
                                 <div class="col-xs-12 col-md-6">
                                     <div class="form-group required {{ $errors->has('money_promotion') ? 'has-error' : '' }}">
                                         {!! Form::label('money_promotion', 'Số tiền khuyến mại', array('class' => 'required')) !!}
-                                        {!! Form::text('money_promotion', null, array('id' => 'money_promotion','class' => 'form-control')) !!}
+                                        {!! Form::text('money_promotion', @number_format($doc->money_promotion), array('id' => 'money_promotion','class' => 'form-control')) !!}
                                         <span class="help-block">{{ $errors->first('money_promotion', ':message') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
                                     <div class="form-group required {{ $errors->has('min_price') ? 'has-error' : '' }}">
                                         {!! Form::label('min_price', 'Giá trị đơn hàng tối thiểu áp dụng (VNĐ)', array('class' => 'required')) !!}
-                                        {!! Form::text('min_price', null, array('class' => 'form-control min_price')) !!}
+                                        {!! Form::text('min_price', @number_format($doc->min_price), array('class' => 'form-control min_price')) !!}
                                         <span class="help-block">{{ $errors->first('min_price', ':message') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
                                     <div class="form-group required {{ $errors->has('current_quantity') ? 'has-error' : '' }}">
                                         {!! Form::label('current_quantity', 'Số lượng voucher', array('class' => 'required')) !!}
-                                        {!! Form::text('current_quantity', null, array('class' => 'form-control current_quantity')) !!}
+                                        {!! Form::text('current_quantity', @number_format($doc->current_quantity), array('class' => 'form-control current_quantity')) !!}
                                         <span class="help-block">{{ $errors->first('current_quantity', ':message') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
-                                    <div class="form-group required {{ $errors->has('group') ? 'has-error' : '' }}">
-                                        {!! Form::label('group', 'Trạng thái khác hàng áp dụng', array('class' => 'required')) !!}
-                                        {!! Form::select('group', $status, null, array('class' => 'form-control select2 group','multiple'=>true,'data-placeholder'=>'Đối tượng áp dụng')) !!}
-                                        <span class="help-block">{{ $errors->first('group', ':message') }}</span>
+                                    <div class="form-group required {{ $errors->has('group[]') ? 'has-error' : '' }}">
+                                        {!! Form::label('group[]', 'Trạng thái khác hàng áp dụng', array('class' => 'required')) !!}
+                                        {!! Form::select('group[]', $status, null, array('class' => 'form-control select2 group','multiple'=>true,'data-placeholder'=>'Đối tượng áp dụng')) !!}
+                                        <span class="help-block">{{ $errors->first('group[]', ':message') }}</span>
                                     </div>
                                 </div>
                                 <input type="hidden" name="type" value="1" >
