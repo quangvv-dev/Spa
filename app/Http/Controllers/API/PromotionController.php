@@ -12,7 +12,7 @@ class PromotionController extends BaseApiController
 
     public function listVoucher(Request $request)
     {
-        $data = Promotion::where('group', 'like', '%' . $request->status . '%')->get();
+        $data = Promotion::where('current_quantity','>',0)->where('group', 'like', '%' . $request->status . '%')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
     }
 
