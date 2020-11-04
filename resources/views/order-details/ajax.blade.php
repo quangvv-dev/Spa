@@ -50,10 +50,10 @@
                     </td>
                     <td class="text-center">{{ $order->orderDetails->sum('quantity') }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
-                    <td class="text-center">{{ number_format($order->discount)}}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
+                    <td class="text-center">{{ number_format($order->discount)}}</td>
                     {{--                    <td class="text-center">{{ @$history_payment[$order->id]?@number_format($history_payment[$order->id]):0  }}</td>--}}
                     <td class="text-center">{{ $order->name_payment_type }}</td>
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
