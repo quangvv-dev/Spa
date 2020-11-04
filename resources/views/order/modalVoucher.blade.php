@@ -3,41 +3,13 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Dnah sách voucher khuyến mãi</h4>
+                <h4>Danh sách voucher khuyến mãi</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <article class="promotionItem showFull col">
-                        <div class="header m-t-5">
-                            <ul class="promotionRules col">
-                                <li>
-                                    <span class="ruleName">Giảm giá: </span><span class="ruleValue">100,000đ</span>
-                                </li>
-                                <li>
-                                    <span class="ruleName">Đơn hàng từ: </span><span class="ruleValue">1,200,000đ</span>
-                                </li>
-                            </ul>
-                            <div class="div">
-                                <a href="#" class="btn btn-warning">Áp dụng</a>
-                            </div>
-                        </div>
-                        <div class="header m-t-5">
-                            <ul class="promotionRules col">
-                                <li>
-                                    <span class="ruleName">Giảm giá: </span><span class="ruleValue">10%</span>
-                                </li>
-                                <li>
-                                    <span class="ruleName">Tối đa: </span><span class="ruleValue">500,000đ</span>
-                                </li>
-                                <li>
-                                    <span class="ruleName">Đơn hàng từ: </span><span class="ruleValue">1,000,000đ</span>
-                                </li>
-                            </ul>
-                            <div class="div">
-                                <a href="#" class="btn btn-warning">Áp dụng</a>
-                            </div>
-                        </div>
+
                     </article>
                 </div>
             </div>

@@ -10,9 +10,15 @@ use App\Models\Promotion;
 class PromotionController extends BaseApiController
 {
 
+    /**
+     * Danh sach voucher
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listVoucher(Request $request)
     {
-        $data = Promotion::where('current_quantity','>',0)->where('group', 'like', '%' . $request->status . '%')->get();
+        $data = Promotion::where('current_quantity','>',0)->where('group', 'like', '%"' . $request->status . '"%')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
     }
 
@@ -24,9 +30,10 @@ class PromotionController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function checkVoucher(Request $request, Promotion $promotion)
+    public function checkVoucher(Request $request,$id)
     {
         $total_price = $request->total_price ?: 0;
+        $promotion = Promotion::findOrFail($id);
         if ($promotion->type == PromotionConstant::MONEY) {//check trường hợp voucher tiền
             if ($total_price >= $promotion->min_price) {
                 $data = [

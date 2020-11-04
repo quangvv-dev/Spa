@@ -30,4 +30,5 @@ Route::get('/task-schedules', 'API\StatisticController@TaskScheduleSale');
 //Post customers
 Route::put('posts/{id}', 'API\PostController@update');
 Route::get('posts/{id}', 'API\PostController@show');
+Route::get('voucher', 'API\PromotionController@listVoucher');
 Route::get('voucher/{id}', 'API\PromotionController@checkVoucher');
