@@ -22,7 +22,7 @@ class OrderService
 
     public function create($data)
     {
-        $theRest = array_sum(replaceNumberFormat($data['total_price']));
+        $theRest = array_sum(replaceNumberFormat($data['total_price'])) - $data['discount'];
         $countDay = 0;
         if (empty($data) && is_array($data) == false) {
             return false;
@@ -37,11 +37,13 @@ class OrderService
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
             'role_type'         => $data['role_type'],
-            'hsd'               => isset($data['hsd'])?$data['hsd']:null,
-            'support_id'        => isset($data['support_id'])?$data['support_id']:0,
+            'hsd'               => isset($data['hsd']) ? $data['hsd'] : null,
+            'support_id'        => isset($data['support_id']) ? $data['support_id'] : 0,
             'count_day'         => $countDay,
             'type'              => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total'         => $theRest,
+            'discount'          => $data['discount'] ?: 0,
+            'voucher_id'        => $data['voucher_id'] ?: 0,
             'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : 0,
             'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
         ];
@@ -127,11 +129,11 @@ class OrderService
             $revenue = 0;
             if (isset($item->customerSources)) {
                 foreach ($item->customerSources as $customer) {
-                    if (count($customer->order_detail)){
-                            $revenue += $customer->order_detail->sum('total_price');
+                    if (count($customer->order_detail)) {
+                        $revenue += $customer->order_detail->sum('total_price');
                     }
                 }
-                if ($revenue >0){
+                if ($revenue > 0) {
                     $status[$item->id]['revenue'] = $revenue;
                     $status[$item->id]['name'] = @$item->name;
                 }
@@ -161,8 +163,7 @@ class OrderService
     public function update($id, $attibutes)
     {
         $order = $this->find($id);
-
-        $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue;
+        $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue - $order->discount;
         $now = Carbon::now()->format('H:i:s');
 
         if (empty($attibutes) && is_array($attibutes) == false) {
@@ -173,11 +174,11 @@ class OrderService
             'member_id'         => $attibutes['user_id'],
             'the_rest'          => $theRest,
             'role_type'         => $attibutes['role_type'],
-            'hsd'               => isset($attibutes['hsd'])?$attibutes['hsd']:null,
-            'support_id'        => isset($attibutes['support_id'])?$attibutes['support_id']:0,
+            'hsd'               => isset($attibutes['hsd']) ? $attibutes['hsd'] : null,
+            'support_id'        => isset($attibutes['support_id']) ? $attibutes['support_id'] : 0,
             'count_day'         => $attibutes['count_day'],
             'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])),
+            'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount,
             'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
             'created_at'        => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
         ];
@@ -197,10 +198,10 @@ class OrderService
             'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
             'the_rest'      => $order->the_rest + $paymentHistory->price,
         ]);
-        if ($paymentHistory->payment_type !=3){
+        if ($paymentHistory->payment_type != 3) {
             $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
-            $point = ($order->customer->wallet + $point) > 0?$order->customer->wallet + $point:0;
-        }else{
+            $point = ($order->customer->wallet + $point) > 0 ? $order->customer->wallet + $point : 0;
+        } else {
             $point = $order->customer->wallet + $paymentHistory->price;
         }
 

@@ -47,7 +47,7 @@
                                 <div class="col-xs-12 col-md-6">
                                     <div class="form-group required {{ $errors->has('max_discount') ? 'has-error' : '' }}">
                                         {!! Form::label('max_discount', 'Số tiền tối đa được giảm (VNĐ)', array('class' => 'required')) !!}
-                                        {!! Form::text('max_discount', null, array('id' => 'max_discount','class' => 'form-control')) !!}
+                                        {!! Form::text('max_discount', null, array('class' => 'form-control max_discount')) !!}
                                         <span class="help-block">{{ $errors->first('max_discount', ':message') }}</span>
                                     </div>
                                 </div>
@@ -85,14 +85,14 @@
                                 <div class="col-xs-12 col-md-6">
                                     <div class="form-group required {{ $errors->has('money_promotion') ? 'has-error' : '' }}">
                                         {!! Form::label('money_promotion', 'Số tiền khuyến mại', array('class' => 'required')) !!}
-                                        {!! Form::text('money_promotion', null, array('id' => 'money_promotion','class' => 'form-control')) !!}
+                                        {!! Form::text('money_promotion', null, array('class' => 'form-control money_promotion')) !!}
                                         <span class="help-block">{{ $errors->first('money_promotion', ':message') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-md-6">
                                     <div class="form-group required {{ $errors->has('min_price') ? 'has-error' : '' }}">
                                         {!! Form::label('min_price', 'Giá trị đơn hàng tối thiểu áp dụng (VNĐ)', array('class' => 'required')) !!}
-                                        {!! Form::text('min_price', null, array('class' => 'form-control min_price')) !!}
+                                        {!! Form::text('min_price', null, array('id'=>'price','class' => 'form-control min_price')) !!}
                                         <span class="help-block">{{ $errors->first('min_price', ':message') }}</span>
                                     </div>
                                 </div>
@@ -125,9 +125,21 @@
 @section('_script')
     <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
-        $(document).on('.current_quantity','.min_price','#money_promotion','#max_discount', function () {
+        $(document).on('keyup','.current_quantity', function () {
             let val = $(this).val();
-            $(this).val(formatNumber(val)).change();
+            $(this).val(formatNumber(val));
         });
+        $('.min_price').keyup(function () {
+            let val = $(this).val();
+            $(this).val(formatNumber(val));
+        })
+        $('.money_promotion').keyup(function () {
+            let val = $(this).val();
+            $(this).val(formatNumber(val));
+        })
+        $('.max_discount').keyup(function () {
+            let val = $(this).val();
+            $(this).val(formatNumber(val));
+        })
     </script>
 @endsection

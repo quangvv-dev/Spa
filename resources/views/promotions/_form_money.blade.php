@@ -79,7 +79,7 @@
 @section('_script')
     <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
-        $(document).on('keyup','.current_quantity,.min_price,#money_promotion,#max_discount', function () {
+        $(document).on('keyup','.current_quantity,.min_price,#money_promotion', function () {
             let val = $(this).val();
             $(this).val(formatNumber(val));
         });

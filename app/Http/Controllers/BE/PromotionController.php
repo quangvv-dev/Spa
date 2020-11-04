@@ -68,6 +68,7 @@ class PromotionController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        $input['money_promotion'] = $request->money_promotion ? str_replace(',', '', $request->money_promotion) : 0;
         $input['min_price'] = $request->min_price ? str_replace(',', '', $request->min_price) : 0;
         $input['max_discount'] = $request->max_discount ? str_replace(',', '', $request->max_discount) : '';
         $input['current_quantity'] = $request->current_quantity ? str_replace(',', '', $request->current_quantity) : 0;
@@ -119,13 +120,12 @@ class PromotionController extends Controller
     public function update(Request $request, Promotion $promotion)
     {
         $input = $request->all();
+        $input['money_promotion'] = $request->money_promotion ? str_replace(',', '', $request->money_promotion) : 0;
         $input['min_price'] = $request->min_price ? str_replace(',', '', $request->min_price) : 0;
         $input['max_discount'] = $request->max_discount ? str_replace(',', '', $request->max_discount) : '';
         $input['current_quantity'] = $request->current_quantity ? str_replace(',', '', $request->current_quantity) : 0;
         $promotion->update($input);
         return redirect(route('promotions.edit', $promotion->id))->with('status', 'Cập nhật thành công');
-
-
     }
 
     /**

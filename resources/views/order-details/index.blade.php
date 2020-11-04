@@ -330,7 +330,7 @@
                     <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Sửa đổi</a>
                     </button>
                 `);
-                if (data.order.id != 2) {
+                if (data.order.role_type != 2) {
                     $(".link-order").attr("href", "orders-service/" + data.order.id + "/edit");
                 } else {
                     $(".link-order").attr("href", "orders/" + data.order.id + "/edit");
