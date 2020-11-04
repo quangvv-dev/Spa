@@ -445,6 +445,8 @@
                         </div>`;
                         }
                     });
+                }else {
+                    html = `<span style="color: red"><i>Không có mã khuyến mại khả dụng !!!</i></span>`;
                 }
                 $('.promotionItem').html(html);
 

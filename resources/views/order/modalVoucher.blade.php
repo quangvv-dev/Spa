@@ -9,7 +9,6 @@
             <div class="modal-body">
                 <div class="row">
                     <article class="promotionItem showFull col">
-
                     </article>
                 </div>
             </div>
