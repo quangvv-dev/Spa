@@ -78,7 +78,7 @@
                                 </td>
                                 <td class="tc"></td>
                                 <td class="tc">{{$order->role_type==2? $orderDetail->quantity:$orderDetail->days }}</td>
-                                <td class="tc">{{ number_format(@$orderDetail->service->price_sell) }}</td>
+                                <td class="tc">{{ number_format(@$orderDetail->price) }}</td>
                                 <td class="tc">{{ $orderDetail->vat }}</td>
                                 <td class="tc">{{ $orderDetail->percent_discount }}</td>
                                 <td class="tc">{{ number_format($orderDetail->number_discount) }}</td>
