@@ -183,10 +183,7 @@
                         <tr>
                             <td rowspan="2" colspan="4">
                                 <div class="col row">
-                                    {{--<div class="col-md-2">--}}
-                                    {{--{!! Form::label('spa_therapisst_id', 'Kỹ thuật viên') !!}--}}
-                                    {{--{!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}--}}
-                                    {{--</div>--}}
+                                    <input type="hidden" value="0" name="spa_therapisst_id">
                                     <div class="col-md-5">
                                         {!! Form::label('support_id', 'người tư vấn (nếu có)') !!}
                                         {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
