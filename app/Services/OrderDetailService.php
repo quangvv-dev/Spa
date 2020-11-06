@@ -55,7 +55,6 @@ class OrderDetailService
             return false;
         }
         $dataArr = [];
-
         foreach ($data['service_id'] as $key => $value) {
             $dataArr[] = [
                 'id'              => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key] : '',
@@ -74,7 +73,6 @@ class OrderDetailService
 
             $service->update(['description' => $data['service_note'][$key]]);
         }
-
         OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
         foreach ($dataArr as $item) {
             if (!empty($item['id'])) {

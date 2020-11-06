@@ -142,7 +142,6 @@ class OrderController extends Controller
         try {
 
             $order = $this->orderService->create($param);
-
             if (!$order) {
                 DB::rollBack();
             }
@@ -152,7 +151,7 @@ class OrderController extends Controller
                 $promotion->save();
             }
 
-            if (isset($request->spa_therapisst_id)) {
+            if (isset($request->spa_therapisst_id) && $request->spa_therapisst_id1 != 0) {
                 foreach ($param['days'] as $k => $item) {
                     if ($item > 0) {
                         HistoryUpdateOrder::create([

@@ -14,7 +14,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/brand/logo.png')}}"/>
 
     <!-- Title -->
-    <title>Hệ Thống Royal Spa</title>
+    <title>Hệ Thống Hoàng Kim Spa</title>
 
     <!--Font Awesome-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
