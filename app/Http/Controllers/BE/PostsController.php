@@ -59,6 +59,7 @@ class PostsController extends Controller
      */
     public function store(PostRequest $request)
     {
+        dd($request->all());
         Post::create($request->all());
         return redirect(route('posts.index'))->with('Thêm mới thành công');
     }
