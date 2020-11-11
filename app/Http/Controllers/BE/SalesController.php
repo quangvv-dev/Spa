@@ -111,6 +111,7 @@ class SalesController extends Controller
                 $item->schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
 //                ->withTrashed()
             } else {
+//                dd($request->data_time);
                 $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time));
                 $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0]);
                 $data = Customer::select('id')->whereIn('id', $arr_customer);
@@ -118,7 +119,6 @@ class SalesController extends Controller
                 $item->schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
                 $item->schedules_old = Schedule::select('id')->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
             }
-
 
             $order = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
             $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');//doanh so
@@ -145,6 +145,10 @@ class SalesController extends Controller
             'grossRevenue' => $users->sum('payment_revenue'),
         ]);
 
+//        if (!empty($request->dowload_pdf)){
+//            $pdf = \PDF::loadView('report_products.sale_pdf', compact('users', 'telesales'));
+//            return $pdf->download('sale.pdf');
+//        }
         if ($request->ajax()) {
             return view('report_products.ajax_group', compact('users', 'telesales'));
         }
