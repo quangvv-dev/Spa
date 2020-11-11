@@ -287,16 +287,22 @@
                                             </div>
                                         </div>
                                         <div class="tab-pane " id="tab6">
-                                            <div class="card-header">
-                                                <div class="col">
-                                                    <a href="javascript:void(0)" data-value=""
-                                                       class="type-order btn btn-warning">Tất cả</a>
-                                                    <a href="javascript:void(0)" data-value="1"
-                                                       class="type-order btn btn-success">Dịch vụ</a>
-                                                    <a href="javascript:void(0)" data-value="2"
-                                                       class="type-order btn btn-danger">Sản phẩm</a>
-                                                    <a href="javascript:void(0)" data-value="3"
-                                                       class="type-order btn btn-info">Combo</a>
+                                            <div class="card-header row">
+                                                <div class="col-md-8" style="display: flex">
+                                                    <div class="button">
+                                                        <a href="javascript:void(0)" data-value=""
+                                                           class="type-order btn btn-warning">Tất cả</a>
+                                                        <a href="javascript:void(0)" data-value="1"
+                                                           class="type-order btn btn-success">Dịch vụ</a>
+                                                        <a href="javascript:void(0)" data-value="2"
+                                                           class="type-order btn btn-danger">Sản phẩm</a>
+                                                        <a href="javascript:void(0)" data-value="3"
+                                                           class="type-order btn btn-info">Combo</a>
+                                                    </div>
+                                                    <div class="select" style="margin-left: 4px">
+                                                        {!! Form::select('the_rest', $the_rest, null, array('class' => 'form-control','id'=>'the_rest','placeholder'=>'Tất cả đơn')) !!}
+                                                    </div>
+
                                                 </div>
                                                 <div class="col relative">
                                                     @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
@@ -379,6 +385,19 @@
                 url: "{{url()->current() }}",
                 method: "get",
                 data: {role_type: id, member_id: customer}
+            }).done(function (data) {
+                $('#order_customer').html(data);
+            });
+        })
+        $(document).on('change', '#the_rest', function () {
+            let id = $(this).val();
+            let urls = location.href.split('/');
+            let customer = urls[urls.length - 1];
+            $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {the_rest: id, member_id: customer}
             }).done(function (data) {
                 $('#order_customer').html(data);
             });

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\OrderConstant;
 use App\Helpers\Functions;
 use App\User;
 use Carbon\Carbon;
@@ -84,6 +85,13 @@ class Order extends Model
                         $q->where('full_name', 'like', '%' . $input['customer'] . '%')
                             ->orWhere('phone', 'like', '%' . $input['customer'] . '%');
                     });
+                })
+                ->when(isset($input['the_rest']), function ($query) use ($input) {
+                    if ($input['the_rest'] == OrderConstant::THE_REST) {
+                        $query->where('the_rest', '>', 0);
+                    } elseif ($input['the_rest'] == OrderConstant::NONE_REST) {
+                        $query->where('the_rest', 0);
+                    }
                 })
                 ->when(isset($input['payment_type']), function ($query) use ($input) {
                     $query->whereNotNull('payment_type')->where('payment_type', $input['payment_type']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
+use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\CustomerPost;
@@ -62,7 +63,12 @@ class CustomerController extends Controller
             }
             return $item;
         });
+        $the_rest = [
+            OrderConstant::THE_REST => 'Còn nợ',
+            OrderConstant::NONE_REST => 'Đã thanh toán',
+        ];
         view()->share([
+            'the_rest' => $the_rest,
             'status' => $status,
             'group' => $group,
             'source' => $source,
@@ -225,10 +231,10 @@ class CustomerController extends Controller
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
 
-        if ($request->member_id || $request->role_type) {
-            $params = $request->only('member_id', 'role_type');
+        if ($request->member_id || $request->role_type|| $request->the_rest) {
+            $params = $request->only('member_id', 'role_type','the_rest');
             $orders = Order::search($params);
-            return Response::json(view('customers.order', compact('orders','waiters'))->render());
+            return Response::json(view('customers.order', compact('orders', 'waiters'))->render());
         }
         //END
 

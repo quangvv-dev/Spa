@@ -316,7 +316,6 @@
             let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
             let CK2 = $(target).find('.CK2').val();
-
             price = replaceNumber(price);
 
             let total_service = price * quantity + price * quantity * (VAT / 100) - replaceNumber(CK2);
