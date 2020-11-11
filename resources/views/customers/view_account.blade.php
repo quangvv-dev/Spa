@@ -299,6 +299,7 @@
                                                         <a href="javascript:void(0)" data-value="3"
                                                            class="type-order btn btn-info">Combo</a>
                                                     </div>
+                                                    <input type="hidden" id="order_value">
                                                     <div class="select" style="margin-left: 4px">
                                                         {!! Form::select('the_rest', $the_rest, null, array('class' => 'form-control','id'=>'the_rest','placeholder'=>'Tất cả đơn')) !!}
                                                     </div>
@@ -378,6 +379,7 @@
 
         $(document).on('click', '.type-order', function () {
             const id = $(this).data('value') > 0 ? $(this).data('value') : "";
+            $('#order_value').val(id).change();
             let urls = location.href.split('/');
             let customer = urls[urls.length - 1];
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
@@ -401,6 +403,22 @@
             }).done(function (data) {
                 $('#order_customer').html(data);
             });
+        })
+        $(document).on('click', '.page-link', function () {
+            let id = $(this).html();
+            let the_rest = $('#the_rest').val();
+            let role_type = $('#order_value').val();
+            let urls = location.href.split('/');
+            let customer = urls[urls.length - 1];
+            $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {the_rest:the_rest,role_type:role_type,page_order: id, member_id: customer}
+            }).done(function (data) {
+                $('#order_customer').html(data);
+            });
+            return false
         })
 
         $(document).on('click', '#click_tab_9', function () {

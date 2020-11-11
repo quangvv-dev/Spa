@@ -231,8 +231,9 @@ class CustomerController extends Controller
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
 
-        if ($request->member_id || $request->role_type|| $request->the_rest) {
-            $params = $request->only('member_id', 'role_type','the_rest');
+        if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
+            if (!empty($request->page_order)) $request->merge(['page' => $request->page_order]);
+            $params = $request->only('member_id', 'role_type', 'the_rest','page');
             $orders = Order::search($params);
             return Response::json(view('customers.order', compact('orders', 'waiters'))->render());
         }

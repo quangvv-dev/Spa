@@ -136,7 +136,7 @@ class Order extends Model
                 });
         }
 
-        return $data->paginate(10);
+        return $data->paginate(5);
     }
 
     public static function searchAll($input)
