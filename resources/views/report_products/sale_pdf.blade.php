@@ -35,7 +35,6 @@
 
 </head>
 <body>
-
 <div>
     <div class="row">
         <div class="col-md-12 col-lg-12 list-data">

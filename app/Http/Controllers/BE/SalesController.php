@@ -80,7 +80,7 @@ class SalesController extends Controller
         ]);
 
         if (!empty($request->dowload_pdf)) {
-            $pdf = \PDF::loadView('report_products.sale_pdf', compact('users'));
+            $pdf = \PDF::loadView('report_products.sale_pdf', compact('users'))->setPaper('A4', 'landscape');
             return $pdf->download('sale.pdf');
         }
         if ($request->ajax()) {
