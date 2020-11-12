@@ -111,7 +111,6 @@ class SalesController extends Controller
                 $item->schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
 //                ->withTrashed()
             } else {
-//                dd($request->data_time);
                 $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time));
                 $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0]);
                 $data = Customer::select('id')->whereIn('id', $arr_customer);

@@ -18,6 +18,11 @@ class SettingController extends Controller
         return view('settings.index');
     }
 
+    public function indexAdmin()
+    {
+        return view('super_admin.index');
+    }
+
     /**
      * update data hệ thống
      *
@@ -31,6 +36,23 @@ class SettingController extends Controller
             foreach ($input as $key => $item) {
                 $item = $item ? str_replace(',', '', $item) : 0;
                 setting([$key => $item,])->save();
+            }
+        };
+        return back()->with('success', 'Đã cập nhật thông tin thành công !!!');
+    }
+
+    /**
+     * update data hệ thống
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeAdmin(Request $request)
+    {
+        $input = $request->except('_token');
+        if (count($input)) {
+            foreach ($input as $key => $item) {
+                setting([$key => $item])->save();
             }
         };
         return back()->with('success', 'Đã cập nhật thông tin thành công !!!');

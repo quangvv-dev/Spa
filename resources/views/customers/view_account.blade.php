@@ -224,8 +224,10 @@
                                             <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
+                                            @if(empty($permissions) || !in_array('package.customer',$permissions))
                                             <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Ví tiền</a></li>
+                                            @endif
                                             <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Tin nhắn</a></li>
                                             <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
