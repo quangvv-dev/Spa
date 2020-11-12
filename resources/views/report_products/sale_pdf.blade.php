@@ -9,11 +9,11 @@
     <title>Hệ Thống Royal Spa, chuyên nghiệp, uy tín...</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <style>
         * {
-            font-size: 11px;
+            font-size: 9px;
         }
 
         body {
@@ -39,19 +39,19 @@
 <div>
     <div class="row">
         <div class="col-md-12 col-lg-12 list-data">
-            <div style="width: 100%; overflow-y: auto;margin-top: 20px;height: 570px;font-size: 12px" class="tableFixHead">
+            <div style="width: 100%; overflow: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
                 <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
                     <thead class="bg-primary text-white">
                     <tr>
                         <th class="text-center" colspan="1">STT</th>
-                        <th class="text-center" colspan="1"></th>
+                        <th class="text-center" colspan="1">SALE</th>
                         <th class="text-center" colspan="8">KHÁCH HÀNG MỚI</th>
                         <th class="text-center" colspan="5">KHÁCH HÀNG CŨ</th>
-                        <th class="text-center" colspan="2">TỔNG CHUNG</th>
+                        <th class="text-center" colspan="3">TỔNG CHUNG</th>
                     </tr>
                     <tr class="tr1" style="text-transform:unset">
                         <th class="text-center"></th>
-                        <th class="text-center">{{request()->segment(3)=='products'?'Nhóm sản phẩm':'Nhóm dịch vụ'}}</th>
+                        <th class="text-center">Nhân viên</th>
                         <th class="text-center no-wrap">SĐT</th>
                         <th class="text-center">Trao đổi</th>
                         <th class="text-center">Lịch hẹn</th>
@@ -59,14 +59,15 @@
                         <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
                         <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
                         <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-                        <th class="text-center">Thực thu</th>
+                        <th class="text-center">Doanh thu</th>
                         <th class="text-center no-wrap">Lịch hẹn</th>
                         <th class="text-center no-wrap">Trao đổi</th>
                         <th class="text-center no-wrap">Đơn chốt</th>
                         <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-                        <th class="text-center">Thực thu</th>
-                        <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
-                        <th class="text-center">Tổng thực thu</th>
+                        <th class="text-center">Doanh thu</th>
+                        <th class="text-center">Doanh<span class=""><br>số</span></th>
+                        <th class="text-center">Doanh<span class=""><br>thu</span></th>
+                        <th class="text-center">Đã thu T.kỳ</th>
                     </tr>
                     <tr class="number_index">
                         <th class="text-center">(1)</th>
@@ -86,6 +87,7 @@
                         <th class="text-center">(13)</th>
                         <th class="text-center">(7)+(12)</th>
                         <th class="text-center">(8)+(13)</th>
+                        <th class="text-center"></th>
                     </tr>
                     </thead>
 
@@ -104,12 +106,13 @@
                         $order_old = 0;
                         $revenue_old = 0;
                         $payment_old = 0;
-                        $i =0;
+                        $all_payment = 0;
+
                     @endphp
 
                     @if(count($users))
-                        @foreach($users as $item)
-                            @php $i++ ;
+                        @foreach($users as $i => $item)
+                            @php
                 $customer_new += $item->customer_new;
                 $comment_new += $item->comment_new;
                 $schedules_new += $item->schedules_new;
@@ -123,21 +126,18 @@
                 $order_old += $item->order_old;
                 $revenue_old += $item->revenue_old;
                 $payment_old += $item->payment_old;
+                $all_payment += $item->all_payment;
 
                             @endphp
                             <tr class="">
-                                <td class="text-center pdr10">{{$i}}</td>
-                                <td class="text-center pdr10">{{$item->name}}
+                                <td class="text-center pdr10">{{$i+1}}</td>
+                                <td class="text-center pdr10">{{$item->full_name}}
                                 <td class="text-center pdr10">{{$item->customer_new}}</td>
                                 <td class="text-center pdr10">{{$item->comment_new}}</td>
                                 <td class="text-center pdr10">{{$item->schedules_new}}</td>
                                 <td class="text-center pdr10">{{$item->order_new}}</td>
-                                <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0}}
-                                    %
-                                </td>
-                                <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0}}
-                                    %
-                                </td>
+                                <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0}}%</td>
+                                <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0}}%</td>
                                 <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
                                 <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
                                 <td class="text-center pdr10">{{$item->schedules_old}}</td>
@@ -147,6 +147,7 @@
                                 <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
                                 <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
                                 <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old)}}</td>
+                                <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
                             </tr>
                         @endforeach
                     @endif
@@ -168,12 +169,12 @@
                         <th class="text-center bold">{{@number_format($payment_old)}}</th>
                         <th class="bold">{{number_format($allTotal)}}</th>
                         <th class="bold">{{number_format($grossRevenue)}}</th>
+                        <th class="bold">{{number_format($all_payment)}}</th>
                     </tr>
 
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 </div>
