@@ -657,8 +657,7 @@ class OrderController extends Controller
                                 'payment_date'      => $payment_date,
                                 'type'              => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
-                                'created_at'        => Carbon::createFromFormat('d/m/Y',
-                                    $row['ngay_tao'])->format('Y-m-d'),
+                                'created_at'        => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
                             ]);
                         } else {
                             $order = isset($checkOrder) ? $checkOrder : 0;

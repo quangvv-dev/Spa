@@ -3,13 +3,22 @@
 namespace App\Http\Controllers\BE;
 
 use App\Http\Controllers\Controller;
+use App\Components\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+
 
 class SettingController extends Controller
 {
+    private $fileUpload;
+
+    public function __construct(Filesystem $fileUpload)
+    {
+        $this->fileUpload = $fileUpload;
+    }
+
     public function store(Request $request)
     {
-        setting(['view_customer_sale' => $request->value,])->save();
+        setting(['view_customer_sale' => $request->value])->save();
         return setting('view_customer_sale');
     }
 
@@ -50,6 +59,10 @@ class SettingController extends Controller
     public function storeAdmin(Request $request)
     {
         $input = $request->except('_token');
+        $input['logo_website'] = $request->logo_website;
+        if ($input['logo_website']) {
+            $input['logo_website'] = $this->fileUpload->uploadUserImage($input['logo_website']);
+        }
         if (count($input)) {
             foreach ($input as $key => $item) {
                 setting([$key => $item])->save();

@@ -1,4 +1,8 @@
 @extends('layout.app')
+@section('_style')
+    <!-- Bootstrap fileupload css -->
+    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
+@endsection
 @section('content')
     <style>
         label.required:after {
@@ -33,6 +37,27 @@
                                                 {!! Form::text('title_website',setting('title_website'), array('class' => 'form-control')) !!}
                                                 <span class="help-block">{{ $errors->first('title_website', ':message') }}</span>
                                             </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="form-group required {{ $errors->has('logo_website') ? 'has-error' : '' }}">
+                                                {!! Form::label('logo_website', 'Ảnh đại diện') !!}
+                                                <div class="fileupload fileupload-{{!empty(setting('logo_website')) ? 'exists' : 'new' }}"
+                                                     data-provides="fileupload">
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
+                                                        @if(!empty(setting('logo_website')))
+                                                            <img src="{{ setting('logo_website') }}" alt="image"/>
+                                                        @endif
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-default btn-file">
+                                                            <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
+                                                            <input type="file" name="logo_website" accept="image/*" class="btn-default upload"/>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div class="table-responsive col-md-12">
                                             <table id="list-user" class="table table-bordered table-hover">
@@ -134,6 +159,7 @@
     </div>
 @endsection
 @section('_script')
+    <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script src="{{asset('js/format-number.js')}}"></script>
     <script>
         $(document).on('keyup', '.number', function () {

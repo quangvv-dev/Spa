@@ -24,7 +24,7 @@
         <div class="container-fluid">
             <div class="d-flex">
                 <a class="header-brand" href="{{ route('users.index') }}">
-                    <img alt="ren logo" class="header-brand-img" src="/assets/images/brand/logo.png">
+                    <img alt="ren logo" class="header-brand-img" src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}">
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="">
