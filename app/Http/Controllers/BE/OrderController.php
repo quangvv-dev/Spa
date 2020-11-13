@@ -401,8 +401,7 @@ class OrderController extends Controller
                                     'amount_of_work' => 1,
                                     'type'           => 2,
                                     'sms_content'    => Functions::vi_to_en($sms_content),
-                                    'name'           => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category,
-                                            ','),
+                                    'name'           => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category, ','),
                                     'description'    => replaceVariable($sms_content,
                                         @$check3->order->customer->full_name, @$check3->order->customer->phone),
                                 ];

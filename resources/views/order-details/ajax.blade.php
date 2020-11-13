@@ -9,8 +9,8 @@
             <th class="text-white text-center">Mã ĐH</th>
             <th class="text-white text-center">Mã KH</th>
             <th class="text-white text-center">Tên KH</th>
-            <th class="text-white text-center">SDT</th>
-            <th class="text-white text-center">Sản phẩm</th>
+            <th class="text-white text-center">SĐT</th>
+            <th class="text-white text-center">Dịch vụ</th>
             <th class="text-white text-center">Số lượng</th>
             <th class="text-white text-center">Doanh số</th>
             <th class="text-white text-center">Doanh thu</th>
@@ -43,11 +43,7 @@
                         {{ @$order->customer->account_code }}</td>
                     <td class="text-center">{{ @$order->customer->full_name }}</td>
                     <td class="text-center">{{ @$order->customer->phone }}</td>
-                    <td class="text-center">
-                        @foreach($order->orderDetails as $orderDetail)
-                            {{ @$orderDetail->service->name }},
-                        @endforeach
-                    </td>
+                    <td class="text-center">{!! @$order->service_text !!}</td>
                     <td class="text-center">{{ $order->orderDetails->sum('quantity') }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
