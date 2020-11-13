@@ -12,30 +12,30 @@ class Schedule extends Model
 {
     protected $guarded = ['id'];
     const  SCHEDULE_STATUS = [
-        [
-            'id'   => 1,
-            'name' => 'Hẹn gọi lại',
-        ],
+//        [
+//            'id'   => 1,
+//            'name' => 'Hẹn gọi lại',
+//        ],
         [
             'id'   => 2,
             'name' => 'Đặt lịch',
         ],
         [
             'id'   => 3,
-            'name' => 'Đã đến',
+            'name' => 'Đến/mua',
         ],
         [
             'id'   => 4,
-            'name' => 'Không đến',
+            'name' => 'Đến/chưa mua',
         ],
         [
             'id'   => 5,
-            'name' => 'Hủy',
+            'name' => 'Hủy lịch',
         ],
-        [
-            'id'   => 6,
-            'name' => 'Tất cả',
-        ],
+//        [
+//            'id'   => 6,
+//            'name' => 'Tất cả',
+//        ],
     ];
 
     public function creator()
