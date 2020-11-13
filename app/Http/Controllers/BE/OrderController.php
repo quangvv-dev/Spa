@@ -408,8 +408,9 @@ class OrderController extends Controller
                                 ];
 
                                 $task = $this->taskService->create($input);
-                                $follow = User::whereIn('phone',
-                                    ['0977508510', '0776904396', '0975091435', '0334299996'])->get();
+                                $follow = User::where('role',  UserConstant::ADMIN)->orWhere(function ($query){
+                                        $query->where('role',UserConstant::TELESALES)->where('is_leader',UserConstant::IS_LEADER);
+                                    })->get();
                                 $task->users()->attach($follow);
                                 $title = $task->type == NotificationConstant::CALL ? '📅📅📅 Bạn có công việc chăm sóc mới !'
                                     : '💬💬💬 Bạn có công việc gọi điện mới !';

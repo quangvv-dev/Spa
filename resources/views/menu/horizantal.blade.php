@@ -19,7 +19,7 @@
                 <div class="sub-item">
                     <ul>
                         <li><a href="{{route('fanpage.index')}}">Fanpage </a></li>
-                        @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
+                        @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| (Auth::user()->role==App\Constants\UserConstant::TELESALES && Auth::user()->is_leader==\App\Constants\UserConstant::IS_LEADER ) )
                             @if(empty($permissions) || !in_array('rules.index',$permissions))
                                 <li>
                                     <a href="{{url('rules')}}">Automation </a>
@@ -39,7 +39,6 @@
                         @if(empty($permissions) || !in_array('customer-post.index',$permissions))
                             <li><a href="{{route('post.customer')}}">Khách hàng từ form</a></li>
                         @endif
-
                     </ul>
                 </div>
             </li>

@@ -138,7 +138,7 @@
                                 @endif
 
                             @endif
-                            @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
+                            @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER ))
                                 <div class="col" style="color: #7490BD;font-weight: 400">
                                     <label class="switch">
                                         <input name="checkbox" class="check"

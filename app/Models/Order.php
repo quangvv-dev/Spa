@@ -133,7 +133,7 @@ class Order extends Model
                 })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
-                });
+                })->orderByDesc('id');
         }
 
         return $data->paginate(5);

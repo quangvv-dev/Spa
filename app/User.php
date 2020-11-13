@@ -44,6 +44,7 @@ class User extends Authenticatable
         'account_code',
         'description',
         'facebook',
+        'is_leader',
     ];
 
     /**

@@ -874,7 +874,7 @@
                 });
             });
 
-            @if(\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510')
+            @if(Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER ))
             $(document).on('dblclick', '.telesale-customer', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.telesale-customer').empty();

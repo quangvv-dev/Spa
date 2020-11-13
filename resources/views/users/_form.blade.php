@@ -9,7 +9,6 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
             </div>
-
             @if (isset($user))
                 {!! Form::model($user, array('url' => url('users/'.$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
@@ -44,22 +43,6 @@
                         <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
                     </div>
                 </div>
-                @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
-                            {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                            {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
-                            <span class="help-block">{{ $errors->first('role', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
-                            {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}
-                            {!! Form::select('department_id', $departments, null, array('class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}
-                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                        </div>
-                    </div>
-                @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('password') ? 'has-error' : '' }}">
                         {!! Form::label('password', 'Mật khẩu', array('class' => ' required')) !!}
@@ -75,6 +58,29 @@
                         <span class="help-block">{{ $errors->first('confirm_password', ':message') }}</span>
                     </div>
                 </div>
+                @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
+                            {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
+                            {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
+                            <span class="help-block">{{ $errors->first('role', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
+                            {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}
+                            {!! Form::select('department_id', $departments, null, array('class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}
+                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
+                            {!! Form::label('is_leader', 'Trưởng phòng') !!} &nbsp;
+                            <input type="checkbox" name="is_leader" value="1" {{!empty($user) && $user->is_leader > 0 ? 'checked' : ''}}>
+                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                        </div>
+                    </div>
+                @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                         {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
