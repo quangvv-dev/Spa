@@ -45,6 +45,9 @@
         </div>
     </div>
 </div>
+@php
+    $permissions = setting('permissions');
+@endphp
 <div class="page">
     <div class="page-main">
         <!-- Navbar-->
