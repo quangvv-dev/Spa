@@ -151,7 +151,7 @@ class OrderController extends Controller
                 $promotion->save();
             }
 
-            if (isset($request->spa_therapisst_id) && $request->spa_therapisst_id1 != 0) {
+            if (isset($request->spa_therapisst_id) && $request->spa_therapisst_id != 0) {
                 foreach ($param['days'] as $k => $item) {
                     if ($item > 0) {
                         HistoryUpdateOrder::create([
@@ -346,8 +346,7 @@ class OrderController extends Controller
 
             $group_customer = CustomerGroup::where('customer_id', $customer->id)->pluck('category_id')->toArray();
             $check = PaymentHistory::where('order_id', $id)->get();
-            $check2 = RuleOutput::where('event', 'add_order')->groupBy('rule_id')->whereIn('category_id',
-                $group_customer)->get();
+            $check2 = RuleOutput::where('event', 'add_order')->groupBy('rule_id')->whereIn('category_id', $group_customer)->get();
 
             if (count($check) <= 1 && isset($check2) && count($check2)) {
                 $check3 = PaymentHistory::where('order_id', $id)->first();
