@@ -59,8 +59,7 @@ class SettingController extends Controller
     public function storeAdmin(Request $request)
     {
         $input = $request->except('_token');
-        $input['logo_website'] = $request->logo_website;
-        if ($input['logo_website']) {
+        if ($request->hasFile('logo_website')) {
             $input['logo_website'] = $this->fileUpload->uploadUserImage($input['logo_website']);
         }
         if (count($input)) {
