@@ -38,9 +38,9 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
+                <td class="text-center"></td>
                 <td class="text-center bold">Tổng trang</td>
                 <td class="text-center bold">{{ @number_format($allTotalPage) }}</td>
-                <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
@@ -51,9 +51,9 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
+                <td class="text-center"></td>
                 <td class="text-center bold">Tổng cộng</td>
                 <td class="text-center bold">{{ @number_format($allTotal) }}</td>
-                <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
