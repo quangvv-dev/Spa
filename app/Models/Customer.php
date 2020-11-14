@@ -45,6 +45,21 @@ class Customer extends Model
 
     const VIP_STATUS = 10000000;
 
+    public static function searchStatus($input){
+        $user = Auth::user();
+        $data = self::latest();
+        if ($user->role == UserConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
+            if ($user->is_leader == UserConstant::IS_LEADER) {
+                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            } else {
+                $data = $data->where('telesales_id', $user->id);
+            }
+        } else {
+            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+        }
+        return $data;
+    }
+
     public static function applySearchConditions($builder, $conditions)
     {
         $builder->when(isset($conditions['search']), function ($query) use ($conditions) {
@@ -108,12 +123,7 @@ class Customer extends Model
         if (count($param)) {
             static::applySearchConditions($data, $param);
         }
-
-        if (isset($param['limit'])) {
-            return $data->latest()->paginate($param['limit']);
-        }
-
-        return $data->paginate(20);
+        return $data;
     }
 
     public function status()
@@ -264,7 +274,6 @@ class Customer extends Model
         $data = $data->has('order_detail')->get();
         $revenueMale = 0;
         $revenueFemale = 0;
-//        dd($data);
         foreach ($data as $item) {
             if ($item->gender == UserConstant::MALE) {
                 $revenueMale += $item->order_detail->sum('total_price');

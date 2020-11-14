@@ -57,10 +57,16 @@ class Status extends Model
         return $data;
     }
 
+
+
     public static function getRelationshipByCustomer($input)
     {
-        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC');
-
+        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($input){
+            $customers = Customer::search($input);
+            $item->customers_count = $customers->where('status_id',$item->id)->count();
+//            $customers->reresh();
+            return $item;
+        });
 //        $data = $data->withCount(['customers' => function ($query) use ($input) {
 //            Customer::applySearchConditions($query, $input)
 //                ->whereHas('categories', function ($query) use ($input) {
@@ -70,7 +76,8 @@ class Status extends Model
 //            });
 //        }]);
 
-        return $data->get();
+        return $data;
+
     }
 
     public static function getRevenueSource($input)
