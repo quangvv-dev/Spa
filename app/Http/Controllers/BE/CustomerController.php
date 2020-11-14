@@ -91,14 +91,15 @@ class CustomerController extends Controller
         $input = $request->all();
         $statuses = Status::getRelationshipByCustomer($input);
         $customers = Customer::search($input);
-        $categories = Category::with('customers')->get();
+        $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
+        $categories_product = Category::where('type', StatusCode::PRODUCT)->with('customers')->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
             return Response::json(view('customers.ajax',
-                compact('customers', 'statuses', 'rank', 'categories'))->render());
+                compact('customers', 'statuses', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories','categories_product'));
     }
 
     /**
@@ -233,7 +234,7 @@ class CustomerController extends Controller
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
             if (!empty($request->page_order)) $request->merge(['page' => $request->page_order]);
-            $params = $request->only('member_id', 'role_type', 'the_rest','page');
+            $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
             return Response::json(view('customers.order', compact('orders', 'waiters'))->render());
         }
