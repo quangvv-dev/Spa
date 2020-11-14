@@ -61,14 +61,14 @@ class Status extends Model
     {
         $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC');
 
-//        $data = $data->withCount(['customers' => function ($query) use ($input) {
-//            Customer::applySearchConditions($query, $input)
-//                ->whereHas('categories', function ($query) use ($input) {
-//                $query->when(isset($input['group']), function ($query) use($input) {
-//                    $query->where('categories.id', $input['group']);
-//                });
-//            });
-//        }]);
+        $data = $data->withCount(['customers' => function ($query) use ($input) {
+            Customer::applySearchConditions($query, $input)
+                ->whereHas('categories', function ($query) use ($input) {
+                $query->when(isset($input['group']), function ($query) use($input) {
+                    $query->where('categories.id', $input['group']);
+                });
+            });
+        }]);
 
         return $data->get();
     }
