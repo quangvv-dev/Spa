@@ -62,7 +62,7 @@
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
                             {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                            {!! Form::select('role', [1 => 'Admin', 2 => 'Marketing', 3 => 'Telesales', 4 => 'Lễ tân', 5 => 'Kỹ thuật viên'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
+                            {!! Form::select('role', [\App\Constants\UserConstant::ADMIN => 'Admin', \App\Constants\UserConstant::MARKETING => 'Marketing', \App\Constants\UserConstant::TELESALES => 'Telesales', \App\Constants\UserConstant::WAITER => 'Lễ tân', \App\Constants\UserConstant::TECHNICIANS => 'Kỹ thuật viên', \App\Constants\UserConstant::CSKH => 'Tư vấn viên'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn quyền')) !!}
                             <span class="help-block">{{ $errors->first('role', ':message') }}</span>
                         </div>
                     </div>
@@ -76,7 +76,8 @@
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
                             {!! Form::label('is_leader', 'Trưởng phòng') !!} &nbsp;
-                            <input type="checkbox" name="is_leader" value="1" {{!empty($user) && $user->is_leader > 0 ? 'checked' : ''}}>
+                            <input type="checkbox" name="is_leader"
+                                   value="1" {{!empty($user) && $user->is_leader > 0 ? 'checked' : ''}}>
                             <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                         </div>
                     </div>

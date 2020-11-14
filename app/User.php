@@ -101,6 +101,7 @@ class User extends Authenticatable
             UserConstant::MARKETING => 'Marketing',
             UserConstant::TELESALES => 'Telesales',
             UserConstant::WAITER => 'Lễ tân',
+            UserConstant::CSKH => 'Tư vấn viên',
             UserConstant::TECHNICIANS => 'Kỹ thuật viên',
         ];
 
