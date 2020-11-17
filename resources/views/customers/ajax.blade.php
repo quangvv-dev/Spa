@@ -134,7 +134,7 @@
             <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
-            <th class="text-white text-center">Nhóm KH</th>
+            {{--<th class="text-white text-center">Nhóm KH</th>--}}
             <th class="text-white text-center" style="width: 200px">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
@@ -167,12 +167,12 @@
                               style="background-color: #ee630c!important;">2</span>
                     </td>
                     <td class="text-center">{{ $customer->phone }}</td>
-                    <td class="text-center category-db"
-                        data-id="{{$customer->id}}">
-                        @foreach($customer->categories as $category)
-                            {{ $category->name }},
-                        @endforeach
-                    </td>
+                    {{--<td class="text-center category-db"--}}
+                        {{--data-id="{{$customer->id}}">--}}
+                        {{--@foreach($customer->categories as $category)--}}
+                            {{--{{ $category->name }}--}}
+                        {{--@endforeach--}}
+                    {{--</td>--}}
                     <td class="text-center " data-id="{{$customer->id}}"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
@@ -238,7 +238,7 @@
                         <td class="text-center category-db"
                             data-id="{{$customer->id}}">
                             @foreach($customer->categories as $category)
-                                {{ $category->name }},
+                                {{ $category->name }}<br>
                             @endforeach
                         </td>
                         <td class="text-center status-db"
