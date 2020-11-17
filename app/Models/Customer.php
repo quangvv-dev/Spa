@@ -173,7 +173,9 @@ class Customer extends Model
         $group = CustomerGroup::where('customer_id', $this->id)->with('category')->get();
         if (count($group)) {
             foreach ($group as $item) {
-                $text[] = $item->category->name;
+                if (isset($item->category)){
+                    $text[] = $item->category->name;
+                }
             }
         }
         $text = implode($text,',');
