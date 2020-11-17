@@ -607,9 +607,10 @@
             });
 
             $('body').not('.category-result').on('change', function (e) {
-                if (!($('.category-result').parent().find('span.select2-container--focus').length) &&
+                if (!($('.category-result').parent().find('span.select2-container--focus').length) ||
                     $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
                 ) {
+
                     let category_ids = $(e.target).parent().find('.category-result').val();
                     let id = $(e.target).parent().find('.category-result').data('id');
 
