@@ -45,7 +45,8 @@ class Customer extends Model
 
     const VIP_STATUS = 10000000;
 
-    public static function searchStatus($input){
+    public static function searchStatus($input)
+    {
         $user = Auth::user();
         $data = self::latest();
         if ($user->role == UserConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
@@ -164,6 +165,19 @@ class Customer extends Model
     public function getActiveTextAttribute()
     {
         return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
+    }
+
+    public function getGroupTextAttribute()
+    {
+        $text = [];
+        $group = CustomerGroup::where('customer_id', $this->id)->with('category')->get();
+        if (count($group)) {
+            foreach ($group as $item) {
+                $text[] = $item->category->name;
+            }
+        }
+        $text = implode($text,',');
+        return $text;
     }
 
     public static function boot()

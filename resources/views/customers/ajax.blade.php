@@ -125,7 +125,7 @@
         </div>
     </div>
 </div>
-<div class="table-responsive" style="position: relative">
+<div class="table-responsive" style="position: relative;font-size: 12px">
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
         <thead class="bg-primary text-white">
         <tr>
@@ -202,7 +202,7 @@
         </tbody>
     </table>
 </div>
-<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;">
+<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
             <thead class="bg-primary text-white">
@@ -237,9 +237,7 @@
                             data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
                         <td class="text-center category-db"
                             data-id="{{$customer->id}}">
-                            @foreach($customer->categories as $category)
-                                {{ $category->name }}
-                            @endforeach
+                            {{str_limit($customer->group_text,30)}}
                         </td>
                         <td class="text-center status-db"
                             data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
