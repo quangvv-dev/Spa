@@ -238,7 +238,7 @@
                         <td class="text-center category-db"
                             data-id="{{$customer->id}}">
                             @foreach($customer->categories as $category)
-                                {{ $category->name }}<br>
+                                {{ $category->name }}
                             @endforeach
                         </td>
                         <td class="text-center status-db"
