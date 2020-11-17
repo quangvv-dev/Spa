@@ -650,7 +650,7 @@ class OrderController extends Controller
                                 'member_id'         => $customer->id,
                                 'all_total'         => $row['doanh_so'],
                                 'count_day'         => 0,
-                                'the_rest'          => (int)$row['con_lai'],
+                                'the_rest'          => (int)$row['doanh_so'] < (int)$row['da_thanh_toan']? 0 :(int)$row['doanh_so'] - (int)$row['da_thanh_toan'],
                                 'description'       => $row['mo_ta'],
                                 'gross_revenue'     => $row['da_thanh_toan'],
                                 'payment_type'      => $paymentType,
@@ -664,11 +664,11 @@ class OrderController extends Controller
                         }
 
                         if (!empty($customer)) {
-                            $orderDetail = OrderDetail::create([
+                            OrderDetail::create([
                                 'order_id'         => $order->id,
-                                'code'             => $row['ma_sp'],
+                                'code'             => !empty($row['ma_sp'])?$row['ma_sp']:'',
                                 'booking_id'       => $service->id,
-                                'quantity'         => $row['so_luong'],
+                                'quantity'         => !empty($row['so_luong']) ? $row['so_luong'] : 0,
                                 'total_price'      => $row['gia_ban'],
                                 'user_id'          => $customer ? $customer->id : $order->member_id,
                                 'address'          => $customer ? $customer->address : '',
