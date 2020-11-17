@@ -412,7 +412,7 @@ class CustomerController extends Controller
                         $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
                         $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
                         $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
-                        $check = Customer::where('phone', $row['so_dien_thoai'])->first();
+                        $check = Customer::where('phone', $row['so_dien_thoai'])->withTrashed()->first();
                         $category = explode(',', $row['nhom_khach_hang']);
                         if (empty($check)) {
                             if ($row['so_dien_thoai']) {
