@@ -17,19 +17,19 @@ class Schedule extends Model
 //            'name' => 'Hẹn gọi lại',
 //        ],
         [
-            'id'   => 2,
+            'id' => 2,
             'name' => 'Đặt lịch',
         ],
         [
-            'id'   => 3,
+            'id' => 3,
             'name' => 'Đến/mua',
         ],
         [
-            'id'   => 4,
+            'id' => 4,
             'name' => 'Đến/chưa mua',
         ],
         [
-            'id'   => 5,
+            'id' => 5,
             'name' => 'Hủy lịch',
         ],
 //        [
@@ -60,29 +60,8 @@ class Schedule extends Model
 
     public function getNameStatusAttribute()
     {
-        if ($this->status == Schedule::SCHEDULE_STATUS[0]['id']) {
-            return 'Hẹn gọi lại';
-        }
-
-        if ($this->status == Schedule::SCHEDULE_STATUS[1]['id']) {
-            return 'Đặt lịch';
-        }
-
-        if ($this->status == Schedule::SCHEDULE_STATUS[2]['id']) {
-            return 'Đã đến';
-        }
-
-        if ($this->status == Schedule::SCHEDULE_STATUS[3]['id']) {
-            return 'Trễ hẹn';
-        }
-
-        if ($this->status == Schedule::SCHEDULE_STATUS[4]['id']) {
-            return 'Hủy';
-        }
-
-        if ($this->status == Schedule::SCHEDULE_STATUS[5]['id']) {
-            return 'Tất cả';
-        }
+        $key = array_keys(array_column(Schedule::SCHEDULE_STATUS, 'id'), $this->attributes['status']);
+        return Schedule::SCHEDULE_STATUS[$key[0]]['name'];
     }
 
     public static function getBooks($input)
@@ -147,7 +126,7 @@ class Schedule extends Model
 
     public static function search($request)
     {
-        $docs = self::orderBy('id','desc');
+        $docs = self::orderBy('id', 'desc');
 
         if (!empty($request['search'])) {
             $docs = $docs->whereIn('status', $request['search']);
