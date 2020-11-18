@@ -101,7 +101,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     Route::resource('rules', 'RuleController');//Automation
     Route::get('rules/{id}/delete', 'RuleController@delete');
-
     Route::get('orders-payment', 'OrderController@listOrderPayment')->name('order.index_payment');//đã thu trong kỳ
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');

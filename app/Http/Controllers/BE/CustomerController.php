@@ -237,6 +237,9 @@ class CustomerController extends Controller
             $package = PackageWallet::pluck('name', 'id')->toArray();
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
+        if ($request->schedules) {
+            return Response::json(view('schedules.index', compact('schedules','id','group','staff'))->render());
+        }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
             if (!empty($request->page_order)) $request->merge(['page' => $request->page_order]);

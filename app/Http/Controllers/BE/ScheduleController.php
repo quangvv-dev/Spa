@@ -172,6 +172,7 @@ class ScheduleController extends Controller
         }
         $request->merge(['date' => $date]);
         $data = Schedule::with('customer')->find($request->id);
+
         $data->update($request->except('id', 'format_date'));
 
         if ($request->ajax()) {

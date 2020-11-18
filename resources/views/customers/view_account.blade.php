@@ -218,15 +218,13 @@
                                     <div class="tabs-menu1 ">
                                         <!-- Tabs -->
                                         <ul class="nav panel-tabs">
-                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
-                                            </li>
-                                            <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
-                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Đơn hàng</a></li>
+                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a></li>
+                                            <li><a href="#tab7" id="click_tab_7" data-id="{{$customer->id}}" data-toggle="tab">Lịch hẹn</a></li>
+                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}" data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
                                             @if(empty($permissions) || !in_array('package.customer',$permissions))
-                                            <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Ví tiền</a></li>
+                                                <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
+                                                       data-toggle="tab">Ví tiền</a></li>
                                             @endif
                                             <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Tin nhắn</a></li>
@@ -367,6 +365,26 @@
 
     <script type="text/javascript">
         // $(document).ready(function () {
+        $(document).on('click', '#save_schedules', function () {
+            $.post($('.formUpdateSchedule').attr('action'), $('.formUpdateSchedule').serialize(), function (data) {
+                // console.log(data,'----');
+                // $('#updateModal').modal('hide');
+                $("#updateModal .close").click()
+            });
+            $('#click_tab_7').click();
+        })
+        $(document).on('click', '#click_tab_7', function () {
+            const id = $(this).data('id');
+            $('#tab7').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {schedules:1,member_id: id}
+            }).done(function (data) {
+                $('#tab7').html(data);
+            });
+        })
+
         $(document).on('click', '#click_tab_6', function () {
             const id = $(this).data('id');
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
@@ -416,7 +434,7 @@
             $.ajax({
                 url: "{{url()->current() }}",
                 method: "get",
-                data: {the_rest:the_rest,role_type:role_type,page_order: id, member_id: customer}
+                data: {the_rest: the_rest, role_type: role_type, page_order: id, member_id: customer}
             }).done(function (data) {
                 $('#order_customer').html(data);
             });
@@ -565,10 +583,10 @@
                 $('#largeModal').modal("show");
             });
 
-            $(document).change('#list_service',function () {
+            $(document).change('#list_service', function () {
                 let id = $('#list_service').val();
                 let html = '';
-                console.log(id,'idđ');
+                console.log(id, 'idđ');
                 historys.forEach(function (item, index) {
                     let name = item.service != null ? item.service.name : '';
                     let service_id = item.service != null ? item.service.id : 0;
@@ -582,7 +600,7 @@
                     if (item.type == 2) {
                         name_type = 'Đang bảo lưu';
                     }
-                    if (service_id == id || id == 0){
+                    if (service_id == id || id == 0) {
                         html += '<tr >' + '<td class="text-center">' + index + '</td>' +
                             '<td class="text-center">' + item.created_at + '</td>' +
                             '<td class="text-center">' + item.user.full_name + '</td>' +
@@ -592,8 +610,8 @@
                             '<td class="text-center"><a class="sum_history_order" href="javascript:void(0)" data-id="' + item.id + '"data-type="' + item.type + '"data-order="' + item.order_id + '"> <i class="fas fa-trash-alt"></i></a></td>' + '</tr>';
                     }
                 });
-                let detail = order_details.filter(f=>f.booking_id == id);
-                $('#count_service').html(detail.length>0?'Số buổi còn lại: '+detail[0].days:'');
+                let detail = order_details.filter(f => f.booking_id == id);
+                $('#count_service').html(detail.length > 0 ? 'Số buổi còn lại: ' + detail[0].days : '');
                 $('.data-history-update-order').html(html);
 
             });
@@ -784,9 +802,9 @@
                 });
             });
 
-            $('.update').on('click', function () {
-                const id = $(this).attr("data-id");
-                const link = 'schedules/edit/' + id;
+            $('body').delegate('.update', 'click', function () {
+                let id = $(this).attr("data-id");
+                let link = 'schedules/edit/' + id;
                 $.ajax({
                     url: window.location.origin + '/' + link,
                     method: "get",
@@ -798,7 +816,7 @@
                     $('#update_status').val(data['status']);
                     $('#update_note').val(data['note']);
                     $('#update_action').val(data['person_action']).change();
-                    ;
+
                 });
             });
             $('[data-toggle="datepicker"]').datepicker({

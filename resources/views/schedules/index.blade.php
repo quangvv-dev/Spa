@@ -21,9 +21,12 @@
             {{--                </div>--}}
         </div>
 
-        <div id="registration-form">
+        <div id="registration-form" class="customer-schedules">
             @include('schedules.ajax')
         </div>
+    {{--    Modal thêm --}}
+    @include('schedules.modal')
+    {{--    END Modal thêm --}}
         <!-- table-responsive -->
     </div>
 </div>

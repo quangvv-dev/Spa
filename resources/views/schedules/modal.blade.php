@@ -63,7 +63,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                {!! Form::open(array('url' => url('schedules/'.$id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate','autocomplete'=>'off')) !!}
+                {!! Form::open(array('url' => url('schedules/'.$id), 'method' => 'put', 'files'=> true,'class'=>'formUpdateSchedule','autocomplete'=>'off')) !!}
 
                 <div class="row">
                     {!! Form::hidden('id', null, array('class' => 'form-control','id'=>'update_id')) !!}
@@ -98,7 +98,7 @@
                         <span class="help-block">{{ $errors->first('note', ':message') }}</span>
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
-                        <button type="submit" class="btn btn-success">Lưu</button>
+                        <button type="button" class="btn btn-success" id="save_schedules">Lưu</button>
                     </div>
                 </div>
                 {{ Form::close() }}
