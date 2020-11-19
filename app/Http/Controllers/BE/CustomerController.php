@@ -238,7 +238,7 @@ class CustomerController extends Controller
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
         if ($request->schedules) {
-            return Response::json(view('schedules.index', compact('schedules','id','group','staff'))->render());
+            return Response::json(view('schedules.index', compact('schedules', 'id', 'group', 'staff'))->render());
         }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
@@ -334,17 +334,13 @@ class CustomerController extends Controller
     {
         $now = Carbon::now()->format('d/m/Y');
         $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
-        if ($request->status != StatusCode::ALL) {
-            $data = $data->when(!empty($request->status), function ($query) use ($request) {
-                    $query->where('status_id', $request->status);
-                })
-//                ->when(!empty($request->status), function ($query) use ($request) {
-//                    $query->where('status_id', $request->status);
-//                })
-                ->get();
-        } else {
-            $data = $data->get();
-        }
+        $data = $data->when(!empty($request->group), function ($query) use ($request) {
+            $arr = CustomerGroup::where('category_id', $request->group)->pluck('customer_id')->toArray();
+            $query->whereIn('id', $arr);
+        })->when(!empty($request->status), function ($query) use ($request) {
+            $query->where('status_id', $request->status);
+        })->get();
+
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
                 $sheet->cell('A1:Q1', function ($row) {
