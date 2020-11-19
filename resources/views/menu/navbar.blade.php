@@ -94,9 +94,7 @@
                     </div>
 
                     <audio id="myAudio">
-                        <source
-                            src="https://notificationsounds.com/soundfiles/a86c450b76fb8c371afead6410d55534/file-sounds-1108-slow-spring-board.mp3"
-                            type="audio/ogg">
+                        <source src="{{asset('default/sound-notification.mp3')}}" type="audio/ogg">
                     </audio>
                     <button id="btn_audio" style="display: none"></button>
 

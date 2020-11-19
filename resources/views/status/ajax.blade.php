@@ -28,7 +28,7 @@
                     <td class="text-center">
                         <a class="btn" href="{{ url('status/' . $s->id . '/edit') }}"><i
                                     class="fas fa-edit"></i></a>
-                        <a {{$s->type==App\Constants\StatusCode::RELATIONSHIP?'style=display:none':''}} class="btn delete" href="javascript:void(0)" data-url="{{ url('status/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
+                        <a class="btn delete" href="javascript:void(0)" data-url="{{ url('status/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
             @endforeach
