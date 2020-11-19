@@ -323,6 +323,9 @@
                                         <div class="tab-pane" id="tab7">
                                             @include('schedules.index')
                                         </div>
+                                        {{--    Modal thêm --}}
+                                        @include('schedules.modal')
+                                        {{--    END Modal thêm --}}
                                         <div class="tab-pane " id="tab8">
                                             <a style="color: #ffffff;margin-bottom: 8px;"
                                                class="right btn btn-primary btn-flat" data-toggle="modal"
@@ -383,6 +386,11 @@
             }).done(function (data) {
                 $('#tab7').html(data);
             });
+            // $('[data-toggle="datepicker"]').datepicker({
+            //     format: 'dd-mm-yyyy',
+            //     autoHide: true,
+            //     zIndex: 2048,
+            // });
         })
 
         $(document).on('click', '#click_tab_6', function () {
