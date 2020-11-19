@@ -135,7 +135,7 @@
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Nhóm KH</th>
-            <th class="text-white text-center" style="width: 200px">&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+            <th class="text-white text-center" style="width: 200px">&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
             <th class="text-white text-center">Ngày sinh</th>
