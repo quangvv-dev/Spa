@@ -67,7 +67,7 @@
 
                 <div class="row">
                     {!! Form::hidden('id', null, array('class' => 'form-control','id'=>'update_id')) !!}
-                    {!! Form::hidden('format_date', 1, array('class' => 'form-control','id'=>'update_id')) !!}
+                    {!! Form::hidden('format_date', 1, array('class' => 'form-control',)) !!}
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}
                         {!! Form::date('date', null, array('class' => 'form-control','id'=>'update_date','readonly'=>true)) !!}

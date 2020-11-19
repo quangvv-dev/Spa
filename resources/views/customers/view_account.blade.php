@@ -365,13 +365,13 @@
 
     <script type="text/javascript">
         // $(document).ready(function () {
-        $(document).on('click', '#save_schedules', function () {
+        $(document).on('click', '#save_schedules', function (e) {
+            let name = $('#update_status :selected').text();
+            let ids = $('#update_id').val();
             $.post($('.formUpdateSchedule').attr('action'), $('.formUpdateSchedule').serialize(), function (data) {
-                // console.log(data,'----');
-                // $('#updateModal').modal('hide');
-                $("#updateModal .close").click()
+                $('#updateModal').modal('hide');
             });
-            $('#click_tab_7').click();
+            $(".status[data-id='" + ids +"']").html(name);
         })
         $(document).on('click', '#click_tab_7', function () {
             const id = $(this).data('id');
@@ -802,9 +802,10 @@
                 });
             });
 
-            $('body').delegate('.update', 'click', function () {
+            $('body').delegate('.update', 'click', function (e) {
                 let id = $(this).attr("data-id");
                 let link = 'schedules/edit/' + id;
+                console.log(123,parent);
                 $.ajax({
                     url: window.location.origin + '/' + link,
                     method: "get",
