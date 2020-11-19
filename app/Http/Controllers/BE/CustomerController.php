@@ -334,14 +334,14 @@ class CustomerController extends Controller
     {
         $now = Carbon::now()->format('d/m/Y');
         $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
-        //        $rq = $request->all();
-//        if ($rq['search']) {
-//            $data = $data->where('name', 'like', '%' . $rq['search'] . '%')
-//                ->orWhere('email', 'like', '%' . $rq['search'] . '%')
-//                ->orWhere('phone', 'like', '%' . $rq['search'] . '%');
-//        }
         if ($request->status != StatusCode::ALL) {
-            $data = $data->where('status_id', $request->status)->get();
+            $data = $data->when(!empty($request->status), function ($query) use ($request) {
+                    $query->where('status_id', $request->status);
+                })
+//                ->when(!empty($request->status), function ($query) use ($request) {
+//                    $query->where('status_id', $request->status);
+//                })
+                ->get();
         } else {
             $data = $data->get();
         }
