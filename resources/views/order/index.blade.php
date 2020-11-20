@@ -4,6 +4,15 @@
         tfoot td {
             border: none !important;
         }
+
+        td input.form-control {
+            font-size: 14px;
+        }
+
+        td select.form-control {
+            font-size: 14px;
+        }
+
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -63,13 +72,14 @@
             <div class="col">
                 <div class="table-responsive">
                     <table class="table card-table table-vcenter text-nowrap table-primary">
-                        <thead style="width: 100%" class="bg-primary text-white">
+                        <thead class="bg-primary text-white">
                         <tr>
                             <th class="text-white text-center">Dịch vụ</th>
                             <th class="text-white text-center">Số lượng</th>
                             <th class="text-white text-center">Đơn giá</th>
-                            <th class="text-white text-center">VAT (%)</th>
-                            <th class="text-white text-center">CK (đ)</th>
+                            <th class="text-white text-center">VAT(%)</th>
+                            <th class="text-white text-center">CK(%)</th>
+                            <th class="text-white text-center" style="width: 100px">CK(đ)</th>
                             <th class="text-white text-center">Thành tiền</th>
                             <th class="text-white text-center"></th>
                         </tr>
@@ -96,7 +106,8 @@
                                             <span class="btn btn-default col-md-1 no-padd add_note"
                                                   style="height:34px; background-color: #ffffff;"> <i
                                                     class="fa fa-plus font16" aria-hidden="true"></i> </span>
-                                            <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú"
+                                            <textarea class="product_note form-control pt5 italic"
+                                                      style="margin-left: 12px; display: none" placeholder="Ghi chú"
                                                       name="service_note[]">{{$orderDetail->service->description}}</textarea>
                                         </div>
                                     </td>
@@ -108,6 +119,9 @@
                                     </td>
                                     <td class="text-center">
                                         {!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="text" class="form-control CK1">
                                     </td>
                                     <td class="text-center">
                                         {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2')) !!}
@@ -155,6 +169,9 @@
                                     {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                                 </td>
                                 <td class="text-center">
+                                    <input type="text" class="form-control CK1" value="0">
+                                </td>
+                                <td class="text-center">
                                     {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                                 </td>
                                 <td class="text-center">
@@ -172,7 +189,7 @@
                                 <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm sản
                                         phẩm</a></div>
                             </td>
-                            <td colspan="4">
+                            <td colspan="5">
                                 @if(empty($order))
                                     <a href="javascript:void(0)" id="get_Voucher" class="right">
                                         <i class="fa fa-check-square text-primary"></i> Chọn Voucher KM !!!</a>
@@ -181,7 +198,7 @@
                             <td colspan="2"></td>
                         </tr>
                         <tr>
-                            <td rowspan="2" colspan="4">
+                            <td rowspan="2" colspan="5">
                                 <div class="col row">
                                     <input type="hidden" value="0" name="spa_therapisst_id">
                                     <div class="col-md-5">
@@ -205,10 +222,6 @@
                                         </div>
                                         <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
                                     </div>
-                                    {{--                        <div class="col-md-2">--}}
-                                    {{--                            {!! Form::label('type', 'Trạng thái đơn hàng') !!}--}}
-                                    {{--                            {!! Form::select('type', [2 => 'Trong liệu trình', 3 => 'Đã bảo hành', 4 => 'Đang bảo lưu'], null, array('class' => 'form-control select2')) !!}--}}
-                                    {{--                        </div>--}}
                                 </div>
                             </td>
                             <td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>
@@ -221,6 +234,20 @@
                             </td>
                         </tr>
                         <tr class="bold">
+                            <td class="text-center"><b>Chiết khấu tổng đơn (VNĐ)</b></td>
+                            <td class="text-center">
+                                @if(empty($order))
+                                    <input type="number" max="100" min="0" value="0" id="discount_percent" >(%)
+                                @endif
+                            </td>
+                            <td class="text-center"
+                                id="all_discount_order">{{isset($order)?@number_format($order->discount_order):0}}
+                            </td>
+                            <input type="hidden" name="discount_order" id="discount_order" value="0">
+
+                        </tr>
+                        <tr class="bold">
+                            <td colspan="5"></td>
                             <td class="text-center"><b>Tổng thanh toán (VNĐ)</b></td>
                             <td class="text-center"
                                 id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>
@@ -277,6 +304,9 @@
             {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                 </td>
                 <td class="text-center">
+            <input type="text" class="form-control CK1" value="0">
+                </td>
+                <td class="text-center">
             {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                 </td>
                 <td class="text-center">
@@ -316,7 +346,11 @@
             let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
             let CK2 = $(target).find('.CK2').val();
+            let CK1 = $(target).find('.CK1').val();
             price = replaceNumber(price);
+            if (CK1 > 0) {
+                CK2 = CK1 * price * quantity / 100;
+            }
 
             let total_service = price * quantity + price * quantity * (VAT / 100) - replaceNumber(CK2);
             $(target).find('.price').val(formatNumber(price));
@@ -464,5 +498,19 @@
                 }
             });
         })
+        $(document).on('change', '#discount_percent', function (e) {
+            let money = $(this).val()?$(this).val():0;
+            let old_money = $('#discount_order').val();
+            value_total = parseInt(old_money) + parseInt(replaceNumber(value_total));
+            money = parseInt(money) * parseInt(value_total) / 100;
+            $('#discount_order').val(money);
+            $('#all_discount_order').html(formatNumber(money));
+            value_total = replaceNumber(value_total) - money;
+
+            console.log(old_money, value_total, 'old');
+            $('#sum_total').html(formatNumber(value_total));
+            console.log(money, 'money-discount');
+        })
+        ;
     </script>
 @endsection

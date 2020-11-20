@@ -22,7 +22,7 @@ class OrderService
 
     public function create($data)
     {
-        $theRest = array_sum(replaceNumberFormat($data['total_price'])) - $data['discount'];
+        $theRest = array_sum(replaceNumberFormat($data['total_price'])) - $data['discount'] - $data['discount_order'];
         $countDay = 0;
         if (empty($data) && is_array($data) == false) {
             return false;
@@ -36,6 +36,7 @@ class OrderService
         $input = [
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
+            'discount_order'    => $data['discount_order'],
             'role_type'         => $data['role_type'],
             'hsd'               => isset($data['hsd']) ? $data['hsd'] : null,
             'support_id'        => isset($data['support_id']) ? $data['support_id'] : 0,
@@ -163,7 +164,7 @@ class OrderService
     public function update($id, $attibutes)
     {
         $order = $this->find($id);
-        $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue - $order->discount;
+        $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue - $order->discount -  $order->discount_order;
         $now = Carbon::now()->format('H:i:s');
 
         if (empty($attibutes) && is_array($attibutes) == false) {
@@ -178,7 +179,7 @@ class OrderService
             'support_id'        => isset($attibutes['support_id']) ? $attibutes['support_id'] : 0,
             'count_day'         => $attibutes['count_day'],
             'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount,
+            'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount - $order->discount_order,
             'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
             'created_at'        => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
         ];
