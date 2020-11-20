@@ -10,11 +10,11 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="{{asset('assets/images/brand/logo.png')}}" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/brand/logo.png')}}"/>
+    <link rel="icon" href="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}"/>
 
     <!-- Title -->
-    <title>Hệ Thống Royal Spa</title>
+    <title>{{!empty(setting('title_website'))?setting('title_website'):'Hệ Thống Royal Spa'}}</title>
 
     <!--Font Awesome-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -48,7 +48,7 @@
     <!-- Date Picker Plugin -->
     <link href="{{ asset('assets/plugins/date-picker/spectrum.css') }}" rel="stylesheet"/>
 @yield('vuejs')
-    <!-- Select2 Plugin -->
+<!-- Select2 Plugin -->
     <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet"/>
     <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap.css') }}" rel="stylesheet"/>
 

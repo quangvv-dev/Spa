@@ -8,6 +8,7 @@
             <th class="text-white text-center">Mã ĐH</th>
             <th class="text-white text-center">Tên KH</th>
             <th class="text-white text-center">SĐT</th>
+            <th class="text-white text-center">Dịch vụ</th>
             <th class="text-white text-center">Số tiền</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Phương thức thanh toán</th>
@@ -24,6 +25,7 @@
                     <td class="text-center"><a href="{{isset($order->order)?route('order.show',$order->order_id):'#'}}">{{isset($order->order) ? $order->order->code:' ' }}</a></td>
                     <td class="text-center">{{isset($order->order) && isset($order->order->customer) ? @$order->order->customer->full_name :''}}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer) ? @$order->order->customer->phone :''}}</td>
+                    <td class="text-center">{!! isset($order->order) && !empty($order->order->service_text) ? @$order->order->service_text :'' !!}</td>
                     <td class="text-center">{{ @number_format($order->price) }}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->telesale)? @$order->order->customer->telesale->full_name:'' }}</td>
                     <td class="text-center">{{ isset($order->payment_type) ? $order->name_payment_type:' ' }}</td>
@@ -36,6 +38,7 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
+                <td class="text-center"></td>
                 <td class="text-center bold">Tổng trang</td>
                 <td class="text-center bold">{{ @number_format($allTotalPage) }}</td>
                 <td class="text-center"></td>
@@ -43,6 +46,7 @@
                 <td class="text-center"></td>
             </tr>
             <tr class="fixed">
+                <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>

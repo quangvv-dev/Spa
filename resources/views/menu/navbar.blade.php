@@ -24,7 +24,7 @@
         <div class="container-fluid">
             <div class="d-flex">
                 <a class="header-brand" href="{{ route('users.index') }}">
-                    <img alt="ren logo" class="header-brand-img" src="/assets/images/brand/logo.png">
+                    <img alt="ren logo" class="header-brand-img" src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}">
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="">
@@ -94,9 +94,7 @@
                     </div>
 
                     <audio id="myAudio">
-                        <source
-                            src="https://notificationsounds.com/soundfiles/a86c450b76fb8c371afead6410d55534/file-sounds-1108-slow-spring-board.mp3"
-                            type="audio/ogg">
+                        <source src="{{asset('default/sound-notification.mp3')}}" type="audio/ogg">
                     </audio>
                     <button id="btn_audio" style="display: none"></button>
 
@@ -121,16 +119,24 @@
                                         class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
                                 <a class="dropdown-item" href="{!! route('department.index') !!}"><i
                                         class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
-                                <a class="dropdown-item" href="{!! route('sms.index') !!}"><i
-                                        class="dropdown-icon fas fa-envelope"></i> Quản lý tin nhắn</a>
+                                @if(empty($permissions) || !in_array('sms.index',$permissions))
+                                    <a class="dropdown-item" href="{!! route('sms.index') !!}">
+                                        <i class="dropdown-icon fas fa-envelope"></i> Quản lý tin nhắn
+                                    </a>
+                                @endif
                                 <a class="dropdown-item" href="{!! route('status.index') !!}"><i
                                         class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
-                                <a class="dropdown-item" href="{!! route('package.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
-                                <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
+                                @if(empty($permissions) || !in_array('package.index',$permissions))
+                                    <a class="dropdown-item" href="{!! route('package.index') !!}"><i
+                                            class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
+                                @endif
+                                @if(empty($permissions) || !in_array('settings.index',$permissions))
+                                    <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
+                                            class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
+                                @endif
+
                             @endif
-                            @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510'|| \Illuminate\Support\Facades\Auth::user()->phone=='0776904396')
+                            @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER ))
                                 <div class="col" style="color: #7490BD;font-weight: 400">
                                     <label class="switch">
                                         <input name="checkbox" class="check"

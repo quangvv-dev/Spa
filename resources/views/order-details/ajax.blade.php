@@ -9,14 +9,14 @@
             <th class="text-white text-center">Mã ĐH</th>
             <th class="text-white text-center">Mã KH</th>
             <th class="text-white text-center">Tên KH</th>
-            <th class="text-white text-center">SDT</th>
-            <th class="text-white text-center">Sản phẩm</th>
+            <th class="text-white text-center">SĐT</th>
+            <th class="text-white text-center">Dịch vụ</th>
             <th class="text-white text-center">Số lượng</th>
             <th class="text-white text-center">Doanh số</th>
-            <th class="text-white text-center">CK(Đ)</th>
             <th class="text-white text-center">Doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Còn lại</th>
+            <th class="text-white text-center">khuyến mại(voucher)</th>
             <th class="text-white text-center">Phương thức thanh toán</th>
             <th class="text-white text-center">Người lên đơn</th>
         </tr>
@@ -26,7 +26,7 @@
             @foreach($orders as $order)
                 <tr>
                     <td class="text-center">
-                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
+                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER||Auth::user()->role == \App\Constants\UserConstant::CSKH)
                             <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)"
                                data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
@@ -43,17 +43,13 @@
                         {{ @$order->customer->account_code }}</td>
                     <td class="text-center">{{ @$order->customer->full_name }}</td>
                     <td class="text-center">{{ @$order->customer->phone }}</td>
-                    <td class="text-center">
-                        @foreach($order->orderDetails as $orderDetail)
-                            {{ @$orderDetail->service->name }},
-                        @endforeach
-                    </td>
+                    <td class="text-center">{!! @$order->service_text !!}</td>
                     <td class="text-center">{{ $order->orderDetails->sum('quantity') }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
-                    <td class="text-center">{{ number_format($order->orderDetails->sum('number_discount')) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
+                    <td class="text-center">{{ number_format($order->discount)}}</td>
                     {{--                    <td class="text-center">{{ @$history_payment[$order->id]?@number_format($history_payment[$order->id]):0  }}</td>--}}
                     <td class="text-center">{{ $order->name_payment_type }}</td>
                     <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
@@ -68,12 +64,13 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
+                <td class="text-center"></td>
                 <td class="text-center bold">Tổng trang</td>
                 <td class="text-center bold"> {{ @number_format($allTotalPage) }} </td>
-                <td class="text-center"></td>
                 <td class="text-center bold"> {{ @number_format($grossRevenuePage) }} </td>
                 <td class="text-center bold"> {{ @number_format($grossRevenuePage) }}</td>
                 <td class="text-center bold">{{ @number_format($theRestPage) }}</td>
+                <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
             </tr>
@@ -86,12 +83,14 @@
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
+                <td class="text-center"></td>
                 <td class="text-center bold">Tổng cộng</td>
                 <td class="text-center bold"> {{ @number_format($allTotal) }} </td>
-                <td class="text-center"></td>
                 <td class="text-center bold"> {{ @number_format($grossRevenue) }} </td>
                 <td class="text-center bold"> {{ @number_format($grossRevenue) }}</td>
                 <td class="text-center bold">{{ @number_format($theRest) }}</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
                 <td class="text-center"></td>
             </tr>
         @else

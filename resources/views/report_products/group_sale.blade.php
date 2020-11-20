@@ -80,9 +80,11 @@
         tr.number_index th {
             font-size: 12px;
         }
+
         th.text-center {
             font-size: 13px;
         }
+
         tr.fixed th {
             font-size: 12px;
         }
@@ -95,16 +97,20 @@
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow" style="width: 100%; padding: 10px;">
             <div class="col-md-4 no-padd">
                 <ul class="fr mg0 pt10 no-padd">
-                    <li class="display pl5"><a data-time="THIS_WEEK" class="btn_choose_time border b-gray bg-gray active">Tuần này</a></li>
+                    <li class="display pl5"><a data-time="THIS_WEEK"
+                                               class="btn_choose_time border b-gray bg-gray active">Tuần này</a></li>
                     <li class="display pl5"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần trước</a></li>
                     <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time ">Tháng này</a></li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng trước</a></li>
                 </ul>
                 <input type="hidden" id="time_choose" value="THIS_WEEK">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="position: absolute;right: 5%">
                 {{Form::select('type',$telesales, null, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Tất cả nhân viên'))}}
             </div>
+            <a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"
+               href="javascript:void(0)">
+                <i class="fas fa-download"></i></a>
         </div>
     </div>
     <div class="col-md-12 col-lg-12 list-data">
@@ -116,7 +122,7 @@
         function searchAjax(data) {
             $('.list-data').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
-                url: window.location.href ,
+                url: window.location.href,
                 method: "get",
                 data: data,
             }).done(function (data) {
@@ -124,6 +130,12 @@
             });
         }
 
+        $(document).on('click', '.download-pdf', function (e) {
+            let time_choose = $('#time_choose').val();
+            let telesales = $('#telesales').val();
+            let url = location.href + '?data_time=' + time_choose + '&telesale_id=' + telesales + '&dowload_pdf=1';
+            location.href = url;
+        });
         $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
             let target = $(e.target).parent();
             $('a.btn_choose_time').removeClass('border b-gray bg-gray');

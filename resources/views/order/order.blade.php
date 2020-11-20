@@ -78,7 +78,7 @@
                                 </td>
                                 <td class="tc"></td>
                                 <td class="tc">{{$order->role_type==2? $orderDetail->quantity:$orderDetail->days }}</td>
-                                <td class="tc">{{ number_format(@$orderDetail->service->price_sell) }}</td>
+                                <td class="tc">{{ number_format(@$orderDetail->price) }}</td>
                                 <td class="tc">{{ $orderDetail->vat }}</td>
                                 <td class="tc">{{ $orderDetail->percent_discount }}</td>
                                 <td class="tc">{{ number_format($orderDetail->number_discount) }}</td>
@@ -86,24 +86,8 @@
                             </tr>
                         @endforeach
                         <tr>
-                            <td class="font-bold" colspan="9">Tổng</td>
-                            <td class="tr bold">{{ number_format($order->all_total) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold" colspan="9">Chiết khấu trước thuế %</td>
-                            <td class="tr">0</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold" colspan="9">Thuế VAT %</td>
-                            <td class="tr"></td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold" colspan="9">Phí vận chuyển %</td>
-                            <td class="tr">0</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold" colspan="9">Phí lắp đặt %</td>
-                            <td class="tr">0</td>
+                            <td class="font-bold" colspan="9">Khuyến mại (voucher)</td>
+                            <td class="tr bold">{{ number_format($order->discount) }}</td>
                         </tr>
                         <tr>
                             <td class="font-bold" colspan="9">Tổng cộng</td>
@@ -111,17 +95,17 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div class="require-order">
-                        <div class="pt10 pb5 bold bor-bot-matt mb10">
-                            <strong>
-                                Điều khoản đi kèm
-                            </strong>
-                        </div>
-                        <div>
-                            <div><span>1. Thời gian giao hàng:</span></div>
-                            <div><span>2. Địa điểm giao hàng:</span></div>
-                        </div>
-                    </div>
+                    {{--<div class="require-order">--}}
+                        {{--<div class="pt10 pb5 bold bor-bot-matt mb10">--}}
+                            {{--<strong>--}}
+                                {{--Điều khoản đi kèm--}}
+                            {{--</strong>--}}
+                        {{--</div>--}}
+                        {{--<div>--}}
+                            {{--<div><span>1. Thời gian giao hàng:</span></div>--}}
+                            {{--<div><span>2. Địa điểm giao hàng:</span></div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
                 </div>
             </div>
         </div>
@@ -141,7 +125,7 @@
                 <div class="box-cont col-md-12 no-padd content-pay"><h3
                             class="bor-bot uppercase font12 mg0 bold padding5">Thanh toán</h3>
                     <div class="padding col-md-12">
-                        <table>
+                        <table style="width: 100%">
                             <thead>
                             <tr>
                                 <th width="56%"></th>
@@ -154,17 +138,26 @@
                                 <td class="tr mb5" id="all_total">{{ number_format($order->all_total) }}</td>
                             </tr>
                             <tr>
-                                <td class="mb5">Doanh thu:</td>
+                                <td class="mb5">Đã thanh toán:</td>
                                 <td class="tr mb5" id="gross_revenue">{{ number_format($order->gross_revenue) }}</td>
                             </tr>
+                            {{--<tr>--}}
+                                {{--<td class="mb5">Thực tế phải thanh toán:</td>--}}
+                                {{--<td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>--}}
+                            {{--</tr>--}}
                             <tr>
-                                <td class="mb5">Thực tế phải thanh toán:</td>
-                                <td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>
+                                <td class="mb5">Khuyến mại (voucher):</td>
+                                <td class="tr mb5" id="all_total1">{{ number_format($order->discount) }}</td>
                             </tr>
                             <tr>
-                                <td class="mb5">Đã thanh toán:</td>
-                                <td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>
-                            </tr><tr>
+                                <td class="mb5">Chiết khấu :</td>
+                                <td class="tr mb5" id="all_total1">{{ number_format($order->discount_order) }}</td>
+                            </tr>
+                            {{--<tr>--}}
+                                {{--<td class="mb5">Đã thanh toán:</td>--}}
+                                {{--<td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>--}}
+                            {{--</tr>--}}
+                            <tr>
                                 <td class="mb5">Còn lại:</td>
                                 <td class="tr mb5" id="the_rest">{{ number_format($order->the_rest) }}</td>
                             </tr>

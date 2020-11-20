@@ -29,7 +29,7 @@ class OrderDetailService
                 'order_id'        => $orderId,
                 'user_id'         => $data['user_id'],
                 'booking_id'      => $data['service_id'][$key],
-                'days'            => isset($data['days']) && count($data['days'])? $data['days'][$key]:0,
+                'days'            => isset($data['days']) && count($data['days'])? $data['days'][$key] - 1:0,
                 'quantity'        => $data['quantity'][$key],
                 'price'           => replaceNumberFormat($data['price'][$key]),
                 'vat'             => $data['vat'][$key],
@@ -41,7 +41,6 @@ class OrderDetailService
 
             $service->update(['description' => $data['service_note'][$key]]);
         }
-
         if (!empty($dataArr)) {
             $model = OrderDetail::insert($dataArr);
 
@@ -55,7 +54,6 @@ class OrderDetailService
             return false;
         }
         $dataArr = [];
-
         foreach ($data['service_id'] as $key => $value) {
             $dataArr[] = [
                 'id'              => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key] : '',
@@ -74,7 +72,6 @@ class OrderDetailService
 
             $service->update(['description' => $data['service_note'][$key]]);
         }
-
         OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
         foreach ($dataArr as $item) {
             if (!empty($item['id'])) {

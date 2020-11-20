@@ -3,19 +3,14 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
-use App\Constants\StatusCode;
-use App\Constants\UserConstant;
-use App\Helpers\Functions;
 use App\Http\Requests\UserRequest;
-use App\Models\Category;
 use App\Models\Department;
-use App\Models\Status;
 use App\Services\UserService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+
 
 class UserController extends Controller
 {
@@ -35,8 +30,8 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
@@ -65,10 +60,8 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param User                     $user
-     *
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(UserRequest $request)
     {
@@ -108,10 +101,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param User                     $user
-     *
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(UserRequest $request, $id)
     {
@@ -125,12 +117,11 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete
      *
      * @param Request $request
-     * @param User    $user
-     *
-     * @return void
+     * @param User $user
+     * @throws \Exception
      */
     public function destroy(Request $request, User $user)
     {
@@ -138,6 +129,12 @@ class UserController extends Controller
         $request->session()->flash('error', 'Xóa người dùng thành công!');
     }
 
+    /**
+     * Check trùng data
+     *
+     * @param Request $request
+     * @return string
+     */
     public function checkUnique(Request $request)
     {
         $phone = $request->phone;

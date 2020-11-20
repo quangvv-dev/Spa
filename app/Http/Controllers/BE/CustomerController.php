@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
+use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\CustomerPost;
@@ -62,7 +63,12 @@ class CustomerController extends Controller
             }
             return $item;
         });
+        $the_rest = [
+            OrderConstant::THE_REST => 'Còn nợ',
+            OrderConstant::NONE_REST => 'Đã thanh toán',
+        ];
         view()->share([
+            'the_rest' => $the_rest,
             'status' => $status,
             'group' => $group,
             'source' => $source,
@@ -83,16 +89,23 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $statuses = Status::getRelationshipByCustomer($input);
         $customers = Customer::search($input);
-        $categories = Category::with('customers')->get();
+        if (isset($input['limit'])) {
+            $customers = $customers->latest()->paginate($input['limit']);
+        } else {
+            $customers = $customers->paginate(StatusCode::PAGINATE_20);
+
+        }
+        $statuses = Status::getRelationshipByCustomer($input);
+        $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
+        $categories_product = Category::where('type', StatusCode::PRODUCT)->with('customers')->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
             return Response::json(view('customers.ajax',
-                compact('customers', 'statuses', 'rank', 'categories'))->render());
+                compact('customers', 'statuses', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'categories_product'));
     }
 
     /**
@@ -224,11 +237,15 @@ class CustomerController extends Controller
             $package = PackageWallet::pluck('name', 'id')->toArray();
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
+        if ($request->schedules) {
+            return Response::json(view('schedules.index', compact('schedules', 'id', 'group', 'staff'))->render());
+        }
 
-        if ($request->member_id || $request->role_type) {
-            $params = $request->only('member_id', 'role_type');
+        if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
+            if (!empty($request->page_order)) $request->merge(['page' => $request->page_order]);
+            $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
-            return Response::json(view('customers.order', compact('orders','waiters'))->render());
+            return Response::json(view('customers.order', compact('orders', 'waiters'))->render());
         }
         //END
 
@@ -317,17 +334,13 @@ class CustomerController extends Controller
     {
         $now = Carbon::now()->format('d/m/Y');
         $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
-        //        $rq = $request->all();
-//        if ($rq['search']) {
-//            $data = $data->where('name', 'like', '%' . $rq['search'] . '%')
-//                ->orWhere('email', 'like', '%' . $rq['search'] . '%')
-//                ->orWhere('phone', 'like', '%' . $rq['search'] . '%');
-//        }
-        if ($request->status != StatusCode::ALL) {
-            $data = $data->where('status_id', $request->status)->get();
-        } else {
-            $data = $data->get();
-        }
+        $data = $data->when(!empty($request->group), function ($query) use ($request) {
+            $arr = CustomerGroup::where('category_id', $request->group)->pluck('customer_id')->toArray();
+            $query->whereIn('id', $arr);
+        })->when(!empty($request->status), function ($query) use ($request) {
+            $query->where('status_id', $request->status);
+        })->get();
+
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
                 $sheet->cell('A1:Q1', function ($row) {
@@ -393,45 +406,48 @@ class CustomerController extends Controller
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
-                    $date = Carbon::createFromFormat('d/m/Y H:i:s', $row['ngay_tao_kh'])->format('Y-m-d H:i:s');
-                    $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
-                    $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
-                    $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
-                    $check = Customer::where('phone', $row['so_dien_thoai'])->first();
-                    $category = explode(',', $row['nhom_khach_hang']);
-                    if (empty($check)) {
-                        if ($row['so_dien_thoai']) {
-                            $data = Customer::create([
-                                'full_name' => $row['ten_khach_hang'],
-                                'account_code' => $row['ma_khach_hang'],
-                                'mkt_id' => @Auth::user()->id,
-                                'telesales_id' => isset($telesale) ? $telesale->id : 1,
-                                'status_id' => isset($status) ? $status->id : 1,
-                                'source_id' => isset($source) ? $source->id : 18,
-                                'phone' => $row['so_dien_thoai'],
-                                'birthday' => $row['sinh_nhat'],
-                                'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
-                                'address' => $row['dia_chi'] ?: '',
-                                'facebook' => $row['link_facebook'] ?: '',
-                                'description' => $row['mo_ta'],
-                                'created_at' => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
-                                'updated_at' => isset($date) && $date ? $date : Carbon::now()->format('Y-m-d H:i:s'),
-                            ]);
-
-                            if (count($category)) {
-                                foreach ($category as $item) {
-                                    $field = Category::where('name', 'like',
-                                        '%' . $item . '%')->first();
+                    if (!empty($row['so_dien_thoai'])) {
+                        $date = Carbon::createFromFormat('d/m/Y', $row['ngay_tao_kh'])->format('Y-m-d');
+                        $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
+                        $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
+                        $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
+                        $check = Customer::where('phone', $row['so_dien_thoai'])->withTrashed()->first();
+                        $category = explode(',', $row['nhom_khach_hang']);
+                        if (empty($check)) {
+                            if ($row['so_dien_thoai']) {
+                                $data = Customer::create([
+                                    'full_name' => $row['ten_khach_hang'],
+                                    'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : '',
+                                    'mkt_id' => @Auth::user()->id,
+                                    'telesales_id' => isset($telesale) ? $telesale->id : 1,
+                                    'status_id' => isset($status) ? $status->id : 1,
+                                    'source_id' => isset($source) ? $source->id : 18,
+                                    'phone' => $row['so_dien_thoai'],
+                                    'birthday' => $row['sinh_nhat'],
+                                    'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                                    'address' => $row['dia_chi'] ?: '',
+                                    'facebook' => $row['link_facebook'] ?: '',
+                                    'description' => $row['mo_ta'],
+                                    'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                    'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                ]);
+                                if (count($category)) {
+                                    foreach ($category as $item) {
+                                        $field = Category::where('name', 'like',
+                                            '%' . $item . '%')->first();
+                                        if (isset($field) && $field) {
+                                            CustomerGroup::create([
+                                                'customer_id' => $data->id,
+                                                'category_id' => isset($field) ? $field->id : 0,
+                                            ]);
+                                        }
+                                    }
+                                } else {
+                                    CustomerGroup::create([
+                                        'customer_id' => $data->id,
+                                        'category_id' => 0,
+                                    ]);
                                 }
-                                CustomerGroup::create([
-                                    'customer_id' => $data->id,
-                                    'category_id' => isset($field) ? $field->id : 25,
-                                ]);
-                            } else {
-                                CustomerGroup::create([
-                                    'customer_id' => $data->id,
-                                    'category_id' => 25,
-                                ]);
                             }
                         }
                     }

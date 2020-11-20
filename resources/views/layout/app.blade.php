@@ -28,6 +28,7 @@
         background: #fff;
         border-right: 1px solid #e7effc !important;
         border-left: 1px solid #e7effc !important;
+        border-bottom: 1px solid #e7effc !important;
     }
     label.required:after {
         content: " *";
@@ -44,6 +45,9 @@
         </div>
     </div>
 </div>
+@php
+    $permissions = setting('permissions');
+@endphp
 <div class="page">
     <div class="page-main">
         <!-- Navbar-->

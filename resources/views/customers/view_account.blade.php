@@ -218,14 +218,14 @@
                                     <div class="tabs-menu1 ">
                                         <!-- Tabs -->
                                         <ul class="nav panel-tabs">
-                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
-                                            </li>
-                                            <li><a href="#tab7" data-toggle="tab">Lịch hẹn</a></li>
-                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Đơn hàng</a></li>
+                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a></li>
+                                            <li><a href="#tab7" id="click_tab_7" data-id="{{$customer->id}}" data-toggle="tab">Lịch hẹn</a></li>
+                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}" data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
-                                            <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Ví tiền</a></li>
+                                            @if(empty($permissions) || !in_array('package.customer',$permissions))
+                                                <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
+                                                       data-toggle="tab">Ví tiền</a></li>
+                                            @endif
                                             <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Tin nhắn</a></li>
                                             <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
@@ -287,19 +287,26 @@
                                             </div>
                                         </div>
                                         <div class="tab-pane " id="tab6">
-                                            <div class="card-header">
-                                                <div class="col">
-                                                    <a href="javascript:void(0)" data-value=""
-                                                       class="type-order btn btn-warning">Tất cả</a>
-                                                    <a href="javascript:void(0)" data-value="1"
-                                                       class="type-order btn btn-success">Dịch vụ</a>
-                                                    <a href="javascript:void(0)" data-value="2"
-                                                       class="type-order btn btn-danger">Sản phẩm</a>
-                                                    <a href="javascript:void(0)" data-value="3"
-                                                       class="type-order btn btn-info">Combo</a>
+                                            <div class="card-header row">
+                                                <div class="col-md-8" style="display: flex">
+                                                    <div class="button">
+                                                        <a href="javascript:void(0)" data-value=""
+                                                           class="type-order btn btn-warning">Tất cả</a>
+                                                        <a href="javascript:void(0)" data-value="1"
+                                                           class="type-order btn btn-success">Dịch vụ</a>
+                                                        <a href="javascript:void(0)" data-value="2"
+                                                           class="type-order btn btn-danger">Sản phẩm</a>
+                                                        <a href="javascript:void(0)" data-value="3"
+                                                           class="type-order btn btn-info">Combo</a>
+                                                    </div>
+                                                    <input type="hidden" id="order_value">
+                                                    <div class="select" style="margin-left: 4px">
+                                                        {!! Form::select('the_rest', $the_rest, null, array('class' => 'form-control','id'=>'the_rest','placeholder'=>'Tất cả đơn')) !!}
+                                                    </div>
+
                                                 </div>
                                                 <div class="col relative">
-                                                    @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER)
+                                                    @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER||Auth::user()->role == \App\Constants\UserConstant::CSKH)
                                                         <a class="right btn btn-primary btn-flat" data-toggle="modal"
                                                            data-target="#roleTypeModal"><i
                                                                 class="fa fa-plus-circle"></i>Thêm mới</a>
@@ -316,6 +323,9 @@
                                         <div class="tab-pane" id="tab7">
                                             @include('schedules.index')
                                         </div>
+                                        {{--    Modal thêm --}}
+                                        @include('schedules.modal')
+                                        {{--    END Modal thêm --}}
                                         <div class="tab-pane " id="tab8">
                                             <a style="color: #ffffff;margin-bottom: 8px;"
                                                class="right btn btn-primary btn-flat" data-toggle="modal"
@@ -358,6 +368,31 @@
 
     <script type="text/javascript">
         // $(document).ready(function () {
+        $(document).on('click', '#save_schedules', function (e) {
+            let name = $('#update_status :selected').text();
+            let ids = $('#update_id').val();
+            $.post($('.formUpdateSchedule').attr('action'), $('.formUpdateSchedule').serialize(), function (data) {
+                $('#updateModal').modal('hide');
+            });
+            $(".status[data-id='" + ids +"']").html(name);
+        })
+        $(document).on('click', '#click_tab_7', function () {
+            const id = $(this).data('id');
+            $('#tab7').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {schedules:1,member_id: id}
+            }).done(function (data) {
+                $('#tab7').html(data);
+            });
+            // $('[data-toggle="datepicker"]').datepicker({
+            //     format: 'dd-mm-yyyy',
+            //     autoHide: true,
+            //     zIndex: 2048,
+            // });
+        })
+
         $(document).on('click', '#click_tab_6', function () {
             const id = $(this).data('id');
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
@@ -372,6 +407,7 @@
 
         $(document).on('click', '.type-order', function () {
             const id = $(this).data('value') > 0 ? $(this).data('value') : "";
+            $('#order_value').val(id).change();
             let urls = location.href.split('/');
             let customer = urls[urls.length - 1];
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
@@ -382,6 +418,35 @@
             }).done(function (data) {
                 $('#order_customer').html(data);
             });
+        })
+        $(document).on('change', '#the_rest', function () {
+            let id = $(this).val();
+            let urls = location.href.split('/');
+            let customer = urls[urls.length - 1];
+            $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {the_rest: id, member_id: customer}
+            }).done(function (data) {
+                $('#order_customer').html(data);
+            });
+        })
+        $(document).on('click', '.page-link', function () {
+            let id = $(this).html();
+            let the_rest = $('#the_rest').val();
+            let role_type = $('#order_value').val();
+            let urls = location.href.split('/');
+            let customer = urls[urls.length - 1];
+            $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {the_rest: the_rest, role_type: role_type, page_order: id, member_id: customer}
+            }).done(function (data) {
+                $('#order_customer').html(data);
+            });
+            return false
         })
 
         $(document).on('click', '#click_tab_9', function () {
@@ -526,10 +591,10 @@
                 $('#largeModal').modal("show");
             });
 
-            $(document).change('#list_service',function () {
+            $(document).change('#list_service', function () {
                 let id = $('#list_service').val();
                 let html = '';
-                console.log(id,'idđ');
+                console.log(id, 'idđ');
                 historys.forEach(function (item, index) {
                     let name = item.service != null ? item.service.name : '';
                     let service_id = item.service != null ? item.service.id : 0;
@@ -543,7 +608,7 @@
                     if (item.type == 2) {
                         name_type = 'Đang bảo lưu';
                     }
-                    if (service_id == id || id == 0){
+                    if (service_id == id || id == 0) {
                         html += '<tr >' + '<td class="text-center">' + index + '</td>' +
                             '<td class="text-center">' + item.created_at + '</td>' +
                             '<td class="text-center">' + item.user.full_name + '</td>' +
@@ -553,8 +618,8 @@
                             '<td class="text-center"><a class="sum_history_order" href="javascript:void(0)" data-id="' + item.id + '"data-type="' + item.type + '"data-order="' + item.order_id + '"> <i class="fas fa-trash-alt"></i></a></td>' + '</tr>';
                     }
                 });
-                let detail = order_details.filter(f=>f.booking_id == id);
-                $('#count_service').html(detail.length>0?'Số buổi còn lại: '+detail[0].days:'');
+                let detail = order_details.filter(f => f.booking_id == id);
+                $('#count_service').html(detail.length > 0 ? 'Số buổi còn lại: ' + detail[0].days : '');
                 $('.data-history-update-order').html(html);
 
             });
@@ -745,9 +810,10 @@
                 });
             });
 
-            $('.update').on('click', function () {
-                const id = $(this).attr("data-id");
-                const link = 'schedules/edit/' + id;
+            $('body').delegate('.update', 'click', function (e) {
+                let id = $(this).attr("data-id");
+                let link = 'schedules/edit/' + id;
+                console.log(123,parent);
                 $.ajax({
                     url: window.location.origin + '/' + link,
                     method: "get",
@@ -759,7 +825,7 @@
                     $('#update_status').val(data['status']);
                     $('#update_note').val(data['note']);
                     $('#update_action').val(data['person_action']).change();
-                    ;
+
                 });
             });
             $('[data-toggle="datepicker"]').datepicker({

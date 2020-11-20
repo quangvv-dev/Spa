@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\OrderConstant;
 use App\Helpers\Functions;
 use App\User;
 use Carbon\Carbon;
@@ -85,6 +86,13 @@ class Order extends Model
                             ->orWhere('phone', 'like', '%' . $input['customer'] . '%');
                     });
                 })
+                ->when(isset($input['the_rest']), function ($query) use ($input) {
+                    if ($input['the_rest'] == OrderConstant::THE_REST) {
+                        $query->where('the_rest', '>', 0);
+                    } elseif ($input['the_rest'] == OrderConstant::NONE_REST) {
+                        $query->where('the_rest', 0);
+                    }
+                })
                 ->when(isset($input['payment_type']), function ($query) use ($input) {
                     $query->whereNotNull('payment_type')->where('payment_type', $input['payment_type']);
                 })
@@ -125,10 +133,10 @@ class Order extends Model
                 })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
-                });
+                })->orderByDesc('id');
         }
 
-        return $data->paginate(10);
+        return $data->paginate(5);
     }
 
     public static function searchAll($input)
@@ -244,6 +252,13 @@ class Order extends Model
             return "Liệu trình";
         }
 
+    }
+
+    public function getServiceTextAttribute()
+    {
+        $raw = OrderDetail::where('order_id', $this->id)->pluck('booking_id')->toArray();
+        $service = Services::whereIn('id', $raw)->pluck('name')->toArray();
+        return count($service) ? implode($service, '<br>') : '';
     }
 
     public static function boot()

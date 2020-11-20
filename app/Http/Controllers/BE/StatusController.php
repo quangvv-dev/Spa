@@ -15,10 +15,10 @@ class StatusController extends Controller
     public function __construct()
     {
         $types_pluck = [
-            ''                          => '-Chọn loại nhớm-',
+            '' => '-Chọn loại nhớm-',
             StatusCode::SOURCE_CUSTOMER => 'Nguồn khách hàng',
-            StatusCode::RELATIONSHIP    => 'Mối quan hệ',
-            StatusCode::BRANCH          => 'Chi nhánh',
+            StatusCode::RELATIONSHIP => 'Mối quan hệ',
+            StatusCode::BRANCH => 'Chi nhánh',
         ];
 
         view()->share([
@@ -36,9 +36,9 @@ class StatusController extends Controller
         $docs = Status::orderBy('position', 'asc');
         if ($request->search) {
             $docs = $docs->where('name', 'like', '%' . $request->search . '%')
-                ->orwhere('type', 'like', '%' . $request->search. '%');
+                ->orwhere('type', 'like', '%' . $request->search . '%');
         }
-        $docs = $docs->paginate(15);
+        $docs = $docs->paginate(StatusCode::PAGINATE_20);
         $title = 'Quản lý trạng thái';
         if ($request->ajax()) {
             return Response::json(view('status.ajax', compact('docs', 'title'))->render());
@@ -102,7 +102,7 @@ class StatusController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Status                   $status
+     * @param Status $status
      *
      * @return \Illuminate\Http\Response
      */
@@ -117,14 +117,18 @@ class StatusController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Status $status
+     * @throws \Exception
      */
     public function destroy(Request $request, Status $status)
     {
-        $status->delete();
-        $request->session()->flash('error', 'Xóa danh mục thành công!');
+        if ($status->customers->count() == 0) {
+            $status->delete();
+            $request->session()->flash('error', 'Xóa danh mục thành công!');
+        } else {
+            $request->session()->flash('error', 'Tồn tại khách hàng thuộc nhóm. Không thể xóa!');
+        }
     }
 
     public function getList(Request $request)
@@ -134,20 +138,31 @@ class StatusController extends Controller
         $statuses = Status::get();
 
         return $data = [
-                'customer' => $customer,
-                'data' => $statuses
-            ];
+            'customer' => $customer,
+            'data' => $statuses
+        ];
     }
+
+    /**
+     * sap xep thu tu hien thi
+     *
+     * @param Request $request
+     */
     public function updatePostion(Request $request)
     {
         $data = $request->all();
         foreach ($data['data'] as $key => $record) {
-            Status::where('id',$record['id'])->update(['position'=>$record['position']]);
+            Status::where('id', $record['id'])->update(['position' => $record['position']]);
         }
     }
+
+    /**
+     * cap nhat mau sac trang thai
+     *
+     * @param Request $request
+     */
     public function updateColor(Request $request)
     {
-        $data = $request->id;
         $color = Status::find($request->id);
         $color->color = $request->color;
         $color->save();

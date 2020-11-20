@@ -44,7 +44,7 @@
                     <div class="col-sm-6">
                         <img src="assets/images/brand/logo_login.png" class="logo" alt="">
                         <address style="font-size: 14px">
-                            <strong style="font-size: 14px">LINH ANH SPA</strong><br>
+                            <strong style="font-size: 14px">ROYAL SPA</strong><br>
                             ĐCGD: . <br>
                             ĐT:
                             - Fax: <br>

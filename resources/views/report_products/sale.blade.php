@@ -1,6 +1,5 @@
 @extends('layout.app')
 @section('_style')
-    {{--<link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>--}}
     <style>
         .bxh-container {
             position: relative;
@@ -159,8 +158,11 @@
                     <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
                             trước</a></li>
                 </ul>
-                <input type="hidden" id="time_choose" value="TODAY">
+                <input type="hidden" id="time_choose" value="THIS_MONTH">
             </div>
+            <a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"
+               href="javascript:void(0)">
+                <i class="fas fa-download"></i></a>
         </div>
     </div>
     <div class="col-md-12 col-lg-12 list-data">
@@ -175,7 +177,6 @@
             $('a.btn_choose_time').removeClass('border b-gray');
             $(target).find('.btn_choose_time').addClass('border b-gray');
             const data_time = $(target).find('.btn_choose_time').data('time');
-            console.log(data_time, 'data');
             $.ajax({
                 url: "{{ Url('report/sales') }}",
                 method: "get",
@@ -185,6 +186,11 @@
             }).done(function (data) {
                 $('.list-data').html(data);
             });
+        });
+        $(document).on('click', '.download-pdf', function (e) {
+            let time_choose = $('#time_choose').val();
+            let url = location.href + '?data_time=' + time_choose + '&dowload_pdf=1';
+            location.href = url;
         });
     </script>
 @endsection

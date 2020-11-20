@@ -67,7 +67,7 @@
         @foreach(@$statuses as $k => $item)
             <button class="status btn white account_relation position" data-name="{{$item->name}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                        class="not-number-account white">{{ $item->customers->count() }}</span></button>
+                        class="not-number-account white">{{ @$item->customers_count }}</span></button>
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
@@ -125,7 +125,7 @@
         </div>
     </div>
 </div>
-<div class="table-responsive" style="position: relative">
+<div class="table-responsive" style="position: relative;font-size: 12px">
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
         <thead class="bg-primary text-white">
         <tr>
@@ -135,7 +135,7 @@
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Nhóm KH</th>
-            <th class="text-white text-center" style="width: 200px">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+            <th class="text-white text-center" style="width: 200px">&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
             <th class="text-white text-center">Ngày sinh</th>
@@ -167,13 +167,12 @@
                               style="background-color: #ee630c!important;">2</span>
                     </td>
                     <td class="text-center">{{ $customer->phone }}</td>
-                    <td class="text-center category-db"
-                        data-id="{{$customer->id}}">
+                    <td class="text-center category-db" data-id="{{$customer->id}}">
                         @foreach($customer->categories as $category)
-                            {{ $category->name }},
+                            {{ $category->name }}
                         @endforeach
                     </td>
-                    <td class="text-center " data-id="{{$customer->id}}"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+                    <td class="text-center " data-id="{{$customer->id}}">&nbsp; &nbsp; &nbsp; &nbsp;</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description-cus" data-id="{{$customer->id}}"
@@ -202,7 +201,7 @@
         </tbody>
     </table>
 </div>
-<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;">
+<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
             <thead class="bg-primary text-white">
@@ -237,9 +236,7 @@
                             data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
                         <td class="text-center category-db"
                             data-id="{{$customer->id}}">
-                            @foreach($customer->categories as $category)
-                                {{ $category->name }},
-                            @endforeach
+                            {{str_limit($customer->group_text,30)}}
                         </td>
                         <td class="text-center status-db"
                             data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>

@@ -42,7 +42,4 @@
     <div class="pull-right">
         {{ $schedules->appends(['search' => request()->search ])->links() }}
     </div>
-    {{--    Modal thêm --}}
-    @include('schedules.modal')
-    {{--    END Modal thêm --}}
 </div>

@@ -43,15 +43,6 @@
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
                        type="text" id="search">
                 <div class="col-md-2 col-xs-12">
-                    {{--                    {!! Form::select('group', $group, null, array('class' => 'form-control group','placeholder'=>'Chọn nhóm DV')) !!}--}}
-                    <select name="group" class="form-control group">
-                        <option value="">Chọn nhóm DV</option>
-                        @foreach($categories as $item)
-                            <option value="{{$item->id}}">{{ $item->name}}({{ $item->customers->count() }})</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2 col-xs-12">
                     <select name="telesales_id" id="telesales_id" class="form-control telesales">
                         <option value="">Chọn nhân viên</option>
                         @foreach($telesales as $k => $l)
@@ -64,11 +55,28 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col relative" >
-                    <a title="Upload Data" style="position: absolute;right: 50%" class="btn" href="#"
+                <div class="col-md-2 col-xs-12">
+                    <select name="group" class="form-control group">
+                        <option value="">Nhóm dịch vụ</option>
+                        @foreach($categories as $item)
+                            <option value="{{$item->id}}">{{ $item->name}}({{ $item->customers->count() }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2 col-xs-12">
+                    <select name="group_product" class="form-control group-product">
+                        <option value="">Nhóm sản phẩm</option>
+                        @foreach($categories_product as $item)
+                            <option value="{{$item->id}}">{{ $item->name}}({{ $item->customers->count() }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col relative">
+                    <a title="Upload Data" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
-                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}}status-db title="Download Data" style="position: absolute;right: 42%" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
+                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}}status-db
+                       title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
                     @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::MARKETING ||
 \Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
@@ -90,6 +98,7 @@
             <input type="hidden" id="status">
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
+            <input type="hidden" id="group_product">
             <input type="hidden" id="telesales">
             <input type="hidden" id="search_value">
             <input type="hidden" id="btn_choose_time">
@@ -99,7 +108,7 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $( "#search" ).focus();
+        $("#search").focus();
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
                 e.preventDefault();
@@ -368,15 +377,18 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales', delay(function () {
-                const group = $('.group').val();
-                const telesales = $('.telesales').val();
-                const search = $('#search_value').val();
+            $(document).on('change', '.group, .telesales, .group-product', delay(function () {
+                let group_product = $('.group-product').val();
+                let group = $('.group').val();
+                let telesales = $('.telesales').val();
+                let search = $('#search_value').val();
                 $('#group').val(group);
+                $('#group_product').val(group);
                 $('#telesales').val(telesales);
                 $('#birthday_tab').val('');
                 const data_time = $('#btn_choose_time').val();
                 const status = $('#status').val();
+                group = group ? group : group_product;
 
                 let data = {
                     group: group,
@@ -595,9 +607,10 @@
             });
 
             $('body').not('.category-result').on('change', function (e) {
-                if (!($('.category-result').parent().find('span.select2-container--focus').length) &&
+                if (!($('.category-result').parent().find('span.select2-container--focus').length) ||
                     $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
                 ) {
+
                     let category_ids = $(e.target).parent().find('.category-result').val();
                     let id = $(e.target).parent().find('.category-result').data('id');
 
@@ -874,7 +887,7 @@
                 });
             });
 
-            @if(\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| \Illuminate\Support\Facades\Auth::user()->phone=='0977508510')
+            @if(Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER ))
             $(document).on('dblclick', '.telesale-customer', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.telesale-customer').empty();

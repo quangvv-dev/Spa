@@ -7,20 +7,16 @@ use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
-use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
-use App\Models\Task;
-use App\Models\TaskStatus;
 use App\Services\TaskService;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
+use Dompdf\Dompdf;
 
 class SalesController extends Controller
 {
@@ -66,16 +62,16 @@ class SalesController extends Controller
             $request->merge(['telesales' => $item->id]);
             $detail = PaymentHistory::search($request->all());
 
-            $item->customer_new     = $data_new->get()->count();
-            $item->order_new        = $order_new->count();
-            $item->order_old        = $order_old->count();
-            $item->revenue_new      = $order_new->sum('all_total');
-            $item->revenue_old      = $order->sum('all_total') - $order_new->sum('all_total');
-            $item->payment_revenue  = $order->sum('gross_revenue');
-            $item->payment_new      = $order_new->sum('gross_revenue');//da thu trong ky
-            $item->payment_old      = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
-            $item->revenue_total    = $order->sum('all_total');
-            $item->all_payment      = $detail->sum('price');
+            $item->customer_new = $data_new->get()->count();
+            $item->order_new = $order_new->count();
+            $item->order_old = $order_old->count();
+            $item->revenue_new = $order_new->sum('all_total');
+            $item->revenue_old = $order->sum('all_total') - $order_new->sum('all_total');
+            $item->payment_revenue = $order->sum('gross_revenue');
+            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
+            $item->payment_old = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
+            $item->revenue_total = $order->sum('all_total');
+            $item->all_payment = $detail->sum('price');
             return $item;
         })->sortByDesc('all_payment');
         \View::share([
@@ -83,6 +79,10 @@ class SalesController extends Controller
             'grossRevenue' => $users->sum('payment_revenue'),
         ]);
 
+        if (!empty($request->dowload_pdf)) {
+            $pdf = \PDF::loadView('report_products.sale_pdf', compact('users'))->setPaper('A3', 'landscape');
+            return $pdf->download('sale.pdf');
+        }
         if ($request->ajax()) {
             return view('report_products.ajax_sale', compact('users'));
         }
@@ -119,7 +119,6 @@ class SalesController extends Controller
                 $item->schedules_old = Schedule::select('id')->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
             }
 
-
             $order = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
             $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');//doanh so
             $order_old = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
@@ -145,6 +144,10 @@ class SalesController extends Controller
             'grossRevenue' => $users->sum('payment_revenue'),
         ]);
 
+        if (!empty($request->dowload_pdf)) {
+            $pdf = \PDF::loadView('report_products.category_pdf', compact('users', 'telesales'))->setPaper('A4', 'landscape');
+            return $pdf->download('category_report.pdf');
+        }
         if ($request->ajax()) {
             return view('report_products.ajax_group', compact('users', 'telesales'));
         }
