@@ -4,6 +4,13 @@
         tfoot td {
             border: none !important;
         }
+        td input.form-control {
+            font-size: 14px;
+        }
+
+        td select.form-control {
+            font-size: 14px;
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -80,7 +87,8 @@
                             <th class="text-white text-center">Số buổi</th>
                             <th class="text-white text-center">Đơn giá</th>
                             <th class="text-white text-center">VAT (%)</th>
-                            <th class="text-white text-center">CK (đ)</th>
+                            <th class="text-white text-center">CK(%)</th>
+                            <th class="text-white text-center" style="width: 100px">CK(đ)</th>
                             <th class="text-white text-center">Thành tiền</th>
                             <th class="text-white text-center"></th>
                         </tr>
@@ -188,6 +196,9 @@
                                     {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                                 </td>
                                 <td class="text-center">
+                                    <input type="text" class="form-control CK1" value="0">
+                                </td>
+                                <td class="text-center">
                                     {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                                 </td>
                                 <td class="text-center">
@@ -204,7 +215,7 @@
                             <td>
                                 <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm dịch vụ</a></div>
                             </td>
-                            <td colspan="4">
+                            <td colspan="5">
                                 @if(empty($order))
                                 <a href="javascript:void(0)" id="get_Voucher" class="right">
                                     <i class="fa fa-check-square text-primary"></i> Chọn Voucher KM !!!</a>
@@ -213,7 +224,7 @@
                             <td colspan="2"></td>
                         </tr>
                         <tr>
-                            <td rowspan="2" colspan="4">
+                            <td rowspan="2" colspan="5">
                                 <div class="col row">
                                     {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
 
@@ -250,11 +261,23 @@
                             </td>
                         </tr>
                         <tr class="bold">
-                            {{--<td colspan="4">--}}
+                            <td class="text-center"><b>Chiết khấu tổng đơn (VNĐ)</b></td>
+                            <td class="text-center">
+                                @if(empty($order))
+                                    <input type="number" max="100" min="0" value="0" id="discount_percent" >(%)
+                                @endif
+                            </td>
+                            <td class="text-center"
+                                id="all_discount_order">{{isset($order)?@number_format($order->discount_order):0}}
+                            </td>
+                            <input type="hidden" name="discount_order" id="discount_order" value="0">
 
-                            {{--</td>--}}
+                        </tr>
+                        <tr class="bold">
+                            <td colspan="5"></td>
                             <td class="text-center"><b>Tổng thanh toán (VNĐ)</b></td>
-                            <td class="text-center" id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>
+                            <td class="text-center"
+                                id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>
                             <td></td>
                         </tr>
                         </tfoot>
@@ -309,6 +332,9 @@
                     <td class="text-center">
 {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                     </td>
+                    <td class="text-center">
+            <input type="text" class="form-control CK1" value="0">
+                </td>
                     <td class="text-center">
 {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                     </td>
@@ -389,7 +415,12 @@
             let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
             let CK2 = $(target).find('.CK2').val();
+            let CK1 = $(target).find('.CK1').val();
+
             price = replaceNumber(price);
+            if (CK1 > 0) {
+                CK2 = CK1 * price / 100;
+            }
             let total_service = parseInt(price) + parseInt(price) * (VAT / 100) - parseInt(replaceNumber(CK2));
             $(target).find('.price').val(formatNumber(price));
             $(target).find('.CK2').val(formatNumber(CK2));
@@ -538,6 +569,18 @@
                 }
             });
         })
+        $(document).on('change', '#discount_percent', function (e) {
+            let money = $(this).val()?$(this).val():0;
+            let old_money = $('#discount_order').val();
+            value_total = parseInt(old_money) + parseInt(replaceNumber(value_total));
+            money = parseInt(money) * parseInt(value_total) / 100;
+            $('#discount_order').val(money);
+            $('#all_discount_order').html(formatNumber(money));
+            value_total = replaceNumber(value_total) - money;
 
+            console.log(old_money, value_total, 'old');
+            $('#sum_total').html(formatNumber(value_total));
+            console.log(money, 'money-discount');
+        });
     </script>
 @endsection

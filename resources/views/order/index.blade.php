@@ -510,7 +510,6 @@
             console.log(old_money, value_total, 'old');
             $('#sum_total').html(formatNumber(value_total));
             console.log(money, 'money-discount');
-        })
-        ;
+        });
     </script>
 @endsection

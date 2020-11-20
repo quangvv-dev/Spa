@@ -138,21 +138,26 @@
                                 <td class="tr mb5" id="all_total">{{ number_format($order->all_total) }}</td>
                             </tr>
                             <tr>
-                                <td class="mb5">Doanh thu:</td>
+                                <td class="mb5">Đã thanh toán:</td>
                                 <td class="tr mb5" id="gross_revenue">{{ number_format($order->gross_revenue) }}</td>
                             </tr>
-                            <tr>
-                                <td class="mb5">Thực tế phải thanh toán:</td>
-                                <td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>
-                            </tr>
+                            {{--<tr>--}}
+                                {{--<td class="mb5">Thực tế phải thanh toán:</td>--}}
+                                {{--<td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>--}}
+                            {{--</tr>--}}
                             <tr>
                                 <td class="mb5">Khuyến mại (voucher):</td>
                                 <td class="tr mb5" id="all_total1">{{ number_format($order->discount) }}</td>
                             </tr>
                             <tr>
-                                <td class="mb5">Đã thanh toán:</td>
-                                <td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>
-                            </tr><tr>
+                                <td class="mb5">Chiết khấu :</td>
+                                <td class="tr mb5" id="all_total1">{{ number_format($order->discount_order) }}</td>
+                            </tr>
+                            {{--<tr>--}}
+                                {{--<td class="mb5">Đã thanh toán:</td>--}}
+                                {{--<td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>--}}
+                            {{--</tr>--}}
+                            <tr>
                                 <td class="mb5">Còn lại:</td>
                                 <td class="tr mb5" id="the_rest">{{ number_format($order->the_rest) }}</td>
                             </tr>
