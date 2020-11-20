@@ -18,8 +18,9 @@ class CreateLandipagesTable extends Migration
             $table->string('title')->comment('tiêu đề tin');
             $table->text('content')->nullable()->comment('nội dung tin');
 //            $table->string('campaign_id')->unique();
-            $table->string('slug')->unique();
-            $table->string('phone');
+            $table->string('slug')->unique()->comment('đường dẫn');
+            $table->string('phone')->nullable()->comment('sdt tư vấn');
+            $table->string('form')->nullable()->comment('Đường dẫn form');
             $table->timestamps();
         });
     }

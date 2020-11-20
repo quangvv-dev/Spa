@@ -8,11 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Campaign;
 use App\Models\Category;
+use App\Models\Landipage;
 use App\Models\Post;
 use App\User;
 use Illuminate\Http\Request;
 
-class PostsController extends Controller
+class LandipageController extends Controller
 {
 
     public function __construct()
@@ -35,9 +36,9 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $title = 'Danh sách bài đăng';
-        $docs = Post::orderByDesc('id')->paginate(StatusCode::PAGINATE_10);
-        return view('post.list', compact('title', 'docs'));
+        $title = 'Danh sách landipage';
+        $docs = Landipage::orderByDesc('id')->paginate(StatusCode::PAGINATE_10);
+        return view('landipage.list', compact('title', 'docs'));
     }
 
     /**
@@ -48,7 +49,7 @@ class PostsController extends Controller
     public function create()
     {
         $title = 'Tạo bài đăng';
-        return view('post._form', compact('title'));
+        return view('landipage._form', compact('title'));
     }
 
     /**
