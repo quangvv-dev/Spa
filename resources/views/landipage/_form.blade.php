@@ -1,7 +1,5 @@
 @extends('landipage.layout')
 @section('content')
-    {{--<link rel="stylesheet" href="/admin-page/css/dropify.min.css">--}}
-    <link rel="stylesheet" href="{{asset('laningpage/frontend/css/summernote-bs4.css')}}">
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
@@ -28,10 +26,17 @@
                         <span class="help-block">{{ $errors->first('title', ':message') }}</span>
                     </div>
                 </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('form') ? 'has-error' : '' }}">
+                        {!! Form::label('form', 'Đường dẫn form', array('class' => ' required')) !!}
+                        {!! Form::text('form',old('slug')?:null, array('class' => 'form-control form', 'readonly' => true)) !!}
+                        <span class="help-block">{{ $errors->first('form', ':message') }}</span>
+                    </div>
+                </div>
                 <div class="col-xs-12 col-md-12">
                     <div class="form-group required {{ $errors->has('title') ? 'has-error' : '' }}">
                         {!! Form::label('content', 'Nội dung', array('class' => ' required')) !!}
-                        {!! Form::textarea('content',old('content')?:null, array('class' => 'form-control js-summernote','row'=>8)) !!}
+                        {!! Form::textarea('content',old('content')?:null, array('class' => 'form-control','row'=>8)) !!}
                         <span class="help-block">{{ $errors->first('content', ':message') }}</span>
                     </div>
                 </div>
@@ -46,12 +51,15 @@
     </div>
 @endsection
 @section('_script')
-    <script src="{{asset('/laningpage/frontend/js/codebase.core.min.js')}}"></script>
-    <script src="{{asset('/laningpage/frontend/js/summernote-bs4.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/ckeditor/ckeditor.js')}}"></script>
     <script src="{{asset('/laningpage/frontend/js/speakingurl.min.js')}}"></script>
     <script src="{{asset('/laningpage/frontend/js/jquery.stringtoslug.min.js')}}"></script>
     <script>
         $(document).ready(function () {
+            CKEDITOR.replace('content',{
+                // filebrowserBrowseUrl: '/browser/browse.php',
+                // filebrowserUploadUrl: '/uploader/upload.php'
+            });
             $(".title").stringToSlug({
                 setEvents: 'keyup keydown blur change',
                 getPut: '.slug',
@@ -69,69 +77,9 @@
                 // Text = Text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
                 $(".slug").val(Text).change();
             })
-            // $('form#fvalidate').validate({
-            //     rules: {
-            //         name: 'required',
-            //     },
-            //     messages: {
-            //         name: "vui lòng nhâp tên danh mục",
-            //     }
-            // });
-            // jQuery('.select2').select2({ //apply select2 to my element
-            //     placeholder: "-Chọn sản phẩm-",
-            //     allowClear: true
-            // });
+
+            // var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
         })
 
-        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-        $(function () {
-
-            $('.js-summernote').summernote({
-                minHeight: 400,
-                followingToolbar: true,
-                callbacks: {
-                    onImageUpload: function (images) {
-                        for (var i = 0; i < images.length; i++) {
-                            var formData = new FormData();
-                            formData.append('_token', csrfToken);
-                            formData.append('image', images[i]);
-                            formData.append('folder', 'images/posts');
-                            $.ajax({
-                                method: 'POST',
-                                url: '/ajax/image/store',
-                                contentType: false,
-                                cache: false,
-                                processData: false,
-                                data: formData,
-                                success: function (url) {
-                                    $('.js-summernote').summernote('insertImage', '/' + url);
-                                }
-                            });
-                        }
-                    },
-                    onMediaDelete: function (target) {
-                        var url = target[0].getAttribute('src');
-                        if (!url.includes('/images/posts', 0)) {
-                            return;
-                        }
-
-                        var formData = new FormData();
-                        formData.append('_token', csrfToken);
-                        formData.append('url', url.replace('/', ''));
-                        console.log(url.replace('/', ''), 'formdata');
-                        $.ajax({
-                            type: "POST",
-                            url: "/ajax/image/destroy",
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            data: formData,
-                            success: function (data) {
-                            }
-                        });
-                    }
-                }
-            });
-        });
     </script>
 @endsection
