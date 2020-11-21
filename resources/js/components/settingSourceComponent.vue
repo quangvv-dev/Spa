@@ -199,7 +199,7 @@
                 <div class="pu-caption">
                     Xem trước tiện ích
                 </div>
-                <form method="post" ref="foo" style="padding: 0px 15px">
+                <form id="form_view" method="post" ref="foo" style="padding: 0px 12px">
                     <!--<input name="_token" type="hidden" value="FGHsRIgbF0xwrr6RhHkzyKyjpjysbQ8O8M57iTnb"/>-->
                     <input name="_token" type="hidden" value="U6849U5jRCHHYxfGMa8DwvpOfETAU4SAzRb690qn"/>
                     <div class="row"
@@ -330,13 +330,16 @@
             ngonngay() {
                 const template = this.$refs.foo;
                 let form_html = this.nodeToString(template);
+                let form_view = document.getElementById("form_view");
+                let height = form_view.offsetHeight;
+                let width = form_view.offsetWidth;
                 let data = {
                     form_html: form_html,
                     setting_form: JSON.stringify(this.source),
                 }
                 axios.put('/api/posts/' + this.source_id, data).then(res => {
                     if (res.status == 200) {
-                        this.code_nhung = '<iframe src="' + location.origin + '/post/' + this.source_id + '" frameborder="0" style="width: 100%; height: 100%;"></iframe>';
+                        this.code_nhung = '<iframe src="' + location.origin + '/optin-form/' + this.source_id + '" frameborder="0" style="width: '+width+'px; height: '+height+'px;"></iframe>';
                     } else {
                         swal("Có lỗi gì đó sảy ra!", "error");
                     }
@@ -362,7 +365,7 @@
                 // this.source_name = source.name;
                 if (source.setting_form) {
                     this.source = JSON.parse(source.setting_form);
-                    this.code_nhung = '<iframe src="' + location.origin + '/post/' + source.id + '" frameborder="0" style="width: 100%; height: 100%;"></iframe>';
+                    this.code_nhung = '<iframe src="' + location.origin + '/optin-form/' + source.id + '" frameborder="0" style="width: '+width+'px; height: '+height+'px;"></iframe>';
                 }
                 // $('#modalSettingSource').modal({show: true});
             },

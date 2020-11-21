@@ -88,6 +88,13 @@ class PostsController extends Controller
         return view('optin_form._form', compact('post', 'title'));
     }
 
+    public function showOptinForm($id)
+    {
+        $title = 'Cấu hình Form';
+        $post = Post::find($id);
+        return view('optin_form.index', compact('post', 'title'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -8,6 +8,7 @@ use App\CustomerPost;
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use App\Models\Customer;
+use App\Models\Landipage;
 use App\Models\Notification;
 use App\Models\OrderDetail;
 use App\Models\Post;
@@ -98,8 +99,8 @@ class AjaxController extends Controller
      */
     public function indexPost($id)
     {
-        $post = Post::find($id);
-        return view('optin_form.index', compact('post'));
+        $post = Landipage::find($id);
+        return view('landipage.index', compact('post'));
     }
 
     /**

@@ -6,8 +6,7 @@
     <meta name="csrf-token" content="">
     <title>RoyalSpa</title>
     <script src="{{asset('assets/js/vendors/jquery-3.2.1.min.js')}}"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{asset('assets/css/dashboard.css')}}">
     <!-- Alertify -->
 </head>
 <style>
@@ -16,6 +15,18 @@
         font-size: 11px;
         border-color: red;
     }
+    input {
+        height: 38px !important;
+    }
+    button {
+        height: 33.5px !important;
+    }
+    textarea.form-control {
+        height: 118.625px;
+    }
+    /*h2, .h2 {*/
+        /*font-size: 1.75rem;*/
+    /*}*/
 </style>
 <body style="overflow: hidden">
 

@@ -3,7 +3,6 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
-            <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Tiêu đề</th>
             <th class="text-white text-center">Optin form</th>
             {{--<th class="text-white text-center">Đường dẫn</th>--}}
@@ -15,13 +14,10 @@
             @foreach($docs as $k => $s)
                 <tr>
                     <th scope="row">{{$k}}</th>
-                    <td class="text-center">{{@$s->campaign->name}}</td>
                     <td class="text-center">{{$s->title}}</td>
                     <td class="text-center"><a href="{{url('form/'.$s->id)}}"><i class="fa fa-edit"></i> Kết nối</a></td>
                     <td class="text-center">
-                        <a class="btn coppy" href="javascript:void(0)"><i
-                                class="fas fa-copy"></i></a>
-                        <a class="btn" href="{{ url('posts/' . $s->id . '/edit') }}"><i
+                        <a class="btn" href="{{ route('landipages.edit',$s->id) }}"><i
                                 class="fas fa-edit"></i></a>
                         <a class="btn delete" href="javascript:void(0)"
                            data-url="{{ url('posts/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>

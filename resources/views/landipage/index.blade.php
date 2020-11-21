@@ -193,17 +193,7 @@
                      {{--data-scroll="/laningpage/frontend/images/register-girl.png" alt="royal girl face"/>--}}
             {{--</div>--}}
             <div class="col-12 col-md-5 register-form-container" id="dang-ky">
-                <div class="add"></div>
-                <form id="my_Form" class="register-form" method="post" action="">
-                    <h2 class="register-title" data-key="customer-432">ĐĂNG KÝ NHẬN QUÀ</h2>
-                    <input class="register-input" type="text" name="full_name" placeholder="Họ tên khách hàng"
-                           required/>
-                    <input class="register-input" type="text" name="phone" placeholder="Số điện thoại" required/>
-                    <input class="register-input" type="text" name="note" placeholder="Dịch vụ cần tư vấn thêm"/>
-                    <input class="register-input" type="hidden" name="slug" value="{{request()->segment(2)}}"/>
-                    <input id="js-register-button" class="register-button-submit btn-royal" type="submit"
-                           value="NHẬN QUÀ NGAY"/>
-                </form>
+                <iframe src="http://spa.test/optin-form/1" frameborder="0" style="width: 287px; height: 348px;"></iframe>
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('landipage.layout')
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">

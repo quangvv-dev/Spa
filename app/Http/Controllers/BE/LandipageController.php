@@ -58,10 +58,10 @@ class LandipageController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(Request $request)
     {
-        Post::create($request->all());
-        return redirect(route('posts.index'))->with('Thêm mới thành công');
+        Landipage::create($request->all());
+        return redirect(route('landipages.index'))->with('Thêm mới thành công');
     }
 
     /**
@@ -72,21 +72,8 @@ class LandipageController extends Controller
      */
     public function show($id)
     {
-        $post = Post::where('slug', $id)->first();
-        return view('post.index', compact('post'));
-    }
-
-    /**
-     * View hiển thị form
-     *
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showForm($id)
-    {
-        $title = 'Cấu hình Form';
-        $post = Post::find($id);
-        return view('optin_form._form', compact('post', 'title'));
+        $post = Landipage::where('slug', $id)->first();
+        return view('landipage.index', compact('post'));
     }
 
     /**
@@ -95,11 +82,11 @@ class LandipageController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit(Landipage $landipage)
     {
         $title = 'Tạo bài đăng';
-        $doc = $post;
-        return view('post._form', compact('doc', 'title'));
+        $doc = $landipage;
+        return view('landipage._form', compact('doc', 'title'));
     }
 
     /**
@@ -109,10 +96,10 @@ class LandipageController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Landipage $landipage)
     {
-        $post->update($request->all());
-        return redirect(route('posts.edit', $post->id))->with('chỉnh sửa thành công');
+        $landipage->update($request->all());
+        return redirect(route('landipages.edit', $landipage->id))->with('chỉnh sửa thành công');
     }
 
     /**
@@ -121,9 +108,9 @@ class LandipageController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Landipage $landipage)
     {
-        $post->delete();
+        $landipage->delete();
         return 1;
     }
 }

@@ -2062,13 +2062,16 @@ var pathArray = window.location.pathname.split("/");
 
       var template = this.$refs.foo;
       var form_html = this.nodeToString(template);
+      var form_view = document.getElementById("form_view");
+      var height = form_view.offsetHeight;
+      var width = form_view.offsetWidth;
       var data = {
         form_html: form_html,
         setting_form: JSON.stringify(this.source)
       };
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/posts/' + this.source_id, data).then(function (res) {
         if (res.status == 200) {
-          _this.code_nhung = '<iframe src="' + location.origin + '/post/' + _this.source_id + '" frameborder="0" style="width: 100%; height: 100%;"></iframe>';
+          _this.code_nhung = '<iframe src="' + location.origin + '/optin-form/' + _this.source_id + '" frameborder="0" style="width: ' + width + 'px; height: ' + height + 'px;"></iframe>';
         } else {
           swal("Có lỗi gì đó sảy ra!", "error");
         }
@@ -2092,7 +2095,7 @@ var pathArray = window.location.pathname.split("/");
 
       if (source.setting_form) {
         this.source = JSON.parse(source.setting_form);
-        this.code_nhung = '<iframe src="' + location.origin + '/post/' + source.id + '" frameborder="0" style="width: 100%; height: 100%;"></iframe>';
+        this.code_nhung = '<iframe src="' + location.origin + '/optin-form/' + source.id + '" frameborder="0" style="width: ' + width + 'px; height: ' + height + 'px;"></iframe>';
       } // $('#modalSettingSource').modal({show: true});
 
     },
@@ -39294,8 +39297,8 @@ var render = function() {
           "form",
           {
             ref: "foo",
-            staticStyle: { padding: "0px 15px" },
-            attrs: { method: "post" }
+            staticStyle: { padding: "0px 12px" },
+            attrs: { id: "form_view", method: "post" }
           },
           [
             _c("input", {

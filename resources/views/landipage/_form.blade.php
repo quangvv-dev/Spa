@@ -14,7 +14,7 @@
             <div class="col row">
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('title') ? 'has-error' : '' }}">
-                        {!! Form::label('title', 'Tiêu đề form', array('class' => ' required')) !!}
+                        {!! Form::label('title', 'Tiêu đề landipage', array('class' => ' required')) !!}
                         {!! Form::text('title',null, array('class' => 'form-control title', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('title', ':message') }}</span>
                     </div>
@@ -28,8 +28,8 @@
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('form') ? 'has-error' : '' }}">
-                        {!! Form::label('form', 'Đường dẫn form', array('class' => ' required')) !!}
-                        {!! Form::text('form',old('slug')?:null, array('class' => 'form-control form', 'readonly' => true)) !!}
+                        {!! Form::label('form', 'Đường dẫn form đăng ký', array('class' => ' required')) !!}
+                        {!! Form::text('form',old('form')?:null, array('class' => 'form-control form', 'required' => true)) !!}
                         <span class="help-block">{{ $errors->first('form', ':message') }}</span>
                     </div>
                 </div>
