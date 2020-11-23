@@ -41,9 +41,9 @@
 
             searchCategory(data)
         });
-        $('.coppy').click(function () {
-            $('#slug').focus();
-            $('#slug').select();
+        $('.coppy').click(function (e) {
+            $(e.target).closest('tr').find('.slug').focus();
+            $(e.target).closest('tr').find('.slug').select();
             document.execCommand('copy');
         })
         //
