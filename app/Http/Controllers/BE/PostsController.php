@@ -35,7 +35,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $title = 'Danh sách bài đăng';
+        $title = 'Danh sách OPTIN FORM';
         $docs = Post::orderByDesc('id')->paginate(StatusCode::PAGINATE_10);
         return view('post.list', compact('title', 'docs'));
     }

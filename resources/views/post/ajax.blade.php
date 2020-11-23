@@ -19,8 +19,6 @@
                     <td class="text-center">{{$s->title}}</td>
                     <td class="text-center"><a href="{{url('form/'.$s->id)}}"><i class="fa fa-edit"></i> Kết nối</a></td>
                     <td class="text-center">
-                        <a class="btn coppy" href="javascript:void(0)"><i
-                                class="fas fa-copy"></i></a>
                         <a class="btn" href="{{ url('posts/' . $s->id . '/edit') }}"><i
                                 class="fas fa-edit"></i></a>
                         <a class="btn delete" href="javascript:void(0)"

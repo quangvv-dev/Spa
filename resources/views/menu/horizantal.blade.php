@@ -25,11 +25,14 @@
                                     <a href="{{url('rules')}}">Automation </a>
                                 </li>
                             @endif
-                            @if(empty($permissions) || !in_array('posts.index',$permissions))
+                            @if(empty($permissions) || !in_array('landipages.index',$permissions))
                                 <li>
-                                    <a href="{{route('posts.index')}}">Landing Page</a>
+                                    <a href="{{route('landipages.index')}}">Landing Page</a>
                                 </li>
                             @endif
+                                <li>
+                                    <a href="{{route('posts.index')}}">Optin Form</a>
+                                </li>
                             @if(empty($permissions) || !in_array('promotions.index',$permissions))
                                 <li>
                                     <a href="{{route('promotions.index')}}">Voucher khuyến mãi</a>

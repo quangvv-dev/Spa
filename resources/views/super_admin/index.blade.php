@@ -111,6 +111,13 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td>Quản lý landingPage</td>
+                                                    <td>
+                                                        <input type="checkbox" id="input178" name="permissions[]"
+                                                               value="landipages.index" {{!empty($permissions) && in_array('landipages.index',$permissions) ? 'checked' : ''}}>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td>Quản lý optin form</td>
                                                     <td>
                                                         <input type="checkbox" id="input178" name="permissions[]"
