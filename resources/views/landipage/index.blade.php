@@ -169,7 +169,7 @@
 <div class="container">
     <div class="row">
         <section class="contents col-md-12 col-sm-12">
-            <h2 class="content-title">{{@$post->title}}</h2>
+            {{--<h2 class="content-title" style="text-transform: uppercase">{{@$post->title}}</h2>--}}
             {!! @$post->content !!}
         </section>
     </div>

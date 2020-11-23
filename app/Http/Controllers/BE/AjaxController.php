@@ -99,7 +99,8 @@ class AjaxController extends Controller
      */
     public function indexPost($id)
     {
-        $post = Landipage::find($id);
+        $post = Landipage::where('slug', $id)->first();
+        if (empty($post)) abort(404);
         return view('landipage.index', compact('post'));
     }
 
@@ -298,7 +299,7 @@ class AjaxController extends Controller
     public function getServiceWithOrder($id)
     {
         $array = OrderDetail::select('booking_id')->where('order_id', $id)->pluck('booking_id')->toArray();
-        return  Services::whereIn('id', $array)->get();
+        return Services::whereIn('id', $array)->get();
     }
 
 }
