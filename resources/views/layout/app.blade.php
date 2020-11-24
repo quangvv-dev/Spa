@@ -34,6 +34,17 @@
         content: " *";
         color: red;
     }
+    .datepicker-panel > ul > li.picked, .datepicker-panel > ul > li.picked:hover {
+        color: #fff;
+        font-weight: bold;
+        background-color: black;
+
+    }
+    .datepicker-panel > ul > li.highlighted {
+        background-color: rgb(99 177 255);
+        font-weight: bold;
+        color: #fff;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">

@@ -149,11 +149,7 @@
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow" style="width: 100%; padding: 10px;">
             <div class="col-md-8 no-padd">
                 <ul class="fr mg0 pt10 no-padd">
-                    {{--<li class="display pl5"><a data-time="TODAY" class="btn_choose_time border b-gray bg-gray active">Hôm--}}
-                    {{--nay</a>--}}
-                    {{--</li>--}}
-                    <li class="display pl5"><a data-time="THIS_MONTH"
-                                               class="btn_choose_time padding0-5 b-gray active">Tháng
+                    <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time border padding0-5 b-gray active">Tháng
                             này</a></li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
                             trước</a></li>

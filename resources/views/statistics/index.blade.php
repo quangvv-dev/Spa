@@ -49,7 +49,6 @@
     <input type="hidden" id="start-date">
     <input type="hidden" id="end-date">
     <input type="hidden" id="search-user">
-    </div>
 @endsection
 @section('_script')
     <script type="text/javascript">
@@ -74,7 +73,6 @@
             const data_time = $(target).find('.choose_time').data('time');
             const class_name = target.attr('class');
             if (class_name === 'display pl5') {
-                console.log('done');
                 $('.filter_start_date').val('');
                 $('.filter_end_date').val('');
             }
