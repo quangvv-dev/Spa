@@ -53,6 +53,7 @@ class StatisticController extends Controller
         }
 
         $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
+        $schedules = Schedule::getBooks($input);
         $payment = PaymentHistory::search($input);
 
         $orders = Order::returnRawData($input);
@@ -80,23 +81,22 @@ class StatisticController extends Controller
             'revenue_month' => $revenue_month,
         ];
         $products = [
-            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
-            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+//            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+//            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'the_rest' => $orders->where('role_type', StatusCode::PRODUCT)->sum('the_rest'),
+//            'the_rest' => $orders->where('role_type', StatusCode::PRODUCT)->sum('the_rest'),
         ];
         $services = [
-            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->get()->count(),
-            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+//            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->get()->count(),
+//            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-            'the_rest' => $orders2->where('role_type', StatusCode::SERVICE)->sum('the_rest'),
+//            'the_rest' => $orders2->where('role_type', StatusCode::SERVICE)->sum('the_rest'),
         ];
 
-
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues'))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules'));
     }
 
     public function show($id)

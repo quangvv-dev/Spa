@@ -39,6 +39,21 @@
     <div class="col">
         <div class="card  overflow-hidden bg-gradient-indigo text-white">
             <div class="card-body text-center">
+                <div class="h5">Tổng số lịch hẹn</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">{{@number_format($schedules)}}</span></div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cards">
+    <div class="col">
+        <div class="card  overflow-hidden bg-gradient-indigo text-white">
+            <div class="card-body text-center">
                 <div class="h5">Tổng doanh số</div>
                 <div class="h3 font-weight-bold mb-4 font-30"><span
                         class="">{{@number_format($data['all_total'])}}</span></div>
@@ -72,113 +87,112 @@
         </div>
     </div>
 </div>
+{{--<div class="h4 text-center">SẢN PHẨM</div>--}}
+{{--<div class="row row-cards">--}}
+    {{--<div class="col-3">--}}
+        {{--<div class="card  overflow-hidden bg-gradient-blue text-white">--}}
+            {{--<div class="card-body text-center">--}}
+                {{--<div class="h5">Đơn hàng</div>--}}
+                {{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+                        {{--class="">{{@number_format($products['orders'])}}</span>--}}
+                {{--</div>--}}
+                {{--<div class="progress progress-sm">--}}
+                    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="col-3">--}}
+        {{--<div class="card  overflow-hidden bg-gradient-blue text-white">--}}
+            {{--<div class="card-body text-center">--}}
+                {{--<div class="h5">Doanh số</div>--}}
+                {{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+                        {{--class="">{{@number_format($products['all_total'])}}</span>--}}
+                {{--</div>--}}
+                {{--<div class="progress progress-sm">--}}
+                    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="col-3">--}}
+        {{--<div class="card  overflow-hidden bg-gradient-blue text-white">--}}
+            {{--<div class="card-body text-center">--}}
+                {{--<div class="h5">Doanh thu</div>--}}
+                {{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+                        {{--class="">{{@number_format($products['gross_revenue'])}}</span>--}}
+                {{--</div>--}}
+                {{--<div class="progress progress-sm">--}}
+                    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+    {{--<div class="col-3">--}}
+        {{--<div class="card overflow-hidden">--}}
+            {{--<div class="card-body text-center bg-gradient-blue text-white">--}}
+                {{--<div class="h5">Còn nợ</div>--}}
+                {{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+                        {{--class="">{{@number_format($products['the_rest'])}}</span></div>--}}
+                {{--<div class="progress progress-sm">--}}
+                    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
 
-<div class="h4 text-center">SẢN PHẨM</div>
-<div class="row row-cards">
-    <div class="col-3">
-        <div class="card  overflow-hidden bg-gradient-blue text-white">
-            <div class="card-body text-center">
-                <div class="h5">Đơn hàng</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($products['orders'])}}</span>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="card  overflow-hidden bg-gradient-blue text-white">
-            <div class="card-body text-center">
-                <div class="h5">Doanh số</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($products['all_total'])}}</span>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="card  overflow-hidden bg-gradient-blue text-white">
-            <div class="card-body text-center">
-                <div class="h5">Doanh thu</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($products['gross_revenue'])}}</span>
-                </div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="card overflow-hidden">
-            <div class="card-body text-center bg-gradient-blue text-white">
-                <div class="h5">Còn nợ</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($products['the_rest'])}}</span></div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="h4 text-center">DỊCH VỤ</div>
-<div class="row row-cards">
-    <div class="col-3">
-        <div class="card  overflow-hidden bg-gradient-teal text-white">
-            <div class="card-body text-center">
-                <div class="h5">Đơn</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($services['orders'])}}</span></div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="card  overflow-hidden bg-gradient-teal text-white">
-            <div class="card-body text-center">
-                <div class="h5">Doanh số</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($services['all_total'])}}</span></div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="card  overflow-hidden bg-gradient-teal text-white">
-            <div class="card-body text-center">
-                <div class="h5">Doanh thu</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($services['gross_revenue'])}}</span></div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-yellow" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="card overflow-hidden">
-            <div class="card-body text-center bg-gradient-teal text-white">
-                <div class="h5">Còn nợ</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span
-                        class="">{{@number_format($services['the_rest'])}}</span></div>
-                <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{{--<div class="h4 text-center">DỊCH VỤ</div>--}}
+{{--<div class="row row-cards">--}}
+{{--<div class="col-3">--}}
+{{--<div class="card  overflow-hidden bg-gradient-teal text-white">--}}
+{{--<div class="card-body text-center">--}}
+{{--<div class="h5">Đơn</div>--}}
+{{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+{{--class="">{{@number_format($services['orders'])}}</span></div>--}}
+{{--<div class="progress progress-sm">--}}
+{{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="col-3">--}}
+{{--<div class="card  overflow-hidden bg-gradient-teal text-white">--}}
+{{--<div class="card-body text-center">--}}
+{{--<div class="h5">Doanh số</div>--}}
+{{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+{{--class="">{{@number_format($services['all_total'])}}</span></div>--}}
+{{--<div class="progress progress-sm">--}}
+{{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="col-3">--}}
+{{--<div class="card  overflow-hidden bg-gradient-teal text-white">--}}
+{{--<div class="card-body text-center">--}}
+{{--<div class="h5">Doanh thu</div>--}}
+{{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+{{--class="">{{@number_format($services['gross_revenue'])}}</span></div>--}}
+{{--<div class="progress progress-sm">--}}
+{{--<div class="progress-bar bg-gradient-yellow" style="width: 100%"></div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--<div class="col-3">--}}
+{{--<div class="card overflow-hidden">--}}
+{{--<div class="card-body text-center bg-gradient-teal text-white">--}}
+{{--<div class="h5">Còn nợ</div>--}}
+{{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
+{{--class="">{{@number_format($services['the_rest'])}}</span></div>--}}
+{{--<div class="progress progress-sm">--}}
+{{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
+{{--</div>--}}
 
 <div class="h4 text-center">BIỂU ĐỒ</div>
 <div class="row row-cards">
@@ -187,16 +201,18 @@
     </div>
     <div class="col-md-6">
         <div id="piechart-2"></div>
-        {{--<div id="barchart"style="overflow-x: scroll;overflow-y: hidden;"></div>--}}
     </div>
 </div>
 <div class="row row-cards">
     <div class="col-md-6">
         <div id="piechart-3" style="margin-left: 15px"></div>
     </div>
+    <div class="col-md-6">
+        <div id="piechart-4" style="margin-left: 15px"></div>
+    </div>
 </div>
 <div class="row row-cards">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <div id="column" style="margin-left: 15px"></div>
     </div>
 </div>
@@ -214,7 +230,6 @@
             ['Task', 'Hours per Day'],
                 @foreach($statusRevenues as $k =>$statusRevenue)
             ['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],
-            {{--['{{ $k }}', {{ (int)array_sum($statusRevenue) }}],--}}
             @endforeach
         ]);
 
@@ -267,8 +282,8 @@
             ['Task', 'Hours per Day'],
                 @foreach($data['category_product'] as $k =>$item)
                 @if(!empty($item))
-                ['{{$item->service->name}}', {{$item->total}}],
-                @endif
+            ['{{$item->service->name}}', {{$item->total}}],
+            @endif
             @endforeach
         ]);
 
@@ -279,6 +294,30 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-3'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Sản phẩm', {{$products['gross_revenue']}}],
+            ['Dịch vụ', {{$services['gross_revenue']}}],
+        ]);
+
+        var options = {
+            title: 'DOANH THU SẢN PHẨM & DỊCH VỤ',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-4'));
 
         chart.draw(data, options);
     }

@@ -542,6 +542,7 @@ class CustomerController extends Controller
         $statusRevenues = Status::getRevenueSource($input);
         $customerRevenueByGenders = Customer::getRevenueByGender($input);
         $groupComments = GroupComment::getAll($input);
+        $input['status_schedule'] = StatusCode::BOOK;
         $books = Schedule::getBooks($input);
         $services = Services::handleChart($arr, $input);
         $service1 = $services->orderBy('count_order', 'desc')->paginate(10);
