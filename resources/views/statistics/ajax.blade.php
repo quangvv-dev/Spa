@@ -212,7 +212,7 @@
     </div>
 </div>
 <div class="row row-cards">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div id="column" style="margin-left: 15px"></div>
     </div>
 </div>
