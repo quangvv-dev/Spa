@@ -347,6 +347,7 @@ class CustomerController extends Controller
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
+                $sheet->freezeFirstRow();
                 $sheet->row(1, [
                     'ID',
                     'Tên khách hàng',
@@ -366,6 +367,7 @@ class CustomerController extends Controller
                     'ID Mối quan hệ',
                     'Mô tả',
                 ]);
+
                 $i = 1;
                 if ($data) {
                     foreach ($data as $k => $ex) {
