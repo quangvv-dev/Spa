@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Status;
+use App\Models\WalletHistory;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -59,6 +60,8 @@ class StatisticController extends Controller
         $orders = Order::returnRawData($input);
         $orders2 = Order::returnRawData($input);
 
+        $wallet = WalletHistory::search($input);
+
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
         $statusRevenues = Status::getRevenueSource($input);
@@ -68,7 +71,6 @@ class StatisticController extends Controller
 
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))->whereBetween('payment_date', getTime($input['data_time']))
             ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
-
 
         $data = [
             'all_total' => $orders->sum('all_total'),
@@ -93,10 +95,16 @@ class StatisticController extends Controller
 //            'the_rest' => $orders2->where('role_type', StatusCode::SERVICE)->sum('the_rest'),
         ];
 
+        $wallets = [
+            'orders' => $wallet->count(),
+            'revenue' => $wallet->sum('order_price'),
+            'used' => $payment->where('payment_type', 3)->sum('price'),
+        ];
+
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules'))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules','wallets'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules','wallets'));
     }
 
     public function show($id)
