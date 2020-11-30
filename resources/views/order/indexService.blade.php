@@ -140,6 +140,9 @@
                                         {!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}
                                     </td>
                                     <td class="text-center">
+                                        <input type="text" class="form-control CK1" value="0">
+                                    </td>
+                                    <td class="text-center">
                                         {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2')) !!}
                                     </td>
                                     <td class="text-center">

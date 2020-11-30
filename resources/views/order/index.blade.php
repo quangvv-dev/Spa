@@ -58,8 +58,7 @@
                             <select id="status" class="form-control select2" name="status_id" required="required"
                                     data-placeholder="Trạng thái">
                                 @foreach($status as $key => $value)
-                                    <option
-                                        value="{{ $key }}" {{ $key == $customer->status_id ? 'selected' : "" }}>{{ $value }}</option>
+                                    <option value="{{ $key }}" {{ $key == $customer->status_id ? 'selected' : "" }}>{{ $value }}</option>
                                 @endforeach
                             </select>
                         @else
@@ -304,7 +303,7 @@
             {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
                 </td>
                 <td class="text-center">
-            <input type="text" class="form-control CK1" value="0">
+                    <input type="text" class="form-control CK1" value="0">
                 </td>
                 <td class="text-center">
             {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
