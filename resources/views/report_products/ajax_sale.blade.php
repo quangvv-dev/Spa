@@ -50,8 +50,8 @@
            <th class="text-center">Doanh thu<span class=""><br>TB/đơn</span></th>
            <th class="text-center">Doanh<span class=""><br>số</span></th>
            <th class="text-center">Doanh<span class=""><br>thu</span></th>
-           <th class="text-center">Đã thu T.kỳ</th>
-           <th class="text-center">Còn nợ</th>
+           <th class="text-center">Đã thu<span class=""><br>T.kỳ</span></th>
+           <th class="text-center">Thu<span class=""><br>còn nợ</span></th>
        </tr>
        <tr class="number_index">
            <th class="text-center">(1)</th>
