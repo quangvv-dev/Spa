@@ -51,7 +51,7 @@ class Order extends Model
 
     public function support()
     {
-        return $this->belongsTo(User::class, 'spa_therapisst_id', 'id');
+        return $this->belongsTo(User::class, 'support_id', 'id');
     }
 
     public static function search($input)
@@ -283,7 +283,6 @@ class Order extends Model
                 })
                     ->when($input['data_time'] == 'THIS_WEEK' ||
                         $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
                         $input['data_time'] == 'THIS_MONTH' ||
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
@@ -294,6 +293,11 @@ class Order extends Model
                         Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                         Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                     ]);
+                })
+                ->when(isset($input['spa_therapisst_id']), function ($query) use ($input) {
+                    $query->where('spa_therapisst_id', $input['spa_therapisst_id']);
+                })->when(isset($input['support_id']), function ($query) use ($input) {
+                    $query->where('support_id', $input['support_id']);
                 });
         }
 

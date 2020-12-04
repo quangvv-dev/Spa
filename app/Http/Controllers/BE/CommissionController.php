@@ -5,6 +5,8 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Commission;
+use App\Models\Customer;
+use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Services\CommissionService;
 use App\User;
@@ -78,14 +80,26 @@ class CommissionController extends Controller
         if (empty($request->data_time)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
+        $input = $request->all();
+        $data = User::select('id', 'full_name','avatar')->where('role', UserConstant::TECHNICIANS)->get()->map(function ($item) use ($input) {
+            $input['support_id'] = $item->id;
+            $input['user_id'] = $item->id;
+            $order = Order::getAll($input);
+            $item->orders = $order->count();
+            $item->all_total = $order->sum('all_total');
+            $item->gross_revenue = $order->sum('gross_revenue');
+            $item->days = HistoryUpdateOrder::search($input)->count();
+            $item->earn = Commission::search($input)->sum('earn');
+            return $item;
+        })->sortByDesc('gross_revenue');
 
-        $data = Commission::select('user_id', 'order_id', DB::raw('SUM(earn) AS total'))->groupBy('user_id')
-            ->with('users')->whereBetween('created_at', getTime($request->data_time))->get()->map(function ($item) use ($request) {
-                $orders = Order::select('all_total', 'gross_revenue')->where('id', $item->order_id)->whereBetween('created_at', getTime($request->data_time));
-                $item->all_total = $orders->sum('all_total');
-                $item->gross_revenue = $orders->sum('gross_revenue');
-                return $item;
-            })->sortByDesc('total');
+//        $data = Commission::select('user_id', 'order_id', DB::raw('SUM(earn) AS total'))->groupBy('user_id')
+//            ->with('users')->whereBetween('created_at', getTime($request->data_time))->get()->map(function ($item) use ($request) {
+//                $orders = Order::select('all_total', 'gross_revenue')->where('id', $item->order_id)->whereBetween('created_at', getTime($request->data_time));
+//                $item->all_total = $orders->sum('all_total');
+//                $item->gross_revenue = $orders->sum('gross_revenue');
+//                return $item;
+//            })->sortByDesc('total');
 
         if ($request->ajax()) {
             return Response::json(view('report_products.ajax_commision', compact('data'))->render());

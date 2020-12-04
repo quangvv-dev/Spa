@@ -9,12 +9,12 @@
                 <img src="{{$int==1?'https://pushsale.vn/Portals/_default/Skins/APP/images/bxh/bxh2.png':''}}">
             </div>
             <div class="avatar-container  blink">
-                <img class="avatar-img" src="{{asset(@$value->users->avatar)}}">
+                <img class="avatar-img" src="{{asset(@$value->avatar)}}">
             </div>
             <div class="item-info {{'item-info'.($int)}}">
                 <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
-                <div class="item-tennv">{{@$value->users->full_name}}</div>
-                <div class="">{{number_format($value->total)}}</div>
+                <div class="item-tennv">{{@$value->full_name}}</div>
+                <div class="">{{number_format($value->gross_revenue)}}</div>
             </div>
         </div>
     @endforeach
@@ -26,22 +26,26 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">Nhân viên</th>
+            <th class="text-white text-center">Số công</th>
+            <th class="text-white text-center">Tổng số đơn hàng (upsale)</th>
+            <th class="text-white text-center">Doanh số</th>
+            <th class="text-white text-center">Doanh thu</th>
             <th class="text-white text-center">Hoa hồng</th>
-            <th class="text-white text-center">Tổng doanh số đơn hàng</th>
-            <th class="text-white text-center">Tổng doanh thu đơn hàng</th>
         </tr>
         </thead>
         <tbody>
         @if(@count($data))
             @foreach($data as $k => $s)
                 <tr>
-                    <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s->user_id}}">
+                    <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s->id}}">
                             <i class="fas fa-info-circle"></i>
-                            {{@$s->users->full_name}}</a>
+                            {{@$s->full_name}}</a>
                     </td>
-                    <td class="text-center">{{@number_format($s->total)}}</td>
+                    <td class="text-center">{{@number_format($s->days)}}</td>
+                    <td class="text-center">{{@number_format($s->orders)}}</td>
                     <td class="text-center">{{@number_format($s->all_total)}}</td>
                     <td class="text-center">{{@number_format($s->gross_revenue)}}</td>
+                    <td class="text-center">{{@number_format($s->earn)}}</td>
                 </tr>
         </tbody>
         @endforeach

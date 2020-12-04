@@ -4,12 +4,8 @@
     <style>
         .bxh-container {
             position: relative;
-            margin-bottom: 14%;
-            margin-top: 3%;
-        }
-
-        .item-tennv {
-            font-size: 12px;
+            width: 100%;
+            height: 35%;
         }
 
         .bxh .item-rank {

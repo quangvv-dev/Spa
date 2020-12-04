@@ -83,7 +83,7 @@
                             <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
                         @endif
                         <li><a href="{{url('report/group-sale/tasks')}}">Hiệu quả công việc</a></li>
-                        <li><a href="{{url('report/commission')}}">Hoa hồng nhân viên</a></li>
+                        <li><a href="{{url('report/commission')}}">Hoa hồng KTV</a></li>
                         <li><a href="{{url('report/sales')}}">Xếp hạng Telasales</a></li>
                         <li><a href="{{url('statistics-task')}}">BĐ C.việc & lịch hẹn</a></li>
                     </ul>

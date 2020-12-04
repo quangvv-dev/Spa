@@ -94,7 +94,6 @@
             $revenue_old = 0;
             $payment_old = 0;
             $all_payment = 0;
-
         @endphp
 
         @if(count($users))
