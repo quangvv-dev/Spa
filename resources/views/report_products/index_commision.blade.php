@@ -60,6 +60,9 @@
         .page-main {
             background-color: #fff;
         }
+        .registration-form{
+            margin-top: 30px;
+        }
     </style>
     <style>
         select#order_type {
