@@ -60,7 +60,7 @@
         .page-main {
             background-color: #fff;
         }
-        .registration-form{
+        #registration-form{
             margin-top: 30px;
         }
     </style>
