@@ -5,7 +5,7 @@
         .bxh-container {
             position: relative;
             width: 100%;
-            height: 35%;
+            height: 25%;
         }
 
         .bxh .item-rank {
@@ -61,6 +61,52 @@
             background-color: #fff;
         }
     </style>
+    <style>
+        select#order_type {
+            background: #dddddd;
+        }
+
+        .tableFixHead {
+            overflow-y: auto;
+            height: 800px;
+        }
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+        }
+
+        .tableFixHead tbody .fixed td {
+            position: sticky;
+            bottom: 0;
+        }
+
+        .tableFixHead tbody .fixed2 td {
+            position: sticky;
+            bottom: 46px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            background: #0062cc;
+        }
+
+        .tableFixHead tbody .fixed td {
+            background: #3b8fec;
+        }
+
+        .tableFixHead tbody .fixed2 td {
+            background: #3b8fec;
+        }
+
+        .form-control {
+            font-size: 14px;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="card">
@@ -86,7 +132,7 @@
         <div id="registration-form">
             @include('report_products.ajax_commision')
         </div>
-        @include('report_products.commision_modal')
+        {{--@include('report_products.commision_modal')--}}
     </div>
 @endsection
 @section('_script')

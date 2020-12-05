@@ -18,10 +18,9 @@
             </div>
         </div>
     @endforeach
-
 </div>
 
-<div class="table-responsive">
+<div class="table-responsive tableFixHead">
     <table class="table card-table table-center text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
