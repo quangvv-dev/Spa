@@ -54,9 +54,9 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('trademark') ? 'has-error' : '' }}">
-                        {!! Form::label('trademark', 'Nhà cung cấp') !!}
-                        {!! Form::text('trademark',null, array('class' => 'form-control')) !!}
+                    <div class="form-group {{ $errors->has('trademark') ? 'has-error' : '' }}">
+                        {!! Form::label('trademark','Nhà cung cấp', array('class' => 'required')) !!}
+                        {!! Form::select('trademark',$trademarks, @$doc->trademark, array('class' => 'form-control select2','required'=>true)) !!}
                         <span class="help-block">{{ $errors->first('trademark', ':message') }}</span>
                     </div>
                 </div>

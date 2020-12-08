@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Category;
+use App\Models\Trademark;
 use App\Models\Services as Service;
 use Carbon\Carbon;
 use function GuzzleHttp\Promise\all;
@@ -23,8 +24,10 @@ class ProductController extends Controller
     {
         $this->list[0] = ('category.parent');
         $categories = Category::where('type', StatusCode::PRODUCT)->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
+        $trademarks = Trademark::get()->pluck('name', 'id');
         view()->share([
             'category_pluck' => $categories,
+            'trademarks' => $trademarks,
         ]);
     }
 

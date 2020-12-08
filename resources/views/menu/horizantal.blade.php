@@ -54,6 +54,7 @@
                         <li><a href="{!! route('category-product.index') !!}">Nhóm sản phẩm</a></li>
                         <li><a href="{!! route('services.index') !!}">Danh sách dịch vụ</a></li>
                         <li><a href="{!! route('products.index') !!}">Danh sách sản phẩm</a></li>
+                        <li><a href="{!! route('trademark.index') !!}">Nhà cung cấp</a></li>
                         <li><a href="{!! route('combos.index') !!}">Danh sách combo</a></li>
                         <li><a href="{!! route('order.list') !!}">Danh sách đơn hàng</a></li>
                         <li><a href="{!! route('order.index_payment') !!}">Đã thu trong kỳ</a></li>

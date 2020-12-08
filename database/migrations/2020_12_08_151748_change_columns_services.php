@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrademarksTable extends Migration
+class ChangeColumnsServices extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateTrademarksTable extends Migration
      */
     public function up()
     {
-        Schema::create('trademarks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('name')->nullable()->comment('Nhà cung cấp');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('services', function (Blueprint $table) {
+            $table->integer('trademark')->default(0)->comment('id nhà cung cấp')->index()->change();
         });
     }
 
@@ -28,6 +25,8 @@ class CreateTrademarksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trademarks');
+        Schema::table('services', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -21,6 +21,11 @@ class Services extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    public function trademarks()
+    {
+        return $this->belongsTo(Trademark::class, 'trademark');
+    }
+
     public function getActiveTextAttribute()
     {
         return $this->enable == UserConstant::ACTIVE ? 'Hoạt động' : 'Ngừng hoạt động';

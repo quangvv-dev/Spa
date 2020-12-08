@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Models\Category;
 use App\Models\Services as Service;
+use App\Models\Trademark;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Functions;
@@ -19,8 +20,10 @@ class ServiceController extends Controller
     {
         $this->list[0] = ('category.parent');
         $categories = Category::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
+        $trademarks = Trademark::get()->pluck('name', 'id');
         view()->share([
             'category_pluck' => $categories,
+            'trademarks' => $trademarks,
         ]);
     }
 

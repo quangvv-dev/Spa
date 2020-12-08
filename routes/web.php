@@ -97,7 +97,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('update-customer-post', 'AjaxController@updateCustomerPost')->name('customer_post.update');
         Route::post('convert-customer-post', 'AjaxController@convertCustomerPost')->name('customer_post.convert');
         Route::get('export-customer-post', 'AjaxController@exportCustomer')->name('customer_post.export');
-        Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');
+        Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');;
     });
 
     Route::resource('rules', 'RuleController');//Automation
@@ -143,6 +143,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('tasks', 'TaskController@statistical');
     });
     Route::resource('promotions', 'PromotionController');
+    Route::resource('trademark', 'TrademarkController');
     Route::resource('tasks', 'TaskController');
     Route::get('tasks-employee', 'TaskController@statisticIndex');
     Route::get('notifications', 'AjaxController@getNotificationOutView')->name('notifications.index');

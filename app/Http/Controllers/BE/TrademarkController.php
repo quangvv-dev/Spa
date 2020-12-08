@@ -15,7 +15,9 @@ class TrademarkController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Quản lý nhà cung cấp';
+        $trademark = Trademark::get();
+        return view('trademarks.index', compact('title', 'trademark'));
     }
 
     /**
@@ -36,7 +38,9 @@ class TrademarkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input['name'] = 'Điền NCC';
+        Trademark::create($input);
+        return 1;
     }
 
     /**
@@ -70,7 +74,8 @@ class TrademarkController extends Controller
      */
     public function update(Request $request, Trademark $trademark)
     {
-        //
+        $trademark->update($request->all());
+        return 1;
     }
 
     /**
@@ -81,6 +86,6 @@ class TrademarkController extends Controller
      */
     public function destroy(Trademark $trademark)
     {
-        //
+        $trademark->delete();
     }
 }
