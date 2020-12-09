@@ -23,7 +23,7 @@ class Services extends Model
 
     public function trademarks()
     {
-        return $this->belongsTo(Trademark::class, 'trademark');
+        return $this->belongsTo(Trademark::class, 'trademark')->withTrashed();
     }
 
     public function getActiveTextAttribute()

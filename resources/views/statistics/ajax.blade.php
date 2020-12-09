@@ -146,13 +146,20 @@
     </div>
 </div>
 <div class="row row-cards">
+    <div class="col-md-6">
+        <div id="piechart-5" style="margin-left: 15px"></div>
+    </div>
+    {{--<div class="col-md-6">--}}
+        {{--<div id="piechart-4" style="margin-left: 15px"></div>--}}
+    {{--</div>--}}
+</div>
+<div class="row row-cards">
     <div class="col-md-12">
         <div id="column" style="margin-left: 15px"></div>
     </div>
 </div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
@@ -252,6 +259,33 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-4'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            @if(count($trademark))
+                @foreach($trademark as $item)
+            ['{{$item->name}}', {{$item->price}}],
+                @endforeach
+            @endif
+        ]);
+
+        var options = {
+            title: 'DOANH SỐ 5 NHÀ CUNG CẤP BÁN CHẠY NHẤT',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-5'));
 
         chart.draw(data, options);
     }

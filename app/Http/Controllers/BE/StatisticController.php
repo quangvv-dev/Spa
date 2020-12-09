@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Status;
+use App\Models\Trademark;
 use App\Models\WalletHistory;
 use App\User;
 use Illuminate\Http\Request;
@@ -60,8 +61,14 @@ class StatisticController extends Controller
         $orders = Order::returnRawData($input);
         $orders2 = Order::returnRawData($input);
 
-        $wallet = WalletHistory::search($input);
+        $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
+            $services = Services::where('trademark', $item->id)->pluck('id')->toArray();
+            $input['booking_id'] = $services;
+            $item->price = OrderDetail::search($input)->sum('total_price');
+            return $item;
+        })->sortByDesc('price')->take(5);
 
+        $wallet = WalletHistory::search($input);
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
         $statusRevenues = Status::getRevenueSource($input);
@@ -69,8 +76,9 @@ class StatisticController extends Controller
         $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
-        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))->whereBetween('payment_date', getTime($input['data_time']))
-            ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
+        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+            ->whereBetween('payment_date', getTime($input['data_time']))->whereNotNull('payment_date')->orderBy('payment_date', 'asc')
+            ->groupBy('payment_date')->get();
 
         $data = [
             'all_total' => $orders->sum('all_total'),
@@ -83,10 +91,7 @@ class StatisticController extends Controller
             'revenue_month' => $revenue_month,
         ];
         $products = [
-//            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
-//            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-//            'the_rest' => $orders->where('role_type', StatusCode::PRODUCT)->sum('the_rest'),
         ];
         $services = [
 //            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->get()->count(),
@@ -102,11 +107,17 @@ class StatisticController extends Controller
         ];
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules','wallets'))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules','wallets'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark'));
     }
 
+    /**
+     * Chi tiết thống kê
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show($id)
     {
         $title = 'Chi tiết thống kê';
@@ -116,6 +127,13 @@ class StatisticController extends Controller
         return view('statistics.detail', compact('detail', 'title', 'total'));
     }
 
+    /**
+     * Thống kê lịch hẹn
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
+     */
     public function taskSchedules(Request $request)
     {
         $input = $request->all();
