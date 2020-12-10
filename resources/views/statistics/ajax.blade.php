@@ -149,9 +149,9 @@
     <div class="col-md-6">
         <div id="piechart-5" style="margin-left: 15px"></div>
     </div>
-    {{--<div class="col-md-6">--}}
-        {{--<div id="piechart-4" style="margin-left: 15px"></div>--}}
-    {{--</div>--}}
+    <div class="col-md-6">
+        <div id="piechart-6" style="margin-left: 15px"></div>
+    </div>
 </div>
 <div class="row row-cards">
     <div class="col-md-12">
@@ -286,6 +286,32 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-5'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            @if(count($revenue_gender))
+                @foreach($revenue_gender as $k => $item)
+            ['{{$k==0?"NỮ":'NAM'}}', {{@array_sum($item)}}],
+                @endforeach
+            @endif
+        ]);
+
+        var options = {
+            title: 'DOANH THU THEO GIỚI TÍNH',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-6'));
 
         chart.draw(data, options);
     }

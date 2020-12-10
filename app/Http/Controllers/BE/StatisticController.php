@@ -59,7 +59,8 @@ class StatisticController extends Controller
         $payment = PaymentHistory::search($input);
 
         $orders = Order::returnRawData($input);
-        $orders2 = Order::returnRawData($input);
+        $orders2 = clone $orders;
+        $orders3 = clone $orders;
 
         $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
             $services = Services::where('trademark', $item->id)->pluck('id')->toArray();
@@ -94,12 +95,16 @@ class StatisticController extends Controller
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
         ];
         $services = [
-//            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->get()->count(),
-//            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-//            'the_rest' => $orders2->where('role_type', StatusCode::SERVICE)->sum('the_rest'),
         ];
 
+        $revenue_gender = [];
+        $orders3 = $orders3->get();
+        if (count($orders3)) {
+            foreach ($orders3 as $item) {
+                $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
+            }
+        }
         $wallets = [
             'orders' => $wallet->count(),
             'revenue' => $wallet->sum('order_price'),
@@ -107,9 +112,9 @@ class StatisticController extends Controller
         ];
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark'))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender'));
     }
 
     /**
