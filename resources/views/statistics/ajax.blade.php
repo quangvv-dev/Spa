@@ -158,6 +158,11 @@
         <div id="column" style="margin-left: 15px"></div>
     </div>
 </div>
+<div class="row row-cards">
+    <div class="col-md-12">
+        <div id="column2" style="margin-left: 15px"></div>
+    </div>
+</div>
 
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
 
@@ -336,6 +341,32 @@
         };
 
         var chart = new google.visualization.ColumnChart(document.getElementById('column'));
+        chart.draw(data, options);
+    }
+</script>
+
+<script>
+    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
+
+    function drawBasic() {
+        var data = google.visualization.arrayToDataTable([
+            ['Ngày', 'Doanh số'],
+                @foreach($revenue_year as $k =>$item)
+            ['{{'Tháng '.$k}}', {{$item}}],
+            @endforeach
+        ]);
+        var options = {
+            title: 'Doanh thu trong năm',
+            width: '100%',
+            height: 500,
+            hAxis: {title: 'Các tháng trong năm'},
+            seriesType: 'bars',
+            // series: {1: {type: 'line'}},
+            bar: {groupWidth: '75%'},
+            isStacked: true,
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('column2'));
         chart.draw(data, options);
     }
 </script>

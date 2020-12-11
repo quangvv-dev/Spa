@@ -13,6 +13,7 @@ use App\Models\WalletHistory;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Response;
 use App\Models\Services;
 use App\Models\Category;
@@ -61,6 +62,7 @@ class StatisticController extends Controller
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders3 = clone $orders;
+        $ordersYear = Order::whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
         $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
             $services = Services::where('trademark', $item->id)->pluck('id')->toArray();
@@ -105,6 +107,12 @@ class StatisticController extends Controller
                 $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
             }
         }
+        $revenue_year = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $newOrder = clone $ordersYear;
+            $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
+            $revenue_year[$i] = $newOrder;
+        }
         $wallets = [
             'orders' => $wallet->count(),
             'revenue' => $wallet->sum('order_price'),
@@ -114,7 +122,7 @@ class StatisticController extends Controller
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year'));
     }
 
     /**
