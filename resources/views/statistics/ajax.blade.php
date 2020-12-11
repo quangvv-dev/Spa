@@ -159,7 +159,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
 
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
@@ -212,7 +212,6 @@
         chart.draw(data, options);
     }
 </script>
-
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
@@ -239,7 +238,6 @@
         chart.draw(data, options);
     }
 </script>
-
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
@@ -263,7 +261,6 @@
         chart.draw(data, options);
     }
 </script>
-
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
@@ -272,10 +269,10 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            @if(count($trademark))
+                @if(count($trademark))
                 @foreach($trademark as $item)
             ['{{$item->name}}', {{$item->price}}],
-                @endforeach
+            @endforeach
             @endif
         ]);
 
@@ -298,10 +295,10 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            @if(count($revenue_gender))
+                @if(count($revenue_gender))
                 @foreach($revenue_gender as $k => $item)
             ['{{$k==0?"NỮ":'NAM'}}', {{@array_sum($item)}}],
-                @endforeach
+            @endforeach
             @endif
         ]);
 
@@ -326,7 +323,6 @@
                 @foreach($data['revenue_month'] as $k =>$item)
             ['{{substr($item->payment_date, -2)}}', {{$item->total}},{{$item->revenue}}],
             @endforeach
-            // ['2020', 16, 22],
         ]);
         var options = {
             title: 'Doanh số & doanh thu theo từng ngày',
@@ -339,60 +335,7 @@
             isStacked: true,
         };
 
-
         var chart = new google.visualization.ColumnChart(document.getElementById('column'));
         chart.draw(data, options);
     }
 </script>
-
-{{--<script>--}}
-{{--google.charts.load('current', {callback: drawBasic, packages: ['corechart']});--}}
-{{--var heights = {{count($data['category_service'])*50}}--}}
-{{--function drawBasic() {--}}
-{{--var data = google.visualization.arrayToDataTable([--}}
-{{--@if(count($data['category_service']))--}}
-{{--['Năm', 'Doanh số', {role: 'style'}],--}}
-{{--@foreach($data['category_service'] as $item)--}}
-{{--['{{$item->name}}', {{$item->all_total}}, '{{generateRandomColor()}}'],--}}
-{{--@endforeach--}}
-{{--@else--}}
-{{--['Năm', 0, '#fffff'],--}}
-{{--@endif--}}
-{{--]);--}}
-
-{{--var options = {--}}
-{{--title: 'Top 5 nhóm DV có doanh số cao nhất',--}}
-{{--height: heights,--}}
-{{--width: '100%',--}}
-{{--// titleFontSize:12,--}}
-{{--chartArea: {--}}
-{{--height: '100%',--}}
-{{--left: 200,--}}
-{{--top: 70,--}}
-{{--},--}}
-{{--colors: ['#62c9c3'],--}}
-{{--hAxis: {--}}
-{{--title: 'Doanh thu dich vu',--}}
-{{--minValue: 0,--}}
-{{--titleTextStyle: {--}}
-{{--fontSize: 66 // or the number you want--}}
-{{--}--}}
-{{--},--}}
-{{--// vAxis: {--}}
-{{--//     title: 'Khoá hoc',--}}
-{{--//     titleTextStyle: {--}}
-{{--//         color: "#000",--}}
-{{--//         fontName: "sans-serif",--}}
-{{--//         fontSize: 11,--}}
-{{--//         bold: true,--}}
-{{--//         italic: false--}}
-{{--//     }--}}
-{{--// }--}}
-{{--};--}}
-
-{{--var chart = new google.visualization.BarChart(document.getElementById('barchart'));--}}
-{{--chart.draw(data, options);--}}
-{{--};--}}
-{{--// column chart--}}
-{{--</script>--}}
-{{--counter--}}

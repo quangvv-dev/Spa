@@ -26,7 +26,7 @@
 
 </div>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
 
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart', 'bar']});
