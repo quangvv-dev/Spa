@@ -356,7 +356,7 @@
             @endforeach
         ]);
         var options = {
-            title: 'Doanh thu trong năm',
+            title: 'Doanh thu trong năm hiện tại',
             width: '100%',
             height: 500,
             hAxis: {title: 'Các tháng trong năm'},
