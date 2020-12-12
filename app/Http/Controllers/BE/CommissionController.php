@@ -81,17 +81,18 @@ class CommissionController extends Controller
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
         $input = $request->all();
-        $data = User::select('id', 'full_name','avatar')->where('role', UserConstant::TECHNICIANS)->get()->map(function ($item) use ($input) {
-            $input['support_id'] = $item->id;
-            $input['user_id'] = $item->id;
-            $order = Order::getAll($input);
-            $item->orders = $order->count();
-            $item->all_total = $order->sum('all_total');
-            $item->gross_revenue = $order->sum('gross_revenue');
-            $item->days = HistoryUpdateOrder::search($input)->count();
-            $item->earn = Commission::search($input)->sum('earn');
-            return $item;
-        })->sortByDesc('gross_revenue');
+        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS, UserConstant::CSKH])
+            ->get()->map(function ($item) use ($input) {
+                $input['support_id'] = $item->id;
+                $input['user_id'] = $item->id;
+                $order = Order::getAll($input);
+                $item->orders = $order->count();
+                $item->all_total = $order->sum('all_total');
+                $item->gross_revenue = $order->sum('gross_revenue');
+                $item->days = HistoryUpdateOrder::search($input)->count();
+                $item->earn = Commission::search($input)->sum('earn');
+                return $item;
+            })->sortByDesc('gross_revenue');
 
 //        $data = Commission::select('user_id', 'order_id', DB::raw('SUM(earn) AS total'))->groupBy('user_id')
 //            ->with('users')->whereBetween('created_at', getTime($request->data_time))->get()->map(function ($item) use ($request) {
