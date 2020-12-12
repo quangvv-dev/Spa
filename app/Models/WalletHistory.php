@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\Functions;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WalletHistory extends Model
