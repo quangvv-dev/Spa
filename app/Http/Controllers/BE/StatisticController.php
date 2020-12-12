@@ -153,7 +153,7 @@ class StatisticController extends Controller
         return [
             'revenueNew' => $order_new->sum('gross_revenue'),
             'revenueOld' => $order_old->sum('gross_revenue'),
-            'revenueRest' => ($payment - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue')) > 0 ? $payment - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue') : 0,
+            'revenueRest' => ($payment->sum('price') - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue')) > 0 ? $payment->sum('price') - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue') : 0,
         ];
     }
 
