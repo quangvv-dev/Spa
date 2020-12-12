@@ -100,7 +100,7 @@ class StatisticController extends Controller
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
         ];
 
-        $revenue = self::getRevenueCustomer($input);
+        $revenue = self::getRevenueCustomer($input,$payment);
 
         $revenue_gender = [];
         $orders3 = $orders3->get();
@@ -142,7 +142,7 @@ class StatisticController extends Controller
         return view('statistics.detail', compact('detail', 'title', 'total'));
     }
 
-    public function getRevenueCustomer($request)
+    public function getRevenueCustomer($request,$payment)
     {
         $data_new = Customer::select('id')->whereBetween('created_at', getTime($request['data_time']));
         $data_old = Customer::select('id')->where('created_at', '<', getTime($request['data_time'])[0]);
@@ -150,7 +150,6 @@ class StatisticController extends Controller
 
         $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request['data_time']))->with('orderDetails');//doanh so
         $order_old = Order::whereBetween('created_at', getTime($request['data_time']))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
-        $payment = PaymentHistory::whereBetween('created_at', getTime($request['data_time']))->sum('price');
         return [
             'revenueNew' => $order_new->sum('gross_revenue'),
             'revenueOld' => $order_old->sum('gross_revenue'),
