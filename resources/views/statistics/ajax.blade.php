@@ -154,6 +154,11 @@
     </div>
 </div>
 <div class="row row-cards">
+    <div class="col-md-6">
+        <div id="piechart-7" style="margin-left: 15px"></div>
+    </div>
+</div>
+<div class="row row-cards">
     <div class="col-md-12">
         <div id="column" style="margin-left: 15px"></div>
     </div>
@@ -314,6 +319,30 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-6'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Khách hàng mới', {{$revenue['revenueNew']}}],
+            ['Khách hàng cũ', {{$revenue['revenueOld']}}],
+            ['Thu còn nợ', {{$revenue['revenueRest']}}],
+        ]);
+
+        var options = {
+            title: 'DOANH THU THEO LOẠI KHÁCH HÀNG',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-7'));
 
         chart.draw(data, options);
     }

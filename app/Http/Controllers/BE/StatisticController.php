@@ -100,6 +100,8 @@ class StatisticController extends Controller
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
         ];
 
+        $revenue = self::getRevenueCustomer($input);
+
         $revenue_gender = [];
         $orders3 = $orders3->get();
         if (count($orders3)) {
@@ -120,9 +122,9 @@ class StatisticController extends Controller
         ];
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender'))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
     }
 
     /**
@@ -138,6 +140,22 @@ class StatisticController extends Controller
         $detail = $this->customer->getStatisticsUsers()->where('mkt_id', $id)->first();
 
         return view('statistics.detail', compact('detail', 'title', 'total'));
+    }
+
+    public function getRevenueCustomer($request)
+    {
+        $data_new = Customer::select('id')->whereBetween('created_at', getTime($request['data_time']));
+        $data_old = Customer::select('id')->where('created_at', '<', getTime($request['data_time'])[0]);
+//        $input['member_arr'] =
+
+        $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request['data_time']))->with('orderDetails');//doanh so
+        $order_old = Order::whereBetween('created_at', getTime($request['data_time']))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+        $payment = PaymentHistory::whereBetween('created_at', getTime($request['data_time']))->sum('price');
+        return [
+            'revenueNew' => $order_new->sum('gross_revenue'),
+            'revenueOld' => $order_old->sum('gross_revenue'),
+            'revenueRest' => ($payment - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue')) > 0 ? $payment - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue') : 0,
+        ];
     }
 
     /**

@@ -307,7 +307,7 @@ class Order extends Model
 
     public static function returnRawData($input)
     {
-        $data = self::select('id','member_id', 'all_total', 'gross_revenue', 'the_rest', 'created_at')
+        $data = self::select('id', 'member_id', 'all_total', 'gross_revenue', 'the_rest', 'created_at')
             ->when(isset($input['data_time']), function ($query) use ($input) {
                 $query->when($input['data_time'] == 'TODAY' ||
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
@@ -324,6 +324,8 @@ class Order extends Model
                 $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             })->when(isset($input['role_type']), function ($query) use ($input) {
                 $query->where('role_type', $input['role_type']);
+            })->when(isset($input['member_arr']), function ($query) use ($input) {
+                $query->whereIn('member_arr', $input['member_arr']);
             });
         return $data;
     }
