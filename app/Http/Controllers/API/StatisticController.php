@@ -66,7 +66,7 @@ class StatisticController extends BaseApiController
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders3 = clone $orders;
-        $ordersYear = Order::whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
+        $ordersYear = Order::whereYear('created_at', now('Asia/Ho_Chi_Minh')->format('Y'));
 
         $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
             $services = Services::where('trademark', $item->id)->pluck('id')->toArray();
