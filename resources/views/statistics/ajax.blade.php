@@ -169,7 +169,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
@@ -331,9 +331,9 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            ['Khách hàng mới', {{$revenue['revenueNew']}}],
-            ['Khách hàng cũ', {{$revenue['revenueOld']}}],
-            ['Thu còn nợ', {{$revenue['revenueRest']}}],
+            ['Khách hàng mới', {{$revenue->revenueNew}}],
+            ['Khách hàng cũ', {{$revenue->revenueOld}}],
+            ['Thu còn nợ', {{$revenue->revenueRest}}],
         ]);
 
         var options = {

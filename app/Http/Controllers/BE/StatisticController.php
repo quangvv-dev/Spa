@@ -85,6 +85,8 @@ class StatisticController extends Controller
         ];
         $trademark = $datas->trademark;
         $revenue_gender = $datas->revenue_gender;
+        $revenue = $datas->revenue;
+        $revenue_year = $datas->revenue_year;
 //        dd($datas);
         $products = [
             'gross_revenue' => $datas->products->gross_revenue,
@@ -94,9 +96,9 @@ class StatisticController extends Controller
         ];
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender'))->render());
+            return Response::json(view('statistics.ajax', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender','revenue','revenue_year'))->render());
         }
-        return view('statistics.index', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender'));
+        return view('statistics.index', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender','revenue','revenue_year'));
     }
 
     public function show($id)
