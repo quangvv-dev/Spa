@@ -88,6 +88,7 @@ class StatisticController extends Controller
         $revenue = $datas->revenue;
         $revenue_year = $datas->revenue_year;
         $wallets = $datas->wallets;
+        $schedules = $datas->schedules;
 //        dd($datas);
         $products = [
             'gross_revenue' => $datas->products->gross_revenue,
@@ -97,9 +98,9 @@ class StatisticController extends Controller
         ];
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender','revenue','revenue_year','wallets'))->render());
+            return Response::json(view('statistics.ajax', compact('towers', 'data', 'services', 'products', 'statusRevenues', 'trademark', 'revenue_gender', 'revenue', 'revenue_year', 'wallets','schedules'))->render());
         }
-        return view('statistics.index', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender','revenue','revenue_year','wallets'));
+        return view('statistics.index', compact('towers', 'data', 'services', 'products', 'statusRevenues', 'trademark', 'revenue_gender', 'revenue', 'revenue_year', 'wallets','schedules'));
     }
 
     public function show($id)
