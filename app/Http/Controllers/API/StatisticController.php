@@ -23,6 +23,8 @@ use App\Models\Category;
 use App\Helpers\Functions;
 use App\Constants\UserConstant;
 use App\Models\GroupComment;
+use App\Models\WalletHistory;
+use App\Models\Trademark;
 
 class StatisticController extends BaseApiController
 {
@@ -58,11 +60,22 @@ class StatisticController extends BaseApiController
         }
 
         $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
+        $schedules = Schedule::getBooks($input);
         $payment = PaymentHistory::search($input);
 
         $orders = Order::returnRawData($input);
-        $orders2 = Order::returnRawData($input);
+        $orders2 = clone $orders;
+        $orders3 = clone $orders;
+        $ordersYear = Order::whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
+        $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
+            $services = Services::where('trademark', $item->id)->pluck('id')->toArray();
+            $input['booking_id'] = $services;
+            $item->price = OrderDetail::search($input)->sum('total_price');
+            return $item;
+        })->sortByDesc('price')->take(5);
+
+        $wallet = WalletHistory::search($input);
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
         $statusRevenues = Status::getRevenueSource($input);
@@ -85,16 +98,30 @@ class StatisticController extends BaseApiController
             'revenue_month' => $revenue_month,
         ];
         $products = [
-            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
-            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'the_rest' => $orders->where('role_type', StatusCode::PRODUCT)->sum('the_rest'),
         ];
         $services = [
-            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->get()->count(),
-            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-            'the_rest' => $orders2->where('role_type', StatusCode::SERVICE)->sum('the_rest'),
+        ];
+
+        $revenue = self::getRevenueCustomer($input, $payment);
+        $revenue_gender = [];
+        $orders3 = $orders3->get();
+        if (count($orders3)) {
+            foreach ($orders3 as $item) {
+                $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
+            }
+        }
+        $revenue_year = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $newOrder = clone $ordersYear;
+            $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
+            $revenue_year[$i] = $newOrder;
+        }
+        $wallets = [
+            'orders' => $wallet->count(),
+            'revenue' => $wallet->sum('order_price'),
+            'used' => $payment->where('payment_type', 3)->sum('price'),
         ];
 
         $response = [
@@ -102,10 +129,29 @@ class StatisticController extends BaseApiController
             'products' => $products,
             'services' => $services,
             'statusRevenues' => array_values($statusRevenues),
+            'revenue' => $revenue,
+            'wallets' => $wallets,
+            'trademark' => $trademark,
+            'revenue_year' => $revenue_year,
+            'schedules' => $schedules,
         ];
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
 
+    }
+
+    public function getRevenueCustomer($request, $payment)
+    {
+        $data_new = Customer::select('id')->whereBetween('created_at', getTime($request['data_time']));
+        $data_old = Customer::select('id')->where('created_at', '<', getTime($request['data_time'])[0]);
+
+        $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request['data_time']))->with('orderDetails');//doanh so
+        $order_old = Order::whereBetween('created_at', getTime($request['data_time']))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+        return [
+            'revenueNew' => $order_new->sum('gross_revenue'),
+            'revenueOld' => $order_old->sum('gross_revenue'),
+            'revenueRest' => ($payment->sum('price') - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue')) > 0 ? $payment->sum('price') - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue') : 0,
+        ];
     }
 
     public function show($id)
