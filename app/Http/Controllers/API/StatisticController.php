@@ -134,6 +134,7 @@ class StatisticController extends BaseApiController
             'trademark' => $trademark,
             'revenue_year' => $revenue_year,
             'schedules' => $schedules,
+            'revenue_gender' => $revenue_gender,
         ];
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
