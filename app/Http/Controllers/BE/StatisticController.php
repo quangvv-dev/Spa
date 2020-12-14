@@ -83,23 +83,20 @@ class StatisticController extends Controller
             'category_product' => $datas->data->category_product,
             'revenue_month' => $datas->data->revenue_month,
         ];
+        $trademark = $datas->trademark;
+        $revenue_gender = $datas->revenue_gender;
+//        dd($datas);
         $products = [
-            'orders' => $datas->products->orders,
-            'all_total' => $datas->products->all_total,
             'gross_revenue' => $datas->products->gross_revenue,
-            'the_rest' => $datas->products->the_rest,
         ];
         $services = [
-            'orders' => $datas->services->orders,
-            'all_total' => $datas->services->all_total,
             'gross_revenue' => $datas->services->gross_revenue,
-            'the_rest' => $datas->services->the_rest,
         ];
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('towers', 'data', 'services', 'products', 'statusRevenues'))->render());
+            return Response::json(view('statistics.ajax', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender'))->render());
         }
-        return view('statistics.index', compact('towers', 'data', 'services', 'products', 'statusRevenues'));
+        return view('statistics.index', compact('towers', 'data', 'services', 'products', 'statusRevenues','trademark','revenue_gender'));
     }
 
     public function show($id)
