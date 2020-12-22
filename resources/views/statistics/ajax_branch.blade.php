@@ -17,6 +17,7 @@
     $customers = 0;
     $revenue_month = [];
     $total_month = [];
+    $total_year = [];
     $users = [];
         foreach($response as $k =>$item){
         $all_total      += (int)$item->all_total;
@@ -36,6 +37,13 @@
                     $total_month[$key] = $value;
                 }else{
                     $total_month[$key] = $total_month[$key] + $value;
+                }
+            }
+            foreach ((array)$item->total_year as $key => $value){
+                if (array_key_exists($key, $total_year) ==false){
+                    $total_year[$key] = $value;
+                }else{
+                    $total_year[$key] = $total_year[$key] + $value;
                 }
             }
         }
@@ -118,6 +126,12 @@
         <div id="column" style="margin-left: 15px"></div>
     </div>
 </div>
+
+<div class="row row-cards">
+    <div class="col-md-12">
+        <div id="column2" style="margin-left: 15px"></div>
+    </div>
+</div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
@@ -147,11 +161,9 @@
                 left: 150,
                 top: 70,
             },
-            // colors: ['#0f89d0'],
             vAxis: {
                 textStyle: {
                     bold: true,
-                    // fontSize: 15,
                 },
             },
             annotations: {
@@ -179,7 +191,6 @@
                 @foreach($revenue_month as $k =>$item)
             ['{{substr($k, -2)}}',{{$total_month[$k]}},{{$item}}],
             @endforeach
-            // ['2020', 16, 22],
         ]);
         var options = {
             title: 'Doanh số & doanh thu theo từng ngày',
@@ -194,6 +205,33 @@
 
 
         var chart = new google.visualization.ColumnChart(document.getElementById('column'));
+        chart.draw(data, options);
+    }
+</script>
+
+<script>
+    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
+
+    function drawBasic() {
+        var data = google.visualization.arrayToDataTable([
+            ['Tháng', 'Doanh thu','Tăng trưởng'],
+                @foreach($total_year as $k =>$item)
+            [{{$k}},{{$item}},{{$item}}],
+            @endforeach
+        ]);
+        var options = {
+            title: 'Doanh thu theo các tháng trong năm',
+            width: '100%',
+            height: 500,
+            hAxis: {title: 'Các tháng trong năm'},
+            seriesType: 'bars',
+            series: {1: {type: 'line'}},
+            bar: {groupWidth: '75%'},
+            isStacked: true,
+        };
+
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('column2'));
         chart.draw(data, options);
     }
 </script>
