@@ -99,7 +99,7 @@ class OrderDetail extends Model
     public static function getTotalPriceBookingId($input, $type, $paginate)
     {
         $data = self::select('booking_id', \DB::raw('SUM(total_price) AS total'))->groupBy('booking_id')
-            ->whereBetween('created_at', getTime($input['data_time']))->has('service')->with('service')->get()->map(function ($item) use ($type) {
+            ->whereBetween('created_at', getTime($input['data_time']))->whereHas('service')->get()->map(function ($item) use ($type) {
                 if (isset($item->service) && $item->service->type == $type) {
                     return $item;
                 }

@@ -82,7 +82,6 @@ class StatisticController extends BaseApiController
 
         $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5)->toArray();
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5)->toArray();
-
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))->whereBetween('payment_date', getTime($input['data_time']))
             ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
 
@@ -178,7 +177,6 @@ class StatisticController extends BaseApiController
         }
         $payment = PaymentHistory::search($input);
         $orders = Order::returnRawData($input);
-//        $orders2 = Order::returnRawData($input);
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
             ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
                 $query->whereBetween('payment_date', getTime($input['data_time']));
@@ -204,8 +202,6 @@ class StatisticController extends BaseApiController
             'payment' => $payment->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
-//            'revenue_products' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-//            'revenue_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
             'revenue_month' => $revenue,
             'total_month' => $total,
         ];
@@ -316,7 +312,7 @@ class StatisticController extends BaseApiController
         $campaign = Campaign::search($input)->count();
         $post = Post::search($input)->count();
         $customer = CustomerPost::search($input);
-        $customer2 = CustomerPost::search($input);
+        $customer2 = clone $customer;
 
         $response = [
             'campaign' => $campaign,
@@ -343,7 +339,7 @@ class StatisticController extends BaseApiController
         $campaign = Campaign::search($input)->get()->map(function ($item) use ($input) {
             $input['campaign_id'] = $item->id;
             $customer = CustomerPost::search($input);
-            $customer2 = CustomerPost::search($input);
+            $customer2 = clone $customer;
             $item->all_customer = $customer->count();
             $item->call = $customer->where('status', StatusConstant::CALL)->count();
             $item->receive = $customer2->where('status', StatusConstant::RECEIVE)->count();
@@ -367,16 +363,16 @@ class StatisticController extends BaseApiController
         $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
             if (isset($input['data_time']) && $input['data_time']) {
                 $schedule = Schedule::where('person_action', $item->id)->whereBetween('date', getTime($input['data_time']));
-                $schedule2 = Schedule::where('person_action', $item->id)->whereBetween('date', getTime($input['data_time']));
-                $schedule3 = Schedule::where('person_action', $item->id)->whereBetween('date', getTime($input['data_time']));
+                $schedule2 = clone $schedule;
+                $schedule3 = clone $schedule;
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', getTime($input['data_time']));
-                $task1 = Task::where('user_id', $item->id)->whereBetween('date_from', getTime($input['data_time']));
+                $task1 = clone $task;
             } else {
                 $schedule = Schedule::where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                $schedule2 = Schedule::where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                $schedule3 = Schedule::where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $schedule2 = clone $schedule;
+                $schedule3 = clone $schedule;
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                $task1 = Task::where('user_id', $item->id)->whereBetween('date_from', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $task1 = clone $task;
             }
             $item->all_schedules = $schedule->count();
             $item->schedules_buy = $schedule->where('status', ScheduleConstant::DEN_MUA)->count();
