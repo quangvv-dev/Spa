@@ -196,6 +196,15 @@ class StatisticController extends BaseApiController
             })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
                 $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             });
+
+        $ordersYear = Order::whereYear('created_at', now('Asia/Ho_Chi_Minh')->format('Y'));
+        $revenue_year = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $newOrder = clone $ordersYear;
+            $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
+            $revenue_year[$i] = $newOrder;
+        }
+
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
@@ -204,6 +213,7 @@ class StatisticController extends BaseApiController
             'customers' => $customers->count(),
             'revenue_month' => $revenue,
             'total_month' => $total,
+            'total_year' => $revenue_year,
         ];
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
