@@ -205,12 +205,20 @@ class StatisticController extends BaseApiController
             $revenue_year[$i] = $newOrder;
         }
 
+        $wallet = WalletHistory::search($input);
+        $wallets = [
+            'orders' => $wallet->count(),
+            'revenue' => $wallet->sum('order_price'),
+            'used' => $payment->where('payment_type', 3)->sum('price'),
+        ];
+
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
             'payment' => $payment->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
+            'wallets' => $wallets,
             'revenue_month' => $revenue,
             'total_month' => $total,
             'total_year' => $revenue_year,
