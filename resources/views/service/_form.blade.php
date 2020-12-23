@@ -53,13 +53,14 @@
                         <span class="help-block">{{ $errors->first('promotion_price', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group {{ $errors->has('trademark') ? 'has-error' : '' }}">
-                        {!! Form::label('trademark','Nhà cung cấp', array('class' => 'required')) !!}
-                        {!! Form::select('trademark',$trademarks, @$doc->trademark, array('class' => 'form-control select2','required'=>true)) !!}
-                        <span class="help-block">{{ $errors->first('trademark', ':message') }}</span>
-                    </div>
-                </div>
+                {{--<div class="col-xs-12 col-md-6">--}}
+                    {{--<div class="form-group {{ $errors->has('trademark') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('trademark','Nhà cung cấp', array('class' => 'required')) !!}--}}
+                        {{--{!! Form::select('trademark',$trademarks, @$doc->trademark, array('class' => 'form-control select2','required'=>true)) !!}--}}
+                        {{--<span class="help-block">{{ $errors->first('trademark', ':message') }}</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                         {!! Form::label('enable', 'Trạng thái', array('class' => ' required')) !!}
@@ -73,6 +74,8 @@
                         {!! Form::select('category_id',$category_pluck, @$doc->category_id, array('class' => 'form-control select2','required'=>true)) !!}
                         <span class="help-block">{{ $errors->first('category_id', ':message') }}</span>
                     </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
