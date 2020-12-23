@@ -19,12 +19,19 @@
     $total_month = [];
     $total_year = [];
     $users = [];
+    $wallets_orders = 0;
+    $wallets_revenue = 0;
+    $wallets_used = 0;
         foreach($response as $k =>$item){
         $all_total      += (int)$item->all_total;
         $payment        += (int)$item->payment;
         $orders         += (int)$item->orders;
         $customers      += (int)$item->customers;
         $gross_revenue  += (int)$item->gross_revenue;
+        $wallets_orders  += (int)$item->wallets->orders;
+        $wallets_revenue  += (int)$item->wallets->revenue;
+        $wallets_used  += (int)$item->wallets->used;
+
             foreach ((array)$item->revenue_month as $key => $value){
                 if (array_key_exists($key, $revenue_month) ==false){
                     $revenue_month[$key] = $value;
@@ -114,7 +121,47 @@
         </div>
     </div>
 </div>
-<div class="h4 text-center">BIỂU ĐỒ</div>
+
+<div class="h4 text-center">Ví tiền</div>
+<div class="row row-cards">
+    <div class="col">
+        <div class="card  overflow-hidden bg-gradient-blue text-white">
+            <div class="card-body text-center">
+                <div class="h5">Tổng đơn nạp ví</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">{{@number_format($wallets_orders)}}</span></div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card overflow-hidden">
+            <div class="card-body text-center bg-gradient-blue text-white">
+                <div class="h5">Tổng doanh thu từ gói nạp</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">{{@number_format($wallets_revenue)}}</span></div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card  overflow-hidden">
+            <div class="card-body text-center bg-gradient-blue text-white">
+                <div class="h5">Tổng tiền khách tiêu từ ví</div>
+                <div class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($wallets_used)}}</div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="row row-cards">
     <div class="col-md-12">
         <div id="barchart" style="overflow-x: scroll;overflow-y: hidden"></div>

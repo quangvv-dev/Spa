@@ -18,7 +18,7 @@ class StatisticController extends Controller
         'https://royalspabg.adamtech.vn/api/' => 'Bắc Giang',
         'https://royalspahp.adamtech.vn/api/' => 'Hải Phòng',
         'https://royalspavp.adamtech.vn/api/' => 'Vĩnh Phúc',
-        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
+//        'https://royalspatn.adamtech.vn/api/' => 'Thái Nguyên',
         'https://royalspasg.adamtech.vn/api/' => 'Quận 10',
         'https://royalspatb.adamtech.vn/api/' => 'Tân bình',
         'https://royalspagv.adamtech.vn/api/' => 'Gò Vấp',
