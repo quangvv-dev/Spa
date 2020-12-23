@@ -58,7 +58,6 @@ class StatisticController extends Controller
         $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
         $schedules = Schedule::getBooks($input);
         $payment = PaymentHistory::search($input);
-
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders3 = clone $orders;

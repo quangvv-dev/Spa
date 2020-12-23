@@ -176,6 +176,7 @@ class StatisticController extends BaseApiController
             $input['data_time'] = 'THIS_MONTH';
         }
         $payment = PaymentHistory::search($input);
+        $payment2 = clone $payment;
         $orders = Order::returnRawData($input);
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
             ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
@@ -215,7 +216,7 @@ class StatisticController extends BaseApiController
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
-            'payment' => $payment->sum('price'),
+            'payment' => $payment2->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
             'wallets' => $wallets,
