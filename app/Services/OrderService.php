@@ -30,9 +30,14 @@ class OrderService
 
         $now = Carbon::now()->format('H:i:s');
 
+        if (!empty($data['count_day'])){
+            $countDay = $data['count_day'];
+        }
+
         if (!empty($data['spa_therapisst_id']) && !empty($data['count_day'])) {
             $countDay = $data['count_day'] - 1;
         }
+
         $input = [
             'member_id'         => $data['user_id'],
             'the_rest'          => $theRest,
