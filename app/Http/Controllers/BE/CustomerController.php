@@ -59,6 +59,8 @@ class CustomerController extends Controller
                 $telesales['Lễ Tân'][$item->full_name] = $item->id;
             } elseif ($item->role == UserConstant::TELESALES) {
                 $telesales['Telesales'][$item->full_name] = $item->id;
+            }elseif ($item->role == UserConstant::CSKH) {
+                $telesales['Tư vấn viên'][$item->full_name] = $item->id;
             }
             return $item;
         });

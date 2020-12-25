@@ -78,14 +78,12 @@
                     <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}}status-db
                        title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
-                    @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::MARKETING ||
-\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
-                        <a class="right btn btn-primary btn-flat" href="{{ route('customers.indexGroup') }}"
-                           style="margin-left: 3px"><i
-                                class="fa fa-plus-circle"></i>Auto (test)</a>
+                    @if(in_array(\Illuminate\Support\Facades\Auth::user()->role,[\App\Constants\UserConstant::ADMIN,\App\Constants\UserConstant::MARKETING,\App\Constants\UserConstant::WAITER]))
+                        {{--<a class="right btn btn-primary btn-flat" href="{{ route('customers.indexGroup') }}"--}}
+                           {{--style="margin-left: 3px"><i--}}
+                                {{--class="fa fa-plus-circle"></i>Auto</a>--}}
+                        <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
                     @endif
-                    <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i
-                            class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
             </div>
             <div id="registration-form">
