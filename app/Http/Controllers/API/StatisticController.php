@@ -178,6 +178,9 @@ class StatisticController extends BaseApiController
         $payment = PaymentHistory::search($input);
         $payment2 = clone $payment;
         $orders = Order::returnRawData($input);
+        $orders2 = clone $orders;
+        $orders3 = clone $orders;
+
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
             ->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
                 $query->whereBetween('payment_date', getTime($input['data_time']));
@@ -197,6 +200,15 @@ class StatisticController extends BaseApiController
             })->when(!empty($request->end_date) && !empty($request->start_date), function ($query) use ($input) {
                 $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             });
+
+        $revenue = self::getRevenueCustomer($input, $payment);
+        $revenue_gender = [];
+        $orders3 = $orders3->get();
+        if (count($orders3)) {
+            foreach ($orders3 as $item) {
+                $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
+            }
+        }
 
         $ordersYear = Order::whereYear('created_at', now('Asia/Ho_Chi_Minh')->format('Y'));
         $revenue_year = [];
@@ -223,6 +235,9 @@ class StatisticController extends BaseApiController
             'revenue_month' => $revenue,
             'total_month' => $total,
             'total_year' => $revenue_year,
+            'revenue_gender' => $revenue_gender,
+            'revenueProducts' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'revenueServices' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
         ];
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
