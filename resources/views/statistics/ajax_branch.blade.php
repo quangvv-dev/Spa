@@ -51,7 +51,6 @@
                 }
             }
         }
-
 @endphp
 
 {{--<div class="h4 text-center">TOÀN HỆ THỐNG</div>--}}
@@ -205,7 +204,7 @@
             height: 300,
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart-4'));
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
 
         chart.draw(data, options);
     }
@@ -264,9 +263,9 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Ngày', 'Doanh số', 'Doanh thu'],
-                @foreach($revenue_month as $k =>$item)
-            ['{{substr($k, -2)}}',{{$total_month[$k]}},{{$item}}],
+            ['Ngày',  'Doanh thu'],
+                @foreach($total_month as $k =>$item)
+            ['{{substr($k, -2)}}',{{$item}}],
             @endforeach
         ]);
         var options = {
