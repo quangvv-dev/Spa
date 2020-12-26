@@ -201,7 +201,7 @@ class StatisticController extends BaseApiController
                 $query->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             });
 
-        $revenue = self::getRevenueCustomer($input, $payment);
+        $revenueAll = self::getRevenueCustomer($input, $payment);
         $revenue_gender = [];
         $orders3 = $orders3->get();
         if (count($orders3)) {
@@ -226,18 +226,19 @@ class StatisticController extends BaseApiController
         ];
 
         $data = [
-            'all_total' => $orders->sum('all_total'),
-            'gross_revenue' => $orders->sum('gross_revenue'),
-            'payment' => $payment2->sum('price'),
-            'orders' => $orders->count(),
-            'customers' => $customers->count(),
-            'wallets' => $wallets,
-            'revenue_month' => $revenue,
-            'total_month' => $total,
-            'total_year' => $revenue_year,
-            'revenue_gender' => $revenue_gender,
-            'revenueProducts' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'revenueServices' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'all_total'         => $orders->sum('all_total'),
+            'gross_revenue'     => $orders->sum('gross_revenue'),
+            'payment'           => $payment2->sum('price'),
+            'orders'            => $orders->count(),
+            'customers'         => $customers->count(),
+            'wallets'           => $wallets,
+            'revenue_month'     => $revenue,
+            'total_month'       => $total,
+            'total_year'        => $revenue_year,
+            'revenue_gender'    => $revenue_gender,
+            'revenueAll'        => $revenueAll,
+            'revenueProducts'   => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'revenueServices'   => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
         ];
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
