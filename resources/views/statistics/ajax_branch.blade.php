@@ -25,7 +25,6 @@
     $revenueProducts = 0;
     $revenueServices = 0;
         foreach($response as $k =>$item){
-        dd($item);
         $all_total      += (int)$item->all_total;
         $payment        += (int)$item->payment;
         $orders         += (int)$item->orders;
