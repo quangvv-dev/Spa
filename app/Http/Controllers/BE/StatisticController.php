@@ -146,6 +146,7 @@ class StatisticController extends Controller
             $datas = json_decode($response_data)->data;
             $response[$item] = $datas;
         }
+//        dd($response);
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax_branch', compact('response'))->render());
         }

@@ -22,7 +22,10 @@
     $wallets_orders = 0;
     $wallets_revenue = 0;
     $wallets_used = 0;
+    $revenueProducts = 0;
+    $revenueServices = 0;
         foreach($response as $k =>$item){
+        dd($item);
         $all_total      += (int)$item->all_total;
         $payment        += (int)$item->payment;
         $orders         += (int)$item->orders;
@@ -31,14 +34,9 @@
         $wallets_orders  += (int)$item->wallets->orders;
         $wallets_revenue  += (int)$item->wallets->revenue;
         $wallets_used  += (int)$item->wallets->used;
+        $revenueProducts = (int)$item->revenueProducts;
+        $revenueServices = (int)$item->revenueServices;
 
-            foreach ((array)$item->revenue_month as $key => $value){
-                if (array_key_exists($key, $revenue_month) ==false){
-                    $revenue_month[$key] = $value;
-                }else{
-                    $revenue_month[$key] = $revenue_month[$key] + $value;
-                }
-            }
             foreach ((array)$item->total_month as $key => $value){
                 if (array_key_exists($key, $total_month) ==false){
                     $total_month[$key] = $value;
@@ -160,7 +158,16 @@
         </div>
     </div>
 </div>
+<div class="h4 text-center">BIỂU ĐỒ</div>
 
+<div class="row row-cards">
+    <div class="col-md-6">
+        <div id="piechart-1" style="margin-left: 15px"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="piechart-2"></div>
+    </div>
+</div>
 
 <div class="row row-cards">
     <div class="col-md-12">
@@ -180,6 +187,30 @@
     </div>
 </div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Sản phẩm', {{$revenueProducts}}],
+            ['Dịch vụ', {{$revenueServices}}],
+        ]);
+
+        var options = {
+            title: 'DOANH THU SẢN PHẨM & DỊCH VỤ',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-4'));
+
+        chart.draw(data, options);
+    }
+</script>
 
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
