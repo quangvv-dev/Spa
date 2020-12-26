@@ -24,6 +24,11 @@
     $wallets_used = 0;
     $revenueProducts = 0;
     $revenueServices = 0;
+
+    $revenueNew = 0;
+    $revenueOld = 0;
+    $revenueRest = 0;
+
         foreach($response as $k =>$item){
         $all_total      += (int)$item->all_total;
         $payment        += (int)$item->payment;
@@ -33,9 +38,20 @@
         $wallets_orders  += (int)$item->wallets->orders;
         $wallets_revenue  += (int)$item->wallets->revenue;
         $wallets_used  += (int)$item->wallets->used;
-        $revenueProducts = (int)$item->revenueProducts;
-        $revenueServices = (int)$item->revenueServices;
+        $revenueProducts += (int)$item->revenueProducts;
+        $revenueServices += (int)$item->revenueServices;
 
+        $revenueNew += (int)$item->revenueAll->revenueNew;
+        $revenueOld += (int)$item->revenueAll->revenueOld;
+        $revenueRest += (int)$item->revenueAll->revenueRest;
+
+            foreach ((array)$item->revenue_month as $key => $value){
+                if (array_key_exists($key, $revenue_month) ==false){
+                    $revenue_month[$key] = $value;
+                }else{
+                    $revenue_month[$key] = $revenue_month[$key] + $value;
+                }
+            }
             foreach ((array)$item->total_month as $key => $value){
                 if (array_key_exists($key, $total_month) ==false){
                     $total_month[$key] = $value;
@@ -195,7 +211,7 @@
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
             ['Sản phẩm', {{$revenueProducts}}],
-            ['Dịch vụ', {{$revenueServices}}],
+            ['Dịch vụ', {{$revenueOld}}],
         ]);
 
         var options = {
@@ -205,6 +221,31 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Khách hàng mới', {{$revenueNew}}],
+            ['Khách hàng cũ', {{$revenueNew}}],
+            ['Thu nợ', {{$revenueRest}}],
+        ]);
+
+        var options = {
+            title: 'DOANH THU THEO NGUỒN',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));
 
         chart.draw(data, options);
     }
@@ -263,9 +304,9 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Ngày',  'Doanh thu'],
-                @foreach($total_month as $k =>$item)
-            ['{{substr($k, -2)}}',{{$item}}],
+            ['Ngày', 'Doanh số', 'Doanh thu'],
+                @foreach($revenue_month as $k =>$item)
+            ['{{substr($k, -2)}}',{{$total_month[$k]}},{{$item}}],
             @endforeach
         ]);
         var options = {
@@ -290,7 +331,7 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Tháng', 'Doanh thu','Tăng trưởng'],
+            ['Tháng', 'Doanh thu', 'Tăng trưởng'],
                 @foreach($total_year as $k =>$item)
             [{{$k}},{{$item}},{{$item}}],
             @endforeach
