@@ -10,7 +10,8 @@
                 <img src="{{$int==1?'https://pushsale.vn/Portals/_default/Skins/APP/images/bxh/bxh2.png':''}}">
             </div>
             <div class="avatar-container  blink">
-                <img class="avatar-img" src="{{asset(isset($value->avatar)?$select_tower.@$value->avatar:$select_tower.'/assets/images/brand/logo.png')}}">
+                <img class="avatar-img"
+                     src="{{asset(isset($value->avatar)?$select_tower.@$value->avatar:$select_tower.'/assets/images/brand/logo.png')}}">
             </div>
             <div class="item-info {{'item-info'.($int)}}">
                 <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
@@ -49,7 +50,10 @@
             <th class="text-center">Thực thu</th>
             <th class="text-center">Tổng<span class=""><br>doanh số</span></th>
             <th class="text-center">Tổng thực thu</th>
-            <th class="text-center">Đã thu<span class=""><br>T.kỳ</span></th></th>
+            <th class="text-center">Thu nợ</th>
+            </th>
+            <th class="text-center">Đã thu<span class=""><br>T.kỳ</span></th>
+            </th>
         </tr>
         <tr class="number_index">
             <th class="text-center">(1)</th>
@@ -69,6 +73,7 @@
             <th class="text-center">(13)</th>
             <th class="text-center">(7)+(12)</th>
             <th class="text-center">(8)+(13)</th>
+            <th class="text-center"></th>
             <th class="text-center"></th>
         </tr>
         </thead>
@@ -131,6 +136,7 @@
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->all_payment - ($item->payment_new+$item->payment_old))}}</td>
                     <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
                 </tr>
             @endforeach
@@ -153,6 +159,7 @@
             <th class="text-center bold">{{@number_format($payment_old)}}</th>
             <th class="bold">{{@number_format($revenue_new + $revenue_old)}}</th>
             <th class="bold">{{@number_format($payment_new + $payment_old)}}</th>
+            <th class="bold">{{@number_format($all_payment - ($payment_new + $payment_old))}}</th>
             <th class="bold">{{@number_format($all_payment)}}</th>
         </tr>
 
