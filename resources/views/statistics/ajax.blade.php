@@ -52,7 +52,7 @@
 
 <div class="row row-cards">
     <div class="col">
-        <div class="card  overflow-hidden bg-gradient-indigo text-white">
+        <div class="card  overflow-hidden bg-gradient-gray text-white">
             <div class="card-body text-center">
                 <div class="h5">Tổng doanh số</div>
                 <div class="h3 font-weight-bold mb-4 font-30"><span
@@ -65,7 +65,7 @@
     </div>
     <div class="col">
         <div class="card overflow-hidden">
-            <div class="card-body text-center  bg-gradient-indigo text-white">
+            <div class="card-body text-center bg-gradient-gray text-white">
                 <div class="h5">Tổng doanh thu</div>
                 <div class="h3 font-weight-bold mb-4 font-30"><span
                         class="">{{@number_format($data['gross_revenue'])}}</span></div>
@@ -77,7 +77,18 @@
     </div>
     <div class="col">
         <div class="card  overflow-hidden">
-            <div class="card-body text-center bg-gradient-indigo text-white">
+            <div class="card-body text-center bg-gradient-gray text-white">
+                <div class="h5">Thu nợ</div>
+                <div class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment']-$data['gross_revenue'])}}</div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card  overflow-hidden">
+            <div class="card-body text-center bg-gradient-gray text-white">
                 <div class="h5">Đã thu trong kỳ</div>
                 <div class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment'])}}</div>
                 <div class="progress progress-sm">
