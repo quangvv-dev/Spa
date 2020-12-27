@@ -178,6 +178,7 @@ class StatisticController extends BaseApiController
         if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
             $input['data_time'] = 'THIS_MONTH';
         }
+        $schedules = Schedule::getBooks($input);
         $payment = PaymentHistory::search($input);
         $payment2 = clone $payment;
         $orders = Order::returnRawData($input);
@@ -233,6 +234,7 @@ class StatisticController extends BaseApiController
             'gross_revenue' => $orders->sum('gross_revenue'),
             'payment' => $payment2->sum('price'),
             'orders' => $orders->count(),
+            'schedules' => $schedules,
             'customers' => $customers->count(),
             'wallets' => $wallets,
             'revenue_month' => $revenue,
