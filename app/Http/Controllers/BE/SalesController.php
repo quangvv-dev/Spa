@@ -98,7 +98,6 @@ class SalesController extends Controller
         $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
 
         $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
-
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request) {
             $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
 
@@ -134,7 +133,7 @@ class SalesController extends Controller
             $item->payment_revenue = $order->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
             $item->payment_old = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
-//            $item->payment_rest = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');//da thu trong ky thu thêm
+            $item->payment_rest = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');//da thu trong ky thu thêm
 
             $item->revenue_total = $order->sum('all_total');
             return $item;
