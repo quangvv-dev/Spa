@@ -28,10 +28,12 @@
     $revenueNew = 0;
     $revenueOld = 0;
     $revenueRest = 0;
+    $schedules = 0;
 
         foreach($response as $k =>$item){
         $all_total      += (int)$item->all_total;
         $payment        += (int)$item->payment;
+        $schedules      += (int)$item->schedules;
         $orders         += (int)$item->orders;
         $customers      += (int)$item->customers;
         $gross_revenue  += (int)$item->gross_revenue;
@@ -91,6 +93,18 @@
                 <div class="h3 font-weight-bold mb-4 font-30"><span
                         class="">{{number_format($orders)}}</span>
                 </div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card  overflow-hidden bg-gradient-indigo text-white">
+            <div class="card-body text-center">
+                <div class="h5">Tổng số lịch hẹn</div>
+                <div class="h3 font-weight-bold mb-4 font-30"><span
+                        class="">{{@number_format($schedules)}}</span></div>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
                 </div>
