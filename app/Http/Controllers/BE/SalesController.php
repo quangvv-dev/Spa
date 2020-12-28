@@ -121,7 +121,8 @@ class SalesController extends Controller
             $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');//doanh so
             $order_old = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
 
-            $mergerArr = @array_merge($order_new->pluck('id')->toArray(),$order_old->pluck('id')->toArray())?:[];
+            $mergerArr = @array_merge($order_new->pluck('id')->toArray(), $order_old->pluck('id')->toArray()) ?: [];
+            $lastArray = array_diff($order->pluck('id')->toArray(), $mergerArr);
 
             $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();// trao doi moi
             $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $data_old->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count(); // trao doi cu
@@ -134,7 +135,7 @@ class SalesController extends Controller
             $item->payment_revenue = $order->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
             $item->payment_old = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
-            $item->payment_rest = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereNotIn('order_id', $mergerArr)->sum('price');//da thu trong ky thu thêm
+            $item->payment_rest = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereNotIn('order_id', $lastArray)->sum('price');//da thu trong ky thu thêm
 
             $item->revenue_total = $order->sum('all_total');
             return $item;
