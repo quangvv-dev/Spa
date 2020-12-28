@@ -121,7 +121,7 @@ class SalesController extends Controller
             $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');//doanh so
             $order_old = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
 
-            $mergerArr = @array_merge($order_new->pluck('id'),$order_old->pluck('id'))?:[];
+            $mergerArr = @array_merge($order_new->pluck('id')->toArray(),$order_old->pluck('id')->toArray())?:[];
 
             $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();// trao doi moi
             $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $data_old->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count(); // trao doi cu
