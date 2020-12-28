@@ -117,7 +117,7 @@ class SalesController extends Controller
                 $item->schedules_old = Schedule::select('id')->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
             }
 
-            $orderLast = Order::whereBetween('created_at', '<', getTime($request->data_time)[0])->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
+            $orderLast = Order::whereDate('created_at', '<', getTime($request->data_time)[0])->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
             $order = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
             $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');//doanh so
             $order_old = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
