@@ -135,7 +135,7 @@ class SalesController extends Controller
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
             $item->payment_old = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
             $allPayment = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $order->pluck('id')->toArray())->sum('price');//da thu trong ky thu thêm
-            $priceNew = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereNotIn('order_id', $mergerArr)->sum('price');//da thu trong ky thu thêm
+            $priceNew = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $mergerArr)->sum('price');//da thu trong ky thu thêm
             $item->payment_rest = $allPayment - $priceNew;
             $item->revenue_total = $order->sum('all_total');
             return $item;
