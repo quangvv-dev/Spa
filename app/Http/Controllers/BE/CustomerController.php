@@ -14,6 +14,7 @@ use App\Models\CustomerGroup;
 use App\Models\Department;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
+
 //use App\Models\Order;
 //use App\Models\OrderDetail;
 use App\Models\Order;
@@ -59,7 +60,7 @@ class CustomerController extends Controller
                 $telesales['Lễ Tân'][$item->full_name] = $item->id;
             } elseif ($item->role == UserConstant::TELESALES) {
                 $telesales['Telesales'][$item->full_name] = $item->id;
-            }elseif ($item->role == UserConstant::CSKH) {
+            } elseif ($item->role == UserConstant::CSKH) {
                 $telesales['Tư vấn viên'][$item->full_name] = $item->id;
             }
             return $item;
@@ -99,11 +100,9 @@ class CustomerController extends Controller
         }
         $statuses = Status::getRelationshipByCustomer($input);
         $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
-        $categories_product = Category::where('type', StatusCode::PRODUCT)->with('customers')->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
-            return Response::json(view('customers.ajax',
-                compact('customers', 'statuses', 'rank'))->render());
+            return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
         }
 
         return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'categories_product'));

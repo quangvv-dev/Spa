@@ -76,13 +76,17 @@ class Customer extends Model
                 });
             })
             ->when(isset($conditions['group']), function ($query) use ($conditions) {
-                $group_customer = CustomerGroup::where('category_id', $conditions['group'])->pluck('customer_id')
-                    ->toArray();
-
+                $group_customer = CustomerGroup::where('category_id', $conditions['group'])->pluck('customer_id')->toArray();
                 $query->whereIn('id', $group_customer);
             })
             ->when(isset($conditions['telesales']), function ($query) use ($conditions) {
                 $query->where('telesales_id', $conditions['telesales']);
+            })
+            ->when(isset($conditions['marketing']), function ($query) use ($conditions) {
+                $query->where('mkt_id', $conditions['marketing']);
+            })
+            ->when(isset($conditions['source']), function ($query) use ($conditions) {
+                $query->where('source_id', $conditions['source']);
             })
             ->when(isset($conditions['data_time']), function ($query) use ($conditions) {
                 $query->when($conditions['data_time'] == 'TODAY' ||

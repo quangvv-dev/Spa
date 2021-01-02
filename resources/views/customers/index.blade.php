@@ -44,7 +44,7 @@
                        type="text" id="search">
                 <div class="col-md-2 col-xs-12">
                     <select name="telesales_id" id="telesales_id" class="form-control telesales">
-                        <option value="">Chọn nhân viên</option>
+                        <option value="">Người phụ trách</option>
                         @foreach($telesales as $k => $l)
                             <optgroup label="{{ $k }}">
                                 @foreach($l as $kl => $vl)
@@ -65,24 +65,31 @@
                 </div>
                 <div class="col-md-2 col-xs-12">
                     <select name="group_product" class="form-control group-product">
-                        <option value="">Nhóm sản phẩm</option>
-                        @foreach($categories_product as $item)
-                            <option value="{{$item->id}}">{{ $item->name}}({{ $item->customers->count() }})</option>
+                        <option value="">Người tạo</option>
+                        @foreach($marketingUsers as $k=> $item)
+                            <option value="{{$k}}">{{ $item}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-1.5 col-xs-12">
+                    <select name="source" class="form-control source">
+                        <option value="">Nguồn</option>
+                        @foreach($source as $k=> $item)
+                            <option value="{{$k}}">{{ $item}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col relative">
-                    <a title="Upload Data" class="btn" href="#"
-                       data-toggle="modal" data-target="#myModal">
-                        <i class="fas fa-upload"></i></a>
-                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}}status-db
+                    <a title="Upload Data" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i class="fas fa-upload"></i></a>
+                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN?:"style=display:none"}}
                        title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
                     @if(in_array(\Illuminate\Support\Facades\Auth::user()->role,[\App\Constants\UserConstant::ADMIN,\App\Constants\UserConstant::MARKETING,\App\Constants\UserConstant::WAITER]))
                         {{--<a class="right btn btn-primary btn-flat" href="{{ route('customers.indexGroup') }}"--}}
-                           {{--style="margin-left: 3px"><i--}}
-                                {{--class="fa fa-plus-circle"></i>Auto</a>--}}
-                        <a class="right btn btn-primary btn-flat" href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
+                        {{--style="margin-left: 3px"><i--}}
+                        {{--class="fa fa-plus-circle"></i>Auto</a>--}}
+                        <a  class="right btn btn-primary btn-flat"
+                           href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
                     @endif
                 </div>
             </div>
@@ -97,6 +104,7 @@
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
             <input type="hidden" id="group_product">
+            <input type="hidden" id="source">
             <input type="hidden" id="telesales">
             <input type="hidden" id="search_value">
             <input type="hidden" id="btn_choose_time">
@@ -262,7 +270,6 @@
 
             $(document).on('click', '.update-messages', function (e) {
                 const target = $(e.target).parent().parent().parent().parent();
-
                 const messages = $(target).find('.message').val();
                 const id = $(target).find('.message').data('id');
 
@@ -310,6 +317,8 @@
                 const data_time = $('#btn_choose_time').val();
                 const search = $('#search_value').val();
                 const group = $('#group').val();
+                const marketing = $('#group-product').val();
+                const source = $('#source').val();
                 const telesales = $('#telesales').val();
                 $('#status').val(status);
                 $('#birthday_tab').val('');
@@ -319,6 +328,8 @@
                     group: group,
                     telesales: telesales,
                     search: search,
+                    source: source,
+                    marketing: marketing,
                 };
 
                 searchAjax(data);
@@ -351,12 +362,16 @@
                 const group = $('#group').val();
                 const telesales = $('#telesales').val();
                 const status = $('#status').val();
+                const marketing = $('#group-product').val();
+                const source = $('#source').val();
                 let data = {
                     data_time: data_time,
                     group: group,
                     telesales: telesales,
                     search: search,
                     status: status,
+                    source: source,
+                    marketing: marketing,
                 };
 
                 searchAjax(data);
@@ -375,25 +390,28 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product', delay(function () {
-                let group_product = $('.group-product').val();
+            $(document).on('change', '.group, .telesales, .group-product, .source', delay(function () {
+                let marketing = $('.group-product').val();
+                let source = $('.source').val();
                 let group = $('.group').val();
                 let telesales = $('.telesales').val();
                 let search = $('#search_value').val();
+                $('#source').val(source);
                 $('#group').val(group);
-                $('#group_product').val(group);
+                $('#group_product').val(marketing);
                 $('#telesales').val(telesales);
                 $('#birthday_tab').val('');
                 const data_time = $('#btn_choose_time').val();
                 const status = $('#status').val();
-                group = group ? group : group_product;
 
                 let data = {
+                    marketing: marketing,
                     group: group,
                     telesales: telesales,
                     data_time: data_time,
                     search: search,
-                    status: status
+                    status: status,
+                    source: source
                 };
                 searchAjax(data);
 
@@ -407,13 +425,16 @@
                 const group = $('#group').val();
                 const telesales = $('#telesales').val();
                 const status = $('#status').val();
-
+                const marketing = $('#group-product').val();
+                const source = $('#source').val();
                 let data = {
                     search: search,
                     data_time: data_time,
                     group: group,
                     telesales: telesales,
-                    status: status
+                    status: status,
+                    marketing: marketing,
+                    source: source,
                 };
                 searchAjax(data);
 
@@ -688,6 +709,8 @@
                 const group = $('.group').val();
                 const telesales = $('.telesales').val();
                 const search = $('#search_value').val();
+                const marketing = $('#group-product').val();
+                const source = $('#source').val();
                 let status = $('#status').val();
                 let invalid_account = $('#invalid_account').val();
                 let btn_choose_time = $('#btn_choose_time').val();
@@ -696,6 +719,8 @@
                     url: '{{ url()->current() }}',
                     method: "get",
                     data: {
+                        marketing: marketing,
+                        source: source,
                         page: pages,
                         group: group,
                         telesales: telesales,
