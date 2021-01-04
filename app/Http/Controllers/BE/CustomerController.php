@@ -196,7 +196,7 @@ class CustomerController extends Controller
     public function show(Request $request, $id)
     {
         $title = 'Trao đổi';
-        $customer = Customer::with('status', 'marketing', 'category', 'telesale', 'source_customer')->findOrFail($id);
+        $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer')->findOrFail($id);
         $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
