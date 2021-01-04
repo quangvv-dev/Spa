@@ -592,6 +592,29 @@
                 });
             });
 
+            $(document).on('dblclick', '.genitive-db', function (e) {
+                let target = $(e.target).parent();
+                $(target).find('.genitive-db').empty();
+                let id = $(this).data('id');
+                let html = '';
+
+                $.ajax({
+                    url: "ajax/genitives/",
+                    method: "get",
+                    data: {id: id}
+                }).done(function (data) {
+                    html +=
+                        '<select class="genitive-result form-control" data-id="' + data.customer.id + '" name="status_id" style="font-size: 14px;">';
+                    data.data.forEach(function (item) {
+                        html +=
+                            '<option value="' + item.id + '" ' + (item.id === data.customer.genitive_id ? "selected" : "") + '>' + item.name + '</option>';
+                    });
+
+                    html += '</select>';
+                    $(target).find(".genitive-db").append(html);
+                });
+            });
+
             $(document).on('change', '.status-result', function (e) {
                 let target = $(e.target).parent();
                 let status_id = $(target).find('.status-result').val();
@@ -608,6 +631,25 @@
                     $(target).parent().find('.status-db').html(data.status.name);
                 });
             });
+
+            $(document).on('change', '.genitive-result', function (e) {
+                let target = $(e.target).parent();
+                let genitives = $(target).find('.genitive-result').val();
+                let id1 = $(this).data('id');
+
+                $.ajax({
+                    url: "ajax/customers/" + id1,
+                    method: "put",
+                    data: {
+                        genitive_id: genitives
+                    }
+                }).done(function (data) {
+                    $(target).parent().find(".genitive-db").empty();
+                    $(target).parent().find('.genitive-db').html(data.genitive.name);
+                });
+            });
+
+
             $(document).on('focusout', '.description-result-customer', function (e) {
                 let target = $(e.target).parent();
                 let description = $(target).find('.description-result-customer').val();
@@ -627,9 +669,7 @@
 
             $('body').not('.category-result').on('change', function (e) {
                 if (!($('.category-result').parent().find('span.select2-container--focus').length) ||
-                    $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length
-                ) {
-
+                    $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length) {
                     let category_ids = $(e.target).parent().find('.category-result').val();
                     let id = $(e.target).parent().find('.category-result').data('id');
 

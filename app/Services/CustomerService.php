@@ -71,9 +71,9 @@ class CustomerService
     public function update($input, $id)
     {
         $data = $this->data($input);
-
         $customer = $this->find($id);
         $customer->update($data);
+//        dd($customer);
         return $customer;
 
     }

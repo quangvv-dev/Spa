@@ -515,7 +515,7 @@ class CustomerController extends Controller
             $customer->categories()->sync($request->category_ids);
         }
 
-        $data = Customer::with('status', 'categories', 'telesale')->where('id', $id)->first();
+        $data = Customer::with('status', 'categories', 'telesale','genitive')->where('id', $id)->first();
         if (isset($data->birthday)) {
             $data->birthday = Functions::dayMonthYear($data->birthday);
         }

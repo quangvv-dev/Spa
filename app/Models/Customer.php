@@ -27,6 +27,7 @@ class Customer extends Model
         'telesales_id',
         'source_id',
         'status_id',
+        'genitive_id',
         'full_name',
         'account_code',
         'address',
@@ -141,9 +142,9 @@ class Customer extends Model
         return $this->belongsTo(User::class, 'mkt_id', 'id');
     }
 
-    public function category()
+    public function genitive()
     {
-        return $this->belongsTo(Category::class, 'group_id', 'id');
+        return $this->belongsTo(Genitive::class, 'genitive_id', 'id');
     }
 
     public function categories()

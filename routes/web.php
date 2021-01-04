@@ -69,6 +69,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('customers/{id}', 'CustomerController@ajaxUpdate');
         Route::put('schedules/{id}', 'ScheduleController@ajaxUpdate');
         Route::get('statuses', 'StatusController@getList');
+        Route::get('genitives', 'GenitiveController@getList');
         Route::get('/status-schedules', 'ScheduleController@getList');
         Route::get('categories', 'CategoryServiceController@getListApi');
         Route::put('orders/{id}', 'OrderController@updateCountDay')->name('order.update_count_day');
@@ -144,6 +145,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     });
     Route::resource('promotions', 'PromotionController');
     Route::resource('trademark', 'TrademarkController');
+    Route::resource('genitives', 'GenitiveController');
     Route::resource('tasks', 'TaskController');
     Route::get('tasks-employee', 'TaskController@statisticIndex');
     Route::get('notifications', 'AjaxController@getNotificationOutView')->name('notifications.index');
