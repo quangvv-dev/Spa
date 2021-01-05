@@ -168,6 +168,9 @@
     <div class="col-md-6">
         <div id="piechart-7" style="margin-left: 15px"></div>
     </div>
+    <div class="col-md-6">
+        <div id="piechart-8" style="margin-left: 15px"></div>
+    </div>
 </div>
 <div class="row row-cards">
     <div class="col-md-12">
@@ -330,6 +333,32 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-6'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @if(count($revenue_genitive))
+                @foreach($revenue_genitive as $k => $item)
+            ['{{$k}}', {{@array_sum($item)}}],
+            @endforeach
+            @endif
+        ]);
+
+        var options = {
+            title: 'DOANH THU THEO NHÓM TÍNH CÁCH',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-8'));
 
         chart.draw(data, options);
     }
