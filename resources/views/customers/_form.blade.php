@@ -83,11 +83,12 @@
                             <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
                         </div>
                     </div>
+
                     <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                            {!! Form::label('address', 'Địa chỉ') !!}
-                            {!! Form::text('address', null, array('id' => 'address','class' => 'form-control')) !!}
-                            <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                        <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
+                            {!! Form::label('genitive_id', 'Nhóm tính cách') !!}
+                            {!! Form::select('genitive_id',$genitives, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhóm tính cách')) !!}
+                            <span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>
                         </div>
                     </div>
                 </div>

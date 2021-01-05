@@ -172,9 +172,9 @@
                             <div class="mb10 clearfix"><p class="pr5 fl">Người phụ trách:</p>
                                 <p class="bold word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
                             </div>
-                            {{--<div class="mb10 clearfix"><p class="pr5 fl">Nhóm KH:</p>--}}
-                                {{--<p class="bold word-wrap"> &nbsp;{{ @$customer->categories->name }}</p>--}}
-                            {{--</div>--}}
+                            <div class="mb10 clearfix"><p class="pr5 fl">Nhóm giới tính:</p>
+                                <p class="bold word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
+                            </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Nguồn KH:</p>
                                 <p class="bold word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
                             </div>

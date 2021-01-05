@@ -646,6 +646,7 @@
                 }).done(function (data) {
                     $(target).parent().find(".genitive-db").empty();
                     $(target).parent().find('.genitive-db').html(data.genitive.name);
+                    $(target).parent().find('.genitive-db').attr( 'title' ,data.genitive.description);
                 });
             });
 

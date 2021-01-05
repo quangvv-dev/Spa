@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Department;
+use App\Models\Genitive;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
 
@@ -54,6 +55,7 @@ class CustomerController extends Controller
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
         $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $genitives = Genitive::pluck('name', 'id')->toArray();
         $telesales = [];
         User::get()->map(function ($item) use (&$telesales) {
             if ($item->role == UserConstant::WAITER) {
@@ -77,6 +79,7 @@ class CustomerController extends Controller
             'branch' => $branch,
             'telesales' => $telesales,
             'marketingUsers' => $marketingUsers,
+            'genitives' => $genitives,
         ]);
     }
 
@@ -96,7 +99,6 @@ class CustomerController extends Controller
             $customers = $customers->latest()->paginate($input['limit']);
         } else {
             $customers = $customers->paginate(StatusCode::PAGINATE_20);
-
         }
         $statuses = Status::getRelationshipByCustomer($input);
         $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
@@ -515,7 +517,7 @@ class CustomerController extends Controller
             $customer->categories()->sync($request->category_ids);
         }
 
-        $data = Customer::with('status', 'categories', 'telesale','genitive')->where('id', $id)->first();
+        $data = Customer::with('status', 'categories', 'telesale', 'genitive')->where('id', $id)->first();
         if (isset($data->birthday)) {
             $data->birthday = Functions::dayMonthYear($data->birthday);
         }

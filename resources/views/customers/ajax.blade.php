@@ -2,13 +2,16 @@
     .page-header {
         display: none;
     }
+
     .display {
         display: inline-block;
         vertical-align: top;
     }
+
     .dropdown, .dropup {
         position: relative;
     }
+
     .gf-icon-filter {
         /*background-position: -758px -284px;*/
         width: 28px;
@@ -20,7 +23,7 @@
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="true"
                 style="height: 39px; border-radius: 3px; margin-right: 10px"><i
-                    class="fa fa-caret-down"></i></button>
+                class="fa fa-caret-down"></i></button>
         <ul class="dropdown-menu">
             <li class="pd5" id="search"><a class="invalid_account" data-invalid="1"
                                            data-icon-class="fa fa-trash">
@@ -28,7 +31,7 @@
             </li>
             <li class="pd5"><a class="invalid_account" data-invalid="0"
                                data-icon-class="fa fa-dot-circle-o"> <span class="pr10"><i
-                                class="fa fa-dot-circle-o" aria-hidden="true"></i></span> Đã xoá </a>
+                            class="fa fa-dot-circle-o" aria-hidden="true"></i></span> Đã xoá </a>
             </li>
         </ul>
     </div>
@@ -67,7 +70,7 @@
         @foreach(@$statuses as $k => $item)
             <button class="status btn white account_relation position" data-name="{{$item->name}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                        class="not-number-account white">{{ @$item->customers_count }}</span></button>
+                    class="not-number-account white">{{ @$item->customers_count }}</span></button>
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
@@ -88,7 +91,8 @@
         </div>
         <div class="display" style="width: 28px; height: 20px;">
             <div class="dropdown open"><i class="fa fa-eye dropdown-toggle" role="button"
-                                          data-toggle="dropdown" title="Hiển thị số trang" aria-expanded="true" style="margin-top: 8px; margin-left: 5px;"></i>
+                                          data-toggle="dropdown" title="Hiển thị số trang" aria-expanded="true"
+                                          style="margin-top: 8px; margin-left: 5px;"></i>
                 <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px">
                     <li><a class="b-white b-hover limiting active_limit bold" data-limit="20">Hiển thị 20 kết
                             quả/trang</a></li>
@@ -135,7 +139,8 @@
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Nhóm KH</th>
-            <th class="text-white text-center" style="width: 200px">&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+            <th class="text-white text-center" style="width: 200px">&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+            </th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
             <th class="text-white text-center">Nhóm tính cách</th>
@@ -178,8 +183,10 @@
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description-cus" data-id="{{$customer->id}}"
                         style="width: 291px; height: 59px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
-                    <td class="text-center genitive-db" data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>
-                    <td class="text-center customer-birthday" data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
+                    <td class="text-center genitive-db" title="{{@$customer->genitive->description}}"
+                        data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>
+                    <td class="text-center customer-birthday"
+                        data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ @$customer->facebook}}</td>
@@ -191,7 +198,7 @@
                     <td class="text-center">{{ number_format($customer->orders->sum('the_rest')) }}</td>
                     <td class="text-center">
                         <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
-                                    class="fas fa-edit"></i></a>
+                                class="fas fa-edit"></i></a>
                     </td>
                 </tr>
             @endforeach
@@ -203,7 +210,8 @@
         </tbody>
     </table>
 </div>
-<div class="table-ajax" style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">
+<div class="table-ajax"
+     style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
             <thead class="bg-primary text-white">
@@ -224,14 +232,15 @@
                         <td class="text-center"
                             style="background: {{isset($customer->status)?$customer->status->color :''}}; height: 63px">
                             <input
-                                    type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
+                                type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                         <td class="text-center">{{ $rank ++ }}</td>
                         <td class="text-center">{{ date('d-m-Y H:i', strtotime($customer->created_at)) }}</td>
                         <td class="text-center name-customer" data-customer-id="{{ $customer->id }}">
                             <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
                                 <i class="fas fa-info-circle"></i>
                             </a>
-                            <a target="_blank" href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
+                            <a target="_blank"
+                               href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                             <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                         </td>
                         <td class="text-center phone-customer"
