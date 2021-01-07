@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Models\Promotion;
 use App\Constants\PromotionConstant;
+use App\Models\Services;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,9 +25,11 @@ class PromotionController extends Controller
             PromotionConstant::MONEY => 'THEO TIỀN',
         ];
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();
+        $services = Services::where('type', StatusCode::SERVICE)->pluck('name', 'id')->toArray();
         view()->share([
             'type' => $type,
             'status' => $status,
+            'services' => $services,
         ]);
     }
 

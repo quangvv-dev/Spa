@@ -4,6 +4,7 @@
         tfoot td {
             border: none !important;
         }
+
         td input.form-control {
             font-size: 14px;
         }
@@ -204,17 +205,18 @@
                         <tfoot>
                         <tr>
                             <td>
-                                <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm dịch vụ</a></div>
+                                <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm
+                                        dịch vụ</a></div>
                             </td>
                             <td colspan="5">
                                 @if(empty($order))
-                                <a href="javascript:void(0)" id="get_Voucher" class="right">
-                                    <i class="fa fa-check-square text-primary"></i> Voucher KM !!!</a>
+                                    <a href="javascript:void(0)" id="get_Voucher" class="right">
+                                        <i class="fa fa-check-square text-primary"></i> Voucher KM !!!</a>
                                 @endif
                             </td>
                             <td colspan="2">
                                 @if(empty($order))
-                                    <a href="javascript:void(0)" id="get_Voucher" class="right">
+                                    <a href="javascript:void(0)" id="get_Voucher_Services" class="right">
                                         <i class="fa fa-check-square text-primary"></i> Voucher dịch vụ !!!</a>
                                 @endif
                             </td>
@@ -233,7 +235,8 @@
                                         {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
+                                        <div
+                                            class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
                                             {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
                                             <div class="wd-200 mg-b-30">
                                                 <div class="input-group">
@@ -251,16 +254,19 @@
                                 </div>
                             </td>
                             <td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>
-                            <td class="text-center bold" id="voucher">{{isset($order)?@number_format($order->discount):0}}</td>
-                            <td><input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden" id="discount">
-                                <input value="{{isset($order)?@$order->voucher_id:0}}" name="voucher_id" id="voucher_id" type="hidden">
+                            <td class="text-center bold"
+                                id="voucher">{{isset($order)?@number_format($order->discount):0}}</td>
+                            <td><input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden"
+                                       id="discount">
+                                <input value="{{isset($order)?@$order->voucher_id:0}}" name="voucher_id" id="voucher_id"
+                                       type="hidden">
                             </td>
                         </tr>
                         <tr class="bold">
                             <td class="text-center"><b>Chiết khấu tổng đơn (VNĐ)</b></td>
                             <td class="text-center">
                                 @if(empty($order))
-                                    <input type="number" max="100" min="0" value="0" id="discount_percent" >(%)
+                                    <input type="number" max="100" min="0" value="0" id="discount_percent">(%)
                                 @endif
                             </td>
                             <td class="text-center"
@@ -471,7 +477,47 @@
                         </div>`;
                         }
                     });
-                }else {
+                } else {
+                    html = `<span style="color: red"><i>Không có mã khuyến mại khả dụng !!!</i></span>`;
+                }
+                $('.promotionItem').html(html);
+
+            });
+            $('#voucherModal').modal('show');
+        });
+
+        $('#get_Voucher_Services').click(function () {
+            let status = $('#status').val();
+            let service = $('#fvalidate').find("select[name='service_id[]']").val()
+            $.ajax({
+                url: "{{ Url('api/voucher-services') }}",
+                method: "get",
+                data: {status: status, service: service}
+            }).done(function (response) {
+                let html = '';
+                let data = response.data;
+                if (data.length > 0) {
+                    data.forEach(function (item) {
+                        if (item.type == {{\App\Constants\PromotionConstant::PERCENT}}) {
+                            html += `<div class="header m-t-5">
+                            <ul class="promotionRules col">
+                                <li>
+                                    <span class="ruleName"></span><span class="ruleValue">` + item.title + `</span>
+                                </li>
+                                <li>
+                                    <span class="ruleName">Giảm giá: </span><span class="ruleValue">` + item.percent_promotion + `%</span>
+                                </li>
+                                <li>
+                                    <span class="ruleName">Tối đa: </span><span class="ruleValue">` + formatNumber(item.max_discount) + `</span>
+                                </li>
+                            </ul>
+                            <div class="div">
+                                <a href="#" data-id="` + item.id + `" class="btn btn-warning chooseVoucher">Áp dụng</a>
+                            </div>
+                        </div>`;
+                        }
+                    });
+                } else {
                     html = `<span style="color: red"><i>Không có mã khuyến mại khả dụng !!!</i></span>`;
                 }
                 $('.promotionItem').html(html);
@@ -482,7 +528,7 @@
 
         $(document).on('click', '.remove_row', function (e) {
             $(e.target).closest('tr').remove();
-            value_total =0;
+            value_total = 0;
             $(".total").each(function () {
                 value_total += parseInt(replaceNumber($(this).val()));
             });
@@ -547,25 +593,25 @@
                 if (response.ok == 200) {
                     $('#voucher').html(formatNumber(response.data.discount));
                     $('#discount').val(response.data.discount);
-                    value_total =0;
+                    value_total = 0;
                     $(".total").each(function () {
                         value_total += parseInt(replaceNumber($(this).val()));
                     });
-                    value_total = parseInt(value_total) -parseInt(response.data.discount);
+                    value_total = parseInt(value_total) - parseInt(response.data.discount);
                     $('#sum_total').html(formatNumber(value_total));
                     $('#voucher_id').val(response.data.voucher_id);
                     $('#voucherModal').modal('hide');
-                }else {
+                } else {
                     swal({
                         title: 'Đơn hàng không đủ điều kiện !!!',
-                        type:'error',
+                        type: 'error',
                         confirmButtonText: 'OK'
                     });
                 }
             });
         })
         $(document).on('change', '#discount_percent', function (e) {
-            let money = $(this).val()?$(this).val():0;
+            let money = $(this).val() ? $(this).val() : 0;
             let old_money = $('#discount_order').val();
             value_total = parseInt(old_money) + parseInt(replaceNumber(value_total));
             money = parseInt(money) * parseInt(value_total) / 100;

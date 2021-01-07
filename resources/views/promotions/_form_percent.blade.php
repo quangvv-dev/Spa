@@ -75,6 +75,13 @@
                                         <span class="help-block">{{ $errors->first('group[]', ':message') }}</span>
                                     </div>
                                 </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="form-group required {{ $errors->has('service_id') ? 'has-error' : '' }}">
+                                        {!! Form::label('service_id', 'Voucher tổng đơn | Voucher theo dịch vụ') !!}
+                                        {!! Form::select('service_id', $services, null, array('class' => 'form-control select2','placeholder'=>'Dịch vụ (nếu có)')) !!}
+                                        <span class="help-block">{{ $errors->first('service_id', ':message') }}</span>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="type" value="2">
                             </div>
                             <button type="submit" class="btn btn-success">Lưu</button>

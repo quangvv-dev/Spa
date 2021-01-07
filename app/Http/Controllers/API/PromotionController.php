@@ -16,9 +16,21 @@ class PromotionController extends BaseApiController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    public function listVoucherServices(Request $request)
+    {
+        $data = Promotion::where('service_id', '<>', 0)->where('service_id', $request->service)->where('current_quantity', '>', 0)->where('group', 'like', '%"' . $request->status . '"%')->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
+    }
+
+    /**
+     * Danh sach voucher
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function listVoucher(Request $request)
     {
-        $data = Promotion::where('current_quantity','>',0)->where('group', 'like', '%"' . $request->status . '"%')->get();
+        $data = Promotion::where('service_id', 0)->where('current_quantity', '>', 0)->where('group', 'like', '%"' . $request->status . '"%')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
     }
 
@@ -30,7 +42,7 @@ class PromotionController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function checkVoucher(Request $request,$id)
+    public function checkVoucher(Request $request, $id)
     {
         $total_price = $request->total_price ?: 0;
         $promotion = Promotion::findOrFail($id);
