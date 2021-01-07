@@ -24,21 +24,9 @@
                 {!! Form::open(array('url' => route('order-detail.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col row">
-                {{--<div class="col-xs-12 col-md-3">--}}
-                {{--<div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">--}}
-                {{--{!! Form::label('user_id', 'Khách hàng', array('class' => ' required')) !!}--}}
                 @if(isset($customer))
-                    {{--<select class="form-control select2 user" name="user_id" required="required"--}}
-                    {{--data-placeholder="Chọn khách hàng">--}}
-                    {{--<option value="{{ $customer->id }}" selected>{{ $customer->full_name }}</option>--}}
-                    {{--</select>--}}
                     {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control quantity', 'required' => true)) !!}
-                    {{--{!! Form::select('user_id', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn khách hàng')) !!}--}}
                 @endif
-                {{--<span class="help-block">{{ $errors->first('user_id', ':message') }}</span>--}}
-                {{--</div>--}}
-                {{--</div>--}}
-
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
@@ -221,10 +209,15 @@
                             <td colspan="5">
                                 @if(empty($order))
                                 <a href="javascript:void(0)" id="get_Voucher" class="right">
-                                    <i class="fa fa-check-square text-primary"></i> Chọn Voucher KM !!!</a>
+                                    <i class="fa fa-check-square text-primary"></i> Voucher KM !!!</a>
                                 @endif
                             </td>
-                            <td colspan="2"></td>
+                            <td colspan="2">
+                                @if(empty($order))
+                                    <a href="javascript:void(0)" id="get_Voucher" class="right">
+                                        <i class="fa fa-check-square text-primary"></i> Voucher dịch vụ !!!</a>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td rowspan="2" colspan="5">
@@ -304,7 +297,6 @@
         var searchParams = new URLSearchParams(window.location.search)
         var param = searchParams.get('type');
         var param2 = {{@$role_type?:0}};
-        // $(".fc-datepicker").datepicker().datepicker("setDate", new Date());
         $(document).on('click', '#add_row', function () {
 
             if (param === 'services' || param2 === 1) {
@@ -445,7 +437,7 @@
                 let data = response.data;
                 if (data.length > 0) {
                     data.forEach(function (item) {
-                        if (item.type =={{\App\Constants\PromotionConstant::MONEY}}) {
+                        if (item.type == {{\App\Constants\PromotionConstant::MONEY}}) {
                             html += `<div class="header m-t-5">
                             <ul class="promotionRules col">
                                 <li>
