@@ -71,7 +71,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-1.5 col-xs-12">
+                <div class="col-xs-12" style="max-width: 170px">
                     <select name="source" class="form-control source">
                         <option value="">Nguồn</option>
                         @foreach($source as $k=> $item)
