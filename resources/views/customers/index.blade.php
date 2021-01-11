@@ -81,7 +81,7 @@
                 </div>
                 <div class="col relative">
                     <a title="Upload Data" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i class="fas fa-upload"></i></a>
-                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN || (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER)?:"style=display:none"}}
+                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN || (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER)|| (Auth::user()->role == App\Constants\UserConstant::MARKETING && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER)?:"style=display:none"}}
                        title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
                     @if(in_array(\Illuminate\Support\Facades\Auth::user()->role,[\App\Constants\UserConstant::ADMIN,\App\Constants\UserConstant::MARKETING,\App\Constants\UserConstant::WAITER]))
