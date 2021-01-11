@@ -28,7 +28,7 @@
                     <tr>
                         <td class="text-center">
                             <a class="btn" href="{{$order->role_type== 2 ?url('/orders/'.$order->id.'/edit'):url('/orders-service/'.$order->id.'/edit')}}" title="Chỉnh sửa"><i class="fas fa-edit"></i></a>
-                            @if($order->count_day > 0 )
+                            @if($order->count_day > 0 && Auth::user()->role != \App\Constants\UserConstant::CSKH)
                                 <a title="Trừ liệu trình" class="btn edit-order" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                             @endif
                         </td>
