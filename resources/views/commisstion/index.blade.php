@@ -41,7 +41,7 @@
                             <div class="col-xs-12 col-md-2 hidden">
                                 <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                                     {!! Form::label('all_total', 'Giá tiền', array('class' => ' required')) !!}
-                                    {!! Form::text('all_total', $order->all_total, array('class' => 'form-control price-total hidden','required'=>true)) !!}
+                                    {!! Form::text('all_total', $order->gross_revenue, array('class' => 'form-control price-total hidden','required'=>true)) !!}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-2">
@@ -100,7 +100,7 @@
                 <div class="col-xs-12 col-md-2 hidden">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('all_total', 'Giá tiền', array('class' => ' required')) !!}
-                        {!! Form::text('all_total', $order->all_total, array('class' => 'form-control price-total hidden','required'=>true)) !!}
+                        {!! Form::text('all_total', $order->gross_revenue, array('class' => 'form-control price-total hidden','required'=>true)) !!}
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
