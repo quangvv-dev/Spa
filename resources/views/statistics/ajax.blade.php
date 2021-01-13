@@ -171,7 +171,7 @@
     </div>
 </div>
 
-<div class="h4 text-center">Ví tiền</div>
+{{--<div class="h4 text-center">Ví tiền</div>--}}
 
 <div class="row row-cards">
     {{--<div class="col">--}}
