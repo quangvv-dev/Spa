@@ -53,7 +53,7 @@
         <div class="card overflow-hidden bg-gradient-indigo text-white">
             <div class="card-body text-center">
                 <div class="h5">Tổng số đơn hàng</div>
-                <div class="h3 font-weight-bold mb-4 font-30"><span class="">{{@number_format($data['orders'])}}</span>
+                <div class="h3 font-weight-bold mb-4 font-30"><span class="">{{@number_format($data['orders'] + $wallets['orders'])}}</span>
                 </div>
                 <div class="row">
                     <div class="col-md-3 col-xs-12">
