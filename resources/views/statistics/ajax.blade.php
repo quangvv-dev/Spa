@@ -122,14 +122,17 @@
                 <div
                     class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment'] + $wallets['revenue']-$wallets['used'])}}</div>
                 <div class="row">
-                    <div class="col-12">
-                        Doanh thu: {{@number_format($data['gross_revenue'])}}
+                    <div class="col-12 row">
+                        <div class="title col-5">Doanh thu:</div>
+                        <div class="col-7">{{@number_format($data['gross_revenue'])}}</div>
                     </div>
-                    <div class="col-12">
-                        Thu nợ: {{@number_format($data['payment']-$data['gross_revenue'])}}
+                    <div class="col-12 row">
+                        <div class="title col-5">Thu nợ:</div>
+                        <div class="col-7">{{@number_format($data['payment']-$data['gross_revenue'])}}</div>
                     </div>
-                    <div class="col-12">
-                        Nạp ví: {{@number_format($wallets['revenue'])}}
+                    <div class="col-12 row">
+                        <div class="title col-5">Nạp ví:</div>
+                        <div class="col-7">{{@number_format($wallets['revenue'])}}</div>
                     </div>
 
                 </div>
@@ -147,14 +150,17 @@
                 <div
                     class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment'] - $wallets['used'])}}</div>
                 <div class="row">
-                    <div class="col-12">
-                        Tiền mặt: {{@number_format($list_payment['money'])}}
+                    <div class="col-12 row">
+                        <div class="title col-5">Tiền mặt:</div>
+                        <div class="col-7">{{@number_format($list_payment['money'])}}</div>
                     </div>
-                    <div class="col-12">
-                        Thẻ: {{@number_format($list_payment['card'])}}
+                    <div class="col-12 row">
+                        <div class="title col-5">Thẻ:</div>
+                        <div class="col-7">{{@number_format($list_payment['card'])}}</div>
                     </div>
-                    <div class="col-12">
-                        Tiêu từ ví: {{@number_format($wallets['used'])}}
+                    <div class="col-12 row">
+                        <div class="title col-5">Tiêu từ ví:</div>
+                        <div class="col-7">{{@number_format($wallets['used'])}}</div>
                     </div>
                 </div>
                 <div class="progress progress-sm">
