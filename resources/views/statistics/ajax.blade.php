@@ -146,7 +146,7 @@
     <div class="col-md-4 col-xs-12">
         <div class="card  overflow-hidden">
             <div class="card-body text-center bg-gradient-gray text-white">
-                <div class="h5">Nguồn tiền</div>
+                <div class="h5">Nguồn tiền từ đơn hàng</div>
                 <div
                     class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment'])}}</div>
                 <div class="row">
