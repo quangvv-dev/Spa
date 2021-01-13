@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -49,7 +50,8 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         $data['title'] = '404';
-        if ($this->isHttpException($exception)) {
+        if ($exception->getMessage()) {
+//        if ($this->isHttpException($exception)) {
             return response()->view('errors.404', ['data' => $data], 404);
         }
 

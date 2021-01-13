@@ -107,7 +107,7 @@ class CustomerController extends Controller
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'categories_product'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories'));
     }
 
     /**
