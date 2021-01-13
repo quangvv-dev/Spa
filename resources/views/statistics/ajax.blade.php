@@ -148,7 +148,7 @@
             <div class="card-body text-center bg-gradient-gray text-white">
                 <div class="h5">Nguồn tiền</div>
                 <div
-                    class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment'] - $wallets['used'])}}</div>
+                    class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($data['payment'])}}</div>
                 <div class="row">
                     <div class="col-12 row">
                         <div class="title col-5">Tiền mặt:</div>
