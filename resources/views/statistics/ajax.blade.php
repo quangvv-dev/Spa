@@ -211,47 +211,50 @@
     {{--</div>--}}
 </div>
 
-<div class="h4 text-center">BIỂU ĐỒ</div>
-<div class="row row-cards">
-    <div class="col-md-6">
-        <div id="piechart-1" style="margin-left: 15px"></div>
+<div class="d-none col-xs-none d-md-block">
+    <div class="h4 text-center">BIỂU ĐỒ</div>
+
+    <div class="row row-cards">
+        <div class="col-md-6">
+            <div id="piechart-1" style="margin-left: 15px"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="piechart-2"></div>
+        </div>
     </div>
-    <div class="col-md-6">
-        <div id="piechart-2"></div>
+    <div class="row row-cards">
+        <div class="col-md-6">
+            <div id="piechart-3" style="margin-left: 15px"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="piechart-4" style="margin-left: 15px"></div>
+        </div>
     </div>
-</div>
-<div class="row row-cards">
-    <div class="col-md-6">
-        <div id="piechart-3" style="margin-left: 15px"></div>
+    <div class="row row-cards">
+        <div class="col-md-6">
+            <div id="piechart-5" style="margin-left: 15px"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="piechart-6" style="margin-left: 15px"></div>
+        </div>
     </div>
-    <div class="col-md-6">
-        <div id="piechart-4" style="margin-left: 15px"></div>
+    <div class="row row-cards">
+        <div class="col-md-6">
+            <div id="piechart-7" style="margin-left: 15px"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="piechart-8" style="margin-left: 15px"></div>
+        </div>
     </div>
-</div>
-<div class="row row-cards">
-    <div class="col-md-6">
-        <div id="piechart-5" style="margin-left: 15px"></div>
+    <div class="row row-cards">
+        <div class="col-md-12">
+            <div id="column" style="margin-left: 15px"></div>
+        </div>
     </div>
-    <div class="col-md-6">
-        <div id="piechart-6" style="margin-left: 15px"></div>
-    </div>
-</div>
-<div class="row row-cards">
-    <div class="col-md-6">
-        <div id="piechart-7" style="margin-left: 15px"></div>
-    </div>
-    <div class="col-md-6">
-        <div id="piechart-8" style="margin-left: 15px"></div>
-    </div>
-</div>
-<div class="row row-cards">
-    <div class="col-md-12">
-        <div id="column" style="margin-left: 15px"></div>
-    </div>
-</div>
-<div class="row row-cards">
-    <div class="col-md-12">
-        <div id="column2" style="margin-left: 15px"></div>
+    <div class="row row-cards">
+        <div class="col-md-12">
+            <div id="column2" style="margin-left: 15px"></div>
+        </div>
     </div>
 </div>
 
