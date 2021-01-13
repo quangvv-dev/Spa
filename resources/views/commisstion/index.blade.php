@@ -112,8 +112,7 @@
             <div class="col-xs-12 col-md-1" style="margin-top:34px">
                 <a class="remove"> <i class="fa fa-times fa-2x"></i> </a>
             </div>
-            </div>
-`);
+            </div>`);
             $('.number').number(true);
             $("#fvalidate").validate({
                 rules: {

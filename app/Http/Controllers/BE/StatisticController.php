@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Models\Customer;
+use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
@@ -58,6 +59,8 @@ class StatisticController extends Controller
         $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
         $schedules = Schedule::getBooks($input);
         $payment = PaymentHistory::search($input);
+        $payment2 = clone $payment;
+        $payment3 = clone $payment;
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders3 = clone $orders;
@@ -82,6 +85,7 @@ class StatisticController extends Controller
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
             ->whereBetween('payment_date', getTime($input['data_time']))->whereNotNull('payment_date')->orderBy('payment_date', 'asc')
             ->groupBy('payment_date')->get();
+        $groupComment = GroupComment::whereBetween('created_at', getTime($input['data_time']));
 
         $data = [
             'all_total' => $orders->sum('all_total'),
@@ -92,12 +96,15 @@ class StatisticController extends Controller
             'category_service' => $category_service,
             'category_product' => $category_product,
             'revenue_month' => $revenue_month,
+            'groupComment' => $groupComment->count(),
         ];
         $products = [
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
         ];
         $services = [
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
         ];
 
         $revenue = self::getRevenueCustomer($input, $payment);
@@ -131,11 +138,15 @@ class StatisticController extends Controller
             'revenue' => $wallet->sum('order_price'),
             'used' => $payment->where('payment_type', 3)->sum('price'),
         ];
+        $list_payment = [
+            'money' => $payment2->where('payment_type', 1)->sum('price'),
+            'card' => $payment3->where('payment_type', 2)->sum('price'),
 
+        ];
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'))->render());
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'list_payment', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'))->render());
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'));
     }
 
     /**
