@@ -411,7 +411,7 @@ class CustomerController extends Controller
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
                     if (!empty($row['so_dien_thoai'])) {
-                        $date = Carbon::createFromFormat('d/m/Y', $row['ngay_tao_kh'])->format('Y-m-d');
+                        $date = Carbon::createFromFormat('d/m/Y', trim($row['ngay_tao_kh']))->format('Y-m-d');
                         $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
                         $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
                         $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
