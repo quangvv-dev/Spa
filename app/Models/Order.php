@@ -200,7 +200,7 @@ class Order extends Model
                     })
                 ->when(isset($input['bor_none']), function ($query) use ($input) {
                     $query->when($input['bor_none'] == 'unpaid', function ($q) use ($input) {
-                        $q->where('gross_revenue', 0);
+                        $q->where('the_rest', '<>', 0);
                     })
                         ->when($input['bor_none'] == 'paid', function ($q) use ($input) {
                             $q->where('the_rest', 0);
