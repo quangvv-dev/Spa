@@ -212,6 +212,7 @@ class StatisticController extends BaseApiController
         $orders3 = $orders3->get();
         if (count($orders3)) {
             foreach ($orders3 as $item) {
+                if (isset($item->customer) && $item->customer->gender)
                 $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
             }
         }
