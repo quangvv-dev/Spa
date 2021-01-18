@@ -290,11 +290,9 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @if(count($trademark))
                 @foreach($trademark as $item)
             ['{{$item->name}}', {{$item->price}}],
             @endforeach
-            @endif
         ]);
 
         var options = {
