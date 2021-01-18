@@ -55,9 +55,12 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col">
-                    <a title="Upload Data" style="position: absolute;right: 0%" class="btn" href="#"
-                       data-toggle="modal" data-target="#myModal">
+                    <a title="Upload Data" style="position: absolute;right: 0%" href="#" data-toggle="modal"
+                       data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
+                    <a title="Tải data" style="position: absolute;right: 3%" class="download" data-value="dowload"
+                       href="javascript:void(0)"><i
+                            class="fas fa-download"></i></a>
                 </div>
             </div>
             <div class="card-header col-md-12">
@@ -146,7 +149,7 @@
             });
         }
 
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
+        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none, .download', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
             const class_name = $(this).attr("class");
@@ -162,7 +165,6 @@
             const role_type = $('#role_type').val();
             const phone = $('.phone').val();
             var bor_none = '';
-
             if (class_name == 'choose_time') {
                 var data_time = $(target).find('.choose_time').data('time');
                 $('a.choose_time').removeClass('border b-gray');
@@ -194,6 +196,17 @@
             }
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
+            if (class_name == 'download') {
+                if (typeof (data_time) == "undefined") {
+                    data_time = 'THIS_MONTH';
+                }
+                let url = location.origin + '/list-orders/?group=' + group + '&telesales=' + telesales + '&marketing=' + marketing + '&customer='
+                    + customer + '&service=' + service + '&payment_type=' + payment_type + '&data_time=' + data_time + '&start_date=' + start_date
+                    + '&end_date=' + end_date + '&bor_none=' + bor_none + '&order_type=' + order_type + '&role_type=' + role_type + '&phone=' + phone
+                    + '&download=1'
+                ;
+                location.href = url;
+            }
 
             searchAjax({
                 group: group,
@@ -337,9 +350,11 @@
         $(document).on('click', '.cancel_other_time', function () {
             $(".other_time_panel").css({'display': 'none'});
         });
+
         $(document).on('click', '#showBoxSearch', function () {
             $("#boxSearch").css({'display': ''});
         });
+
         $(document).on('click', '#closeBoxSearch', function () {
             $("#boxSearch").css({'display': 'none'});
         });
