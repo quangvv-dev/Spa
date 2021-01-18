@@ -314,11 +314,9 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @if(count($revenue_gender))
-                @foreach($revenue_gender as $k => $item)
+            @foreach($revenue_gender as $k => $item)
             ['{{$k==0?"NỮ":'NAM'}}', {{@array_sum($item)}}],
             @endforeach
-            @endif
         ]);
 
         var options = {
