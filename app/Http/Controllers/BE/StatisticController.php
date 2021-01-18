@@ -113,7 +113,7 @@ class StatisticController extends Controller
         $orders3 = $orders3->get();
         if (count($orders3)) {
             foreach ($orders3 as $item) {
-                if (isset($item->customer->genitive) && $item->customer->genitive) {
+                if (isset($item->customer->gender) && $item->customer->gender) {
                     $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
                 }
             }

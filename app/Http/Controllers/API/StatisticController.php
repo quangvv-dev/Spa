@@ -108,7 +108,9 @@ class StatisticController extends BaseApiController
         $orders3 = $orders3->get();
         if (count($orders3)) {
             foreach ($orders3 as $item) {
-                $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
+                if (isset($item->customer->gender) && $item->customer->gender)
+                    $revenue_gender[@$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
+
             }
         }
         $revenue_year = [];
