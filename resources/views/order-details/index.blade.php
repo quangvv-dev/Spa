@@ -58,7 +58,6 @@
                     <a title="Upload Data" style="position: absolute;right: 0%" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
-                    {{--<a class="right btn btn-primary btn-flat" href="{{ route('orders.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>--}}
                 </div>
             </div>
             <div class="card-header col-md-12">
@@ -70,12 +69,9 @@
                     <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
                     <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
                     <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
-                    <li class="display pl5"><a data-time="THIS_MONTH" class="display padding0-5 choose_time">Tháng
-                            này</a>
-                    </li>
+                    <li class="display pl5"><a data-time="THIS_MONTH" class="choose_time">Tháng này</a></li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                    <li class="display position"><a class="other_time  border b-gray"
-                        >Khác</a>
+                    <li class="display position"><a class="other_time  border b-gray">Khác</a>
                         <div class="add-drop add-d-right other_time_panel"
                              style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>
                             <div class="padding tl"><p>Ngày bắt đầu</p>
@@ -108,11 +104,6 @@
                     <div class="btn-group ml5">
                         <button class="btn btn-default order_status" data-status="">Đã hủy</button>
                     </div>
-                    {{--                    <div class="btn-group ml5">--}}
-                    {{--                        <button class="btn btn-default bor-none" data-filter="payment" id="payment_tab">Đã thu trong--}}
-                    {{--                            kỳ--}}
-                    {{--                        </button>--}}
-                    {{--                    </div>--}}
                     <div class="btn-group ml5">
                         {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Đơn thường & Liệu trình')) !!}
                     </div>
@@ -158,7 +149,7 @@
         $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time, .bor-none', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
-            const class_name = target.attr('class');
+            const class_name = $(this).attr("class");
             const group = $('.group').val();
             const telesales = $('.telesales').val();
             const marketing = $('.marketing').val();
@@ -170,19 +161,20 @@
             const order_type = $('#order-type').val();
             const role_type = $('#role_type').val();
             const phone = $('.phone').val();
+            var bor_none = '';
 
-            if (class_name === 'display pl5') {
+            if (class_name == 'choose_time') {
                 var data_time = $(target).find('.choose_time').data('time');
                 $('a.choose_time').removeClass('border b-gray');
+                $('a.other_time').removeClass('border b-gray');
                 $(target).find('.choose_time').addClass('border b-gray');
             } else {
                 var data_time = $('#choose_time').val();
             }
-            if (class_name === 'btn-group ml5') {
-                var bor_none = $(target).find('.bor-none').data('filter');
+            if (class_name == 'tl filter_advanced bor-none') {
+                bor_none = $(target).find('.bor-none').data('filter');
             } else {
-                var bor_none = $('#bor-none').val();
-
+                bor_none = $('#bor-none').val();
             }
             $('#group').val(group);
             $('#role_type').val(role_type);
@@ -270,7 +262,6 @@
             const phone = $('#phone').val();
             const role_type = $('.role_type').val();
             $('#role_type').val(role_type);
-
 
             searchAjax({
                 group: group,
