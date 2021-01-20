@@ -197,11 +197,13 @@
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
             if (class_name == 'download') {
-                if (typeof (data_time) == "undefined") {
-                    data_time = 'THIS_MONTH';
+                let time_up = $('#choose-time').val();
+
+                if (typeof (time_up) == "undefined") {
+                    time_up = 'THIS_MONTH';
                 }
                 let url = location.origin + '/list-orders/?group=' + group + '&telesales=' + telesales + '&marketing=' + marketing + '&customer='
-                    + customer + '&service=' + service + '&payment_type=' + payment_type + '&data_time=' + data_time + '&start_date=' + start_date
+                    + customer + '&service=' + service + '&payment_type=' + payment_type + '&data_time=' + time_up + '&start_date=' + start_date
                     + '&end_date=' + end_date + '&bor_none=' + bor_none + '&order_type=' + order_type + '&role_type=' + role_type + '&phone=' + phone
                     + '&download=1'
                 ;

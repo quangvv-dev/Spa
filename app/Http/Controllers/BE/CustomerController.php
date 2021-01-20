@@ -530,14 +530,7 @@ class CustomerController extends Controller
         $title = 'THỐNG KÊ KHÁCH HÀNG';
         $input = $request->all();
 
-//        $input['order_id'] = null;
         $input['data_time'] = $request->data_time ?: 'TODAY';
-//        $customer = Customer::getDataOfYears($input);
-//        $statuses = Status::getRelationship($input);
-//        $statusRevenueByRelations = Status::getRevenueSourceByRelation($input);
-//        $schedules = Schedule::countStatus($input);
-//        $categoryRevenues = Category::getRevenue($input);
-//        $statusRevenues = OrderDetail::getCustomerSearch($input);
 
         $type = $request->type ?: StatusCode::PRODUCT;
         $arr = Services::getIdServiceType($type);
@@ -560,11 +553,6 @@ class CustomerController extends Controller
                 'title',
                 'service1',
                 'type',
-//                'statuses',
-//                'customer',
-//                'statusRevenueByRelations',
-//                'schedules'
-//                'categoryRevenues',
                 'services',
                 'orders',
                 'statusRevenues',
@@ -578,11 +566,6 @@ class CustomerController extends Controller
 
         return view('customers.chart', compact(
                 'title',
-//                'statuses',
-//                'customer',
-//                'schedules'
-//                'statusRevenueByRelations',
-//                'categoryRevenues',
                 'type',
                 'service1',
                 'orders',

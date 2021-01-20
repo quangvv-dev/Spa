@@ -197,67 +197,54 @@ class OrderController extends Controller
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest' => $orders->sum('the_rest'),
             ]);
-//            if (isset($request->download)) {
-//                Excel::create('Danh sách đơn hàng', function ($excel) use ($orders->get()) {
-//                    $excel->sheet('Sheet 1', function ($sheet) use ($data) {
-//                        $sheet->cell('A1:Q1', function ($row) {
-//                            $row->setBackground('#008686');
-//                            $row->setFontColor('#ffffff');
-//                        });
-//                        $sheet->freezeFirstRow();
-//                        $sheet->row(1, [
-//                            'ID',
-//                            'Tên khách hàng',
-//                            'Mã khách hàng',
-//                            'Số điện thoại',
-//                            'Sinh nhật',
-//                            'Giới tính',
-//                            'Link Facebook',
-//                            'Địa chỉ',
-//                            'Ngày tạo',
-//                            'Số đơn',
-//                            'Tổng doanh thu',
-//                            'ID người phụ trách',
-//                            'ID người tư vấn',
-//                            'ID nhóm KH',
-//                            'ID nguồn KH',
-//                            'ID Mối quan hệ',
-//                            'Mô tả',
-//                        ]);
-//
-//                        $i = 1;
-//                        if ($data) {
-//                            foreach ($data as $k => $ex) {
-//                                $categoryName = '';
-//                                $i++;
-//                                foreach ($ex->categories as $category) {
-//                                    $categoryName .= $category->name . ', ';
-//                                }
-//                                $sheet->row($i, [
-//                                    @$ex->id,
-//                                    @$ex->full_name,
-//                                    @$ex->account_code,
-//                                    @$ex->phone,
-//                                    @$ex->birthday,
-//                                    @$ex->GenderText,
-//                                    @$ex->facebook,
-//                                    @$ex->address,
-//                                    @$ex->created_at,
-//                                    @$ex->orders->count(),
-//                                    @(int)$ex->orders->sum('all_total'),
-//                                    @$ex->marketing->full_name,
-//                                    @$ex->telesale->full_name,
-//                                    @$categoryName,
-//                                    @$ex->source_customer->name,
-//                                    @$ex->status->name,
-//                                    @$ex->description,
-//                                    // (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
-//                                ]);
-//                            }
-//                        }
-//                    });
-//                })->export('xlsx');
-//            }
+            if (isset($request->download)) {
+                $orders2 = $orders->get();
+                Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
+                    $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
+                        $sheet->cell('A1:M1', function ($row) {
+                            $row->setBackground('#008686');
+                            $row->setFontColor('#ffffff');
+                        });
+                        $sheet->freezeFirstRow();
+                        $sheet->row(1, [
+                            'STT',
+                            'Ngày đặt hàng',
+                            'Ngày hết hạn',
+                            'Mã ĐH',
+                            'Tên KH',
+                            'SĐT',
+                            'Sản phẩm|Dịch vụ',
+                            'Số lượng (nếu có)',
+                            'Doanh số',
+                            'Doanh thu',
+                            'Còn nợ',
+                            'Khuyến mại (voucher)',
+                            'Người lên đơn',
+                        ]);
+                        $i = 1;
+                        if ($orders2) {
+                            foreach ($orders2 as $k => $ex) {
+                                $i++;
+                                $sheet->row($i, [
+                                    @$k + 1,
+                                    isset($ex->created_at) ? date("d/m/Y", strtotime($ex->created_at)) : '',
+                                    isset($ex->hsd) ? date("d/m/Y", strtotime($ex->hsd)) : '',
+                                    @$ex->code,
+                                    @$ex->customer->full_name,
+                                    @$ex->customer->phone,
+                                    @str_replace('<br>', ',', $ex->service_text),
+                                    @$ex->orderDetails->sum('quantity'),
+                                    @number_format($ex->all_total),
+                                    @number_format($ex->gross_revenue),
+                                    @number_format($ex->the_rest),
+                                    @number_format($ex->discount),
+                                    @$ex->customer->marketing->full_name,
+                                ]);
+                            }
+                        }
+                    });
+                })->export('xlsx');
+            }
             $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
                 'allTotalPage' => $orders->sum('all_total'),
