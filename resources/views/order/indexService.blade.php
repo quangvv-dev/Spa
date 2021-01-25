@@ -389,7 +389,7 @@
         $(document).on('change', '.service', function (e) {
             let target = $(e.target).parent().parent().parent().parent();
             let id = $(this).val();
-            if (param === 'services') {
+            if (param2 === 1) {
                 $('#role_type').val({{\App\Constants\StatusCode::SERVICE}}).change();
             } else {
                 $('#role_type').val({{\App\Constants\StatusCode::COMBOS}}).change();
