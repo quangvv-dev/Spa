@@ -370,10 +370,10 @@ class OrderController extends Controller
     {
         $order = Order::with('customer', 'orderDetails')->findOrFail($id);
         $payment = PaymentHistory::where('order_id', $order->id)->latest()->first();
-        $customPaper = array(0, 0, 454.08, 227.04);
-//        return view('order.order-pdf', compact('order','payment'));
-        $pdf = \PDF::loadView('order.order-pdf', compact('order', 'payment'))->setPaper($customPaper, 'landscape');
-        return $pdf->download('order.pdf');
+        return view('order.order-pdf', compact('order','payment'));
+//        $customPaper = array(0, 0, 454.08, 227.04);
+//        $pdf = \PDF::loadView('order.order-pdf', compact('order', 'payment'))->setPaper($customPaper, 'landscape');
+//        return $pdf->download('order.pdf');
     }
 
     public function payment(Request $request, $id)

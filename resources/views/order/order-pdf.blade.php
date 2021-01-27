@@ -6,18 +6,27 @@
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Spa Linh anh, chuyên nghiệp, uy tín...</title>
-
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <style>
-        * {
-            font-size: 8px;
+        .font12 {
+            font-size: 10px;
         }
 
         body {
-            font-family: DejaVu Sans, Arial, Helvetica;
+            font-family: system-ui;
+        }
+        strong{
+            font-size: 12px;
+            font-weight: 600;
+        }
+        b{
+            font-size: 12px;
+        }
+
+        h3{
+            margin: 0;
         }
 
         td {
@@ -38,30 +47,30 @@
     </style>
 
 </head>
-<body>
+<body id="appBanner">
 
 
 <div class="invoice">
     <div class="row">
+        <div class="col-xs-12">
         <table class="table mt0">
             <tbody>
             <tr>
-                <td colspan="2" class="text-center"><strong style="font-size: 14px;font-family: Monospace, Calibri, Verdana, Helvetica, sans-serif">ROYAL SPA</strong><br></td>
+                <td colspan="2" class="text-center"><h3>VIỆN THẨM MỸ ROYAL</h3><br></td>
             </tr>
             <tr>
-                <td colspan="2" class="text-center"><b style="font-size: 10px">ĐƠN HÀNG BÁN</b></td>
+                <td colspan="2" class="text-center"><b >ĐƠN HÀNG BÁN</b></td>
             </tr>
-            <tr>
+            <tr class="font12">
                 <td class="padding5">Ngày : {{ date('d-m-Y', strtotime($payment->created_at)) }}</td>
                 <td class="padding5">HĐ: {{ $order->code }}</td>
             </tr>
-            <tr>
+            <tr class="font12">
                 <td class="padding5">Khách hàng : {{ @$order->customer->full_name }}</td>
                 <td class="padding5">SĐT: {{ @$order->customer->phone }}</td>
             </tr>
             </tbody>
         </table>
-
         <table class="table table-bordered mt10">
             <tbody>
             <tr class="bold b-gray">
@@ -71,16 +80,16 @@
                 <td class="padding5"><strong>T.Tiền</strong></td>
             </tr>
             @foreach($order->orderDetails as $key => $orderDetail)
-                <tr>
+                <tr class="font12">
                     <td class="tl position">{{ $orderDetail->service->name }}</td>
                     <td class="tc">{{ number_format($orderDetail->price) }}</td>
                     <td class="tc">{{ $orderDetail->quantity }}</td>
                     <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
                 </tr>
             @endforeach
-            <tr>
-                <td style="border-bottom:dotted 1px !important;" colspan="4"></td>
-            </tr>
+            {{--<tr>--}}
+                {{--<td style="border-bottom:dotted 1px !important;" colspan="4"></td>--}}
+            {{--</tr>--}}
             <tr>
                 <td class="bold" colspan="3"><strong>Giảm giá</strong></td>
                 <td class="tr bold"><strong>{{ @number_format($order->discount) }}</strong></td>
@@ -93,7 +102,7 @@
                 <td class="font-bold" colspan="4"><strong>Khách T.Toán</strong></td>
             </tr>
             <tr>
-                <td colspan="3">{{$payment->payment_type==1?'Tiền mặt':($payment->payment_type==2?'Thẻ':'Điểm')}}</td>
+                <td class="font12" colspan="3">{{$payment->payment_type==1?'Tiền mặt':($payment->payment_type==2?'Thẻ':'Điểm')}}</td>
                 <td class="tr bold"><strong>{{ @number_format($payment->price) }}</strong></td>
             </tr>
             <tr>
@@ -106,23 +115,29 @@
                 <td style="padding: 0px !important;" class="font-bold" colspan="2"><strong>Khách hàng</strong></td>
                 <td style="padding: 0px !important;" class="tr bold" colspan="2"><strong>Nhân viên</strong></td>
             </tr>
-            <tr>
+            <tr class="font12">
                 <td style="padding: 0px !important;" class="font-bold" colspan="2"><i>(Chữ ký)</i></td>
                 <td style="padding: 0px !important;" class="tr bold" colspan="2"><i>(Chữ ký)</i></td>
             </tr>
-            <tr>
-                <td style="border-bottom:dotted 1px !important;" colspan="4"></td>
+            <tr style="margin-top: 10px">
+                <td><p></p><p></p></td>
             </tr>
+            {{--<tr>--}}
+                {{--<td style="border-bottom:dotted 1px !important;" colspan="4"></td>--}}
+            {{--</tr>--}}
             <tr>
                 <td colspan="4">
-                    <div class="text-center"><b style="font-size: 10px">CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
-                    <div class="text-center">Website: thammyroyal.com</div>
+                    <div class="text-center"><b>CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
+                    <div class="text-center font12">Website: thammyroyal.com</div>
                 </td>
             </tr>
             </tfoot>
         </table>
+        </div>
     </div>
 </div>
-
+<script>
+    window.print();
+</script>
 </body>
 </html>
