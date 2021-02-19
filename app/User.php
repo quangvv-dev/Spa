@@ -6,6 +6,7 @@ use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Department;
 use App\Models\Order;
+use App\Models\Role;
 use App\Models\Status;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -70,8 +71,8 @@ class User extends Authenticatable
     {
         $data = self::when($param['search'], function ($query) use ($param) {
             $query->where('full_name', 'like', '%' . $param['search'] . '%')
-                ->orWhere('phone', 'like', '%'. $param['search'] . '%');
-            })
+                ->orWhere('phone', 'like', '%' . $param['search'] . '%');
+        })
             ->where('role', '<>', UserConstant::ADMIN)
             ->latest('id')->paginate(10);
 
@@ -96,16 +97,33 @@ class User extends Authenticatable
 
     public function getRoleTextAttribute()
     {
-        $map = [
-            UserConstant::ADMIN => 'Admin',
-            UserConstant::MARKETING => 'Marketing',
-            UserConstant::TELESALES => 'Telesales',
-            UserConstant::WAITER => 'Lễ tân',
-            UserConstant::CSKH => 'Tư vấn viên',
-            UserConstant::TECHNICIANS => 'Kỹ thuật viên',
-        ];
+//        $map = [
+//            UserConstant::ADMIN => 'Admin',
+//            UserConstant::MARKETING => 'Marketing',
+//            UserConstant::TELESALES => 'Telesales',
+//            UserConstant::WAITER => 'Lễ tân',
+//            UserConstant::CSKH => 'Tư vấn viên',
+//            UserConstant::TECHNICIANS => 'Kỹ thuật viên',
+//        ];
+//
+//        return $map[$this->role] ?? null;
+        $role = Role::select('name')->find($this->role);
+        return $role->name;
+    }
 
-        return $map[$this->role] ?? null;
+    public function roles()
+    {
+        return $this->belongsTo(Role::class, 'role', 'id');
+    }
+
+    public function permission($permission = null)
+    {
+        @$pers = @json_decode($this->roles->permissions, true);
+        if (is_array($pers)) {
+            return in_array($permission, $pers);
+        } else {
+            return 0;
+        }
     }
 
 }

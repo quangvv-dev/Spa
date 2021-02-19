@@ -55,12 +55,11 @@
     <div class="page-content">
         <div class="container text-center text-white">
 
-            <div class="display-1 mb-5 ">404</div>
-            <h1 class="h2  mb-3">Page Not Found</h1>
-            <p class="h4 font-weight-normal mb-7 leading-normal ">Oops!!!! you tried to access a page which is not
-                available. go back to Home</p>
+            <div class="display-1 mb-5 ">403</div>
+            <h1 class="h2  mb-3">Không có quyền hạn</h1>
+            <p class="h4 font-weight-normal mb-7 leading-normal ">Oops!!!! Bạn đang cố gắng truy cập vào mục bạn chưa đủ thẩm quyền . Xin liện hệ lại quản trị viên.</p>
             <a class="btn btn-warning zindex2" href="{{url('/')}}">
-                Back To Home
+                Về trang chủ
             </a>
         </div>
     </div>

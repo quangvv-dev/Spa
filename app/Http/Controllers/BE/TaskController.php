@@ -291,9 +291,9 @@ class TaskController extends Controller
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) {
-            return view('tasks.ajax_statistical', compact('data', 'docs'));
+            return view('tasks.ajax_statistical', compact( 'docs'));
         }
 
-        return view('tasks.statistical', compact('data', 'title', 'docs','users'));
+        return view('tasks.statistical', compact( 'title', 'docs','users'));
     }
 }

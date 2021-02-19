@@ -4,6 +4,9 @@ Auth::routes();
 Route::get('post/{slug}', 'BE\AjaxController@indexPost');
 Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
 Route::get('optin-form/{id}', 'BE\PostsController@showOptinForm');
+Route::get('403',function (){
+    return view('errors.403');
+});
 
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
@@ -16,11 +19,12 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
     Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryServiceController');
-    Route::resource('category-product', 'CategoryProductController');
+        Route::resource('category-product', 'CategoryProductController');
     Route::resource('services', 'ServiceController');
     Route::resource('products', 'ProductController');
     Route::resource('combos', 'CombosController');
     Route::resource('users', 'UserController');
+    Route::resource('roles', 'RoleController');
 //    Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::get('customers-group', 'CustomerController@createGroup')->name('customers.indexGroup');
@@ -136,18 +140,18 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('group-comments/{id}/edit', 'GroupCommentController@update');
     Route::delete('group-comments/{id}/delete', 'GroupCommentController@destroy');
     Route::group(['prefix' => 'report'], function () {//Chart doanh số
-        Route::get('customers', 'CustomerController@reportCustomer');
+        Route::get('customers', 'CustomerController@reportCustomer')->name('report.customers');
         Route::get('products', 'OrderController@reportProduct');
-        Route::get('sales', 'SalesController@index');
-        Route::get('group-sale/{type}', 'SalesController@indexGroupCategory');
-        Route::get('commission', 'CommissionController@statistical');
-        Route::get('tasks', 'TaskController@statistical');
+        Route::get('sales', 'SalesController@index')->name('report.sale');
+        Route::get('group-sale/{type}', 'SalesController@indexGroupCategory')->name('report.groupSale');
+        Route::get('commission', 'CommissionController@statistical')->name('report.commission');
+        Route::get('tasks', 'TaskController@statistical')->name('report.tasks');
     });
     Route::resource('promotions', 'PromotionController');
     Route::resource('trademark', 'TrademarkController');
     Route::resource('genitives', 'GenitiveController');
     Route::resource('tasks', 'TaskController');
-    Route::get('tasks-employee', 'TaskController@statisticIndex');
+    Route::get('tasks-employee', 'TaskController@statisticIndex')->name('tasks.employee');
     Route::get('notifications', 'AjaxController@getNotificationOutView')->name('notifications.index');
     Route::resource('wallet', 'WalletController');
     Route::resource('package', 'PackageController');
