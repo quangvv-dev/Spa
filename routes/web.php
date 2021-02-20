@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('schedules/edit/{id}', 'ScheduleController@edit')->name('schedules.edit');
     Route::delete('schedules/{id}', 'ScheduleController@destroy')->name('schedules.destroy');
 
-    Route::get('/statistics/', 'StatisticController@index')->name('statistics.index');
+    Route::get('/statistics', 'StatisticController@index')->name('statistics.index');
     Route::get('/statistics/{id}/detail', 'StatisticController@show')->name('statistics.show');
     Route::get('/statistics-task', 'StatisticController@taskSchedules')->name('statistics.taskSchedules');
     Route::get('settings', 'SettingController@index')->name('settings.index');

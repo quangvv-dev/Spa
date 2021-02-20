@@ -14,6 +14,11 @@ class StatusController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('permission:status.list', ['only' => ['index']]);
+        $this->middleware('permission:status.edit', ['only' => ['edit']]);
+        $this->middleware('permission:status.add', ['only' => ['create']]);
+        $this->middleware('permission:status.delete', ['only' => ['destroy']]);
+
         $types_pluck = [
             '' => '-Chọn loại nhớm-',
             StatusCode::SOURCE_CUSTOMER => 'Nguồn khách hàng',
@@ -28,9 +33,12 @@ class StatusController extends Controller
 
     /**
      * Display a listing of the resource.
+     * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
      */
+
     public function index(Request $request)
     {
         $docs = Status::orderBy('position', 'asc');

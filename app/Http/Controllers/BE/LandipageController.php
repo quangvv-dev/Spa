@@ -18,6 +18,11 @@ class LandipageController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:landipages.list', ['only' => ['index']]);
+        $this->middleware('permission:landipages.edit', ['only' => ['edit']]);
+        $this->middleware('permission:landipages.add', ['only' => ['create']]);
+        $this->middleware('permission:landipages.delete', ['only' => ['destroy']]);
+
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $category = Category::orderByDesc('id')->pluck('name', 'id')->toArray();
         $sale = User::where('role', UserConstant::TELESALES)->where('active', UserConstant::ACTIVE)->orderByDesc('id')

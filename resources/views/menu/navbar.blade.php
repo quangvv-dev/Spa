@@ -114,18 +114,28 @@
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
                                     class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
-                            @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN)
-                                <a class="dropdown-item" href="{!! route('users.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
-                                <a class="dropdown-item" href="{!! route('department.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
+
+                                @if($roleGlobal->permission('users.list'))
+                                    <a class="dropdown-item" href="{!! route('users.index') !!}"><i
+                                                class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
+                                @endif
+
+                                @if($roleGlobal->permission('department.list'))
+                                    <a class="dropdown-item" href="{!! route('department.index') !!}"><i
+                                                class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
+                                @endif
+
                                 @if(empty($permissions) || !in_array('sms.index',$permissions))
                                     <a class="dropdown-item" href="{!! route('sms.index') !!}">
                                         <i class="dropdown-icon fas fa-envelope"></i> Quản lý tin nhắn
                                     </a>
                                 @endif
-                                <a class="dropdown-item" href="{!! route('status.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
+                                @if($roleGlobal->permission('status.list'))
+                                    <a class="dropdown-item" href="{!! route('status.index') !!}"><i
+                                                class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
+                                @endif
+
+
                                 @if(empty($permissions) || !in_array('package.index',$permissions))
                                     <a class="dropdown-item" href="{!! route('package.index') !!}"><i
                                             class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
@@ -135,7 +145,6 @@
                                             class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
                                 @endif
 
-                            @endif
                             @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER ))
                                 <div class="col" style="color: #7490BD;font-weight: 400">
                                     <label class="switch">

@@ -13,6 +13,11 @@ class DepartmentController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:department.list', ['only' => ['index']]);
+        $this->middleware('permission:department.edit', ['only' => ['edit']]);
+        $this->middleware('permission:department.add', ['only' => ['create']]);
+        $this->middleware('permission:department.delete', ['only' => ['destroy']]);
+
         $categories = Department::orderBy('id', 'asc')->get()->pluck('name', 'id')->toArray();
         view()->share([
             'category_pluck' => $categories,
@@ -62,7 +67,7 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$request->parent_id){
+        if (!$request->parent_id) {
             $request->merge(['parent_id' => 0]);
         }
 
@@ -110,7 +115,7 @@ class DepartmentController extends Controller
     public function update(Request $request, Department $department)
     {
         $doc = $department;
-        if(!$request->parent_id){
+        if (!$request->parent_id) {
             $request->merge(['parent_id' => 0]);
         }
 
@@ -136,7 +141,8 @@ class DepartmentController extends Controller
         }
     }
 
-    public function recursive($data = array(), $current = 0, $parent = 0, $string = "") {
+    public function recursive($data = [], $current = 0, $parent = 0, $string = "")
+    {
         foreach ($data as $val) {
             if ($val->parent_id == $parent) {
                 $this->list .= "<option value=" . $val->id;

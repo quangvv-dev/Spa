@@ -34,6 +34,9 @@ class StatisticController extends Controller
      */
     public function __construct(Customer $customer)
     {
+        $this->middleware('permission:statistics.index', ['only' => ['index']]);
+        $this->middleware('permission:statistics.taskSchedules', ['only' => ['taskSchedules']]);
+
         $user = User::get()->pluck('full_name', 'id')->toArray();
         $this->customer = $customer;
         view()->share([

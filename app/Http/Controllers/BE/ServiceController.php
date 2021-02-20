@@ -18,6 +18,11 @@ class ServiceController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('permission:services.list', ['only' => ['index']]);
+        $this->middleware('permission:services.edit', ['only' => ['edit']]);
+        $this->middleware('permission:services.add', ['only' => ['create']]);
+        $this->middleware('permission:services.delete', ['only' => ['destroy']]);
+
         $this->list[0] = ('category.parent');
         $categories = Category::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
         $trademarks = Trademark::get()->pluck('name', 'id');

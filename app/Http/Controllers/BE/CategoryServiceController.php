@@ -18,6 +18,11 @@ class CategoryServiceController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:category.list', ['only' => ['index']]);
+        $this->middleware('permission:category.edit', ['only' => ['edit']]);
+        $this->middleware('permission:category.add', ['only' => ['create']]);
+        $this->middleware('permission:category.delete', ['only' => ['destroy']]);
+
         $this->list[0] = ('category.parent');
         $categories = Category::where('type', StatusCode::SERVICE)->orderBy('parent_id', 'asc')->orderBy('id', 'desc')->get()->pluck('name',
             'id')->prepend('Danh mục cha ...', 0)->toArray();

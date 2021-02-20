@@ -9,6 +9,14 @@ use App\Http\Controllers\Controller;
 
 class GenitiveController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:genitives.list', ['only' => ['index']]);
+        $this->middleware('permission:genitives.edit', ['only' => ['edit']]);
+        $this->middleware('permission:genitives.add', ['only' => ['create']]);
+        $this->middleware('permission:genitives.delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

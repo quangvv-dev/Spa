@@ -22,6 +22,11 @@ class ProductController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('permission:products.list', ['only' => ['index']]);
+        $this->middleware('permission:products.edit', ['only' => ['edit']]);
+        $this->middleware('permission:products.add', ['only' => ['create']]);
+        $this->middleware('permission:products.delete', ['only' => ['destroy']]);
+
         $this->list[0] = ('category.parent');
         $categories = Category::where('type', StatusCode::PRODUCT)->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
         $trademarks = Trademark::get()->pluck('name', 'id');

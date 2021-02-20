@@ -17,6 +17,11 @@ class PostsController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:posts.list', ['only' => ['index']]);
+        $this->middleware('permission:posts.edit', ['only' => ['edit']]);
+        $this->middleware('permission:posts.add', ['only' => ['create']]);
+        $this->middleware('permission:posts.delete', ['only' => ['destroy']]);
+
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $category = Category::orderByDesc('id')->pluck('name', 'id')->toArray();
         $sale = User::where('role', UserConstant::TELESALES)->where('active', UserConstant::ACTIVE)->orderByDesc('id')

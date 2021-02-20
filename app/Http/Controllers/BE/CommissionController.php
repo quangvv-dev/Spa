@@ -25,6 +25,7 @@ class CommissionController extends Controller
      */
     public function __construct(CommissionService $commissionService)
     {
+        $this->middleware('permission:report.commission', ['only' => ['statistical']]);
         $this->commissionService = $commissionService;
     }
 

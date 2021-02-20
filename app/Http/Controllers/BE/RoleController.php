@@ -34,12 +34,12 @@ class RoleController extends Controller
         'status',
     ];
     protected $report = [
+        'statistics.index',
+        'report.groupSale',
+        'sms.history',
         'report.tasks',
         'report.commission',
-        'sms.history',
-        'report.groupSale',
         'report.sale',
-        'statistics.index',
         'statistics.taskSchedules',
     ];
 
@@ -177,6 +177,7 @@ class RoleController extends Controller
                 'permissions'   => json_encode($request->permissions),
             ]);
 
+            return back();  
             return redirect(route('roles.index'))->with('success', 'Chỉnh sửa thành công !');
         }
 

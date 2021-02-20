@@ -8,6 +8,15 @@ use App\Http\Controllers\Controller;
 
 class TrademarkController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:trademark.list', ['only' => ['index']]);
+        $this->middleware('permission:trademark.edit', ['only' => ['edit']]);
+        $this->middleware('permission:trademark.add', ['only' => ['create']]);
+        $this->middleware('permission:trademark.delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

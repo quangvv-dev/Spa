@@ -25,6 +25,11 @@ class ScheduleController extends Controller
 
     public function __construct(TaskService $taskService)
     {
+        $this->middleware('permission:schedules.list', ['only' => ['index']]);
+        $this->middleware('permission:schedules.edit', ['only' => ['edit']]);
+        $this->middleware('permission:schedules.add', ['only' => ['create']]);
+        $this->middleware('permission:schedules.delete', ['only' => ['destroy']]);
+
         $this->taskService = $taskService;
         $category = Category::pluck('name', 'id')->toArray();//nhóm KH
         $user = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id');

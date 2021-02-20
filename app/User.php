@@ -108,7 +108,7 @@ class User extends Authenticatable
 //
 //        return $map[$this->role] ?? null;
         $role = Role::select('name')->find($this->role);
-        return $role->name;
+        return isset($role) ? $role->name : '';
     }
 
     public function roles()

@@ -17,12 +17,17 @@ class RuleController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:rules.list', ['only' => ['index']]);
+        $this->middleware('permission:rules.edit', ['only' => ['show']]);
+        $this->middleware('permission:rules.add', ['only' => ['create']]);
+        $this->middleware('permission:rules.delete', ['only' => ['destroy']]);
+
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//trạng thái KH
         $category = Category::pluck('name', 'id')->toArray();//danh sách nhóm dịch vụ
 
         view()->share([
             'category' => $category,
-            'status' => $status,
+            'status'   => $status,
         ]);
     }
 
@@ -113,7 +118,7 @@ class RuleController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -170,8 +175,8 @@ class RuleController extends Controller
         $category_ids = $category_data->configs->group;
         foreach ($link_nodes as $key => $record) {
             $new = [];
-            if (count($category_ids)){
-                foreach ($category_ids as $item){
+            if (count($category_ids)) {
+                foreach ($category_ids as $item) {
                     $new['rule_id'] = $rule->id;
                     $new['category_id'] = $item;
                     $new['status'] = $rule->status;

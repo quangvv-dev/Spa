@@ -17,6 +17,11 @@ class CategoryProductController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:category-product.list', ['only' => ['index']]);
+        $this->middleware('permission:category-product.edit', ['only' => ['edit']]);
+        $this->middleware('permission:category-product.add', ['only' => ['create']]);
+        $this->middleware('permission:category-product.delete', ['only' => ['destroy']]);
+
         $this->list[0] = ('category.parent');
         $categories = Category::where('type', StatusCode::PRODUCT)->orderBy('parent_id', 'asc')->orderBy('id', 'desc')
             ->get()->pluck('name', 'id')->prepend('Danh mục cha ...', 0)->toArray();

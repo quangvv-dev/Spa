@@ -21,6 +21,11 @@ class CombosController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('permission:combos.list', ['only' => ['index']]);
+        $this->middleware('permission:combos.edit', ['only' => ['edit']]);
+        $this->middleware('permission:combos.add', ['only' => ['create']]);
+        $this->middleware('permission:combos.delete', ['only' => ['destroy']]);
+
         $this->list[0] = ('category.parent');
         $categories = Category::orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
         view()->share([

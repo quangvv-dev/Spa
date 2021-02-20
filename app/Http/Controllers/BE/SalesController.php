@@ -29,6 +29,8 @@ class SalesController extends Controller
      */
     public function __construct(TaskService $taskService)
     {
+        $this->middleware('permission:report.groupSale', ['only' => ['indexGroupCategory']]);
+        $this->middleware('permission:report.sale', ['only' => ['index']]);
 
     }
 

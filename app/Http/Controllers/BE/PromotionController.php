@@ -19,6 +19,11 @@ class PromotionController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('permission:promotions.list', ['only' => ['index']]);
+        $this->middleware('permission:promotions.edit', ['only' => ['edit']]);
+        $this->middleware('permission:promotions.add', ['only' => ['create']]);
+        $this->middleware('permission:promotions.delete', ['only' => ['destroy']]);
+
         $type = [
             '' => 'TẤT CẢ',
             PromotionConstant::PERCENT => 'THEO %',

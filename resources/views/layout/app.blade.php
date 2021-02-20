@@ -21,25 +21,30 @@
     label {
         font-weight: 600;
     }
+
     thead > tr th {
         background: #3b8fec;
     }
-    tr th,td {
+
+    tr th, td {
         background: #fff;
         border-right: 1px solid #e7effc !important;
         border-left: 1px solid #e7effc !important;
         border-bottom: 1px solid #e7effc !important;
     }
+
     label.required:after {
         content: " *";
         color: red;
     }
+
     .datepicker-panel > ul > li.picked, .datepicker-panel > ul > li.picked:hover {
         color: #fff;
         font-weight: bold;
         background-color: black;
 
     }
+
     .datepicker-panel > ul > li.highlighted {
         background-color: rgb(99 177 255);
         font-weight: bold;
@@ -58,6 +63,7 @@
 </div>
 @php
     $permissions = setting('permissions');
+    $roleGlobal = auth()->user()?:[];
 @endphp
 <div class="page">
     <div class="page-main">
