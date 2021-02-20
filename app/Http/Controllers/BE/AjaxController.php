@@ -36,6 +36,8 @@ class AjaxController extends Controller
 
     public function __construct(ImageService $imageService, CustomerService $customerService)
     {
+        $this->middleware('permission:post.customer', ['only' => ['ListCustomerPost']]);
+
         $this->imageService = $imageService;
         $this->customerService = $customerService;
     }

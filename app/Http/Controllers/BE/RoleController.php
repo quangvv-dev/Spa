@@ -47,7 +47,6 @@ class RoleController extends Controller
         'leaderSale',
         'leaderMKT',
         'post.customer',
-        'order.list',
         'order.index_payment',
         'tasks.employee',
         'sms',

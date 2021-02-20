@@ -32,9 +32,9 @@ return [
     'post.customer'            => "DS khách hàng từ form",
     'order.list'               => "Danh sách đơn hàng",
     'order.index_payment'      => "Đã thu trong kỳ",
-    'tasks.employee'           => "Công việc theo sale",
+    'tasks.employee'           => "Theo dõi công việc SALE",
     'sms'                      => "QL tin nhắn",
     'settings'                 => "Cài đặt chung hệ thống (gói nạp)",
-    'leaderSale'               => "Đặc quyền TP Sale",
+    'leaderSale'               => "Đặc quyền TP SALE",
     'leaderMKT'                => "Đặc quyền TP Marketing",
 ];

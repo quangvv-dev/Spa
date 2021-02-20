@@ -1,4 +1,7 @@
 @extends('layout.app')
+@php
+    $roleGlobal = auth()->user()?:[];
+@endphp
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <style>
@@ -81,13 +84,10 @@
                 </div>
                 <div class="col relative">
                     <a title="Upload Data" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i class="fas fa-upload"></i></a>
-                    <a {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN || (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER)|| (Auth::user()->role == App\Constants\UserConstant::MARKETING && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER)?:"style=display:none"}}
+                    <a {{$roleGlobal->permission('leaderSale')||$roleGlobal->permission('leaderMKT')?:"style=display:none"}}
                        title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
-                    @if(in_array(\Illuminate\Support\Facades\Auth::user()->role,[\App\Constants\UserConstant::ADMIN,\App\Constants\UserConstant::MARKETING,\App\Constants\UserConstant::WAITER]))
-                        {{--<a class="right btn btn-primary btn-flat" href="{{ route('customers.indexGroup') }}"--}}
-                        {{--style="margin-left: 3px"><i--}}
-                        {{--class="fa fa-plus-circle"></i>Auto</a>--}}
+                    @if($roleGlobal->permission('customers.add'))
                         <a  class="right btn btn-primary btn-flat"
                            href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
                     @endif
@@ -951,7 +951,7 @@
                 });
             });
 
-            @if(Auth::user()->role!=\App\Constants\UserConstant::TELESALES|| (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER ))
+            @if($roleGlobal->permission('leaderSale'))
             $(document).on('dblclick', '.telesale-customer', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.telesale-customer').empty();

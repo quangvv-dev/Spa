@@ -22,6 +22,7 @@ class SmsController extends Controller
     public function __construct()
     {
         $this->middleware('permission:sms.history', ['only' => ['history']]);
+        $this->middleware('permission:sms', ['only' => ['index']]);
 
         $campaign_arr = Campaign::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
         view()->share([

@@ -54,7 +54,31 @@
                            onclick="checkAll('group{{$key}}', 'input{{$key}}')">
                 </td>
             </tr>
+
         @endforeach
+        <tr>
+            <td>QL đơn hàng</td>
+            <td>
+                <input type="checkbox" id="input171" name="permissions[]"
+                       value="order.list" {{@$doc && $doc->hasAccess('order.list') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input172" name="permissions[]"
+                       value="order.add" {{@$doc && $doc->hasAccess('order.add') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input173" name="permissions[]"
+                       value="order.edit" {{@$doc && $doc->hasAccess('order.edit') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input174" name="permissions[]"
+                       value="order.delete" {{@$doc && $doc->hasAccess('order.delete') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="group17"
+                       onclick="checkAll('group17', 'input17')">
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -98,6 +122,7 @@
         @endforeach
         </tbody>
     </table>
+
 </div>
 
 

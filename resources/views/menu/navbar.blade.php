@@ -24,7 +24,8 @@
         <div class="container-fluid">
             <div class="d-flex">
                 <a class="header-brand" href="{{ route('users.index') }}">
-                    <img alt="ren logo" class="header-brand-img" src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}">
+                    <img alt="ren logo" class="header-brand-img"
+                         src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}">
                 </a>
                 <div class="d-flex order-lg-2 ml-auto">
                     <div class="">
@@ -36,50 +37,10 @@
                             </div>
                         </form>
                     </div>
-                    <div class="dropdown d-none d-md-flex">
-                        <a class="nav-link icon" data-toggle="dropdown">
-                            <i class="fas fa-user"></i>
-                            <span class="nav-unread bg-green"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a class="dropdown-item d-flex pb-3" href="#">
-                                <span class="avatar brround mr-3 align-self-center"
-                                      style="background-image: url(/assets/images/faces/male/4.jpg)"></span>
-                                <div>
-                                    <strong>Madeleine Scott</strong> Sent you add request
-                                    <div class="small text-muted">
-                                        view profile
-                                    </div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex pb-3" href="#">
-                                <span class="avatar brround mr-3 align-self-center"
-                                      style="background-image: url(/assets/images/faces/female/14.jpg)"></span>
-                                <div>
-                                    <strong>rebica</strong> Suggestions for you
-                                    <div class="small text-muted">
-                                        view profile
-                                    </div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex pb-3" href="#">
-                                <span class="avatar brround mr-3 align-self-center"
-                                      style="background-image: url(/assets/images/faces/male/1.jpg)"></span>
-                                <div>
-                                    <strong>Devid robott</strong> sent you add request
-                                    <div class="small text-muted">
-                                        view profile
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-center text-muted-dark" href="#">View all contact list</a>
-                        </div>
-                    </div>
                     <input id="check_notify" type="hidden">
                     <div class="dropdown d-none d-md-flex">
                         <a class="nav-link icon notification" data-toggle="dropdown"><i class="fas fa-bell"></i> <span
-                                class="badge badge-danger badge-pill">10</span></a>
+                                    class="badge badge-danger badge-pill">10</span></a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
                              style="overflow: auto;max-height: 400px">
                             <a class="dropdown-item text-center text-dark" href="#">2 New Messages</a>
@@ -113,39 +74,43 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
-                                    class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
+                                        class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
 
-                                @if($roleGlobal->permission('users.list'))
-                                    <a class="dropdown-item" href="{!! route('users.index') !!}"><i
-                                                class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
-                                @endif
+                            @if($roleGlobal->permission('users.list'))
+                                <a class="dropdown-item" href="{!! route('users.index') !!}"><i
+                                            class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
+                            @endif
 
-                                @if($roleGlobal->permission('department.list'))
-                                    <a class="dropdown-item" href="{!! route('department.index') !!}"><i
-                                                class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
-                                @endif
+                            @if($roleGlobal->permission('department.list'))
+                                <a class="dropdown-item" href="{!! route('department.index') !!}"><i
+                                            class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
+                            @endif
 
-                                @if(empty($permissions) || !in_array('sms.index',$permissions))
+                            @if(empty($permissions) || !in_array('sms.index',$permissions))
+                                @if($roleGlobal->permission('sms'))
                                     <a class="dropdown-item" href="{!! route('sms.index') !!}">
                                         <i class="dropdown-icon fas fa-envelope"></i> Quản lý tin nhắn
                                     </a>
                                 @endif
-                                @if($roleGlobal->permission('status.list'))
-                                    <a class="dropdown-item" href="{!! route('status.index') !!}"><i
-                                                class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
-                                @endif
-
-
-                                @if(empty($permissions) || !in_array('package.index',$permissions))
+                            @endif
+                            @if($roleGlobal->permission('status.list'))
+                                <a class="dropdown-item" href="{!! route('status.index') !!}"><i
+                                            class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
+                            @endif
+                            @if(empty($permissions) || !in_array('package.index',$permissions))
+                                @if($roleGlobal->permission('package.list'))
                                     <a class="dropdown-item" href="{!! route('package.index') !!}"><i
-                                            class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
+                                                class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
                                 @endif
-                                @if(empty($permissions) || !in_array('settings.index',$permissions))
-                                    <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
+                            @endif
+                            @if(empty($permissions) || !in_array('settings.index',$permissions))
+                                @if($roleGlobal->permission('settings'))
+                                <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
                                             class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
-                                @endif
+                            @endif
+                            @endif
 
-                            @if(Auth::user()->role ==  App\Constants\UserConstant::ADMIN|| (Auth::user()->role == App\Constants\UserConstant::TELESALES && Auth::user()->is_leader == \App\Constants\UserConstant::IS_LEADER ))
+                            @if($roleGlobal->permission('leaderSale'))
                                 <div class="col" style="color: #7490BD;font-weight: 400">
                                     <label class="switch">
                                         <input name="checkbox" class="check"

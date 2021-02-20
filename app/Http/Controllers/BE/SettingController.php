@@ -13,6 +13,8 @@ class SettingController extends Controller
 
     public function __construct(Filesystem $fileUpload)
     {
+        $this->middleware('permission:settings', ['only' => ['index']]);
+
         $this->fileUpload = $fileUpload;
     }
 

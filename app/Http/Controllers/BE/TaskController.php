@@ -30,6 +30,7 @@ class TaskController extends Controller
     public function __construct(TaskService $taskService)
     {
         $this->middleware('permission:report.tasks', ['only' => ['statistical']]);
+        $this->middleware('permission:tasks.employee', ['only' => ['statisticIndex']]);
 
         $this->taskService = $taskService;
     }

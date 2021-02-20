@@ -52,6 +52,8 @@ class OrderController extends Controller
         TaskService $taskService
     )
     {
+        $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
+
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
         $this->taskService = $taskService;
