@@ -4,7 +4,7 @@ Auth::routes();
 Route::get('post/{slug}', 'BE\AjaxController@indexPost');
 Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
 Route::get('optin-form/{id}', 'BE\PostsController@showOptinForm');
-Route::get('403',function (){
+Route::get('403', function () {
     return view('errors.403');
 });
 
@@ -19,7 +19,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
     Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryServiceController');
-        Route::resource('category-product', 'CategoryProductController');
+    Route::resource('category-product', 'CategoryProductController');
     Route::resource('services', 'ServiceController');
     Route::resource('products', 'ProductController');
     Route::resource('combos', 'CombosController');
@@ -102,7 +102,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('update-customer-post', 'AjaxController@updateCustomerPost')->name('customer_post.update');
         Route::post('convert-customer-post', 'AjaxController@convertCustomerPost')->name('customer_post.convert');
         Route::get('export-customer-post', 'AjaxController@exportCustomer')->name('customer_post.export');
-        Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');;
+        Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');
+
+        Route::get('find-role/{department_id}', 'AjaxController@getRoleWithDepartment');
     });
 
     Route::resource('rules', 'RuleController');//Automation
@@ -111,7 +113,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
-//    Route::get('order-service/{id}/show', 'OrderController@showService')->name('orderService.show');
 
 
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');

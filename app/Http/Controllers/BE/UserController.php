@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Components\Filesystem\Filesystem;
 use App\Http\Requests\UserRequest;
 use App\Models\Department;
+use App\Models\Role;
 use App\Services\UserService;
 use App\User;
 use Illuminate\Http\Request;
@@ -100,7 +101,8 @@ class UserController extends Controller
     {
         $title = 'Sửa người dùng';
         $departments = Department::pluck('name', 'id');
-        return view('users._form', compact('user', 'title', 'departments'));
+        $role = Role::where('department_id', $user->department_id)->get();
+        return view('users._form', compact('user', 'title', 'departments', 'role'));
     }
 
     /**

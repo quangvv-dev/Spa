@@ -12,6 +12,7 @@ use App\Models\Landipage;
 use App\Models\Notification;
 use App\Models\OrderDetail;
 use App\Models\Post;
+use App\Models\Role;
 use App\Models\Services;
 use App\Models\Status;
 use App\Models\Category;
@@ -170,7 +171,6 @@ class AjaxController extends Controller
     {
         $status = [0 => "Chưa gọi", 1 => "Đã gọi", 2 => "Đã đến"];
         $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id');
-//        $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $posts = Post::orderByDesc('id')->pluck('title', 'id')->toArray();
         $title = 'Danh sách khách hàng đăng ký form';
         $input = $request->all();
@@ -245,13 +245,6 @@ class AjaxController extends Controller
             }
         }
         return 1;
-
-
-//        $response = [
-//            'customer' => $data,
-//            'data' => $telesales,
-//        ];
-//        return \response($response);
     }
 
     /**
@@ -302,6 +295,18 @@ class AjaxController extends Controller
     {
         $array = OrderDetail::select('booking_id')->where('order_id', $id)->pluck('booking_id')->toArray();
         return Services::whereIn('id', $array)->get();
+    }
+
+    /**
+     * Lấy quyền từ phòng ban.
+     *
+     * @param $id
+     * @return array
+     */
+    public function getRoleWithDepartment($id)
+    {
+        $data = Role::where('department_id', $id)->get();
+        return response()->json($data);
     }
 
 }

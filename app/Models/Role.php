@@ -43,6 +43,8 @@ class Role extends Model
         $data = self::when($dataSearch['searchName'], function ($query, $dataSearch) {
             return $query->where('name', 'like', '%' . $dataSearch['searchName'] . '%')
                 ->orWhere('description', 'like', '%' . $dataSearch['searchName'] . '%');
+        })->when(!empty($dataSearch['department_id']), function ($query, $dataSearch) {
+            return $query->where('department_id', $dataSearch['department_id']);
         });
         $data = $data->paginate(StatusCode::PAGINATE_10);
 
