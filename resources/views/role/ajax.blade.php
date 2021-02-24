@@ -6,7 +6,7 @@
             <th class="text-white text-center">Ngày tạo</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Phòng ban</th>
-            <th class="text-white text-center">Mô tả</th>
+            <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
         <tbody>
@@ -15,7 +15,7 @@
                 <th scope="row">{{$k+1}}</th>
                 <td class="text-center">{{date('d-m-Y', strtotime($item->created_at))}}</td>
                 <td class="text-center">{{$item->name}}</td>
-                <td class="text-center">{{$item->description}}</td>
+                <td class="text-center">{{@$item->department->name}}</td>
 
                 <td class="text-center">
                     <a class="primary btn"
