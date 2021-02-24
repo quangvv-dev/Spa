@@ -103,10 +103,12 @@ class StatisticController extends Controller
         ];
         $products = [
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
             'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
         ];
         $services = [
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             'orders' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
         ];
 

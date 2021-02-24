@@ -107,7 +107,12 @@
                                 @if($roleGlobal->permission('settings'))
                                 <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
                                             class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
+                                @endif
                             @endif
+
+                            @if($roleGlobal->permission('roles.list'))
+                                <a class="dropdown-item" href="{!! route('roles.index') !!}"><i
+                                        class="dropdown-icon mdi mdi-settings"></i> Quản lý phân quyền</a>
                             @endif
 
                             @if($roleGlobal->permission('leaderSale'))
