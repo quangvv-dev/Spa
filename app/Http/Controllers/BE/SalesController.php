@@ -99,7 +99,7 @@ class SalesController extends Controller
         }
         $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
 
-        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
+        $telesales = User::whereIn('role', [UserConstant::TP_SALE,UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request) {
             $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
 

@@ -631,7 +631,7 @@ class CustomerController extends Controller
 
         $customer = Customer::with('telesale')->where('id', $id)->first();
 
-        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get();
+        $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
 
         return [
             'customer' => $customer,
