@@ -73,7 +73,7 @@ class User extends Authenticatable
             $query->where('full_name', 'like', '%' . $param['search'] . '%')
                 ->orWhere('phone', 'like', '%' . $param['search'] . '%');
         })
-            ->where('role', '<>', UserConstant::ADMIN)
+//            ->where('role', '<>', UserConstant::ADMIN)
             ->latest('id')->paginate(10);
 
         return $data;
