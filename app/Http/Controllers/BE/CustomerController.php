@@ -59,13 +59,13 @@ class CustomerController extends Controller
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
-        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::pluck('name', 'id')->toArray();
         $telesales = [];
         User::get()->map(function ($item) use (&$telesales) {
             if ($item->role == UserConstant::WAITER) {
                 $telesales['Lễ Tân'][$item->full_name] = $item->id;
-            } elseif ($item->role == UserConstant::TELESALES) {
+            } elseif ($item->role == UserConstant::TELESALES || $item->role == UserConstant::TP_SALE) {
                 $telesales['Telesales'][$item->full_name] = $item->id;
             } elseif ($item->role == UserConstant::CSKH) {
                 $telesales['Tư vấn viên'][$item->full_name] = $item->id;
@@ -631,7 +631,7 @@ class CustomerController extends Controller
 
         $customer = Customer::with('telesale')->where('id', $id)->first();
 
-        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get();
+        $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
 
         return [
             'customer' => $customer,
