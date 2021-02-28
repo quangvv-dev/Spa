@@ -771,7 +771,7 @@ class OrderController extends Controller
         if (!isset($request->group) && !isset($request->telesales) && !isset($request->marketing)
             && !isset($request->customer) && !isset($request->service) && !isset($request->payment_type)
             && !isset($request->data_time) && !isset($request->start_date) && !isset($request->end_date)
-            && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none)) {
+            && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none)&& !isset($request->role_type)) {
             return 1;
 
         } else {
