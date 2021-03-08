@@ -175,6 +175,7 @@
             }
             if (class_name == 'tl filter_advanced bor-none') {
                 bor_none = $(target).find('.bor-none').data('filter');
+                $('#bor-none').val(bor_none);
             } else {
                 bor_none = $('#bor-none').val();
             }
