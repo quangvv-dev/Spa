@@ -26,7 +26,7 @@
         <tr>
             <th class="text-white text-center">Nhân viên</th>
             <th class="text-white text-center">Số công liệu trình</th>
-            <th class="text-white text-center">Tiền công</th>
+            <th class="text-white text-center">Tiền công liệu trình</th>
             <th class="text-white text-center">Tổng số đơn hàng (upsale)</th>
             <th class="text-white text-center">Doanh số</th>
             <th class="text-white text-center">Doanh thu</th>
@@ -39,7 +39,7 @@
                 <tr>
                     <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s['id']}}">
                             <i class="fas fa-info-circle"></i>
-                            {{@$s->full_name}}</a>
+                            {{@$s['full_name']}}</a>
                     </td>
                     <td class="text-center">{{@number_format($s['days'])}}</td>
                     <td class="text-center">{{@number_format($s['price'])}}</td>
