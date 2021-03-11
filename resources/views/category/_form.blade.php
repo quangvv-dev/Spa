@@ -30,9 +30,17 @@
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group {{ $errors->has('parent_id') ? 'has-error' : '' }}">
-                        {!! Form::label('parent_id','Danh mục cha', array('class' => 'required')) !!}
+                        {!! Form::label('parent_id','Danh mục cha') !!}
                         {!! Form::select('parent_id',$category_pluck, @$doc->parent_id, array('class' => 'form-control select2')) !!}
                         <span class="help-block">{{ $errors->first('parent_id', ':message') }}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('price') ? 'has-error' : '' }}">
+                        {!! Form::label('price', 'Giá công KTV') !!}
+                        {!! Form::text('price',@number_format($doc->price), array('class' => 'form-control price', 'required' => true)) !!}
+                        <span class="help-block">{{ $errors->first('price', ':message') }}</span>
                     </div>
                 </div>
             </div>
@@ -46,7 +54,14 @@
     </div>
 @endsection
 @section('_script')
+    <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
+        $('body').on('keyup', '.price', function (e) {
+            let price = $(this).val();
+            price = formatNumber(price);
+            $(this).val(price);
+        })
+
         $(document).ready(function () {
             $('form#fvalidate').validate({
                 rules: {

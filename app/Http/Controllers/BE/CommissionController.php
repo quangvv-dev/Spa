@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Customer;
 use App\Models\HistoryUpdateOrder;
@@ -78,31 +79,44 @@ class CommissionController extends Controller
      */
     public function statistical(Request $request)
     {
+        $docs = [];
         if (empty($request->data_time)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
+        $category_price = Category::pluck('price', 'id')->toArray();
         $input = $request->all();
-        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS, UserConstant::CSKH])
-            ->get()->map(function ($item) use ($input) {
+        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS, UserConstant::CSKH])->get();
+        if (count($data)) {
+
+            foreach ($data as $item) {
+                $price = [];
                 $input['support_id'] = $item->id;
                 $input['user_id'] = $item->id;
+                $input['type'] = 0;
                 $order = Order::getAll($input);
-                $item->orders = $order->count();
-                $item->all_total = $order->sum('all_total');
-                $item->gross_revenue = $order->sum('gross_revenue');
-                $item->days = HistoryUpdateOrder::search($input)->count();
-                $item->earn = Commission::search($input)->sum('earn');
-                return $item;
-            })->sortByDesc('gross_revenue');
+                $history_orders = HistoryUpdateOrder::search($input)->with('service');
+                $history = $history_orders->get();
+                if (count($history)) {
+                    foreach ($history as $item2) {
 
-//        $data = Commission::select('user_id', 'order_id', DB::raw('SUM(earn) AS total'))->groupBy('user_id')
-//            ->with('users')->whereBetween('created_at', getTime($request->data_time))->get()->map(function ($item) use ($request) {
-//                $orders = Order::select('all_total', 'gross_revenue')->where('id', $item->order_id)->whereBetween('created_at', getTime($request->data_time));
-//                $item->all_total = $orders->sum('all_total');
-//                $item->gross_revenue = $orders->sum('gross_revenue');
-//                return $item;
-//            })->sortByDesc('total');
-
+                        $price[] = (int)$category_price[$item2->service->category_id];
+                    }
+                }
+                $doc = [
+                    'id' => $item->id,
+                    'avatar' => $item->avatar,
+                    'full_name' => $item->full_name,
+                    'orders' => $order->count(),
+                    'all_total' => $order->sum('all_total'),
+                    'gross_revenue' => $order->sum('gross_revenue'),
+                    'days' => $history_orders->count(),
+                    'earn' => Commission::search($input)->sum('earn'),
+                    'price' => array_sum($price) ? array_sum($price) : 0,
+                ];
+                $docs[] = $doc;
+            }
+        }
+        $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
         if ($request->ajax()) {
             return Response::json(view('report_products.ajax_commision', compact('data'))->render());
         }

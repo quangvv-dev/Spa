@@ -42,6 +42,8 @@ class HistoryUpdateOrder extends Model
         })
             ->when(isset($input['user_id']), function ($query) use ($input) {
                 $query->where('user_id', $input['user_id']);
+            })->when(isset($input['type']), function ($query) use ($input) {
+                $query->where('type', $input['type']);
             });
         return $data;
     }

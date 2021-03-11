@@ -5,7 +5,7 @@
             <th class="text-white">STT</th>
             <th class="text-white text-center">Tên nhóm</th>
             <th class="text-white text-center">Mã nhóm</th>
-            <th class="text-white text-center">Nhóm cha</th>
+            <th class="text-white text-center">Giá công KTV (Nếu có)</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -16,11 +16,11 @@
                     <th scope="row">{{$k}}</th>
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{$s->code}}</td>
-                    <td class="text-center">{{@$s->categories->name}}
+                    <td class="text-center">{{@number_format($s->price)}}
                     </td>
                     <td class="text-center">
                         <a class="btn" href="{{ url('category/' . $s->id . '/edit') }}"><i
-                                    class="fas fa-edit"></i></a>
+                                class="fas fa-edit"></i></a>
                         <a class="btn delete" href="javascript:void(0)"
                            data-url="{{ url('category/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>

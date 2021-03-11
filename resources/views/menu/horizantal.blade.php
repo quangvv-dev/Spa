@@ -1,3 +1,6 @@
+@php
+    $roleGlobal = auth()->user()?:[];
+@endphp
 <!-- Horizantal menu-->
 <div class="ren-navbar fixed-header" id="headerMenuCollapse">
     <div class="container">

@@ -31,21 +31,6 @@ class CategoryServiceController extends Controller
         ]);
     }
 
-//    private function getList($list, $id, $str = '', $mang2 = [])
-//    {
-//        if (isset($list)) {
-//            foreach ($list as $key => $val) {
-//                if ($val->id != $id) {
-//                    $val->name = $str . $val->name;
-//                    $mang2[$val->id] = $val->name;
-//                    return $this->getList($val->categories, $val->id, $str . '|--', $mang2);
-//                }
-//            }
-//        } else {
-//            return $mang2;
-//        }
-//    }
-
 
     /**
      * Display a listing of the resource.
@@ -86,9 +71,11 @@ class CategoryServiceController extends Controller
     public function store(Request $request)
     {
         $text = Functions::vi_to_en(@$request->name);
+
         $request->merge([
             'code' => str_replace(' ', '_', strtolower($text)),
-            'type' => StatusCode::SERVICE
+            'type' => StatusCode::SERVICE,
+            'price' => $request->price ? str_replace(',', '', $request->price) : 0
         ]);
         Category::create($request->all());
         return redirect(route('category.create'))->with('status', 'Tạo danh mục thành công');
@@ -131,7 +118,10 @@ class CategoryServiceController extends Controller
     public function update(Request $request, Category $category)
     {
         $text = Functions::vi_to_en(@$request->name);
-        $request->merge(['code' => str_replace(' ', '_', strtolower($text))]);
+        $request->merge([
+            'code' => str_replace(' ', '_', strtolower($text)),
+            'price' => $request->price ? str_replace(',', '', $request->price) : 0
+        ]);
         $category->update($request->all());
         return redirect(route('category.index'))->with('status', 'Cập nhật danh mục thành công');
     }

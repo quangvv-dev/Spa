@@ -9,12 +9,12 @@
                 <img src="{{$int==1?'https://pushsale.vn/Portals/_default/Skins/APP/images/bxh/bxh2.png':''}}">
             </div>
             <div class="avatar-container  blink">
-                <img class="avatar-img" src="{{asset(@$value->avatar)}}">
+                <img class="avatar-img" src="{{asset(@$value['avatar'])}}">
             </div>
             <div class="item-info {{'item-info'.($int)}}">
                 <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
-                <div class="item-tennv">{{@$value->full_name}}</div>
-                <div class="">{{number_format($value->gross_revenue)}}</div>
+                <div class="item-tennv">{{@$value['full_name']}}</div>
+                <div class="">{{number_format($value['gross_revenue'])}}</div>
             </div>
         </div>
     @endforeach
@@ -25,7 +25,8 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">Nhân viên</th>
-            <th class="text-white text-center">Số công</th>
+            <th class="text-white text-center">Số công liệu trình</th>
+            <th class="text-white text-center">Tiền công</th>
             <th class="text-white text-center">Tổng số đơn hàng (upsale)</th>
             <th class="text-white text-center">Doanh số</th>
             <th class="text-white text-center">Doanh thu</th>
@@ -36,15 +37,16 @@
         @if(@count($data))
             @foreach($data as $k => $s)
                 <tr>
-                    <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s->id}}">
+                    <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s['id']}}">
                             <i class="fas fa-info-circle"></i>
                             {{@$s->full_name}}</a>
                     </td>
-                    <td class="text-center">{{@number_format($s->days)}}</td>
-                    <td class="text-center">{{@number_format($s->orders)}}</td>
-                    <td class="text-center">{{@number_format($s->all_total)}}</td>
-                    <td class="text-center">{{@number_format($s->gross_revenue)}}</td>
-                    <td class="text-center">{{@number_format($s->earn)}}</td>
+                    <td class="text-center">{{@number_format($s['days'])}}</td>
+                    <td class="text-center">{{@number_format($s['price'])}}</td>
+                    <td class="text-center">{{@number_format($s['orders'])}}</td>
+                    <td class="text-center">{{@number_format($s['all_total'])}}</td>
+                    <td class="text-center">{{@number_format($s['gross_revenue'])}}</td>
+                    <td class="text-center">{{@number_format($s['earn'])}}</td>
                 </tr>
         </tbody>
         @endforeach

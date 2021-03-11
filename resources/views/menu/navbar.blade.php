@@ -13,6 +13,9 @@
         -webkit-box-orient: vertical;
     }
 </style>
+@php
+    $roleGlobal = auth()->user()?:[];
+@endphp
 <header class="app-header header shadow-none relative">
     <div id="particles-js"></div>
     <div class="container">
@@ -75,7 +78,6 @@
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
                                         class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
-
                             @if($roleGlobal->permission('users.list'))
                                 <a class="dropdown-item" href="{!! route('users.index') !!}"><i
                                             class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
