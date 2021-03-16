@@ -20,7 +20,7 @@
 
         .search-box,
         .filter-box {
-            z-index: 999;
+            z-index: 1;
             background: #FFF;
         }
 
@@ -35,6 +35,10 @@
             top: calc(63px + 57px);
             left: 0;
         }
+
+        .floatThead-container {
+            z-index: 1 !important;
+        }
     </style>
     <script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>
     <!-- end anheasy -->
@@ -42,7 +46,7 @@
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header search-box">
+            <div class="card-header search-box searchbox-sticky">
                 <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
                        type="text" id="search">
                 <div class="col-md-2 col-xs-12">
@@ -83,12 +87,13 @@
                     </select>
                 </div>
                 <div class="col relative">
-                    <a title="Upload Data" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i class="fas fa-upload"></i></a>
+                    <a title="Upload Data" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i
+                            class="fas fa-upload"></i></a>
                     <a {{$roleGlobal->permission('leaderSale')||$roleGlobal->permission('leaderMKT')?:"style=display:none"}}
                        title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-download"></i></a>
                     @if($roleGlobal->permission('customers.add'))
-                        <a  class="right btn btn-primary btn-flat"
+                        <a class="right btn btn-primary btn-flat"
                            href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
                     @endif
                 </div>
@@ -646,7 +651,7 @@
                 }).done(function (data) {
                     $(target).parent().find(".genitive-db").empty();
                     $(target).parent().find('.genitive-db').html(data.genitive.name);
-                    $(target).parent().find('.genitive-db').attr( 'title' ,data.genitive.description);
+                    $(target).parent().find('.genitive-db').attr('title', data.genitive.description);
                 });
             });
 
@@ -746,7 +751,7 @@
 
             $('body').on('click', 'a.page-link', function (e) {
                 e.preventDefault();
-                let pages = $(this).attr('href').split('page=')[1];
+                let pages = $(this).attr('href').split('page=')[1] ? $(this).attr('href').split('page=')[1] : 1;
                 const group = $('.group').val();
                 const telesales = $('.telesales').val();
                 const search = $('#search_value').val();
@@ -916,15 +921,30 @@
                 top: 196,
                 position: 'absolute'
             });
-            $(window).on("scroll", function (e) {
-                if ($(window).scrollTop() >= 66) {
-                    $('.search-box').addClass('searchbox-sticky');
-                    $('.filter-box').addClass('filterbox-sticky');
-                } else {
-                    $('.search-box').removeClass('searchbox-sticky');
-                    $('.filter-box').removeClass('filterbox-sticky');
-                }
-            });
+            window.onload = function (e) {
+                $('html, body').animate({scrollTop: '1000px'}, 200);
+                $.ajax({
+                    url: '{{ url()->current() }}',
+                    method: "get",
+                    data: {
+                        page: 1,
+                    },
+                }).done(function (data) {
+                    $('#registration-form').html(data);
+                }).fail(function () {
+                    alert('Articles could not be loaded.');
+                });
+            }
+
+            // $(window).on("scroll", function (e) {
+            //     if ($(window).scrollTop() >= 66) {
+            //         $('.search-box').addClass('searchbox-sticky');
+            //         $('.filter-box').addClass('filterbox-sticky');
+            //     } else {
+            //         $('.search-box').removeClass('searchbox-sticky');
+            //         $('.filter-box').removeClass('filterbox-sticky');
+            //     }
+            // });
             // end anheasy
 
             $(document).on('click', '#change_relations', function () {
