@@ -2,13 +2,31 @@
     $roleGlobal = auth()->user()?:[];
 @endphp
 <style>
-    .dropdown-custom{
+    .dropdown-custom {
         position: absolute !important;
         top: 4px;
         right: 0;
     }
-    .dropdown-custom .username{
+
+    .dropdown-notification {
+        position: absolute !important;
+        top: 4px;
+        right: 7%;
+    }
+
+    .nav-link.icon.notification {
+        border: solid 1px #7abaff;
+    }
+
+    .dropdown-custom .username {
         line-height: 3.5;
+    }
+    .position0{
+        position: absolute !important;
+        top: 0;
+        right: 0;
+    }.margin-right0 i{
+       margin-right: 0 !important;
     }
 </style>
 <!-- Horizantal menu-->
@@ -26,7 +44,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
                        href="{!! route('customers.index') !!}"><i
-                                class="fas fa-users"></i><span>Quản lý khách hàng</span></a>
+                            class="fas fa-users"></i><span>Quản lý khách hàng</span></a>
                 </li>
             @endif
             <li class="nav-item with-sub">
@@ -102,7 +120,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}" href="{{route('tasks.index')}}"><i
-                            class="fas fa-tasks"></i><span>Công việc</span></a>
+                        class="fas fa-tasks"></i><span>Công việc</span></a>
                 @if($roleGlobal->permission('tasks.employee'))
                     <div class="sub-item">
                         <ul>
@@ -144,6 +162,28 @@
                 </div>
             </li>
         </ul>
+        <input id="check_notify" type="hidden">
+        <div class="dropdown dropdown-notification d-none d-md-flex">
+            <a class="nav-link icon notification margin-right0" data-toggle="dropdown"><i style="color: #3691ef;"
+                                                                            class="fas fa-bell"></i> <span
+                    class="badge badge-danger badge-pill position0">10</span></a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
+                 style="overflow: auto;max-height: 400px">
+                <a class="dropdown-item text-center text-dark" href="#">2 New Messages</a>
+                <div class="dropdown-divider"></div>
+                <div class="content-notify">
+
+                </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-center text-muted-dark"
+                   href="{{route('notifications.index')}}">Xem tất cả</a>
+            </div>
+        </div>
+
+        <audio id="myAudio">
+            <source src="{{asset('default/sound-notification.mp3')}}" type="audio/ogg">
+        </audio>
+        <button id="btn_audio" style="display: none"></button>
         <div class="dropdown dropdown-custom">
             <a class="pr-0 leading-none d-flex" data-toggle="dropdown" href="#">
                 @if(Auth::user()->avatar)
@@ -154,8 +194,8 @@
                           style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
                 @endif
                 <span class="ml-2 d-none d-lg-block username">
-												<span class="text-white">{!! Auth::user()->full_name !!}</span>
-											</span>
+                    <span class="" style="color: #7490BD">{!! Auth::user()->full_name !!}</span>
+                </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                 <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
