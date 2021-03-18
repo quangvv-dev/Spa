@@ -96,12 +96,16 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 $history_orders = HistoryUpdateOrder::search($input)->with('service');
                 $history = $history_orders->get();
+
                 if (count($history)) {
                     foreach ($history as $item2) {
-
-                        $price[] = (int)$category_price[$item2->service->category_id]?:0;
+                        $category_id = $item2->service->category_id ?: 0;
+                        if (!empty($category_price[$category_id])) {
+                            $price[] = (int)$category_price[$category_id];
+                        }
                     }
                 }
+
                 $doc = [
                     'id' => $item->id,
                     'avatar' => $item->avatar,
