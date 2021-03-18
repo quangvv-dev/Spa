@@ -123,14 +123,6 @@ a:hover {
     padding-left: 10px;
     line-height: 18px;
 }
-.avatar {
-    display: table-cell;
-    vertical-align: top;
-    width: 52px;
-    height: 52px;
-    -webkit-box-sizing: none;
-    box-sizing: none;
-}
 .a35, .a35 img {
     width: 35px;
     height: 35px;

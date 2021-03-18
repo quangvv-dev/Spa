@@ -30,6 +30,14 @@
     .margin-right0 i {
         margin-right: 0 !important;
     }
+    .avatar {
+        display: table-cell;
+        vertical-align: top;
+        width: 52px;
+        height: 52px;
+        -webkit-box-sizing: none;
+        box-sizing: none;
+    }
 </style>
 <!-- Horizantal menu-->
 <div class="ren-navbar fixed-header" id="headerMenuCollapse">
