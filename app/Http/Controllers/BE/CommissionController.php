@@ -99,7 +99,7 @@ class CommissionController extends Controller
                 if (count($history)) {
                     foreach ($history as $item2) {
 
-                        $price[] = (int)$category_price[$item2->service->category_id];
+                        $price[] = (int)$category_price[$item2->service->category_id]?:0;
                     }
                 }
                 $doc = [
