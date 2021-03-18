@@ -18,7 +18,9 @@
         height: 20px;
     }
     .table-responsive td.text-center{
-        padding: 2px;
+        padding: 1px;
+    }.table-ajax td.text-center{
+             padding: 11px;
     }
     body{
         overflow: hidden;
