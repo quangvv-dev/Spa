@@ -17,14 +17,6 @@
         width: 28px;
         height: 20px;
     }
-    .table-responsive td.text-center{
-        padding: 1.5px;
-    }.table-ajax td.text-center{
-             padding: 11px;
-    }
-    /*body{*/
-        /*overflow: hidden;*/
-    /*}*/
 </style>
 <div class="card-header filter-box filterbox-sticky">
     <div class="display btn-group open">
@@ -137,7 +129,7 @@
         </div>
     </div>
 </div>
-<div class="table-responsive" style="position: relative;font-size: 12px">
+<div class="table-responsive fixed-scrollbar" style="position: relative;font-size: 12px">
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
         <thead class="bg-primary text-white">
         <tr>
@@ -238,7 +230,7 @@
                 @foreach($customers as $key => $customer)
                     <tr>
                         <td class="text-center"
-                            style="background: {{isset($customer->status)?$customer->status->color :''}}">
+                            style="background: {{isset($customer->status)?$customer->status->color :''}};height: 63px">
                             <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                         <td class="text-center">{{ $rank ++ }}</td>
                         <td class="text-center">{{ date('d-m-Y H:i', strtotime($customer->created_at)) }}</td>
