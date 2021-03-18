@@ -18,13 +18,13 @@
         height: 20px;
     }
     .table-responsive td.text-center{
-        padding: 1px;
+        padding: 1.5px;
     }.table-ajax td.text-center{
              padding: 11px;
     }
-    body{
-        overflow: hidden;
-    }
+    /*body{*/
+        /*overflow: hidden;*/
+    /*}*/
 </style>
 <div class="card-header filter-box filterbox-sticky">
     <div class="display btn-group open">
