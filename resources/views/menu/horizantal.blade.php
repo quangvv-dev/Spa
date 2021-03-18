@@ -11,7 +11,7 @@
     .dropdown-notification {
         position: absolute !important;
         top: 4px;
-        right: 7%;
+        right: 9%;
     }
 
     .nav-link.icon.notification {
@@ -25,8 +25,10 @@
         position: absolute !important;
         top: 0;
         right: 0;
-    }.margin-right0 i{
-       margin-right: 0 !important;
+    }
+
+    .margin-right0 i {
+        margin-right: 0 !important;
     }
 </style>
 <!-- Horizantal menu-->

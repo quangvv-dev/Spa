@@ -103,7 +103,7 @@ class CustomerController extends Controller
         if (isset($input['limit'])) {
             $customers = $customers->latest()->paginate($input['limit']);
         } else {
-            $customers = $customers->paginate(StatusCode::PAGINATE_20);
+            $customers = $customers->paginate(StatusCode::PAGINATE_10);
         }
         $statuses = Status::getRelationshipByCustomer($input);
         $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
