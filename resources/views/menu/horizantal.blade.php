@@ -2,18 +2,6 @@
     $roleGlobal = auth()->user()?:[];
 @endphp
 <style>
-    .dropdown-custom {
-        position: absolute !important;
-        top: 4px;
-        right: 0;
-    }
-
-    .dropdown-notification {
-        position: absolute !important;
-        top: 4px;
-        right: 9%;
-    }
-
     .nav-link.icon.notification {
         border: solid 1px #7abaff;
     }
@@ -40,8 +28,16 @@
     }
     @media only screen and (max-width: 1367px) {
         .ren-navbar .nav-link{
-            padding: 1.3rem 1rem;
+            padding: 1.3rem 0.9rem;
         }
+    }
+    .div-info{
+        position: absolute !important;
+        top: 4px;
+        right: 0;
+    }
+    .left{
+        float: left;
     }
 </style>
 <!-- Horizantal menu-->
@@ -177,105 +173,113 @@
                 </div>
             </li>
         </ul>
-        <input id="check_notify" type="hidden">
-        <div class="dropdown dropdown-notification d-none d-md-flex">
-            <a class="nav-link icon notification margin-right0" data-toggle="dropdown"><i style="color: #3691ef;"
-                                                                            class="fas fa-bell"></i> <span
-                    class="badge badge-danger badge-pill position0">10</span></a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
-                 style="overflow: auto;max-height: 400px">
-                <a class="dropdown-item text-center text-dark" href="#">2 New Messages</a>
-                <div class="dropdown-divider"></div>
-                <div class="content-notify">
+        <div class="div-info">
+            <div class="left">
+                <input id="check_notify" type="hidden">
+                <div class="dropdown dropdown-notification d-none d-md-flex">
+                    <a class="nav-link icon notification margin-right0" data-toggle="dropdown"><i style="color: #3691ef;"
+                                                                                                  class="fas fa-bell"></i> <span
+                            class="badge badge-danger badge-pill position0">10</span></a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
+                         style="overflow: auto;max-height: 400px">
+                        <a class="dropdown-item text-center text-dark" href="#">2 New Messages</a>
+                        <div class="dropdown-divider"></div>
+                        <div class="content-notify">
 
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-center text-muted-dark"
+                           href="{{route('notifications.index')}}">Xem tất cả</a>
+                    </div>
                 </div>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-center text-muted-dark"
-                   href="{{route('notifications.index')}}">Xem tất cả</a>
-            </div>
-        </div>
 
-        <audio id="myAudio">
-            <source src="{{asset('default/sound-notification.mp3')}}" type="audio/ogg">
-        </audio>
-        <button id="btn_audio" style="display: none"></button>
-        <div class="dropdown dropdown-custom">
-            <a class="pr-0 leading-none d-flex" data-toggle="dropdown" href="#">
-                @if(Auth::user()->avatar)
-                    <span class="avatar avatar-md brround "
-                          style="background-image: url({{ url(Auth::user()->avatar) }})"></span>
-                @else
-                    <span class="avatar avatar-md brround"
-                          style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
-                @endif
-                <span class="ml-2 d-none d-lg-block username">
+                <audio id="myAudio">
+                    <source src="{{asset('default/sound-notification.mp3')}}" type="audio/ogg">
+                </audio>
+                <button id="btn_audio" style="display: none"></button>
+            </div>
+            <div class="right">
+                <div class="dropdown dropdown-custom">
+                    <a class="pr-0 leading-none d-flex" data-toggle="dropdown" href="#">
+                        @if(Auth::user()->avatar)
+                            <span class="avatar avatar-md brround "
+                                  style="background-image: url({{ url(Auth::user()->avatar) }})"></span>
+                        @else
+                            <span class="avatar avatar-md brround"
+                                  style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
+                        @endif
+                        <span class="ml-2 d-none d-lg-block username">
                     <span class="" style="color: #7490BD">{!! Auth::user()->full_name !!}</span>
                 </span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
-                        class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
-                @if($roleGlobal->permission('users.list'))
-                    <a class="dropdown-item" href="{!! route('users.index') !!}"><i
-                            class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
-                @endif
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
+                                class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
+                        @if($roleGlobal->permission('users.list'))
+                            <a class="dropdown-item" href="{!! route('users.index') !!}"><i
+                                    class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
+                        @endif
 
-                @if($roleGlobal->permission('department.list'))
-                    <a class="dropdown-item" href="{!! route('department.index') !!}"><i
-                            class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
-                @endif
+                        @if($roleGlobal->permission('department.list'))
+                            <a class="dropdown-item" href="{!! route('department.index') !!}"><i
+                                    class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
+                        @endif
 
-                @if(empty($permissions) || !in_array('sms.index',$permissions))
-                    @if($roleGlobal->permission('sms'))
-                        <a class="dropdown-item" href="{!! route('sms.index') !!}">
-                            <i class="dropdown-icon fas fa-envelope"></i> Quản lý tin nhắn
+                        @if(empty($permissions) || !in_array('sms.index',$permissions))
+                            @if($roleGlobal->permission('sms'))
+                                <a class="dropdown-item" href="{!! route('sms.index') !!}">
+                                    <i class="dropdown-icon fas fa-envelope"></i> Quản lý tin nhắn
+                                </a>
+                            @endif
+                        @endif
+                        @if($roleGlobal->permission('status.list'))
+                            <a class="dropdown-item" href="{!! route('status.index') !!}"><i
+                                    class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
+                        @endif
+                        @if(empty($permissions) || !in_array('package.index',$permissions))
+                            @if($roleGlobal->permission('package.list'))
+                                <a class="dropdown-item" href="{!! route('package.index') !!}"><i
+                                        class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
+                            @endif
+                        @endif
+                        @if(empty($permissions) || !in_array('settings.index',$permissions))
+                            @if($roleGlobal->permission('settings'))
+                                <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
+                                        class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
+                            @endif
+                        @endif
+
+                        @if($roleGlobal->permission('roles.list'))
+                            <a class="dropdown-item" href="{!! route('roles.index') !!}"><i
+                                    class="dropdown-icon mdi mdi-settings"></i> Quản lý phân quyền</a>
+                        @endif
+
+                        @if($roleGlobal->permission('leaderSale'))
+                            <div class="col" style="color: #7490BD;font-weight: 400">
+                                <label class="switch">
+                                    <input name="checkbox" class="check"
+                                           type="checkbox" {{setting('view_customer_sale')==\App\Constants\StatusCode::ON?'checked':''}}>
+                                    <span class="slider round"></span>
+                                </label>
+                                Sale xem tất cả KH
+                            </div>
+                        @endif
+                        <div class="dropdown-divider"></div>
+                        <a href="{!! url('/logout') !!}" class="dropdown-item"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="dropdown-icon mdi mdi-logout-variant"></i>
+                            Đăng xuất
                         </a>
-                    @endif
-                @endif
-                @if($roleGlobal->permission('status.list'))
-                    <a class="dropdown-item" href="{!! route('status.index') !!}"><i
-                            class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
-                @endif
-                @if(empty($permissions) || !in_array('package.index',$permissions))
-                    @if($roleGlobal->permission('package.list'))
-                        <a class="dropdown-item" href="{!! route('package.index') !!}"><i
-                                class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
-                    @endif
-                @endif
-                @if(empty($permissions) || !in_array('settings.index',$permissions))
-                    @if($roleGlobal->permission('settings'))
-                        <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
-                                class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
-                    @endif
-                @endif
 
-                @if($roleGlobal->permission('roles.list'))
-                    <a class="dropdown-item" href="{!! route('roles.index') !!}"><i
-                            class="dropdown-icon mdi mdi-settings"></i> Quản lý phân quyền</a>
-                @endif
-
-                @if($roleGlobal->permission('leaderSale'))
-                    <div class="col" style="color: #7490BD;font-weight: 400">
-                        <label class="switch">
-                            <input name="checkbox" class="check"
-                                   type="checkbox" {{setting('view_customer_sale')==\App\Constants\StatusCode::ON?'checked':''}}>
-                            <span class="slider round"></span>
-                        </label>
-                        Sale xem tất cả KH
+                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
                     </div>
-                @endif
-                <div class="dropdown-divider"></div>
-                <a href="{!! url('/logout') !!}" class="dropdown-item"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="dropdown-icon mdi mdi-logout-variant"></i>
-                    Đăng xuất
-                </a>
+                </div>
 
-                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                    {{ csrf_field() }}
-                </form>
             </div>
         </div>
+
     </div>
 </div>
 <script>
