@@ -38,6 +38,11 @@
         -webkit-box-sizing: none;
         box-sizing: none;
     }
+    @media only screen and (max-width: 1367px) {
+        .ren-navbar .nav-link{
+            padding: 1.3rem 1rem;
+        }
+    }
 </style>
 <!-- Horizantal menu-->
 <div class="ren-navbar fixed-header" id="headerMenuCollapse">
