@@ -214,17 +214,19 @@
      style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">
     <div style="overflow: hidden">
         <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
-            <thead class="bg-primary text-white">
-            <tr>
-                <th><input type="checkbox" class="selectall myCheck"/></th>
-                <th class="text-white text-center">STT</th>
-                <th class="text-white text-center">Ngày tạo KH</th>
-                <th class="text-white text-center">Họ tên</th>
-                <th class="text-white text-center">SĐT</th>
-                <th class="text-white text-center">Nhóm KH</th>
-                <th class="text-white text-center">Trạng thái</th>
-            </tr>
-            </thead>
+            @if (count($customers))
+                <thead class="bg-primary text-white">
+                <tr>
+                    <th><input type="checkbox" class="selectall myCheck"/></th>
+                    <th class="text-white text-center">STT</th>
+                    <th class="text-white text-center">Ngày tạo KH</th>
+                    <th class="text-white text-center">Họ tên</th>
+                    <th class="text-white text-center">SĐT</th>
+                    <th class="text-white text-center">Nhóm KH</th>
+                    <th class="text-white text-center">Trạng thái</th>
+                </tr>
+                </thead>
+            @endif
             <tbody style="background: white;">
             @if (count($customers))
                 @foreach($customers as $key => $customer)
