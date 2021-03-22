@@ -47,7 +47,9 @@ class OrderDetail extends Model
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                     $q->whereBetween('created_at', getTime(($input['data_time'])));
                 });
-        })
+        })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -77,6 +79,8 @@ class OrderDetail extends Model
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                     $q->whereBetween('created_at', getTime(($input['data_time'])));
                 });
+        })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
         })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [
@@ -99,11 +103,19 @@ class OrderDetail extends Model
     public static function getTotalPriceBookingId($input, $type, $paginate)
     {
         $data = self::select('booking_id', \DB::raw('SUM(total_price) AS total'))->groupBy('booking_id')
+            ->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })
             ->whereBetween('created_at', getTime($input['data_time']))->whereHas('service')->get()->map(function ($item) use ($type) {
                 if (isset($item->service) && $item->service->type == $type) {
                     return $item;
                 }
             })->sortByDesc('total')->take($paginate);
         return $data;
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 }

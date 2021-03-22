@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Category;
 use App\Models\Department;
@@ -46,6 +47,7 @@ class User extends Authenticatable
         'description',
         'facebook',
         'is_leader',
+        'branch_id',
     ];
 
     /**
@@ -72,9 +74,10 @@ class User extends Authenticatable
         $data = self::when($param['search'], function ($query) use ($param) {
             $query->where('full_name', 'like', '%' . $param['search'] . '%')
                 ->orWhere('phone', 'like', '%' . $param['search'] . '%');
+        })->when(isset($param['branch_id']) && isset($input['branch_id']), function ($q) use ($param) {
+            $q->where('branch_id', $param['branch_id']);
         })
-//            ->where('role', '<>', UserConstant::ADMIN)
-            ->latest('id')->paginate(10);
+            ->latest('id')->paginate(StatusCode::PAGINATE_10);
 
         return $data;
     }
@@ -97,16 +100,6 @@ class User extends Authenticatable
 
     public function getRoleTextAttribute()
     {
-//        $map = [
-//            UserConstant::ADMIN => 'Admin',
-//            UserConstant::MARKETING => 'Marketing',
-//            UserConstant::TELESALES => 'Telesales',
-//            UserConstant::WAITER => 'Lễ tân',
-//            UserConstant::CSKH => 'Tư vấn viên',
-//            UserConstant::TECHNICIANS => 'Kỹ thuật viên',
-//        ];
-//
-//        return $map[$this->role] ?? null;
         $role = Role::select('name')->find($this->role);
         return isset($role) ? $role->name : '';
     }
@@ -126,4 +119,8 @@ class User extends Authenticatable
         }
     }
 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
 }

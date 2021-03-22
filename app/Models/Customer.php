@@ -46,21 +46,6 @@ class Customer extends Model
 
     const VIP_STATUS = 10000000;
 
-    public static function searchStatus($input)
-    {
-        $user = Auth::user();
-        $data = self::latest();
-        if ($user->role == UserConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
-            if ($user->is_leader == UserConstant::IS_LEADER) {
-                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
-            } else {
-                $data = $data->where('telesales_id', $user->id);
-            }
-        } else {
-            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
-        }
-        return $data;
-    }
 
     public static function applySearchConditions($builder, $conditions)
     {
@@ -126,6 +111,9 @@ class Customer extends Model
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
+        if (isset($param['branch_id']) && $param['branch_id']) {
+            $data = $data->where('branch_id', $param['branch_id']);
+        }
         if (count($param)) {
             static::applySearchConditions($data, $param);
         }
@@ -178,12 +166,12 @@ class Customer extends Model
         $group = CustomerGroup::where('customer_id', $this->id)->with('category')->get();
         if (count($group)) {
             foreach ($group as $item) {
-                if (isset($item->category)){
+                if (isset($item->category)) {
                     $text[] = $item->category->name;
                 }
             }
         }
-        $text = implode($text,',');
+        $text = implode($text, ',');
         return $text;
     }
 
@@ -288,6 +276,9 @@ class Customer extends Model
                             Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                             Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                         ]);
+                    })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                        $q->where('branch_id',$input['branch_id']);
+
                     });
             },
         ]);
@@ -334,6 +325,8 @@ class Customer extends Model
                     });
             })->when(isset($input['user_id']), function ($query) use ($input) {
                 $query->where('mkt_id', $input['user_id']);
+            })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
             })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -345,21 +338,8 @@ class Customer extends Model
         return $data->count();
     }
 
-    public static function searchWithTime($input)
+    public function branch()
     {
-        $data = self::select('id')->where('telesales_id', $input['telesales_id'])->when(isset($input['data_time']), function ($query) use ($input) {
-//            $query->when($input['data_time'] == 'TODAY' ||
-//                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-//                $q->whereDate('created_at', getTime(($input['data_time'])));
-//            })
-            $query->when($input['data_time'] == 'THIS_WEEK' ||
-                $input['data_time'] == 'LAST_WEEK' ||
-                $input['data_time'] == 'LAST_WEEK' ||
-                $input['data_time'] == 'THIS_MONTH' ||
-                $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                $q->whereBetween('created_at', getTime(($input['data_time'])));
-            });
-        });
-        return $data;
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 }

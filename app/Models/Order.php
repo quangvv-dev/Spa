@@ -329,4 +329,9 @@ class Order extends Model
             });
         return $data;
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
 }

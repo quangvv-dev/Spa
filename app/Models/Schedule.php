@@ -82,6 +82,8 @@ class Schedule extends Model
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ]);
+        })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
         })->when(!empty($input['status_schedule']), function ($q) use ($input) {
             $q->where('status', $input['status_schedule']);
         });
@@ -108,6 +110,8 @@ class Schedule extends Model
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                         $q->whereBetween('created_at', getTime(($input['data_time'])));
                     });
+            })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
             })
                 ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                     $q->whereBetween('created_at', [
@@ -122,7 +126,10 @@ class Schedule extends Model
 
     public static function search($request)
     {
-        $docs = self::orderBy('id', 'desc');
+        $docs = self::orderBy('id', 'desc')
+            ->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($request) {
+                $q->where('branch_id', $request['branch_id']);
+            });
 
         if (!empty($request['search'])) {
             $docs = $docs->whereIn('status', $request['search']);
@@ -146,5 +153,10 @@ class Schedule extends Model
         }
 
         return $docs;
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 }
