@@ -201,9 +201,9 @@
             <div class="right">
                 <div class="dropdown dropdown-custom">
                     <a class="pr-0 leading-none d-flex" data-toggle="dropdown" href="#">
-                        @if(Auth::user()->avatar)
+                        @if(\Auth::user()->avatar)
                             <span class="avatar avatar-md brround "
-                                  style="background-image: url({{ url(Auth::user()->avatar) }})"></span>
+                                  style="background-image: url({{ url(\Auth::user()->avatar) }})"></span>
                         @else
                             <span class="avatar avatar-md brround"
                                   style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
