@@ -159,13 +159,8 @@
         </thead>
         <tbody style="background: white;">
         @if (count($customers))
-            @if(empty($customers))
-                <style>
-                    .table-responsive {
-                        margin-top: 1%;
-                    }
-                </style>
-            @elseif(count($customers) <7)
+
+            @if(count($customers) <7)
                 <tr>
                     <td colspan="21"></td>
                 </tr>
