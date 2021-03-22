@@ -25,13 +25,12 @@
                 style="height: 39px; border-radius: 3px; margin-right: 10px"><i
                 class="fa fa-caret-down"></i></button>
         <ul class="dropdown-menu">
-            <li class="pd5" id="search"><a class="invalid_account" data-invalid="1"
-                                           data-icon-class="fa fa-trash">
-                    <span class="pr10"></span> Đang sử dụng </a>
+            <li class="pd5" id="search">
+                <a class="invalid_account" data-invalid="1" data-icon-class="fa fa-trash"><span class="pr10"></span>
+                    Đang sử dụng </a>
             </li>
-            <li class="pd5"><a class="invalid_account" data-invalid="0"
-                               data-icon-class="fa fa-dot-circle-o"> <span class="pr10"><i
-                            class="fa fa-dot-circle-o" aria-hidden="true"></i></span> Đã xoá </a>
+            <li class="pd5"><a class="invalid_account" data-invalid="0" data-icon-class="fa fa-dot-circle-o"> <span
+                        class="pr10"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></span> Đã xoá </a>
             </li>
         </ul>
     </div>

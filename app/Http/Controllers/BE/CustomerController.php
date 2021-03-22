@@ -8,6 +8,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\CustomerPost;
 use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -98,6 +99,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
+        $branchs = Branch::search()->pluck('name', 'id');
         $input = $request->all();
         $customers = Customer::search($input);
         if (isset($input['limit'])) {
@@ -112,7 +114,7 @@ class CustomerController extends Controller
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories','branchs'));
     }
 
     /**
