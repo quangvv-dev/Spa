@@ -41,7 +41,7 @@
         }
 
         .floatThead-container {
-            z-index: 1 !important;
+            z-index: 0 !important;
         }
     </style>
     <script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>
