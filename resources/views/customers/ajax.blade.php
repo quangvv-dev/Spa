@@ -159,6 +159,14 @@
         </thead>
         <tbody style="background: white;">
         @if (count($customers))
+            @if(count($customers) <7)
+                <tr>
+                    <td colspan="21"></td>
+                </tr>
+                <tr>
+                    <td colspan="21"></td>
+                </tr>
+            @endif
             @foreach($customers as $key => $customer)
                 <tr>
                     <td class="text-center"
@@ -229,6 +237,14 @@
             @endif
             <tbody style="background: white;">
             @if (count($customers))
+                @if(count($customers) <7)
+                    <tr>
+                        <td colspan="7"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7"></td>
+                    </tr>
+                @endif
                 @foreach($customers as $key => $customer)
                     <tr>
                         <td class="text-center"
