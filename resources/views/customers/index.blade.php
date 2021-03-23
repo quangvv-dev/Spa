@@ -54,10 +54,23 @@
         body {
             overflow: hidden;
         }
-
         .table-responsive {
             overflow-y: scroll;
-            max-height: 67vh;
+        }
+
+        @media only screen and (max-width: 1367px) {
+            .table-responsive {
+                max-height: 65vh;
+            }
+        }
+        @media only screen and (max-width: 1441px) {
+            .table-responsive {
+                max-height: 78vh;
+            }
+        }@media only screen and (max-width: 1921px) {
+            .table-responsive {
+                max-height: 88vh;
+            }
         }
     </style>
     {{--<script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>--}}
