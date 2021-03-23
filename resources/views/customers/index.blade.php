@@ -57,7 +57,7 @@
 
         .table-responsive {
             overflow-y: scroll;
-            max-height: 80vh;
+            max-height: 67vh;
         }
     </style>
     {{--<script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>--}}
