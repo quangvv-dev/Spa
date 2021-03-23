@@ -74,7 +74,7 @@
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
-    align-items: baseline;">
+  align-items: baseline;">
         <div style="float: right">
             <span>{{$customers->firstItem()}} - {{$customers->lastItem()}}</span>
         </div>
@@ -129,7 +129,7 @@
         </div>
     </div>
 </div>
-<div class="table-responsive fixed-scrollbar" style="position: relative;font-size: 12px">
+<div class="table-responsive" style="position: relative;font-size: 12px">
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
         <thead class="bg-primary text-white">
         <tr>
@@ -139,8 +139,7 @@
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Nhóm KH</th>
-            <th class="text-white text-center" style="min-width: 200px">&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-            </th>
+            <th class="text-white text-center">Trạng Thái</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
             <th class="text-white text-center">Nhóm tính cách</th>
@@ -171,23 +170,26 @@
             @foreach($customers as $key => $customer)
                 <tr>
                     <td class="text-center"
-                        style="background: {{isset($customer->status)?$customer->status->color :''}}">
+                        style="background: {{isset($customer->status)?$customer->status->color :''}};height: 63px">
                         <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
-                    <td class="text-center"></td>
+                    <td class="text-center">{{ $rank ++ }}</td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
-                    <td class="text-center">
-                        <a href="#"><i class="fas fa-info-circle"></i></a>
-                        <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
-                        <span class="noti-number noti-number-on ml5"
-                              style="background-color: #ee630c!important;">2</span>
+                    <td class="text-center name-customer" data-customer-id="{{ $customer->id }}">
+                        <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                        <a target="_blank"
+                           href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
+                        <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                     </td>
-                    <td class="text-center">{{ $customer->phone }}</td>
-                    <td class="text-center category-db" data-id="{{$customer->id}}">
-                        @foreach($customer->categories as $category)
-                            {{ $category->name }}
-                        @endforeach
+                    <td class="text-center phone-customer"
+                        data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
+                    <td class="text-center category-db"
+                        data-id="{{$customer->id}}">
+                        {{str_limit($customer->group_text,30)}}
                     </td>
-                    <td class="text-center " data-id="{{$customer->id}}">&nbsp; &nbsp; &nbsp; &nbsp;</td>
+                    <td class="text-center status-db"
+                        data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description-cus" data-id="{{$customer->id}}"
@@ -218,89 +220,90 @@
         @endif
         </tbody>
     </table>
-</div>
-<div class="table-ajax"
-     style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">
-    <div style="overflow: hidden">
-        <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
-            @if (count($customers))
-                <thead class="bg-primary text-white">
-                <tr>
-                    <th><input type="checkbox" class="selectall myCheck"/></th>
-                    <th class="text-white text-center">STT</th>
-                    <th class="text-white text-center">Ngày tạo KH</th>
-                    <th class="text-white text-center">Họ tên</th>
-                    <th class="text-white text-center">SĐT</th>
-                    <th class="text-white text-center">Nhóm KH</th>
-                    <th class="text-white text-center">Trạng thái</th>
-                </tr>
-                </thead>
-            @endif
-            <tbody style="background: white;">
-            @if (count($customers))
-                @if(count($customers) <7)
-                    <tr>
-                        <td colspan="7"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="7"></td>
-                    </tr>
-                @endif
-                @foreach($customers as $key => $customer)
-                    <tr>
-                        <td class="text-center"
-                            style="background: {{isset($customer->status)?$customer->status->color :''}};height: 63px">
-                            <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
-                        <td class="text-center">{{ $rank ++ }}</td>
-                        <td class="text-center">{{ date('d-m-Y H:i', strtotime($customer->created_at)) }}</td>
-                        <td class="text-center name-customer" data-customer-id="{{ $customer->id }}">
-                            <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
-                                <i class="fas fa-info-circle"></i>
-                            </a>
-                            <a target="_blank"
-                               href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
-                            <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
-                        </td>
-                        <td class="text-center phone-customer"
-                            data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
-                        <td class="text-center category-db"
-                            data-id="{{$customer->id}}">
-                            {{str_limit($customer->group_text,30)}}
-                        </td>
-                        <td class="text-center status-db"
-                            data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
-                    </tr>
-                @endforeach
-            @else
-                <tr>
-                    {{--<td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>--}}
-                </tr>
-            @endif
-            </tbody>
-        </table>
+    <div class="pull-left">
+        <div class="page-info">
+            {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
+        </div>
+        <div class="pull-right">
+            {{ $customers->appends(['search' => request()->search ])->links() }}
+        </div>
     </div>
 </div>
-<div class="pull-left">
-    <div class="page-info">
-        {{ 'Tổng số ' . $customers->total() . ' khách hàng ' . (request()->search ? 'found' : '') }}
-    </div>
-    <div class="pull-right">
-        {{ $customers->appends(['search' => request()->search ])->links() }}
-    </div>
-</div>
+{{--<div class="table-ajax"--}}
+{{--style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">--}}
+{{--<div style="overflow: hidden">--}}
+{{--<table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">--}}
+{{--@if (count($customers))--}}
+{{--<thead class="bg-primary text-white">--}}
+{{--<tr>--}}
+{{--<th><input type="checkbox" class="selectall myCheck"/></th>--}}
+{{--<th class="text-white text-center">STT</th>--}}
+{{--<th class="text-white text-center">Ngày tạo KH</th>--}}
+{{--<th class="text-white text-center">Họ tên</th>--}}
+{{--<th class="text-white text-center">SĐT</th>--}}
+{{--<th class="text-white text-center">Nhóm KH</th>--}}
+{{--<th class="text-white text-center">Trạng thái</th>--}}
+{{--</tr>--}}
+{{--</thead>--}}
+{{--@endif--}}
+{{--<tbody style="background: white;">--}}
+{{--@if (count($customers))--}}
+{{--@if(count($customers) <7)--}}
+{{--<tr>--}}
+{{--<td colspan="7"></td>--}}
+{{--</tr>--}}
+{{--<tr>--}}
+{{--<td colspan="7"></td>--}}
+{{--</tr>--}}
+{{--@endif--}}
+{{--@foreach($customers as $key => $customer)--}}
+{{--<tr>--}}
+{{--<td class="text-center"--}}
+{{--style="background: {{isset($customer->status)?$customer->status->color :''}};height: 63px">--}}
+{{--<input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>--}}
+{{--<td class="text-center">{{ $rank ++ }}</td>--}}
+{{--<td class="text-center">{{ date('d-m-Y H:i', strtotime($customer->created_at)) }}</td>--}}
+{{--<td class="text-center name-customer" data-customer-id="{{ $customer->id }}">--}}
+{{--<a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">--}}
+{{--<i class="fas fa-info-circle"></i>--}}
+{{--</a>--}}
+{{--<a target="_blank"--}}
+{{--href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>--}}
+{{--<span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>--}}
+{{--</td>--}}
+{{--<td class="text-center phone-customer"--}}
+{{--data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>--}}
+{{--<td class="text-center category-db"--}}
+{{--data-id="{{$customer->id}}">--}}
+{{--{{str_limit($customer->group_text,30)}}--}}
+{{--</td>--}}
+{{--<td class="text-center status-db"--}}
+{{--data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>--}}
+{{--</tr>--}}
+{{--@endforeach--}}
+{{--@else--}}
+{{--<tr>--}}
+{{--<td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>--}}
+{{--</tr>--}}
+{{--@endif--}}
+{{--</tbody>--}}
+{{--</table>--}}
+{{--</div>--}}
+{{--</div>--}}
+
 @include('customers.modal_view')
 <!-- table-responsive -->
 <script>
-    $('.table-responsive .table-primary').floatThead({
-        top: 196,
-        scrollContainer: function ($table) {
-            return $table.closest('');
-        },
-        position: 'absolute'
-    });
-    $('.table-ajax .table-primary').floatThead({
-        top: 196,
-        position: 'absolute'
-    });
+    // $('.table-responsive .table-primary').floatThead({
+    //     top: 196,
+    //     scrollContainer: function ($table) {
+    //         return $table.closest('');
+    //     },
+    //     position: 'absolute'
+    // });
+    // $('.table-ajax .table-primary').floatThead({
+    //     top: 196,
+    //     position: 'absolute'
+    // });
     $('html, body').animate({scrollTop: '0px'}, 300);
 </script>
