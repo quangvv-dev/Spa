@@ -172,18 +172,40 @@ class Customer extends Model
         return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
     }
 
+    public function getSchedulesTextAttribute()
+    {
+
+        $arr = [];
+        $schedules = Schedule::select(\DB::raw('COUNT(id) AS count'), 'user_id', 'status')->where('user_id', $this->id);
+        $all_count = $schedules->count();
+        $arr[] = '<span class="bold text-info">' .'Tất cả : '. $all_count . '</span> ';
+        $schedules = $schedules->groupBy('user_id', 'status')->get();
+        if (count($schedules)) {
+            foreach ($schedules as $item) {
+                if ($item->status == 3) { //đến- mua
+                    $arr[] = '<span class="bold text-success">' .'Đến Mua : '. $item->count . '</span>';
+                } elseif ($item->status == 4) {//đến - không mua
+                    $arr[] = '<span class="bold text-warning">' .'Đến không Mua : '. $item->count . '</span>';
+                } elseif ($item->status == 5) {//Hủy
+                    $arr[] = '<span class="bold text-danger">' .'Hủy :'. $item->count . '</span> ';
+                }
+            }
+        }
+        return implode(",", $arr);
+    }
+
     public function getGroupTextAttribute()
     {
         $text = [];
         $group = CustomerGroup::where('customer_id', $this->id)->with('category')->get();
         if (count($group)) {
             foreach ($group as $item) {
-                if (isset($item->category)){
+                if (isset($item->category)) {
                     $text[] = $item->category->name;
                 }
             }
         }
-        $text = implode($text,',');
+        $text = implode($text, ',');
         return $text;
     }
 

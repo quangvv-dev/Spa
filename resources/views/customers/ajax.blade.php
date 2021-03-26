@@ -143,6 +143,7 @@
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
             <th class="text-white text-center">Nhóm tính cách</th>
+            <th class="text-white text-center">Lich Hẹn</th>
             <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Người tạo KH</th>
             <th class="text-white text-center">Nguồn KH</th>
@@ -184,20 +185,15 @@
                     </td>
                     <td class="text-center phone-customer"
                         data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
-                    <td class="text-center category-db"
-                        data-id="{{$customer->id}}">
-                        {{str_limit($customer->group_text,30)}}
+                    <td class="text-center category-db" data-id="{{$customer->id}}">{{str_limit($customer->group_text,30)}}</td>
+                    <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
+                    <td class="text-center telesale-customer" data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
+                    <td class="text-center description-cus" data-id="{{$customer->id}}" style="width: 291px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
+                    <td class="text-center genitive-db" title="{{@$customer->genitive->description}}" data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>
+                    <td class="text-center" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
+                        {!! $customer->schedules_text !!}
                     </td>
-                    <td class="text-center status-db"
-                        data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
-                    <td class="text-center telesale-customer"
-                        data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center description-cus" data-id="{{$customer->id}}"
-                        style="width: 291px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
-                    <td class="text-center genitive-db" title="{{@$customer->genitive->description}}"
-                        data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>
-                    <td class="text-center customer-birthday"
-                        data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
+                    <td class="text-center customer-birthday" data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ @$customer->facebook}}</td>
