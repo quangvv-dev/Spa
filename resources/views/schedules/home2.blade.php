@@ -33,7 +33,7 @@
     <div class="col-md-12 col-lg-12" style="margin-left: 6%">
         <div class="card">
             <div class="card-header">
-                <div class="left-click">
+                <div class="col-md-6">
                     @foreach($color as $k => $item)
                         <div data-id="{{$k}}" class="btn white account_relation position"
                              style="background: @switch($k)
@@ -71,9 +71,9 @@
                 <div class="col-md-2">
                     {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
                 </div>
-                <div class="col-md-2">
-                    {!! Form::select('category_id', $category,null, array( 'id'=>'category','class' => 'form-control','placeholder'=>'Nhóm DV')) !!}
-                </div>
+                {{--<div class="col-md-2">--}}
+                    {{--{!! Form::select('category_id', $category,null, array( 'id'=>'category','class' => 'form-control','placeholder'=>'Nhóm DV')) !!}--}}
+                {{--</div>--}}
             </div>
             <input type="hidden" id="status_val">
             <div class="side-app">
