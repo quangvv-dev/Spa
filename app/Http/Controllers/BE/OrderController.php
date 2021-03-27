@@ -465,8 +465,8 @@ class OrderController extends Controller
                                     $query->where('role', UserConstant::TELESALES)->where('is_leader', UserConstant::IS_LEADER);
                                 })->get();
                                 $task->users()->attach($follow);
-                                $title = $task->type == NotificationConstant::CALL ? '📅📅📅 Bạn có công việc chăm sóc mới !'
-                                    : '💬💬💬 Bạn có công việc gọi điện mới !';
+                                $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
+                                    : '📅📅📅 Bạn có công việc chăm sóc mới !';
                                 Notification::insert([
                                     'title' => $title,
                                     'user_id' => $task->user_id,

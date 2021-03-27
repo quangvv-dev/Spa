@@ -104,7 +104,7 @@ class Task extends Model
     {
         $idlogin = Auth::user()->id;
         $user = User::where('id', $idlogin)->first();
-        $data = self::with('user', 'taskStatus', 'customer', 'department');
+        $data = self::with('user', 'taskStatus', 'customer', 'department')->where('type', 2);
 
         if (isset($input)) {
             $data = $data->when(isset($input['task_id']), function ($query) use ($input) {

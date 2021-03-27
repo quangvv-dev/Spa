@@ -45,6 +45,7 @@ class TaskController extends Controller
         $input = $request->all();
         $now = Carbon::now()->format('Y-m-d');
         $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
+        $input['type'] = 2;
         $type = Task::TYPE;
         $users = User::pluck('full_name', 'id');
         $user = $request->user ?: 0;
@@ -125,8 +126,8 @@ class TaskController extends Controller
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
 
-        $title = $task->type == NotificationConstant::CALL ? '📅📅📅 Bạn có công việc chăm sóc mới !'
-            : '💬💬💬 Bạn có công việc gọi điện mới !';
+        $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
+            : '📅📅📅 Bạn có công việc chăm sóc mới !';
         Notification::insert([
 //            'title' => 'CV ' . $request->name . ' đã đến giờ thực hiện',
             'title' => $title,
@@ -283,7 +284,7 @@ class TaskController extends Controller
      */
     public function statisticIndex(Request $request)
     {
-        if (empty($request->data_time) && empty($request->start_date)&& empty($request->end_date)) {
+        if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
         $users = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
@@ -293,9 +294,9 @@ class TaskController extends Controller
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) {
-            return view('tasks.ajax_statistical', compact( 'docs'));
+            return view('tasks.ajax_statistical', compact('docs'));
         }
 
-        return view('tasks.statistical', compact( 'title', 'docs','users'));
+        return view('tasks.statistical', compact('title', 'docs', 'users'));
     }
 }

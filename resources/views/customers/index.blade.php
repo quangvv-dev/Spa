@@ -17,11 +17,13 @@
             min-width: auto !important;
             width: auto !important;
         }
+
         body *::-webkit-scrollbar {
             width: 6px;
-            height: 20px;
+            height: 15px;
             transition: .3s background;
         }
+
         .search-box,
         .filter-box {
             z-index: 1;
@@ -40,11 +42,39 @@
             left: 0;
         }
 
-        .floatThead-container {
-            z-index: 0 !important;
+        /*.floatThead-container {*/
+        /*z-index: 1 !important;*/
+        /*}*/
+
+        th {
+            position: sticky;
+            top: 0;
         }
+
+        body {
+            overflow: hidden;
+        }
+        .table-responsive {
+            overflow-y: scroll;
+        }
+        @media only screen and (max-width: 1921px) {
+            .table-responsive {
+                max-height: 80vh;
+            }
+        }
+        @media only screen and (max-width: 1441px) {
+            .table-responsive {
+                max-height: 75vh;
+            }
+        }
+        @media only screen and (max-width: 1367px) {
+            .table-responsive {
+                max-height: 65vh;
+            }
+        }
+
     </style>
-    <script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>
+    {{--<script src="https://unpkg.com/floatthead@2.1.4/dist/jquery.floatThead.min.js"></script>--}}
     <!-- end anheasy -->
 @endsection
 @section('content')
@@ -914,17 +944,17 @@
                 })
             });
             // anheasy
-            $('.table-responsive .table-primary').floatThead({
-                top: 196,
-                scrollContainer: function ($table) {
-                    return $table.closest('');
-                },
-                position: 'absolute'
-            });
-            $('.table-ajax .table-primary').floatThead({
-                top: 196,
-                position: 'absolute'
-            });
+            // $('.table-responsive .table-primary').floatThead({
+            //     top: 196,
+            //     scrollContainer: function ($table) {
+            //         return $table.closest('');
+            //     },
+            //     position: 'absolute'
+            // });
+            // $('.table-ajax .table-primary').floatThead({
+            //     top: 196,
+            //     position: 'absolute'
+            // });
             window.onload = function (e) {
                 $('html, body').animate({scrollTop: '1000px'}, 200);
                 $.ajax({
