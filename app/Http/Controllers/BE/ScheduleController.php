@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\HistorySms;
+use App\Models\Status;
 use App\Services\TaskService;
 use App\User;
 use DateTime;
@@ -37,16 +38,16 @@ class ScheduleController extends Controller
         $staff2 = $user->prepend('Tất cả người tạo', 0)->toArray();
         $color = [
 //            1 => 'Chưa qua',
-                2 => 'Đặt lịch',
-                3 => 'Đến/mua',
-                4 => 'Đến/chưa mua',
-                5 => 'Hủy lịch',
+            2 => 'Đặt lịch',
+            3 => 'Đến/mua',
+            4 => 'Đến/chưa mua',
+            5 => 'Hủy lịch',
 //            6 => 'Tất cả',
         ];
         view()->share([
-            'staff'    => $staff,
-            'staff2'   => $staff2,
-            'color'    => $color,
+            'staff' => $staff,
+            'staff2' => $staff2,
+            'color' => $color,
             'category' => $category,
         ]);
     }
@@ -92,9 +93,9 @@ class ScheduleController extends Controller
     public function store(Request $request, $id)
     {
         $request->merge([
-            'user_id'       => $id,
+            'user_id' => $id,
             'person_action' => Auth::user()->id,
-            'creator_id'    => Auth::user()->id,
+            'creator_id' => Auth::user()->id,
         ]);
         if ($request->note) {
             $note = str_replace("\r\n", ' ', $request->note);
@@ -104,7 +105,7 @@ class ScheduleController extends Controller
             $request->merge(['note' => $note]);
         }
         $data = Schedule::create($request->all());
-        if(!empty(setting('sms_schedules'))){
+        if (!empty(setting('sms_schedules'))) {
             $date = Functions::dayMonthYear($data->date);
             $text = setting('sms_schedules');
             $text = str_replace("%full_name%", @$data->customer->full_name, $text);
@@ -157,7 +158,7 @@ class ScheduleController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -200,6 +201,7 @@ class ScheduleController extends Controller
 
     public function homePage(Request $request)
     {
+        $status = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();
         $now = Carbon::now()->format('Y-m-d');
         $docs = Schedule::search($request->all())->has('customer')->with('customer');
         $docs = $docs->get()->map(function ($item) use ($now) {
@@ -215,7 +217,7 @@ class ScheduleController extends Controller
         if ($request->ajax()) {
             return $docs;
         }
-        return view('schedules.home2', compact('title', 'docs', 'now', 'user', 'customer'));
+        return view('schedules.home2', compact('status','title', 'docs', 'now', 'user', 'customer'));
     }
 
     /**
@@ -244,7 +246,7 @@ class ScheduleController extends Controller
 
         return $data = [
             'schedule_id' => $scheduleId,
-            'data'        => $status,
+            'data' => $status,
         ];;
     }
 
