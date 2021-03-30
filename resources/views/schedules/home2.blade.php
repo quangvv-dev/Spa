@@ -25,55 +25,57 @@
         }
     }
     thead > tr th {
-         background: #fff !important;
+        background: #fff !important;
     }
 
 </style>
 @section('content')
-    <div class="col-md-12 col-lg-12" style="margin-left: 6%">
+    <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <div class="col-md-6">
-                    @foreach($color as $k => $item)
-                        <div data-id="{{$k}}" class="btn white account_relation position"
-                             style="background: @switch($k)
-                             @case(1)
-                             {{'#63cff9'}}
-                             @break
-                             @case(2)
-                             {{'#dccf34'}}
-                             @break
-                             @case(3)
-                             {{'#d03636'}}
-                             @break
-                             @case(4)
-                             {{'#4bcc4b'}}
-                             @break
-                             @case(5)
-                             {{'gray'}}
-                             @break
-                             @case(6)
-                             {{'#da70dc'}}
-                             @break
-                             @endswitch;margin-left: 3px;text-align: left">
-                            <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
-                            <label>{{$item}}</label>
-                        </div>
-                    @endforeach
-                </div>
-
-                <div class="col-md-2">
+            <div class="card-header row">
+                {{--<div class="col-md-6">--}}
+                @foreach($color as $k => $item)
+                    <div data-id="{{$k}}" class="btn white account_relation position"
+                         style="background: @switch($k)
+                         @case(1)
+                         {{'#63cff9'}}
+                         @break
+                         @case(2)
+                         {{'#dccf34'}}
+                         @break
+                         @case(3)
+                         {{'#d03636'}}
+                         @break
+                         @case(4)
+                         {{'#4bcc4b'}}
+                         @break
+                         @case(5)
+                         {{'gray'}}
+                         @break
+                         @case(6)
+                         {{'#da70dc'}}
+                         @break
+                         @endswitch;margin-left: 3px;text-align: left">
+                        <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
+                        <label>{{$item}}</label>
+                    </div>
+                @endforeach
+                {{--</div>--}}
+                {{--<div class="row">--}}
+                <div class="col">
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
-                <div class="col-md-2">
+                <div class="col">
                     {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
                 </div>
-                <div class="col-md-2">
+                <div class="col">
                     {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
                 </div>
-                {{--<div class="col-md-2">--}}
-                    {{--{!! Form::select('category_id', $category,null, array( 'id'=>'category','class' => 'form-control','placeholder'=>'Nhóm DV')) !!}--}}
+                <div class="col">
+                    {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
+                </div>
                 {{--</div>--}}
+
             </div>
             <input type="hidden" id="status_val">
             <div class="side-app">
@@ -151,42 +153,42 @@
                 } else { // if the checkbox is checked
                     arr.push(data);
                 }
-                let category = $('#category').val();
+                let status = $('#status').val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({search: arr, category: category, date: date, user: user, customer: customer});
+                searchAjax({search: arr, status: status, date: date, user: user, customer: customer});
             });
             $(document).on('change', '#search', function () {
                 $('.spin').show();
                 var val = $(this).val();
-                let category = $('#category').val();
+                let status = $('#status').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({date: val, category: category, search: arr, user: user, customer: customer});
+                searchAjax({date: val, status: status, search: arr, user: user, customer: customer});
             });
-            $(document).on('change', '#category', function () {
+            $(document).on('change', '#status', function () {
                 $('.spin').show();
                 var val = $(this).val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({category: val, date: date, search: arr, user: user, customer: customer});
+                searchAjax({status: val, date: date, search: arr, user: user, customer: customer});
             });
             $(document).on('change', '#person_action', function () {
                 var val = $(this).val();
-                let category = $('#category').val();
+                let status = $('#status').val();
                 let date = $('#search').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({user: val, category: category, date: date, search: arr, customer: customer});
+                searchAjax({user: val, status: status, date: date, search: arr, customer: customer});
 
             });
             $(document).on('change', '#customer_plus', function () {
                 var val = $(this).val();
-                let category = $('#category').val();
+                let status = $('#status').val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
-                searchAjax({customer: val, category: category, user: user, date: date, search: arr});
+                searchAjax({customer: val, status: status, user: user, date: date, search: arr});
 
             });
 

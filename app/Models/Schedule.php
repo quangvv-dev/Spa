@@ -151,6 +151,11 @@ class Schedule extends Model
                 $q->where('phone', 'like', '%' . $param . '%');
             });
         }
+        if (!empty($request['status'])) {
+            $docs->whereHas('customer', function ($q) use ($request) {
+                $q->where('source_id', $request['status']);
+            });
+        }
 
         return $docs;
     }
