@@ -54,19 +54,23 @@
         body {
             overflow: hidden;
         }
+
         .table-responsive {
             overflow-y: scroll;
         }
+
         @media only screen and (max-width: 1921px) {
             .table-responsive {
                 max-height: 80vh;
             }
         }
+
         @media only screen and (max-width: 1441px) {
             .table-responsive {
                 max-height: 75vh;
             }
         }
+
         @media only screen and (max-width: 1367px) {
             .table-responsive {
                 max-height: 65vh;
@@ -81,8 +85,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header search-box searchbox-sticky">
-                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
-                       type="text" id="search">
+                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1" type="text" id="search">
                 <div class="col-md-2 col-xs-12">
                     <select name="telesales_id" id="telesales_id" class="form-control telesales">
                         <option value="">Người phụ trách</option>
@@ -131,7 +134,14 @@
                            href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
                     @endif
                 </div>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0"><li><a style="display: none" href="#" class="angleDoubleUp">
+                                <i class="fa fa-angle-double-up"></i></a></li>
+                        <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
+                    </ul>
+                </div>
             </div>
+            @include('customers.dropdownFilter')
             <div id="registration-form">
                 @include('customers.ajax')
             </div>
@@ -148,6 +158,7 @@
             <input type="hidden" id="search_value">
             <input type="hidden" id="btn_choose_time">
             <input type="hidden" id="birthday_tab">
+            <input type="hidden" id="branch_id">
         </div>
     </div>
 @endsection
@@ -359,6 +370,7 @@
                 const marketing = $('#group-product').val();
                 const source = $('#source').val();
                 const telesales = $('#telesales').val();
+                let branch_id = $('.branch_id').val();
                 $('#status').val(status);
                 $('#birthday_tab').val('');
                 let data = {
@@ -369,6 +381,7 @@
                     search: search,
                     source: source,
                     marketing: marketing,
+                    branch_id: branch_id,
                 };
 
                 searchAjax(data);
@@ -403,6 +416,8 @@
                 const status = $('#status').val();
                 const marketing = $('#group-product').val();
                 const source = $('#source').val();
+                let branch_id = $('.branch_id').val();
+
                 let data = {
                     data_time: data_time,
                     group: group,
@@ -411,6 +426,7 @@
                     status: status,
                     source: source,
                     marketing: marketing,
+                    branch_id: branch_id,
                 };
 
                 searchAjax(data);
@@ -429,12 +445,14 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product, .source', delay(function () {
+            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id', delay(function () {
                 let marketing = $('.group-product').val();
+                let branch_id = $('.branch_id').val();
                 let source = $('.source').val();
                 let group = $('.group').val();
                 let telesales = $('.telesales').val();
                 let search = $('#search_value').val();
+                $('#branch_id').val(branch_id);
                 $('#source').val(source);
                 $('#group').val(group);
                 $('#group_product').val(marketing);
@@ -450,7 +468,8 @@
                     data_time: data_time,
                     search: search,
                     status: status,
-                    source: source
+                    source: source,
+                    branch_id: branch_id
                 };
                 searchAjax(data);
 
@@ -466,6 +485,8 @@
                 const status = $('#status').val();
                 const marketing = $('#group-product').val();
                 const source = $('#source').val();
+                let branch_id = $('.branch_id').val();
+
                 let data = {
                     search: search,
                     data_time: data_time,
@@ -474,6 +495,7 @@
                     status: status,
                     marketing: marketing,
                     source: source,
+                    branch_id: branch_id,
                 };
                 searchAjax(data);
 
@@ -791,6 +813,7 @@
                 const search = $('#search_value').val();
                 const marketing = $('#group-product').val();
                 const source = $('#source').val();
+                let branch_id = $('.branch_id').val();
                 let status = $('#status').val();
                 let invalid_account = $('#invalid_account').val();
                 let btn_choose_time = $('#btn_choose_time').val();
@@ -808,7 +831,8 @@
                         search: search,
                         status: status,
                         data_time: btn_choose_time,
-                        birthday: birthday
+                        birthday: birthday,
+                        branch_id: branch_id
                     },
                 }).done(function (data) {
                     $('#registration-form').html(data);
@@ -1090,6 +1114,7 @@
             }
 
             var active = $([]);
+
             function find_active() {
                 scrollbar.show();
                 var active = $([]);
@@ -1106,7 +1131,7 @@
 
             function fit(active) {
                 if (!active.length) return scrollbar.hide();
-                scrollbar.css({ left: active.offset().left, width: active.width() });
+                scrollbar.css({left: active.offset().left, width: active.width()});
                 fakecontent.width($(this).get(0).scrollWidth);
                 fakecontent.height(1);
                 delete lastScroll;
@@ -1125,6 +1150,7 @@
             }
 
             var lastScroll;
+
             function scroll() {
                 if (!active.length) return;
                 if (scrollbar.scrollLeft() === lastScroll) return;

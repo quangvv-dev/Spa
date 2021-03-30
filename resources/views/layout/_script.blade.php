@@ -13,7 +13,17 @@
             });
             return false;
         });
-
+        $('.angleDoubleUp').on('click', function () {
+            $('.isShowView').hide();
+            $('.angleDoubleDown').show();
+            $(this).hide();
+        });
+        $('.angleDoubleDown').on('click', function () {
+            console.log(11111);
+            $('.isShowView').show();
+            $('.angleDoubleUp').show();
+            $(this).hide();
+        });
         // delete action
         $(document).on('click', '.delete', function (e) {
             var url = $(this).data('url');

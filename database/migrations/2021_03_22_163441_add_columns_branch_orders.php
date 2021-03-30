@@ -14,7 +14,7 @@ class AddColumnsBranchOrders extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('branch_id')->nullable()->default(0)->comment('Chi nhánh');
+            $table->integer('branch_id')->nullable()->default(0)->index()->comment('Chi nhánh');
         });
     }
 

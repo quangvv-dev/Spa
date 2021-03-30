@@ -127,7 +127,7 @@ class Schedule extends Model
     public static function search($request)
     {
         $docs = self::orderBy('id', 'desc')
-            ->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($request) {
+            ->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
                 $q->where('branch_id', $request['branch_id']);
             });
 

@@ -16,6 +16,8 @@ class CreateBranchsTable extends Migration
         Schema::create('branchs', function (Blueprint $table) {
                 $table->Increments('id');
                 $table->string('name')->comment('Chi nhánh');
+                $table->string('phone')->nullable()->comment('Số điện thoại');
+                $table->string('address')->nullable()->comment('Địa chỉ');
                 $table->timestamps();
         });
     }

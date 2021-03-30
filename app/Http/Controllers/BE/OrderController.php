@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -65,10 +66,12 @@ class OrderController extends Controller
             Order::TYPE_ORDER_DEFAULT => 'Đơn thường',
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
+        $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
             'services' => $services,
             'status' => $status,
             'order_type' => $order_type,
+            'branchs' => $branchs,
         ]);
     }
 
@@ -372,7 +375,7 @@ class OrderController extends Controller
     {
         $order = Order::with('customer', 'orderDetails')->findOrFail($id);
         $payment = PaymentHistory::where('order_id', $order->id)->latest()->first();
-        return view('order.order-pdf', compact('order','payment'));
+        return view('order.order-pdf', compact('order', 'payment'));
 //        $customPaper = array(0, 0, 454.08, 227.04);
 //        $pdf = \PDF::loadView('order.order-pdf', compact('order', 'payment'))->setPaper($customPaper, 'landscape');
 //        return $pdf->download('order.pdf');
@@ -771,7 +774,7 @@ class OrderController extends Controller
         if (!isset($request->group) && !isset($request->telesales) && !isset($request->marketing)
             && !isset($request->customer) && !isset($request->service) && !isset($request->payment_type)
             && !isset($request->data_time) && !isset($request->start_date) && !isset($request->end_date)
-            && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none)&& !isset($request->role_type)) {
+            && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none) && !isset($request->role_type)) {
             return 1;
 
         } else {

@@ -39,6 +39,7 @@ class Customer extends Model
         'avatar',
         'fb_name',
         'membership',
+        'branch_id',
         'deleted_at',
         'updated_at',
         'created_at',
@@ -166,16 +167,16 @@ class Customer extends Model
         $arr = [];
         $schedules = Schedule::select(\DB::raw('COUNT(id) AS count'), 'user_id', 'status')->where('user_id', $this->id);
         $all_count = $schedules->count();
-        $arr[] = '<span class="bold text-info">' .'Tất cả : '. $all_count . '</span> ';
+        $arr[] = '<span class="bold text-info">' . 'Tất cả : ' . $all_count . '</span> ';
         $schedules = $schedules->groupBy('user_id', 'status')->get();
         if (count($schedules)) {
             foreach ($schedules as $item) {
                 if ($item->status == 3) { //đến- mua
-                    $arr[] = '<span class="bold text-success">' .'Đến Mua : '. $item->count . '</span>';
+                    $arr[] = '<span class="bold text-success">' . 'Đến Mua : ' . $item->count . '</span>';
                 } elseif ($item->status == 4) {//đến - không mua
-                    $arr[] = '<span class="bold text-warning">' .'Đến không Mua : '. $item->count . '</span>';
+                    $arr[] = '<span class="bold text-warning">' . 'Đến không Mua : ' . $item->count . '</span>';
                 } elseif ($item->status == 5) {//Hủy
-                    $arr[] = '<span class="bold text-danger">' .'Hủy :'. $item->count . '</span> ';
+                    $arr[] = '<span class="bold text-danger">' . 'Hủy :' . $item->count . '</span> ';
                 }
             }
         }
@@ -299,7 +300,7 @@ class Customer extends Model
                             Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                         ]);
                     })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
-                        $q->where('branch_id',$input['branch_id']);
+                        $q->where('branch_id', $input['branch_id']);
 
                     });
             },

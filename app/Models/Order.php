@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\OrderConstant;
+use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\User;
 use Carbon\Carbon;
@@ -131,12 +132,15 @@ class Order extends Model
                             $q->where('the_rest', 0);
                         });
                 })
+                ->when(isset($input['branch_id']), function ($query) use ($input) {
+                    $query->where('branch_id', $input['branch_id']);
+                })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
                 })->orderByDesc('id');
         }
 
-        return $data->paginate(5);
+        return $data->paginate(StatusCode::PAGINATE_20);
     }
 
     public static function searchAll($input)
@@ -218,6 +222,9 @@ class Order extends Model
                             $q->whereIn('id', $detail);
                         });
                 })
+                ->when(isset($input['branch_id']), function ($query) use ($input) {
+                    $query->where('branch_id', $input['branch_id']);
+                })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
                 });
@@ -272,7 +279,6 @@ class Order extends Model
 
     public static function getAll($input)
     {
-//        $data = self::with('orderDetails', 'paymentHistories');
         $data = self::orderBy('id', 'desc');
 
         if (isset($input)) {
@@ -298,6 +304,8 @@ class Order extends Model
                     $query->where('spa_therapisst_id', $input['spa_therapisst_id']);
                 })->when(isset($input['support_id']), function ($query) use ($input) {
                     $query->where('support_id', $input['support_id']);
+                }) ->when(isset($input['branch_id']), function ($query) use ($input) {
+                    $query->where('branch_id', $input['branch_id']);
                 });
         }
 
@@ -326,6 +334,8 @@ class Order extends Model
                 $query->where('role_type', $input['role_type']);
             })->when(isset($input['member_arr']), function ($query) use ($input) {
                 $query->whereIn('member_arr', $input['member_arr']);
+            }) ->when(isset($input['branch_id']), function ($query) use ($input) {
+                $query->where('branch_id', $input['branch_id']);
             });
         return $data;
     }
