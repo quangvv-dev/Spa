@@ -90,6 +90,7 @@ class RoleController extends Controller
     {
         $title = "Danh sách quyền trong hệ thống";
         $dataSearch['searchName'] = $request->searchName;
+        $dataSearch['department_id'] = $request->department_id;
         $docs = Role::search($dataSearch);
 
         if ($request->ajax()) {
@@ -176,7 +177,7 @@ class RoleController extends Controller
                 'permissions'   => json_encode($request->permissions),
             ]);
 
-            return back();  
+            return back();
             return redirect(route('roles.index'))->with('success', 'Chỉnh sửa thành công !');
         }
 
