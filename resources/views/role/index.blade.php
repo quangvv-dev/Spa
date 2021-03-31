@@ -11,7 +11,7 @@
                 <input class="form-control header-search col-md-2" name="search" placeholder="Search…" tabindex="1"
                        type="search">
                 <div class="col-md-2">
-{{--                    {!! Form::select('type',$category_pluck, null, array('class' => 'form-control header-search','placeholder'=>'Trực thuộc')) !!}--}}
+                    {!! Form::select('department_id',$department, null, array('class' => 'form-control department_id','placeholder'=>'--Tất cả phòng ban--')) !!}
                 </div>
             </div>
             <div id="registration-form">
@@ -27,20 +27,20 @@
             e.preventDefault();
             var search = $(this).val();
             $.ajax({
-                url: "{{ Url('department/') }}",
+                url: "{{ Url('roles/') }}",
                 method: "get",
-                data: {search: search}
+                data: {searchName: search}
             }).done(function (data) {
                 $('#registration-form').html(data);
 
             });
         });
-        $(document).on('change', '.header-search', function () {
+        $(document).on('change', '.department_id', function () {
             var search = $(this).val();
             $.ajax({
-                url: "{{ Url('department/') }}",
+                url: "{{ Url('roles/') }}",
                 method: "get",
-                data: {search: search}
+                data: {department_id: search}
             }).done(function (data) {
                 $('#registration-form').html(data);
 

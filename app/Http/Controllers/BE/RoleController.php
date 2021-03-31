@@ -90,6 +90,7 @@ class RoleController extends Controller
     {
         $title = "Danh sách quyền trong hệ thống";
         $dataSearch['searchName'] = $request->searchName;
+        $dataSearch['department_id'] = $request->department_id;
         $docs = Role::search($dataSearch);
 
         if ($request->ajax()) {

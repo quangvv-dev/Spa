@@ -47,11 +47,7 @@ class OrderController extends Controller
      * @param OrderService $orderService
      * @param OrderDetailService $orderDetailService
      */
-    public function __construct(
-        OrderService $orderService,
-        OrderDetailService $orderDetailService,
-        TaskService $taskService
-    )
+    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService, TaskService $taskService)
     {
         $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
 

@@ -45,10 +45,10 @@ class Role extends Model
      */
     public static function search($dataSearch)
     {
-        $data = self::when($dataSearch['searchName'], function ($query, $dataSearch) {
+        $data = self::when($dataSearch['searchName'], function ($query) use ($dataSearch) {
             return $query->where('name', 'like', '%' . $dataSearch['searchName'] . '%')
                 ->orWhere('description', 'like', '%' . $dataSearch['searchName'] . '%');
-        })->when(!empty($dataSearch['department_id']), function ($query, $dataSearch) {
+        })->when(!empty($dataSearch['department_id']), function ($query) use ($dataSearch) {
             return $query->where('department_id', $dataSearch['department_id']);
         });
         $data = $data->paginate(StatusCode::PAGINATE_10);
