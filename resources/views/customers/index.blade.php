@@ -23,7 +23,9 @@
             height: 15px;
             transition: .3s background;
         }
-
+        .content-custom {
+            max-width: 100%;
+        }
         .search-box,
         .filter-box {
             z-index: 1;

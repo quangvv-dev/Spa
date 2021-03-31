@@ -6,6 +6,10 @@
     .container {
         max-width: 90% !important;
     }
+    .content-custom {
+        max-width: 100% !important;
+    }
+
 
     button.status.btn.white.account_relation.position {
         text-align: left;
@@ -60,8 +64,6 @@
                         <label>{{$item}}</label>
                     </div>
                 @endforeach
-                {{--</div>--}}
-                {{--<div class="row">--}}
                 <div class="col">
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
@@ -74,7 +76,9 @@
                 <div class="col">
                     {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
                 </div>
-                {{--</div>--}}
+                <div class="col">
+                    {!! Form::select('branch_id', $branchs,null, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
+                </div>
 
             </div>
             <input type="hidden" id="status_val">
@@ -165,7 +169,8 @@
                 let status = $('#status').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({date: val, status: status, search: arr, user: user, customer: customer});
+                let branch_id = $('#branch_id').val();
+                searchAjax({date: val,branch_id: branch_id, status: status, search: arr, user: user, customer: customer});
             });
             $(document).on('change', '#status', function () {
                 $('.spin').show();
@@ -173,14 +178,18 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({status: val, date: date, search: arr, user: user, customer: customer});
+                let branch_id = $('#branch_id').val();
+
+                searchAjax({status: val,branch_id: branch_id, date: date, search: arr, user: user, customer: customer});
             });
             $(document).on('change', '#person_action', function () {
                 var val = $(this).val();
                 let status = $('#status').val();
                 let date = $('#search').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({user: val, status: status, date: date, search: arr, customer: customer});
+                let branch_id = $('#branch_id').val();
+
+                searchAjax({user: val,branch_id: branch_id, status: status, date: date, search: arr, customer: customer});
 
             });
             $(document).on('change', '#customer_plus', function () {
@@ -188,7 +197,18 @@
                 let status = $('#status').val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
-                searchAjax({customer: val, status: status, user: user, date: date, search: arr});
+                let branch_id = $('#branch_id').val();
+                searchAjax({customer: val,branch_id: branch_id, status: status, user: user, date: date, search: arr});
+
+            });
+
+            $(document).on('change', '#branch_id', function () {
+                var branch_id = $(this).val();
+                let status = $('#status').val();
+                let date = $('#search').val();
+                let user = $('#person_action').val();
+                let customer = $('#customer_plus').val();
+                searchAjax({customer: customer,branch_id: branch_id, status: status, user: user, date: date, search: arr});
 
             });
 

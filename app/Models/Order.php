@@ -304,7 +304,7 @@ class Order extends Model
                     $query->where('spa_therapisst_id', $input['spa_therapisst_id']);
                 })->when(isset($input['support_id']), function ($query) use ($input) {
                     $query->where('support_id', $input['support_id']);
-                }) ->when(isset($input['branch_id']), function ($query) use ($input) {
+                })->when(isset($input['branch_id']), function ($query) use ($input) {
                     $query->where('branch_id', $input['branch_id']);
                 });
         }
@@ -334,7 +334,7 @@ class Order extends Model
                 $query->where('role_type', $input['role_type']);
             })->when(isset($input['member_arr']), function ($query) use ($input) {
                 $query->whereIn('member_arr', $input['member_arr']);
-            }) ->when(isset($input['branch_id']), function ($query) use ($input) {
+            })->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
             });
         return $data;

@@ -3,9 +3,6 @@
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>
-        select#order_type {
-            background: #dddddd;
-        }
 
         .tableFixHead {
             overflow-y: auto;
@@ -113,6 +110,9 @@
                     <div class="btn-group ml5">
                         {!! Form::select('role_type', [1=>'Dịch vụ',2=>'Sản phẩm',3=>'Combo'], null, array('class' => 'form-control role_type', 'placeholder'=>'Tất cả đơn')) !!}
                     </div>
+                    <div class="btn-group ml5">
+                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                    </div>
                 </div>
             </div>
             <div id="registration-form">
@@ -134,6 +134,7 @@
     <input type="hidden" id="order-type">
     <input type="hidden" id="role_type">
     <input type="hidden" id="phone">
+    <input type="hidden" id="branch_id">
     @include('order-details.modal-upload-excel')
 @endsection
 @section('_script')
@@ -164,6 +165,7 @@
             const order_type = $('#order-type').val();
             const role_type = $('#role_type').val();
             const phone = $('.phone').val();
+            const branch_id = $('.branch_id').val();
             var bor_none = '';
             if (class_name == 'choose_time') {
                 var data_time = $(target).find('.choose_time').data('time');
@@ -189,6 +191,7 @@
             $('#payment-type').val(payment_type);
             $('#filter-start-date').val(start_date);
             $('#filter-end-date').val(end_date);
+            $('#branch_id').val(branch_id);
             if (typeof (data_time) != "undefined") {
                 $('#choose-time').val(data_time);
             }
@@ -225,6 +228,7 @@
                 order_type: order_type,
                 role_type: role_type,
                 phone: phone,
+                branch_id: branch_id,
             });
         })
         ;
@@ -243,6 +247,7 @@
             const bor_none = $('#bor-none').val();
             const phone = $('#phone').val();
             const role_type = $('#role_type').val();
+            const branch_id = $('.branch_id').val();
             $('#order-type').val(order_type);
             $('#role_type').val(role_type);
 
@@ -260,6 +265,7 @@
                 order_type: order_type,
                 role_type: role_type,
                 phone: phone,
+                branch_id: branch_id,
             });
         });
 
@@ -277,6 +283,8 @@
             const bor_none = $('#bor-none').val();
             const phone = $('#phone').val();
             const role_type = $('.role_type').val();
+            const branch_id = $('.branch_id').val();
+
             $('#role_type').val(role_type);
 
             searchAjax({
@@ -293,6 +301,43 @@
                 order_type: order_type,
                 role_type: role_type,
                 phone: phone,
+                branch_id: branch_id,
+            });
+        });
+
+        $(document).on('change', '.branch_id', function () {
+            const order_type = $('#order_type').val();
+            const group = $('#group').val();
+            const telesales = $('#telesales').val();
+            const marketing = $('#marketing').val();
+            const customer = $('#customer').val();
+            const service = $('#service').val();
+            const payment_type = $('#payment-type').val();
+            const data_time = $('#choose-time').val();
+            const start_date = $('#filter-start-date').val();
+            const end_date = $('#filter-end-date').val();
+            const bor_none = $('#bor-none').val();
+            const phone = $('#phone').val();
+            const role_type = $('.role_type').val();
+            const branch_id = $('.branch_id').val();
+
+            $('#role_type').val(role_type);
+
+            searchAjax({
+                group: group,
+                telesales: telesales,
+                marketing: marketing,
+                customer: customer,
+                service: service,
+                payment_type: payment_type,
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                bor_none: bor_none,
+                order_type: order_type,
+                role_type: role_type,
+                phone: phone,
+                branch_id: branch_id,
             });
         });
 
@@ -396,6 +441,7 @@
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
             const phone = $('#phone').val();
+            const branch_id = $('.branch_id').val();
             $.ajax({
                 url: '{{ url()->current() }}',
                 method: "get",
@@ -414,6 +460,7 @@
                     role_type: role_type,
                     phone: phone,
                     page: pages,
+                    branch_id: branch_id,
                 },
             }).done(function (data) {
                 $('#registration-form').html(data);

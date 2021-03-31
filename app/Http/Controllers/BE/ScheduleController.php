@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\HistorySms;
 use App\Models\Status;
@@ -36,6 +37,8 @@ class ScheduleController extends Controller
         $user = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id');
         $staff = $user->toArray();
         $staff2 = $user->prepend('Tất cả người tạo', 0)->toArray();
+        $branchs = Branch::search()->pluck('name', 'id');
+
         $color = [
 //            1 => 'Chưa qua',
             2 => 'Đặt lịch',
@@ -49,6 +52,7 @@ class ScheduleController extends Controller
             'staff2' => $staff2,
             'color' => $color,
             'category' => $category,
+            'branchs' => $branchs,
         ]);
     }
 

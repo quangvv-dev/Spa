@@ -62,6 +62,9 @@
                     <div class="btn-group ml5">
                         {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                     </div>
+                    <div class="btn-group ml5">
+                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                    </div>
                 </div>
 
                 <ul class="col-md-9 no-padd mt5 tr">
@@ -124,6 +127,7 @@
             const telesales = $('#telesales-input').val();
             const start_date = $('.filter_start_date').val();
             const end_date = $('.filter_end_date').val();
+            const branch_id = $('.branch_id').val();
 
             if (class_name === 'display pl5') {
                 var data_time = $(target).find('.choose_time').data('time');
@@ -156,16 +160,19 @@
                 start_date: start_date,
                 end_date: end_date,
                 bor_none: bor_none,
+                branch_id: branch_id,
             });
         })
         ;
 
-        $(document).on('change', '#telesales', function () {
+        $(document).on('change', '#telesales, .branch_id', function () {
             const telesales = $('#telesales').val();
             const data_time = $('#choose-time').val();
             const start_date = $('#filter-start-date').val();
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
+            const branch_id = $('.branch_id').val();
+
             $('#telesales-input').val(telesales);
 
             searchAjax({
@@ -173,7 +180,8 @@
                 data_time: data_time,
                 start_date: start_date,
                 end_date: end_date,
-                bor_none: bor_none
+                bor_none: bor_none,
+                branch_id: branch_id
             });
         });
 
@@ -207,6 +215,8 @@
             const start_date = $('#filter-start-date').val();
             const end_date = $('#filter-end-date').val();
             const bor_none = $('#bor-none').val();
+            const branch_id = $('.branch_id').val();
+
             $.ajax({
                 url: '{{ url()->current() }}',
                 method: "get",
@@ -217,6 +227,7 @@
                     end_date: end_date,
                     bor_none: bor_none,
                     page: pages,
+                    branch_id: branch_id,
                 },
             }).done(function (data) {
                 $('#registration-form').html(data);
