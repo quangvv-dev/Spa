@@ -47,7 +47,7 @@ class OrderDetail extends Model
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                     $q->whereBetween('created_at', getTime(($input['data_time'])));
                 });
-        })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+        })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
@@ -79,7 +79,7 @@ class OrderDetail extends Model
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                     $q->whereBetween('created_at', getTime(($input['data_time'])));
                 });
-        })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+        })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
@@ -103,7 +103,7 @@ class OrderDetail extends Model
     public static function getTotalPriceBookingId($input, $type, $paginate)
     {
         $data = self::select('booking_id', \DB::raw('SUM(total_price) AS total'))->groupBy('booking_id')
-            ->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })
             ->whereBetween('created_at', getTime($input['data_time']))->whereHas('service')->get()->map(function ($item) use ($type) {

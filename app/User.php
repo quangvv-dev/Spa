@@ -74,7 +74,7 @@ class User extends Authenticatable
         $data = self::when($param['search'], function ($query) use ($param) {
             $query->where('full_name', 'like', '%' . $param['search'] . '%')
                 ->orWhere('phone', 'like', '%' . $param['search'] . '%');
-        })->when(isset($param['branch_id']) && isset($input['branch_id']), function ($q) use ($param) {
+        })->when(isset($param['branch_id']) &&$param['branch_id'], function ($q) use ($param) {
             $q->where('branch_id', $param['branch_id']);
         })
             ->latest('id')->paginate(StatusCode::PAGINATE_10);

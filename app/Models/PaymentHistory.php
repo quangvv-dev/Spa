@@ -20,11 +20,9 @@ class PaymentHistory extends Model
     {
         if ($this->payment_type === 1) {
             return "Tiền mặt";
-        }
-        elseif ($this->payment_type === 2) {
+        } elseif ($this->payment_type === 2) {
             return "Thẻ";
-        }
-        else {
+        } else {
             return "Điểm";
         }
     }
@@ -38,7 +36,6 @@ class PaymentHistory extends Model
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ])->with('order')->has('order');
         }
-
         if (isset($input['data_time'])) {
             if ($input['data_time'] == 'THIS_WEEK' ||
                 $input['data_time'] == 'LAST_WEEK' ||
@@ -55,7 +52,9 @@ class PaymentHistory extends Model
             $detail = PaymentHistory::whereDate('payment_date', '=', date('Y-m-d'))
                 ->with('order')->has('order');
         }
-
+        if (!empty($input['branch_id'])) {
+            $detail = $detail->where('branch_id', $input['branch_id']);
+        }
         if (isset($input['telesales'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
                 $item->whereHas('customer', function ($q) use ($input) {

@@ -299,7 +299,7 @@ class Customer extends Model
                             Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                             Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                         ]);
-                    })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                    })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                         $q->where('branch_id', $input['branch_id']);
 
                     });
@@ -348,7 +348,7 @@ class Customer extends Model
                     });
             })->when(isset($input['user_id']), function ($query) use ($input) {
                 $query->where('mkt_id', $input['user_id']);
-            })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [

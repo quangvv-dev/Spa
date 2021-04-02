@@ -40,6 +40,7 @@ class OrderService
 
         $input = [
             'member_id'         => $data['user_id'],
+            'branch_id'         => $data['branch_id'],
             'the_rest'          => $theRest,
             'discount_order'    => $data['discount_order'],
             'role_type'         => $data['role_type'],

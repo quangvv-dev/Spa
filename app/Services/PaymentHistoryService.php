@@ -24,6 +24,7 @@ class PaymentHistoryService
 
         $input = [
             'order_id'     => $id,
+            'branch_id'    => $data['branch_id'],
             'price'        => $grossRevenue,
             'payment_date' => Functions::yearMonthDay($data['payment_date']),
             'description'  => $data['description'],

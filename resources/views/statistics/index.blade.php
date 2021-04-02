@@ -3,7 +3,7 @@
     {{--    <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>--}}
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>
-        .title{
+        .title {
             text-align: left;
         }
     </style>
@@ -13,13 +13,14 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Thống kê tổng quan</h3>
-                <div class="col-md-10">
+                <div class="col-md-7">
                     <ul class="col-md-9 no-padd mt5 tr right">
                         {{--<li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>--}}
                         {{--<li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>--}}
                         <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
                         <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
-                        <li class="display pl5"><a data-time="THIS_MONTH" class="display padding0-5 choose_time border b-gray">Tháng
+                        <li class="display pl5"><a data-time="THIS_MONTH"
+                                                   class="display padding0-5 choose_time border b-gray">Tháng
                                 này</a>
                         </li>
                         <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
@@ -42,6 +43,9 @@
                             </div>
                         </li>
                     </ul>
+                </div>
+                <div class="col-md-3">
+                    {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
                 </div>
             </div>
             <div id="registration-form">
@@ -72,20 +76,35 @@
             });
         }
 
+        $(document).on('change', '.branch_id', function (e) {
+            let branch_id = $('.branch_id').val();
+            let data_time = $('#data-time').val();
+            let start_date = $('#start-date').val();
+            let end_date = $('#end-date').val();
+            let user_id = $('#search-user').val();
+            searchAjax({
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                user_id: user_id,
+                branch_id: branch_id
+            });
+        });
         $(document).on('click', '.choose_time, .submit_other_time', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
-            const data_time = $(target).find('.choose_time').data('time');
-            const class_name = target.attr('class');
+            let branch_id = $('.branch_id').val();
+            let data_time = $(target).find('.choose_time').data('time');
+            let class_name = target.attr('class');
             if (class_name === 'display pl5') {
                 $('.filter_start_date').val('');
                 $('.filter_end_date').val('');
             }
             $('a.choose_time').removeClass('border b-gray');
             $(target).find('.choose_time').addClass('border b-gray');
-            const start_date = $('.filter_start_date').val();
-            const end_date = $('.filter_end_date').val();
-            const user_id = $('#search-user').val();
+            let start_date = $('.filter_start_date').val();
+            let end_date = $('.filter_end_date').val();
+            let user_id = $('#search-user').val();
 
             if (typeof data_time === "undefined") {
                 $('#data-time').val();
@@ -100,6 +119,7 @@
                 start_date: start_date,
                 end_date: end_date,
                 user_id: user_id,
+                branch_id: branch_id
             });
         });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\GroupComment;
 use App\Models\Order;
@@ -38,9 +39,11 @@ class StatisticController extends Controller
         $this->middleware('permission:statistics.taskSchedules', ['only' => ['taskSchedules']]);
 
         $user = User::get()->pluck('full_name', 'id')->toArray();
+        $branchs = Branch::search()->pluck('name', 'id');
         $this->customer = $customer;
         view()->share([
             'user' => $user,
+            'branchs' => $branchs,
         ]);
     }
 
@@ -58,8 +61,9 @@ class StatisticController extends Controller
         if (empty($request->data_time)) {
             $input['data_time'] = 'THIS_MONTH';
         }
-
-        $customers = Customer::select('id')->whereBetween('created_at', getTime($input['data_time']));
+        $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
+        })->whereBetween('created_at', getTime($input['data_time']));
         $schedules = Schedule::getBooks($input);
         $payment = PaymentHistory::search($input);
         $payment2 = clone $payment;
@@ -68,7 +72,9 @@ class StatisticController extends Controller
         $orders2 = clone $orders;
         $orders3 = clone $orders;
         $orders4 = clone $orders;
-        $ordersYear = Order::whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
+        $ordersYear = Order::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
+        })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
         $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
             $services = Services::where('trademark', $item->id)->pluck('id')->toArray();
@@ -86,10 +92,12 @@ class StatisticController extends Controller
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })
             ->whereBetween('payment_date', getTime($input['data_time']))->whereNotNull('payment_date')->orderBy('payment_date', 'asc')
             ->groupBy('payment_date')->get();
         $groupComment = GroupComment::whereBetween('created_at', getTime($input['data_time']));
-
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
@@ -171,11 +179,19 @@ class StatisticController extends Controller
 
     public function getRevenueCustomer($request, $payment)
     {
-        $data_new = Customer::select('id')->whereBetween('created_at', getTime($request['data_time']));
-        $data_old = Customer::select('id')->where('created_at', '<', getTime($request['data_time'])[0]);
+        $data_new = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
+            $q->where('branch_id', $request['branch_id']);
+        })->whereBetween('created_at', getTime($request['data_time']));
+        $data_old = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
+            $q->where('branch_id', $request['branch_id']);
+        })->where('created_at', '<', getTime($request['data_time'])[0]);
 
-        $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request['data_time']))->with('orderDetails');//doanh so
-        $order_old = Order::whereBetween('created_at', getTime($request['data_time']))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+        $order_new = Order::when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
+            $q->where('branch_id', $request['branch_id']);
+        })->whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request['data_time']))->with('orderDetails');//doanh so
+        $order_old = Order::when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
+            $q->where('branch_id', $request['branch_id']);
+        })->whereBetween('created_at', getTime($request['data_time']))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
         return [
             'revenueNew' => $order_new->sum('gross_revenue'),
             'revenueOld' => $order_old->sum('gross_revenue'),

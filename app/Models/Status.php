@@ -88,11 +88,10 @@ class Status extends Model
                     'order_detail' => function ($query) use ($input) {
                         $query->when(count($input['list_booking']), function ($query) use ($input) {
                             $query->whereIn('booking_id', $input['list_booking']);
+                        })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                            $q->where('branch_id', $input['branch_id']);
                         })
                         ->when(isset($input['data_time']), function ($query) use ($input) {
-//                            $query->when(isset($input['order_id']), function ($query) use ($input) {
-//                                $query->whereIn('id', $input['order_id']);
-//                            })
                             $query->when($input['data_time'] == 'TODAY' ||
                                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                                 $q->whereDate('created_at', getTime(($input['data_time'])));

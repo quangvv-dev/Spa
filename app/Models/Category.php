@@ -102,7 +102,10 @@ class Category extends Model
     {
         $data = self::select('id', 'name')->where('type', $type)->get()->map(function ($item) use ($input) {
             $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
-            $order = Order::whereIn('member_id', $arr_customer)->whereBetween('created_at', getTime($input['data_time']))->with('orderDetails');//doanh so
+            $order = Order::whereIn('member_id', $arr_customer)->whereBetween('created_at', getTime($input['data_time']))
+                ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->with('orderDetails');//doanh so
             $item->all_total = $order->sum('all_total');
             return $item;
         })->sortByDesc('all_total')->take($paginate);

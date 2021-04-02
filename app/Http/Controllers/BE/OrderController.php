@@ -159,6 +159,7 @@ class OrderController extends Controller
                         HistoryUpdateOrder::create([
                             'user_id' => $request->spa_therapisst_id,
                             'order_id' => $order->id,
+                            'branch_id' => $customer->branch_id,
                             'service_id' => $param['service_id'][$k] ?: 0,
                         ]);
                     }
@@ -379,13 +380,16 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
-            $paymentHistory = PaymentHistoryService::create($input, $id);
             $customer = Customer::find($request->customer_id);
+            $input['branch_id'] = $customer->branch_id;
+            $paymentHistory = PaymentHistoryService::create($input, $id);
+
             if ($paymentHistory->payment_type != 3) {
                 $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
             } else {
                 $point = ($customer->wallet - $paymentHistory->price) > 0 ? $customer->wallet - $paymentHistory->price : 0;
             }
+
             $customer->wallet = $point;
             $customer->save();
             $order = $this->orderService->updatePayment($input, $id);
@@ -395,11 +399,10 @@ class OrderController extends Controller
             DB::commit();
 
             $group_customer = CustomerGroup::where('customer_id', $customer->id)->pluck('category_id')->toArray();
-            $check = PaymentHistory::where('order_id', $id)->get();
+            $check = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->get();
             $check2 = RuleOutput::where('event', 'add_order')->groupBy('rule_id')->whereIn('category_id', $group_customer)->get();
-
             if (count($check) <= 1 && isset($check2) && count($check2)) {
-                $check3 = PaymentHistory::where('order_id', $id)->first();
+                $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
                 foreach ($check2 as $item) {
                     if (@$item->rules->status == StatusCode::ON) {
                         $rule = $item->rules;
@@ -482,6 +485,7 @@ class OrderController extends Controller
                 }
             }
             DB::commit();
+
             Functions::updateRank($customer->id);
             return $order; //comment
         } catch (\Exception $e) {
@@ -708,6 +712,7 @@ class OrderController extends Controller
                                 'gross_revenue' => $row['da_thanh_toan'],
                                 'payment_type' => $paymentType,
                                 'payment_date' => $payment_date,
+                                'branch_id' => $customer->branch_id,
                                 'type' => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
                                 'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
@@ -729,12 +734,14 @@ class OrderController extends Controller
                                 'percent_discount' => $row['ck'],
                                 'number_discount' => $row['ckd'],
                                 'price' => $row['gia_ban'],
+                                'branch_id' => $customer->branch_id,
                                 'days' => 0,
                             ]);
 
                             PaymentHistory::create([
                                 'order_id' => $order->id,
                                 'price' => $row['da_thanh_toan'],
+                                'branch_id' => $customer->branch_id,
                                 'payment_date' => Carbon::now()->format('Y-m-d'),
                             ]);
                         }
