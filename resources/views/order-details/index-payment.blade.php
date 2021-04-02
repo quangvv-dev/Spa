@@ -58,16 +58,15 @@
                 </div>
             </div>
             <div class="card-header col-md-12">
-                <div class="col-md-3">
-                    <div class="btn-group ml5">
-                        {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
-                    </div>
-                    <div class="btn-group ml5">
-                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
-                    </div>
+                <div class="col-md-2">
+                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                 </div>
 
-                <ul class="col-md-9 no-padd mt5 tr">
+                <div class="col-md-2">
+                    {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                </div>
+
+                <ul class="col-md-8 no-padd mt5 tr">
                     <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
                     <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
                     <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
