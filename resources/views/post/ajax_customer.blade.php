@@ -8,8 +8,8 @@
             {{--<th class="text-white text-center">Chiến dịch</th>--}}
             <th class="text-white text-center">Optin Form</th>
             <th class="text-white text-center">Khách hàng</th>
-            {{--<th class="text-white text-center">SĐT</th>--}}
             <th class="text-white text-center">ghi chú</th>
+            <th class="text-white text-center">Chi nhánh</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">T.T</th>
         </tr>
@@ -44,6 +44,7 @@
                         @endif
                         ( {{@$s->phone}} )</td>
                     <td class="text-center">{{@$s->note}}</td>
+                    <td class="text-center">{{@$s->branch->name}}</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{@$s->id}}">{{@$s->telesales->full_name}}</td>
                     <td class="text-center">{{@$s->status==\App\Constants\StatusConstant::NOT_CALL?'Chưa gọi':($s->status==\App\Constants\StatusConstant::CALL?'Đã gọi':'Đã đến')}}</td>
@@ -51,7 +52,7 @@
             @endforeach
         @else
             <tr>
-                <td id="no-data" class="text-center" colspan="7">Không tồn tại dữ liệu</td>
+                <td id="no-data" class="text-center" colspan="9">Không tồn tại dữ liệu</td>
             </tr>
         @endif
         </tbody>

@@ -238,6 +238,7 @@
     .micromodal-slide .modal__container, .micromodal-slide .modal__overlay {
         will-change: transform;
     }
+
     ul.dropdown-menu.textcomplete-dropdown {
         z-index: 99999 !important;
     }
@@ -279,20 +280,6 @@
                                        value="{{!empty($rule->title) ? $rule->title : '' }}">
                             </div>
                         </div>
-                        {{--<div class="col-md-8 col-lg-8 offset-md-2">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label class="form-label">Bắt đầu</label>--}}
-                                {{--<textarea class="form-control autocomplete-textarea" name="content" id="" cols="30"--}}
-                                          {{--rows="10"></textarea>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="col-md-8 col-lg-8 offset-md-2">--}}
-                        {{--<div class="form-group">--}}
-                        {{--<label class="form-label">Kết thúc</label>--}}
-                        {{--<input type="text" name="end_at" class="form-control datetimepicker"--}}
-                        {{--value="{{!empty($rule->end_at) ? $rule->end_at : '' }}">--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
                         <div class="col-md-8 col-lg-8 offset-md-2">
                             <div class="form-group">
                                 <div class="form-label">Kích hoạt</div>
@@ -488,35 +475,43 @@
     <script>
         // $('body').delegate('.autocomplete-textarea', 'keyup', function () {
         //     console.log($(this).val());
-            $('.autocomplete-textarea').textcomplete([{
-                match: /(^|\s)@(\w*(?:\s*\w*))$/,
+        $('.autocomplete-textarea').textcomplete([{
+            match: /(^|\s)@(\w*(?:\s*\w*))$/,
 
-                search: function (query, callback) {
-                    let data = [{
-                        name: "Tên khách hàng",
-                        value: "%full_name%"
-                    },{
-                        name: "SĐT khách hàng",
-                        value: "%phone%"
-                    }
-                    ];
-                    callback(data);
-                },
+            search: function (query, callback) {
+                let data = [{
+                    name: "Tên khách hàng",
+                    value: "%full_name%"
+                }, {
+                    name: "SĐT khách hàng",
+                    value: "%phone%"
+                }, {
+                    name: "Chi nhánh",
+                    value: "%branch%"
+                }, {
+                    name: "SĐT chi nhánh",
+                    value: "%phoneBranch%"
+                },{
+                    name: "Địa chỉ chi nhánh",
+                    value: "%addressBranch%"
+                }];
+                callback(data);
+            },
 
-                template: function (hit) {
-                    // phan hien thi o dropdown
-                    let html = `
+            template: function (hit) {
+                // phan hien thi o dropdown
+                let html = `
             <a class="tag-item" href="">
-            <span class="label">${hit.name} <img width="40" src='http://spa.test/assets/images/brand/logo.png'/></span>
+            <span class="label">${hit.name} <img width="30" src='http://spa.test/assets/images/brand/logo.png'/></span>
             </a>`;
-                    return html;
-                },
+                return html;
+            },
 
-                replace: function (hit) {
-                    // phan hien thi khi
-                    return hit.value.trim();
-                }
-            }]);
+            replace: function (hit) {
+                // phan hien thi khi
+                return hit.value.trim();
+            }
+        }]);
         // })
 
     </script>

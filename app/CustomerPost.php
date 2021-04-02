@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,10 @@ class CustomerPost extends Model
     public function post()
     {
         return $this->belongsTo(Post::class, 'post_id');
+    }
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     public function customer()

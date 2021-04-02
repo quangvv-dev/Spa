@@ -107,10 +107,13 @@ function findIndexOfKey($key_to_index, $array)
     return array_search($key_to_index, array_keys($array));
 }
 
-function replaceVariable($content, $name = '', $phone = '')
+function replaceVariable($content, $name = '', $phone = '', $branch = '', $phoneBranch = '', $addressBranch = '')
 {
     $content = str_replace('%full_name%', $name, $content);
     $content = str_replace('%phone%', $phone, $content);
+    $content = str_replace('%branch%', $branch, $content);
+    $content = str_replace('%phoneBranch%', $phoneBranch, $content);
+    $content = str_replace('%addressBranch%', $addressBranch, $content);
     return $content;
 
 }
@@ -121,6 +124,7 @@ function usort_key($data, $key)
         return $a[$key] <=> $b[$key];
     });
 }
+
 if (!function_exists('formatYMD')) {
     function formatYMD($date)
     {

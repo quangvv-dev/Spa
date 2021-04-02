@@ -156,6 +156,7 @@ class AjaxController extends Controller
         }
         $input['post_id'] = $post->id;
         $input['group'] = $post->group;
+        $input['branch_id'] = $post->branch_id ?: 0;
         CustomerPost::create($input);
         return 'Đăng ký thành công';
     }
@@ -236,6 +237,7 @@ class AjaxController extends Controller
                     'status_id' => $moi->id,
                     'gender' => 0,
                     'fb_name' => $item->full_name,
+                    'branch_id' => $item->branch_id,
                 ];
                 $customer = $this->customerService->create($input);
                 $this->customerService->update_code($customer);

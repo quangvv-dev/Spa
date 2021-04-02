@@ -25,9 +25,6 @@
                 <div class="col-md-6 col-sm-6">
                     {!! Form::select('post_id', $posts, null, array('class' => 'form-control post select-gear', 'placeholder' => 'Tất cả Form')) !!}
                 </div>
-                {{--<div class="col-md-6 col-sm-6">--}}
-                {{--{!! Form::select('campaign_id', $campaigns, null, array('class' => 'form-control campaign select-gear', 'placeholder' => 'Tất cả chiến dịch')) !!}--}}
-                {{--</div>--}}
                 <div class="col-md-1 col-sm-6">
                     <a title="Download Data" class="btn export" href="#">
                         <i class="fas fa-download"></i></a>

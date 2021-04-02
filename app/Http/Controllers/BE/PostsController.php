@@ -6,6 +6,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
+use App\Models\Branch;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Post;
@@ -23,13 +24,15 @@ class PostsController extends Controller
         $this->middleware('permission:posts.delete', ['only' => ['destroy']]);
 
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
+        $branchs = Branch::pluck('name', 'id')->toArray();
         $category = Category::orderByDesc('id')->pluck('name', 'id')->toArray();
         $sale = User::where('role', UserConstant::TELESALES)->where('active', UserConstant::ACTIVE)->orderByDesc('id')
             ->pluck('full_name', 'id')->toArray();
         \View::share([
             'campaigns' => $campaigns,
-            'category' => $category,
-            'sale' => $sale
+            'category'  => $category,
+            'sale'      => $sale,
+            'branchs'   => $branchs
         ]);
     }
 
@@ -52,7 +55,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        $title = 'Tạo bài đăng';
+        $title = 'Tạo OPTIN FORM';
         return view('post._form', compact('title'));
     }
 

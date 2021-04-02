@@ -40,6 +40,13 @@
                         <span class="help-block">{{ $errors->first('sale_id', ':message') }}</span>
                     </div>
                 </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group {{ $errors->has('sale_id') ? 'has-error' : '' }}">
+                        {!! Form::label('branch_id','Chi nhánh', array('class' => 'required')) !!}
+                        {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2','required'=>true,'placeholder'=>'Chọn chi nhánh')) !!}
+                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                    </div>
+                </div>
 
             </div>
         </div>

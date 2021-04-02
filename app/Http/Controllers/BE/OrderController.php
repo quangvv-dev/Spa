@@ -372,9 +372,6 @@ class OrderController extends Controller
         $order = Order::with('customer', 'orderDetails')->findOrFail($id);
         $payment = PaymentHistory::where('order_id', $order->id)->latest()->first();
         return view('order.order-pdf', compact('order', 'payment'));
-//        $customPaper = array(0, 0, 454.08, 227.04);
-//        $pdf = \PDF::loadView('order.order-pdf', compact('order', 'payment'))->setPaper($customPaper, 'landscape');
-//        return $pdf->download('order.pdf');
     }
 
     public function payment(Request $request, $id)
@@ -410,6 +407,9 @@ class OrderController extends Controller
                         $sms_ws = Functions::checkRuleSms($config);
                         if (count($sms_ws)) {
                             foreach ($sms_ws as $sms) {
+                                $input_raw['branch'] = @$check3->order->customer->branch->name;
+                                $input_raw['phoneBranch'] = @$check3->order->customer->branch->phone;
+                                $input_raw['addressBranch'] = @$check3->order->customer->branch->address;
                                 $input_raw['full_name'] = $check3->order->customer->full_name;
                                 $input_raw['phone'] = @$check3->order->customer->phone;
                                 $exactly_value = Functions::getExactlyTime($sms);
@@ -455,8 +455,8 @@ class OrderController extends Controller
                                     'type' => 2,
                                     'sms_content' => Functions::vi_to_en($sms_content),
                                     'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category, ','),
-                                    'description' => replaceVariable($sms_content,
-                                        @$check3->order->customer->full_name, @$check3->order->customer->phone),
+                                    'description' => replaceVariable($sms_content, @$check3->order->customer->full_name, @$check3->order->customer->phone,
+                                        @$check3->order->customer->branch->name, @$check3->order->customer->branch->phone, @$check3->order->customer->branch->address),
                                 ];
 
                                 $task = $this->taskService->create($input);
@@ -771,7 +771,7 @@ class OrderController extends Controller
             && !isset($request->customer) && !isset($request->service) && !isset($request->payment_type)
             && !isset($request->data_time) && !isset($request->start_date) && !isset($request->end_date)
             && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none)
-            && !isset($request->role_type)&& !isset($request->branch_id)) {
+            && !isset($request->role_type) && !isset($request->branch_id)) {
             return 1;
 
         } else {

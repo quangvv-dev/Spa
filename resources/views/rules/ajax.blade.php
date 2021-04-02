@@ -13,13 +13,6 @@
         <tbody>
         @if(@count($docs))
             @foreach($docs as $k => $rule)
-
-{{--                    <td class="text-center">--}}
-{{--                        <a class="btn" href="{{ url('category/' . $s->id . '/edit') }}"><i--}}
-{{--                                    class="fas fa-edit"></i></a>--}}
-{{--                        <a class="btn delete" href="javascript:void(0)"--}}
-{{--                           data-url="{{ url('category/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>--}}
-{{--                    </td>--}}
                 <tr>
                     <th scope="row">{{$k}}</th>
                     <td class="lalign">{{$rule->title}}</td>

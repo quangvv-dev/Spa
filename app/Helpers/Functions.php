@@ -67,6 +67,9 @@ class Functions
     {
         $text = str_replace('%full_name%', $input['full_name'], $text);
         $text = str_replace('%phone%', $input['phone'], $text);
+        $text = str_replace('%branch%', $input['branch'], $text);
+        $text = str_replace('%phoneBranch%', $input['phoneBranch'], $text);
+        $text = str_replace('%addressBranch%', $input['addressBranch'], $text);
         return $text;
 
     }
