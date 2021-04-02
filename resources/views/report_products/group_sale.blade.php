@@ -110,6 +110,9 @@
                     <div class="col-md-2" style="position: absolute;right: 5%">
                         {{Form::select('type',$telesales, null, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Tất cả nhân viên'))}}
                     </div>
+                    <div class="col-md-2" style="position: absolute;right: 21%">
+                        {{Form::select('branch_id',$branchs, null, array('class' => 'form-control','id'=>'branch_id','placeholder'=>'Tất cả chi nhánh'))}}
+                    </div>
                     <a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"
                        href="javascript:void(0)">
                         <i class="fas fa-download"></i></a>
@@ -148,14 +151,22 @@
             const data_time = $(target).find('.btn_choose_time').data('time');
             $('#time_choose').val(data_time).change();
             const telesales = $('#telesales').val();
-            searchAjax({data_time: data_time, telesale_id: telesales})
+            let branch_id = $('#branch_id').val();
+            searchAjax({data_time: data_time, telesale_id: telesales, branch_id: branch_id})
         });
 
         $('#telesales').change(function () {
             let value = $(this).val();
             let data_time = $('#time_choose').val();
-            searchAjax({data_time: data_time, telesale_id: value})
+            let branch_id = $('#branch_id').val();
+            searchAjax({data_time: data_time, telesale_id: value , branch_id: branch_id})
+        })
 
+        $('#branch_id').change(function () {
+            let value = $(this).val();
+            let telesales = $('#telesales').val();;
+            let data_time = $('#time_choose').val();
+            searchAjax({data_time: data_time, telesale_id: telesales, branch_id: value})
         })
     </script>
 @endsection
