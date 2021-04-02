@@ -32,8 +32,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('customers/delete-multiple', 'CustomerController@deleteMultiple');
     Route::post('customers/restore', 'CustomerController@restore');
     Route::post('customers/force-delete', 'CustomerController@forceDelete');
-    Route::post('customers/update-multiple-status',
-        'CustomerController@updateMultipleStatus')->name('customers.update-multiple-status');
+    Route::post('customers/update-multiple-status', 'CustomerController@updateMultipleStatus')->name('customers.update-multiple-status');
+    Route::post('customers/update-multiple-branch', 'CustomerController@updateBranch')->name('customers.update-multiple-branch');
     //sms
     Route::resource('sms', 'SmsController');
     Route::post('sent-sms', 'SmsController@sentSms')->name('sms.sent');

@@ -114,7 +114,7 @@ class CustomerController extends Controller
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories','branchs'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'branchs'));
     }
 
     /**
@@ -585,12 +585,29 @@ class CustomerController extends Controller
         );
     }
 
+    /**
+     * Khôi phục data
+     *
+     * @param Request $request
+     */
     public function restore(Request $request)
     {
         $ids = $request->ids;
         Customer::onlyTrashed()->whereIn('id', $ids)->restore();
     }
 
+    public function updateBranch(Request $request)
+    {
+        $ids = $request->ids;
+        Customer::whereIn('id', $ids)->update(['branch_id' => $request->branch_id]);
+
+    }
+
+    /**
+     * Xoá hẳn
+     *
+     * @param Request $request
+     */
     public function forceDelete(Request $request)
     {
         $ids = $request->ids;
@@ -598,9 +615,10 @@ class CustomerController extends Controller
     }
 
     /**
-     * update code
+     * Update code
      *
      * @param $customer
+     * @return mixed
      */
     public function update_code($customer)
     {
@@ -610,6 +628,11 @@ class CustomerController extends Controller
         return $customer;
     }
 
+    /**
+     * Update trạng thái khách hàng
+     *
+     * @param Request $request
+     */
     public function updateMultipleStatus(Request $request)
     {
         $customer = Customer::whereIn('id', $request->ids);

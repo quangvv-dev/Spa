@@ -151,6 +151,7 @@
             @include('customers.modal-export')
             @include('customers.modal-update-relation')
             @include('customers.modal-update-account-manager')
+            @include('customers.modal-branch')
             <input type="hidden" id="status">
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
@@ -172,7 +173,7 @@
                 e.preventDefault();
 
                 $('.customer-chat').empty();
-                const id = $(this).data('customer-id');
+                let id = $(this).data('customer-id');
 
                 $.ajax({
                     url: "{{ Url('/group_comments/') }}" + '/' + id,
@@ -299,8 +300,8 @@
             });
 
             $(document).on('click', '.btn-edit-comment', function (e) {
-                const target = $(e.target).parent().parent().parent();
-                const group_comment_id = $(this).data('id');
+                let target = $(e.target).parent().parent().parent();
+                let group_comment_id = $(this).data('id');
 
                 $.ajax({
                     url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/edit",
@@ -321,9 +322,9 @@
             });
 
             $(document).on('click', '.update-messages', function (e) {
-                const target = $(e.target).parent().parent().parent().parent();
-                const messages = $(target).find('.message').val();
-                const id = $(target).find('.message').data('id');
+                let target = $(e.target).parent().parent().parent().parent();
+                let messages = $(target).find('.message').val();
+                let id = $(target).find('.message').data('id');
 
                 $.ajax({
                     url: "{{ Url('group-comments/') }}" + "/" + id + "/edit",
@@ -338,10 +339,10 @@
             });
 
             $(document).on('click', '.btn-delete-comment', function (e) {
-                const target = $(e.target).parent().parent().parent();
-                const group_comment_id = $(this).data('id');
+                let target = $(e.target).parent().parent().parent();
+                let group_comment_id = $(this).data('id');
 
-                const result = confirm("Bạn muốn xoá tin nhắn này?");
+                let result = confirm("Bạn muốn xoá tin nhắn này?");
                 if (result) {
                     $.ajax({
                         url: "{{ Url('group-comments/') }}" + "/" + group_comment_id + "/delete",
@@ -365,13 +366,13 @@
             }
 
             $(document).on('click', '.status', function () {
-                const status = $(this).data('name');
-                const data_time = $('#btn_choose_time').val();
-                const search = $('#search_value').val();
-                const group = $('#group').val();
-                const marketing = $('#group-product').val();
-                const source = $('#source').val();
-                const telesales = $('#telesales').val();
+                let status = $(this).data('name');
+                let data_time = $('#btn_choose_time').val();
+                let search = $('#search_value').val();
+                let group = $('#group').val();
+                let marketing = $('#group-product').val();
+                let source = $('#source').val();
+                let telesales = $('#telesales').val();
                 let branch_id = $('.branch_id').val();
                 $('#status').val(status);
                 $('#birthday_tab').val('');
@@ -390,7 +391,7 @@
             });
 
             $(document).on('click', '.limiting', function () {
-                const limit = $(this).data('limit');
+                let limit = $(this).data('limit');
                 $('#birthday_tab').val('');
                 let data = {
                     limit: limit
@@ -400,7 +401,7 @@
             });
 
             $(document).on('click', '.birthday_tab', function () {
-                const birthday = $('.birthday_tab').data('original-title');
+                let birthday = $('.birthday_tab').data('original-title');
                 $('#birthday_tab').val(birthday);
                 let data = {birthday: birthday};
 
@@ -409,15 +410,15 @@
 
             $(document).on('click', '.btn_choose_time', function (e) {
                 let target = $(e.target).parent();
-                const data_time = $(target).find('.btn_choose_time').data('time');
+                let data_time = $(target).find('.btn_choose_time').data('time');
                 $('#birthday_tab').val('');
                 $('#btn_choose_time').val(data_time);
-                const search = $('#search_value').val();
-                const group = $('#group').val();
-                const telesales = $('#telesales').val();
-                const status = $('#status').val();
-                const marketing = $('#group-product').val();
-                const source = $('#source').val();
+                let search = $('#search_value').val();
+                let group = $('#group').val();
+                let telesales = $('#telesales').val();
+                let status = $('#status').val();
+                let marketing = $('#group-product').val();
+                let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
 
                 let data = {
@@ -460,8 +461,8 @@
                 $('#group_product').val(marketing);
                 $('#telesales').val(telesales);
                 $('#birthday_tab').val('');
-                const data_time = $('#btn_choose_time').val();
-                const status = $('#status').val();
+                let data_time = $('#btn_choose_time').val();
+                let status = $('#status').val();
 
                 let data = {
                     marketing: marketing,
@@ -478,15 +479,15 @@
             }, 500));
 
             $(document).on('keyup', '#search', delay(function () {
-                const search = $('#search').val();
+                let search = $('#search').val();
                 $('#search_value').val(search);
                 $('#birthday_tab').val('');
-                const data_time = $('#btn_choose_time').val();
-                const group = $('#group').val();
-                const telesales = $('#telesales').val();
-                const status = $('#status').val();
-                const marketing = $('#group-product').val();
-                const source = $('#source').val();
+                let data_time = $('#btn_choose_time').val();
+                let group = $('#group').val();
+                let telesales = $('#telesales').val();
+                let status = $('#status').val();
+                let marketing = $('#group-product').val();
+                let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
 
                 let data = {
@@ -505,7 +506,7 @@
 
             $(document).on('click', '.invalid_account', function (e) {
                 let target = $(e.target).parent();
-                const invalid_account = $(target).find('.invalid_account').data('invalid');
+                let invalid_account = $(target).find('.invalid_account').data('invalid');
                 if (invalid_account === 0) {
                     $("#send_email, #send_sms, #mark_as_potential, #show_popup_task, #show_group_type_account, #show_manager_account, #remove_selected_account, #change_relations").css({'display': 'none'});
                     $("#restore_account, #permanently_delete_account").css({'display': 'block'});
@@ -541,7 +542,7 @@
             $(document).on('dblclick', '.category-db', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.category-db').empty();
-                const id = $(this).data('id');
+                let id = $(this).data('id');
                 let html = '';
 
                 $.ajax({
@@ -570,7 +571,7 @@
             $(document).on('dblclick', '.customer-birthday', function (e) {
                 let target = $(e.target).parent();
                 let customerBirthday = $(this);
-                const id = $(this).data('id');
+                let id = $(this).data('id');
                 customerBirthday.empty();
 
                 $.ajax({
@@ -578,7 +579,7 @@
                     method: "get",
                     data: {id: id}
                 }).done(function (data) {
-                    const birthdayResult = document.createElement('input');
+                    let birthdayResult = document.createElement('input');
                     birthdayResult.setAttribute('data-id', data.id);
                     birthdayResult.setAttribute('id', data.id);
                     birthdayResult.setAttribute('value', data.birthday);
@@ -589,7 +590,7 @@
                     birthdayResult.onblur = customerBirthday_handleChange;
                     customerBirthday.append(birthdayResult);
 
-                    const jqueryBirthdayResult = $(birthdayResult);
+                    let jqueryBirthdayResult = $(birthdayResult);
                     jqueryBirthdayResult.datepicker({
                         format: "DD-MM-YYYY"
                     });
@@ -600,8 +601,8 @@
 
             function customerBirthday_handleChange(event) {
                 let parent = event.target.parentNode;
-                const birthday = event.target.value;
-                const id = event.target.id;
+                let birthday = event.target.value;
+                let id = event.target.id;
 
                 $.ajax({
                     url: "ajax/customers/" + id,
@@ -744,8 +745,8 @@
                             category_ids: category_ids
                         }
                     }).done(function (data) {
-                        const blkstr = $.map(data.categories, function (val) {
-                            const str = val.name;
+                        let blkstr = $.map(data.categories, function (val) {
+                            let str = val.name;
                             return str;
                         }).join(", ");
 
@@ -772,8 +773,8 @@
             });
 
             $(document).on('click', '#remove_selected_account', function () {
-                const id = $('td .myCheck:checked');
-                const ids = [];
+                let id = $('td .myCheck:checked');
+                let ids = [];
                 $.each(id, function () {
                     ids.push($(this).val());
                 });
@@ -810,16 +811,16 @@
             $('body').on('click', 'a.page-link', function (e) {
                 e.preventDefault();
                 let pages = $(this).attr('href').split('page=')[1] ? $(this).attr('href').split('page=')[1] : 1;
-                const group = $('.group').val();
-                const telesales = $('.telesales').val();
-                const search = $('#search_value').val();
-                const marketing = $('#group-product').val();
-                const source = $('#source').val();
+                let group = $('.group').val();
+                let telesales = $('.telesales').val();
+                let search = $('#search_value').val();
+                let marketing = $('#group-product').val();
+                let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
                 let status = $('#status').val();
                 let invalid_account = $('#invalid_account').val();
                 let btn_choose_time = $('#btn_choose_time').val();
-                const birthday = $('#birthday_tab').val();
+                let birthday = $('#birthday_tab').val();
                 $.ajax({
                     url: '{{ url()->current() }}',
                     method: "get",
@@ -914,8 +915,8 @@
             });
 
             $(document).on('click', '#restore_account', function () {
-                const id = $('td .myCheck:checked');
-                const ids = [];
+                let id = $('td .myCheck:checked');
+                let ids = [];
                 $.each(id, function () {
                     ids.push($(this).val());
                 });
@@ -942,8 +943,8 @@
             });
 
             $(document).on('click', '#permanently_delete_account', function () {
-                const id = $('td .myCheck:checked');
-                const ids = [];
+                let id = $('td .myCheck:checked');
+                let ids = [];
                 $.each(id, function () {
                     ids.push($(this).val());
                 });
@@ -1012,9 +1013,9 @@
             });
 
             $(document).on('click', '.update-multiple-status', function () {
-                const id = $('td .myCheck:checked');
-                const ids = [];
-                const status_id = $('.status-customer').val();
+                let id = $('td .myCheck:checked');
+                let ids = [];
+                let status_id = $('.status-customer').val();
                 $.each(id, function () {
                     ids.push($(this).val());
                 });
@@ -1057,7 +1058,7 @@
             @endif
             $(document).on('change', '.telesales-result', function (e) {
                 let target = $(e.target).parent();
-                const telesales_id = $(target).find('.telesales-result').val();
+                let telesales_id = $(target).find('.telesales-result').val();
                 let id = $(this).data('id');
 
                 $.ajax({
@@ -1076,9 +1077,9 @@
             })
 
             $(document).on('click', '.update-multiple-account-manager', function () {
-                const id = $('td .myCheck:checked');
-                const ids = [];
-                const account_manager = $('#manager-account').val();
+                let id = $('td .myCheck:checked');
+                let ids = [];
+                let account_manager = $('#manager-account').val();
                 $.each(id, function () {
                     ids.push($(this).val());
                 });
@@ -1089,6 +1090,25 @@
                     data: {
                         ids: ids,
                         telesales_id: account_manager,
+                    }
+                }).done(function () {
+                    window.location.reload();
+                });
+            });
+
+            $(document).on('click', '.update-multiple-branch', function () {
+                let id = $('td .myCheck:checked');
+                let ids = [];
+                let branch_id = $('#changeBranch').val();
+                $.each(id, function () {
+                    ids.push($(this).val());
+                });
+                $.ajax({
+                    url: "customers/update-multiple-branch",
+                    method: "post",
+                    data: {
+                        ids: ids,
+                        branch_id: branch_id,
                     }
                 }).done(function () {
                     window.location.reload();

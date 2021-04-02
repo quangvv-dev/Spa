@@ -38,17 +38,17 @@
         <button type="button" class="btn btn-default position dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false"> Thao tác <span class="caret"></span></button>
         <ul class="dropdown-menu">
-            <li class="dropdown_action" id="send_email"><a>Gửi Email</a></li>
-            <li class="dropdown_action" id="send_sms"><a>Gửi SMS</a></li>
-            <li class="dropdown_action" id="mark_as_potential"><a>Tạo cơ hội</a></li>
-            <li class="dropdown_action" id="show_popup_task"><a>Tạo công việc</a></li>
-            <li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>
-            <li class="dropdown_action" id="show_manager_account"><a>Người phụ trách</a></li>
+            {{--<li class="dropdown_action" id="send_email"><a>Gửi Email</a></li>--}}
+            {{--<li class="dropdown_action" id="send_sms"><a>Gửi SMS</a></li>--}}
+            {{--<li class="dropdown_action" id="mark_as_potential"><a>Tạo cơ hội</a></li>--}}
+            {{--<li class="dropdown_action" id="show_popup_task"><a>Tạo công việc</a></li>--}}
+            {{--<li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>--}}
+            <li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>
+            <li class="dropdown_action"><a id="change_relations">Trạng thái khách hàng</a></li>
+            <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>
             <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
-            <li class="dropdown_action" id="restore_account" style="display: none;"><a>Khôi phục</a></li>
-            <li class="dropdown_action" id="permanently_delete_account" style="display: none;"><a>Xóa
-                    hẳn</a></li>
-            <li class="dropdown_action"><a id="change_relations">Mối quan hệ</a></li>
+            <li class="dropdown_action" id="restore_account"><a>Khôi phục</a></li>
+            <li class="dropdown_action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></li>
         </ul>
     </div>
     <div style="margin-left: 10px">
@@ -89,9 +89,9 @@
                                                                               style="background: rgb(249, 87, 87); color: rgb(255, 255, 255); display: none;"></span>
         </div>
         <div class="display" style="width: 28px; height: 20px;">
-            <div class="dropdown open"><i class="fa fa-eye dropdown-toggle" role="button"
-                                          data-toggle="dropdown" title="Hiển thị số trang" aria-expanded="true"
-                                          style="margin-top: 8px; margin-left: 5px;"></i>
+            <div class="dropdown open">
+                <i class="fa fa-eye dropdown-toggle" role="button"
+                   data-toggle="dropdown" title="Hiển thị số trang" aria-expanded="true" style="margin-top: 8px; margin-left: 5px;"></i>
                 <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px">
                     <li><a class="b-white b-hover limiting active_limit bold" data-limit="20">Hiển thị 20 kết
                             quả/trang</a></li>
@@ -184,15 +184,21 @@
                     </td>
                     <td class="text-center phone-customer"
                         data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
-                    <td class="text-center category-db" data-id="{{$customer->id}}">{{str_limit($customer->group_text,30)}}</td>
+                    <td class="text-center category-db"
+                        data-id="{{$customer->id}}">{{str_limit($customer->group_text,30)}}</td>
                     <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
-                    <td class="text-center telesale-customer" data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center description-cus" data-id="{{$customer->id}}" style="width: 291px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
-                    <td class="text-center genitive-db" title="{{@$customer->genitive->description}}" data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>
-                    <td class="text-center" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
+                    <td class="text-center telesale-customer"
+                        data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
+                    <td class="text-center description-cus" data-id="{{$customer->id}}"
+                        style="width: 291px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
+                    <td class="text-center genitive-db" title="{{@$customer->genitive->description}}"
+                        data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>
+                    <td class="text-center"
+                        title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
                     </td>
-                    <td class="text-center customer-birthday" data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
+                    <td class="text-center customer-birthday"
+                        data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
                     <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center">{{ @$customer->facebook}}</td>
@@ -308,6 +314,7 @@
         }
 
         var active = $([]);
+
         function find_active() {
             scrollbar.show();
             var active = $([]);
@@ -324,7 +331,7 @@
 
         function fit(active) {
             if (!active.length) return scrollbar.hide();
-            scrollbar.css({ left: active.offset().left, width: active.width() });
+            scrollbar.css({left: active.offset().left, width: active.width()});
             fakecontent.width($(this).get(0).scrollWidth);
             fakecontent.height(1);
             delete lastScroll;
@@ -343,6 +350,7 @@
         }
 
         var lastScroll;
+
         function scroll() {
             if (!active.length) return;
             if (scrollbar.scrollLeft() === lastScroll) return;
