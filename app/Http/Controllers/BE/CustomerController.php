@@ -245,7 +245,7 @@ class CustomerController extends Controller
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
         if ($request->schedules) {
-            return Response::json(view('schedules.index', compact('schedules', 'id', 'group', 'staff'))->render());
+            return Response::json(view('schedules.index', compact('schedules', 'id', 'staff'))->render());
         }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
