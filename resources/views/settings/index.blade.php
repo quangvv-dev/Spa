@@ -27,7 +27,7 @@
                                     <div class="col row">
                                         <div class="col-md-6 col-xs-12">
                                             <div class="form-group">
-                                                {!! Form::label('silver', 'Thăng hạn rank Khách hàng (Membership)', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('silver', 'Thăng hạn rank Khách hàng (Sliver)', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('silver',@number_format(setting('silver')), array('class' => 'form-control')) !!}
                                                 <span class="help-block">{{ $errors->first('silver', ':message') }}</span>
                                             </div>
