@@ -400,11 +400,12 @@ class Functions
      * @param $id
      * @return int
      */
-    public static function sumRevenues($id)
+    public static function sumOrder($id)
     {
-        $payment = Order::where('member_id', $id)->sum('gross_revenue');
-        $wallet = WalletHistory::where('customer_id', $id)->sum('order_price');
-        $total = (int)$payment + (int)$wallet;
+        $total = Order::where('member_id', $id)->count();
+//        $payment = Order::where('member_id', $id)->sum('gross_revenue');
+//        $wallet = WalletHistory::where('customer_id', $id)->sum('order_price');
+//        $total = (int)$payment + (int)$wallet;
         return $total;
     }
 
@@ -422,18 +423,17 @@ class Functions
      */
     public static function updateRank($customer_id)
     {
-        $total = Functions::sumRevenues($customer_id);
+        $total = Functions::sumOrder($customer_id);
         $silver = setting('silver') ?: 0;
         $gold = setting('gold') ?: 0;
         $platinum = setting('platinum') ?: 0;
         if (isset($silver) && isset($gold) && isset($platinum) && $silver > 0 && $gold > 0 && $platinum > 0) {
             if ($silver <= $total && $total < $gold) {
-                $status = Functions::getStatusWithCode('silver');
-
+                $status = Functions::getStatusWithCode('nguoi_mua_hang');
             } elseif ($gold <= $total && $total < $platinum) {
-                $status = Functions::getStatusWithCode('gold');
+                $status = Functions::getStatusWithCode('khach_hang_than_thiet');
             } elseif ($platinum <= $total) {
-                $status = Functions::getStatusWithCode('platinum');
+                $status = Functions::getStatusWithCode('cong_tac_vien');
             }
             if (isset($status) && $status) {
                 Customer::find($customer_id)->update(['status_id' => $status]);

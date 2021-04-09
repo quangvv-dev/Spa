@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Helpers\Functions;
+use App\Models\Status;
 use Illuminate\Console\Command;
 use App\Models\Customer;
 use App\Models\Order;
@@ -40,14 +41,9 @@ class  Silver extends Command
      */
     public function handle()
     {
-        $member = Functions::getStatusWithCode('membership');
-
-        $status = Functions::getStatusWithCode('silver');
-        $status1 = Functions::getStatusWithCode('gold');
-        $status2 = Functions::getStatusWithCode('platinum');
-        Customer::whereIn('status_id', [$status, $status1, $status2])->update(['status_id' => $member]);
-        $data = Order::select('gross_revenue', 'member_id', \DB::raw('SUM(gross_revenue) AS total'))->groupBy('member_id')
-            ->having('total', '>=', setting('silver'))->get()->pluck('member_id');
-        Customer::whereIn('id',$data)->update(['status_id' => $status]);
+        Status::where('code', 'membership')->update(['name' => 'Khách hàng', 'code' => 'khach_hang']);
+        Status::where('code', 'silver')->update(['name' => 'Người mua hàng', 'code' => 'nguoi_mua_hang']);
+        Status::where('code', 'gold')->update(['name' => 'Khách hàng thân thiết', 'code' => 'khach_hang_than_thiet']);
+        Status::where('code', 'platinum')->update(['name' => 'Cộng tác viên', 'code' => 'cong_tac_vien']);
     }
 }
