@@ -237,8 +237,8 @@
                                     class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
                         @endif
                         @if(empty($permissions) || !in_array('package.index',$permissions))
-                            @if($roleGlobal->permission('package.list'))
-                                <a class="dropdown-item" href="{!! route('package.index') !!}"><i
+                            @if($roleGlobal->permission('settings'))
+                            <a class="dropdown-item" href="{!! route('package.index') !!}"><i
                                         class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
                             @endif
                         @endif

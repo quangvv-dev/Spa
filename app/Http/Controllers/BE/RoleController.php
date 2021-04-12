@@ -177,7 +177,7 @@ class RoleController extends Controller
                 'permissions'   => json_encode($request->permissions),
             ]);
 
-            return back();  
+            return back();
             return redirect(route('roles.index'))->with('success', 'Chỉnh sửa thành công !');
         }
 
