@@ -78,14 +78,14 @@ class CustomerController extends Controller
             OrderConstant::NONE_REST => 'Đã thanh toán',
         ];
         view()->share([
-            'the_rest' => $the_rest,
-            'status' => $status,
-            'group' => $group,
-            'source' => $source,
-            'branch' => $branch,
-            'telesales' => $telesales,
-            'marketingUsers' => $marketingUsers,
-            'genitives' => $genitives,
+            'the_rest'      => $the_rest,
+            'status'        => $status,
+            'group'         => $group,
+            'source'        => $source,
+            'branch'        => $branch,
+            'telesales'     => $telesales,
+            'marketingUsers'=> $marketingUsers,
+            'genitives'     => $genitives,
         ]);
     }
 
@@ -99,6 +99,10 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
+        $checkRole = checkRoleAlready();
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
+        }
         $branchs = Branch::search()->pluck('name', 'id');
         $input = $request->all();
         $customers = Customer::search($input);

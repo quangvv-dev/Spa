@@ -1,4 +1,7 @@
 @extends('layout.app')
+@php
+    $checkRole = checkRoleAlready();
+@endphp
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
@@ -110,9 +113,11 @@
                     <div class="btn-group ml5">
                         {!! Form::select('role_type', [1=>'Dịch vụ',2=>'Sản phẩm',3=>'Combo'], null, array('class' => 'form-control role_type', 'placeholder'=>'Tất cả đơn')) !!}
                     </div>
-                    <div class="btn-group ml5">
-                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
-                    </div>
+                    @if(empty($checkRole))
+                        <div class="btn-group ml5">
+                            {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                        </div>
+                    @endif
                 </div>
             </div>
             <div id="registration-form">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Http\Controllers\Controller;
 use App\Components\Filesystem\Filesystem;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 
 
@@ -26,8 +27,25 @@ class SettingController extends Controller
 
     public function index()
     {
-        return view('settings.index');
+        $branchs = Branch::get();
+        return view('settings.index', compact('branchs'));
     }
+
+    public function storeBranch()
+    {
+        Branch::create([
+            'name' => 'Chi Nhánh',
+        ]);
+    }
+
+    public function updateBranch(Request $request, Branch $id)
+    {
+        $branch = $id;
+        $input = $request->all();
+        $branch->update($input);
+        return 1;
+    }
+
 
     public function indexAdmin()
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
 use App\Http\Requests\UserRequest;
+use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Role;
 use App\Services\UserService;
@@ -30,6 +31,10 @@ class UserController extends Controller
         $this->middleware('permission:users.delete', ['only' => ['destroy']]);
 
         $this->userService = $userService;
+        $branchs = Branch::search()->pluck('name', 'id');
+        \View::share([
+            'branchs' => $branchs,
+        ]);
     }
 
     /**

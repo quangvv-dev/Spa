@@ -62,6 +62,7 @@ class OrderController extends Controller
             Order::TYPE_ORDER_DEFAULT => 'Đơn thường',
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
+
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
             'services' => $services,
@@ -186,13 +187,18 @@ class OrderController extends Controller
     public function listOrder(Request $request)
     {
         $title = 'ĐƠN HÀNG BÁN';
+        $input = $request->all();
+        $checkRole = checkRoleAlready();
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
+        }
         $group = Category::pluck('name', 'id')->toArray();
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
         $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
-            $orders = Order::searchAll($request->all());
+            $orders = Order::searchAll($input);
 
             View::share([
                 'allTotal' => $orders->sum('all_total'),
@@ -258,7 +264,10 @@ class OrderController extends Controller
             $now = Carbon::now()->format('m');
             $year = Carbon::now()->format('Y');
             $orders = Order::whereYear('created_at', $year)->whereMonth('created_at',
-                $now)->with('orderDetails')->orderBy('id', 'desc');
+                $now)->with('orderDetails')
+                ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->orderBy('id', 'desc');
             View::share([
                 'allTotal' => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
@@ -293,6 +302,11 @@ class OrderController extends Controller
     public function listOrderPayment(Request $request)
     {
         $title = 'ĐƠN THU TRONG KỲ';
+        $input = $request->all();
+        $checkRole = checkRoleAlready();
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
+        }
         $group = Category::pluck('name', 'id')->toArray();
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
         $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
@@ -300,7 +314,7 @@ class OrderController extends Controller
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
-            $detail = PaymentHistory::search($request->all());
+            $detail = PaymentHistory::search($input);
             View::share([
                 'allTotal' => $detail->sum('price'),
             ]);
@@ -310,11 +324,11 @@ class OrderController extends Controller
             ]);
 
         } else {
-            $request->merge([
+            $input = [
                 'start_date' => Carbon::now()->startOfMonth()->format('Y-m-d'),
                 'end_date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
-            ]);
-            $detail = PaymentHistory::search($request->all());
+            ];
+            $detail = PaymentHistory::search($input);
 
             View::share([
                 'allTotal' => $detail->sum('price'),

@@ -1,6 +1,7 @@
 @extends('layout.app')
 @php
     $roleGlobal = auth()->user()?:[];
+    $checkRole = checkRoleAlready();
 @endphp
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>

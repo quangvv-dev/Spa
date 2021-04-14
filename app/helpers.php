@@ -131,3 +131,11 @@ if (!function_exists('formatYMD')) {
         return \Carbon\Carbon::parse($date)->format('Y-m-d');
     }
 }
+
+if (!function_exists('checkRoleAlready')) {
+    function checkRoleAlready()
+    {
+        $user = \Illuminate\Support\Facades\Auth::user()->branch_id;
+        return $user;
+    }
+}

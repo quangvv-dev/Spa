@@ -1,5 +1,6 @@
 @php
     $roleGlobal = auth()->user()?:[];
+    $checkRole = checkRoleAlready();
 @endphp
 <style>
     .nav-link.icon.notification {

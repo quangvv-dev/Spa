@@ -6,9 +6,9 @@
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">Số điện thoại</th>
             <th class="text-white text-center">Email</th>
-            <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Phòng ban</th>
-            <th class="text-white text-center">Trạng thái đăng nhập</th>
+            <th class="text-white text-center">Quyền</th>
+            <th class="text-white text-center">Chi nhánh</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -20,9 +20,9 @@
                     <td class="text-center">{{ $user->full_name }}</td>
                     <td class="text-center">{{ $user->phone }}</td>
                     <td class="text-center">{{ $user->email }}</td>
+                    <td class="text-center">{{ @$user->department->name}}</td>
                     <td class="text-center">{{ $user->role_text }}</td>
-                    <td class="text-center">{{ @$user->department->name  }}</td>
-                    <td class="text-center">{{ $user->active_text}}</td>
+                    <td class="text-center">{{ isset($user->branch)?$user->branch->name:'Tất cả chi nhánh'}}</td>
                     <td class="text-center">
                         <a title="sửa tài khoản" class="btn" href="{{ route('users.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
                     @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)

@@ -59,6 +59,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('settings', 'SettingController@storeRank')->name('settings.storeRank');
     Route::get('super-admin', 'SettingController@indexAdmin')->name('settings.indexAdmin');
     Route::post('super-admin', 'SettingController@storeAdmin')->name('settings.storeAdmin');
+    Route::post('store-branch', 'SettingController@storeBranch')->name('settings.storeBranch');
+    Route::put('branch/{id}', 'SettingController@updateBranch')->name('settings.updateBranch');
 
     //Order
     Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');

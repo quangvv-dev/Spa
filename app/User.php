@@ -4,11 +4,9 @@ namespace App;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
-use App\Models\Category;
+use App\Models\Branch;
 use App\Models\Department;
-use App\Models\Order;
 use App\Models\Role;
-use App\Models\Status;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

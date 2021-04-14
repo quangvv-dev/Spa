@@ -84,14 +84,22 @@
                         </div>
                     </div>
                     <input type="hidden" name="is_leader" value="0">
-                    {{--<div class="col-xs-12 col-md-6">--}}
-                        {{--<div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">--}}
-                            {{--{!! Form::label('is_leader', 'Trưởng phòng') !!} &nbsp;--}}
-                            {{--<input type="checkbox" name="is_leader"--}}
-                                   {{--value="1" {{!empty($user) && $user->is_leader > 0 ? 'checked' : ''}}>--}}
-                            {{--<span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
+
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
+                            {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
+                            <select id="role" name="branch_id" class="form-control select2">
+                                <option value="">Tất cả chi nhánh</option>
+                                @forelse($branchs as $k => $item)
+                                    <option
+                                        {{$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
+                                    </option>
+                                @empty
+                                @endforelse
+                            </select>
+                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                        </div>
+                    </div>
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">

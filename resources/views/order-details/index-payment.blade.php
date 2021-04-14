@@ -1,4 +1,7 @@
 @extends('layout.app')
+@php
+    $checkRole = checkRoleAlready();
+@endphp
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
@@ -61,11 +64,11 @@
                 <div class="col-md-2">
                     {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                 </div>
-
-                <div class="col-md-2">
-                    {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
-                </div>
-
+                @if(empty($checkRole))
+                    <div class="col-md-2">
+                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                    </div>
+                @endif
                 <ul class="col-md-8 no-padd mt5 tr">
                     <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
                     <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>

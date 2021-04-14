@@ -15,6 +15,7 @@
 </style>
 @php
     $roleGlobal = auth()->user()?:[];
+    $checkRole = checkRoleAlready();
 @endphp
 {{--<header class="app-header header shadow-none relative">--}}
     {{--<div id="particles-js"></div>--}}
