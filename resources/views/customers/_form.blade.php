@@ -1,4 +1,7 @@
 @extends('layout.app')
+@php
+    $checkRole = checkRoleAlready();
+@endphp
 @section('_style')
     <!-- Bootstrap fileupload css -->
     <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
@@ -91,12 +94,22 @@
                             <span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>
                         </div>
                     </div>
+                    @if(empty($checkRole))
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
+                                {!! Form::label('branch_id', 'Chi nhánh') !!}
+                                {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn chi nhánh')) !!}
+                                <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                            </div>
+                        </div>
+                    @else
+                        <input type="hidden" name="branch_id" value="{{$checkRole}}">
+                    @endif
                 </div>
                 <div class="col-md-6">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
                             {!! Form::label('telesales_id', 'Người phụ trách', array('class' => 'control-label required')) !!}
-                            {{--                            {!! Form::select('telesales_id', $telesales,@$customer->telesales_id, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhân viên')) !!}--}}
                             <select name="telesales_id" id="telesales_id" class="form-control select2"
                                     {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::TELESALES && isset($customer) ?'disabled':''}}
                                     data-placeholder="Chọn nhân viên">

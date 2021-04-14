@@ -9,20 +9,34 @@
             <div class="modal-body">
                 {!! Form::open(array('url' => route('customer.export'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','enctype'=>'multipart/form-data','autocomplete'=>'off')) !!}
                 <div class="row">
+                    @if(empty($checkRole))
+                        <div class="col-md-12 col-xs-12">
+                            <i style="color: red">Chi nhánh</i><br>
+                            <select name="branch_id" class="form-control branch_id select2">
+                                <option value="">Tất cả chi nhánh</option>
+                                @foreach($branchs as $k=> $item)
+                                    <option value="{{$k}}">{{ $item}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @else
+                        <input type="hidden" name="branch_id" value="{{$checkRole}}">
+                    @endif
+
                     <div class="col-md-12">
                         <i style="color: red">Chọn trạng thái KH</i><br>
                         {!! Form::select('status',$status, null, array('class' => 'form-control select2','placeholder'=>'Tất cả')) !!}
-
                     </div>
                     <div class="col-md-12 col-xs-12">
                         <i style="color: red">Nhóm khách hàng</i><br>
                         <select name="group" class="form-control select2">
                             <option value="">Nhóm dịch vụ</option>
                             @foreach($categories as $item)
-                                <option value="{{$item->id}}">{{ $item->name}}({{ $item->customers->count() }})</option>
+                                <option value="{{$item->id}}">{{ $item->name}}</option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Tải xuống</button>
                     </div>

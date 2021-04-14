@@ -59,7 +59,7 @@ class CustomerController extends Controller
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-        $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
+        $branchs = Branch::search()->pluck('name','id');// chi nhánh
         $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::pluck('name', 'id')->toArray();
         $telesales = [];
@@ -82,7 +82,7 @@ class CustomerController extends Controller
             'status'        => $status,
             'group'         => $group,
             'source'        => $source,
-            'branch'        => $branch,
+            'branchs'        => $branchs,
             'telesales'     => $telesales,
             'marketingUsers'=> $marketingUsers,
             'genitives'     => $genitives,
@@ -103,7 +103,6 @@ class CustomerController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        $branchs = Branch::search()->pluck('name', 'id');
         $input = $request->all();
         $customers = Customer::search($input);
         if (isset($input['limit'])) {
@@ -345,6 +344,9 @@ class CustomerController extends Controller
 
     public function exportCustomer(Request $request)
     {
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
+        }
         $now = Carbon::now()->format('d/m/Y');
         $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
         $data = $data->when(!empty($request->group), function ($query) use ($request) {
@@ -352,6 +354,8 @@ class CustomerController extends Controller
             $query->whereIn('id', $arr);
         })->when(!empty($request->status), function ($query) use ($request) {
             $query->where('status_id', $request->status);
+        })->when(!empty($input['branch_id']), function ($query) use ($input) {
+            $query->where('status_id', $input['branch_id']);
         })->get();
 
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
@@ -443,6 +447,7 @@ class CustomerController extends Controller
                                     'address' => $row['dia_chi'] ?: '',
                                     'facebook' => $row['link_facebook'] ?: '',
                                     'description' => $row['mo_ta'],
+                                    'branch_id' => $row['chi_nhanh'],
                                     'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                     'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                 ]);
