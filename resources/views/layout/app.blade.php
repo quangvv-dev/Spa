@@ -54,8 +54,10 @@
         font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
     }
     tr td {
-        font-size: 15px;
+        font-size: 14px;
+        font-weight: 500;
     }
+
 </style>
 <div id="global-loader">
     <div class="showbox">
