@@ -55,18 +55,27 @@
         * {
             font-size: 14px;
         }
+
+        ul.nav.panel-tabs li a {
+            font-weight: 600;
+        }
+        img.account_manager_avatar {
+            border-radius: 50%;
+        }
     </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
         <div class="card">
             <div class="card-header">
-                <div class="col-md-3 no-padd font16"><a class="avatar a45 fl mr10 pic"> <img
-                            src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png"> </a> <span
-                        class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
-                    <div class="display" id="toolbox" style="width: 28px; height: 20px">
-                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
-                                class="fas fa-edit"></i></a>
+                <div class="col-md-3 no-padd font16">
+                    <a class="avatar fl mr10 pic"> <img class="account_manager_avatar"
+                            src="{{$customer->avatar?:'/default/noavatar.png'}}">
+                    </a>
+                    <span class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
+                    <div class="display" id="toolbox" style="width: 28px; height: 20px;margin-left: 10px;">
+                        <a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}"><i
+                                class="fas fa-pencil-alt"></i></a>
                         <a id="btn_del_account" rel="tooltip"
                            data-placement="bottom"
                            data-original-title="Xóa" class="ml5">
@@ -83,24 +92,24 @@
                 </div>
                 <div class="col-md-1 position" rel="tooltip"></div>
 
-                <div class="col-md-2 no-padd bor-l pl20 mg0 pt10 position hoverlastactive" rel="tooltip"
+                <div class="col-md-2 no-padd pl20 mg0 pt10 position hoverlastactive" rel="tooltip"
                      data-original-title="Click thay đổi người phụ trách" data-placement="bottom">
                     <div class="show_change_am" style="cursor:pointer">
-                        <div class="avatar a35"><img class="account_manager_avatar"
-                                                     src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png">
+                        <div class="avatar">
+                            <img class="account_manager_avatar"
+                                 src="{{!empty($customer->telesale->avatar)?$customer->telesale->avatar:'/default/noavatar.png'}}">
                         </div>
-                        <div class="info-avatar"><p class="account_manager_name"><a
-                                    class="gfname">{{ @$customer->telesale->full_name }}</a>
+                        <div class="info-avatar">
+                            <p class="account_manager_name">
+                                <a class="gfname">{{ @$customer->telesale->full_name }}</a>
                             </p>
                             <p class="gray1 font12">Người phụ trách</p></div>
                     </div>
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"></div>
-                {{--<div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011" class="bold mg0">0</h1>--}}
-                {{--<p>Tương tác</p></div>--}}
-                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011"
-                                                               class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
-                        VNĐ</h1>
+                <div class="col-md-2 no-padd tc bor-l mg0">
+                    <h1 style="font-size:25px;color: #dc3011"
+                        class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}VNĐ</h1>
                     <p>Giá trị</p></div>
             </div>
             <div style="height:5px" class="color-picker-bg-41"></div>
@@ -115,16 +124,16 @@
                     </div>
                     <div class="full2 pb20 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i
-                                    class="fa fa-random mr5 gray margin-left-10">&nbsp;{{ @$customer->source_customer->name }}</i>
+                            <h3 class="uppercase pb5 mb10 font12 mg0">Nguồn:
+                                <i class="fa fa-random mr5 gray margin-left-10"></i>{{ @$customer->source_customer->name }}
                             </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo:<i
-                                    class="fa fa-user mr5 gray margin-left-10">&nbsp;{{ @$customer->marketing->full_name }}</i>
+                            <h3 class="uppercase pb5 mb10 font12 mg0"> Người tạo:
+                                {{ @$customer->marketing->full_name }}
                             </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo:<i
-                                    class="fa fa-calendar mr5 gray margin-left-10">&nbsp;{{ $customer->created_at }}</i>
+                            <h3 class="uppercase pb5 mb10 font12  mg0"> Ngày tạo:
+                                {{ $customer->created_at }}
                             </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua:<i
+                            <h3 class="uppercase pb5 mb10 font12 mg0"> Đã mua:<i
                                     class="fa fa-shopping-cart mr5 gray margin-left-10">&nbsp;{{ $customer->orders->count() }}</i>
                             </h3>
                         </div>
@@ -218,9 +227,12 @@
                                     <div class="tabs-menu1 ">
                                         <!-- Tabs -->
                                         <ul class="nav panel-tabs">
-                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a></li>
-                                            <li><a href="#tab7" id="click_tab_7" data-id="{{$customer->id}}" data-toggle="tab">Lịch hẹn</a></li>
-                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}" data-toggle="tab">Đơn hàng</a></li>
+                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
+                                            </li>
+                                            <li><a href="#tab7" id="click_tab_7" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Lịch hẹn</a></li>
+                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
                                             @if(empty($permissions) || !in_array('package.customer',$permissions))
                                                 <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
@@ -274,7 +286,7 @@
                                                     </div>
                                                     <div class="col-md-12">
                                                         <button style="float: right" type="submit"
-                                                                class="btn btn-success">Gửi
+                                                                class="btn btn-info">Gửi
                                                         </button>
                                                     </div>
                                                     {{ Form::close() }}
@@ -374,7 +386,7 @@
             $.post($('.formUpdateSchedule').attr('action'), $('.formUpdateSchedule').serialize(), function (data) {
                 $('#updateModal').modal('hide');
             });
-            $(".status[data-id='" + ids +"']").html(name);
+            $(".status[data-id='" + ids + "']").html(name);
         })
         $(document).on('click', '#click_tab_7', function () {
             const id = $(this).data('id');
@@ -382,7 +394,7 @@
             $.ajax({
                 url: "{{url()->current() }}",
                 method: "get",
-                data: {schedules:1,member_id: id}
+                data: {schedules: 1, member_id: id}
             }).done(function (data) {
                 $('#tab7').html(data);
             });
@@ -813,7 +825,7 @@
             $('body').delegate('.update', 'click', function (e) {
                 let id = $(this).attr("data-id");
                 let link = 'schedules/edit/' + id;
-                console.log(123,parent);
+                console.log(123, parent);
                 $.ajax({
                     url: window.location.origin + '/' + link,
                     method: "get",

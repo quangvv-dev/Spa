@@ -55,13 +55,11 @@
                          @case(6)
                          {{'#da70dc'}}
                          @break
-                         @endswitch;margin-left: 3px;text-align: left">
+                         @endswitch;margin-left: 3px;text-align: left;height: 2.4rem;color: #fff;">
                         <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
                         <label>{{$item}}</label>
                     </div>
                 @endforeach
-                {{--</div>--}}
-                {{--<div class="row">--}}
                 <div class="col">
                     {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}
                 </div>
@@ -74,7 +72,6 @@
                 <div class="col">
                     {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
                 </div>
-                {{--</div>--}}
 
             </div>
             <input type="hidden" id="status_val">

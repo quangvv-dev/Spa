@@ -54,13 +54,13 @@
     </div>
     <div style="margin-left: 10px">
         <button data-name="" class="btn btn-default status btn white account_relation position"
-                style="height: 40px;">
+                style="height: 40px;font-weight: 600">
             TẤT CẢ
             <span class="not-number-account white">{{ $customers->total() }}</span>
         </button>
     </div>
     <div style="margin-left: 10px">
-        <button class="btn btn-default" style="height: 40px;">
+        <button class="btn btn-default" style="height: 40px">
             <a href="{{ route('status.create') }}">
                 <i class="fa fa-plus font16"></i>
             </a>
@@ -68,9 +68,9 @@
     </div>
     <div class="scrollmenu col-md-7">
         @foreach(@$statuses as $k => $item)
-            <button class="status btn white account_relation position" data-name="{{$item->name}}"
+            <button class="status btn white account_relation position btn-new" data-name="{{$item->name}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                    class="not-number-account white">{{ @$item->customers_count }}</span></button>
+                    class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
@@ -82,10 +82,9 @@
             {{ $customers->appends(['search' => request()->search ])->links('vendor.pagination.simple-bootstrap-4') }}
         </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2" style="color: #3b8fec">
         <div class="display birthday_tab position font20 pointer mt7" rel="tooltip" data-placement="left"
-             data-original-title="Sinh nhật hôm nay"
-             aria-describedby="tooltip146058"><i class="fa fa-birthday-cake gf-icon-h02"
+             title="Sinh nhật hôm nay"><i class="fa fa-birthday-cake gf-icon-h02"
                                                  aria-hidden="true"></i><span class="not-number-account"
                                                                               style="background: rgb(249, 87, 87); color: rgb(255, 255, 255); display: none;"></span>
         </div>
@@ -99,8 +98,6 @@
                     <li><a class="b-white b-hover limiting" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
-                    {{--<li><a class="b-white b-hover limiting" data-limit="500">Hiển thị 500 kết quả/trang</a></li>--}}
-                    {{--<li><a class="b-white b-hover limiting" data-limit="1000">Hiển thị 1000 kết quả/trang</a></li>--}}
                 </ul>
             </div>
         </div>
@@ -108,9 +105,8 @@
              class="display position pointer mt5 open" rel="tooltip"
              data-placement="left" data-original-title="Thời gian tạo khách hàng"
              style="padding-left: 5px"><a class="dropdown-toggle" data-toggle="dropdown"
-                                          aria-expanded="true"><i id="created_at_icon"
-                                                                  class="far fa-clock"
-                                                                  style="font-size:22px"></i></a>
+                                          aria-expanded="true">
+                <i id="created_at_icon" title="Hiển thị theo thời gian" class="far fa-clock" style="font-size:22px"></i></a>
             <ul class="dropdown-menu pull-right tr">
                 <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
                         nay</a>

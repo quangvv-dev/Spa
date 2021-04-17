@@ -22,8 +22,8 @@
                     <td class="text-center status" data-id="{{ $s->id }}"> {{ @$s->name_status }}</td>
                     <td class="text-center">{{@$s->creator->full_name}}</td>
                     <td class="text-center">
-                        <a class="btn update" href="#" data-id="{{$s->id}}" title="Chỉnh sửa lịch hẹn"
-                           data-toggle="modal" data-target="#updateModal"><i class="fas fa-edit"></i></a>
+                        <a class=" update" href="#" data-id="{{$s->id}}" title="Chỉnh sửa lịch hẹn"
+                           data-toggle="modal" data-target="#updateModal"><i class="fas fa-pencil-alt"></i></a>
                     </td>
                 </tr>
         </tbody>

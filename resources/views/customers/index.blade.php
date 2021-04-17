@@ -121,11 +121,11 @@
                     </select>
                 </div>
                 <div class="col relative">
-                    <a title="Upload Data" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i
-                            class="fas fa-upload"></i></a>
+                    <a title="Đẩy dữ liễu Excel" style="color: #3b8fec" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i
+                            class="fas fa-cloud-upload-alt"></i></a>
                     <a {{$roleGlobal->permission('leaderSale')||$roleGlobal->permission('leaderMKT')?:"style=display:none"}}
-                       title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
-                        <i class="fas fa-download"></i></a>
+                       title="Tải dữ liệu" style="color: #3b8fec" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
+                        <i class="fas fa-cloud-download-alt"></i></a>
                     @if($roleGlobal->permission('customers.add'))
                         <a class="right btn btn-primary btn-flat"
                            href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>

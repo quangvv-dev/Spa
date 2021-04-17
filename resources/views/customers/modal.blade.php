@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">
             <div class="modal-header">
-                <h4>Upload Data khách hàng</h4>
+                <h4>Đẩy dữ liệu lên CLOUD <i class="fas fa-cloud-upload-alt"></i></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
