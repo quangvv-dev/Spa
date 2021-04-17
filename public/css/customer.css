@@ -5,6 +5,7 @@ div.scrollmenu {
     white-space: nowrap;
     margin-left: 10px;
     margin-right: 10px;
+    padding-top: 8px;
 }
 
 div.scrollmenu button {
@@ -203,4 +204,105 @@ span.noti-number {
     text-align: center;
     text-shadow: 0 1px 0 rgba(0,0,0,.3);
     margin-right: 10px;
+}
+
+/*style inline index bê sang*/
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.table-vcenter td, .table-vcenter th {
+    border-left: 1px solid #e7effc;
+}
+
+.table-ajax table {
+    min-width: auto !important;
+    width: auto !important;
+}
+
+body *::-webkit-scrollbar {
+    width: 6px;
+    height: 15px;
+    transition: .3s background;
+}
+.content-custom {
+    max-width: 100%;
+}
+.search-box,
+.filter-box {
+    z-index: 1;
+    background: #FFF;
+}
+
+.searchbox-sticky {
+    position: sticky;
+    top: 63px;
+    left: 0;
+}
+
+.filterbox-sticky {
+    position: sticky;
+    top: calc(63px + 57px);
+    left: 0;
+}
+
+/*.floatThead-container {*/
+/*z-index: 1 !important;*/
+/*}*/
+
+th {
+    position: sticky;
+    top: 0;
+}
+
+body {
+    overflow: hidden;
+}
+
+.table-responsive {
+    overflow-y: scroll;
+}
+
+@media only screen and (max-width: 1921px) {
+    .table-responsive {
+        max-height: 80vh;
+    }
+}
+
+@media only screen and (max-width: 1441px) {
+    .table-responsive {
+        max-height: 75vh;
+    }
+}
+
+@media only screen and (max-width: 1367px) {
+    .table-responsive {
+        max-height: 65vh;
+    }
+}
+.btn-new{
+    color: #fff;
+    font-weight: 600;
+}
+.noti-reletion{
+    background: #f36a26;
+    font-size: 10px;
+    padding: 0 5px;
+    position: absolute;
+    color: #fff;
+    border-radius:10px ;
+    top: -8px;
+    border: 2px solid #fff;
+}
+select.form-control:not([size]):not([multiple]) {
+    height: 2.2rem;
+    font-size: 13px;
+}
+input#search {
+    font-size: 14px;
+}
+a.right.btn.btn-primary.btn-flat{
+    height: 2.3rem;
+    line-height: 1.6;
 }

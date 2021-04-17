@@ -112,6 +112,7 @@ class ScheduleController extends Controller
         if (!empty(setting('sms_schedules'))) {
             $date = Functions::dayMonthYear($data->date);
             $text = setting('sms_schedules');
+//            $text = replaceVariable($text,@$data->customer->full_name,'','','','');
             $text = str_replace("%full_name%", @$data->customer->full_name, $text);
             $text = str_replace("%time_from%", @$data->time_from, $text);
             $text = str_replace("%time_to%", @$data->time_to, $text);

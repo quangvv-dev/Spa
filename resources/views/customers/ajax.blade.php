@@ -59,7 +59,7 @@
         </button>
     </div>
     <div style="margin-left: 10px">
-        <button class="btn btn-default" style="height: 40px;">
+        <button class="btn btn-default" style="height: 40px;font-weight: 600;">
             <a href="{{ route('status.create') }}">
                 <i class="fa fa-plus font16"></i>
             </a>
@@ -67,9 +67,9 @@
     </div>
     <div class="scrollmenu col-md-7">
         @foreach(@$statuses as $k => $item)
-            <button class="status btn white account_relation position" data-name="{{$item->name}}"
+            <button class="status btn white account_relation position btn-new" data-name="{{$item->name}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                    class="not-number-account white">{{ @$item->customers_count }}</span></button>
+                    class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;
@@ -98,8 +98,6 @@
                     <li><a class="b-white b-hover limiting" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
-                    {{--<li><a class="b-white b-hover limiting" data-limit="500">Hiển thị 500 kết quả/trang</a></li>--}}
-                    {{--<li><a class="b-white b-hover limiting" data-limit="1000">Hiển thị 1000 kết quả/trang</a></li>--}}
                 </ul>
             </div>
         </div>

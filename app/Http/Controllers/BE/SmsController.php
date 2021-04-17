@@ -271,9 +271,7 @@ class SmsController extends Controller
      */
     public function saveSmsSchedules(Request $request)
     {
-//        if (isset($request->sms_schedules) && $request->sms_schedules) {
-            setting(['sms_schedules' => $request->sms_schedules])->save();
-//        }
+        setting(['sms_schedules' => $request->sms_schedules])->save();
         return back()->with('status', 'LƯU NỘI DUNG THÀNH CÔNG !!!');
     }
 }

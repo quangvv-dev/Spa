@@ -54,7 +54,6 @@
                         <div class="tab-pane" id="tab8">
                             @include('sms.schedules_sms')
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -80,8 +79,16 @@
                 }, {
                     name: "Giờ kết thúc",
                     value: "%time_to%"
-                }
-                ];
+                },{
+                    name: "Chi nhánh",
+                    value: "%branch%"
+                }, {
+                    name: "SĐT chi nhánh",
+                    value: "%phoneBranch%"
+                },{
+                    name: "Địa chỉ chi nhánh",
+                    value: "%addressBranch%"
+                }];
                 callback(data);
             },
 
