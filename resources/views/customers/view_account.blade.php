@@ -101,7 +101,7 @@
                         </div>
                         <div class="info-avatar">
                             <p class="account_manager_name">
-                                <a class="gfname">{{ @$customer->telesale->full_name }}</a>
+                                <a class="gfname bold">{{ @$customer->telesale->full_name }}</a>
                             </p>
                             <p class="gray1 font12">Người phụ trách</p></div>
                     </div>
@@ -144,11 +144,11 @@
                             <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">
                                 <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i
                                             class="icon-user mr5 mt2 fl"></i> <b
-                                            class="blue">&nbsp;{{ $customer->full_name }}</b> <i
+                                            class="blue bold">&nbsp;{{ $customer->full_name }}</b> <i
                                             data-original-title="Liên hệ chính" rel="tooltip"
-                                            class="fa orange fa-star" aria-hidden="true"></i></p>
+                                            class="fa fa-star" aria-hidden="true" style="color: orangered"></i></p>
                                     <p></p>
-                                    <p class="clearfix">&nbsp;{{ $customer->phone }}</p>
+                                    <p class="clearfix bold">&nbsp;{{ $customer->phone }}</p>
                                 </div>
                                 <div class="col-md-12 no-padd hide"><a><i data-task-type="2"
                                                                           class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>
@@ -174,7 +174,7 @@
                                 <p class="bold word-wrap"> &nbsp;{{ $customer->address }}</p>
                             </div>
                             <div class="mb10 clearfix"><p class="pr5 fl">Điện thoại:</p>
-                                <p class="bold word-wrap"><a class="" data-account-id="4629" data-phone="0904341335"
+                                <p class="bold word-wrap"><a class="bold" data-account-id="4629" data-phone="0904341335"
                                                              data-type="crm" data-issensitive="true">
                                         &nbsp;{{ $customer->phone }} </a></p>
                             </div>

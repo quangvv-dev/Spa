@@ -7,12 +7,12 @@
                         <div class="col-md-11">
                             <p>
                                 <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:''}}</a>
-                                <span><i class="fa fa-clock"> {{$item->created_at}}</i></span>
+                                <span>  <i class="fa fa-clock"></i><span class="bold"> {{$item->created_at}}</span></span>
                             </p>
                             @if (Auth::user()->id == $item->user_id)
                                 <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
                                     <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                        <i class="fas fa-edit btn-edit-comment" data-id="{{$item->id}}"></i>
+                                        <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
                                     </a>
                                     <a data-original-title="Xóa" rel="tooltip">
                                         <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>

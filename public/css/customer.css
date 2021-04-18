@@ -296,13 +296,17 @@ body {
     border: 2px solid #fff;
 }
 select.form-control:not([size]):not([multiple]) {
-    height: 2.2rem;
-    font-size: 13px;
+    /*height: 2.2rem;*/
+    /*color: #7490BD;/*/
+    font-size: 14px;
+    font-weight: 500;
 }
 input#search {
     font-size: 14px;
+    font-weight: 500;
+    /*color: #000000;*/
 }
 a.right.btn.btn-primary.btn-flat{
-    height: 2.3rem;
+    /*height: 2.3rem;*/
     line-height: 1.6;
 }

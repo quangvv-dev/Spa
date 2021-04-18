@@ -2,7 +2,8 @@
 
 Auth::routes();
 Route::get('post/{slug}', 'BE\AjaxController@indexPost');
-Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
+//Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
+Route::get('customer-post', 'BE\AjaxController@storeCustomerPost');
 Route::get('optin-form/{id}', 'BE\PostsController@showOptinForm');
 Route::get('403', function () {
     return view('errors.403');
