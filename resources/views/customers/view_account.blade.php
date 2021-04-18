@@ -62,6 +62,9 @@
         img.account_manager_avatar {
             border-radius: 50%;
         }
+        .comment{
+            font-weight: 400;
+        }
     </style>
 @endsection
 @section('content')
