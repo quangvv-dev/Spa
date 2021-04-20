@@ -53,6 +53,11 @@
     body{
         font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
     }
+    tr td {
+        font-size: 14px;
+        font-weight: 300;
+        font-family: 'Poppins', sans-serif;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">

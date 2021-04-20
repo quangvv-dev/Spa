@@ -130,7 +130,7 @@
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
         <thead class="bg-primary text-white">
         <tr>
-            <th style="width:3%"><input type="checkbox" class="selectall myCheck"/></th>
+            <th ><input type="checkbox" class="selectall myCheck"/></th>
             <th class="text-white text-center">STT</th>
             <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
@@ -168,7 +168,7 @@
             @foreach($customers as $key => $customer)
                 <tr>
                     <td class="text-center"
-                        style="background: {{isset($customer->status)?$customer->status->color :''}};height: 63px">
+                        style="background: {{isset($customer->status)?$customer->status->color :''}}">
                         <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                     <td class="text-center">{{ $rank ++ }}</td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
