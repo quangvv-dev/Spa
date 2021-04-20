@@ -96,8 +96,6 @@
                     </div>
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"></div>
-                {{--<div class="col-md-1 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011" class="bold mg0">0</h1>--}}
-                {{--<p>Tương tác</p></div>--}}
                 <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011"
                                                                class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
                         VNĐ</h1>

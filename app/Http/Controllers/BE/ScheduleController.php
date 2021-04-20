@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\HistorySms;
 use App\Models\Status;
 use App\Services\TaskService;
@@ -96,10 +97,13 @@ class ScheduleController extends Controller
      */
     public function store(Request $request, $id)
     {
+        $customer = Customer::find($id);
+
         $request->merge([
-            'user_id' => $id,
+            'user_id'       => $id,
             'person_action' => Auth::user()->id,
-            'creator_id' => Auth::user()->id,
+            'creator_id'    => Auth::user()->id,
+            'branch_id'     => $customer->branch_id,
         ]);
         if ($request->note) {
             $note = str_replace("\r\n", ' ', $request->note);
@@ -112,11 +116,13 @@ class ScheduleController extends Controller
         if (!empty(setting('sms_schedules'))) {
             $date = Functions::dayMonthYear($data->date);
             $text = setting('sms_schedules');
-//            $text = replaceVariable($text,@$data->customer->full_name,'','','','');
             $text = str_replace("%full_name%", @$data->customer->full_name, $text);
             $text = str_replace("%time_from%", @$data->time_from, $text);
             $text = str_replace("%time_to%", @$data->time_to, $text);
             $text = str_replace("%date%", @$date, $text);
+            $text = str_replace("%branch%", @$customer->branch->name, $text);
+            $text = str_replace("%phoneBranch%", @$customer->branch->phone, $text);
+            $text = str_replace("%addressBranch%", @$customer->branch->address, $text);
             $text = Functions::vi_to_en($text);
             $err = Functions::sendSmsV3($data->customer->phone, @$text);
             if (isset($err) && $err) {
@@ -193,11 +199,10 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Schedule $id
+     * @throws \Exception
      */
     public function destroy(Schedule $id)
     {
@@ -222,7 +227,7 @@ class ScheduleController extends Controller
         if ($request->ajax()) {
             return $docs;
         }
-        return view('schedules.home2', compact('status','title', 'docs', 'now', 'user', 'customer'));
+        return view('schedules.home2', compact('status', 'title', 'docs', 'now', 'user', 'customer'));
     }
 
     /**

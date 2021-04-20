@@ -138,8 +138,9 @@ class OrderController extends Controller
             $combo = Services::find($param['service_id'][0]);
             $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
         }
-
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
+        $param['branch_id'] = $customer->branch_id;
+
 
         DB::beginTransaction();
         try {
