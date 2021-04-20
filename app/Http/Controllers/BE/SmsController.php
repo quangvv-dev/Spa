@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Customer;
@@ -25,8 +26,10 @@ class SmsController extends Controller
         $this->middleware('permission:sms', ['only' => ['index']]);
 
         $campaign_arr = Campaign::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+        $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
             'campaign_arr' => $campaign_arr,
+            'branchs' => $branchs,
         ]);
 
     }
@@ -63,8 +66,8 @@ class SmsController extends Controller
     {
         $arr_customers = CustomerGroup::whereIn('category_id', $request->category_id)
             ->groupBy('customer_id')->pluck('customer_id')->toArray();
-        $count = Customer::whereIn('id', $arr_customers)->whereIn('status_id', $request->status_id)
-            ->when($request->time_from && $request->time_to, function ($q) use ($request) {
+        $count = Customer::where('branch_id', $request->branch_id)->whereIn('id', $arr_customers)
+            ->whereIn('status_id', $request->status_id)->when($request->time_from && $request->time_to, function ($q) use ($request) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($request->time_from) . " 00:00:00",
                     Functions::yearMonthDay($request->time_to) . " 23:59:59",
@@ -128,8 +131,8 @@ class SmsController extends Controller
             setting(['sms_group' => $request->sms_group])->save();
             $arr_customers = CustomerGroup::whereIn('category_id', $request->category_id)
                 ->groupBy('customer_id')->pluck('customer_id')->toArray();
-            $users = Customer::whereIn('id', $arr_customers)->whereIn('status_id', $request->status_id)
-                ->when($request->time_from && $request->time_to, function ($q) use ($request) {
+            $users = Customer::where('branch_id', $request->branch_id)->whereIn('id', $arr_customers)
+                ->whereIn('status_id', $request->status_id)->when($request->time_from && $request->time_to, function ($q) use ($request) {
                     $q->whereBetween('created_at', [
                         Functions::yearMonthDay($request->time_from) . " 00:00:00",
                         Functions::yearMonthDay($request->time_to) . " 23:59:59",

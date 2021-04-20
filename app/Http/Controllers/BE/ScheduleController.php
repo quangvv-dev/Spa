@@ -257,7 +257,7 @@ class ScheduleController extends Controller
         return $data = [
             'schedule_id' => $scheduleId,
             'data' => $status,
-        ];;
+        ];
     }
 
     public function ajaxUpdate(Request $request, $id)

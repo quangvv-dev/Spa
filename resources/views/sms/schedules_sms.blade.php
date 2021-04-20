@@ -3,6 +3,10 @@
         content: " *";
         color: red;
     }
+    ul#textcomplete-dropdown-2 {
+        max-height: 300px;
+        overflow: auto;
+    }
 </style>
 <div class="col-md-12 col-lg-12">
     <div class="card">

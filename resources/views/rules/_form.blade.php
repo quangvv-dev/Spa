@@ -459,7 +459,7 @@
     </div>
 @endsection
 @section('_script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
+    <script src="{{asset('js/jquery.textcomplete.min.js')}}"></script>
     <script src="{{url('app.js')}}"></script>
     <script>
         $(document).ready(function () {
@@ -477,7 +477,6 @@
         //     console.log($(this).val());
         $('.autocomplete-textarea').textcomplete([{
             match: /(^|\s)@(\w*(?:\s*\w*))$/,
-
             search: function (query, callback) {
                 let data = [{
                     name: "Tên khách hàng",
