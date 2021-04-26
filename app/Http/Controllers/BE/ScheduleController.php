@@ -114,7 +114,7 @@ class ScheduleController extends Controller
             $text = str_replace("%date%", @$date, $text);
             $text = Functions::vi_to_en($text);
             $err = Functions::sendSmsV3($data->customer->phone, @$text);
-            if (isset($err) && $err) {
+            if (!empty($err) ) {
                 HistorySms::insert([
                     'phone' => @$data->customer->phone,
                     'campaign_id' => 0,
