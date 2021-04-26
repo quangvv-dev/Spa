@@ -56,7 +56,7 @@
         <table class="table mt0">
             <tbody>
             <tr>
-                <td colspan="2" class="text-center"><h3>VIỆN THẨM MỸ ROYAL</h3><br></td>
+                <td colspan="2" class="text-center"><h3>{{!empty(setting('title_website'))?setting('title_website'):'VIỆN THẨM MỸ ROYAL'}}</h3><br></td>
             </tr>
             <tr>
                 <td colspan="2" class="text-center"><b >ĐƠN HÀNG BÁN</b></td>
@@ -127,8 +127,12 @@
             {{--</tr>--}}
             <tr>
                 <td colspan="4">
-                    <div class="text-center"><b>CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
-                    <div class="text-center font12">Website: thammyroyal.com</div>
+                    @if(!empty(setting('title_website')))
+                        <div class="text-center"><b>CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
+                    @else
+                        <div class="text-center"><b>CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
+                        <div class="text-center font12">Website: thammyroyal.com</div>
+                    @endif
                 </td>
             </tr>
             </tfoot>
