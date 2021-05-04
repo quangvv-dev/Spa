@@ -6,8 +6,27 @@
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <style>
-        i{
+        i {
             color: #3b8fec !important;
+        }
+        .tooltip-nav .tooltiptext {
+            visibility: hidden;
+            min-width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            font-size: 12px;
+            font-weight: 400;
+            position: absolute;
+            z-index: 1;
+            top: -24px;
+            left: -9px;
+        }
+
+        .tooltip-nav:hover .tooltiptext {
+            visibility: visible;
         }
     </style>
 @endsection
@@ -15,7 +34,8 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header search-box searchbox-sticky">
-                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1" type="text" id="search">
+                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
+                       type="text" id="search">
                 <div class="col-md-2 col-xs-12">
                     <select name="telesales_id" id="telesales_id" class="form-control telesales">
                         <option value="">Người phụ trách</option>
@@ -54,18 +74,23 @@
                     </select>
                 </div>
                 <div class="col relative">
-                    <a title="Upload Data" class="btn" href="#" data-toggle="modal" data-target="#myModal"><i
-                            class="fas fa-cloud-upload-alt"></i></a>
+                    <a class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    <span class="tooltiptext">Nhập khách hàng (excel)</span>
+                    </a>
                     <a {{$roleGlobal->permission('leaderSale')||$roleGlobal->permission('leaderMKT')?:"style=display:none"}}
-                       title="Download Data" class="btn" href="#" data-toggle="modal" data-target="#myModalExport">
-                        <i class="fas fa-cloud-download-alt"></i></a>
+                       class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModalExport">
+                        <i class="fas fa-cloud-download-alt"></i>
+                        <span class="tooltiptext">Tải khách hàng (excel)</span>
+                    </a>
                     @if($roleGlobal->permission('customers.add'))
                         <a class="right btn btn-primary btn-flat"
                            href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
                     @endif
                 </div>
                 <div class="heading-elements">
-                    <ul class="list-inline mb-0"><li><a style="display: none" href="#" class="angleDoubleUp">
+                    <ul class="list-inline mb-0">
+                        <li><a style="display: none" href="#" class="angleDoubleUp">
                                 <i class="fa fa-angle-double-up"></i></a></li>
                         <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
                     </ul>
@@ -95,6 +120,7 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
+
         $("#search").focus();
         $(function () {
             $(document).on('click', '.view_modal', function (e) {
@@ -1121,5 +1147,6 @@
             $(window).scroll(onscroll);
             $(window).resize(onscroll);
         });
+
     </script>
 @endsection

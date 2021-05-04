@@ -82,32 +82,28 @@
         </div>
     </div>
     <div class="col-md-2">
-        <div class="display birthday_tab position font20 pointer mt7" rel="tooltip" data-placement="left"
-             data-original-title="Sinh nhật hôm nay"
-             aria-describedby="tooltip146058"><i class="fa fa-birthday-cake gf-icon-h02"
-                                                 aria-hidden="true"></i><span class="not-number-account"
-                                                                              style="background: rgb(249, 87, 87); color: rgb(255, 255, 255); display: none;"></span>
+        <div class="display birthday_tab position font20 pointer mt7 tooltip-nav">
+             <i class="fa fa-birthday-cake gf-icon-h02" aria-hidden="true"></i>
+            <span class="tooltiptext">Sinh nhật hôm nay</span>
+            {{--<span class="not-number-account"></span>--}}
         </div>
         <div class="display" style="width: 28px; height: 20px;">
-            <div class="dropdown open">
-                <i class="fa fa-eye dropdown-toggle" role="button"
-                   data-toggle="dropdown" title="Hiển thị số trang" aria-expanded="true" style="margin-top: 8px; margin-left: 5px;"></i>
+            <div class="dropdown ope tooltip-nav">
+                <i class="fa fa-eye dropdown-toggle" role="button" data-toggle="dropdown" style="margin-top: 8px; margin-left: 5px;"></i>
+                <span class="tooltiptext">Hiển thị số trang</span>
                 <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px">
-                    <li><a class="b-white b-hover limiting active_limit bold" data-limit="20">Hiển thị 20 kết
-                            quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting active_limit bold" data-limit="20">Hiển thị 20 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
                 </ul>
             </div>
         </div>
-        <div id="div_created_at_dropdown"
-             class="display position pointer mt5 open" rel="tooltip"
-             data-placement="left" data-original-title="Thời gian tạo khách hàng"
-             style="padding-left: 5px"><a class="dropdown-toggle" data-toggle="dropdown"
-                                          aria-expanded="true"><i id="created_at_icon"
-                                                                  class="far fa-clock"
-                                                                  style="font-size:22px"></i></a>
+        <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav" style="padding-left: 5px">
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i id="created_at_icon"
+              class="far fa-clock" style="font-size:22px"></i></a>
+            <span class="tooltiptext">Thời gian tạo khách hàng</span>
+
             <ul class="dropdown-menu pull-right tr">
                 <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
                         nay</a>
@@ -139,7 +135,8 @@
             <th class="text-white text-center">Trạng Thái</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Mô tả</th>
-            <th class="text-white text-center">Nhóm tính cách</th>
+            <th class="text-white text-center">C.Nhánh</th>
+            {{--<th class="text-white text-center">Nhóm tính cách</th>--}}
             <th class="text-white text-center">Lich Hẹn</th>
             <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Người tạo KH</th>
@@ -189,8 +186,9 @@
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
                     <td class="text-center description-cus" data-id="{{$customer->id}}"
                         style="width: 291px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
-                    <td class="text-center genitive-db" title="{{@$customer->genitive->description}}"
-                        data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>
+                    <td class="text-center">{{@$customer->branch->name}}</td>
+                    {{--<td class="text-center genitive-db" title="{{@$customer->genitive->description}}"--}}
+                        {{--data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>--}}
                     <td class="text-center"
                         title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
@@ -228,67 +226,6 @@
         </div>
     </div>
 </div>
-{{--<div class="table-ajax"--}}
-{{--style="position: absolute; top: 121px; left: 0; overflow: hidden; margin-top: 12px;font-size: 12px">--}}
-{{--<div style="overflow: hidden">--}}
-{{--<table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">--}}
-{{--@if (count($customers))--}}
-{{--<thead class="bg-primary text-white">--}}
-{{--<tr>--}}
-{{--<th><input type="checkbox" class="selectall myCheck"/></th>--}}
-{{--<th class="text-white text-center">STT</th>--}}
-{{--<th class="text-white text-center">Ngày tạo KH</th>--}}
-{{--<th class="text-white text-center">Họ tên</th>--}}
-{{--<th class="text-white text-center">SĐT</th>--}}
-{{--<th class="text-white text-center">Nhóm KH</th>--}}
-{{--<th class="text-white text-center">Trạng thái</th>--}}
-{{--</tr>--}}
-{{--</thead>--}}
-{{--@endif--}}
-{{--<tbody style="background: white;">--}}
-{{--@if (count($customers))--}}
-{{--@if(count($customers) <7)--}}
-{{--<tr>--}}
-{{--<td colspan="7"></td>--}}
-{{--</tr>--}}
-{{--<tr>--}}
-{{--<td colspan="7"></td>--}}
-{{--</tr>--}}
-{{--@endif--}}
-{{--@foreach($customers as $key => $customer)--}}
-{{--<tr>--}}
-{{--<td class="text-center"--}}
-{{--style="background: {{isset($customer->status)?$customer->status->color :''}};height: 63px">--}}
-{{--<input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>--}}
-{{--<td class="text-center">{{ $rank ++ }}</td>--}}
-{{--<td class="text-center">{{ date('d-m-Y H:i', strtotime($customer->created_at)) }}</td>--}}
-{{--<td class="text-center name-customer" data-customer-id="{{ $customer->id }}">--}}
-{{--<a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">--}}
-{{--<i class="fas fa-info-circle"></i>--}}
-{{--</a>--}}
-{{--<a target="_blank"--}}
-{{--href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>--}}
-{{--<span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>--}}
-{{--</td>--}}
-{{--<td class="text-center phone-customer"--}}
-{{--data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>--}}
-{{--<td class="text-center category-db"--}}
-{{--data-id="{{$customer->id}}">--}}
-{{--{{str_limit($customer->group_text,30)}}--}}
-{{--</td>--}}
-{{--<td class="text-center status-db"--}}
-{{--data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>--}}
-{{--</tr>--}}
-{{--@endforeach--}}
-{{--@else--}}
-{{--<tr>--}}
-{{--<td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>--}}
-{{--</tr>--}}
-{{--@endif--}}
-{{--</tbody>--}}
-{{--</table>--}}
-{{--</div>--}}
-{{--</div>--}}
 
 @include('customers.modal_view')
 <!-- table-responsive -->
@@ -370,4 +307,5 @@
         $(window).resize(onscroll);
     });
     $('html, body').animate({scrollTop: '0px'}, 300);
+
 </script>
