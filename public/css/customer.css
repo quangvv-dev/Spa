@@ -307,6 +307,3 @@ select.form-control:not([size]):not([multiple]) {
     font-size: 14px;
     font-weight: 500;
 }
-i{
-    color: #3b8fec !important;
-}

@@ -55,18 +55,21 @@
         * {
             font-size: 14px;
         }
+        .avatar{
+            border-radius: 50%;
+        }
     </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
         <div class="card">
             <div class="card-header">
-                <div class="col-md-3 no-padd font16"><a class="avatar a45 fl mr10 pic"> <img
-                            src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png"> </a> <span
+                <div class="col-md-3 no-padd font16"><a class="fl mr10 pic"> <img class="avatar"
+                            src="{{$customer->avatar?:'/default/noavatar.png'}}"> </a> <span
                         class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
                     <div class="display" id="toolbox" style="width: 28px; height: 20px">
-                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
-                                class="fas fa-edit"></i></a>
+                        <a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}"><i
+                                class="fas fa-pencil-alt"></i></a>
                         <a id="btn_del_account" rel="tooltip"
                            data-placement="bottom"
                            data-original-title="Xóa" class="ml5">
@@ -86,8 +89,9 @@
                 <div class="col-md-2 no-padd bor-l pl20 mg0 pt10 position hoverlastactive" rel="tooltip"
                      data-original-title="Click thay đổi người phụ trách" data-placement="bottom">
                     <div class="show_change_am" style="cursor:pointer">
-                        <div class="avatar a35"><img class="account_manager_avatar"
-                                                     src="https://linhanhspa.getflycrm.com/assets/images/noavatar.png">
+                        <div class="avatar">
+                            <img class="avatar"
+                                 src="{{!empty($customer->telesale->avatar)?$customer->telesale->avatar:'/default/noavatar.png'}}">
                         </div>
                         <div class="info-avatar"><p class="account_manager_name"><a
                                     class="gfname">{{ @$customer->telesale->full_name }}</a>
@@ -113,17 +117,40 @@
                     </div>
                     <div class="full2 pb20 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i
-                                    class="fa fa-random mr5 gray margin-left-10">&nbsp;{{ @$customer->source_customer->name }}</i>
-                            </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Người tạo:<i
-                                    class="fa fa-user mr5 gray margin-left-10">&nbsp;{{ @$customer->marketing->full_name }}</i>
-                            </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Ngày tạo:<i
-                                    class="fa fa-calendar mr5 gray margin-left-10">&nbsp;{{ $customer->created_at }}</i>
-                            </h3>
-                            <h3 class="uppercase pb5 mb10 font12 bold mg0"> Đã mua:<i
-                                    class="fa fa-shopping-cart mr5 gray margin-left-10">&nbsp;{{ $customer->orders->count() }}</i>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i
+                                            class="fa fa-random mr5 gray margin-left-10"></i>
+                                    </h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-a">{{ @$customer->source_customer->name }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Người tạo: <i
+                                            class="fa fa-user mr5 gray margin-left-10"></i>
+                                    </h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-a">{{ @$customer->marketing->full_name }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Ngày Tạo: <i
+                                            class="fa fa-calendar mr5 gray margin-left-10">&nbsp;</i>
+                                    </h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-a">{{ $customer->created_at }}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Đơn : <i
+                                            class="fa fa-shopping-cart mr5 gray margin-left-10"></i>
+                                    </h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-a">{{ $customer->orders->count() }}</div>
+                                </div>
+                            </div>
                             </h3>
                         </div>
                     </div>
@@ -135,7 +162,7 @@
                                             class="icon-user mr5 mt2 fl"></i> <b
                                             class="blue">&nbsp;{{ $customer->full_name }}</b> <i
                                             data-original-title="Liên hệ chính" rel="tooltip"
-                                            class="fa orange fa-star" aria-hidden="true"></i></p>
+                                            class="fa fa-star text-warning" aria-hidden="true"></i></p>
                                     <p></p>
                                     <p class="clearfix">&nbsp;{{ $customer->phone }}</p>
                                 </div>
@@ -153,56 +180,56 @@
                         <div class="infor-top-ct"><h3 class="uppercase mb10 font12 bold mg0"
                                                       style="margin-bottom: 10px!important;">Thông tin khách
                                 hàng</h3>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Mã KH:</p>
-                                <p class="bold word-wrap"> &nbsp;{{$customer->account_code}}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mã KH:</p>
+                                <p class="word-wrap"> &nbsp;{{$customer->account_code}}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Tên KH:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->full_name }} </p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tên KH:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->full_name }} </p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Địa chỉ:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->address }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Địa chỉ:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->address }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Điện thoại:</p>
-                                <p class="bold word-wrap"><a class="" data-account-id="4629" data-phone="0904341335"
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Điện thoại:</p>
+                                <p class="word-wrap"><a class="" data-account-id="4629" data-phone="0904341335"
                                                              data-type="crm" data-issensitive="true">
                                         &nbsp;{{ $customer->phone }} </a></p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Người phụ trách:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Người phụ trách:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Nhóm giới tính:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm giới tính:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Nguồn KH:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nguồn KH:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Sinh nhật:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->birthday }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Sinh nhật:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->birthday }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Mối quan hệ:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->status->name }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mối quan hệ:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->status->name }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Ngày tạo:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->created_at }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Ngày tạo:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->created_at }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Giới tính:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->genderText }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Giới tính:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->genderText }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Mô tả:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->description }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mô tả:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->description }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Số đơn hàng:</p>
-                                <p class="bold word-wrap"> &nbsp;{{ $customer->orders->count() }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Số đơn hàng:</p>
+                                <p class="word-wrap "> &nbsp;{{ $customer->orders->count() }}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Tổng doanh thu:</p>
-                                <p class="bold word-wrap">
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tổng doanh thu:</p>
+                                <p class="word-wrap">
                                     &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Tổng số tương tác:</p>
-                                <p class="bold word-wrap">&nbsp;0</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tổng số tương tác:</p>
+                                <p class="word-wrap">&nbsp;0</p>
                             </div>
-                            <div class="mb10 clearfix"><p class="pr5 fl">Giá trị:</p>
-                                <p class="bold word-wrap">
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Giá trị:</p>
+                                <p class="word-wrap">
                                     &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
                             </div>
                         </div>

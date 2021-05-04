@@ -5,6 +5,11 @@
 @endphp
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
+    <style>
+        i{
+            color: #3b8fec !important;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">

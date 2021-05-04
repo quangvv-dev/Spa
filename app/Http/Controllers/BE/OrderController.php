@@ -229,6 +229,7 @@ class OrderController extends Controller
                             'Còn nợ',
                             'Khuyến mại (voucher)',
                             'Người lên đơn',
+                            'Chi nhánh',
                         ]);
                         $i = 1;
                         if ($orders2) {
@@ -248,6 +249,7 @@ class OrderController extends Controller
                                     @number_format($ex->the_rest),
                                     @number_format($ex->discount),
                                     @$ex->customer->marketing->full_name,
+                                    @$ex->branch->name,
                                 ]);
                             }
                         }
@@ -700,6 +702,8 @@ class OrderController extends Controller
                     $customer = Customer::where('phone', $row['so_dt'])->first();
                     $service = Services::where('name', $row['ten_san_pham'])->first();
                     $checkOrder = Order::where('code', $row['ma_dh'])->first();
+                    $branch = Branch::where('name', $row['chi_nhanh'])->first();
+
                     $paymentType = null;
 
                     if ($row['hinh_thuc_thanh_toan_tung_lan'] == null) {
@@ -716,7 +720,7 @@ class OrderController extends Controller
                         $payment_date = Carbon::now()->format('Y-m-d');
                     }
                     if (!empty($service)) {
-                        if (!empty($customer) && empty($checkOrder)) {
+                        if (!empty($customer) && empty($checkOrder) && !empty($branch)) {
                             $order = Order::create([
                                 'code' => $row['ma_dh'],
                                 'member_id' => $customer->id,
@@ -730,6 +734,7 @@ class OrderController extends Controller
                                 'branch_id' => $customer->branch_id,
                                 'type' => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
+                                'branch_id' => $branch->id,
                                 'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
                             ]);
                         } else {
