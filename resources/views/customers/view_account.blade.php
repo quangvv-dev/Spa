@@ -58,6 +58,10 @@
         .avatar{
             border-radius: 50%;
         }
+        .tabs-menu1 ul li :hover {
+            color: #3b8fec;
+            border-bottom: 3px solid #3b8fec;
+        }
     </style>
 @endsection
 @section('content')

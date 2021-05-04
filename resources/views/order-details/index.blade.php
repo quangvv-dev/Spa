@@ -38,10 +38,12 @@
 
         .tableFixHead tbody .fixed td {
             background: #3b8fec;
+            color: #fff !important;
         }
 
         .tableFixHead tbody .fixed2 td {
             background: #3b8fec;
+            color: #fff !important;
         }
 
         .form-control {
@@ -57,10 +59,10 @@
                 <div class="col">
                     <a title="Upload Data" style="position: absolute;right: 0%" href="#" data-toggle="modal"
                        data-target="#myModal">
-                        <i class="fas fa-upload"></i></a>
+                        <i class="fas fa-cloud-upload-alt"></i></a>
                     <a title="Tải data" style="position: absolute;right: 3%" class="download" data-value="dowload"
                        href="javascript:void(0)"><i
-                            class="fas fa-download"></i></a>
+                            class="fas fa-cloud-download-alt"></i></a>
                 </div>
             </div>
             <div class="card-header col-md-12">
