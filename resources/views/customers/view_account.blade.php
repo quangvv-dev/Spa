@@ -99,7 +99,7 @@
                 </div>
                 <div class="col-md-3 position" rel="tooltip">
                     <div class="no-padd tc mg0">
-                        <h1 style="font-size:25px;color: #dc3011;" class="bold mg0">{{number_format($customer->wallet)}}
+                        <h1 style="font-size:24px;color: #f36a26;" class="bold mg0">{{number_format($customer->wallet)}}
                             VNĐ</h1>
                         <p>Số dư ví</p></div>
                 </div>
@@ -119,7 +119,7 @@
                     </div>
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"></div>
-                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:25px;color: #dc3011"
+                <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:24px;color: #f36a26"
                                                                class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
                         VNĐ</h1>
                     <p>Giá trị</p></div>
