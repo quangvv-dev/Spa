@@ -60,7 +60,7 @@
     }
     .tooltip-nav .tooltiptext {
         visibility: hidden;
-        min-width: 120px;
+        min-width: 130px;
         background-color: black;
         color: #fff;
         text-align: center;
@@ -70,7 +70,7 @@
         font-weight: 400;
         position: absolute;
         z-index: 1;
-        top: -24px;
+        top: -27px;
         left: -9px;
     }
 

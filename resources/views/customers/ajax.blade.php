@@ -102,7 +102,7 @@
         <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav" style="padding-left: 5px">
             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i id="created_at_icon"
               class="far fa-clock" style="font-size:22px"></i></a>
-            <span class="tooltiptext">Thời gian tạo khách hàng</span>
+            <span class="tooltiptext">Thời gian tạo KH</span>
 
             <ul class="dropdown-menu pull-right tr">
                 <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm

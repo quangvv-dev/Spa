@@ -355,7 +355,7 @@ class CustomerController extends Controller
         })->when(!empty($request->status), function ($query) use ($request) {
             $query->where('status_id', $request->status);
         })->when(!empty($input['branch_id']), function ($query) use ($input) {
-            $query->where('status_id', $input['branch_id']);
+            $query->where('branch_id', $input['branch_id']);
         })->get();
 
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
