@@ -59,7 +59,7 @@ class CustomerController extends Controller
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-        $branchs = Branch::search()->pluck('name','id');// chi nhánh
+        $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
         $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::pluck('name', 'id')->toArray();
         $telesales = [];
@@ -78,14 +78,14 @@ class CustomerController extends Controller
             OrderConstant::NONE_REST => 'Đã thanh toán',
         ];
         view()->share([
-            'the_rest'      => $the_rest,
-            'status'        => $status,
-            'group'         => $group,
-            'source'        => $source,
-            'branchs'        => $branchs,
-            'telesales'     => $telesales,
-            'marketingUsers'=> $marketingUsers,
-            'genitives'     => $genitives,
+            'the_rest' => $the_rest,
+            'status' => $status,
+            'group' => $group,
+            'source' => $source,
+            'branchs' => $branchs,
+            'telesales' => $telesales,
+            'marketingUsers' => $marketingUsers,
+            'genitives' => $genitives,
         ]);
     }
 
@@ -344,6 +344,8 @@ class CustomerController extends Controller
 
     public function exportCustomer(Request $request)
     {
+        $checkRole = checkRoleAlready();
+        $input['branch_id'] = $request->branch_id;
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
