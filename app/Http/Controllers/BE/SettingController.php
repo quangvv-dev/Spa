@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Http\Controllers\Controller;
 use App\Components\Filesystem\Filesystem;
 use App\Models\Branch;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 
@@ -88,5 +89,17 @@ class SettingController extends Controller
             }
         };
         return back()->with('success', 'Đã cập nhật thông tin thành công !!!');
+    }
+
+    public function destroy(Branch $id)
+    {
+        $branch = $id;
+        $customer = Customer::where('branch_id', $branch->id)->first();
+        if (isset($customer) && $customer) {
+            return 0;
+        } else {
+            $branch->delete();
+            return 1;
+        }
     }
 }

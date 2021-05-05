@@ -58,6 +58,25 @@
         font-weight: 300;
         font-family: 'Poppins', sans-serif;
     }
+    .tooltip-nav .tooltiptext {
+        visibility: hidden;
+        min-width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        font-size: 12px;
+        font-weight: 400;
+        position: absolute;
+        z-index: 1;
+        top: -24px;
+        left: -9px;
+    }
+
+    .tooltip-nav:hover .tooltiptext {
+        visibility: visible;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">

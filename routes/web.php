@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('super-admin', 'SettingController@storeAdmin')->name('settings.storeAdmin');
     Route::post('store-branch', 'SettingController@storeBranch')->name('settings.storeBranch');
     Route::put('branch/{id}', 'SettingController@updateBranch')->name('settings.updateBranch');
+    Route::delete('branch/{id}', 'SettingController@destroy')->name('settings.destroy');
 
     //Order
     Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');
