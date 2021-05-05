@@ -92,7 +92,7 @@
                                 <option value="">Tất cả chi nhánh</option>
                                 @forelse($branchs as $k => $item)
                                     <option
-                                        {{$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
+                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
                                     </option>
                                 @empty
                                 @endforelse

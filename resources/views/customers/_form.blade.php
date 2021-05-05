@@ -87,18 +87,18 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
-                            {!! Form::label('genitive_id', 'Nhóm tính cách') !!}
-                            {!! Form::select('genitive_id',$genitives, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhóm tính cách')) !!}
-                            <span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>
-                        </div>
-                    </div>
+                    {{--<div class="col-xs-12 col-md-12">--}}
+                        {{--<div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">--}}
+                            {{--{!! Form::label('genitive_id', 'Nhóm tính cách') !!}--}}
+                            {{--{!! Form::select('genitive_id',$genitives, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhóm tính cách')) !!}--}}
+                            {{--<span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
                     @if(empty($checkRole))
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
                                 {!! Form::label('branch_id', 'Chi nhánh') !!}
-                                {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn chi nhánh')) !!}
+                                {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2', 'placeholder' => 'Tất cả chi nhánh')) !!}
                                 <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                             </div>
                         </div>
