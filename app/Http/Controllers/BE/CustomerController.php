@@ -356,7 +356,7 @@ class CustomerController extends Controller
                 });
                 $sheet->freezeFirstRow();
                 $sheet->row(1, [
-                    'ID',
+                    'Ngày tạo KH',
                     'Tên khách hàng',
                     'Mã khách hàng',
                     'Số điện thoại',
@@ -364,14 +364,15 @@ class CustomerController extends Controller
                     'Giới tính',
                     'Link Facebook',
                     'Địa chỉ',
-                    'Ngày tạo',
+//                    'Mối quan hệ',
+//                    'Ngày tạo',
                     'Số đơn',
                     'Tổng doanh thu',
-                    'ID người phụ trách',
-                    'ID người tư vấn',
-                    'ID nhóm KH',
-                    'ID nguồn KH',
-                    'ID Mối quan hệ',
+//                    'ID người phụ trách',
+                    'Người phụ trách',
+                    'Nhóm khách hàng',
+                    'Nguồn KH',
+                    'Mối quan hệ',
                     'Mô tả',
                 ]);
 
@@ -384,7 +385,7 @@ class CustomerController extends Controller
                             $categoryName .= $category->name . ', ';
                         }
                         $sheet->row($i, [
-                            @$ex->id,
+                            @Carbon::createFromFormat('Y-m-d H:i:s', $ex->created_at)->format('d/m/Y'),
                             @$ex->full_name,
                             @$ex->account_code,
                             @$ex->phone,
@@ -392,10 +393,9 @@ class CustomerController extends Controller
                             @$ex->GenderText,
                             @$ex->facebook,
                             @$ex->address,
-                            @$ex->created_at,
                             @$ex->orders->count(),
                             @(int)$ex->orders->sum('all_total'),
-                            @$ex->marketing->full_name,
+//                            @$ex->marketing->full_name,
                             @$ex->telesale->full_name,
                             @$categoryName,
                             @$ex->source_customer->name,
