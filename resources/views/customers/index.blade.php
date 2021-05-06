@@ -47,12 +47,14 @@
                     </select>
                 </div>
                 <div class="col-xs-12" style="max-width: 170px">
-                    <select name="source" class="form-control source">
-                        <option value="">Nguồn</option>
-                        @foreach($source as $k=> $item)
-                            <option value="{{$k}}">{{ $item}}</option>
-                        @endforeach
-                    </select>
+                    @if(empty($checkRole))
+                        <select name="branch_id" class="form-control branch_id">
+                            <option value="">Tất cả chi nhánh</option>
+                            @foreach($branchs as $k=> $item)
+                                <option value="{{$k}}">{{ $item}}</option>
+                            @endforeach
+                        </select>
+                    @endif
                 </div>
                 <div class="col relative">
                     <a class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
