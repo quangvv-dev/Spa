@@ -368,7 +368,7 @@ class CustomerController extends Controller
                 });
                 $sheet->freezeFirstRow();
                 $sheet->row(1, [
-                    'ID',
+                    'Ngày tạo KH',
                     'Tên khách hàng',
                     'Mã khách hàng',
                     'Số điện thoại',
@@ -376,15 +376,14 @@ class CustomerController extends Controller
                     'Giới tính',
                     'Link Facebook',
                     'Địa chỉ',
-                    'Ngày tạo',
                     'Số đơn',
                     'Tổng doanh thu',
-                    'ID người phụ trách',
-                    'ID người tư vấn',
-                    'ID nhóm KH',
-                    'ID nguồn KH',
-                    'ID Mối quan hệ',
+                    'Người phụ trách',
+                    'Nhóm khách hàng',
+                    'Nguồn KH',
+                    'Mối quan hệ',
                     'Mô tả',
+                    'Chi nhánh',
                 ]);
 
                 $i = 1;
@@ -396,7 +395,7 @@ class CustomerController extends Controller
                             $categoryName .= $category->name . ', ';
                         }
                         $sheet->row($i, [
-                            @$ex->id,
+                            @Carbon::createFromFormat('Y-m-d H:i:s', $ex->created_at)->format('d/m/Y'),
                             @$ex->full_name,
                             @$ex->account_code,
                             @$ex->phone,
@@ -404,15 +403,15 @@ class CustomerController extends Controller
                             @$ex->GenderText,
                             @$ex->facebook,
                             @$ex->address,
-                            @$ex->created_at,
                             @$ex->orders->count(),
                             @(int)$ex->orders->sum('all_total'),
-                            @$ex->marketing->full_name,
+//                            @$ex->marketing->full_name,
                             @$ex->telesale->full_name,
                             @$categoryName,
                             @$ex->source_customer->name,
                             @$ex->status->name,
                             @$ex->description,
+                            @$ex->branch->name,
                             // (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
                         ]);
                     }
