@@ -423,10 +423,12 @@ class CustomerController extends Controller
 
     public function importCustomer(Request $request)
     {
+
         if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
+
                     if (!empty($row['so_dien_thoai'])) {
                         $date = Carbon::createFromFormat('d/m/Y', trim($row['ngay_tao_kh']))->format('Y-m-d');
                         $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();
@@ -434,6 +436,7 @@ class CustomerController extends Controller
                         $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
                         $check = Customer::where('phone', $row['so_dien_thoai'])->withTrashed()->first();
                         $category = explode(',', $row['nhom_khach_hang']);
+                        $branch = Branch::where('name', $row['chi_nhanh'])->first();
                         if (empty($check)) {
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
@@ -449,7 +452,7 @@ class CustomerController extends Controller
                                     'address' => $row['dia_chi'] ?: '',
                                     'facebook' => $row['link_facebook'] ?: '',
                                     'description' => $row['mo_ta'],
-                                    'branch_id' => $row['chi_nhanh'],
+                                    'branch_id' => isset($branch) && $branch ? $branch->id : '',
                                     'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                     'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                 ]);
