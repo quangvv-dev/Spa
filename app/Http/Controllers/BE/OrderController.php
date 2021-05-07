@@ -228,6 +228,7 @@ class OrderController extends Controller
                             'Doanh thu',
                             'Còn nợ',
                             'Khuyến mại (voucher)',
+                            'Hình thức thanh toán',
                             'Ngày thanh toán',
                             'Người lên đơn',
                             'Chi nhánh',
@@ -236,6 +237,9 @@ class OrderController extends Controller
                         if ($orders2) {
                             foreach ($orders2 as $k => $ex) {
                                 $history_payment = PaymentHistory::where('order_id', $ex->id)->first();
+                                $payment_type = @$history_payment->payment_type == 1 ? 'Tiền mặt' : (@$history_payment->payment_type == 2 ? 'Thẻ' : 'Điểm');
+                                $date = !empty($history_payment) ?
+                                    Carbon::createFromFormat('Y-m-d', $history_payment->payment_date)->format('d/m/Y') : '';
                                 $i++;
                                 $sheet->row($i, [
                                     @$k + 1,
@@ -250,9 +254,8 @@ class OrderController extends Controller
                                     @number_format($ex->gross_revenue),
                                     @number_format($ex->the_rest),
                                     @number_format($ex->discount),
-                                    isset($history_payment) & $history_payment ?
-                                        Carbon::createFromFormat('Y-m-d', $history_payment->payment_date)->format('d/m/Y') :
-                                        '',
+                                    $payment_type,
+                                    $date,
                                     @$ex->customer->marketing->full_name,
                                     @$ex->branch->name,
                                 ]);
