@@ -203,7 +203,7 @@ class OrderController extends Controller
                 $orders2 = $orders->get();
                 Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
                     $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
-                        $sheet->cell('A1:M1', function ($row) {
+                        $sheet->cell('A1:O1', function ($row) {
                             $row->setBackground('#008686');
                             $row->setFontColor('#ffffff');
                         });
@@ -221,12 +221,19 @@ class OrderController extends Controller
                             'Doanh thu',
                             'Còn nợ',
                             'Khuyến mại (voucher)',
+                            'Hình thức thanh toán',
+                            'Ngày thanh toán',
                             'Người lên đơn',
                         ]);
                         $i = 1;
                         if ($orders2) {
                             foreach ($orders2 as $k => $ex) {
                                 $i++;
+                                $history_payment = PaymentHistory::where('order_id', $ex->id)->first();
+                                $payment_type = @$history_payment->payment_type == 1 ? 'Tiền mặt' : (@$history_payment->payment_type == 2 ? 'Thẻ' : 'Điểm');
+                                $date = !empty($history_payment) ?
+                                    Carbon::createFromFormat('Y-m-d', $history_payment->payment_date)->format('d/m/Y') : '';
+
                                 $sheet->row($i, [
                                     @$k + 1,
                                     isset($ex->created_at) ? date("d/m/Y", strtotime($ex->created_at)) : '',
@@ -240,6 +247,8 @@ class OrderController extends Controller
                                     @number_format($ex->gross_revenue),
                                     @number_format($ex->the_rest),
                                     @number_format($ex->discount),
+                                    @$payment_type,
+                                    @$date,
                                     @$ex->customer->marketing->full_name,
                                 ]);
                             }
@@ -372,7 +381,7 @@ class OrderController extends Controller
     {
         $order = Order::with('customer', 'orderDetails')->findOrFail($id);
         $payment = PaymentHistory::where('order_id', $order->id)->latest()->first();
-        return view('order.order-pdf', compact('order','payment'));
+        return view('order.order-pdf', compact('order', 'payment'));
 //        $customPaper = array(0, 0, 454.08, 227.04);
 //        $pdf = \PDF::loadView('order.order-pdf', compact('order', 'payment'))->setPaper($customPaper, 'landscape');
 //        return $pdf->download('order.pdf');
@@ -771,7 +780,7 @@ class OrderController extends Controller
         if (!isset($request->group) && !isset($request->telesales) && !isset($request->marketing)
             && !isset($request->customer) && !isset($request->service) && !isset($request->payment_type)
             && !isset($request->data_time) && !isset($request->start_date) && !isset($request->end_date)
-            && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none)&& !isset($request->role_type)) {
+            && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none) && !isset($request->role_type)) {
             return 1;
 
         } else {
