@@ -210,7 +210,7 @@ class OrderController extends Controller
                 $orders2 = $orders->get();
                 Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
                     $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
-                        $sheet->cell('A1:M1', function ($row) {
+                        $sheet->cell('A1:P1', function ($row) {
                             $row->setBackground('#008686');
                             $row->setFontColor('#ffffff');
                         });
