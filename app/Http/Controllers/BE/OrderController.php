@@ -707,19 +707,24 @@ class OrderController extends Controller
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
-                    $customer = Customer::where('phone', $row['so_dt'])->first();
-                    $service = Services::where('name', $row['ten_san_pham'])->first();
+                    $row['doanh_so'] = str_replace(',', '', $row['doanh_so']);
+                    $row['doanh_thu'] = str_replace(',', '', $row['doanh_thu']);
+                    $row['con_no'] = str_replace(',', '', $row['con_no']);
+                    $row['khuyen_mai_voucher'] = str_replace(',', '', $row['khuyen_mai_voucher']);
+                    $name_services = explode(',', $row['san_phamdich_vu']);
+                    $customer = Customer::where('phone', $row['sdt'])->first();
+                    $service = Services::whereIn('name', $name_services)->get();
                     $checkOrder = Order::where('code', $row['ma_dh'])->first();
-                    $branch = Branch::where('name', $row['chi_nhanh'])->first();
-
                     $paymentType = null;
 
-                    if ($row['hinh_thuc_thanh_toan_tung_lan'] == null) {
-                        $paymentType = null;
-                    } elseif ($row['hinh_thuc_thanh_toan_tung_lan'] == "Tiền mặt") {
+                    if ($row['hinh_thuc_thanh_toan'] == null) {
                         $paymentType = 1;
-                    } else {
+                    } elseif ($row['hinh_thuc_thanh_toan'] == "Tiền mặt") {
+                        $paymentType = 1;
+                    } elseif ($row['hinh_thuc_thanh_toan'] == "Thẻ") {
                         $paymentType = 2;
+                    } else {
+                        $paymentType = 3;
                     }
                     if ($row['ngay_thanh_toan']) {
                         $payment_date = Carbon::createFromFormat('d/m/Y',
@@ -728,49 +733,51 @@ class OrderController extends Controller
                         $payment_date = Carbon::now()->format('Y-m-d');
                     }
                     if (!empty($service)) {
-                        if (!empty($customer) && empty($checkOrder) && !empty($branch)) {
+                        if (!empty($customer) && empty($checkOrder)) {
                             $order = Order::create([
                                 'code' => $row['ma_dh'],
                                 'member_id' => $customer->id,
                                 'all_total' => $row['doanh_so'],
                                 'count_day' => 0,
-                                'the_rest' => (int)$row['doanh_so'] < (int)$row['da_thanh_toan'] ? 0 : (int)$row['doanh_so'] - (int)$row['da_thanh_toan'],
-                                'description' => $row['mo_ta'],
-                                'gross_revenue' => $row['da_thanh_toan'],
+//                                'the_rest' => (int)$row['doanh_so'] < (int)$row['doanh_thu'] ? 0 : (int)$row['doanh_so'] - (int)$row['doanh_thu'],
+                                'the_rest' => $row['con_no'],
+                                'description' => @$row['mo_ta'],
+                                'gross_revenue' => $row['doanh_thu'],
                                 'payment_type' => $paymentType,
                                 'payment_date' => $payment_date,
                                 'branch_id' => $customer->branch_id,
                                 'type' => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
-                                'branch_id' => $branch->id,
-                                'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_tao'])->format('Y-m-d'),
+                                'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_dat_hang'])->format('Y-m-d'),
                             ]);
                         } else {
-                            $order = isset($checkOrder) ? $checkOrder : 0;
+                            $order = isset($checkOrder) && $checkOrder ? $checkOrder : 0;
                         }
 
-                        if (!empty($customer)) {
-                            OrderDetail::create([
-                                'order_id' => $order->id,
-                                'code' => !empty($row['ma_sp']) ? $row['ma_sp'] : '',
-                                'booking_id' => $service->id,
-                                'quantity' => !empty($row['so_luong']) ? $row['so_luong'] : 0,
-                                'total_price' => $row['gia_ban'],
-                                'user_id' => $customer ? $customer->id : $order->member_id,
-                                'address' => $customer ? $customer->address : '',
-                                'vat' => $row['vat'],
-                                'percent_discount' => $row['ck'],
-                                'number_discount' => $row['ckd'],
-                                'price' => $row['gia_ban'],
-                                'branch_id' => $customer->branch_id,
-                                'days' => 0,
-                            ]);
+                        if (!empty($customer) && count($service) && !empty($order)) {
+                            foreach ($service as $item) {
+                                OrderDetail::create([
+                                    'order_id' => $order->id,
+//                                'code' => !empty($row['ma_sp']) ? $row['ma_sp'] : '',
+                                    'booking_id' => $item->id,
+                                    'quantity' => 1,
+                                    'total_price' => $item->price_sell,
+                                    'user_id' => $customer ? $customer->id : $order->member_id,
+                                    'address' => $customer ? $customer->address : '',
+                                    'vat' => 0,
+                                    'percent_discount' => 0,
+                                    'number_discount' => '',
+                                    'price' => $item->price_sell,
+                                    'branch_id' => $customer->branch_id,
+                                    'days' => 0,
+                                ]);
+                            }
 
                             PaymentHistory::create([
                                 'order_id' => $order->id,
-                                'price' => $row['da_thanh_toan'],
+                                'price' => $row['doanh_thu'],
                                 'branch_id' => $customer->branch_id,
-                                'payment_date' => Carbon::now()->format('Y-m-d'),
+                                'payment_date' => $payment_date,
                             ]);
                         }
                     }
