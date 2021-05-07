@@ -56,4 +56,9 @@ class GroupComment extends Model
     {
         return Carbon::parse($this->attributes['created_at'])->format('H:i d-m-Y');
     }
+
+    public function getCreatedStockAttribute()
+    {
+        return Carbon::parse($this->attributes['created_at'])->format('d/m/Y H:i');
+    }
 }

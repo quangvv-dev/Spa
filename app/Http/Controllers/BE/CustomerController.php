@@ -59,7 +59,8 @@ class CustomerController extends Controller
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $branch = Status::where('type', StatusCode::BRANCH)->pluck('name', 'id')->toArray();// chi nhánh
-        $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->pluck('full_name',
+            'id')->toArray();
         $genitives = Genitive::pluck('name', 'id')->toArray();
         $telesales = [];
         User::get()->map(function ($item) use (&$telesales) {
@@ -73,18 +74,18 @@ class CustomerController extends Controller
             return $item;
         });
         $the_rest = [
-            OrderConstant::THE_REST => 'Còn nợ',
+            OrderConstant::THE_REST  => 'Còn nợ',
             OrderConstant::NONE_REST => 'Đã thanh toán',
         ];
         view()->share([
-            'the_rest' => $the_rest,
-            'status' => $status,
-            'group' => $group,
-            'source' => $source,
-            'branch' => $branch,
-            'telesales' => $telesales,
+            'the_rest'       => $the_rest,
+            'status'         => $status,
+            'group'          => $group,
+            'source'         => $source,
+            'branch'         => $branch,
+            'telesales'      => $telesales,
             'marketingUsers' => $marketingUsers,
-            'genitives' => $genitives,
+            'genitives'      => $genitives,
         ]);
     }
 
@@ -153,7 +154,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'fb_name' => $request->full_name,
+            'fb_name'   => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
         ]);
         $input = $request->except(['group_id', 'image']);
@@ -230,17 +231,20 @@ class CustomerController extends Controller
         $package = [];
         $orders = [];
         if ($request->history_sms) {
-            $history = HistorySms::where('phone', $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            $history = HistorySms::where('phone',
+                $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('sms.history',
                 compact('history'))->render());
         }
         if ($request->post) {
-            $customer_post = CustomerPost::where('phone', $request->post)->where('status', '<>', 0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            $customer_post = CustomerPost::where('phone', $request->post)->where('status', '<>',
+                0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return Response::json(view('post.history',
                 compact('customer_post'))->render());
         }
         if ($request->history_wallet) {
-            $wallet = WalletHistory::where('customer_id', $request->history_wallet)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            $wallet = WalletHistory::where('customer_id',
+                $request->history_wallet)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             $package = PackageWallet::pluck('name', 'id')->toArray();
             return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
         }
@@ -249,7 +253,9 @@ class CustomerController extends Controller
         }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
-            if (!empty($request->page_order)) $request->merge(['page' => $request->page_order]);
+            if (!empty($request->page_order)) {
+                $request->merge(['page' => $request->page_order]);
+            }
             $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
             return Response::json(view('customers.order', compact('orders', 'waiters'))->render());
@@ -257,8 +263,10 @@ class CustomerController extends Controller
         //END
 
         return view('customers.view_account',
-            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus', 'customer_post',
-                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet', 'package', 'orders'));
+            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
+                'customer_post',
+                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet',
+                'package', 'orders'));
     }
 
     /**
@@ -281,7 +289,7 @@ class CustomerController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -364,18 +372,18 @@ class CustomerController extends Controller
                     'Giới tính',
                     'Link Facebook',
                     'Địa chỉ',
-//                    'Mối quan hệ',
-//                    'Ngày tạo',
+                    //                    'Mối quan hệ',
+                    //                    'Ngày tạo',
                     'Số đơn',
                     'Tổng doanh thu',
-//                    'ID người phụ trách',
+                    //                    'ID người phụ trách',
                     'Người phụ trách',
                     'Nhóm khách hàng',
                     'Nguồn KH',
                     'Mối quan hệ',
                     'Mô tả',
                     'Ngày trao đổi',
-                    'Nội dung trao đổi'
+                    'Nội dung trao đổi',
                 ]);
 
                 $i = 1;
@@ -387,11 +395,10 @@ class CustomerController extends Controller
                             $categoryName .= $category->name . ', ';
                         }
                         $comment = GroupComment::where('customer_id', $ex->id)->orderByDesc('id')->take(3)->get();
-                            $date_comment = count($comment) ? $comment->pluck('created_at')->toArray() : [];
-                            $messages = count($comment) ? $comment->pluck('messages')->toArray() : [];
-                            $date_comment = count($messages) ? implode("||", $date_comment) : '';
-                            $messages = count($messages) ? implode("||", $messages) : '';
-
+                        $date_comment = count($comment) ? $comment->pluck('created_stock')->toArray() : [];
+                        $messages = count($comment) ? $comment->pluck('messages')->toArray() : [];
+                        $date_comment = count($messages) ? implode("||", $date_comment) : '';
+                        $messages = count($messages) ? implode("||", $messages) : '';
 
                         $sheet->row($i, [
                             @Carbon::createFromFormat('Y-m-d H:i:s', $ex->created_at)->format('d/m/Y'),
@@ -404,7 +411,7 @@ class CustomerController extends Controller
                             @$ex->address,
                             @$ex->orders->count(),
                             @(int)$ex->orders->sum('all_total'),
-//                            @$ex->marketing->full_name,
+                            //                            @$ex->marketing->full_name,
                             @$ex->telesale->full_name,
                             @$categoryName,
                             @$ex->source_customer->name,
@@ -436,20 +443,20 @@ class CustomerController extends Controller
                         if (empty($check)) {
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
-                                    'full_name' => $row['ten_khach_hang'],
+                                    'full_name'    => $row['ten_khach_hang'],
                                     'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : '',
-                                    'mkt_id' => @Auth::user()->id,
+                                    'mkt_id'       => @Auth::user()->id,
                                     'telesales_id' => isset($telesale) ? $telesale->id : 1,
-                                    'status_id' => isset($status) ? $status->id : 1,
-                                    'source_id' => isset($source) ? $source->id : 18,
-                                    'phone' => $row['so_dien_thoai'],
-                                    'birthday' => $row['sinh_nhat'],
-                                    'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
-                                    'address' => $row['dia_chi'] ?: '',
-                                    'facebook' => $row['link_facebook'] ?: '',
-                                    'description' => $row['mo_ta'],
-                                    'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
-                                    'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                    'status_id'    => isset($status) ? $status->id : 1,
+                                    'source_id'    => isset($source) ? $source->id : 18,
+                                    'phone'        => $row['so_dien_thoai'],
+                                    'birthday'     => $row['sinh_nhat'],
+                                    'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                                    'address'      => $row['dia_chi'] ?: '',
+                                    'facebook'     => $row['link_facebook'] ?: '',
+                                    'description'  => $row['mo_ta'],
+                                    'created_at'   => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                    'updated_at'   => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                 ]);
                                 if (count($category)) {
                                     foreach ($category as $item) {
@@ -517,11 +524,11 @@ class CustomerController extends Controller
                             $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
                             if (isset($err) && $err) {
                                 HistorySms::insert([
-                                    'phone' => @$customer->phone,
+                                    'phone'       => @$customer->phone,
                                     'campaign_id' => 0,
-                                    'message' => $text,
-                                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                    'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                    'message'     => $text,
+                                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                    'updated_at'  => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
                                 ]);
                             }
                         }
@@ -560,7 +567,7 @@ class CustomerController extends Controller
         $services = Services::handleChart($arr, $input);
         $service1 = $services->orderBy('count_order', 'desc')->paginate(10);
         $orders = [
-            'sum' => $services->get()->sum('count_order'),
+            'sum'   => $services->get()->sum('count_order'),
             'count' => $services->get()->sum('count'),
         ];
 
@@ -642,11 +649,12 @@ class CustomerController extends Controller
 
         $customer = Customer::with('telesale')->where('id', $id)->first();
 
-        $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
+        $telesales = User::whereIn('role',
+            [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
 
         return [
             'customer' => $customer,
-            'data' => $telesales,
+            'data'     => $telesales,
         ];
     }
 }
