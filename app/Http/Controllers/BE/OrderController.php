@@ -773,12 +773,14 @@ class OrderController extends Controller
                                 ]);
                             }
 
-                            PaymentHistory::create([
-                                'order_id' => $order->id,
-                                'price' => $row['doanh_thu'],
-                                'branch_id' => $customer->branch_id,
-                                'payment_date' => $payment_date,
-                            ]);
+                            if ($row['doanh_thu'] > 0) {
+                                PaymentHistory::create([
+                                    'order_id' => $order->id,
+                                    'price' => $row['doanh_thu'],
+                                    'branch_id' => $customer->branch_id,
+                                    'payment_date' => $payment_date,
+                                ]);
+                            }
                         }
                     }
 
