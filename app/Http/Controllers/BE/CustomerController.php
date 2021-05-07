@@ -374,6 +374,8 @@ class CustomerController extends Controller
                     'Nguồn KH',
                     'Mối quan hệ',
                     'Mô tả',
+                    'Ngày trao đổi',
+                    'Nội dung trao đổi'
                 ]);
 
                 $i = 1;
@@ -384,6 +386,13 @@ class CustomerController extends Controller
                         foreach ($ex->categories as $category) {
                             $categoryName .= $category->name . ', ';
                         }
+                        $comment = GroupComment::where('customer_id', $ex->id)->orderByDesc('id')->take(3)->get();
+                            $date_comment = count($comment) ? $comment->pluck('created_at')->toArray() : [];
+                            $messages = count($comment) ? $comment->pluck('messages')->toArray() : [];
+                            $date_comment = count($messages) ? implode("||", $date_comment) : '';
+                            $messages = count($messages) ? implode("||", $messages) : '';
+
+
                         $sheet->row($i, [
                             @Carbon::createFromFormat('Y-m-d H:i:s', $ex->created_at)->format('d/m/Y'),
                             @$ex->full_name,
@@ -401,6 +410,8 @@ class CustomerController extends Controller
                             @$ex->source_customer->name,
                             @$ex->status->name,
                             @$ex->description,
+                            $date_comment,
+                            $messages
                             // (@$ex->type == 0) ? 'Tài khoản thường' : 'Tài khoản VIP',
                         ]);
                     }
