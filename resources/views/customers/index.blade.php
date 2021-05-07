@@ -6,7 +6,7 @@
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <style>
-        i {
+       .card i {
             color: #3b8fec !important;
         }
     </style>

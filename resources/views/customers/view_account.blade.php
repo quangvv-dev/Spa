@@ -55,27 +55,17 @@
         * {
             font-size: 14px;
         }
-        .avatar{
+
+        .avatar {
             border-radius: 50%;
         }
+
         .tabs-menu1 ul li :hover {
             color: #3b8fec;
             border-bottom: 3px solid #3b8fec;
         }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: black;
-            color: #fff;
-            border-radius: 6px;
-            padding: 5px 0;
-            position: absolute;
-            z-index: 1;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
+        .card i{
+        color: #3b8fec ;
         }
     </style>
 @endsection
@@ -84,7 +74,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="col-md-3 no-padd font16"><a class="fl mr10 pic"> <img class="avatar"
-                            src="{{$customer->avatar?:'/default/noavatar.png'}}"> </a> <span
+                                                                                  src="{{$customer->avatar?:'/default/noavatar.png'}}">
+                    </a> <span
                         class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
                     <div class="display" id="toolbox" style="width: 28px; height: 20px">
                         <a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}"><i
@@ -137,36 +128,44 @@
                     <div class="full2 pb20 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Nguồn: <i
-                                            class="fa fa-random mr5 gray margin-left-10"></i>
+                                <div class="col-md-4">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">
+                                        <i class="fa fa-random mr5 gray margin-left-10 tooltip-nav">
+                                            <span class="tooltiptext">Nguồn</span>
+                                        </i>
                                     </h3>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="text-a">{{ @$customer->source_customer->name }}</div>
                                 </div>
-                                <div class="col-md-6">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Người tạo: <i
-                                            class="fa fa-user mr5 gray margin-left-10"></i>
+                                <div class="col-md-4">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">
+                                        <i class="fa fa-user mr5 gray margin-left-10 tooltip-nav">
+                                            <span class="tooltiptext">Người tạo</span>
+                                        </i>
                                     </h3>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="text-a">{{ @$customer->marketing->full_name }}</div>
                                 </div>
-                                <div class="col-md-6">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Ngày Tạo: <i
-                                            class="fa fa-calendar mr5 gray margin-left-10">&nbsp;</i>
+                                <div class="col-md-4">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">
+                                        <i class="fa fa-calendar mr5 gray margin-left-10 tooltip-nav">&nbsp;
+                                            <span class="tooltiptext">Ngày Tạo</span>
+                                        </i>
                                     </h3>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="text-a">{{ $customer->created_at }}</div>
+                                <div class="col-md-8">
+                                    <div class="text-a">{{ \Carbon\Carbon::parse($customer->created_at)->format('d/m/Y') }}</div>
                                 </div>
-                                <div class="col-md-6">
-                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Đơn : <i
-                                            class="fa fa-shopping-cart mr5 gray margin-left-10"></i>
+                                <div class="col-md-4">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0"><i
+                                            class="fa fa-shopping-cart mr5 gray margin-left-10 tooltip-nav">
+                                            <span class="tooltiptext">Đơn</span>
+                                        </i>
                                     </h3>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="text-a">{{ $customer->orders->count() }}</div>
                                 </div>
                             </div>
@@ -210,7 +209,7 @@
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Điện thoại:</p>
                                 <p class="word-wrap"><a class="" data-account-id="4629" data-phone="0904341335"
-                                                             data-type="crm" data-issensitive="true">
+                                                        data-type="crm" data-issensitive="true">
                                         &nbsp;{{ $customer->phone }} </a></p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Người phụ trách:</p>
@@ -262,9 +261,12 @@
                                     <div class="tabs-menu1 ">
                                         <!-- Tabs -->
                                         <ul class="nav panel-tabs">
-                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a></li>
-                                            <li><a href="#tab7" id="click_tab_7" data-id="{{$customer->id}}" data-toggle="tab">Lịch hẹn</a></li>
-                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}" data-toggle="tab">Đơn hàng</a></li>
+                                            <li class=""><a href="#tab5" class="active" data-toggle="tab">Trao đổi</a>
+                                            </li>
+                                            <li><a href="#tab7" id="click_tab_7" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Lịch hẹn</a></li>
+                                            <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
                                             @if(empty($permissions) || !in_array('package.customer',$permissions))
                                                 <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
@@ -418,7 +420,7 @@
             $.post($('.formUpdateSchedule').attr('action'), $('.formUpdateSchedule').serialize(), function (data) {
                 $('#updateModal').modal('hide');
             });
-            $(".status[data-id='" + ids +"']").html(name);
+            $(".status[data-id='" + ids + "']").html(name);
         })
         $(document).on('click', '#click_tab_7', function () {
             const id = $(this).data('id');
@@ -426,7 +428,7 @@
             $.ajax({
                 url: "{{url()->current() }}",
                 method: "get",
-                data: {schedules:1,member_id: id}
+                data: {schedules: 1, member_id: id}
             }).done(function (data) {
                 $('#tab7').html(data);
             });
@@ -857,7 +859,7 @@
             $('body').delegate('.update', 'click', function (e) {
                 let id = $(this).attr("data-id");
                 let link = 'schedules/edit/' + id;
-                console.log(123,parent);
+                console.log(123, parent);
                 $.ajax({
                     url: window.location.origin + '/' + link,
                     method: "get",
