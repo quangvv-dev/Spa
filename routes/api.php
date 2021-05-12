@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('callcenter/hangup', 'API\CallController@hangUp');
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -32,4 +34,4 @@ Route::put('posts/{id}', 'API\PostController@update');
 Route::get('posts/{id}', 'API\PostController@show');
 Route::get('voucher-services', 'API\PromotionController@listVoucherServices');
 Route::get('voucher', 'API\PromotionController@listVoucher');
-Route::get('voucher/{id}', 'API\PromotionController@checkVoucher');
+
