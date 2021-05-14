@@ -714,7 +714,11 @@ class OrderController extends Controller
                     $name_services = explode(',', $row['san_phamdich_vu']);
                     $customer = Customer::where('phone', $row['sdt'])->first();
                     $service = Services::whereIn('name', $name_services)->get();
-                    $checkOrder = Order::where('code', $row['ma_dh'])->first();
+                    if ($row['ma_dh']){
+                        $checkOrder = Order::where('code', $row['ma_dh'])->first();
+                    }else{
+                        $checkOrder = null;
+                    }
                     $paymentType = null;
 
                     if ($row['hinh_thuc_thanh_toan'] == null) {
@@ -754,7 +758,7 @@ class OrderController extends Controller
                             $order = isset($checkOrder) && $checkOrder ? $checkOrder : 0;
                         }
 
-                        if (!empty($customer) && count($service) && !empty($order)) {
+                        if (!empty($customer) && count($service) && !empty($order) && empty($checkOrder)) {
                             foreach ($service as $item) {
                                 OrderDetail::create([
                                     'order_id' => $order->id,
