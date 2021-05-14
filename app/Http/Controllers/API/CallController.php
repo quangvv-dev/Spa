@@ -39,7 +39,7 @@ class CallController extends BaseApiController
         if ($request->api_key != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
-        $input = $request->except('api_key');
+        $input = $request->except('api_key','duraction','wait_time');
         try {
             CallCenter::insert($input);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
