@@ -41,11 +41,11 @@ class CallController extends BaseApiController
         }
         $input = $request->except('api_key');
         try {
-            CallCenter::create($input);
+            CallCenter::insert($input);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
 
         } catch (\Exception $ex) {
-            return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'MOVED PERMANENTLY DONE');
+            return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'MOVED PERMANENTLY DONE',$ex);
         }
     }
 
