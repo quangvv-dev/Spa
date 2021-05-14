@@ -15,12 +15,14 @@ class CreateCallCentersTable extends Migration
     {
         Schema::create('call_center', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('caller_number')->comment('nguời gọi');
+            $table->string('caller_id')->comment('ID cuộc gọi');
+            $table->string('call_type')->nullable()->comment('Gọi đến hay gọi đi');
+            $table->dateTime('start_time')->comment('nguời gọi');
             $table->string('dest_number')->comment('nguời nghe máy');
             $table->integer('answer_time')->nullable()->comment('Thời gian đàm thoại');
             $table->string('call_status')->comment('Trạng thái cuộc gọi');
             $table->text('recording_url')->nullable()->comment('File ghi âm');
-            $table->timestamps();
+//            $table->timestamps();
         });
     }
 
