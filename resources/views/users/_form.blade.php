@@ -29,20 +29,14 @@
                         <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('email') ? 'has-error' : '' }}">
-                        {!! Form::label('email', 'Email', array('class' => ' required')) !!}
-                        {!! Form::email('email', null, array('id' => 'email', 'class' => 'form-control')) !!}
-                        <span class="help-block">{{ $errors->first('email', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
-                        {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
-                        {!! Form::select('gender',[0 => 'Nữ', 1 => 'Nam'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn giới tính')) !!}
-                        <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
-                    </div>
-                </div>
+                {{--<div class="col-xs-12 col-md-6">--}}
+                    {{--<div class="form-group required {{ $errors->has('email') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('email', 'Email', array('class' => ' required')) !!}--}}
+                        {{--{!! Form::email('email', null, array('id' => 'email', 'class' => 'form-control')) !!}--}}
+                        {{--<span class="help-block">{{ $errors->first('email', ':message') }}</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('password') ? 'has-error' : '' }}">
                         {!! Form::label('password', 'Mật khẩu', array('class' => ' required')) !!}
@@ -56,6 +50,21 @@
                         {!! Form::label('confirm_password', 'Nhập lại mật khẩu', array('class' => ' required')) !!}
                         <input type="password" name="confirm_password" autocomplete="new-password" class="form-control">
                         <span class="help-block">{{ $errors->first('confirm_password', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
+                        {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
+                        {!! Form::select('gender',[0 => 'Nữ', 1 => 'Nam'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn giới tính')) !!}
+                        <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
+                        {!! Form::label('', 'Mã máy tổng đài (nếu có)') !!}
+                        <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}"
+                        {{\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::ADMIN ?'disabled':'name=caller_number'}} >
+                        <span class="help-block">{{ $errors->first('caller_number', ':message') }}</span>
                     </div>
                 </div>
                 @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
