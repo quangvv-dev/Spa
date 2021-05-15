@@ -27,31 +27,33 @@
                     </td>
                     <td class="text-center">
                         {{--<i class="fas fa-play-circle fa-2x text-primary"></i>--}}
+                        @if($doc->recording_url !='None')
                         <div class="mediPlayer">
                             <audio class="listen" preload="none" data-size="50" src="{{$doc->recording_url}}"></audio>
                         </div>
+                        @endif
                     </td>
                 </tr>
             @endforeach
 
 
 
-            <tr class="fixed2">
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+            {{--<tr class="fixed2">--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
 
-            </tr>
+            {{--</tr>--}}
 
-            <tr class="fixed">
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-            </tr>
+            {{--<tr class="fixed">--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
+                {{--<td class="text-center"></td>--}}
+            {{--</tr>--}}
 
         @else
             <tr>
