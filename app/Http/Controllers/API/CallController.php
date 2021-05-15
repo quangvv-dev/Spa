@@ -39,13 +39,13 @@ class CallController extends BaseApiController
         if ($request->api_key != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
-        $input = $request->only('caller_number', 'dest_number', 'answer_time','call_status','recording_url','caller_id','call_type','start_time');
+        $input = $request->only('caller_number', 'dest_number', 'answer_time', 'call_status', 'recording_url', 'caller_id', 'call_type', 'start_time');
         $isset = CallCenter::where('caller_id', $request->caller_id)->first();
-        if (empty($isset)) {
+
+        if (empty($isset) && $request->call_type != 'INBOUND') {
             CallCenter::insert($input);
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
-
 
     }
 
