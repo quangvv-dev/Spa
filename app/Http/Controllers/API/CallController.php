@@ -39,17 +39,14 @@ class CallController extends BaseApiController
         if ($request->api_key != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
-        $input = $request->except('api_key','duraction','wait_time');
-        try {
-            $isset = CallCenter::where('caller_id',$request->caller_id)->first();
-            if (empty($isset)){
-                CallCenter::insert($input);
-            }
-            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
-
-        } catch (\Exception $ex) {
-            return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'MOVED PERMANENTLY DONE',$ex);
+        $input = $request->only('caller_number', 'dest_number', 'answer_time','call_status','recording_url','caller_id','call_type','start_time');
+        $isset = CallCenter::where('caller_id', $request->caller_id)->first();
+        if (empty($isset)) {
+            CallCenter::insert($input);
         }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+
+
     }
 
     /**
