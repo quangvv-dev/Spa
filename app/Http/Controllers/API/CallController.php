@@ -41,7 +41,10 @@ class CallController extends BaseApiController
         }
         $input = $request->except('api_key','duraction','wait_time');
         try {
-            CallCenter::insert($input);
+            $isset = CallCenter::where('caller_id',$request->caller_id)->first();
+            if (empty($isset)){
+                CallCenter::insert($input);
+            }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
 
         } catch (\Exception $ex) {
