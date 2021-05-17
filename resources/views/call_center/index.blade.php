@@ -108,14 +108,7 @@
                     {{--</li>--}}
                 </ul>
             </div>
-            <div class="card-header col-md-12">
-                <div class="col-md-3 bold">
-                    Tổng gọi đến : 45 <span class="text-success">(110 phút)</span>
-                </div>
-                <div class="col-md-3 bold">
-                    Tổng gọi lỡ : 100
-                </div>
-            </div>
+
             <div id="registration-form">
                 @include('call_center.ajax')
             </div>

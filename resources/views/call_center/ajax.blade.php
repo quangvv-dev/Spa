@@ -1,3 +1,19 @@
+@php
+    $minutes = floor(($answers->sum('answer_time') / 60));
+               $sec = round($answers->sum('answer_time') % 60);
+               $time_call =  ($minutes > 0 ? $minutes . ' phút ' : '') . ($sec > 0 ? $sec . ' giây' : '');
+@endphp
+<div class="card-header col-md-12">
+    <div class="col-md-3 bold">
+        Tổng cuộc gọi : <span class="text-success">{{@$docs->total()}}</span>
+    </div>
+    <div class="col-md-3 bold">
+        Tổng khách nghe máy: {{$answers->count()}} <span class="text-success">({{$time_call}})</span>
+    </div>
+    <div class="col-md-3 bold">
+        Tổng gọi lỡ : <span class="text-danger">{{$docs->total()-$answers->count()}}</span>
+    </div>
+</div>
 <div class="table-responsive tableFixHead" id="parent">
     <table class="table card-table table-vcenter text-nowrap table-primary" id="fixTable">
         <thead class="bg-primary text-white">
@@ -15,9 +31,9 @@
                 <tr>
                     <td class="text-center">{{@$doc->customer->full_name?:'Số máy lạ'}}</br>
                         {{--<a href="sip:{{@$doc->dest_number}}">{{@$doc->dest_number}}</a>--}}
-                        <a href="{{@$doc->customer->id}}">{{@$doc->dest_number}}</a>
+                        <a href="{{'customers/'.@$doc->customer->id}}">{{@$doc->dest_number}}</a>
                     </td>
-                    <td class="text-center">{{@$doc->user->caller_number?:'Nhân viên lạ'}}</br>
+                    <td class="text-center">{{@$doc->user->full_name?:'Nhân viên lạ'}}</br>
                         <span class="small-tip">(Số máy lẻ: {{@$doc->caller_number}})</span>
                     </td>
                     <td class="text-center">{!!@$doc->call_status=='ANSWERED'?'<span class="badge badge-success">Nghe máy</span>':
@@ -31,9 +47,10 @@
                     <td class="text-center">
                         {{--<i class="fas fa-play-circle fa-2x text-primary"></i>--}}
                         @if($doc->recording_url !='None')
-                        <div class="mediPlayer">
-                            <audio class="listen" preload="none" data-size="40" src="{{$doc->recording_url}}"></audio>
-                        </div>
+                            <div class="mediPlayer">
+                                <audio class="listen" preload="none" data-size="40"
+                                       src="{{$doc->recording_url}}"></audio>
+                            </div>
                         @endif
                     </td>
                 </tr>
@@ -42,20 +59,20 @@
 
 
             {{--<tr class="fixed2">--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
 
             {{--</tr>--}}
 
             {{--<tr class="fixed">--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
-                {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center"></td>--}}
             {{--</tr>--}}
 
         @else
@@ -66,12 +83,12 @@
         </tbody>
     </table>
     <div class="pull-left">
-    <div class="page-info">
-    {{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
-    </div>
+        <div class="page-info">
+            {{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+        </div>
     </div>
     <div class="pull-right">
-    {{ $docs->appends(['search' => request()->search ])->links() }}
+        {{ $docs->appends(['search' => request()->search ])->links() }}
     </div>
 </div>
 

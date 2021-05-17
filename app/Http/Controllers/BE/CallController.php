@@ -32,17 +32,21 @@ class CallController extends Controller
     public function index(Request $request)
     {
         $title = 'Quản lý tổng đài';
-        $input =$request->all();
+        $input = $request->all();
 
         if (empty($request->data_time)) {
             $input['data_time'] = 'THIS_MONTH';
         }
 
-        $docs = CallCenter::search($input)->paginate(StatusCode::PAGINATE_20);
+        $docs = CallCenter::search($input);
+        $answers = clone $docs;
+        $answers = $answers->where('call_status','ANSWERED');
+
+        $docs = $docs->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return Response::json(view('call_center.ajax', compact('docs'))->render());
+            return Response::json(view('call_center.ajax', compact('docs','answers'))->render());
         }
-        return view('call_center.index', compact('title', 'docs'));
+        return view('call_center.index', compact('title', 'docs','answers'));
     }
 
     /**
