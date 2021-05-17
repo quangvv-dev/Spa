@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\BE;
 
-use App\Models\Branch;
+use App\Constants\StatusCode;
 use App\Models\CallCenter;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
+
 
 class CallController extends Controller
 {
@@ -13,9 +16,10 @@ class CallController extends Controller
 
     public function __construct()
     {
-        $branchs = Branch::search()->pluck('name', 'id');
+        $telesales = User::whereNotNull('caller_number')->pluck('full_name', 'caller_number');
+
         view()->share([
-            'branchs' => $branchs,
+            'telesales' => $telesales,
         ]);
     }
 
@@ -24,10 +28,19 @@ class CallController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Quản lý tổng đài';
-        $docs = CallCenter::orderByDesc('id')->paginate(20);
+        $input =$request->all();
+
+        if (empty($request->data_time)) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+
+        $docs = CallCenter::search($input)->paginate(StatusCode::PAGINATE_20);
+        if ($request->ajax()) {
+            return Response::json(view('call_center.ajax', compact('docs'))->render());
+        }
         return view('call_center.index', compact('title', 'docs'));
     }
 

@@ -51,6 +51,7 @@
         .form-control {
             font-size: 14px;
         }
+
         .small-tip {
             font-size: 11px;
             color: #999;
@@ -66,14 +67,12 @@
                 </div>
             </div>
             <div class="card-header col-md-12">
-                {{--<div class="col-md-2">--}}
-                {{--{!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}--}}
-                {{--</div>--}}
-                {{--@if(empty($checkRole))--}}
-                {{--<div class="col-md-2">--}}
-                {{--{!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}--}}
-                {{--</div>--}}
-                {{--@endif--}}
+                <div class="col-md-2">
+                    {!! Form::select('caller_number', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Nhân viên')) !!}
+                </div>
+                <div class="col-md-2">
+                    {!! Form::select('call_status', ['ANSWERED'=>'Nghe máy','MISSED CALL'=>'Gọi lỡ'], null, array('class' => 'form-control','id'=>'call_status', 'placeholder'=>'Tất cả cuộc gọi')) !!}
+                </div>
                 <ul class="col-md-8 no-padd mt5 tr">
                     <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
                     <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
@@ -83,45 +82,46 @@
                             này</a>
                     </li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                    <li class="display position"><a class="other_time choose_time border b-gray"
-                        >Khác</a>
-                        <div class="add-drop add-d-right other_time_panel"
-                             style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>
-                            <div class="padding tl"><p>Ngày bắt đầu</p>
-                                <input type="text" class="form-control filter_start_date" id="datepicker"
-                                       data-toggle="datepicker" name="payment_date">
-                            </div>
-                            <div class="padding tl"><p>Ngày kết thúc</p>
-                                <input type="text" class="form-control filter_end_date" id="datepicker"
-                                       data-toggle="datepicker" name="payment_date">
-                            </div>
-                            <div class="padding5-10 tl mb5">
-                                <button class="btn btn-info submit_other_time">Tìm kiếm</button>
-                                <button class="btn btn-default cancel_other_time">Đóng</button>
-                            </div>
-                        </div>
-                    </li>
+                    {{--<li class="display position"><a class="other_time choose_time border b-gray"--}}
+                        {{-->Khác</a>--}}
+                        {{--<div class="add-drop add-d-right other_time_panel"--}}
+                             {{--style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>--}}
+                            {{--<div class="padding tl"><p>Ngày bắt đầu</p>--}}
+                                {{--<input type="text" class="form-control filter_start_date" id="datepicker"--}}
+                                       {{--data-toggle="datepicker" name="payment_date">--}}
+                            {{--</div>--}}
+                            {{--<div class="padding tl"><p>Ngày kết thúc</p>--}}
+                                {{--<input type="text" class="form-control filter_end_date" id="datepicker"--}}
+                                       {{--data-toggle="datepicker" name="payment_date">--}}
+                            {{--</div>--}}
+                            {{--<div class="padding5-10 tl mb5">--}}
+                                {{--<button class="btn btn-info submit_other_time">Tìm kiếm</button>--}}
+                                {{--<button class="btn btn-default cancel_other_time">Đóng</button>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</li>--}}
                 </ul>
+            </div>
+            <div class="card-header col-md-12">
+                <div class="col-md-3 bold">
+                    Tổng gọi đến : 45 <span class="text-success">(110 phút)</span>
+                </div>
+                <div class="col-md-3 bold">
+                    Tổng gọi lỡ : 100
+                </div>
             </div>
             <div id="registration-form">
                 @include('call_center.ajax')
             </div>
         </div>
     </div>
-    <input type="hidden" id="telesales-input">
     <input type="hidden" id="choose-time">
     <input type="hidden" id="filter-start-date">
     <input type="hidden" id="filter-end-date">
-    <input type="hidden" id="bor-none">
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="/js/player.js"></script>
 
-    <script type="text/javascript">
 
-        $(document).ready(function () {
-            $('.mediPlayer').mediaPlayer();
-        });
-    </script>
 @endsection
 @section('_script')
 
@@ -129,7 +129,7 @@
         function searchAjax(data) {
             $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
-                url: "{{ Url('orders-payment/') }}",
+                url: "{{ url('/call-center') }}",
                 method: "get",
                 data: data
             }).done(function (data) {
@@ -137,14 +137,14 @@
             });
         }
 
-        $(document).on('click', '#applyBoxSearch, .choose_time, .submit_other_time', function (e) {
+        $(document).on('click', '.choose_time, .submit_other_time', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
-            const class_name = target.attr('class');
-            const telesales = $('#telesales-input').val();
-            const start_date = $('.filter_start_date').val();
-            const end_date = $('.filter_end_date').val();
-            const branch_id = $('.branch_id').val();
+            let class_name = target.attr('class');
+            let telesales = $('#telesales').val();
+            let call_status = $('#call_status').val();
+            let start_date = $('.filter_start_date').val();
+            let end_date = $('.filter_end_date').val();
 
             if (class_name === 'display pl5') {
                 var data_time = $(target).find('.choose_time').data('time');
@@ -153,52 +153,38 @@
             } else {
                 var data_time = $('#choose_time').val();
             }
-            if (class_name === 'btn-group ml5') {
-                var bor_none = $(target).find('.bor-none').data('filter');
-            } else {
-                var bor_none = $('#bor-none').val();
-
-            }
 
             $('#filter-start-date').val(start_date);
             $('#filter-end-date').val(end_date);
             if (typeof (data_time) != "undefined") {
                 $('#choose-time').val(data_time);
             }
-            if (typeof (bor_none) != "undefined") {
-                $('#bor-none').val(bor_none);
-            }
             $(".other_time_panel").css({'display': 'none'});
             $("#boxSearch").css({'display': 'none'});
 
             searchAjax({
-                telesales: telesales,
+                caller_number: telesales,
+                call_status: call_status,
                 data_time: data_time,
                 start_date: start_date,
                 end_date: end_date,
-                bor_none: bor_none,
-                branch_id: branch_id,
             });
         })
         ;
 
-        $(document).on('change', '#telesales, .branch_id', function () {
-            const telesales = $('#telesales').val();
-            const data_time = $('#choose-time').val();
-            const start_date = $('#filter-start-date').val();
-            const end_date = $('#filter-end-date').val();
-            const bor_none = $('#bor-none').val();
-            const branch_id = $('.branch_id').val();
-
-            $('#telesales-input').val(telesales);
+        $(document).on('change', '#telesales, #call_status', function () {
+            let telesales = $('#telesales').val();
+            let call_status = $('#call_status').val();
+            let data_time = $('#choose-time').val();
+            let start_date = $('#filter-start-date').val();
+            let end_date = $('#filter-end-date').val();
 
             searchAjax({
-                telesales: telesales,
+                caller_number: telesales,
                 data_time: data_time,
                 start_date: start_date,
                 end_date: end_date,
-                bor_none: bor_none,
-                branch_id: branch_id
+                call_status: call_status,
             });
         });
 
@@ -227,12 +213,12 @@
         $(document).on('click', 'a.page-link', function (e) {
             e.preventDefault();
             let pages = $(this).attr('href').split('page=')[1];
-            const telesales = $('#telesales-input').val();
-            const data_time = $('#choose-time').val();
-            const start_date = $('#filter-start-date').val();
-            const end_date = $('#filter-end-date').val();
-            const bor_none = $('#bor-none').val();
-            const branch_id = $('.branch_id').val();
+            let telesales = $('#telesales-input').val();
+            let data_time = $('#choose-time').val();
+            let start_date = $('#filter-start-date').val();
+            let end_date = $('#filter-end-date').val();
+            let bor_none = $('#bor-none').val();
+            let branch_id = $('.branch_id').val();
 
             $.ajax({
                 url: '{{ url()->current() }}',
