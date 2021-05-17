@@ -35,7 +35,7 @@ class CallController extends Controller
         $input = $request->all();
 
         if (empty($request->data_time)) {
-            $input['data_time'] = 'THIS_MONTH';
+            $input['data_time'] = 'TODAY';
         }
 
         $docs = CallCenter::search($input);

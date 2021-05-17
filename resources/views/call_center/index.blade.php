@@ -80,7 +80,7 @@
                     {!! Form::select('call_status', ['ANSWERED'=>'Nghe máy','MISSED CALL'=>'Gọi lỡ'], null, array('class' => 'form-control','id'=>'call_status', 'placeholder'=>'Tất cả cuộc gọi')) !!}
                 </div>
                 <ul class="col-md-8 no-padd mt5 tr">
-                    <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
+                    <li class="display pl5"><a data-time="TODAY" class="choose_time active border b-gray">Hôm nay</a></li>
                     <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
                     <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
                     <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>

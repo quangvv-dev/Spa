@@ -1,6 +1,7 @@
 @php
-    $minutes = floor(($answers->sum('answer_time') / 60));
-               $sec = round($answers->sum('answer_time') % 60);
+    $hours = floor(($answers->sum('answer_time') / 3600));
+    $minutes = floor(($answers->sum('answer_time') % 3600)/60);
+               $sec = round(($answers->sum('answer_time') % 3600)%60);
                $time_call =  ($minutes > 0 ? $minutes . ' phút ' : '') . ($sec > 0 ? $sec . ' giây' : '');
 @endphp
 <div class="card-header col-md-12">
