@@ -255,7 +255,7 @@
 
                         @if($roleGlobal->permission('roles.list'))
                             <a class="dropdown-item" href="{!! route('roles.index') !!}"><i
-                                    class="dropdown-icon mdi mdi-settings"></i> Quản lý phân quyền</a>
+                                    class="dropdown-icon mdi mdi-percent"></i> Quản lý phân quyền</a>
                         @endif
 
                         @if($roleGlobal->permission('leaderSale'))
