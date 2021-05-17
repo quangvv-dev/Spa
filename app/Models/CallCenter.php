@@ -42,7 +42,7 @@ class CallCenter extends Model
         })
             ->when($param['data_time'] == 'TODAY' ||
                 $param['data_time'] == 'YESTERDAY', function ($q) use ($param) {
-                $q->whereDate('created_at', getTime(($param['data_time'])));
+                $q->whereDate('start_time', getTime(($param['data_time'])));
             })
             ->when($param['data_time'] == 'THIS_WEEK' ||
                 $param['data_time'] == 'LAST_WEEK' ||
