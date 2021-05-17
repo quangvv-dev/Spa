@@ -170,6 +170,9 @@
                         @if($roleGlobal->permission('statistics.taskSchedules'))
                             <li><a href="{{url('statistics-task')}}">BĐ C.việc & lịch hẹn</a></li>
                         @endif
+                            @if($roleGlobal->permission('call-center'))
+                            <li><a href="{{route('call-center.index')}}">Quản lý tổng đài</a></li>
+                        @endif
                     </ul>
                 </div>
             </li>

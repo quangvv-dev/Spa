@@ -37,4 +37,5 @@ return [
     'settings'                 => "Cài đặt chung hệ thống (gói nạp)",
     'leaderSale'               => "Đặc quyền TP SALE",
     'leaderMKT'                => "Đặc quyền TP Marketing",
+    'call-center'              => "Quản lý tổng đài",
 ];

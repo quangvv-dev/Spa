@@ -56,6 +56,12 @@
             font-size: 11px;
             color: #999;
         }
+
+        @media only screen and (max-width: 1921px) {
+            .table-responsive {
+                max-height: 75vh;
+            }
+        }
     </style>
 @endsection
 @section('content')
@@ -83,22 +89,22 @@
                     </li>
                     <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
                     {{--<li class="display position"><a class="other_time choose_time border b-gray"--}}
-                        {{-->Khác</a>--}}
-                        {{--<div class="add-drop add-d-right other_time_panel"--}}
-                             {{--style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>--}}
-                            {{--<div class="padding tl"><p>Ngày bắt đầu</p>--}}
-                                {{--<input type="text" class="form-control filter_start_date" id="datepicker"--}}
-                                       {{--data-toggle="datepicker" name="payment_date">--}}
-                            {{--</div>--}}
-                            {{--<div class="padding tl"><p>Ngày kết thúc</p>--}}
-                                {{--<input type="text" class="form-control filter_end_date" id="datepicker"--}}
-                                       {{--data-toggle="datepicker" name="payment_date">--}}
-                            {{--</div>--}}
-                            {{--<div class="padding5-10 tl mb5">--}}
-                                {{--<button class="btn btn-info submit_other_time">Tìm kiếm</button>--}}
-                                {{--<button class="btn btn-default cancel_other_time">Đóng</button>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                    {{-->Khác</a>--}}
+                    {{--<div class="add-drop add-d-right other_time_panel"--}}
+                    {{--style="left: auto; right: 0px; z-index: 999; display: none;"><s class="gf-icon-neotop"></s>--}}
+                    {{--<div class="padding tl"><p>Ngày bắt đầu</p>--}}
+                    {{--<input type="text" class="form-control filter_start_date" id="datepicker"--}}
+                    {{--data-toggle="datepicker" name="payment_date">--}}
+                    {{--</div>--}}
+                    {{--<div class="padding tl"><p>Ngày kết thúc</p>--}}
+                    {{--<input type="text" class="form-control filter_end_date" id="datepicker"--}}
+                    {{--data-toggle="datepicker" name="payment_date">--}}
+                    {{--</div>--}}
+                    {{--<div class="padding5-10 tl mb5">--}}
+                    {{--<button class="btn btn-info submit_other_time">Tìm kiếm</button>--}}
+                    {{--<button class="btn btn-default cancel_other_time">Đóng</button>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
                     {{--</li>--}}
                 </ul>
             </div>
