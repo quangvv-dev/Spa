@@ -352,7 +352,7 @@
 
                                                 </div>
                                                 <div class="col relative">
-                                                    @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER||Auth::user()->role == \App\Constants\UserConstant::CSKH)
+                                                    @if (in_array('order.list',$permissions))
                                                         <a class="right btn btn-primary btn-flat" data-toggle="modal"
                                                            data-target="#roleTypeModal"><i
                                                                 class="fa fa-plus-circle"></i>Thêm mới</a>
