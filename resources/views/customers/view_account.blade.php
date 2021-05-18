@@ -356,9 +356,9 @@
                                                 </div>
                                                 <div class="col relative">
                                                     @if($roleGlobal->permission('order.add'))
-                                                        <a class="right btn btn-primary btn-flat" data-toggle="modal"
+                                                        <a class="right btn btn-primary btn-flat text-white" data-toggle="modal"
                                                            data-target="#roleTypeModal"><i
-                                                                class="fa fa-plus-circle"></i>Thêm mới</a>
+                                                                class="fa fa-plus-circle text-white"></i>Thêm đơn</a>
                                                     @endif
                                                 </div>
                                                 @include('order.role_type_modal')
@@ -377,8 +377,8 @@
                                         {{--    END Modal thêm --}}
                                         <div class="tab-pane " id="tab8">
                                             <a style="color: #ffffff;margin-bottom: 8px;"
-                                               class="right btn btn-primary btn-flat" data-toggle="modal"
-                                               data-target="#task"><i class="fa fa-plus-circle"></i>Thêm mới CV</a>
+                                               class="right btn btn-primary btn-flat text-white" data-toggle="modal"
+                                               data-target="#task"><i class="fa fa-plus-circle text-white"></i>Thêm CV</a>
                                             @include('tasks.ajax')
                                             @include('tasks._form_customer')
                                         </div>
