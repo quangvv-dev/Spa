@@ -51,7 +51,7 @@
                 // phan hien thi o dropdown
                 let html = `
 <a class="tag-item" href="">
-<span class="label">${hit.name} <img width="40" src='http://spa.test/assets/images/brand/logo.png'/></span>
+<span class="label">${hit.name} <img width="40" src='{{asset('/assets/images/brand/logo.png')}}'/></span>
 </a>`;
                 return html;
             },
