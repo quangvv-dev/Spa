@@ -63,12 +63,12 @@
                        value="order.list" {{@$doc && $doc->hasAccess('order.list') ? 'checked' : ''}}>
             </td>
             <td>
-                <input type="checkbox" id="input172" name="permissions[]"
-                       value="order.add" {{@$doc && $doc->hasAccess('order.add') ? 'checked' : ''}}>
-            </td>
-            <td>
                 <input type="checkbox" id="input173" name="permissions[]"
                        value="order.edit" {{@$doc && $doc->hasAccess('order.edit') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input172" name="permissions[]"
+                       value="order.add" {{@$doc && $doc->hasAccess('order.add') ? 'checked' : ''}}>
             </td>
             <td>
                 <input type="checkbox" id="input174" name="permissions[]"
