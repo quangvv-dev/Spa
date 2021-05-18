@@ -39,6 +39,8 @@ class CallCenter extends Model
             $q->where('call_status', $param['call_status']);
         })->when(isset($param['caller_number']) && $param['caller_number'], function ($q) use ($param) {
             $q->where('caller_number', $param['caller_number']);
+        })->when(isset($param['dest_number']) && $param['dest_number'], function ($q) use ($param) {
+            $q->where('dest_number', $param['dest_number']);
         })
             ->when($param['data_time'] == 'TODAY' ||
                 $param['data_time'] == 'YESTERDAY', function ($q) use ($param) {

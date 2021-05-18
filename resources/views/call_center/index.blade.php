@@ -59,7 +59,7 @@
 
         @media only screen and (max-width: 1921px) {
             .table-responsive {
-                max-height: 75vh;
+                max-height: 70vh;
             }
         }
     </style>
@@ -79,7 +79,10 @@
                 <div class="col-md-2">
                     {!! Form::select('call_status', ['ANSWERED'=>'Nghe máy','MISSED CALL'=>'Gọi lỡ'], null, array('class' => 'form-control','id'=>'call_status', 'placeholder'=>'Tất cả cuộc gọi')) !!}
                 </div>
-                <ul class="col-md-8 no-padd mt5 tr">
+                <div class="col-md-2">
+                    {!! Form::text('dest_number', null, array('class' => 'form-control','id'=>'dest_number', 'placeholder'=>'SĐT khách hàng')) !!}
+                </div>
+                <ul class="col-md-6 no-padd mt5 tr">
                     <li class="display pl5"><a data-time="TODAY" class="choose_time active border b-gray">Hôm nay</a></li>
                     <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
                     <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
@@ -144,6 +147,7 @@
             let call_status = $('#call_status').val();
             let start_date = $('.filter_start_date').val();
             let end_date = $('.filter_end_date').val();
+            let dest_number = $('#dest_number').val();
 
             if (class_name === 'display pl5') {
                 var data_time = $(target).find('.choose_time').data('time');
@@ -167,12 +171,14 @@
                 data_time: data_time,
                 start_date: start_date,
                 end_date: end_date,
+                dest_number: dest_number,
             });
         })
         ;
 
         $(document).on('change', '#telesales, #call_status', function () {
             let telesales = $('#telesales').val();
+            let dest_number = $('#dest_number').val();
             let call_status = $('#call_status').val();
             let data_time = $('#choose-time').val();
             let start_date = $('#filter-start-date').val();
@@ -184,9 +190,42 @@
                 start_date: start_date,
                 end_date: end_date,
                 call_status: call_status,
+                dest_number: dest_number,
             });
         });
 
+        $(document).on('keyup', ' #dest_number', delay(function () {
+            let dest_number = $(' #dest_number').val();
+            let call_status = $('#call_status').val();
+            let data_time = $('#choose-time').val();
+            let start_date = $('#filter-start-date').val();
+            let end_date = $('#filter-end-date').val();
+            let telesales = $('#telesales').val();
+
+            let data = {
+                caller_number: telesales,
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                call_status: call_status,
+                dest_number: dest_number,
+            };
+            searchAjax(data);
+
+        }, 500));
+
+        // delay keyup
+        function delay(callback, ms) {
+            // alert(ms);
+            var timer = 0;
+            return function () {
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    callback.apply(context, args);
+                }, ms || 0);
+            };
+        }
         $(document).on('click', '.other_time', function () {
             $(".other_time_panel").css({'display': ''});
         });
@@ -218,6 +257,8 @@
             let end_date = $('#filter-end-date').val();
             let bor_none = $('#bor-none').val();
             let branch_id = $('.branch_id').val();
+            let dest_number = $('#dest_number').val();
+
 
             $.ajax({
                 url: '{{ url()->current() }}',
@@ -230,6 +271,7 @@
                     bor_none: bor_none,
                     page: pages,
                     branch_id: branch_id,
+                    dest_number: dest_number,
                 },
             }).done(function (data) {
                 $('#registration-form').html(data);

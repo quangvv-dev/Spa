@@ -85,7 +85,7 @@
     </table>
     <div class="pull-left">
         <div class="page-info">
-            {{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+            {{ 'Tổng số ' . $docs->total() . ' cuộc gọi ' . (request()->search ? 'found' : '') }}
         </div>
     </div>
     <div class="pull-right">
