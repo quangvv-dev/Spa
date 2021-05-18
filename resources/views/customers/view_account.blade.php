@@ -68,6 +68,9 @@
         color: #3b8fec ;
         }
     </style>
+    @php
+        $roleGlobal = auth()->user()?:[];
+    @endphp
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
@@ -352,7 +355,7 @@
 
                                                 </div>
                                                 <div class="col relative">
-                                                    @if (in_array('order.list',$permissions))
+                                                    @if($roleGlobal->permission('order.add'))
                                                         <a class="right btn btn-primary btn-flat" data-toggle="modal"
                                                            data-target="#roleTypeModal"><i
                                                                 class="fa fa-plus-circle"></i>Thêm mới</a>
