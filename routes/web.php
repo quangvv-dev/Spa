@@ -8,9 +8,13 @@ Route::get('403', function () {
     return view('errors.403');
 });
 
+
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
         return view('dashboard.index');
+    });
+    Route::get('kanban-board', function (){
+        return view('kanban_board.index');
     });
 
     Route::get('demo/data-system', 'DBController@index');
