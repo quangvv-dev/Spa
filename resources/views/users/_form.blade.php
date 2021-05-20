@@ -74,7 +74,7 @@
                                 @if(isset($user))
                                     @forelse($role as $item)
                                         <option
-                                            {{$user->department_id==$item->id?'selected':''}} value="{{$item->id}}">{{$item->name}}
+                                            {{$user->role==$item->id?'selected':''}} value="{{$item->id}}">{{$item->name}}
                                         </option>
                                     @empty
                                     @endforelse
