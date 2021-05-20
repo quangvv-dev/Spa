@@ -24,6 +24,7 @@
 
     thead > tr th {
         background: #3b8fec;
+        color: #fff;
     }
 
     tr th, td {

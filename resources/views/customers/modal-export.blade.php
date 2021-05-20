@@ -23,6 +23,13 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="col-md-12">
+                        <i style="color: red">Từ ngày - đến ngày (không chọn ngày nếu lấy tất cả data)</i><br>
+                        <input type="hidden" name="start_date" id="start_date">
+                        <input type="hidden" name="end_date" id="end_date">
+                        <input id="reportrange" type="text" class="form-control square">
+
+                    </div>
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Tải xuống</button>
                     </div>
@@ -33,3 +40,18 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="{{asset('assets/js/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/js/daterangepicker.min.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/daterangepicker.css')}}"/>
+<script>
+    $('#reportrange').daterangepicker({
+        "timePicker": true,
+        "timePicker24Hour": true,
+        locale: {
+            format: "DD/MM/YYYY H:mm",
+        }
+    }, function (start, end) {
+        $('#start_date').val(start.format('YYYY-MM-DD H:mm')).change();
+        $('#end_date').val(end.format('YYYY-MM-DD H:mm')).change();
+    });
+</script>

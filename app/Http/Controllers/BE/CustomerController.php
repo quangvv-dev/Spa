@@ -347,8 +347,13 @@ class CustomerController extends Controller
 
     public function exportCustomer(Request $request)
     {
+        ;
+        $params = $request->all();
         $now = Carbon::now()->format('d/m/Y');
-        $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
+        $data = Customer::orderBy('id', 'desc')
+            ->when(!empty($params['start_date']) && !empty($params['end_date']), function ($q) use ($params) {
+                $q->whereBetween('created_at', [$params['start_date'], $params['end_date']]);
+            })->with('orders', 'categories');
         $data = $data->when(!empty($request->group), function ($query) use ($request) {
             $arr = CustomerGroup::where('category_id', $request->group)->pluck('customer_id')->toArray();
             $query->whereIn('id', $arr);
@@ -395,7 +400,7 @@ class CustomerController extends Controller
                             $categoryName .= $category->name . ', ';
                         }
                         $comment = GroupComment::where('customer_id', $ex->id)->orderByDesc('id')->take(3)->get();
-                        $date_comment = count($comment) ? $comment->pluck('created_stock')->toArray() : [];
+                        $date_comment = count($comment) ? $comment->pluck('created_at')->toArray() : [];
                         $messages = count($comment) ? $comment->pluck('messages')->toArray() : [];
                         $date_comment = count($messages) ? implode("||", $date_comment) : '';
                         $messages = count($messages) ? implode("||", $messages) : '';
