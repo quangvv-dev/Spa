@@ -50,14 +50,17 @@
         font-weight: bold;
         color: #fff;
     }
-    body{
-        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     }
+
     tr td {
         font-size: 14px;
         font-weight: 300;
         font-family: 'Poppins', sans-serif;
     }
+
     .tooltip-nav .tooltiptext {
         visibility: hidden;
         min-width: 130px;
@@ -76,7 +79,19 @@
 
     .tooltip-nav:hover .tooltiptext {
         visibility: visible;
-        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    }
+
+    .modal-footer {
+        background: #f7f8f9;
+    }
+
+    .modal-header {
+        background: #0fa2e8;
+    }
+
+    .modal-header h2,.modal-header h3,.modal-header h4,.modal-header h5,.modal-header button {
+        color: #fff !important;
     }
 </style>
 <div id="global-loader">

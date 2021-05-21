@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <title>Title</title>
-    <link rel="stylesheet" href="{{asset('assets/plugins/kanban-board/jkanban.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/plugins/kanban-board/jkanban.min.css')}}"/>
     <link
         href="https://fonts.googleapis.com/css?family=Lato"
         rel="stylesheet"
@@ -54,63 +54,79 @@
 </head>
 <body>
 <div id="myKanban"></div>
+
+
 <button id="addDefault">Add "Default" board</button>
-<br />
+<br/>
 <button id="addToDo">Add element in "To Do" Board</button>
-<br />
+<br/>
 <button id="removeBoard">Remove "Done" Board</button>
-<br />
+<br/>
 <button id="removeElement">Remove "My Task Test"</button>
 
 <script src="{{asset('assets/plugins/kanban-board/jkanban.min.js')}}"></script>
 <script>
     var KanbanTest = new jKanban({
-        element : '#myKanban',
-        gutter  : '10px',
-        click : function(el){
+        element: '#myKanban',
+        gutter: '10px',
+        click: function (el) {
             alert(el.innerHTML);
             alert(el.dataset.eid)
         },
-        boards  :[
+        boards: [
             {
-                'id' : '_todo',
-                'title'  : 'To Do (drag me)',
-                'class' : 'info',
-                'item'  : [
+                'id': '_todo',
+                'title': 'Công việc',
+                'class': 'info',
+                'item': [
                     {
-                        'id':'task-1',
-                        'title':'Try drag me',
+                        'id': 6691,
+                        'title': 'CSKH Em Thu - 0966555865 - nhóm Viêm nang lông',
                     },
                     {
-                        'id':'task-2',
-                        'title':'Click me!!',
+                        'id': 'task-2',
+                        'title': 'Click me!!',
                     }
                 ]
             },
             {
-                'id' : '_working',
-                'title'  : 'Working',
-                'class' : 'warning',
-                'item'  : [
+                'id': '_working',
+                'title': 'Đang triển khai',
+                'class': 'warning',
+                'item': [
                     {
-                        'title':'Do Something!',
+                        'title': 'Do Something!',
                     },
                     {
-                        'title':'Run?',
+                        'title': 'Run?',
                     }
                 ]
             },
             {
-                'id' : '_done',
-                'dragTo' : ['_working'],
-                'title'  : 'Done (Drag only in Working)',
-                'class' : 'success',
-                'item'  : [
+                'id': '_done',
+                'dragTo': ['_working'],
+                'title': 'Hoàn thành',
+                'class': 'success',
+                'item': [
                     {
-                        'title':'All right',
+                        'title': 'All right',
                     },
                     {
-                        'title':'Ok!',
+                        'title': 'Ok!',
+                    }
+                ]
+            },
+            {
+                'id': '_fail',
+                'dragTo': ['_working', '_done'],
+                'title': 'Quá hạn',
+                'class': 'error',
+                'item': [
+                    {
+                        'title': 'All right',
+                    },
+                    {
+                        'title': 'Ok!',
                     }
                 ]
             }
@@ -118,11 +134,11 @@
     });
 
     var toDoButton = document.getElementById('addToDo');
-    toDoButton.addEventListener('click',function(){
+    toDoButton.addEventListener('click', function () {
         KanbanTest.addElement(
             '_todo',
             {
-                'title':'Test Add',
+                'title': 'Test Add',
             }
         );
     });
@@ -131,19 +147,19 @@
     addBoardDefault.addEventListener('click', function () {
         KanbanTest.addBoards(
             [{
-                'id' : '_default',
-                'title'  : 'Default (Can\'t drop in Done)',
-                'dragTo':['_todo','_working'],
-                'class' : 'error',
-                'item'  : [
+                'id': '_default',
+                'title': 'Default (Can\'t drop in Done)',
+                'dragTo': ['_todo', '_working'],
+                'class': 'error',
+                'item': [
                     {
-                        'title':'Default Item',
+                        'title': 'Default Item',
                     },
                     {
-                        'title':'Default Item 2',
+                        'title': 'Default Item 2',
                     },
                     {
-                        'title':'Default Item 3',
+                        'title': 'Default Item 3',
                     }
                 ]
             }]
@@ -151,19 +167,19 @@
     });
 
     var removeBoard = document.getElementById('removeBoard');
-    removeBoard.addEventListener('click',function(){
+    removeBoard.addEventListener('click', function () {
         KanbanTest.removeBoard('_done');
     });
 
     var toDoButton = document.getElementById("addToDo");
-    toDoButton.addEventListener("click", function() {
+    toDoButton.addEventListener("click", function () {
         KanbanTest.addElement("_todo", {
             title: "Test Add"
         });
     });
 
     var addBoardDefault = document.getElementById("addDefault");
-    addBoardDefault.addEventListener("click", function() {
+    addBoardDefault.addEventListener("click", function () {
         KanbanTest.addBoards([
             {
                 id: "_default",
@@ -184,21 +200,20 @@
     });
 
     var removeBoard = document.getElementById("removeBoard");
-    removeBoard.addEventListener("click", function() {
+    removeBoard.addEventListener("click", function () {
         KanbanTest.removeBoard("_done");
     });
 
     var removeElement = document.getElementById("removeElement");
-    removeElement.addEventListener("click", function() {
+    removeElement.addEventListener("click", function () {
         KanbanTest.removeElement("_test_delete");
     });
 
     var allEle = KanbanTest.getBoardElements("_todo");
-    allEle.forEach(function(item, index) {
+    allEle.forEach(function (item, index) {
         //console.log(item);
     });
 </script>
-
 
 
 </body>
