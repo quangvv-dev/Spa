@@ -58,7 +58,12 @@
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
+    $("#gridForm").submit(function (e, page) {
+        $.get($(this).attr('action'), $(this).serialize(), function (data) {
+            $('#registration-form').html(data);
+        });
+        return false;
+    });
     // validate error
     $.validator.setDefaults({
         highlight: function (element) {

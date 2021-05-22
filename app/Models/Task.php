@@ -162,6 +162,7 @@ class Task extends Model
                     $q->whereBetween('date_from', getTime(($input['data_time'])));
                 });
         })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+
             $q->whereBetween('date_from', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",

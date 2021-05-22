@@ -43,15 +43,15 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
+        if (empty($request->start_date) && empty($request->end_date)) {
             $request->merge(['data_time' => 'THIS_WEEK']);
         }
+        $input = $request->except('start_date','end_date');
 
-        $input = $request->all();
         $input['sale_id'] = Auth::user()->id;
         $docs = Task::search($input)->select('id', 'name', 'task_status_id')->get();
         if ($request->ajax()) {
-            return $docs;
+            return view('kanban_board.ajax', compact('docs'));
         }
 
         return view('kanban_board.index', compact('docs'));

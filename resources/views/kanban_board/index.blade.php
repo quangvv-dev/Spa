@@ -1,5 +1,6 @@
 @extends('layout.app')
 <link rel="stylesheet" href="{{asset('assets/plugins/kanban-board/jkanban.min.css')}}"/>
+<link rel="stylesheet" href="{{asset('css/daterangepicker.css')}}"/>
 <style>
     body {
         font-family: "Lato";
@@ -83,121 +84,32 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Chăm sóc khách hàng</h3></br>
-                <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('category.create') }}"><i
-                            class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                <div class="col">
+
+                </div>
             </div>
+            {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
+            <div class="card-header">
+                <input type="hidden" name="start_date" id="start_date">
+                <input type="hidden" name="end_date" id="end_date">
+                <div class="col-lg-4 col-md-6">
+                    <input id="reportrange" type="text" class="form-control square">
+                </div>
+                <button type="submit" class="btn btn-primary" id="btnSearch"><i class="fa fa-search"></i> Tìm kiếm
+                </button>
+            </div>
+            {!! Form::close() !!}
             <div id="registration-form">
-                <div id="myKanban"></div>
+                @include('kanban_board.ajax')
                 @include('kanban_board.modal')
             </div>
             <!-- table-responsive -->
         </div>
     </div>
 @endsection
-@php
-    if(count($docs))
-        $new =[];
-        $done =[];
-        $fail =[];
-        foreach($docs as $item){
-        if ($item->task_status_id==1)
-        $new[]=['id'=>$item->id,'title'=>$item->name];
-        if ($item->task_status_id==2)
-        $fail[]=['id'=>$item->id,'title'=>$item->name];
-        if ($item->task_status_id==3)
-        $done[]=['id'=>$item->id,'title'=>$item->name];
-        }
-@endphp
+
 @section('_script')
-    <script src="{{asset('assets/plugins/kanban-board/jkanban.min.js')}}"></script>
-    <script>
-        var KanbanTest = new jKanban({
-            element: '#myKanban',
-            gutter: '10px',
-            click: function (el) {
-                // alert(el.innerHTML);
-                // alert(el.dataset.eid)
-                $.ajax({
-                    url: '/ajax/tasks/' + el.dataset.eid,
-                    method: 'GET',
-                    success: function (data) {
-                        $('#name').val(data.name).change();
-                        $('#date_from').val(data.date_from).change();
-                        $('#time_from').val(data.time_from).change();
-                        $('#time_to').val(data.time_to).change();
-                        $('#description').html(data.description).change();
-                    }
-                })
-                $('#myModal').modal('show');
-            },
-            dropEl: function (el, target, source, sibling) {
-                KanbanTest.options.boards.map(function (board) {
-                    if (board.id === $(source.parentElement).data("id")) {
-                        let status = board.id == "_todo" ? 3 : (board.id == "_done" ? 2 : 3)
-                        $.ajax({
-                            url: '/ajax/tasks/' + el.dataset.eid,
-                            method: 'PUT',
-                            data: {task_status_id: status},
-                            success: function (data) {
-                            }
-                        })
-                    }
-                    ;
-                });
-
-            },
-            boards: [
-                {
-                    'id': '_todo',
-                    'dragTo': ['_done'],
-                    'title': 'Công việc',
-                    'class': 'info',
-                    'item': [
-                            @if(count($new))
-                            @foreach($new as $item)
-                        {
-                            'id': '{{$item['id']}}',
-                            'title': '{{$item['title']}}',
-                        },
-                        @endforeach
-                        @endif
-                    ]
-                },
-                {
-                    'id': '_done',
-                    'dragTo': ['_fail'],
-                    'title': 'Hoàn thành',
-                    'class': 'success',
-                    'item': [
-                            @if(count($done))
-                            @foreach($done as $item)
-                        {
-                            'id': '{{$item['id']}}',
-                            'title': '{{$item['title']}}',
-
-                        },
-                        @endforeach
-                        @endif
-                    ]
-                },
-                {
-                    'id': '_fail',
-                    'dragTo': ['_done'],
-                    'title': 'Quá hạn',
-                    'class': 'error',
-                    'item': [
-                            @if(count($fail))
-                            @foreach($fail as $item)
-                        {
-                            'id': '{{$item['id']}}',
-                            'title': '{{$item['title']}}',
-                        },
-                        @endforeach
-                        @endif
-                    ]
-                }
-            ]
-        });
-    </script>
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 
