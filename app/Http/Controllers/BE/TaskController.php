@@ -42,25 +42,33 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $input = $request->all();
-        $now = Carbon::now()->format('Y-m-d');
-        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
-        $input['type'] = 2;
-        $type = Task::TYPE;
-        $users = User::pluck('full_name', 'id');
-        $user = $request->user ?: 0;
-        $docs = Task::getAll($input);
-        $taskStatus = TaskStatus::getAll($input)->pluck('name', 'id')->toArray();
+//        $input = $request->all();
+//        $now = Carbon::now()->format('Y-m-d');
+//        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
+//        $input['type'] = 2;
+//        $type = Task::TYPE;
+//        $users = User::pluck('full_name', 'id');
+//        $user = $request->user ?: 0;
+//        $docs = Task::getAll($input);
+//        $taskStatus = TaskStatus::getAll($input)->pluck('name', 'id')->toArray();
+        if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
+            $request->merge(['data_time' => 'THIS_MONTH']);
+        }
+        $users = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
 
+        $title = 'Danh sách công việc';
+        $input = $request->all();
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id')->get();
+//dd($docs);
         if ($request->ajax()) {
             return $docs;
         }
 
-        return view('tasks.index', compact(
+        return view('kanban_board.index', compact(
             'type', 'now', 'user',
             'users',
-            'docs',
-            'taskStatus'
+            'docs'
+//            'taskStatus'
         ));
     }
 
@@ -126,18 +134,18 @@ class TaskController extends Controller
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
 
-        $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
-            : '📅📅📅 Bạn có công việc chăm sóc mới !';
-        Notification::insert([
-//            'title' => 'CV ' . $request->name . ' đã đến giờ thực hiện',
-            'title' => $title,
-            'user_id' => $task->user_id,
-            'type' => $task->type,
-            'task_id' => $task->id,
-            'status' => NotificationConstant::HIDDEN,
-            'created_at' => $task->date_from . ' ' . $task->time_from,
-            'data' => json_encode((array)['task_id' => $task->id]),
-        ]);
+//        $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
+//            : '📅📅📅 Bạn có công việc chăm sóc mới !';
+//        Notification::insert([
+////            'title' => 'CV ' . $request->name . ' đã đến giờ thực hiện',
+//            'title' => $title,
+//            'user_id' => $task->user_id,
+//            'type' => $task->type,
+//            'task_id' => $task->id,
+//            'status' => NotificationConstant::HIDDEN,
+//            'created_at' => $task->date_from . ' ' . $task->time_from,
+//            'data' => json_encode((array)['task_id' => $task->id]),
+//        ]);
         return back();
     }
 
@@ -244,7 +252,7 @@ class TaskController extends Controller
         $input = $request->except('user_id2', 'status_name');
         $task = $this->taskService->update($input, $id);
 
-        Notification::where('task_id', $task->id)->update(['created_at' => $task->date_from . ' ' . $task->time_from]);
+//        Notification::where('task_id', $task->id)->update(['created_at' => $task->date_from . ' ' . $task->time_from]);
 
         return $task;
     }
@@ -293,10 +301,37 @@ class TaskController extends Controller
         $input = $request->all();
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
 
-        if ($request->ajax()) {
-            return view('tasks.ajax_statistical', compact('docs'));
-        }
+//        if ($request->ajax()) {
+//            return view('tasks.ajax_statistical', compact('docs'));
+//        }
 
         return view('tasks.statistical', compact('title', 'docs', 'users'));
+    }
+
+    /**
+     * Update task
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function ajaxUpdateStatus(Request $request, $id)
+    {
+        $task = $this->taskService->find($id);
+        $task->task_status_id = $request->task_status_id;
+        $task->save();
+        return 1;
+    }
+
+    /**
+     * find task
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function findTask($id)
+    {
+        $task = $this->taskService->find($id);
+        return $task;
     }
 }

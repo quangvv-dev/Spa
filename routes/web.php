@@ -92,7 +92,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('view-chat/{id}', 'CustomerController@getChat');
         Route::post('view-chat/{id}', 'CustomerController@postChat');
         Route::post('group-comments', 'GroupCommentController@chatAjax');
-        Route::post('tasks/update', 'TaskController@updateStatus');
         Route::get('customers', 'CustomerController@getListAjax');
         Route::get('group-comments/{id}', 'GroupCommentController@edit');
         Route::put('update-type-orders/{id}', 'OrderController@updateType');
@@ -105,6 +104,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('count-notifications', 'AjaxController@countNotification');
         Route::get('notifications', 'AjaxController@getNotification');
         Route::get('change-notification/{id}', 'AjaxController@updateNotification');
+        Route::post('tasks/update', 'TaskController@updateStatus');
+        Route::get('tasks/{id}', 'TaskController@findTask');
 
         Route::post('image/store', 'AjaxController@store');
         Route::post('image/destroy', 'AjaxController@destroy');

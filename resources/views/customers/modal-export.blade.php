@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="modal-content" style="height: 25%">
             <div class="modal-header">
-                <h4><i>Export Data khách hàng</i></h4>
+                <h4>Tải Data khách hàng</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
