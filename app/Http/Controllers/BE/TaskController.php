@@ -15,6 +15,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
@@ -47,6 +48,7 @@ class TaskController extends Controller
         }
 
         $input = $request->all();
+        $input['sale_id'] = Auth::user()->id;
         $docs = Task::search($input)->select('id', 'name', 'task_status_id')->get();
         if ($request->ajax()) {
             return $docs;
