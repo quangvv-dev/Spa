@@ -42,34 +42,17 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-//        $input = $request->all();
-//        $now = Carbon::now()->format('Y-m-d');
-//        $input['type1'] = isset($input['type1']) ? $input['type1'] : 'qf1';
-//        $input['type'] = 2;
-//        $type = Task::TYPE;
-//        $users = User::pluck('full_name', 'id');
-//        $user = $request->user ?: 0;
-//        $docs = Task::getAll($input);
-//        $taskStatus = TaskStatus::getAll($input)->pluck('name', 'id')->toArray();
         if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+            $request->merge(['data_time' => 'THIS_WEEK']);
         }
-        $users = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
 
-        $title = 'Danh sách công việc';
         $input = $request->all();
         $docs = Task::search($input)->select('id', 'name', 'task_status_id')->get();
-//dd($docs);
         if ($request->ajax()) {
             return $docs;
         }
 
-        return view('kanban_board.index', compact(
-            'type', 'now', 'user',
-            'users',
-            'docs'
-//            'taskStatus'
-        ));
+        return view('kanban_board.index', compact('docs'));
     }
 
     /**
