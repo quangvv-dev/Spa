@@ -9,6 +9,7 @@ use App\Constants\UserConstant;
 use App\CustomerPost;
 use App\Helpers\Functions;
 use App\Models\Branch;
+use App\Models\CallCenter;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -232,6 +233,7 @@ class CustomerController extends Controller
         $wallet = [];
         $package = [];
         $orders = [];
+        $call_center = [];
         if ($request->history_sms) {
             $history = HistorySms::where('phone',
                 $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
@@ -254,6 +256,11 @@ class CustomerController extends Controller
             return Response::json(view('schedules.index', compact('schedules', 'id', 'staff'))->render());
         }
 
+        if ($request->call_center) {
+            $call_center = CallCenter::where('dest_number',$request->call_center)->paginate(StatusCode::PAGINATE_20);
+            return Response::json(view('call_center.customer', compact('call_center'))->render());
+        }
+
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
             if (!empty($request->page_order)) {
                 $request->merge(['page' => $request->page_order]);
@@ -268,7 +275,7 @@ class CustomerController extends Controller
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
                 'customer_post',
                 'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet',
-                'package', 'orders'));
+                'package','call_center', 'orders'));
     }
 
     /**

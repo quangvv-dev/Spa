@@ -10,6 +10,8 @@
     <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/style.css') }}" media="all">
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/mobilelightbox.css') }}" media="all">
+    <link href="{{ asset('css/progres-bar.css') }}" rel="stylesheet"/>
+
     <style>
         #snoAlertBox1 {
             position: absolute;
@@ -64,8 +66,9 @@
             color: #3b8fec;
             border-bottom: 3px solid #3b8fec;
         }
-        .card i{
-        color: #3b8fec ;
+
+        .card i {
+            color: #3b8fec;
         }
     </style>
     @php
@@ -159,7 +162,8 @@
                                     </h3>
                                 </div>
                                 <div class="col-md-8">
-                                    <div class="text-a">{{ \Carbon\Carbon::parse($customer->created_at)->format('d/m/Y') }}</div>
+                                    <div
+                                        class="text-a">{{ \Carbon\Carbon::parse($customer->created_at)->format('d/m/Y') }}</div>
                                 </div>
                                 <div class="col-md-4">
                                     <h3 class="uppercase pb5 mb10 font12 bold mg0"><i
@@ -279,6 +283,8 @@
                                                    data-toggle="tab">Tin nhắn</a></li>
                                             <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Khuyến mại</a></li>
+                                            <li><a href="#tab12" id="click_tab_12" data-phone="{{$customer->phone}}"
+                                                   data-toggle="tab">Chăm sóc</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -356,7 +362,8 @@
                                                 </div>
                                                 <div class="col relative">
                                                     @if($roleGlobal->permission('order.add'))
-                                                        <a class="right btn btn-primary btn-flat text-white" data-toggle="modal"
+                                                        <a class="right btn btn-primary btn-flat text-white"
+                                                           data-toggle="modal"
                                                            data-target="#roleTypeModal"><i
                                                                 class="fa fa-plus-circle text-white"></i>Thêm đơn</a>
                                                     @endif
@@ -378,7 +385,8 @@
                                         <div class="tab-pane " id="tab8">
                                             <a style="color: #ffffff;margin-bottom: 8px;"
                                                class="right btn btn-primary btn-flat text-white" data-toggle="modal"
-                                               data-target="#task"><i class="fa fa-plus-circle text-white"></i>Thêm CV</a>
+                                               data-target="#task"><i class="fa fa-plus-circle text-white"></i>Thêm
+                                                CV</a>
                                             @include('tasks.ajax')
                                             @include('tasks._form_customer')
                                         </div>
@@ -397,6 +405,9 @@
                                                 @include('post.history')
                                             @endif
                                         </div>
+                                        <div class="tab-pane " id="tab12">
+                                            @include('call_center.customer')
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -406,6 +417,8 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="/js/player.js"></script>
 @endsection
 @section('_script')
     <script src="{{ asset('zoom-image/js/mobilelightbox.js') }}"></script>
@@ -532,6 +545,18 @@
                 data: {post: phone}
             }).done(function (data) {
                 $('#tab11').html(data);
+            });
+        })
+        $(document).on('click', '#click_tab_12', function () {
+            const phone = $(this).data('phone');
+            $('#tab12').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {call_center: phone}
+            }).done(function (data) {
+                $('#tab12').html(data);
             });
         })
         $(document).on('dblclick', '.order-type', function () {

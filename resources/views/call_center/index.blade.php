@@ -52,11 +52,6 @@
             font-size: 14px;
         }
 
-        .small-tip {
-            font-size: 11px;
-            color: #999;
-        }
-
         @media only screen and (max-width: 1921px) {
             .table-responsive {
                 max-height: 70vh;

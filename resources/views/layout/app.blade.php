@@ -94,6 +94,10 @@
     .modal-header h2,.modal-header h3,.modal-header h4,.modal-header h5,.modal-header button {
         color: #fff !important;
     }
+    .small-tip {
+        font-size: 11px;
+        color: #999;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">
