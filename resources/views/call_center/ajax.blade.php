@@ -40,7 +40,7 @@
                     <td class="text-center">{!!@$doc->call_status=='ANSWERED'?'<span class="badge badge-success">Nghe máy</span>':
                     '<span class="badge badge-danger">Gọi lỡ</span>' !!}
                     </td>
-                    <br class="text-center">
+                    <td class="text-center">
                         {{date('d-m-Y H:i',strtotime($doc->start_time))}}
                     </br>
                     <span class="small-tip">{{@$doc->expired_text}}</span>
