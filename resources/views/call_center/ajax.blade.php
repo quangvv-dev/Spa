@@ -46,7 +46,7 @@
                         <span class="small-tip">{{@$doc->expired_text}}</span>
                         </br>
                         <span
-                            class="small-tip">{{isset($doc->after_time)&&$doc->after_time?'Chăm sóc sau '.$doc->after_time:''}}</span>
+                            class="small-tip">{{!empty($doc->after_time)?'Sau'.$doc->after_time:''}}</span>
                     </td>
                     <td class="text-center">
                         {{--<i class="fas fa-play-circle fa-2x text-primary"></i>--}}
