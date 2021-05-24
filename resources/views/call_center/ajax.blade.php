@@ -40,11 +40,12 @@
                     <td class="text-center">{!!@$doc->call_status=='ANSWERED'?'<span class="badge badge-success">Nghe máy</span>':
                     '<span class="badge badge-danger">Gọi lỡ</span>' !!}
                     </td>
-                    <td class="text-center">
+                    <br class="text-center">
                         {{date('d-m-Y H:i',strtotime($doc->start_time))}}
-                        </br>
-                        <span class="small-tip">{{@$doc->expired_text}}</span>
-                        <span class="small-tip">{{@$doc->after_time}}</span>
+                    </br>
+                    <span class="small-tip">{{@$doc->expired_text}}</span>
+                    </br>
+                    <span class="small-tip">{{'Chăm sóc sau '.@$doc->after_time}}</span>
                     </td>
                     <td class="text-center">
                         {{--<i class="fas fa-play-circle fa-2x text-primary"></i>--}}
