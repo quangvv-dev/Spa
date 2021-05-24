@@ -5,6 +5,10 @@
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Theo dõi công việc nhân viên</h3></br>
+
+            </div>
             {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="card-header">
                 <div class="col-md-2">

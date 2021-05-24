@@ -123,5 +123,12 @@
         $('.clockpicker').clockpicker();
 
     })
+    $(document).on('click', '.other_time', function () {
+        $(".other_time_panel").css({'display': ''});
+    });
+
+    $(document).on('click', '.cancel_other_time', function () {
+        $(".other_time_panel").css({'display': 'none'});
+    });
 </script>
 @include('layout._script')

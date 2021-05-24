@@ -153,16 +153,15 @@ class Task extends Model
         $data = self::when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                $q->whereDate('date_from', getTime(($input['date_from'])));
+                $q->whereDate('date_from', getTime($input['data_time']));
             })
                 ->when($input['data_time'] == 'THIS_WEEK' ||
                     $input['data_time'] == 'LAST_WEEK' ||
                     $input['data_time'] == 'THIS_MONTH' ||
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('date_from', getTime(($input['data_time'])));
+                    $q->whereBetween('date_from', getTime($input['data_time']));
                 });
-        })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-
+        })->when(!empty($input['start_date']) && !empty($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('date_from', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",

@@ -10,7 +10,8 @@
     .dropdown-custom .username {
         line-height: 3.5;
     }
-    .position0{
+
+    .position0 {
         position: absolute !important;
         top: 0;
         right: 0;
@@ -19,6 +20,7 @@
     .margin-right0 i {
         margin-right: 0 !important;
     }
+
     .avatar {
         display: table-cell;
         vertical-align: top;
@@ -27,17 +29,20 @@
         -webkit-box-sizing: none;
         box-sizing: none;
     }
+
     @media only screen and (max-width: 1367px) {
-        .ren-navbar .nav-link{
+        .ren-navbar .nav-link {
             padding: 1.3rem 0.9rem;
         }
     }
-    .div-info{
+
+    .div-info {
         position: absolute !important;
         top: 4px;
         right: 0;
     }
-    .left{
+
+    .left {
         float: left;
     }
 </style>
@@ -131,15 +136,9 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}" href="{{route('tasks.index')}}"><i
-                        class="fas fa-tasks"></i><span>Công việc</span></a>
-                @if($roleGlobal->permission('tasks.employee'))
-                    <div class="sub-item">
-                        <ul>
-                            <li><a href="{!! url('tasks-employee') !!}">Công việc theo sale</a></li>
-                        </ul>
-                    </div>
-                @endif
+                <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}"
+                   href="{{$roleGlobal->permission('tasks.employee')?url('tasks-employee'):($roleGlobal->permission('tasks.index')?route('tasks.index'):'#')}}">
+                    <i class="fas fa-tasks"></i><span>CSKH</span></a>
             </li>
             <li class="nav-item with-sub">
                 <a class="nav-link {{ Request::is('statistics*')||Request::is('report*')||Request::is('history-sms') ? 'active' : '' }}"
@@ -170,7 +169,7 @@
                         @if($roleGlobal->permission('statistics.taskSchedules'))
                             <li><a href="{{url('statistics-task')}}">BĐ C.việc & lịch hẹn</a></li>
                         @endif
-                            @if($roleGlobal->permission('call-center'))
+                        @if($roleGlobal->permission('call-center'))
                             <li><a href="{{route('call-center.index')}}">Quản lý tổng đài</a></li>
                         @endif
                     </ul>
@@ -181,8 +180,9 @@
             <div class="left">
                 <input id="check_notify" type="hidden">
                 <div class="dropdown dropdown-notification d-none d-md-flex">
-                    <a class="nav-link icon notification margin-right0" data-toggle="dropdown"><i style="color: #3691ef;"
-                                                                                                  class="fas fa-bell"></i> <span
+                    <a class="nav-link icon notification margin-right0" data-toggle="dropdown"><i
+                            style="color: #3691ef;"
+                            class="fas fa-bell"></i> <span
                             class="badge badge-danger badge-pill position0">10</span></a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
                          style="overflow: auto;max-height: 400px">
@@ -242,7 +242,7 @@
                         @endif
                         @if(empty($permissions) || !in_array('package.index',$permissions))
                             @if($roleGlobal->permission('settings'))
-                            <a class="dropdown-item" href="{!! route('package.index') !!}"><i
+                                <a class="dropdown-item" href="{!! route('package.index') !!}"><i
                                         class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
                             @endif
                         @endif

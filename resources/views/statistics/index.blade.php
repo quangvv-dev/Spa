@@ -123,13 +123,7 @@
             });
         });
 
-        $(document).on('click', '.other_time', function () {
-            $(".other_time_panel").css({'display': ''});
-        });
 
-        $(document).on('click', '.cancel_other_time', function () {
-            $(".other_time_panel").css({'display': 'none'});
-        });
         $(document).ready(function () {
             $('[data-toggle="datepicker"]').datepicker({
                 format: 'dd-mm-yyyy',

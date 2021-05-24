@@ -1,18 +1,4 @@
 <div id="myKanban"></div>
-@php
-    $new =[];
-    $done =[];
-    $fail =[];
-if(count($docs))
-    foreach($docs as $item){
-    if ($item->task_status_id==1)
-    $new[]=['id'=>$item->id,'title'=>$item->name];
-    if ($item->task_status_id==2)
-    $fail[]=['id'=>$item->id,'title'=>$item->name];
-    if ($item->task_status_id==3)
-    $done[]=['id'=>$item->id,'title'=>$item->name];
-    }
-@endphp
 <script src="{{asset('assets/plugins/kanban-board/jkanban.min.js')}}"></script>
 <script>
     var KanbanTest = new jKanban({
@@ -30,9 +16,9 @@ if(count($docs))
                     $('#time_from').val(data.time_from).change();
                     $('#time_to').val(data.time_to).change();
                     $('#description').html(data.description).change();
+                    $('#myModal').modal('show');
                 }
             })
-            $('#myModal').modal('show');
         },
         dropEl: function (el, target, source, sibling) {
             KanbanTest.options.boards.map(function (board) {
@@ -57,8 +43,8 @@ if(count($docs))
                 'title': 'Công việc',
                 'class': 'info',
                 'item': [
-                        @if(count($new))
-                        @foreach($new as $item)
+                    @if(count($new))
+                    @foreach($new as $item)
                     {
                         'id': '{{$item['id']}}',
                         'title': '{{$item['title']}}',
@@ -73,14 +59,15 @@ if(count($docs))
                 'title': 'Hoàn thành',
                 'class': 'success',
                 'item': [
-                        @if(count($done))
-                        @foreach($done as $item)
+                    @if(count($done))
+                    @foreach($done as $item)
                     {
                         'id': '{{$item['id']}}',
                         'title': '{{$item['title']}}',
 
                     },
                     @endforeach
+
                     @endif
                 ]
             },
@@ -97,6 +84,7 @@ if(count($docs))
                         'title': '{{$item['title']}}',
                     },
                     @endforeach
+
                     @endif
                 ]
             }

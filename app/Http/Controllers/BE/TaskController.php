@@ -43,18 +43,30 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        if (empty($request->start_date) && empty($request->end_date)) {
+
+        if (empty($request->start_date) && empty($request->end_date) && empty($request->data_time)) {
             $request->merge(['data_time' => 'THIS_WEEK']);
         }
-        $input = $request->except('start_date','end_date');
-
+        $input = $request->all();
         $input['sale_id'] = Auth::user()->id;
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id')->get();
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id','date_from')->get();
+        $new = [];
+        $done = [];
+        $fail = [];
+        if (count($docs))
+            foreach ($docs as $item) {
+                if ($item->task_status_id == 1)
+                    $new[] = ['id' => $item->id, 'title' => $item->name];
+                if ($item->task_status_id == 2)
+                    $fail[] = ['id' => $item->id, 'title' => $item->name];
+                if ($item->task_status_id == 3)
+                    $done[] = ['id' => $item->id, 'title' => $item->name];
+            }
         if ($request->ajax()) {
-            return view('kanban_board.ajax', compact('docs'));
+            return view('kanban_board.ajax', compact('new', 'done', 'fail'));
         }
 
-        return view('kanban_board.index', compact('docs'));
+        return view('kanban_board.index', compact('new', 'done', 'fail'));
     }
 
     /**
