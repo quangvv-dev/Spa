@@ -44,6 +44,7 @@
                         {{date('d-m-Y H:i',strtotime($doc->start_time))}}
                         </br>
                         <span class="small-tip">{{@$doc->expired_text}}</span>
+                        <span class="small-tip">{{@$doc->after_time}}</span>
                     </td>
                     <td class="text-center">
                         {{--<i class="fas fa-play-circle fa-2x text-primary"></i>--}}

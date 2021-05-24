@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\Functions;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Date;
 
 class CallCenter extends Model
 {
@@ -29,6 +30,21 @@ class CallCenter extends Model
             $minutes = floor(($this->answer_time / 60));
             $sec = round($this->answer_time % 60);
             return ($minutes > 0 ? $minutes . ' phút ' : '') . ($sec > 0 ? $sec . ' giây' : '');
+        }
+        return '';
+    }
+
+
+    public function getAfterTimeAttribute()
+    {
+        $now = Date::now()->format('Y-m-d H:i:s');
+        $count = CallCenter::where('dest_number', $this->dest_number)->count();
+        if (isset($this->customer) && $count == 1) {
+            $countdown = strtotime($now) - strtotime($this->customer->created_at);
+            $days = ($countdown / 86400) > 1 ? floor($countdown / 86400) : 0;
+            $hours = floor(($countdown % 86400) / 3600);
+            $minutes = round((($countdown % 86400) % 3600) / 60);
+            return ($days > 0 ? $days . ' ngày ' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
         }
         return '';
     }
