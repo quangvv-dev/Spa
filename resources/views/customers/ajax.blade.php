@@ -134,7 +134,7 @@
             <th class="text-white text-center">Nhóm KH</th>
             <th class="text-white text-center">Trạng Thái</th>
             <th class="text-white text-center">Người phụ trách</th>
-            <th class="text-white text-center">Mô tả</th>
+            <th class="text-white text-center" style="min-width: 121px">Mô tả</th>
             <th class="text-white text-center">C.Nhánh</th>
             {{--<th class="text-white text-center">Nhóm tính cách</th>--}}
             <th class="text-white text-center">Lich Hẹn</th>
@@ -184,8 +184,9 @@
                     <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     <td class="text-center telesale-customer"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center description-cus" data-id="{{$customer->id}}"
-                        style="width: 291px; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">{{ $customer->description }}</td>
+                    <td class="text-center" style="position: relative;max-width: 146px">
+                        <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
+                    </td>
                     <td class="text-center">{{@$customer->branch->name}}</td>
                     {{--<td class="text-center genitive-db" title="{{@$customer->genitive->description}}"--}}
                         {{--data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>--}}

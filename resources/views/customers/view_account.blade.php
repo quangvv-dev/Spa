@@ -274,7 +274,7 @@
                                                    data-toggle="tab">Lịch hẹn</a></li>
                                             <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Đơn hàng</a></li>
-                                            <li><a href="#tab8" data-toggle="tab">Công việc</a></li>
+                                            {{--<li><a href="#tab8" data-toggle="tab">Công việc</a></li>--}}
                                             @if(empty($permissions) || !in_array('package.customer',$permissions))
                                                 <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                        data-toggle="tab">Ví tiền</a></li>
@@ -284,7 +284,7 @@
                                             <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Khuyến mại</a></li>
                                             <li><a href="#tab12" id="click_tab_12" data-phone="{{$customer->phone}}"
-                                                   data-toggle="tab">Chăm sóc</a></li>
+                                                   data-toggle="tab">Tổng đài</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -382,14 +382,14 @@
                                         {{--    Modal thêm --}}
                                         @include('schedules.modal')
                                         {{--    END Modal thêm --}}
-                                        <div class="tab-pane " id="tab8">
-                                            <a style="color: #ffffff;margin-bottom: 8px;"
-                                               class="right btn btn-primary btn-flat text-white" data-toggle="modal"
-                                               data-target="#task"><i class="fa fa-plus-circle text-white"></i>Thêm
-                                                CV</a>
-                                            @include('tasks.ajax')
-                                            @include('tasks._form_customer')
-                                        </div>
+                                        {{--<div class="tab-pane " id="tab8">--}}
+                                            {{--<a style="color: #ffffff;margin-bottom: 8px;"--}}
+                                               {{--class="right btn btn-primary btn-flat text-white" data-toggle="modal"--}}
+                                               {{--data-target="#task"><i class="fa fa-plus-circle text-white"></i>Thêm--}}
+                                                {{--CV</a>--}}
+                                            {{--@include('tasks.ajax')--}}
+                                            {{--@include('tasks._form_customer')--}}
+                                        {{--</div>--}}
                                         <div class="tab-pane " id="tab10">
                                             @if(count($wallet))
                                                 @include('wallet.history')

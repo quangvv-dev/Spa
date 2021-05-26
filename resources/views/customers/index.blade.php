@@ -9,6 +9,25 @@
        .card i {
             color: #3b8fec !important;
         }
+        .description-cus {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            overflow-y: hidden;
+            transition: ease 0.2s all;
+            line-height: 20px;
+            font-size: 11px;
+            border: none;
+        }
+       .description-cus:focus, .description-cus:hover {
+           height: 70px;
+           width: 400px !important;
+           z-index: 9999;
+           box-shadow: 0 0 10px #ddd;
+       }
+       th.text-white.text-center{
+           z-index: 900;
+       }
     </style>
 @endsection
 @section('content')
@@ -458,24 +477,6 @@
                 searchAjax(data);
             });
 
-            $(document).on('dblclick', '.description-cus', function (e) {
-                let target = $(e.target).parent();
-                $(target).find('.description-cus').empty();
-                let id = $(this).data('id');
-                let html = '';
-
-                $.ajax({
-                    url: "ajax/customers/" + id,
-                    method: "get",
-                    data: {id: id}
-                }).done(function (data) {
-
-                    html +=
-                        '<textarea name="description" data-id="' + data.id + '" class="description-result-customer" style="width: 291px; height: 59px; font-size: 14px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; background-color: rgb(255, 255, 255); resize: none; min-width: 291px; max-width: 291px; overflow-y: hidden;">' + (data.description ? data.description : '') + '</textarea>';
-                    $(target).find(".description-cus").append(html);
-                });
-            });
-
             $(document).on('dblclick', '.category-db', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.category-db').empty();
@@ -652,9 +653,9 @@
             });
 
 
-            $(document).on('focusout', '.description-result-customer', function (e) {
+            $(document).on('focusout', '.description-cus', function (e) {
                 let target = $(e.target).parent();
-                let description = $(target).find('.description-result-customer').val();
+                let description = $(target).find('.description-cus').val();
                 let id = $(this).data('id');
 
                 $.ajax({
@@ -664,8 +665,6 @@
                         description: description,
                     }
                 }).done(function (data) {
-                    $(target).parent().find(".description-cus").empty();
-                    $(target).parent().find(".description-cus").html(data.description);
                 });
             });
 
