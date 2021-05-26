@@ -187,8 +187,8 @@ class SmsController extends Controller
                     $input['campaign_id'] = $request->campaign_id ?: 0;
                     $input['message'] = $body;
                     HistorySms::create($input);
+                    return back()->with('status', 'GỬI TIN THÀNH CÔNG !!!');
                 }
-                return back()->with('status', 'GỬI TIN THÀNH CÔNG !!!');
             }catch (\Exception $exception){
                 return back()->with('error', 'GỬI TIN THẤT BẠI !!!');
             }
