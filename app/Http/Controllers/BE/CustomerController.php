@@ -490,7 +490,7 @@ class CustomerController extends Controller
                                     $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
                                     $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
                                     foreach ($row['ngay_trao_doi'] as $key_date => $item) {
-                                        $item = Carbon::createFromFormat('d/m/Y H:i', trim($item))->format('Y-m-d H:i');
+                                        $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
                                         $comment_value[] = [
                                             'customer_id' => $data->id,
                                             'user_id'     => Auth::user()->id,
