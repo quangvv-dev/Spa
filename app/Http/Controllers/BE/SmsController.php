@@ -183,7 +183,6 @@ class SmsController extends Controller
             try{
                 $err = Functions::sendSmsV3($phone, $body);
                 if (isset($err) && $err) {
-                    dd($err);
                     $input['phone'] = $customer->phone;
                     $input['campaign_id'] = $request->campaign_id ?: 0;
                     $input['message'] = $body;
