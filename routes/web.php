@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('customers/update-multiple-branch', 'CustomerController@updateBranch')->name('customers.update-multiple-branch');
     //sms
     Route::resource('sms', 'SmsController');
+    Route::post('send-sms-customer', 'SmsController@sendSmsCustomer')->name('sms.sentCustomer');
     Route::post('sent-sms', 'SmsController@sentSms')->name('sms.sent');
     Route::post('save-sms', 'SmsController@saveSmsSchedules')->name('sms.saveSchedules');
     Route::get('history-sms', 'SmsController@history')->name('sms.history');

@@ -61,7 +61,7 @@
 
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
+    <script src="{{asset('js/jquery.textcomplete.min.js')}}"></script>
     <script>
         $('.autocomplete-textarea').textcomplete([{
             match: /(^|\s)@(\w*(?:\s*\w*))$/,

@@ -10,6 +10,7 @@
             color: #3b8fec !important;
         }
         .description-cus {
+            height: 100%;
             position: absolute;
             top: 0px;
             left: 0px;

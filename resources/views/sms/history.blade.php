@@ -7,6 +7,9 @@
             <th class="text-white text-center">KH nhận</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Nội dung tin</th>
+            <th class="text-white text-center" style="max-width: 30px">
+                <a data-toggle="modal" data-target="#modalSendSMS"><i style="color: #fff" class="fa fa-plus"></i> Gửi tin</a>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -17,6 +20,7 @@
                 <td class="text-center">{{@formatYMD($item->updated_at)}}</td>
                 <td class="text-center">{{@$item->campaign->name?:'Tin Automation'}}</td>
                 <td class="text-center">{{@$item->message}}</td>
+                <td class="text-center"></td>
             </tr>
         @endforeach
         </tbody>

@@ -70,6 +70,9 @@
         .card i {
             color: #3b8fec;
         }
+        ul#textcomplete-dropdown-1{
+            z-index: 9999 !important;
+        }
     </style>
     @php
         $roleGlobal = auth()->user()?:[];
@@ -395,10 +398,13 @@
                                                 @include('wallet.history')
                                             @endif
                                         </div>
-                                        <div class="tab-pane " id="tab9">
-                                            @if(count($history))
-                                                @include('sms.history')
-                                            @endif
+                                        <div class="tab-pane" id="tab9">
+                                            <div id="content_tab9">
+                                                @if(count($history))
+                                                    @include('sms.history')
+                                                @endif
+                                            </div>
+                                        @include('customers.modal-sendSMS')
                                         </div>
                                         <div class="tab-pane " id="tab11">
                                             @if(count($customer_post))
@@ -427,8 +433,45 @@
     <script src="{{asset('assets/js/util.js')}}"></script> <!-- util functions included in the CodyHouse framework -->
     <script src="{{asset('assets/js/main.js')}}"></script>
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
+    <script src="{{asset('js/jquery.textcomplete.min.js')}}"></script>
 
     <script type="text/javascript">
+
+        $('.autocomplete-textarea').textcomplete([{
+            match: /(^|\s)@(\w*(?:\s*\w*))$/,
+
+            search: function (query, callback) {
+                let data = [{
+                    name: "Tên khách hàng",
+                    value: "%full_name%"
+                },{
+                    name: "Chi nhánh",
+                    value: "%branch%"
+                }, {
+                    name: "SĐT chi nhánh",
+                    value: "%phoneBranch%"
+                },{
+                    name: "Địa chỉ chi nhánh",
+                    value: "%addressBranch%"
+                }];
+                callback(data);
+            },
+
+            template: function (hit) {
+                // phan hien thi o dropdown
+                let html = `
+            <a class="tag-item" href="">
+            <span class="label">${hit.name} <img width="40" src='{{asset('/assets/images/brand/logo.png')}}'/></span>
+            </a>`;
+                return html;
+            },
+
+            replace: function (hit) {
+                // phan hien thi khi
+                return hit.value.trim();
+            }
+        }]);
+
         // $(document).ready(function () {
         $(document).on('click', '#save_schedules', function (e) {
             let name = $('#update_status :selected').text();
@@ -513,14 +556,14 @@
 
         $(document).on('click', '#click_tab_9', function () {
             const phone = $(this).data('phone');
-            $('#tab9').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $('#content_tab9').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
 
             $.ajax({
                 url: "{{url()->current() }}",
                 method: "get",
                 data: {history_sms: phone}
             }).done(function (data) {
-                $('#tab9').html(data);
+                $('#content_tab9').html(data);
             });
         })
         $(document).on('click', '#click_tab_10', function () {

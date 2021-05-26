@@ -131,6 +131,7 @@ class SmsController extends Controller
             setting(['sms_group' => $request->sms_group])->save();
             $arr_customers = CustomerGroup::whereIn('category_id', $request->category_id)
                 ->groupBy('customer_id')->pluck('customer_id')->toArray();
+            $branch = Branch::find($request->branch_id);
             $users = Customer::where('branch_id', $request->branch_id)->whereIn('id', $arr_customers)
                 ->whereIn('status_id', $request->status_id)->when($request->time_from && $request->time_to, function ($q) use ($request) {
                     $q->whereBetween('created_at', [
@@ -144,8 +145,8 @@ class SmsController extends Controller
                 foreach ($users as $key => $item) {
                     if (strlen($item) == 10) {
                         $phone = Functions::convertPhone($item);
-                        $key = str_replace('%full_name%', $key, $request->sms_group);
-                        $body = Functions::vi_to_en($key);
+                        $body = replaceVariable($request->sms_group, $key, '', @$branch->name, @$branch->phone, @$branch->address);
+                        $body = Functions::vi_to_en($body);
                         $err = Functions::sendSmsV3($phone, $body);
                         if (isset($err) && $err) {
                             $number++;
@@ -167,6 +168,33 @@ class SmsController extends Controller
             }
             return back()->with('status', 'GỬI TIN THÀNH CÔNG CHO ' . $number . ' KHÁCH HÀNG !!!');
         }
+    }
+
+
+    public function sendSmsCustomer(Request $request)
+    {
+        setting(['sms_customer' => $request->sms_group])->save();
+        $branch = Branch::find($request->branch_id);
+        $customer = Customer::find($request->customer_id);
+        if (strlen($customer->phone) == 10) {
+            $phone = Functions::convertPhone($customer->phone);
+            $body = replaceVariable($request->sms_group, @$customer->name, '', @$branch->name, @$branch->phone, @$branch->address);
+            $body = Functions::vi_to_en($body);
+            try{
+                $err = Functions::sendSmsV3($phone, $body);
+                if (isset($err) && $err) {
+                    $input['phone'] = $phone;
+                    $input['campaign_id'] = $request->campaign_id ?: 0;
+                    $input['message'] = $body;
+                    HistorySms::create($input);
+                }
+                return back()->with('status', 'GỬI TIN THÀNH CÔNG !!!');
+            }catch (\Exception $exception){
+                return back()->with('error', 'GỬI TIN THẤT BẠI !!!');
+            }
+        }
+        return back()->with('error', 'Số điện thoại không phải 10 số !!!');
+
     }
 
     public function sentSmsBK(Request $request)
