@@ -149,6 +149,9 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
+            $customer->old_customer = 1;
+            $customer->save();
+
             if ($order->discount > 0) {
                 $promotion = Promotion::find($order->voucher_id);
                 $promotion->current_quantity = $promotion->current_quantity - 1;
@@ -714,9 +717,9 @@ class OrderController extends Controller
                     $name_services = explode(',', $row['san_phamdich_vu']);
                     $customer = Customer::where('phone', $row['sdt'])->first();
                     $service = Services::whereIn('name', $name_services)->get();
-                    if ($row['ma_dh']){
+                    if ($row['ma_dh']) {
                         $checkOrder = Order::where('code', $row['ma_dh'])->first();
-                    }else{
+                    } else {
                         $checkOrder = null;
                     }
                     $paymentType = null;
