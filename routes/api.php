@@ -19,6 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('login-app', 'API\AuthController@login');
+
+
+
 Route::post('/check-unique-users', 'BE\UserController@checkUnique');
 Route::post('/check-unique-customers', 'BE\CustomerController@checkUniquePhone');
 Route::post('/check-unique-code-orders', 'BE\OrderController@checkUniqueCode');

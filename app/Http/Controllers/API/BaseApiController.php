@@ -22,7 +22,7 @@ class BaseApiController extends Controller
     public function responseApi($code, $message = "", $data = [])
     {
         return response()->json([
-            'ok' => $code,
+            'code' => $code,
             'msg' => $message,
             'data' => !empty($data) ? $data : [],
         ]);
