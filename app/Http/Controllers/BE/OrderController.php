@@ -149,8 +149,11 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
-            $customer->old_customer = 1;
-            $customer->save();
+            $countOrders = Order::where('member_id',$customer->id)->count();
+            if (@$countOrders > 1){
+                $customer->old_customer = 1;
+                $customer->save();
+            }
 
             if ($order->discount > 0) {
                 $promotion = Promotion::find($order->voucher_id);

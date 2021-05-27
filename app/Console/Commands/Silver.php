@@ -46,6 +46,6 @@ class  Silver extends Command
 //        Status::where('code', 'gold')->update(['name' => 'Khách hàng thân thiết', 'code' => 'khach_hang_than_thiet']);
 //        Status::where('code', 'platinum')->update(['name' => 'Cộng tác viên', 'code' => 'cong_tac_vien']);
         $customers = Order::select('member_id')->groupBy('member_id')->get()->pluck('member_id');
-        Customer::whereIn('id', $customers)->update(['old_customer' => 1]);
+        Customer::whereIn('id', $customers)->update(['old_customer' => 0]);
     }
 }
