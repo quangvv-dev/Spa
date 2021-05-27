@@ -48,8 +48,8 @@ class SalesController extends Controller
         }
 
         $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', getTime($request->data_time));
-            $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('created_at', '<', getTime($request->data_time)[0]);
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)->where('old_customer', 0)->whereBetween('created_at', getTime($request->data_time));
+            $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('old_customer', 1);
             $data = Customer::select('id')->where('telesales_id', $item->id);
 
             $order = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
@@ -99,7 +99,7 @@ class SalesController extends Controller
             $request->merge(['data_time' => 'THIS_WEEK']);
         }
         $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
-        $branchs = Branch::search()->pluck('name','id');
+        $branchs = Branch::search()->pluck('name', 'id');
 
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request) {
@@ -182,7 +182,7 @@ class SalesController extends Controller
         if ($request->ajax()) {
             return view('report_products.ajax_group', compact('users', 'telesales'));
         }
-        return view('report_products.group_sale', compact('branchs','users', 'telesales'));
+        return view('report_products.group_sale', compact('branchs', 'users', 'telesales'));
     }
 
     public function searchBranch($query, $input)

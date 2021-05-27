@@ -14,7 +14,7 @@ class AddColumnsOldCustomerTables extends Migration
     public function up()
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('old_customer')->default(0)->comment('Khách hàng cũ')->nullable();
+            $table->integer('old_customer')->default(0)->index()->comment('Khách hàng cũ')->nullable();
         });
     }
 
