@@ -23,7 +23,7 @@ class BaseApiController extends Controller
     {
         return response()->json([
             'code' => $code,
-            'msg' => $message,
+            'messages' => $message,
             'data' => !empty($data) ? $data : [],
         ]);
     }

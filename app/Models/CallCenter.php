@@ -58,14 +58,14 @@ class CallCenter extends Model
         })->when(isset($param['dest_number']) && $param['dest_number'], function ($q) use ($param) {
             $q->where('dest_number', $param['dest_number']);
         })
-            ->when($param['data_time'] == 'TODAY' ||
-                $param['data_time'] == 'YESTERDAY', function ($q) use ($param) {
+            ->when(isset($param['data_time']) && ($param['data_time'] == 'TODAY' ||
+                    $param['data_time'] == 'YESTERDAY'), function ($q) use ($param) {
                 $q->whereDate('start_time', getTime(($param['data_time'])));
             })
-            ->when($param['data_time'] == 'THIS_WEEK' ||
-                $param['data_time'] == 'LAST_WEEK' ||
-                $param['data_time'] == 'THIS_MONTH' ||
-                $param['data_time'] == 'LAST_MONTH', function ($q) use ($param) {
+            ->when(isset($param['data_time']) && ($param['data_time'] == 'THIS_WEEK' ||
+                    $param['data_time'] == 'LAST_WEEK' ||
+                    $param['data_time'] == 'THIS_MONTH' ||
+                    $param['data_time'] == 'LAST_MONTH'), function ($q) use ($param) {
                 $q->whereBetween('start_time', getTime(($param['data_time'])));
             })
             ->when(isset($param['start_date']) && isset($param['end_date']), function ($q) use ($param) {

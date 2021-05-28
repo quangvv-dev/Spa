@@ -22,6 +22,7 @@ class UserConstant
     const CSKH = 7;//TƯ VẤN VIÊN CSKH
     const TP_SALE = 8;//TƯ VẤN VIÊN CSKH
     const TP_MKT = 9;//TƯ VẤN VIÊN CSKH
+    const QLCN = 10;//Quản lý chi nhánh
 
     const IS_LEADER = 1;//TRƯỞNG PHÒNG
     const EMPLOYEE = 0;//NHÂN VIÊN

@@ -21,17 +21,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login-app', 'API\AuthController@login');
 
+Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
+    Route::get('branch', 'AuthController@branch');
+    Route::get('sales', 'SaleController@sale');
+    Route::get('call', 'CallController@index');
+
+});
 
 
 Route::post('/check-unique-users', 'BE\UserController@checkUnique');
 Route::post('/check-unique-customers', 'BE\CustomerController@checkUniquePhone');
 Route::post('/check-unique-code-orders', 'BE\OrderController@checkUniqueCode');
-Route::get('/statistics', 'API\StatisticController@index');
-Route::get('/statistics-all', 'API\StatisticController@getAllBranch');
-Route::get('/sales', 'API\StatisticController@sales');
-Route::get('/sales-with-branch', 'API\StatisticController@saleWithBranch');
-Route::get('/campaigns', 'API\StatisticController@campaign');
-Route::get('/campaign-with-branch', 'API\StatisticController@campaignWithBranch');
+//Route::get('/statistics', 'API\StatisticController@index');
+//Route::get('/statistics-all', 'API\StatisticController@getAllBranch');
+//Route::get('/sales', 'API\StatisticController@sales');
+//Route::get('/sales-with-branch', 'API\StatisticController@saleWithBranch');
+//Route::get('/campaigns', 'API\StatisticController@campaign');
+//Route::get('/campaign-with-branch', 'API\StatisticController@campaignWithBranch');
 Route::get('/task-schedules', 'API\StatisticController@TaskScheduleSale');
 //Post customers
 Route::put('posts/{id}', 'API\PostController@update');

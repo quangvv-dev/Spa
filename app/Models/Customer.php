@@ -75,7 +75,7 @@ class Customer extends Model
             ->when(isset($conditions['source']), function ($query) use ($conditions) {
                 $query->where('source_id', $conditions['source']);
             })
-            ->when(isset($conditions['data_time']), function ($query) use ($conditions) {
+            ->when(isset($conditions['data_time']) && $conditions['data_time'], function ($query) use ($conditions) {
                 $query->when($conditions['data_time'] == 'TODAY' ||
                     $conditions['data_time'] == 'YESTERDAY', function ($q) use ($conditions) {
                     $q->whereDate('created_at', getTime(($conditions['data_time'])));
@@ -86,6 +86,11 @@ class Customer extends Model
                         $conditions['data_time'] == 'LAST_MONTH', function ($q) use ($conditions) {
                         $q->whereBetween('created_at', getTime(($conditions['data_time'])));
                     });
+            })->when(isset($conditions['start_date']) && isset($conditions['end_date']), function ($q) use ($conditions) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($conditions['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($conditions['end_date']) . " 23:59:59",
+                ]);
             })
             ->when(isset($conditions['invalid_account']), function ($query) use ($conditions) {
                 $query->when($conditions['invalid_account'] == 0, function ($q) use ($conditions) {

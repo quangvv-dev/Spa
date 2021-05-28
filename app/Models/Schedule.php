@@ -86,6 +86,8 @@ class Schedule extends Model
             $q->where('branch_id', $input['branch_id']);
         })->when(!empty($input['status_schedule']), function ($q) use ($input) {
             $q->where('status', $input['status_schedule']);
+        })->when(isset($input['creator_id']) && $input['creator_id'], function ($q) use ($input) {
+            $q->where('creator_id', $input['creator_id']);
         });
 
         $data = $data->count();
@@ -112,6 +114,8 @@ class Schedule extends Model
                     });
             })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['user']) && $input['user'], function ($q) use ($input) {
+                $q->where('creator_id', $input['user']);
             })
                 ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                     $q->whereBetween('created_at', [
@@ -129,6 +133,12 @@ class Schedule extends Model
         $docs = self::orderBy('id', 'desc')
             ->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
                 $q->where('branch_id', $request['branch_id']);
+            })
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($request) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($request['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($request['end_date']) . " 23:59:59",
+                ]);
             });
 
         if (!empty($request['search'])) {

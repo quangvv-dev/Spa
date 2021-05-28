@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Constants\ResponseStatusCode;
+use App\Constants\StatusCode;
+use App\Models\Branch;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -10,52 +12,46 @@ use Illuminate\Support\Facades\Date;
 class AuthController extends BaseApiController
 {
     /**
-     * Update Post
+     * Login APP
      *
      * @param Request $request
-     * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
-
         $info = User::where('phone', $request->phone)->first();
         if (empty($info)) {
-            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'user not found');
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tồn tại tài khoản');
         } else {
-            if (password_verify($request->password, $info->password) != true ) {
-                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'pass failed or not permision');
+            if (password_verify($request->password, $info->password) != true) {
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Sai mật khẩu');
             } else {
-                if ($info->active == 1) {
+                if ($info->active == StatusCode::ON) {
                     $payload = $info->toArray();
                     $payload['time'] = strtotime(Date::now());
+//                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
                     $data = [
                         'token' => jwtencode($payload),
                         'info' => $info,
                     ];
 
-                    $acc            = $info;
-                    $payload        = [];
-                    $payload['iss'] = $request->fullUrl();
-                    $payload['iat'] = time();
-                    $payload['exp'] = time() + $this->time_jwt_exp;
-                    $payload['sub'] = $acc->id;
-                    $payload['id']  = $payload['sub'];
-//                , 'user' => $acc
-                    $data = ['token' => jwtencode($payload)];
-
-//                    return jsonApiItem($data);
-
-
-                    return $this->responseApi(ResponseStatusCode::OK, 'login success', $data);
+                    return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
                 } else {
-                    return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'PERMISSION NOT FOUND');
+                    return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'Tài khoản bị khoá');
                 }
-
-
-                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'BAD REQUEST');
             }
         }
 
+    }
+
+    /**
+     * Danh sách chi nhánh
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function branch()
+    {
+        $branchs = Branch::select('id', 'name')->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branchs);
     }
 }
