@@ -229,7 +229,7 @@ class Order extends Model
                     $query->onlyTrashed();
                 });
             if (isset($input['phone'])) {
-                $customer = Customer::where('phone', 'like', '%' . $input['phone'] . '%')->pluck('id');
+                $customer = Customer::where('phone', $input['phone'])->pluck('id');
 
                 $data = $data->where('member_id', $customer);
             }
