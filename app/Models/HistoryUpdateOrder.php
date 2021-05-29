@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,12 +35,18 @@ class HistoryUpdateOrder extends Model
 
     public static function search($input)
     {
-        $data = self::orderBy('id', 'desc')->when($input['data_time'] == 'THIS_WEEK' ||
-            $input['data_time'] == 'LAST_WEEK' ||
-            $input['data_time'] == 'THIS_MONTH' ||
-            $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+        $data = self::orderBy('id', 'desc')->when(!empty($input['data_time']) && ($input['data_time'] == 'THIS_WEEK' ||
+                $input['data_time'] == 'LAST_WEEK' ||
+                $input['data_time'] == 'THIS_MONTH' ||
+                $input['data_time'] == 'LAST_MONTH'), function ($q) use ($input) {
             $q->whereBetween('created_at', getTime(($input['data_time'])));
         })
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            })
             ->when(isset($input['user_id']), function ($query) use ($input) {
                 $query->where('user_id', $input['user_id']);
             })->when(isset($input['type']), function ($query) use ($input) {

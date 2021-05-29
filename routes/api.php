@@ -27,6 +27,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('call', 'CallController@index');
     Route::get('orders', 'OrderController@index');
     Route::get('orders/{id}', 'OrderController@show');
+    Route::get('commission', 'OrderController@commission');
 
 });
 
