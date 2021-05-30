@@ -8,6 +8,8 @@ use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
 use App\CustomerPost;
 use App\Http\Resources\CategoryRevenueResource;
+use App\Http\Resources\SchedulesResource;
+use App\Http\Resources\TasksResource;
 use App\Models\Branch;
 use App\Models\Campaign;
 use App\Models\Customer;
@@ -510,28 +512,24 @@ class StatisticController extends BaseApiController
         $users = User::select('id', 'full_name')
             ->whereIn('role',
                 [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::CSKH, UserConstant::TP_CSKH])
-            ->get();
-        $data = [];
-        if (count($users)) {
-            foreach ($users as $item) {
+            ->get()->map(function ($item) use ($input) {
                 $schedule = Schedule::where('person_action', $item->id)->whereBetween('date', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                 ]);
                 $schedule2 = clone $schedule;
                 $schedule3 = clone $schedule;
-                $records = [
-                    'full_name'        => $item->full_name,
-                    'all_schedules'    => $schedule->count(),
-                    'schedules_buy'    => $schedule->where('status', 3)->count(),
-                    'schedules_notbuy' => $schedule2->where('status', 4)->count(),
-                    'schedules_cancel' => $schedule3->where('status', 5)->count(),
-                ];
-                $data[] = $records;
-            }
-        }
-        usort_key($data, 'all_schedules');
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$data);
+
+                $item->all_schedules = $schedule->count();
+                $item->schedules_buy = $schedule->where('status', 3)->count();
+                $item->schedules_notbuy = $schedule2->where('status', 4)->count();
+                $item->schedules_cancel = $schedule3->where('status', 5)->count();
+                return $item;
+            })->sortByDesc('all_schedules');
+
+        $data = SchedulesResource::collection($users);
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
 
@@ -548,27 +546,21 @@ class StatisticController extends BaseApiController
         $users = User::select('id', 'full_name')
             ->whereIn('role',
                 [UserConstant::TELESALES, UserConstant::CSKH, UserConstant::TP_CSKH])
-            ->get();
-        $data = [];
-        if (count($users)) {
-            foreach ($users as $item) {
+            ->get()->map(function ($item) use ($input) {
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                 ]);
                 $task1 = clone $task;
+                $item->all_task = $task->count();
+                $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
+                $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
+                return $item;
+            })->sortByDesc('all_task');
 
-                $records = [
-                    'full_name'  => $item->full_name,
-                    'all_task'   => $task->count(),
-                    'all_done'   => $task->where('task_status_id', StatusCode::DONE_TASK)->count(),
-                    'all_failed' => $task1->where('task_status_id', StatusCode::FAILED_TASK)->count(),
-                ];
-                $data[] = $records;
-            }
-        }
-        usort_key($data, 'all_task');
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$data);
+        $data = TasksResource::collection($users);
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
 
@@ -619,7 +611,7 @@ class StatisticController extends BaseApiController
 
     public function getUserCategory()
     {
-        $data = User::select('id','full_name')->whereIn('role',
+        $data = User::select('id', 'full_name')->whereIn('role',
             [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
