@@ -94,7 +94,7 @@ class CallController extends BaseApiController
      */
     public function getEmployeeCall(Request $request)
     {
-        $data = User::where('caller_number','!=','')->get();
+        $data = User::select('id','full_name','caller_number')->where('caller_number','!=','')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
