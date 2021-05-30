@@ -97,6 +97,6 @@ class OrderController extends BaseApiController
         }
         $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
 
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($data));
     }
 }
