@@ -30,7 +30,9 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('commission', 'OrderController@commission');
     Route::get('schedules', 'StatisticController@schedules');
     Route::get('tasks', 'StatisticController@tasks');
+    Route::get('group', 'StatisticController@group');
     Route::get('get-employee-call', 'CallController@getEmployeeCall');
+    Route::get('get-employee-category', 'StatisticController@getUserCategory');
 
 });
 

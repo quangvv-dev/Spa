@@ -7,8 +7,11 @@ use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
 use App\CustomerPost;
+use App\Http\Resources\CategoryRevenueResource;
+use App\Models\Branch;
 use App\Models\Campaign;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
@@ -567,5 +570,65 @@ class StatisticController extends BaseApiController
         usort_key($data, 'all_task');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$data);
 
+    }
+
+
+    public function group(Request $request)
+    {
+        $input = $request->all();
+        $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item
+        ) use ($request, $input) {
+            $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
+
+            if ($request->telesale_id) {
+                $data = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id',
+                    $request->telesale_id);
+                $data = self::searchBranch($data, $request);
+            } else {
+                $data = Customer::select('id')->whereIn('id', $arr_customer);
+                $data = self::searchBranch($data, $request);
+            }
+
+            $order = Order::when(!empty($input['start_date']) && !empty($input['end_date']),
+                function ($q) use ($input) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                    ]);
+                })->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
+            $order = self::searchBranch($order, $request);
+
+            $payment_history = PaymentHistory::when(!empty($input['start_date']) && !empty($input['end_date']),
+                function ($q) use ($input) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                    ]);
+                })->whereIn('order_id', $order->pluck('id')->toArray());
+            $payment_history = self::searchBranch($payment_history, $request);
+
+            $item->orders = $order->count();
+            $item->revuenue = $payment_history->sum('price');//da thu trong ky thu thêm
+            return $item;
+        })->sortByDesc('revuenue');
+        $data = CategoryRevenueResource::collection($category);
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+    }
+
+
+    public function getUserCategory()
+    {
+        $data = User::select('id','full_name')->whereIn('role',
+            [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+    }
+
+    public function searchBranch($query, $input)
+    {
+        return $query->when(isset($input->branch_id) && $input->branch_id, function ($q) use ($input) {
+            $q->where('branch_id', $input->branch_id);
+        });
     }
 }

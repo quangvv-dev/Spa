@@ -188,7 +188,7 @@ class SalesController extends Controller
     public function searchBranch($query, $input)
     {
         return $query->when(isset($input->branch_id) && $input->branch_id, function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
+            $q->where('branch_id', $input->branch_id);
         });
     }
 }
