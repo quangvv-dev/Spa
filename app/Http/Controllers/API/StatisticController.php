@@ -494,6 +494,13 @@ class StatisticController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
 
+    /**
+     * Lịch hẹn
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function schedules(Request $request)
     {
         $input = $request->all();
@@ -520,24 +527,44 @@ class StatisticController extends BaseApiController
                 $data[] = $records;
             }
         }
-        usort_key($data,'all_schedules');
+        usort_key($data, 'all_schedules');
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$data);
 
+    }
 
-//                $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
-//                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-//                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-//                ]);
-//                $task1 = Task::where('user_id', $item->id)->whereBetween('date_from', [
-//                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-//                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-//                ]);
+    /**
+     * Công việc
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function tasks(Request $request)
+    {
+        $input = $request->all();
+        $users = User::select('id', 'full_name')
+            ->whereIn('role',
+                [UserConstant::TELESALES, UserConstant::CSKH, UserConstant::TP_CSKH])
+            ->get();
+        $data = [];
+        if (count($users)) {
+            foreach ($users as $item) {
+                $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+                $task1 = clone $task;
 
-//                $item->all_task = $task->count();
-//                $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
-//                $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
-
-//                return $item;
-//            })->sortByDesc('all_schedules');
+                $records = [
+                    'full_name'  => $item->full_name,
+                    'all_task'   => $task->count(),
+                    'all_done'   => $task->where('task_status_id', StatusCode::DONE_TASK)->count(),
+                    'all_failed' => $task1->where('task_status_id', StatusCode::FAILED_TASK)->count(),
+                ];
+                $data[] = $records;
+            }
+        }
+        usort_key($data, 'all_task');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$data);
 
     }
