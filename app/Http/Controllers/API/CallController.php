@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
+use App\Constants\UserConstant;
 use App\Http\Resources\CallCenterResource;
 use App\Models\CallCenter;
 use App\Models\Post;
@@ -18,7 +19,8 @@ class CallController extends BaseApiController
      * Update Post
      *
      * @param Request $request
-     * @param $id
+     * @param         $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function hangUp(Request $request)
@@ -26,7 +28,8 @@ class CallController extends BaseApiController
         if ($request->api_key != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
-        $input = $request->only('caller_number', 'dest_number', 'answer_time', 'call_status', 'recording_url', 'caller_id', 'call_type', 'start_time');
+        $input = $request->only('caller_number', 'dest_number', 'answer_time', 'call_status', 'recording_url',
+            'caller_id', 'call_type', 'start_time');
 
         $isset = CallCenter::where('caller_id', $request->caller_id)->first();
         if (empty($isset) && $request->call_type != 'INBOUND') {
@@ -41,6 +44,7 @@ class CallController extends BaseApiController
      * Show data post
      *
      * @param $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
@@ -49,6 +53,13 @@ class CallController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $post);
     }
 
+    /**
+     * Danh sách tổng đài APP
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $input = $request->all();
@@ -72,6 +83,21 @@ class CallController extends BaseApiController
         $data['records'] = CallCenterResource::collection($docs);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+    }
+
+    /**
+     * danh sach tong dai vien
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getEmployeeCall(Request $request)
+    {
+        $data = User::where('caller_number','!=','')->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
+
+
 }
