@@ -497,20 +497,32 @@ class StatisticController extends BaseApiController
     public function schedules(Request $request)
     {
         $input = $request->all();
-        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
-            $input['data_time'] = 'THIS_MONTH';
-        }
-        $users = User::select('id', 'full_name', 'phone')
+        $users = User::select('id', 'full_name')
             ->whereIn('role',
-                [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::CSKH, UserConstant::TP_CSKH,])
-            ->get()->map(function ($item) use ($request, $input) {
-
+                [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::CSKH, UserConstant::TP_CSKH])
+            ->get();
+        $data = [];
+        if (count($users)) {
+            foreach ($users as $item) {
                 $schedule = Schedule::where('person_action', $item->id)->whereBetween('date', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                 ]);
                 $schedule2 = clone $schedule;
                 $schedule3 = clone $schedule;
+                $records = [
+                    'full_name'        => $item->full_name,
+                    'all_schedules'    => $schedule->count(),
+                    'schedules_buy'    => $schedule->where('status', 3)->count(),
+                    'schedules_notbuy' => $schedule2->where('status', 4)->count(),
+                    'schedules_cancel' => $schedule3->where('status', 5)->count(),
+                ];
+                $data[] = $records;
+            }
+        }
+        usort_key($data,'all_schedules');
+
+
 //                $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
 //                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
 //                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
@@ -519,17 +531,14 @@ class StatisticController extends BaseApiController
 //                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
 //                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
 //                ]);
-                $item->all_schedules = $schedule->count();
-                $item->schedules_buy = $schedule->where('status', 3)->count();
-                $item->schedules_notbuy = $schedule2->where('status', 4)->count();
-                $item->schedules_cancel = $schedule3->where('status', 5)->count();
+
 //                $item->all_task = $task->count();
 //                $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
 //                $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
 
-                return $item;
-            })->sortByDesc('all_schedules');
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
+//                return $item;
+//            })->sortByDesc('all_schedules');
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$data);
 
     }
 }
