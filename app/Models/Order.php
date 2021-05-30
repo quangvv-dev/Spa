@@ -231,7 +231,7 @@ class Order extends Model
             if (isset($input['phone'])) {
                 $customer = Customer::where('phone', $input['phone'])->pluck('id');
 
-                $data = $data->where('member_id', $customer);
+                $data = $data->whereIn('member_id', $customer);
             }
         }
 
