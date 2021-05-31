@@ -22,7 +22,7 @@ class CallCenterResource extends JsonResource
             'caller_number'     => @$this->caller_number,
             'start_time'        => @$this->start_time,
             'recording_url'     => @$this->recording_url,
-            'recording_stream'  => @url('call-content').'?link='.$this->recording_url,
+            'recording_stream'  => @url('call-content/'.$this->id),
         ];
         return $result;
     }

@@ -13,9 +13,9 @@
     }
 </style>
 <body>
-<video controls="" autoplay="" name="media">
+<video controls="" autoplay  name="media">
     <source
-        src="{{url($_GET['link'])}}"
+        src="{{@$doc->recording_url}}"
         type="audio/x-wav">
 </video>
 </body>
