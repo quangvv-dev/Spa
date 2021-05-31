@@ -4,6 +4,7 @@ Auth::routes();
 Route::get('post/{slug}', 'BE\AjaxController@indexPost');
 Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
 Route::get('optin-form/{id}', 'BE\PostsController@showOptinForm');
+Route::get('call-content', 'BE\CallController@getStreamLink');
 Route::get('403', function () {
     return view('errors.403');
 });
@@ -13,7 +14,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
         return view('dashboard.index');
     });
-    Route::get('kanban-board', function (){
+    Route::get('kanban-board', function () {
         return view('kanban_board.index');
     });
 

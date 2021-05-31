@@ -40,13 +40,13 @@ class CallController extends Controller
 
         $docs = CallCenter::search($input);
         $answers = clone $docs;
-        $answers = $answers->where('call_status','ANSWERED');
+        $answers = $answers->where('call_status', 'ANSWERED');
 
         $docs = $docs->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return Response::json(view('call_center.ajax', compact('docs','answers'))->render());
+            return Response::json(view('call_center.ajax', compact('docs', 'answers'))->render());
         }
-        return view('call_center.index', compact('title', 'docs','answers'));
+        return view('call_center.index', compact('title', 'docs', 'answers'));
     }
 
     /**
@@ -76,9 +76,8 @@ class CallController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(CallCenter $id)
     {
-        //
     }
 
     /**
@@ -113,5 +112,10 @@ class CallController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getStreamLink(CallCenter $id)
+    {
+        return view('call_center.stream');
     }
 }
