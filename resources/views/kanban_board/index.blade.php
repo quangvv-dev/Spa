@@ -3,9 +3,9 @@
 <link rel="stylesheet" href="{{asset('css/daterangepicker.css')}}"/>
 <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 {{--<style>--}}
-    {{--.title {--}}
-        {{--text-align: left;--}}
-    {{--}--}}
+{{--.title {--}}
+{{--text-align: left;--}}
+{{--}--}}
 {{--</style>--}}
 <style>
     body {
@@ -86,6 +86,9 @@
 
 </style>
 @section('content')
+    @php
+        $roleGlobal = auth()->user()?:[];
+    @endphp
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
@@ -94,48 +97,53 @@
             </div>
             {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
 
-                <ul class="col-md-9 no-padd mt5 tr right">
-                    <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
-                    <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
-                    <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time border b-gray">Tuần này</a></li>
-                    <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
-                    <li class="display pl5">
-                        <a data-time="THIS_MONTH" class="display padding0-5 choose_time ">Tháng này</a>
-                    </li>
-                    <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                    <li class="display position"><a class="other_time choose_time ">Khác</a>
-                        <div class="add-drop add-d-right other_time_panel"
-                             style="left: auto; right: 0px; z-index: 999; display: none;"><s
-                                class="gf-icon-neotop"></s>
-                            <div class="padding tl"><p>Ngày bắt đầu</p>
-                                <input type="text" class="form-control filter_start_date" id="datepicker"
-                                       data-toggle="datepicker" name="payment_date">
-                            </div>
-                            <div class="padding tl"><p>Ngày kết thúc</p>
-                                <input type="text" class="form-control filter_end_date" id="datepicker"
-                                       data-toggle="datepicker" name="payment_date">
-                            </div>
-                            <div class="padding5-10 tl mb5">
-                                <button class="btn btn-info submit_other_time">Tìm kiếm</button>
-                                <button class="btn btn-default cancel_other_time">Đóng</button>
-                            </div>
+            <ul class="col-md-9 no-padd mt5 tr right">
+                <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
+                <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
+                <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time border b-gray">Tuần này</a></li>
+                <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
+                <li class="display pl5">
+                    <a data-time="THIS_MONTH" class="display padding0-5 choose_time ">Tháng này</a>
+                </li>
+                <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
+                <li class="display position"><a class="other_time choose_time ">Khác</a>
+                    <div class="add-drop add-d-right other_time_panel"
+                         style="left: auto; right: 0px; z-index: 999; display: none;"><s
+                            class="gf-icon-neotop"></s>
+                        <div class="padding tl"><p>Ngày bắt đầu</p>
+                            <input type="text" class="form-control filter_start_date" id="datepicker"
+                                   data-toggle="datepicker" name="payment_date">
                         </div>
-                    </li>
-                </ul>
+                        <div class="padding tl"><p>Ngày kết thúc</p>
+                            <input type="text" class="form-control filter_end_date" id="datepicker"
+                                   data-toggle="datepicker" name="payment_date">
+                        </div>
+                        <div class="padding5-10 tl mb5">
+                            <button class="btn btn-info submit_other_time">Tìm kiếm</button>
+                            <button class="btn btn-default cancel_other_time">Đóng</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
 
-            <div class="col-md-3">
-                {{--{!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}--}}
+            <div class="col-md-2">
+                @if($roleGlobal->permission('tasks.employee'))
+                    {!! Form::select('type', [1=>'Của tôi'], null, array('class' => 'form-control type', 'placeholder'=>'Toàn phòng ban')) !!}
+                @endif
             </div>
             {{--<div class="card-header">--}}
-                {{--<input type="hidden" name="start_date" id="start_date">--}}
-                {{--<input type="hidden" name="end_date" id="end_date">--}}
-                {{--<div class="col-lg-4 col-md-6">--}}
-                    {{--<input id="reportrange" type="text" class="form-control square">--}}
-                {{--</div>--}}
-                {{--<button type="submit" class="btn btn-primary" id="btnSearch"><i class="fa fa-search"></i> Tìm kiếm--}}
-                {{--</button>--}}
+            {{--<input type="hidden" name="start_date" id="start_date">--}}
+            {{--<input type="hidden" name="end_date" id="end_date">--}}
+            {{--<div class="col-lg-4 col-md-6">--}}
+            {{--<input id="reportrange" type="text" class="form-control square">--}}
+            {{--</div>--}}
+            {{--<button type="submit" class="btn btn-primary" id="btnSearch"><i class="fa fa-search"></i> Tìm kiếm--}}
+            {{--</button>--}}
             {{--</div>--}}
             {!! Form::close() !!}
+            <input type="hidden" id="start-date">
+            <input type="hidden" id="end-date">
+            <input type="hidden" id="data-time">
 
             <div id="registration-form">
                 @include('kanban_board.ajax')
@@ -165,6 +173,20 @@
             });
         }
 
+        $(document).on('change', '.type', function (e) {
+            let data = $(this).val();
+            let start_date = $('#start-date').val();
+            let end_date = $('#end-date').val();
+            let data_time = $('#data-time').val();
+            console.log(data, start_date, end_date, data_time);
+            searchAjax({
+                data_time: data_time,
+                start_date: start_date,
+                end_date: end_date,
+                type: data,
+            });
+        })
+
         $(document).on('click', '.choose_time, .submit_other_time', function (e) {
             e.preventDefault();
             let target = $(e.target).parent();
@@ -187,11 +209,12 @@
             }
             $('#start-date').val(start_date);
             $('#end-date').val(end_date);
-
+            let type = $('.type').val();
             searchAjax({
                 data_time: data_time,
                 start_date: start_date,
                 end_date: end_date,
+                type: type,
             });
         });
     </script>

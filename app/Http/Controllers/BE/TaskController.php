@@ -48,8 +48,14 @@ class TaskController extends Controller
             $request->merge(['data_time' => 'THIS_WEEK']);
         }
         $input = $request->all();
-        $input['sale_id'] = Auth::user()->id;
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id','date_from')->get();
+        $admin = auth()->user();
+        if (!$admin->permission('tasks.employee')) {
+            $input['sale_id'] = Auth::user()->id;
+        }
+        if (isset($request->type) && $request->type) {
+            $input['sale_id'] = Auth::user()->id;
+        }
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from')->get();
         $new = [];
         $done = [];
         $fail = [];
