@@ -10,6 +10,7 @@
             <tr>
                 <th class="text-white text-center">Trừ liệu trình</th>
                 <th class="text-white text-center">Ngày tạo</th>
+                <th class="text-white text-center">C.Nhánh</th>
                 <th class="text-white text-center">Ng.hết hạn</th>
                 <th class="text-white text-center">Tên SP</th>
                 <th class="text-white text-center">Loại đơn</th>
@@ -32,7 +33,8 @@
                                 <a title="Trừ liệu trình" class="btn edit-order" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
                             @endif
                         </td>
-                        <td class="text-center">{{ @$order->created_at }}</td>
+                        <td class="text-center">{{ @$order->branch->name }}</td>
+                        <td class="text-center">{{ date('d/m/Y',strtotime($order->created_at)) }}</td>
                         <td class="text-center">{{ @$order->hsd}}</td>
                         <td class="text-center">
                             <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">

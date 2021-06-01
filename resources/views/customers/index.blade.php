@@ -26,9 +26,9 @@
            z-index: 9999;
            box-shadow: 0 0 10px #ddd;
        }
-       th.text-white.text-center{
-           z-index: 900;
-       }
+       /*th.text-white.text-center{*/
+           /*z-index: 900;*/
+       /*}*/
     </style>
 @endsection
 @section('content')

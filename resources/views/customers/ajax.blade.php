@@ -134,7 +134,7 @@
             <th class="text-white text-center">Nhóm KH</th>
             <th class="text-white text-center">Trạng Thái</th>
             <th class="text-white text-center">Người phụ trách</th>
-            <th class="text-white text-center" style="min-width: 121px">Mô tả</th>
+            <th class="text-white text-center" style="min-width: 121px;z-index: 600">Mô tả</th>
             <th class="text-white text-center">C.Nhánh</th>
             {{--<th class="text-white text-center">Nhóm tính cách</th>--}}
             <th class="text-white text-center">Lich Hẹn</th>
@@ -156,10 +156,10 @@
 
             @if(count($customers) <7)
                 <tr>
-                    <td colspan="21"></td>
+                    <td colspan="22"></td>
                 </tr>
                 <tr>
-                    <td colspan="21"></td>
+                    <td colspan="22"></td>
                 </tr>
             @endif
             @foreach($customers as $key => $customer)
@@ -213,7 +213,7 @@
             @endforeach
         @else
             <tr>
-                <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>
+                <td id="no-data" class="text-center" colspan="22">Không tồn tại dữ liệu</td>
             </tr>
         @endif
         </tbody>

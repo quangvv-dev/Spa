@@ -73,6 +73,12 @@
         ul#textcomplete-dropdown-1{
             z-index: 9999 !important;
         }
+        .content-custom{
+            max-width: 98%;
+        }
+        /*.page-header{*/
+            /*margin: 0.5rem 0 1.5rem;*/
+        /*}*/
     </style>
     @php
         $roleGlobal = auth()->user()?:[];
@@ -214,8 +220,8 @@
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Tên KH:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->full_name }} </p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Địa chỉ:</p>
-                                <p class="word-wrap"> &nbsp;{{ $customer->address }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Chi nhánh:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Điện thoại:</p>
                                 <p class="word-wrap"><a class="" data-account-id="4629" data-phone="0904341335"

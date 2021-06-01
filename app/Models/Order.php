@@ -323,7 +323,6 @@ class Order extends Model
                 })
                     ->when($input['data_time'] == 'THIS_WEEK' ||
                         $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
                         $input['data_time'] == 'THIS_MONTH' ||
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
                         $q->whereBetween('created_at', getTime(($input['data_time'])));

@@ -225,7 +225,7 @@
                     customer_id: customer_id,
                 }
             }).done(function () {
-                window.location.reload();
+                // window.location.reload();
             });
         });
 

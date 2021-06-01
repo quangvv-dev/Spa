@@ -27,6 +27,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\RuleOutput;
 use App\Services\TaskService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use DB;
 use Excel;
@@ -139,7 +140,7 @@ class OrderController extends Controller
             $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
         }
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
-        $param['branch_id'] = $customer->branch_id;
+        $param['branch_id'] = Auth::user()->branch_id;
 
 
         DB::beginTransaction();
@@ -149,8 +150,8 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
-            $countOrders = Order::where('member_id',$customer->id)->count();
-            if (@$countOrders > 1){
+            $countOrders = Order::where('member_id', $customer->id)->count();
+            if (@$countOrders > 1) {
                 $customer->old_customer = 1;
                 $customer->save();
             }
@@ -167,7 +168,7 @@ class OrderController extends Controller
                         HistoryUpdateOrder::create([
                             'user_id' => $request->spa_therapisst_id,
                             'order_id' => $order->id,
-                            'branch_id' => $customer->branch_id,
+                            'branch_id' => Auth::user()->branch_id,
                             'service_id' => $param['service_id'][$k] ?: 0,
                         ]);
                     }
@@ -408,6 +409,7 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
+        $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
@@ -432,6 +434,8 @@ class OrderController extends Controller
             $group_customer = CustomerGroup::where('customer_id', $customer->id)->pluck('category_id')->toArray();
             $check = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->get();
             $check2 = RuleOutput::where('event', 'add_order')->groupBy('rule_id')->whereIn('category_id', $group_customer)->get();
+
+
             if (count($check) <= 1 && isset($check2) && count($check2)) {
                 $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
                 foreach ($check2 as $item) {
@@ -441,9 +445,9 @@ class OrderController extends Controller
                         $sms_ws = Functions::checkRuleSms($config);
                         if (count($sms_ws)) {
                             foreach ($sms_ws as $sms) {
-                                $input_raw['branch'] = @$check3->order->customer->branch->name;
-                                $input_raw['phoneBranch'] = @$check3->order->customer->branch->phone;
-                                $input_raw['addressBranch'] = @$check3->order->customer->branch->address;
+                                $input_raw['branch'] = @$check3->order->branch->name;
+                                $input_raw['phoneBranch'] = @$check3->order->branch->phone;
+                                $input_raw['addressBranch'] = @$check3->order->branch->address;
                                 $input_raw['full_name'] = $check3->order->customer->full_name;
                                 $input_raw['phone'] = @$check3->order->customer->phone;
                                 $exactly_value = Functions::getExactlyTime($sms);
@@ -451,20 +455,25 @@ class OrderController extends Controller
                                 $phone = Functions::convertPhone($input_raw['phone']);
                                 $text = Functions::replaceTextForUser($input_raw, $text);
                                 $text = Functions::vi_to_en($text);
-                                $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
-                                if (isset($err) && $err) {
-                                    HistorySms::insert([
-                                        'phone' => $input_raw['phone'],
-                                        'campaign_id' => 0,
-                                        'message' => $text,
-                                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                        'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
-                                    ]);
+                                try {
+                                    $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
+                                    if (isset($err) && $err) {
+                                        HistorySms::insert([
+                                            'phone' => $input_raw['phone'],
+                                            'campaign_id' => 0,
+                                            'message' => $text,
+                                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                            'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                        ]);
+                                    }
+                                } catch (Exception $exception) {
+
                                 }
+
                             }
                         }
                         $jobs = Functions::checkRuleJob($config);
-
+                        $controlRule = $item->rules;
                         if (count($jobs)) {
                             foreach ($jobs as $job) {
                                 $day = $job->configs->delay_value;
@@ -476,22 +485,26 @@ class OrderController extends Controller
                                         $text_category[] = $item->name;
                                     }
                                 }
+
                                 $input = [
                                     'customer_id' => @$check3->order->customer->id,
                                     'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
                                     'time_from' => '07:00',
                                     'time_to' => '16:00',
                                     'code' => 'CSKH',
-                                    'user_id' => @$check3->order->customer->telesales_id,
+                                    'user_id' => @!empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0,
                                     'all_day' => 'on',
                                     'priority' => 1,
                                     'amount_of_work' => 1,
                                     'type' => 2,
                                     'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category, ','),
+                                    'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category, ',') . ' ,' . @$check3->order->branch->name,
                                     'description' => replaceVariable($sms_content, @$check3->order->customer->full_name, @$check3->order->customer->phone,
-                                        @$check3->order->customer->branch->name, @$check3->order->customer->branch->phone, @$check3->order->customer->branch->address),
+                                        @$check3->order->branch->name, @$check3->order->branch->phone, @$check3->order->branch->address),
                                 ];
+
+                                $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
+                                $controlRule->save();
 
                                 $task = $this->taskService->create($input);
                                 $follow = User::where('role', UserConstant::ADMIN)->orWhere(function ($query) {
@@ -720,6 +733,7 @@ class OrderController extends Controller
                     $name_services = explode(',', $row['san_phamdich_vu']);
                     $customer = Customer::where('phone', $row['sdt'])->first();
                     $service = Services::whereIn('name', $name_services)->get();
+                    $branch = Branch::where('name', $row['chi_nhanh'])->first();
                     if ($row['ma_dh']) {
                         $checkOrder = Order::where('code', $row['ma_dh'])->first();
                     } else {
@@ -755,7 +769,7 @@ class OrderController extends Controller
                                 'gross_revenue' => $row['doanh_thu'],
                                 'payment_type' => $paymentType,
                                 'payment_date' => $payment_date,
-                                'branch_id' => $customer->branch_id,
+                                'branch_id' => isset($branch) && $branch ? $branch->id : '',
                                 'type' => Order::TYPE_ORDER_DEFAULT,
                                 'spa_therapisst_id' => '',
                                 'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_dat_hang'])->format('Y-m-d'),

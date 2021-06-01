@@ -442,7 +442,6 @@ class CustomerController extends Controller
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
 
-
                     if (!empty($row['so_dien_thoai'])) {
                         $date = Carbon::createFromFormat('d/m/Y', trim($row['ngay_tao_kh']))->format('Y-m-d');
                         $status = Status::where('name', 'like', '%' . $row['moi_quan_he'] . '%')->first();

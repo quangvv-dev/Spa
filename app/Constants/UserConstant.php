@@ -28,4 +28,6 @@ class UserConstant
 
     const IS_LEADER = 1;//TRƯỞNG PHÒNG
     const EMPLOYEE = 0;//NHÂN VIÊN
+
+    const PHONG_CSKH = 4; //Phòng ban CSKH
 }
