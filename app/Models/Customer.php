@@ -118,7 +118,7 @@ class Customer extends Model
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
         if (isset($param['branch_id']) && $param['branch_id']) {
-            if (isset($param['search']) && !is_numeric($param['search'])){
+            if ((isset($param['search']) && !is_numeric($param['search']))|| empty($param['search'])) {
                 $data = $data->where('branch_id', $param['branch_id']);
             }
         }

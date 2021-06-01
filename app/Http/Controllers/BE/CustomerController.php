@@ -103,15 +103,17 @@ class CustomerController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-
         $customers = Customer::search($input);
+        $customers2 = clone $customers;
+        $statuses = Status::getRelationshipByCustomer($customers2 ,$input);
+
         if (isset($input['limit'])) {
             $customers = $customers->latest()->paginate($input['limit']);
         } else {
             $customers = $customers->paginate(StatusCode::PAGINATE_20);
+
         }
 
-        $statuses = Status::getRelationshipByCustomer($input);
         $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {

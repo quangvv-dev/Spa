@@ -58,15 +58,10 @@ class Status extends Model
     }
 
 
-
-    public static function getRelationshipByCustomer($input)
+    public static function getRelationshipByCustomer($customers, $input)
     {
-
-        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($input){
-            $customers = Customer::search($input);
-
-            $item->customers_count = $customers->where('status_id',$item->id)->count();
-//            $customers->reresh();
+        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($customers, $input) {
+            $item->customers_count = $customers->where('status_id', $item->id)->count();
             return $item;
         });
 //        $data = $data->withCount(['customers' => function ($query) use ($input) {
@@ -93,18 +88,18 @@ class Status extends Model
                         })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                             $q->where('branch_id', $input['branch_id']);
                         })
-                        ->when(isset($input['data_time']), function ($query) use ($input) {
-                            $query->when($input['data_time'] == 'TODAY' ||
-                                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                                $q->whereDate('created_at', getTime(($input['data_time'])));
+                            ->when(isset($input['data_time']), function ($query) use ($input) {
+                                $query->when($input['data_time'] == 'TODAY' ||
+                                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                                    $q->whereDate('created_at', getTime(($input['data_time'])));
+                                })
+                                    ->when($input['data_time'] == 'THIS_WEEK' ||
+                                        $input['data_time'] == 'LAST_WEEK' ||
+                                        $input['data_time'] == 'THIS_MONTH' ||
+                                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                                    });
                             })
-                                ->when($input['data_time'] == 'THIS_WEEK' ||
-                                    $input['data_time'] == 'LAST_WEEK' ||
-                                    $input['data_time'] == 'THIS_MONTH' ||
-                                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                                    $q->whereBetween('created_at', getTime(($input['data_time'])));
-                                });
-                        })
                             ->when(isset($input['start_date']) && isset($input['end_date']),
                                 function ($q) use ($input) {
                                     $q->whereBetween('created_at', [
@@ -182,6 +177,6 @@ class Status extends Model
     public static function getStatusWithId($id)
     {
         $data = self::select('name')->find($id);
-        return $data ?$data->name: [];
+        return $data ? $data->name : [];
     }
 }
