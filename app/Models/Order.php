@@ -222,7 +222,7 @@ class Order extends Model
                             $q->whereIn('id', $detail);
                         });
                 })
-                ->when(isset($input['branch_id']), function ($query) use ($input) {
+                ->when(isset($input['branch_id']) && empty($input['phone']), function ($query) use ($input) {
                     $query->where('branch_id', $input['branch_id']);
                 })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
