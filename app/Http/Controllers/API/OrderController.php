@@ -102,7 +102,6 @@ class OrderController extends BaseApiController
 
     public function tuvanvien(Request $request)
     {
-        $category_price = Category::pluck('price', 'id')->toArray();
         $input = $request->all();
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->where('department_id', UserConstant::PHONG_TVV)->get();
@@ -113,7 +112,6 @@ class OrderController extends BaseApiController
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
                 $order = Order::getAll($input);
-
                 $doc = [
                     'id' => $item->id,
                     'avatar' => $item->avatar,
