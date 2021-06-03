@@ -99,4 +99,34 @@ class OrderController extends BaseApiController
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($data));
     }
+
+    public function tuvanvien(Request $request)
+    {
+        $category_price = Category::pluck('price', 'id')->toArray();
+        $input = $request->all();
+        $docs = [];
+        $data = User::select('id', 'full_name', 'avatar')->where('department_id', UserConstant::PHONG_TVV)->get();
+        if (count($data)) {
+
+            foreach ($data as $item) {
+                $input['support_id'] = $item->id;
+                $input['user_id'] = $item->id;
+                $input['type'] = 0;
+                $order = Order::getAll($input);
+
+                $doc = [
+                    'id' => $item->id,
+                    'avatar' => $item->avatar,
+                    'full_name' => $item->full_name,
+                    'orders' => $order->count(),
+                    'gross_revenue' => $order->sum('gross_revenue'),
+                    'rose_money' => Commission::search($input)->sum('earn'),
+                ];
+                $docs[] = $doc;
+            }
+        }
+        $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($data));
+    }
 }

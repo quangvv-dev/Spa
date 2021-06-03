@@ -30,4 +30,5 @@ class UserConstant
     const EMPLOYEE = 0;//NHÂN VIÊN
 
     const PHONG_CSKH = 4; //Phòng ban CSKH
+    const PHONG_TVV = 7; //Phòng ban Tư vấn viên
 }

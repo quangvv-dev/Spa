@@ -176,6 +176,13 @@ class StatisticController extends Controller
         return view('statistics.detail', compact('detail', 'title', 'total'));
     }
 
+    /**
+     *
+     *
+     * @param $request
+     * @param $payment
+     * @return array
+     */
     public function getRevenueCustomer($request, $payment)
     {
         $data_new = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
