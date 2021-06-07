@@ -16,6 +16,7 @@ use App\Models\Status;
 use App\Models\WalletHistory;
 use Illuminate\Http\Request;
 use App\Constants\ResponseStatusCode;
+use Illuminate\Support\Facades\Date;
 use PhpParser\Node\Expr\Clone_;
 
 class RevenueController extends BaseApiController
@@ -142,6 +143,12 @@ class RevenueController extends BaseApiController
 
     }
 
+    /**
+     * Charts tròn
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function statusRevenue(Request $request)
     {
         $input = $request->all();
@@ -223,7 +230,50 @@ class RevenueController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
         }
+    }
 
+    /**
+     * Doanh thu năm hiện tại
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function revenueMonth(Request $request)
+    {
+        $input = $request->all();
+        $ordersYear = Order::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
+        })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
+
+        for ($i = 1; $i <= 12; $i++) {
+            $newOrder = clone $ordersYear;
+            $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
+
+            $data[] = [
+                'month' => 'T' . $i,
+                'all_total' => (int)$newOrder,
+            ];
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+    }
+
+    public function revevueDays(Request $request)
+    {
+        $input = $request->all();
+        $data = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('payment_date', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            })
+            ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')
+            ->groupBy('payment_date')->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
 }

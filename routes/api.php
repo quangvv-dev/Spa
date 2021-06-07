@@ -38,6 +38,8 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
         Route::get('customers', 'RevenueController@index');
         Route::get('orders', 'RevenueController@orders');
         Route::get('charts', 'RevenueController@statusRevenue');
+        Route::get('revenue-month', 'RevenueController@revenueMonth');
+        Route::get('revenue-days', 'RevenueController@revevueDays');
     });
 
 });
