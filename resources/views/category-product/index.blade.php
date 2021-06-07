@@ -25,7 +25,7 @@
     <script type="text/javascript">
         function searchCategory(data) {
             $.ajax({
-                url: "{{ Url('category/') }}",
+                url: "{{ Url('category-product/') }}",
                 method: "get",
                 data: data
             }).done(function (data) {
