@@ -8,6 +8,7 @@ use App\Http\Resources\ChartResource;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\GroupComment;
+use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
@@ -55,11 +56,14 @@ class RevenueController extends BaseApiController
                 $q->where('branch_id', $input['branch_id']);
             })->whereBetween('created_at', [Functions::yearMonthDay($input['old_start']) . " 00:00:00", Functions::yearMonthDay($input['old_end']) . " 23:59:59"]);
         }
-
+        $history = HistoryUpdateOrder::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        });
         $data = [
             'customer_new' => $customers->count(),
             'schedules' => $schedules,
             'groupComment' => $groupComment->count(),
+            'become' => $history->count(),
             'percent' => !empty($customers->count()) && (isset($customers_old) && !empty($customers_old->count())) ? round(($customers->count() - $customers_old->count()) / $customers_old->count() * 100, 2) : 0
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
