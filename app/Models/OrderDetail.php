@@ -48,8 +48,8 @@ class OrderDetail extends Model
                     $q->whereBetween('created_at', getTime(($input['data_time'])));
                 });
         })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-                $q->where('branch_id', $input['branch_id']);
-            })
+            $q->where('branch_id', $input['branch_id']);
+        })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -105,12 +105,17 @@ class OrderDetail extends Model
         $data = self::select('booking_id', \DB::raw('SUM(total_price) AS total'))->groupBy('booking_id')
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+            })->when(isset($input['data_time']) && $input['data_time'], function ($q) use ($input) {
+                $q->whereBetween('created_at', getTime($input['data_time']));
             })
-            ->whereBetween('created_at', getTime($input['data_time']))->whereHas('service')->get()->map(function ($item) use ($type) {
-                if (isset($item->service) && $item->service->type == $type) {
-                    return $item;
-                }
-            })->sortByDesc('total')->take($paginate);
+            ->whereHas('service')->get()->map(function ($item) use ($type) {
+                    if (isset($item->service) && $item->service->type == $type) {
+                        return $item;
+                    }
+                })
+            ->sortByDesc('total')->take($paginate);
         return $data;
     }
 

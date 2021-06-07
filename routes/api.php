@@ -28,7 +28,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('orders', 'OrderController@index');
     Route::get('orders/{id}', 'OrderController@show');
     Route::get('commission', 'OrderController@commission');
-    Route::get('tuvanvien', 'OrderController@tuvanvien');
+    Route::get('orders', 'OrderController@tuvanvien');
     Route::get('schedules', 'StatisticController@schedules');
     Route::get('tasks', 'StatisticController@tasks');
     Route::get('group', 'StatisticController@group');
@@ -37,6 +37,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::group(['prefix' => 'revenue'], function () {
         Route::get('customers', 'RevenueController@index');
         Route::get('orders', 'RevenueController@orders');
+        Route::get('charts', 'RevenueController@statusRevenue');
     });
 
 });
