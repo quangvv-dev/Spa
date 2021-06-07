@@ -40,6 +40,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
         Route::get('charts', 'RevenueController@statusRevenue');
         Route::get('revenue-month', 'RevenueController@revenueMonth');
         Route::get('revenue-days', 'RevenueController@revevueDays');
+        Route::get('revenue-branch', 'RevenueController@revevueBranch');
     });
 
 });

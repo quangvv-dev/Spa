@@ -276,4 +276,21 @@ class RevenueController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
+
+    public function revevueBranch(Request $request)
+    {
+        $input = $request->all();
+        $data = Order::returnRawData($input)->select('branch_id', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+            ->groupBy('branch_id')->get()->map(function ($item) use ($input) {
+                $params = $input;
+                $params['branch_id'] = $item->branch_id;
+                $payment = PaymentHistory::search($params);
+                $item->payment = $payment->sum('price');
+                $item->name = @$item->branch->name;
+                unset($item->branch);
+                return $item;
+            });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+    }
 }
