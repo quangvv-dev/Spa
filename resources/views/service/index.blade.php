@@ -18,6 +18,9 @@
             <div class="card-header">
                 <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
                        type="search">
+                <div class="col-md-2" style="font-size: 16px;">
+                    {!! Form::select('category', $category_pluck, null, array('class' => 'form-control','data-placeholder'=>'Danh mục cha')) !!}
+                </div>
             </div>
             <div class="header-search">
                 @include('service.ajax')

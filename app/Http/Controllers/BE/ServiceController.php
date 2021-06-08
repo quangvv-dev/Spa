@@ -44,7 +44,10 @@ class ServiceController extends Controller
             $docs = $docs->where('name', 'like', '%' . $request->search . '%')
                 ->orwhere('code', 'like', '%' . $request->search . '%')
                 ->orwhere('trademark', 'like', '%' . $request->search . '%')
-                ->orwhere('enable', 'like', '%' . $request->search . '%');
+                ->orwhere('enable', 'like', '%' . $request->search . '%')
+                ->orWhereHas('category', function ($query) use ($request) {
+                    $query->where('name', 'like', '%' . $request->search . '%');
+                });
         }
         $docs = $docs->paginate(10);
 
