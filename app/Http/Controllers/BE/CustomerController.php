@@ -104,8 +104,7 @@ class CustomerController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $customers = Customer::search($input);
-        $customers2 = clone $customers;
-        $statuses = Status::getRelationshipByCustomer($customers2 ,$input);
+        $statuses = Status::getRelationshipByCustomer($input);
 
         if (isset($input['limit'])) {
             $customers = $customers->latest()->paginate($input['limit']);

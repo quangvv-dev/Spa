@@ -58,9 +58,10 @@ class Status extends Model
     }
 
 
-    public static function getRelationshipByCustomer($customers, $input)
+    public static function getRelationshipByCustomer($input)
     {
-        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($customers, $input) {
+        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($input) {
+            $customers = Customer::search($input);
             $item->customers_count = $customers->where('status_id', $item->id)->count();
             return $item;
         });
