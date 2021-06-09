@@ -35,7 +35,7 @@
         $(document).on('change', '.category', function (e) {
             var id = $(this).val();
             $.ajax({
-                url: "{{ Url('services/') }}",
+                url: "{{ Url('products/') }}",
                 method: "get",
                 data: {category_id: id}
             }).done(function (data) {
