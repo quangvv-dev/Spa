@@ -11,7 +11,7 @@
                 <input class="form-control name col-md-2" name="search" placeholder="Tìm kiếm" tabindex="1"
                        type="search">
                 <div class="col-md-2" style="font-size: 16px;">
-                    {!! Form::select('type', $category_pluck, null, array('class' => 'form-control type','data-placeholder'=>'Danh mục cha')) !!}
+                    {!! Form::select('type', $category_pluck, null, array('class' => 'form-control select2 type','placeholder'=>'Danh mục cha')) !!}
                 </div>
             </div>
             <div id="registration-form">
