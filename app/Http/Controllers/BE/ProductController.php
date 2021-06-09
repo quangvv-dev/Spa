@@ -43,13 +43,20 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $docs = Service::where('type', StatusCode::PRODUCT)->orderBy('id', 'desc');
-        if ($request->search) {
-            $docs = $docs->where('name', 'like', '%' . $request->search . '%')
-                ->orwhere('code', 'like', '%' . $request->search . '%')
-                ->orwhere('trademark', 'like', '%' . $request->search . '%')
-                ->orwhere('enable', 'like', '%' . $request->search . '%');
-        }
+        $input = $request->all();
+        $docs = Service::where('type', StatusCode::PRODUCT)->orderBy('id', 'desc')
+            ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
+                $child = Category::where('parent_id', $input['category_id'])->pluck('id')->toArray();
+                $q->whereIn('category_id', $child);
+            })->when(isset($input['search']) && $input['search'], function ($q) use ($input) {
+                $q->where('name', 'like', '%' . $input['search'] . '%')
+                    ->orwhere('code', 'like', '%' . $input['search'] . '%')
+                    ->orwhere('trademark', 'like', '%' . $input['search'] . '%')
+                    ->orwhere('enable', 'like', '%' . $input['search'] . '%')
+                    ->orWhereHas('category', function ($query) use ($input) {
+                        $query->where('name', 'like', '%' . $input['search'] . '%');
+                    });
+            });
         $docs = $docs->paginate(StatusCode::PAGINATE_10);
 
         $title = 'Quản lý sản phẩm';

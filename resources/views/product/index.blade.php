@@ -13,10 +13,15 @@
                                 class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
             </div>
-            <div class="card-header">
-                <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
-                       type="search">
-            </div>
+            <form action="">
+                <div class="card-header" style="align-items: flex-end">
+                    <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
+                           type="search">
+                    <div class="col-md-2" style="font-size: 16px;">
+                        {!! Form::select('type', $category_pluck, null, array('class' => 'form-control select2 category','data-placeholder'=>'Danh mục cha')) !!}
+                    </div>
+                </div>
+            </form>
             <div class="header-search">
                 @include('product.ajax')
                 @include('product.modal')
@@ -28,6 +33,19 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
+
+        $(document).on('change', '.category', function (e) {
+            var id = $(this).val();
+            $.ajax({
+                url: "{{ Url('services/') }}",
+                method: "get",
+                data: {category_id: id}
+            }).done(function (data) {
+                $('.table-responsive').html(data);
+
+            });
+        })
+
         $(document).on('keyup', '.header-search', function (e) {
             e.preventDefault();
             var search = $(this).val();
