@@ -46,7 +46,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $docs = Service::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')
+        $docs = Service::where('type', StatusCode::PRODUCT)->orderBy('id', 'desc')
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $child = Category::where('parent_id', $input['category_id'])->pluck('id')->toArray();
                 $q->whereIn('category_id', $child);
