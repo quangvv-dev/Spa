@@ -39,6 +39,8 @@ class ServiceController extends Controller
      */
     public function index(Request $request)
     {
+        $input = $request->all();
+
         $docs = Service::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $child = Category::where('parent_id', $input['category_id'])->pluck('id')->toArray();
