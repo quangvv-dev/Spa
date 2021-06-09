@@ -17,20 +17,20 @@
                             class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
             </div>
-            <div class="card-header">
-                <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
-                       type="search">
-                <div class="col-md-2" style="font-size: 16px;">
-                    {!! Form::select('category', $category_pluck, null, array('class' => 'form-control category','data-placeholder'=>'Danh mục cha')) !!}
+            <form>
+                <div class="card-header" style="align-items: flex-end">
+                    <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
+                           type="search">
+                    <div class="col-md-2" style="font-size: 16px;">
+                        {!! Form::select('category', $category_pluck, null, array('class' => 'form-control select2 category','data-placeholder'=>'Danh mục cha')) !!}
+                    </div>
                 </div>
-            </div>
+            </form>
             <div class="header-search">
                 @include('service.ajax')
-                {{--                @include('service.modal')--}}
             </div>
             <!-- table-responsive -->
         </div>
-        {{--        @include('status._form')--}}
     </div>
 @endsection
 @section('_script')
