@@ -451,7 +451,7 @@ class CustomerController extends Controller
                         $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
                         $check = Customer::where('phone', $row['so_dien_thoai'])->withTrashed()->first();
                         $category = explode(',', $row['nhom_khach_hang']);
-                        $branch = Branch::where('name', $row['chi_nhanh'])->first();
+//                        $branch = Branch::where('name', $row['chi_nhanh'])->first();
 //                        if (empty($check)) {
 //                            if ($row['so_dien_thoai']) {
 //                                $data = Customer::create([
