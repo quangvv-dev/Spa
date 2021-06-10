@@ -529,10 +529,9 @@ class CustomerController extends Controller
 //                                GroupComment::insertOrIgnore($comment_value);
 //                            }
                             if (isset($check) && $check){
-                                $check->wallet = $row['so_du_vi'];
+                                $check->wallet =  $check->wallet + $row['so_du_vi'];
                                 $check->save();
                             }
-//                        }
                     }
                 }
             });
