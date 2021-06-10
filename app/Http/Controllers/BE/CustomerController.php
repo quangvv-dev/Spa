@@ -510,24 +510,27 @@ class CustomerController extends Controller
 
                             }
                         } else {
-                            if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
-                                GroupComment::where('customer_id', $check->id)->delete();
-                                $comment_value = [];
-                                $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
-                                $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
-                                foreach ($row['ngay_trao_doi'] as $key_date => $item) {
-                                    $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
-                                    $comment_value[] = [
-                                        'customer_id' => $check->id,
-                                        'user_id' => Auth::user()->id,
-                                        'messages' => @$row['noi_dung_trao_doi'][$key_date],
-                                        'created_at' => $item,
-                                        'updated_at' => $item,
-                                        'branch_id' => $check->branch_id,
-                                    ];
-                                }
-                                GroupComment::insertOrIgnore($comment_value);
-                            }
+//                            if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
+//                                GroupComment::where('customer_id', $check->id)->delete();
+//                                $comment_value = [];
+//                                $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
+//                                $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
+//                                foreach ($row['ngay_trao_doi'] as $key_date => $item) {
+//                                    $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
+//                                    $comment_value[] = [
+//                                        'customer_id' => $check->id,
+//                                        'user_id' => Auth::user()->id,
+//                                        'messages' => @$row['noi_dung_trao_doi'][$key_date],
+//                                        'created_at' => $item,
+//                                        'updated_at' => $item,
+//                                        'branch_id' => $check->branch_id,
+//                                    ];
+//                                }
+//                                GroupComment::insertOrIgnore($comment_value);
+//                            }
+
+                            $check->wallet = $row['so_du_vi'];
+                            $check->save();
                         }
                     }
                 }
