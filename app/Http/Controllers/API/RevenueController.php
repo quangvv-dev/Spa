@@ -328,8 +328,8 @@ class RevenueController extends BaseApiController
      */
     public function revevueBranch(Request $request)
     {
-        $input = $request->all();
-        $input['type_api'] = 'all_branch';
+        $request->merge(['type_api' => 'all_branch']);
+        $input = $request->except('type_api');
         $data = Order::returnRawData($input)->select('branch_id', \DB::raw('SUM(all_total) AS total'),
             \DB::raw('SUM(gross_revenue) AS revenue'))
             ->groupBy('branch_id')->get()->map(function ($item) use ($input) {
