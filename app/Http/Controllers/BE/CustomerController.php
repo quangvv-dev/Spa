@@ -452,64 +452,64 @@ class CustomerController extends Controller
                         $check = Customer::where('phone', $row['so_dien_thoai'])->withTrashed()->first();
                         $category = explode(',', $row['nhom_khach_hang']);
                         $branch = Branch::where('name', $row['chi_nhanh'])->first();
-                        if (empty($check)) {
-                            if ($row['so_dien_thoai']) {
-                                $data = Customer::create([
-                                    'full_name' => $row['ten_khach_hang'],
-                                    'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : '',
-                                    'mkt_id' => @Auth::user()->id,
-                                    'telesales_id' => isset($telesale) ? $telesale->id : 1,
-                                    'status_id' => isset($status) ? $status->id : 1,
-                                    'source_id' => isset($source) ? $source->id : 18,
-                                    'phone' => $row['so_dien_thoai'],
-                                    'birthday' => $row['sinh_nhat'],
-                                    'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
-                                    'address' => $row['dia_chi'] ?: '',
-                                    'facebook' => $row['link_facebook'] ?: '',
-                                    'description' => $row['mo_ta'],
-                                    'wallet' => $row['so_du_vi'],
-                                    'branch_id' => isset($branch) && $branch ? $branch->id : '',
-                                    'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
-                                    'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
-                                ]);
-                                if (count($category)) {
-                                    foreach ($category as $item) {
-                                        $field = Category::where('name', $item)->first();
-                                        if (isset($field) && $field) {
-                                            CustomerGroup::create([
-                                                'customer_id' => $data->id,
-                                                'category_id' => isset($field) ? $field->id : 0,
-                                            ]);
-                                        }
-                                    }
-                                } else {
-                                    CustomerGroup::create([
-                                        'customer_id' => $data->id,
-                                        'category_id' => 0,
-                                    ]);
-                                }
-
-                                if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
-                                    GroupComment::where('customer_id', $data->id)->delete();
-                                    $comment_value = [];
-                                    $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
-                                    $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
-                                    foreach ($row['ngay_trao_doi'] as $key_date => $item) {
-                                        $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
-                                        $comment_value[] = [
-                                            'customer_id' => $data->id,
-                                            'user_id' => Auth::user()->id,
-                                            'messages' => @$row['noi_dung_trao_doi'][$key_date],
-                                            'created_at' => $item,
-                                            'updated_at' => $item,
-                                            'branch_id' => $data->branch_id,
-                                        ];
-                                    }
-                                    GroupComment::insertOrIgnore($comment_value);
-                                }
-
-                            }
-                        } else {
+//                        if (empty($check)) {
+//                            if ($row['so_dien_thoai']) {
+//                                $data = Customer::create([
+//                                    'full_name' => $row['ten_khach_hang'],
+//                                    'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : '',
+//                                    'mkt_id' => @Auth::user()->id,
+//                                    'telesales_id' => isset($telesale) ? $telesale->id : 1,
+//                                    'status_id' => isset($status) ? $status->id : 1,
+//                                    'source_id' => isset($source) ? $source->id : 18,
+//                                    'phone' => $row['so_dien_thoai'],
+//                                    'birthday' => $row['sinh_nhat'],
+//                                    'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+//                                    'address' => $row['dia_chi'] ?: '',
+//                                    'facebook' => $row['link_facebook'] ?: '',
+//                                    'description' => $row['mo_ta'],
+//                                    'wallet' => $row['so_du_vi'],
+//                                    'branch_id' => isset($branch) && $branch ? $branch->id : '',
+//                                    'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+//                                    'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+//                                ]);
+//                                if (count($category)) {
+//                                    foreach ($category as $item) {
+//                                        $field = Category::where('name', $item)->first();
+//                                        if (isset($field) && $field) {
+//                                            CustomerGroup::create([
+//                                                'customer_id' => $data->id,
+//                                                'category_id' => isset($field) ? $field->id : 0,
+//                                            ]);
+//                                        }
+//                                    }
+//                                } else {
+//                                    CustomerGroup::create([
+//                                        'customer_id' => $data->id,
+//                                        'category_id' => 0,
+//                                    ]);
+//                                }
+//
+//                                if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
+//                                    GroupComment::where('customer_id', $data->id)->delete();
+//                                    $comment_value = [];
+//                                    $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
+//                                    $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
+//                                    foreach ($row['ngay_trao_doi'] as $key_date => $item) {
+//                                        $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
+//                                        $comment_value[] = [
+//                                            'customer_id' => $data->id,
+//                                            'user_id' => Auth::user()->id,
+//                                            'messages' => @$row['noi_dung_trao_doi'][$key_date],
+//                                            'created_at' => $item,
+//                                            'updated_at' => $item,
+//                                            'branch_id' => $data->branch_id,
+//                                        ];
+//                                    }
+//                                    GroupComment::insertOrIgnore($comment_value);
+//                                }
+//
+//                            }
+//                        } else {
 //                            if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
 //                                GroupComment::where('customer_id', $check->id)->delete();
 //                                $comment_value = [];
@@ -528,10 +528,11 @@ class CustomerController extends Controller
 //                                }
 //                                GroupComment::insertOrIgnore($comment_value);
 //                            }
-
-                            $check->wallet = $row['so_du_vi'];
-                            $check->save();
-                        }
+                            if (isset($check) && $check){
+                                $check->wallet = $row['so_du_vi'];
+                                $check->save();
+                            }
+//                        }
                     }
                 }
             });
