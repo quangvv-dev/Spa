@@ -20,15 +20,23 @@ class ChartResource extends JsonResource
                 'name'      => @$this->name,
                 'all_total' => @$this->all_total,
             ];
-        }elseif ($request->type_api == 3){
+        } elseif ($request->type_api == 3) {
             $result = [
                 'name'      => @$this->service->name,
                 'all_total' => @$this->total,
             ];
-        }elseif ($request->type_api == 7){
+        } elseif ($request->type_api == 7) {
             $result = [
-                'name'      => @$this->source_customer->name,
-                'total'     => @$this->total,
+                'name'  => @$this->source_customer->name,
+                'total' => @$this->total,
+            ];
+        } elseif ($request->type_api == 'all_branch') {
+            $result = [
+                'branch_id'    => @$this->branch_id,
+                'total'   => @$this->total,
+                'revenue' => @$this->revenue,
+                'payment' => @$this->payment,
+                'name'    => @$this->name,
             ];
         }
 

@@ -292,6 +292,13 @@ class RevenueController extends BaseApiController
 
     }
 
+    /**
+     * Doanh thu theo ngày
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function revevueDays(Request $request)
     {
         $input = $request->all();
@@ -333,6 +340,8 @@ class RevenueController extends BaseApiController
                 unset($item->branch);
                 return $item;
             })->sortByDesc('payment');
+        $data = ChartResource::collection($data);
+
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
