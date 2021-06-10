@@ -136,7 +136,7 @@ class RevenueController extends BaseApiController
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old);
             }
-            $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ?$payment_old->sum('price') : 0;
+            $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 
             $data = [
                 'payment'       => $payment->sum('price'),
@@ -151,7 +151,7 @@ class RevenueController extends BaseApiController
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old);
             }
-            $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ?$payment_old->sum('price') : 0;
+            $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 
             $payment = PaymentHistory::search($input);
             $payment2 = clone $payment;
@@ -329,6 +329,7 @@ class RevenueController extends BaseApiController
     public function revevueBranch(Request $request)
     {
         $input = $request->all();
+        $input['type_api'] = 'all_branch';
         $data = Order::returnRawData($input)->select('branch_id', \DB::raw('SUM(all_total) AS total'),
             \DB::raw('SUM(gross_revenue) AS revenue'))
             ->groupBy('branch_id')->get()->map(function ($item) use ($input) {
