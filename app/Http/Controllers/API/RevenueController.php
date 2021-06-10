@@ -312,6 +312,13 @@ class RevenueController extends BaseApiController
 
     }
 
+    /**
+     * Doanh thu theo năm
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function revevueBranch(Request $request)
     {
         $input = $request->all();
@@ -325,7 +332,7 @@ class RevenueController extends BaseApiController
                 $item->name = @$item->branch->name;
                 unset($item->branch);
                 return $item;
-            });
+            })->sortByDesc('payment');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
