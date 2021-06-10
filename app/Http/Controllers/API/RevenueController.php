@@ -37,34 +37,52 @@ class RevenueController extends BaseApiController
      * Khách hàng mới doanh thu.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
         $input = $request->all();
-        $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
-        })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-            $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
+            function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
         });
         $schedules = Schedule::getBooks($input);
-        $groupComment = GroupComment::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
-        })->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-        if (isset($input['old_start']) && isset($input['old_end'])) {
-            $customers_old = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+        $groupComment = GroupComment::when(isset($input['branch_id']) && $input['branch_id'],
+            function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
-            })->whereBetween('created_at', [Functions::yearMonthDay($input['old_start']) . " 00:00:00", Functions::yearMonthDay($input['old_end']) . " 23:59:59"]);
+            })->whereBetween('created_at', [
+            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+        ]);
+        if (isset($input['old_start']) && isset($input['old_end'])) {
+            $customers_old = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
+                function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->whereBetween('created_at', [
+                Functions::yearMonthDay($input['old_start']) . " 00:00:00",
+                Functions::yearMonthDay($input['old_end']) . " 23:59:59",
+            ]);
         }
-        $history = HistoryUpdateOrder::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-            $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-        });
+        $history = HistoryUpdateOrder::when(isset($input['start_date']) && isset($input['end_date']),
+            function ($q) use ($input) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            });
         $data = [
             'customer_new' => $customers->count(),
-            'schedules' => $schedules,
+            'schedules'    => $schedules,
             'groupComment' => $groupComment->count(),
-            'become' => $history->count(),
-            'percent' => !empty($customers->count()) && (isset($customers_old) && !empty($customers_old->count())) ? round(($customers->count() - $customers_old->count()) / $customers_old->count() * 100, 2) : 0
+            'become'       => $history->count(),
+            'percent'      => !empty($customers->count()) && (isset($customers_old) && !empty($customers_old->count())) ? round(($customers->count() - $customers_old->count()) / $customers_old->count() * 100,
+                2) : 0,
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
@@ -74,15 +92,16 @@ class RevenueController extends BaseApiController
      * Đơn hàng list block 1
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function orders(Request $request)
     {
         $input = $request->except('type_api');
         $input_old = [
-            'branch_id' => $request->branch_id,
+            'branch_id'  => $request->branch_id,
             'start_date' => $request->old_start,
-            'end_date' => $request->old_start,
+            'end_date'   => $request->old_start,
         ];
         $wallet = WalletHistory::search($input);
         $orders = Order::returnRawData($input);
@@ -92,23 +111,24 @@ class RevenueController extends BaseApiController
         if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
             $orders_old = Order::returnRawData($input_old);
         }
-
         if ($request->type_api == 1) {
+            $orders_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $orders_old->count() : 0;
             $data = [
-                'orders_old' => $orders_old->count(),
-                'orders' => $orders->count(),
-                'percent' => !empty($orders->count()) && !empty($orders_old->count()) ? round(($orders->count() - $orders_old->count()) / $orders_old->count() * 100, 2) : 0,
-                'order_product' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+                'orders'         => $orders->count(),
+                'percent'        => !empty($orders->count()) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
+                    2) : 0,
+                'order_product'  => $orders->where('role_type', StatusCode::PRODUCT)->count(),
                 'order_services' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
-                'wallets' => $wallet->count(),
-
+                'wallets'        => $wallet->count(),
             ];
         } elseif ($request->type_api == 2) {
+            $orders_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $orders_old->sum('all_total') : 0;
+
             $data = [
-                'total' => $orders->sum('all_total'),
-                'old_total' => $orders_old->sum('all_total'),
-                'percent' => !empty($orders->sum('all_total')) && !empty($orders_old->sum('all_total')) ? round(($orders->count() - $orders_old->count()) / $orders_old->count() * 100, 2) : 0,
-                'total_product' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+                'total'          => $orders->sum('all_total'),
+                'percent'        => !empty($orders->sum('all_total')) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
+                    2) : 0,
+                'total_product'  => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
                 'total_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             ];
         } elseif ($request->type_api == 3) {
@@ -116,29 +136,33 @@ class RevenueController extends BaseApiController
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old);
             }
+            $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ?$payment_old->sum('price') : 0;
 
             $data = [
-                'payment' => $payment->sum('price'),
-                'payment_old' => $payment_old->sum('price'),
-                'percent' => !empty($payment->sum('price')) && !empty($payment_old->sum('price')) ? round(($payment->sum('price') - $payment_old->sum('price')) / $payment_old->sum('price') * 100, 2) : 0,
+                'payment'       => $payment->sum('price'),
+                'percent'       => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
+                    2) : 0,
                 'gross_revenue' => $orders->sum('gross_revenue'),
-                'wallet' => $wallet->sum('order_price'),
-                'thu_no' => $payment->sum('price') - $orders->sum('gross_revenue'),
-                'con_no' => $orders->sum('all_total') - $orders->sum('gross_revenue'),
+                'wallet'        => $wallet->sum('order_price'),
+                'thu_no'        => $payment->sum('price') - $orders->sum('gross_revenue'),
+                'con_no'        => $orders->sum('all_total') - $orders->sum('gross_revenue'),
             ];
         } elseif ($request->type_api == 4) {
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old);
             }
+            $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ?$payment_old->sum('price') : 0;
+
             $payment = PaymentHistory::search($input);
             $payment2 = clone $payment;
             $payment3 = clone $payment;
 
             $data = [
-                'payment' => $payment->sum('price'),
-                'percent' => !empty($payment->sum('price')) && !empty($payment_old->sum('price')) ? round(($payment->sum('price') - $payment_old->sum('price')) / $payment_old->sum('price') * 100, 2) : 0,
-                'cash' => $payment->where('payment_type', 1)->sum('price'),
-                'card' => $payment2->where('payment_type', 2)->sum('price'),
+                'payment'     => $payment->sum('price'),
+                'percent'     => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
+                    2) : 0,
+                'cash'        => $payment->where('payment_type', 1)->sum('price'),
+                'card'        => $payment2->where('payment_type', 2)->sum('price'),
                 'wallet_used' => $payment3->where('payment_type', 3)->sum('price'),
             ];
         }
@@ -151,6 +175,7 @@ class RevenueController extends BaseApiController
      * Charts tròn
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function statusRevenue(Request $request)
@@ -173,12 +198,13 @@ class RevenueController extends BaseApiController
             $orders2 = clone $orders;
             $data = [
                 [
-                    'name' => 'Sản phẩm',
+                    'name'      => 'Sản phẩm',
                     'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-                ], [
-                    'name' => 'Dịch vụ',
-                    'all_total' => $orders2->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue')
-                ]
+                ],
+                [
+                    'name'      => 'Dịch vụ',
+                    'all_total' => $orders2->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+                ],
             ];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 5) {
@@ -193,8 +219,8 @@ class RevenueController extends BaseApiController
                 if (count($revenue_gender)) {
                     foreach ($revenue_gender as $k => $item) {
                         $data[] = [
-                            'name' => $k == 0 ? 'Nữ' : 'Nam',
-                            'all_total' => array_sum($item)
+                            'name'      => $k == 0 ? 'Nữ' : 'Nam',
+                            'all_total' => array_sum($item),
                         ];
                     }
                 }
@@ -211,15 +237,17 @@ class RevenueController extends BaseApiController
             });
             $data = [
                 [
-                    'name' => 'Khách hàng mới',
+                    'name'      => 'Khách hàng mới',
                     'all_total' => $orders_new->sum('gross_revenue'),
 
-                ], [
-                    'name' => 'Khách hàng cũ',
+                ],
+                [
+                    'name'      => 'Khách hàng cũ',
                     'all_total' => $orders_old->sum('gross_revenue'),
 
-                ], [
-                    'name' => 'Thu còn nợ',
+                ],
+                [
+                    'name'      => 'Thu còn nợ',
                     'all_total' => $payment->sum('price') - $orders_new->sum('gross_revenue') - $orders_old->sum('gross_revenue'),
 
                 ],
@@ -228,7 +256,8 @@ class RevenueController extends BaseApiController
 
         } elseif ($request->type_api == 7) {
             $customers = Customer::orderByDesc('id');
-            $data = Customer::applySearchConditions($customers, $input)->select('id', 'source_id', \DB::raw('COUNT(ID) AS total'))->groupBy('source_id')->with('source_customer')->get();
+            $data = Customer::applySearchConditions($customers, $input)->select('id', 'source_id',
+                \DB::raw('COUNT(ID) AS total'))->groupBy('source_id')->with('source_customer')->get();
             $data = ChartResource::collection($data);
 
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -240,6 +269,7 @@ class RevenueController extends BaseApiController
      * Doanh thu năm hiện tại
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function revenueMonth(Request $request)
@@ -254,7 +284,7 @@ class RevenueController extends BaseApiController
             $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
 
             $data[] = [
-                'month' => 'T' . $i,
+                'month'     => 'T' . $i,
                 'all_total' => (int)$newOrder,
             ];
         }
@@ -265,7 +295,8 @@ class RevenueController extends BaseApiController
     public function revevueDays(Request $request)
     {
         $input = $request->all();
-        $data = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+        $data = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'),
+            \DB::raw('SUM(gross_revenue) AS revenue'))
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })
@@ -284,7 +315,8 @@ class RevenueController extends BaseApiController
     public function revevueBranch(Request $request)
     {
         $input = $request->all();
-        $data = Order::returnRawData($input)->select('branch_id', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+        $data = Order::returnRawData($input)->select('branch_id', \DB::raw('SUM(all_total) AS total'),
+            \DB::raw('SUM(gross_revenue) AS revenue'))
             ->groupBy('branch_id')->get()->map(function ($item) use ($input) {
                 $params = $input;
                 $params['branch_id'] = $item->branch_id;
