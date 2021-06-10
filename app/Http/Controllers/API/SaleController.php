@@ -52,7 +52,7 @@ class SaleController extends BaseApiController
 
             $item->totalAll = $detail->sum('price');//da thu trong ky
             return $item;
-        })->sortByDesc('gross_revenue');
+        })->sortByDesc('totalAll');
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
