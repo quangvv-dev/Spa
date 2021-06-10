@@ -142,7 +142,7 @@
                 <div class="sub-item">
                     <ul>
                         @if($roleGlobal->permission('tasks.employee'))
-                            <li><a href="{{url('tasks-employee')}}">CSKH nhân viên</a></li>
+                            <li><a href="{{url('tasks')}}">CSKH nhân viên</a></li>
                             <li><a href="{{url('tasks-employee')}}">CSKH phòng ban</a></li>
                         @endif
                     </ul>
