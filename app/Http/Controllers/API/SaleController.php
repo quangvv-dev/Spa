@@ -7,6 +7,7 @@ use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Http\Resources\SaleResource;
 use App\Models\CallCenter;
 use App\Models\Customer;
 use App\Models\Order;
@@ -54,6 +55,7 @@ class SaleController extends BaseApiController
             return $item;
         })->sortByDesc('totalAll');
 
+        $users = SaleResource::collection($users);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
 }
