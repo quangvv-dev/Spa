@@ -17,34 +17,6 @@ class Customer extends Model
     use SoftDeletes;
     protected $guarded = ['id'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'mkt_id',
-        'telesales_id',
-        'source_id',
-        'status_id',
-        'genitive_id',
-        'full_name',
-        'account_code',
-        'address',
-        'phone',
-        'birthday',
-        'gender',
-        'description',
-        'facebook',
-        'avatar',
-        'fb_name',
-        'membership',
-        'branch_id',
-        'deleted_at',
-        'updated_at',
-        'created_at',
-    ];
-
     const VIP_STATUS = 10000000;
 
 
