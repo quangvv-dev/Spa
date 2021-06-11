@@ -152,6 +152,52 @@ class StatisticController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
+    public function groupDetail(Request $request, $id)
+    {
+        $input = $request->all();
+
+        $category = Category::find($id);
+        $arr_customer = CustomerGroup::where('category_id', $category->id)->pluck('customer_id')->toArray();
+        $customer = Customer::select('id')->whereIn('id', $arr_customer);
+        $data_new = self::searchDateBranch($customer, $input)->pluck('id')->toArray();
+
+        $old = array_diff($arr_customer, $data_new);
+
+        $orderOld = Order::where('member_id', $old);
+        $orderOld = self::searchDateBranch($orderOld, $input);
+
+        $orderNew = Order::where('member_id', $data_new);
+        $orderNew = self::searchDateBranch($orderOld, $input);
+
+        $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new);
+        $schedules_new = self::searchDateBranch($schedules_new, $input, 'date');
+
+
+        $data = [
+            'phone' => count($data_new),
+            'schedules_new' => $schedules_new->count(),
+            'order_old' => $orderOld->count(),
+            'total_old' => $orderOld->sum('gross_revenue'),
+            'order_new' => $orderNew->count(),
+            'total_new' => $orderNew->sum('gross_revenue'),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+    }
+
+    public function searchDateBranch($query, $input, $loc = 'created_at')
+    {
+        $query = $query->when(isset($input->branch_id) && $input->branch_id, function ($q) use ($input) {
+            $q->where('branch_id', $input->branch_id);
+        })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input, $loc) {
+            $q->whereBetween($loc, [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
+        });
+        return $query;
+    }
+
     /**
      * Danh sách nhân viên nhóm (tại nhóm)
      *

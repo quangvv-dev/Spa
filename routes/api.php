@@ -33,6 +33,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('schedules', 'StatisticController@schedules');
     Route::get('tasks', 'StatisticController@tasks');
     Route::get('group', 'StatisticController@group');
+    Route::get('group/{id}', 'StatisticController@groupDetail');
     Route::get('get-employee-category', 'StatisticController@getUserCategory');
     Route::get('get-employee-call', 'CallController@getEmployeeCall');
     Route::group(['prefix' => 'revenue'], function () {

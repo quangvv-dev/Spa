@@ -14,4 +14,9 @@ class CustomerGroup extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 }
