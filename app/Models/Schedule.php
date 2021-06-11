@@ -69,16 +69,16 @@ class Schedule extends Model
         $data = self::when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                $q->whereDate('created_at', getTime(($input['data_time'])));
+                $q->whereDate('date', getTime(($input['data_time'])));
             })
                 ->when($input['data_time'] == 'THIS_WEEK' ||
                     $input['data_time'] == 'LAST_WEEK' ||
                     $input['data_time'] == 'THIS_MONTH' ||
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime(($input['data_time'])));
+                    $q->whereBetween('date', getTime(($input['data_time'])));
                 });
         })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-            $q->whereBetween('created_at', [
+            $q->whereBetween('date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ]);
@@ -103,14 +103,14 @@ class Schedule extends Model
             $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
                 $query->when($input['data_time'] == 'TODAY' ||
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                    $q->whereDate('created_at', getTime(($input['data_time'])));
+                    $q->whereDate('date', getTime(($input['data_time'])));
                 })
                     ->when($input['data_time'] == 'THIS_WEEK' ||
                         $input['data_time'] == 'LAST_WEEK' ||
                         $input['data_time'] == 'LAST_WEEK' ||
                         $input['data_time'] == 'THIS_MONTH' ||
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                        $q->whereBetween('date', getTime(($input['data_time'])));
                     });
             })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
@@ -118,7 +118,7 @@ class Schedule extends Model
                 $q->where('creator_id', $input['user']);
             })
                 ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                    $q->whereBetween('created_at', [
+                    $q->whereBetween('date', [
                         Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                         Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                     ]);
@@ -135,7 +135,7 @@ class Schedule extends Model
                 $q->where('branch_id', $request['branch_id']);
             })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($request) {
-                $q->whereBetween('created_at', [
+                $q->whereBetween('date', [
                     Functions::yearMonthDay($request['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($request['end_date']) . " 23:59:59",
                 ]);

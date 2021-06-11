@@ -78,10 +78,10 @@ class RevenueController extends BaseApiController
             });
         $data = [
             'customer_new' => $customers->count(),
-            'schedules'    => $schedules,
+            'schedules' => $schedules,
             'groupComment' => $groupComment->count(),
-            'become'       => $history->count(),
-            'percent'      => !empty($customers->count()) && (isset($customers_old) && !empty($customers_old->count())) ? round(($customers->count() - $customers_old->count()) / $customers_old->count() * 100,
+            'become' => $history->count(),
+            'percent' => !empty($customers->count()) && (isset($customers_old) && !empty($customers_old->count())) ? round(($customers->count() - $customers_old->count()) / $customers_old->count() * 100,
                 2) : 0,
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -99,9 +99,9 @@ class RevenueController extends BaseApiController
     {
         $input = $request->except('type_api');
         $input_old = [
-            'branch_id'  => $request->branch_id,
+            'branch_id' => $request->branch_id,
             'start_date' => $request->old_start,
-            'end_date'   => $request->old_start,
+            'end_date' => $request->old_end,
         ];
         $wallet = WalletHistory::search($input);
         $orders = Order::returnRawData($input);
@@ -114,21 +114,21 @@ class RevenueController extends BaseApiController
         if ($request->type_api == 1) {
             $orders_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $orders_old->count() : 0;
             $data = [
-                'orders'         => $orders->count(),
-                'percent'        => !empty($orders->count()) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
+                'orders' => $orders->count(),
+                'percent' => !empty($orders->count()) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
                     2) : 0,
-                'order_product'  => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+                'order_product' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
                 'order_services' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
-                'wallets'        => $wallet->count(),
+                'wallets' => $wallet->count(),
             ];
         } elseif ($request->type_api == 2) {
             $orders_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $orders_old->sum('all_total') : 0;
 
             $data = [
-                'total'          => $orders->sum('all_total'),
-                'percent'        => !empty($orders->sum('all_total')) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
+                'total' => $orders->sum('all_total'),
+                'percent' => !empty($orders->sum('all_total')) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
                     2) : 0,
-                'total_product'  => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+                'total_product' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
                 'total_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             ];
         } elseif ($request->type_api == 3) {
@@ -139,13 +139,13 @@ class RevenueController extends BaseApiController
             $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 
             $data = [
-                'payment'       => $payment->sum('price'),
-                'percent'       => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
+                'payment' => $payment->sum('price'),
+                'percent' => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
                     2) : 0,
                 'gross_revenue' => $orders->sum('gross_revenue'),
-                'wallet'        => $wallet->sum('order_price'),
-                'thu_no'        => $payment->sum('price') - $orders->sum('gross_revenue'),
-                'con_no'        => $orders->sum('all_total') - $orders->sum('gross_revenue'),
+                'wallet' => $wallet->sum('order_price'),
+                'thu_no' => $payment->sum('price') - $orders->sum('gross_revenue'),
+                'con_no' => $orders->sum('all_total') - $orders->sum('gross_revenue'),
             ];
         } elseif ($request->type_api == 4) {
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
@@ -158,15 +158,49 @@ class RevenueController extends BaseApiController
             $payment3 = clone $payment;
 
             $data = [
-                'payment'     => $payment->sum('price'),
-                'percent'     => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
+                'payment' => $payment->sum('price'),
+                'percent' => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
                     2) : 0,
-                'cash'        => $payment->where('payment_type', 1)->sum('price'),
-                'card'        => $payment2->where('payment_type', 2)->sum('price'),
+                'cash' => $payment->where('payment_type', 1)->sum('price'),
+                'card' => $payment2->where('payment_type', 2)->sum('price'),
                 'wallet_used' => $payment3->where('payment_type', 3)->sum('price'),
             ];
         }
 
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+    }
+
+    /**
+     * Tab Schedules
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function tabSchedules(Request $request)
+    {
+        $input = $request->except('old_start', 'old_end');
+        $input_old = [
+            'branch_id' => $request->branch_id,
+            'start_date' => $request->old_start,
+            'end_date' => $request->old_end,
+        ];
+        $schedule_old = 0;
+        if (isset($request->old_start) && isset($request->old_end)) {
+            $schedule_old = Schedule::search($input_old)->count();
+        }
+
+        $schedule = Schedule::search($input);
+        $schedule2 = clone $schedule;
+        $schedule3 = clone $schedule;
+
+        $data = [
+            'all_schedules' => $schedule->count(),
+            'percent' => !empty($schedule->count()) && !empty($schedule_old) ? round(($schedule->count()) - $schedule_old) / $schedule_old * 100 : 0,
+            'schedules_buy' => $schedule->where('status', 3)->count(),
+            'schedules_notbuy' => $schedule2->where('status', 4)->count(),
+            'schedules_cancel' => $schedule3->where('status', 5)->count(),
+        ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
@@ -198,11 +232,11 @@ class RevenueController extends BaseApiController
             $orders2 = clone $orders;
             $data = [
                 [
-                    'name'      => 'Sản phẩm',
+                    'name' => 'Sản phẩm',
                     'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
                 ],
                 [
-                    'name'      => 'Dịch vụ',
+                    'name' => 'Dịch vụ',
                     'all_total' => $orders2->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
                 ],
             ];
@@ -219,7 +253,7 @@ class RevenueController extends BaseApiController
                 if (count($revenue_gender)) {
                     foreach ($revenue_gender as $k => $item) {
                         $data[] = [
-                            'name'      => $k == 0 ? 'Nữ' : 'Nam',
+                            'name' => $k == 0 ? 'Nữ' : 'Nam',
                             'all_total' => array_sum($item),
                         ];
                     }
@@ -237,17 +271,17 @@ class RevenueController extends BaseApiController
             });
             $data = [
                 [
-                    'name'      => 'Khách hàng mới',
+                    'name' => 'Khách hàng mới',
                     'all_total' => $orders_new->sum('gross_revenue'),
 
                 ],
                 [
-                    'name'      => 'Khách hàng cũ',
+                    'name' => 'Khách hàng cũ',
                     'all_total' => $orders_old->sum('gross_revenue'),
 
                 ],
                 [
-                    'name'      => 'Thu còn nợ',
+                    'name' => 'Thu còn nợ',
                     'all_total' => $payment->sum('price') - $orders_new->sum('gross_revenue') - $orders_old->sum('gross_revenue'),
 
                 ],
@@ -284,7 +318,7 @@ class RevenueController extends BaseApiController
             $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
 
             $data[] = [
-                'month'     => 'T' . $i,
+                'month' => 'T' . $i,
                 'all_total' => (int)$newOrder,
             ];
         }
