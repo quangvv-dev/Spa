@@ -134,17 +134,17 @@ class StatisticController extends BaseApiController
                 })->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
             $order = self::searchBranch($order, $request);
 
-            $payment_history = PaymentHistory::when(!empty($input['start_date']) && !empty($input['end_date']),
-                function ($q) use ($input) {
-                    $q->whereBetween('created_at', [
-                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                    ]);
-                })->whereIn('order_id', $order->pluck('id')->toArray());
-            $payment_history = self::searchBranch($payment_history, $request);
+//            $payment_history = PaymentHistory::when(!empty($input['start_date']) && !empty($input['end_date']),
+//                function ($q) use ($input) {
+//                    $q->whereBetween('created_at', [
+//                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+//                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+//                    ]);
+//                })->whereIn('order_id', $order->pluck('id')->toArray());
+//            $payment_history = self::searchBranch($payment_history, $request);
 
             $item->orders = $order->count();
-            $item->revuenue = $payment_history->sum('price');//da thu trong ky thu thêm
+            $item->revuenue = $order->sum('gross_revenue');//da thu trong ky thu thêm
             return $item;
         })->sortByDesc('revuenue');
         $data = CategoryRevenueResource::collection($category);
