@@ -158,28 +158,24 @@ class StatisticController extends BaseApiController
 
         $category = Category::find($id);
         $arr_customer = CustomerGroup::where('category_id', $category->id)->pluck('customer_id')->toArray();
+
         $customer = Customer::select('id')->whereIn('id', $arr_customer);
-        $data_new = self::searchDateBranch($customer, $input)->pluck('id')->toArray();
+        $data_new = self::searchDateBranch($customer, $input);
 
-        $old = array_diff($arr_customer, $data_new);
+        $ordersAll = Order::returnRawData($input);
+        $orders_new = $ordersAll->whereIn('member_id', $data_new)->with('orderDetails');
 
-        $orderOld = Order::where('member_id', $old);
-        $orderOld = self::searchDateBranch($orderOld, $input);
-
-        $orderNew = Order::where('member_id', $data_new);
-        $orderNew = self::searchDateBranch($orderOld, $input);
-
-        $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new);
-        $schedules_new = self::searchDateBranch($schedules_new, $input, 'date');
+        $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray());
+        $schedules_new = self::searchDateBranch($schedules_new, $input);
 
 
         $data = [
-            'phone' => count($data_new),
+            'phone' => $data_new->count(),
             'schedules_new' => $schedules_new->count(),
-            'order_old' => $orderOld->count(),
-            'total_old' => $orderOld->sum('gross_revenue'),
-            'order_new' => $orderNew->count(),
-            'total_new' => $orderNew->sum('gross_revenue'),
+            'order_old' => 0,
+            'total_old' => 0,
+            'order_new' => $orders_new->count(),
+            'total_new' => $orders_new->sum('gross_revenue'),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 

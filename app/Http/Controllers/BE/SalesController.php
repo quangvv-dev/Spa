@@ -124,7 +124,7 @@ class SalesController extends Controller
                 $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time));
                 $data_new = self::searchBranch($data_new, $request);
 
-                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0]);
+                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0])->where('old_customer', 1);
                 $data_old = self::searchBranch($data_old, $request);
 
                 $data = Customer::select('id')->whereIn('id', $arr_customer);
