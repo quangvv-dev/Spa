@@ -143,9 +143,10 @@ class CategoryProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Category $category)
+    public function destroy(Request $request, $id)
     {
-        if (isset($category->categories)) {
+        $category = Category::where('id', $id)->with('categories')->first();
+        if (isset($category) && isset($category->categories)) {
             $request->session()->flash('error', 'Không thể xóa vì danh mục đang chứa danh mục con!');
         } else {
             $category->delete();
