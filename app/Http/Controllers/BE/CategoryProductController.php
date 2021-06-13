@@ -58,7 +58,9 @@ class CategoryProductController extends Controller
         $input['type_category'] = StatusCode::PRODUCT;
         $docs = Category::search($input);
 
-        if ($request->ajax()) return Response::json(view('category.ajax', compact('docs', 'title'))->render());
+        if ($request->ajax()) {
+            return Response::json(view('category.ajax', compact('docs', 'title'))->render());
+        }
 
         return view('category-product.index', compact('title', 'docs'));
     }
@@ -88,7 +90,7 @@ class CategoryProductController extends Controller
         $text = Functions::vi_to_en(@$request->name);
         $request->merge([
             'code' => str_replace(' ', '_', strtolower($text)),
-            'type' => StatusCode::PRODUCT
+            'type' => StatusCode::PRODUCT,
         ]);
         Category::create($request->all());
         return redirect(route('category-product.create'))->with('status', 'Tạo danh mục thành công');
@@ -124,7 +126,7 @@ class CategoryProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -143,9 +145,10 @@ class CategoryProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Category $category)
+    public function destroy(Request $request, $id)
     {
-        if (isset($category->categories)) {
+        $category = Category::where('id', $id)->with('categories')->first();
+        if (isset($category) && isset($category->categories)) {
             $request->session()->flash('error', 'Không thể xóa vì danh mục đang chứa danh mục con!');
         } else {
             $category->delete();
@@ -162,8 +165,8 @@ class CategoryProductController extends Controller
 
         return $data = [
             'customer_id' => $customerId,
-            'categories' => $categories,
-            'category_id' => $categoryId
+            'categories'  => $categories,
+            'category_id' => $categoryId,
         ];
     }
 }
