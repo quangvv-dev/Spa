@@ -77,7 +77,7 @@ class OrderController extends BaseApiController
 
                 if (count($history)) {
                     foreach ($history as $item2) {
-                        $category_id = $item2->service->category_id ?: 0;
+                        $category_id = isset($item2->service) ? $item2->service->category_id : 0;
                         if (!empty($category_price[$category_id])) {
                             $price[] = (int)$category_price[$category_id];
                         }
