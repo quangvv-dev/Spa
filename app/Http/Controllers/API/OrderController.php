@@ -60,7 +60,10 @@ class OrderController extends BaseApiController
         $category_price = Category::pluck('price', 'id')->toArray();
         $input = $request->all();
         $docs = [];
-        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])->get();
+        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->get();
         if (count($data)) {
 
             foreach ($data as $item) {
