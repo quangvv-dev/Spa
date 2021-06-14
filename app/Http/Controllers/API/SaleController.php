@@ -35,8 +35,14 @@ class SaleController extends BaseApiController
             $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('old_customer', 1);
             $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
 
+
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input);
+            $detail_total = clone $detail;
+            $detail2 = clone $detail;
+            $total_old = $detail_total->whereIn('order_id',$order_old->pluck('id')->toArray())->sum('price');
+            $total_new = $detail2->whereIn('order_id',$order_new->pluck('id')->toArray())->sum('price');
+
 
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
@@ -46,10 +52,10 @@ class SaleController extends BaseApiController
             $input['call_status'] = 'ANSWERED';
 
             $item->call = !empty($input['caller_number']) ? CallCenter::search($input) : 0;
-            $item->thu_no = $detail->sum('price') - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue');
+            $item->thu_no = $detail->sum('price') - $total_new - $total_old;
 
-            $item->totalNew = $order_new->sum('gross_revenue');
-            $item->totalOld = $order_old->sum('gross_revenue');
+            $item->totalNew =$total_new;
+            $item->totalOld = $total_old;
 
             $item->totalAll = $detail->sum('price');//da thu trong ky
             return $item;
