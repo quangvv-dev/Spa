@@ -145,6 +145,7 @@ class StatisticController extends BaseApiController
 
             $item->orders = $order->count();
             $item->revuenue = $order->sum('gross_revenue');//da thu trong ky thu thêm
+            $item->total = $order->sum('all_total');//da thu trong ky thu thêm
             return $item;
         })->sortByDesc('revuenue');
         $data = CategoryRevenueResource::collection($category);

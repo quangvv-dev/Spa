@@ -20,6 +20,7 @@ class CategoryRevenueResource extends JsonResource
             'name'     => @$this->name,
             'orders'   => @$this->orders,
             'revuenue' => @$this->revuenue,
+            'total'    => @$this->total,
         ];
     }
 }
