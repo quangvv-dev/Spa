@@ -27,9 +27,14 @@ class OrderController extends BaseApiController
     public function index(Request $request)
     {
         $input = $request->all();
-        $orders = Order::searchAll($input)->paginate(StatusCode::PAGINATE_20);
+        $orders = Order::searchAll($input);
+        $data['sumTotal'] = $orders->sum('all_total');
+        $data['sumRevenue'] = $orders->sum('gross_revenue');
+        $data['sumRest'] = $orders->sum('the_rest');
+        $orders = $orders->paginate(StatusCode::PAGINATE_20);
         $data['lastPage'] = $orders->lastPage();
         $data['records'] = OrderResource::collection($orders);
+
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
