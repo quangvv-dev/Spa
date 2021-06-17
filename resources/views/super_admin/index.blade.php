@@ -39,6 +39,13 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="form-group">
+                                                {!! Form::label('bottom_pdf', 'Ghi chú cuối đơn hàng', array('class' => 'control-label')) !!}
+                                                {!! Form::text('bottom_pdf',setting('bottom_pdf'), array('class' => 'form-control')) !!}
+                                                <span class="help-block">{{ $errors->first('bottom_pdf', ':message') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
                                             <div class="form-group required {{ $errors->has('logo_website') ? 'has-error' : '' }}">
                                                 {!! Form::label('logo_website', 'Ảnh đại diện') !!}
                                                 <div class="fileupload fileupload-{{!empty(setting('logo_website')) ? 'exists' : 'new' }}"
