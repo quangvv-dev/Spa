@@ -12,6 +12,9 @@
         td select.form-control {
             font-size: 14px;
         }
+        .width350{
+            max-width: 350px;
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -69,9 +72,9 @@
             </div>
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
+                    <table class="table card-table table-vcenter table-primary">
                         <thead style="width: 100%" class="bg-primary text-white">
-                        <tr>
+                        <tr style="white-space: nowrap">
                             <th class="text-white text-center">Dịch vụ</th>
                             <th class="text-white text-center">Số buổi</th>
                             <th class="text-white text-center">Đơn giá</th>
@@ -87,7 +90,7 @@
                         @if(!empty($order))
                             @foreach($order->orderDetails as $orderDetail)
                                 <tr>
-                                    <td width="350">
+                                    <td class="width350">
                                         <div class="row">
                                             <div class="col-xs-12 col-md-10">
                                                 {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
@@ -145,7 +148,7 @@
                         @else
 
                             <tr>
-                                <td width="350">
+                                <td class="width350">
                                     <div class="row">
                                         <div class="col-xs-12 col-md-10">
 
@@ -205,7 +208,7 @@
                         <tfoot>
                         <tr>
                             <td>
-                                <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm
+                                <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm
                                         dịch vụ</a></div>
                             </td>
                             <td colspan="5">
@@ -309,7 +312,7 @@
 
                 $('.order').append(`
                 <tr>
-                    <td width="350">
+                    <td class="width350">
                 <div class="row">
                     <div class="col-xs-12 col-md-10">
                         <select class="select2 select3 form-control service" required id="service" name="service_id[]">
@@ -348,7 +351,7 @@
             } else if (param === 'combos' || param2 === 3) {
                 $('.order').append(`
                 <tr>
-                    <td width="350" class="row">
+                    <td class="width350 row">
                     <div class="col-xs-12 col-md-10">
                         <select class="select2 select3 form-control service" required id="service" name="service_id[]">
                             <option>-Chọn combo-</option>
