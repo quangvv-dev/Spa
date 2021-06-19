@@ -14,6 +14,37 @@ use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'mkt_id',
+        'telesales_id',
+        'source_id',
+        'status_id',
+        'genitive_id',
+        'full_name',
+        'account_code',
+        'address',
+        'phone',
+        'birthday',
+        'gender',
+        'description',
+        'facebook',
+        'avatar',
+        'fb_name',
+        'membership',
+        'branch_id',
+        'deleted_at',
+        'updated_at',
+        'created_at',
+        'wallet',
+        'old_customer',
+    ];
+
+
     use SoftDeletes;
     protected $guarded = ['id'];
 
