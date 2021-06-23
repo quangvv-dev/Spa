@@ -211,6 +211,75 @@ class AuthController extends BaseApiController
     }
 
     /**
+     * Change Profile
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changeProfile(Request $request)
+    {
+        $user = User::find($request->jwtUser->id);
+//        $regexName = regexName();
+        $required = [
+            'full_name' => "required|min:2|max:255",
+            'phone' => "required|unique:users,phone,$user->id|regex:/(0)[0-9]{9}/",
+        ];
+
+        $messages = [
+            'phone.required' => 'Vui lòng nhập số điện thoại',
+            'phone.unique' => __('auth.phone_exists'),
+            'full_name.required' => 'Nhập tên người dùng',
+        ];
+
+        $validator = Validator::make($request->all(), $required, $messages);
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
+
+        $user_check_phone = User::where('phone', $request->phone)->where('id', '!=', $user->id)->first();
+
+        if (isset($user_check_phone)) {
+            return response()->json([
+                'code' => ResponseStatusCode::PHONE_EXIST,
+                'message' => __('auth.phone_exists'),
+            ]);
+        }
+
+
+        $user->update([
+            'full_name' => request('full_name'),
+//            'email' => request('email'),
+            'phone' => request('phone'),
+            'gender' => request('gender'),
+//            'avatar' => request('avatar'),
+        ]);
+
+        try {
+            if ($user) {
+                return response()->json([
+                    'code' => ResponseStatusCode::OK,
+                    'message' => __('auth.edit_user_success'),
+                    'data' => new UserResource($user)
+                ]);
+            } else {
+                return response()->json([
+                    'code' => ResponseStatusCode::USER_NOT_EXIST,
+                    'message' => __('auth.not_edit_user_success'),
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'message' => __('system.server_error'),
+            ]);
+        }
+    }
+
+    /**
      * Danh sách chi nhánh
      *
      * @return \Illuminate\Http\JsonResponse

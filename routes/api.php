@@ -25,6 +25,7 @@ Route::post('register', 'API\AuthController@register');
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('get-profile', 'AuthController@getProfile');
+    Route::post('change-profile', 'AuthController@changeProfile');
 
     Route::get('branch', 'AuthController@branch');
     Route::get('sales', 'SaleController@sale');
