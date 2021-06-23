@@ -225,6 +225,7 @@ class OrderController extends Controller
                             'Ngày thanh toán',
                             'Người lên đơn',
                             'KTV liệu trình',
+                            'Buổi còn lại',
                             'Dịch vụ',
                             'Loại',
                             'Ngày làm LT'
@@ -271,6 +272,7 @@ class OrderController extends Controller
                                     @$date,
                                     @$ex->customer->marketing->full_name,
                                     count($ktv) ? implode("||", $ktv) : '',
+                                    $ex->count_day,
                                     count($service) ? implode("||", $service) : '',
                                     count($type) ? implode("||", $type) : '',
                                     count($updated) ? implode("||", $updated) : '',
