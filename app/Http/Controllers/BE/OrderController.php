@@ -763,7 +763,7 @@ class OrderController extends Controller
                                 'code' => $row['ma_dh'],
                                 'member_id' => $customer->id,
                                 'all_total' => $row['doanh_so'],
-                                'count_day' => 0,
+                                'count_day' => $row['buoi_con_lai']?:0,
                                 'the_rest' => $row['con_no'],
                                 'description' => @$row['mo_ta'],
                                 'gross_revenue' => $row['doanh_thu'],
