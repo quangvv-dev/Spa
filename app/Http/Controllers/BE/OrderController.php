@@ -726,6 +726,7 @@ class OrderController extends Controller
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
+//                    dd($row);
                     $row['doanh_so'] = str_replace(',', '', $row['doanh_so']);
                     $row['doanh_thu'] = str_replace(',', '', $row['doanh_thu']);
                     $row['con_no'] = str_replace(',', '', $row['con_no']);
@@ -763,14 +764,13 @@ class OrderController extends Controller
                                 'member_id' => $customer->id,
                                 'all_total' => $row['doanh_so'],
                                 'count_day' => 0,
-//                                'the_rest' => (int)$row['doanh_so'] < (int)$row['doanh_thu'] ? 0 : (int)$row['doanh_so'] - (int)$row['doanh_thu'],
                                 'the_rest' => $row['con_no'],
                                 'description' => @$row['mo_ta'],
                                 'gross_revenue' => $row['doanh_thu'],
                                 'payment_type' => $paymentType,
                                 'payment_date' => $payment_date,
                                 'branch_id' => isset($branch) && $branch ? $branch->id : '',
-                                'type' => Order::TYPE_ORDER_DEFAULT,
+                                'type' => empty($row['ktv_lieu_trinh']) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
                                 'spa_therapisst_id' => '',
                                 'created_at' => Carbon::createFromFormat('d/m/Y', $row['ngay_dat_hang'])->format('Y-m-d'),
                             ]);
@@ -804,6 +804,28 @@ class OrderController extends Controller
                                     'branch_id' => $customer->branch_id,
                                     'payment_date' => $payment_date,
                                 ]);
+                            }
+
+                            if (!empty($row['ktv_lieu_trinh']) && !empty($row['dich_vu'])) {
+                                $ktv = explode('||', $row['ktv_lieu_trinh']);
+                                $dv_ktv = explode('||', $row['dich_vu']);
+                                $type = explode('||', $row['loai']);
+                                $date_lt = explode('||', $row['ngay_lam_lt']);
+                                $dv_ktvs = Services::whereIn('name', $dv_ktv)->get();
+                                foreach ($dv_ktvs as $k2 => $i_service) {
+
+                                    $curentUser = User::where('full_name', $ktv[$k2])->first();
+                                    HistoryUpdateOrder::insert([
+                                        'user_id' => @$curentUser->id,
+                                        'order_id' => @$order->id,
+                                        'service_id' => @$i_service->id,
+                                        'created_at' => @$date_lt[$k2],
+                                        'branch_id' => @$customer->branch_id,
+                                        'type' => @$type[$k2],
+                                    ]);
+                                }
+
+
                             }
                         }
                     }
