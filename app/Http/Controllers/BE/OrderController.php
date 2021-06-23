@@ -200,10 +200,10 @@ class OrderController extends Controller
                 'theRest' => $orders->sum('the_rest'),
             ]);
             if (isset($request->download)) {
-                $orders2 = $orders->get();
+                $orders2 = $orders->with('historyUpdateOrders')->get();
                 Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
                     $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
-                        $sheet->cell('A1:O1', function ($row) {
+                        $sheet->cell('A1:S1', function ($row) {
                             $row->setBackground('#008686');
                             $row->setFontColor('#ffffff');
                         });
@@ -224,10 +224,30 @@ class OrderController extends Controller
                             'Hình thức thanh toán',
                             'Ngày thanh toán',
                             'Người lên đơn',
+                            'KTV liệu trình',
+                            'Dịch vụ',
+                            'Loại',
+                            'Ngày làm LT'
                         ]);
                         $i = 1;
                         if ($orders2) {
                             foreach ($orders2 as $k => $ex) {
+                                $ktv = [];
+                                $service = [];
+                                $type = [];
+                                $updated = [];
+                                if (isset($ex->historyUpdateOrders) && count($ex->historyUpdateOrders)) {
+                                    $ktv = [];
+                                    $service = [];
+                                    $type = [];
+                                    foreach ($ex->historyUpdateOrders as $item) {
+                                        $user = User::find($item->user_id);
+                                        $ktv[] = $user->full_name;
+                                        $service[] = @$item->service->name;
+                                        $type[] = @$item->type;
+                                        $updated[] = @date('Y-m-d H:i',strtotime($item->updated_at));
+                                    }
+                                }
                                 $i++;
                                 $history_payment = PaymentHistory::where('order_id', $ex->id)->first();
                                 $payment_type = @$history_payment->payment_type == 1 ? 'Tiền mặt' : (@$history_payment->payment_type == 2 ? 'Thẻ' : 'Điểm');
@@ -250,6 +270,10 @@ class OrderController extends Controller
                                     @$payment_type,
                                     @$date,
                                     @$ex->customer->marketing->full_name,
+                                    count($ktv) ? implode("||", $ktv) : '',
+                                    count($service) ? implode("||", $service) : '',
+                                    count($type) ? implode("||", $type) : '',
+                                    count($updated) ? implode("||", $updated) : '',
                                 ]);
                             }
                         }

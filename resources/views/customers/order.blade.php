@@ -36,8 +36,8 @@
                         <td class="text-center">{{ @$order->hsd}}</td>
                         <td class="text-center">
                             <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal" data-target="#largeModal">
-                                    @foreach($order->orderDetails as $orderDetail)
-                                        {{ @$orderDetail->service->name }},
+                                    @foreach($order->orderDetails as $key => $orderDetail)
+                                        {{$key <3 ?@$orderDetail->service->name:'' }},
                                     @endforeach
                                 </a></b>
                         </td>

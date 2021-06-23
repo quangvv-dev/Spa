@@ -73,7 +73,7 @@
             </div>
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter table-primary">
+                    <table class="table card-table table-vcenter text-nowrap table-primary">
                         <thead style="width: 100%" class="bg-primary text-white">
                         <tr style="white-space: nowrap">
                             <th class="text-white text-center">Dịch vụ</th>
@@ -209,7 +209,7 @@
                         <tfoot>
                         <tr>
                             <td>
-                                <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm
+                                <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm
                                         dịch vụ</a></div>
                             </td>
                             <td colspan="5">
@@ -258,7 +258,7 @@
                                 </div>
                             </td>
                             <td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>
-                            <td class="text-center bold"
+                            <td class="text-center"
                                 id="voucher">{{isset($order)?@number_format($order->discount):0}}</td>
                             <td><input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden"
                                        id="discount">
@@ -282,7 +282,7 @@
                         <tr class="bold">
                             <td colspan="5"></td>
                             <td class="text-center"><b>Tổng thanh toán (VNĐ)</b></td>
-                            <td class="text-center"
+                            <td class="text-center bold"
                                 id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>
                             <td></td>
                         </tr>

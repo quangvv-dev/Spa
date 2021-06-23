@@ -32,6 +32,17 @@ class HistoryUpdateOrder extends Model
         return $map[$this->type] ?? null;
     }
 
+    public function getServiceTextAttribute()
+    {
+        $map = [
+            StatusCode::TYPE_ORDER_PROCESS => 'Trừ liệu trình',
+            StatusCode::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
+            StatusCode::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
+        ];
+
+        return $map[$this->type] ?? null;
+    }
+
     public static function search($input)
     {
         $data = self::orderBy('id', 'desc')->when($input['data_time'] == 'THIS_WEEK' ||

@@ -14,7 +14,7 @@
                 <div class="customer-info" style="margin-bottom: 10px">
 
                 </div>
-                <table class="table card-table table-vcenter text-nowrap table-primary">
+                <table class="table card-table table-vcenter table-primary">
                     <thead class="bg-primary text-white">
                     <tr class="bold b-gray">
                         <td class="padding5">Tên sản phẩm</td>
