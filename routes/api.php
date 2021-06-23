@@ -20,8 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('login-app', 'API\AuthController@login');
+Route::post('register', 'API\AuthController@register');
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
+    Route::post('change-password', 'AuthController@changePassword');
+    Route::get('get-profile', 'AuthController@getProfile');
+
     Route::get('branch', 'AuthController@branch');
     Route::get('sales', 'SaleController@sale');
     Route::get('call', 'CallController@index');
