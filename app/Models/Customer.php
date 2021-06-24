@@ -131,7 +131,7 @@ class Customer extends Model
 //                }, 'source_customer' => function ($query) {
 //                    $query->select('id', 'name');
 //                }, 'categories', 'groupComments']);
-//        }
+        }
         if (isset($param['branch_id']) && $param['branch_id']) {
             if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
                 $data = $data->where('branch_id', $param['branch_id']);
