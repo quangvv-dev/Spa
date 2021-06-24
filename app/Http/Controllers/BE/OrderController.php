@@ -193,14 +193,14 @@ class OrderController extends Controller
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
             $orders = Order::searchAll($request->all());
-
+            $orders2 = clone $orders;
             View::share([
                 'allTotal' => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest' => $orders->sum('the_rest'),
             ]);
             if (isset($request->download)) {
-                $orders2 = $orders->with('historyUpdateOrders')->get();
+                $orders2 = $orders2->with('historyUpdateOrders')->get();
                 Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
                     $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
                         $sheet->cell('A1:S1', function ($row) {
