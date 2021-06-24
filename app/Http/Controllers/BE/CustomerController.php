@@ -102,6 +102,8 @@ class CustomerController extends Controller
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
+        }elseif(empty($checkRole) && empty($input['branch_id'])){
+            $input['branch_id'] = 1;
         }
         $customers = Customer::search($input);
         $statuses = Status::getRelationshipByCustomer($input);
@@ -110,7 +112,6 @@ class CustomerController extends Controller
             $customers = $customers->latest()->paginate($input['limit']);
         } else {
             $customers = $customers->paginate(StatusCode::PAGINATE_20);
-
         }
 
         $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
