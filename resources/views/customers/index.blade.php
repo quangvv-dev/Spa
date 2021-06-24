@@ -71,7 +71,7 @@
                         <select name="branch_id" class="form-control branch_id">
                             <option value="">Tất cả chi nhánh</option>
                             @foreach($branchs as $k=> $item)
-                                <option value="{{$k}}">{{ $item}}</option>
+                                <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
                             @endforeach
                         </select>
                     @endif
