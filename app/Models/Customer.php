@@ -121,7 +121,17 @@ class Customer extends Model
             }
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
-        }
+//            $data = $data->with([
+//                'marketing' => function ($query) {
+//                    $query->select('id', 'full_name');
+//                }, 'status' => function ($query) {
+//                    $query->select('id', 'color', 'name');
+//                }, 'orders' => function ($query) {
+//                    $query->select('id', 'all_total', 'gross_revenue', 'the_rest');
+//                }, 'source_customer' => function ($query) {
+//                    $query->select('id', 'name');
+//                }, 'categories', 'groupComments']);
+//        }
         if (isset($param['branch_id']) && $param['branch_id']) {
             if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
                 $data = $data->where('branch_id', $param['branch_id']);

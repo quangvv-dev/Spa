@@ -55,7 +55,7 @@
         <button data-name="" class="btn btn-default status btn white account_relation position"
                 style="height: 40px;">
             TẤT CẢ
-            <span class="not-number-account white">{{ $customers->total() }}</span>
+            <span class="not-number-account white all_count">{{$statuses->sum('customers_count')}}</span>
         </button>
     </div>
     <div style="margin-left: 10px">
@@ -66,10 +66,16 @@
         </button>
     </div>
     <div class="scrollmenu col-md-7">
+        @php
+            $customers_count = 0;
+        @endphp
         @foreach(@$statuses as $k => $item)
             <button class="status btn white account_relation position btn-new" data-name="{{$item->name}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
                     class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>
+            @php
+            $customers_count += $item->customers_count;
+            @endphp
         @endforeach
     </div>
     <div class="col-md-2 row" style="margin-top: 10px;color: black; font-weight: bold; justify-content: center;

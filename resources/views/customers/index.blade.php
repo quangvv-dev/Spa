@@ -6,9 +6,10 @@
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <style>
-       .card i {
+        .card i {
             color: #3b8fec !important;
         }
+
         .description-cus {
             height: 100%;
             position: absolute;
@@ -20,15 +21,17 @@
             font-size: 11px;
             border: none;
         }
-       .description-cus:focus, .description-cus:hover {
-           height: 70px;
-           width: 400px !important;
-           z-index: 9999;
-           box-shadow: 0 0 10px #ddd;
-       }
-       /*th.text-white.text-center{*/
-           /*z-index: 900;*/
-       /*}*/
+
+        .description-cus:focus, .description-cus:hover {
+            height: 70px;
+            width: 400px !important;
+            z-index: 9999;
+            box-shadow: 0 0 10px #ddd;
+        }
+
+        /*th.text-white.text-center{*/
+        /*z-index: 900;*/
+        /*}*/
     </style>
 @endsection
 @section('content')
@@ -79,7 +82,7 @@
                 <div class="col relative">
                     <a class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-cloud-upload-alt"></i>
-                    <span class="tooltiptext">Nhập khách hàng (excel)</span>
+                        <span class="tooltiptext">Nhập khách hàng (excel)</span>
                     </a>
                     <a {{$roleGlobal->permission('leaderSale')||$roleGlobal->permission('leaderMKT')?:"style=display:none"}}
                        class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModalExport">

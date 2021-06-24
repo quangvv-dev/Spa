@@ -102,12 +102,14 @@ class CustomerController extends Controller
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
-        }elseif(empty($checkRole) && empty($input['branch_id'])){
+        } elseif (empty($checkRole) && empty($input['branch_id'])) {
             $input['branch_id'] = 1;
         }
-        $customers = Customer::search($input);
         $statuses = Status::getRelationshipByCustomer($input);
-
+        if (empty($input['search']) && empty($input['group'])&& empty($input['telesales'])&& empty($input['status'])&& empty($input['source'])) {
+            $input['data_time'] = 'THIS_MONTH';
+        }
+        $customers = Customer::search($input);
         if (isset($input['limit'])) {
             $customers = $customers->latest()->paginate($input['limit']);
         } else {
@@ -117,6 +119,7 @@ class CustomerController extends Controller
         $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
+
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
         }
 
