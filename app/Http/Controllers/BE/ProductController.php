@@ -59,7 +59,7 @@ class ProductController extends Controller
 
         $title = 'Quản lý sản phẩm';
         if ($request->ajax()) {
-            return Response::json(view('service.ajax', compact('docs', 'title'))->render());
+            return Response::json(view('product.ajax', compact('docs', 'title'))->render());
         }
         return view('product.index', compact('title', 'docs'));
     }
