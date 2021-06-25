@@ -263,7 +263,7 @@ class RevenueController extends BaseApiController
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 6) {
-            $payment = PaymentHistory::search($input,'price');
+            $payment = PaymentHistory::search($input, 'price');
             $orders = Order::returnRawData($input);
             $orders_old = clone $orders->whereHas('customer', function ($q) {
                 $q->where('old_customer', 1);
@@ -368,10 +368,10 @@ class RevenueController extends BaseApiController
         $input = $request->except('type_api');
         $data = Order::returnRawData($input)->select('branch_id', \DB::raw('SUM(all_total) AS total'),
             \DB::raw('SUM(gross_revenue) AS revenue'))
-            ->groupBy('branch_id')->get()->map(function ($item) use ($input) {
+            ->groupBy('branch_id')->where('branch_id', '<>', 0)->get()->map(function ($item) use ($input) {
                 $params = $input;
                 $params['branch_id'] = $item->branch_id;
-                $payment = PaymentHistory::search($params,'price');
+                $payment = PaymentHistory::search($params, 'price');
                 $item->payment = $payment->sum('price');
                 $item->name = @$item->branch->name;
                 unset($item->branch);
