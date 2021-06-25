@@ -190,7 +190,7 @@ class RevenueController extends BaseApiController
             $schedule_old = Schedule::search($input_old)->count();
         }
 
-        $schedule = Schedule::search($input);
+        $schedule = Schedule::search($input)->select('status');
         $schedule2 = clone $schedule;
         $schedule3 = clone $schedule;
 

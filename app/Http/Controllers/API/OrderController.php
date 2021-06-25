@@ -31,10 +31,9 @@ class OrderController extends BaseApiController
         $data['sumTotal'] = $orders->sum('all_total');
         $data['sumRevenue'] = $orders->sum('gross_revenue');
         $data['sumRest'] = $orders->sum('the_rest');
-        $orders = $orders->paginate(StatusCode::PAGINATE_20);
+        $orders = $orders->select('id','member_id','all_total','gross_revenue','the_rest')->paginate(StatusCode::PAGINATE_20);
         $data['lastPage'] = $orders->lastPage();
         $data['records'] = OrderResource::collection($orders);
-
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
