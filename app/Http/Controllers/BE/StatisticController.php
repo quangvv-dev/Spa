@@ -194,12 +194,12 @@ class StatisticController extends Controller
         })->whereBetween('created_at', getTime($request['data_time']));
         $data_old = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
-        })->where('created_at', '<', getTime($request['data_time'])[0]);
+        })->where('old_customer', 1);
 
-        $order_new = Order::when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
+        $order_new = Order::select('gross_revenue')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
         })->whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request['data_time']))->with('orderDetails');//doanh so
-        $order_old = Order::when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
+        $order_old = Order::select('gross_revenue')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
         })->whereBetween('created_at', getTime($request['data_time']))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
         return [

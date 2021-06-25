@@ -51,7 +51,8 @@ class  Silver extends Command
 //                return $f->count > 1;
 //            })->pluck('member_id');
 //        Customer::whereIn('id', $customers)->update(['old_customer' => 1]);
-        $arr = Customer::select('id')->where('branch_id', 6)->pluck('id')->toArray();
-        CustomerGroup::whereIn('customer_id',$arr)->delete();
+
+        $arr = Customer::select('id')->where('branch_id', 1)->pluck('id')->toArray();
+        CustomerGroup::whereIn('customer_id', $arr)->update(['branch_id' => 1]);
     }
 }
