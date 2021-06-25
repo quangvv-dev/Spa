@@ -52,7 +52,7 @@ class StatisticController extends BaseApiController
             ->whereIn('role',
                 [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::CSKH, UserConstant::TP_CSKH])
             ->get()->map(function ($item) use ($input) {
-                $schedule = Schedule::where('person_action', $item->id)->whereBetween('date', [
+                $schedule = Schedule::select('status')->where('person_action', $item->id)->whereBetween('date', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                 ]);

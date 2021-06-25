@@ -52,8 +52,8 @@ class RevenueController extends BaseApiController
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ]);
         });
-        $schedules = Schedule::getBooks($input);
-        $groupComment = GroupComment::when(isset($input['branch_id']) && $input['branch_id'],
+        $schedules = Schedule::getBooks($input, 'id');
+        $groupComment = GroupComment::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
             function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })->whereBetween('created_at', [
@@ -69,7 +69,7 @@ class RevenueController extends BaseApiController
                 Functions::yearMonthDay($input['old_end']) . " 23:59:59",
             ]);
         }
-        $history = HistoryUpdateOrder::when(isset($input['start_date']) && isset($input['end_date']),
+        $history = HistoryUpdateOrder::select('id')->when(isset($input['start_date']) && isset($input['end_date']),
             function ($q) use ($input) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -103,7 +103,7 @@ class RevenueController extends BaseApiController
             'start_date' => $request->old_start,
             'end_date' => $request->old_end,
         ];
-        $wallet = WalletHistory::search($input);
+        $wallet = WalletHistory::search($input, 'order_price,payment_type');
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders_old = [];
@@ -132,9 +132,9 @@ class RevenueController extends BaseApiController
                 'total_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             ];
         } elseif ($request->type_api == 3) {
-            $payment = PaymentHistory::search($input);
+            $payment = PaymentHistory::search($input, 'payment_type,price');
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
-                $payment_old = PaymentHistory::search($input_old);
+                $payment_old = PaymentHistory::search($input_old, 'payment_type,price');
             }
             $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 
@@ -149,11 +149,11 @@ class RevenueController extends BaseApiController
             ];
         } elseif ($request->type_api == 4) {
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
-                $payment_old = PaymentHistory::search($input_old);
+                $payment_old = PaymentHistory::search($input_old, 'payment_type,price');
             }
             $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 
-            $payment = PaymentHistory::search($input);
+            $payment = PaymentHistory::search($input, 'payment_type,price');
             $payment2 = clone $payment;
             $payment3 = clone $payment;
 
