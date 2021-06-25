@@ -311,7 +311,7 @@ class RevenueController extends BaseApiController
     public function revenueMonth(Request $request)
     {
         $input = $request->all();
-        $ordersYear = Order::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+        $ordersYear = Order::select('gross_revenue')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
@@ -371,7 +371,7 @@ class RevenueController extends BaseApiController
             ->groupBy('branch_id')->get()->map(function ($item) use ($input) {
                 $params = $input;
                 $params['branch_id'] = $item->branch_id;
-                $payment = PaymentHistory::search($params);
+                $payment = PaymentHistory::search($params,'price');
                 $item->payment = $payment->sum('price');
                 $item->name = @$item->branch->name;
                 unset($item->branch);
