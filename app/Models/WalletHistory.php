@@ -22,9 +22,9 @@ class WalletHistory extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public static function search($input)
+    public static function search($input,$select='*')
     {
-        $data = self::when(isset($input['data_time']), function ($query) use ($input) {
+        $data = self::select($select)->when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                 $q->whereDate('created_at', getTime(($input['data_time'])));

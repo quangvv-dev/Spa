@@ -27,11 +27,11 @@ class PaymentHistory extends Model
         }
     }
 
-    public static function search($input)
+    public static function search($input, $select = '*')
     {
 
         if (isset($input['start_date']) && isset($input['end_date'])) {
-            $detail = PaymentHistory::whereBetween('payment_date', [
+            $detail = PaymentHistory::select($select)->whereBetween('payment_date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ])->with('order')->has('order');
@@ -41,15 +41,15 @@ class PaymentHistory extends Model
                 $input['data_time'] == 'LAST_WEEK' ||
                 $input['data_time'] == 'THIS_MONTH' ||
                 $input['data_time'] == 'LAST_MONTH') {
-                $detail = PaymentHistory::whereBetween('payment_date', getTime(($input['data_time'])))
+                $detail = PaymentHistory::select($select)->whereBetween('payment_date', getTime(($input['data_time'])))
                     ->with('order')->has('order');
             } elseif ($input['data_time'] == 'YESTERDAY' || $input['data_time'] == 'TODAY') {
-                $detail = PaymentHistory::where('payment_date', getTime(($input['data_time'])))
+                $detail = PaymentHistory::select($select)->where('payment_date', getTime(($input['data_time'])))
                     ->with('order')->has('order');
             }
         }
         if (!isset($input['start_date']) && !isset($input['end_date']) && !isset($input['data_time'])) {
-            $detail = PaymentHistory::whereDate('payment_date', '=', date('Y-m-d'))
+            $detail = PaymentHistory::select($select)->whereDate('payment_date', '=', date('Y-m-d'))
                 ->with('order')->has('order');
         }
         if (!empty($input['branch_id'])) {

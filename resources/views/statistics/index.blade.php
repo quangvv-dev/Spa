@@ -45,7 +45,7 @@
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                    {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
                 </div>
             </div>
             <div id="registration-form">

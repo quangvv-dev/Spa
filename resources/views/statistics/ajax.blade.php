@@ -166,41 +166,6 @@
 {{--<div class="h4 text-center">Ví tiền</div>--}}
 
 <div class="row row-cards">
-    {{--<div class="col">--}}
-    {{--<div class="card  overflow-hidden bg-gradient-blue text-white">--}}
-    {{--<div class="card-body text-center">--}}
-    {{--<div class="h5">Tổng đơn nạp ví</div>--}}
-    {{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
-    {{--class="">{{@number_format($wallets['orders'])}}</span></div>--}}
-    {{--<div class="progress progress-sm">--}}
-    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="col">--}}
-    {{--<div class="card overflow-hidden">--}}
-    {{--<div class="card-body text-center bg-gradient-blue text-white">--}}
-    {{--<div class="h5">Tổng doanh thu từ gói nạp</div>--}}
-    {{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
-    {{--class="">{{@number_format($wallets['revenue'])}}</span></div>--}}
-    {{--<div class="progress progress-sm">--}}
-    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="col">--}}
-    {{--<div class="card  overflow-hidden">--}}
-    {{--<div class="card-body text-center bg-gradient-blue text-white">--}}
-    {{--<div class="h5">Tổng tiền khách tiêu từ ví</div>--}}
-    {{--<div class="h3 font-weight-bold mb-4 font-30 ">{{@number_format($wallets['used'])}}</div>--}}
-    {{--<div class="progress progress-sm">--}}
-    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
 </div>
 
 <div class="d-none col-xs-none d-md-block">
@@ -252,57 +217,57 @@
 
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
 
-<script type="text/javascript">
-    google.charts.load('current', {'packages': ['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
+{{--<script type="text/javascript">--}}
+    {{--google.charts.load('current', {'packages': ['corechart']});--}}
+    {{--google.charts.setOnLoadCallback(drawChart);--}}
 
-    function drawChart() {
+    {{--function drawChart() {--}}
 
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-                @foreach($statusRevenues as $k =>$statusRevenue)
-            ['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],
-            @endforeach
-        ]);
+        {{--var data = google.visualization.arrayToDataTable([--}}
+            {{--['Task', 'Hours per Day'],--}}
+                {{--@foreach($statusRevenues as $k =>$statusRevenue)--}}
+            {{--['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],--}}
+            {{--@endforeach--}}
+        {{--]);--}}
 
-        var options = {
-            title: 'DOANH THU THEO NGUỒN',
-            width: 500,
-            height: 300,
-            hAxis: {
-                width: 200
-            }
-        };
+        {{--var options = {--}}
+            {{--title: 'DOANH THU THEO NGUỒN',--}}
+            {{--width: 500,--}}
+            {{--height: 300,--}}
+            {{--hAxis: {--}}
+                {{--width: 200--}}
+            {{--}--}}
+        {{--};--}}
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
+        {{--var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));--}}
 
-        chart.draw(data, options);
-    }
-</script>
-<script type="text/javascript">
-    google.charts.load('current', {'packages': ['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
+        {{--chart.draw(data, options);--}}
+    {{--}--}}
+{{--</script>--}}
+{{--<script type="text/javascript">--}}
+    {{--google.charts.load('current', {'packages': ['corechart']});--}}
+    {{--google.charts.setOnLoadCallback(drawChart);--}}
 
-    function drawChart() {
+    {{--function drawChart() {--}}
 
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-                @foreach($data['category_service'] as $k =>$item)
-            ['{{$item->name}}', {{$item->all_total}}],
-            @endforeach
-        ]);
+        {{--var data = google.visualization.arrayToDataTable([--}}
+            {{--['Task', 'Hours per Day'],--}}
+                {{--@foreach($data['category_service'] as $k =>$item)--}}
+            {{--['{{$item->name}}', {{$item->all_total}}],--}}
+            {{--@endforeach--}}
+        {{--]);--}}
 
-        var options = {
-            title: 'TOP 5 NHÓM DICH VỤ CÓ DOANH THU CAO NHẤT',
-            width: 500,
-            height: 300,
-        };
+        {{--var options = {--}}
+            {{--title: 'TOP 5 NHÓM DICH VỤ CÓ DOANH THU CAO NHẤT',--}}
+            {{--width: 500,--}}
+            {{--height: 300,--}}
+        {{--};--}}
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));
+        {{--var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));--}}
 
-        chart.draw(data, options);
-    }
-</script>
+        {{--chart.draw(data, options);--}}
+    {{--}--}}
+{{--</script>--}}
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);

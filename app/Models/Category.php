@@ -102,7 +102,7 @@ class Category extends Model
     {
         $data = self::select('id', 'name')->where('type', $type)->get()->map(function ($item) use ($input) {
             $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
-            $order = Order::whereIn('member_id', $arr_customer)
+            $order = Order::select('all_total')->whereIn('member_id', $arr_customer)
                 ->when(isset($input['data_time']) && $input['data_time'], function ($q) use ($input) {
                     $q->whereBetween('created_at', getTime($input['data_time']));
                 })

@@ -64,9 +64,9 @@ class Schedule extends Model
         return Schedule::SCHEDULE_STATUS[$key[0]]['name'];
     }
 
-    public static function getBooks($input)
+    public static function getBooks($input, $select = '*')
     {
-        $data = self::when(isset($input['data_time']), function ($query) use ($input) {
+        $data = self::select($select)->when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                 $q->whereDate('date', getTime(($input['data_time'])));

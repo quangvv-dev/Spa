@@ -131,7 +131,6 @@ class OrderService
     public static function handleData($data)
     {
         $status = [];
-
         foreach ($data as $item) {
             $revenue = 0;
             if (isset($item->customerSources)) {

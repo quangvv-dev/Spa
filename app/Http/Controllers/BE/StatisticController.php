@@ -58,14 +58,17 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
+        if (empty($input['branch_id'])) {
+            $input['branch_id'] = 1;
+        }
         if (empty($request->data_time)) {
             $input['data_time'] = 'THIS_MONTH';
         }
         $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })->whereBetween('created_at', getTime($input['data_time']));
-        $schedules = Schedule::getBooks($input);
-        $payment = PaymentHistory::search($input);
+        $schedules = Schedule::getBooks($input, 'id');
+        $payment = PaymentHistory::search($input, 'payment_type,price');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
         $orders = Order::returnRawData($input);
@@ -83,12 +86,12 @@ class StatisticController extends Controller
             return $item;
         })->sortByDesc('price')->take(5);
 
-        $wallet = WalletHistory::search($input);
+        $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
-        $statusRevenues = Status::getRevenueSource($input);
+//        $statusRevenues = Status::getRevenueSource($input);
 
-        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
+//        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
@@ -97,6 +100,7 @@ class StatisticController extends Controller
             })
             ->whereBetween('payment_date', getTime($input['data_time']))->whereNotNull('payment_date')->orderBy('payment_date', 'asc')
             ->groupBy('payment_date')->get();
+
         $groupComment = GroupComment::whereBetween('created_at', getTime($input['data_time']));
         $data = [
             'all_total' => $orders->sum('all_total'),
@@ -104,7 +108,7 @@ class StatisticController extends Controller
             'payment' => $payment->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
-            'category_service' => $category_service,
+//            'category_service' => $category_service,
             'category_product' => $category_product,
             'revenue_month' => $revenue_month,
             'groupComment' => $groupComment->count(),
@@ -156,8 +160,8 @@ class StatisticController extends Controller
             'card' => $payment3->where('payment_type', 2)->sum('price'),
         ];
         if ($request->ajax()) {
-        return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'list_payment', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'))->render());
-    }
+            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'list_payment', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'))->render());
+        }
         return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'));
     }
 
