@@ -243,10 +243,12 @@ class OrderController extends Controller
                                     $type = [];
                                     foreach ($ex->historyUpdateOrders as $item) {
                                         $user = User::find($item->user_id);
-                                        $ktv[] = $user->full_name;
-                                        $service[] = @$item->service->name;
-                                        $type[] = @$item->type;
-                                        $updated[] = @date('Y-m-d H:i',strtotime($item->updated_at));
+                                        if (isset($user) && $user) {
+                                            $ktv[] = $user->full_name;
+                                            $service[] = @$item->service->name;
+                                            $type[] = @$item->type;
+                                            $updated[] = @date('Y-m-d H:i', strtotime($item->updated_at));
+                                        }
                                     }
                                 }
                                 $i++;
