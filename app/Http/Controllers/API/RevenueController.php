@@ -217,11 +217,13 @@ class RevenueController extends BaseApiController
         $input = $request->all();
         $data = [];
         if ($request->type_api == 1) {
-            $statusRevenues = Status::getRevenueSource($input);
+//            $statusRevenues = Status::getRevenueSource($input);
+            $statusRevenues = [];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($statusRevenues));
         } elseif ($request->type_api == 2) {
-            $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
-            $data = ChartResource::collection($category_service);
+            $data = [];
+//            $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
+//            $data = ChartResource::collection($category_service);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 3) {
             $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
@@ -261,7 +263,7 @@ class RevenueController extends BaseApiController
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 6) {
-            $payment = PaymentHistory::search($input);
+            $payment = PaymentHistory::search($input,'price');
             $orders = Order::returnRawData($input);
             $orders_old = clone $orders->whereHas('customer', function ($q) {
                 $q->where('old_customer', 1);
