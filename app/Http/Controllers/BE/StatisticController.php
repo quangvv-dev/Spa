@@ -58,7 +58,7 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        if (empty($input['branch_id'])) {
+        if (count($input) < 1) {
             $input['branch_id'] = 1;
         }
         if (empty($request->data_time)) {
