@@ -66,9 +66,9 @@ class OrderDetail extends Model
         return $response;
     }
 
-    public static function search($input)
+    public static function search($input, $select = '*')
     {
-        $data = self::when(isset($input['data_time']), function ($query) use ($input) {
+        $data = self::select($select)->when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
                 $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
                 $q->whereDate('created_at', getTime(($input['data_time'])));
@@ -89,6 +89,9 @@ class OrderDetail extends Model
                 ]);
             })->when(isset($input['booking_id']), function ($query) use ($input) {
                 $query->whereIn('booking_id', $input['booking_id']);
+            })
+            ->when(isset($input['list_booking']) && count($input['list_booking']), function ($query) use ($input) {
+                $query->whereIn('booking_id', $input['list_booking']);
             });
         return $data;
     }
@@ -111,10 +114,10 @@ class OrderDetail extends Model
                 $q->whereBetween('created_at', getTime($input['data_time']));
             })
             ->whereHas('service')->get()->map(function ($item) use ($type) {
-                    if (isset($item->service) && $item->service->type == $type) {
-                        return $item;
-                    }
-                })
+                if (isset($item->service) && $item->service->type == $type) {
+                    return $item;
+                }
+            })
             ->sortByDesc('total')->take($paginate);
         return $data;
     }

@@ -84,7 +84,7 @@ class Status extends Model
             'customerSources' => function ($query) use ($input) {
                 $query->with([
                     'order_detail' => function ($query) use ($input) {
-                        $query->select('total_price')->when(isset($input['list_booking']) && count($input['list_booking']), function ($query) use ($input) {
+                        $query->when(isset($input['list_booking']) && count($input['list_booking']), function ($query) use ($input) {
                             $query->whereIn('booking_id', $input['list_booking']);
                         })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                             $q->where('branch_id', $input['branch_id']);

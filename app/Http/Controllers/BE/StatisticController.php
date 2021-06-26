@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\GroupComment;
@@ -89,8 +90,22 @@ class StatisticController extends Controller
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
-//        $statusRevenues = Status::getRevenueSource($input);
+        //Status Revuenue
+        $sources = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
+        $order_detail = OrderDetail::search($input, 'total_price');
+        $statusRevenues = [];
+        foreach ($sources as $source) {
+            $price = clone $order_detail;
+            $price = $price->whereHas('user', function ($qr) use ($source) {
+                $qr->where('source_id', $source->id);
+            });
+            $statusRevenues[] = [
+                'revenue' => (int)$price->sum('total_price'),
+                'name' => $source->name,
+            ];
+        }
 
+        //END
 //        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 

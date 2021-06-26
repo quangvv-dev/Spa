@@ -217,8 +217,19 @@ class RevenueController extends BaseApiController
         $input = $request->all();
         $data = [];
         if ($request->type_api == 1) {
-//            $statusRevenues = Status::getRevenueSource($input);
+            $sources = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
+            $order_detail = OrderDetail::search($input, 'total_price');
             $statusRevenues = [];
+            foreach ($sources as $source) {
+                $price = clone $order_detail;
+                $price = $price->whereHas('user', function ($qr) use ($source) {
+                    $qr->where('source_id', $source->id);
+                });
+                $statusRevenues[] = [
+                    'revenue' => (int)$price->sum('total_price'),
+                    'name' => $source->name,
+                ];
+            }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($statusRevenues));
         } elseif ($request->type_api == 2) {
             $data = [];
