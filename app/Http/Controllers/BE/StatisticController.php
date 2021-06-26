@@ -92,7 +92,7 @@ class StatisticController extends Controller
         $input['list_booking'] = $arr;
         //Status Revuenue
         $sources = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
-        $order_detail = OrderDetail::search($input, 'total_price');
+        $order_detail = OrderDetail::search($input,'total_price');
         $statusRevenues = [];
         foreach ($sources as $source) {
             $price = clone $order_detail;
