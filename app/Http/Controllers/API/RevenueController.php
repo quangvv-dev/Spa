@@ -225,10 +225,12 @@ class RevenueController extends BaseApiController
                 $price = $price->whereHas('user', function ($qr) use ($source) {
                     $qr->where('source_id', $source->id);
                 });
-                $statusRevenues[] = [
-                    'revenue' => (int)$price->sum('total_price'),
-                    'name' => $source->name,
-                ];
+                if ((int)$price->sum('total_price') > 0) {
+                    $statusRevenues[] = [
+                        'revenue' => (int)$price->sum('total_price'),
+                        'name' => $source->name,
+                    ];
+                }
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($statusRevenues));
         } elseif ($request->type_api == 2) {
