@@ -781,8 +781,7 @@ class OrderController extends Controller
                                 'branch_id'         => isset($branch) && $branch ? $branch->id : '',
                                 'type'              => empty($row['ktv_lieu_trinh']) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
                                 'spa_therapisst_id' => '',
-                                'created_at'        => Carbon::createFromFormat('d/m/Y',
-                                    $row['ngay_dat_hang'])->format('Y-m-d'),
+                                'created_at'        => Carbon::createFromFormat('d/m/Y', $row['ngay_dat_hang'])->format('Y-m-d'),
                             ]);
                         } else {
                             $order = isset($checkOrder) && $checkOrder ? $checkOrder : 0;
