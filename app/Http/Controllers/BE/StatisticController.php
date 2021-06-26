@@ -99,10 +99,12 @@ class StatisticController extends Controller
             $price = $price->whereHas('user', function ($qr) use ($source) {
                 $qr->where('source_id', $source->id);
             });
-            $statusRevenues[] = [
-                'revenue' => (int)$price->sum('total_price'),
-                'name' => $source->name,
-            ];
+            if ((int)$price->sum('total_price') > 0) {
+                $statusRevenues[] = [
+                    'revenue' => (int)$price->sum('total_price'),
+                    'name' => $source->name,
+                ];
+            }
         }
         //END
 //        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
