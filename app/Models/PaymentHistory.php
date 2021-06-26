@@ -49,8 +49,10 @@ class PaymentHistory extends Model
             }
         }
         if (!isset($input['start_date']) && !isset($input['end_date']) && !isset($input['data_time'])) {
-            $detail = PaymentHistory::select($select)->whereDate('payment_date', '=', date('Y-m-d'))
-                ->with('order')->has('order');
+            $detail = PaymentHistory::select($select)->whereBetween('created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])->with('order')->has('order');
         }
         if (!empty($input['branch_id'])) {
             $detail = $detail->where('branch_id', $input['branch_id']);
