@@ -103,7 +103,8 @@ class SalesController extends Controller
 
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request) {
-            $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
+            $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id');
+            $arr_customer = self::searchBranch($arr_customer, $request)->get()->toArray();
 
             if ($request->telesale_id) {
                 $data_new = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->whereBetween('created_at', getTime($request->data_time));

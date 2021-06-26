@@ -10,7 +10,9 @@ use App\Http\Resources\TasksResource;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
+use App\Models\Services;
 use App\Models\Task;
 use App\User;
 use App\Models\Schedule;
@@ -113,35 +115,32 @@ class StatisticController extends BaseApiController
     {
         $input = $request->all();
         $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item
-        ) use ($request, $input) {
-            $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
-
-            if ($request->telesale_id) {
-                $data = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id',
-                    $request->telesale_id);
-                $data = self::searchBranch($data, $request);
-            } else {
-                $data = Customer::select('id')->whereIn('id', $arr_customer);
-                $data = self::searchBranch($data, $request);
-            }
-
-            $order = Order::when(!empty($input['start_date']) && !empty($input['end_date']),
-                function ($q) use ($input) {
-                    $q->whereBetween('created_at', [
-                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                    ]);
-                })->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
-            $order = self::searchBranch($order, $request);
-
-//            $payment_history = PaymentHistory::when(!empty($input['start_date']) && !empty($input['end_date']),
-//                function ($q) use ($input) {
-//                    $q->whereBetween('created_at', [
-//                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-//                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-//                    ]);
-//                })->whereIn('order_id', $order->pluck('id')->toArray());
-//            $payment_history = self::searchBranch($payment_history, $request);
+        ) use ($input) {
+            $services = Services::select('id')->where('category_id',$item->id)->pluck('id')->toArray();
+            $order_id = OrderDetail::select('order_id')->whereIn('booking_id', $services)
+                ->when(!empty($input['start_date']) && !empty($input['end_date']),
+                    function ($q) use ($input) {
+                        $q->whereBetween('created_at', [
+                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                        ]);
+                    })
+                ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->groupBy('order_id')->pluck('order_id')->toArray();
+            $order = Order::select('gross_revenue', 'total','member_id')->whereIn('id', $order_id)
+                ->when(!empty($input['start_date']) && !empty($input['end_date']),
+                    function ($q) use ($input) {
+                        $q->whereBetween('created_at', [
+                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                        ]);
+                    })
+                ->when(isset($input['telesale_id']) && $input['telesale_id'], function ($q) use ($input) {
+                    $q->whereHas('customer', function ($qr) use ($input) {
+                        $qr->where('telesales_id', $input['telesale_id']);
+                    });
+                });
 
             $item->orders = $order->count();
             $item->revuenue = $order->sum('gross_revenue');//da thu trong ky thu thêm
