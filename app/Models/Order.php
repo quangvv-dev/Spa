@@ -115,11 +115,11 @@ class Order extends Model
                             $input['data_time'] == 'LAST_WEEK' ||
                             $input['data_time'] == 'THIS_MONTH' ||
                             $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                            $q->whereBetween('created_at', getTime(($input['data_time'])));
+                            $q->whereBetween('payment_date', getTime(($input['data_time'])));
                         });
                 })
                 ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                    $q->whereBetween('created_at', [
+                    $q->whereBetween('payment_date', [
                         Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                         Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                     ]);
@@ -192,12 +192,12 @@ class Order extends Model
                             $input['data_time'] == 'LAST_WEEK' ||
                             $input['data_time'] == 'THIS_MONTH' ||
                             $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                            $q->whereBetween('created_at', getTime(($input['data_time'])));
+                            $q->whereBetween('payment_date', getTime(($input['data_time'])));
                         });
                 })
                 ->when(empty($input['bor_none']) && isset($input['start_date']) && isset($input['end_date']),
                     function ($q) use ($input) {
-                        $q->whereBetween('created_at', [
+                        $q->whereBetween('payment_date', [
                             Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                             Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                         ]);
@@ -285,13 +285,13 @@ class Order extends Model
             $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
                 $query->when(!empty($input['data_time']) && ($input['data_time'] == 'TODAY' ||
                         $input['data_time'] == 'YESTERDAY'), function ($q) use ($input) {
-                    $q->whereDate('created_at', getTime(($input['data_time'])));
+                    $q->whereDate('payment_date', getTime(($input['data_time'])));
                 })
                     ->when(!empty($input['data_time']) && ($input['data_time'] == 'THIS_WEEK' ||
                             $input['data_time'] == 'LAST_WEEK' ||
                             $input['data_time'] == 'THIS_MONTH' ||
                             $input['data_time'] == 'LAST_MONTH'), function ($q) use ($input) {
-                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                        $q->whereBetween('payment_date', getTime(($input['data_time'])));
                     });
             })
                 ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
@@ -325,7 +325,7 @@ class Order extends Model
                         $input['data_time'] == 'LAST_WEEK' ||
                         $input['data_time'] == 'THIS_MONTH' ||
                         $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                        $q->whereBetween('created_at', getTime(($input['data_time'])));
+                        $q->whereBetween('payment_date', getTime(($input['data_time'])));
                     });
             })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('payment_date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
