@@ -232,7 +232,6 @@ class RevenueController extends BaseApiController
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($statusRevenues));
         } elseif ($request->type_api == 2) {
-            $data = [];
 //            $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
 //            $data = ChartResource::collection($category_service);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);

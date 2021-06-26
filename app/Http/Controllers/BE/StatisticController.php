@@ -92,7 +92,7 @@ class StatisticController extends Controller
         $input['list_booking'] = $arr;
         //Status Revuenue
         $sources = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
-        $order_detail = OrderDetail::search($input,'total_price');
+        $order_detail = OrderDetail::search($input, 'total_price');
         $statusRevenues = [];
         foreach ($sources as $source) {
             $price = clone $order_detail;
@@ -104,9 +104,10 @@ class StatisticController extends Controller
                 'name' => $source->name,
             ];
         }
-
         //END
 //        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
+
+
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))

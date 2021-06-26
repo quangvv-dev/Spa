@@ -100,8 +100,12 @@ class Category extends Model
      */
     public static function getTotalPrice($input, $type, $paginate)
     {
+//        dd($input, $type, $paginate);
         $data = self::select('id', 'name')->where('type', $type)->get()->map(function ($item) use ($input) {
-            $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id')->toArray();
+            $arr_customer = CustomerGroup::where('category_id', $item->id)
+                ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->pluck('customer_id')->toArray();
             $order = Order::select('all_total')->whereIn('member_id', $arr_customer)
                 ->when(isset($input['data_time']) && $input['data_time'], function ($q) use ($input) {
                     $q->whereBetween('created_at', getTime($input['data_time']));

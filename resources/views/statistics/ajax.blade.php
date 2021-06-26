@@ -172,30 +172,27 @@
     <div class="h4 text-center">BIỂU ĐỒ</div>
 
     <div class="row row-cards">
+
+        {{--<div class="col-md-6">--}}
+            {{--<div id="piechart-2"></div>--}}
+        {{--</div>--}}
+    </div>
+    <div class="row row-cards">
         <div class="col-md-6">
             <div id="piechart-1" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
-            <div id="piechart-2"></div>
-        </div>
-    </div>
-    <div class="row row-cards">
         <div class="col-md-6">
             <div id="piechart-3" style="margin-left: 15px"></div>
         </div>
         <div class="col-md-6">
             <div id="piechart-4" style="margin-left: 15px"></div>
         </div>
-    </div>
-    <div class="row row-cards">
         <div class="col-md-6">
             <div id="piechart-5" style="margin-left: 15px"></div>
         </div>
         <div class="col-md-6">
             <div id="piechart-6" style="margin-left: 15px"></div>
         </div>
-    </div>
-    <div class="row row-cards">
         <div class="col-md-6">
             <div id="piechart-7" style="margin-left: 15px"></div>
         </div>
@@ -203,6 +200,7 @@
             <div id="piechart-8" style="margin-left: 15px"></div>
         </div>
     </div>
+
     <div class="row row-cards">
         <div class="col-md-12">
             <div id="column" style="margin-left: 15px"></div>
@@ -217,33 +215,33 @@
 
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
 
-{{--<script type="text/javascript">--}}
-    {{--google.charts.load('current', {'packages': ['corechart']});--}}
-    {{--google.charts.setOnLoadCallback(drawChart);--}}
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
 
-    {{--function drawChart() {--}}
+    function drawChart() {
 
-        {{--var data = google.visualization.arrayToDataTable([--}}
-            {{--['Task', 'Hours per Day'],--}}
-                {{--@foreach($statusRevenues as $k =>$statusRevenue)--}}
-            {{--['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],--}}
-            {{--@endforeach--}}
-        {{--]);--}}
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @foreach($statusRevenues as $k =>$statusRevenue)
+            ['{{ $statusRevenue['name'] }}', {{ $statusRevenue['revenue'] }}],
+            @endforeach
+        ]);
 
-        {{--var options = {--}}
-            {{--title: 'DOANH THU THEO NGUỒN',--}}
-            {{--width: 500,--}}
-            {{--height: 300,--}}
-            {{--hAxis: {--}}
-                {{--width: 200--}}
-            {{--}--}}
-        {{--};--}}
+        var options = {
+            title: 'DOANH THU THEO NGUỒN',
+            width: 500,
+            height: 300,
+            hAxis: {
+                width: 200
+            }
+        };
 
-        {{--var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));--}}
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
 
-        {{--chart.draw(data, options);--}}
-    {{--}--}}
-{{--</script>--}}
+        chart.draw(data, options);
+    }
+</script>
 {{--<script type="text/javascript">--}}
     {{--google.charts.load('current', {'packages': ['corechart']});--}}
     {{--google.charts.setOnLoadCallback(drawChart);--}}
