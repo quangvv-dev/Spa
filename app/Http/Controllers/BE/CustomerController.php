@@ -105,6 +105,9 @@ class CustomerController extends Controller
         } elseif (empty($checkRole) && empty($input['branch_id'])) {
             $input['branch_id'] = 1;
         }
+        if (!empty($input['search']) && is_numeric($input['search']) ){
+            $input['branch_id'] = null;
+        }
         $statuses = Status::getRelationshipByCustomer($input);
         if (empty($input['search']) && empty($input['group'])&& empty($input['telesales'])&& empty($input['status'])&& empty($input['source'])) {
             $input['data_time'] = 'THIS_MONTH';

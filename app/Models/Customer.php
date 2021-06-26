@@ -55,9 +55,12 @@ class Customer extends Model
     {
         $builder->when(isset($conditions['search']), function ($query) use ($conditions) {
             $query->where(function ($q) use ($conditions) {
-                $q->where('full_name', 'like', '%' . $conditions['search'] . '%')
-                    ->orWhere('phone', 'like', '%' . $conditions['search'] . '%')
-                    ->orWhere('membership', $conditions['search']);
+                if (is_numeric($conditions['search'])) {
+                    $q->where('phone', $conditions['search'])
+                        ->orWhere('membership', $conditions['search']);
+                } else {
+                    $q->where('full_name', 'like', '%' . $conditions['search'] . '%');
+                }
             });
         })
             ->when(isset($conditions['status']), function ($query) use ($conditions) {
