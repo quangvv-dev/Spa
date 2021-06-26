@@ -161,7 +161,7 @@ class RevenueController extends BaseApiController
                 'payment' => $payment->sum('price'),
                 'percent' => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
                     2) : 0,
-                'cash' => $payment->where('payment_type', 1)->sum('price'),
+                'cash' => $payment->whereIn('payment_type', [0, 1])->sum('price'),
                 'card' => $payment2->where('payment_type', 2)->sum('price'),
                 'wallet_used' => $payment3->where('payment_type', 3)->sum('price'),
             ];
