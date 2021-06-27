@@ -102,7 +102,7 @@ class CustomerController extends Controller
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
-        } elseif (empty($checkRole) && empty($input['branch_id'])) {
+        } elseif (empty($checkRole) && empty($input['branch_id']) && empty($input['search'])) {
             $input['branch_id'] = 1;
         }
         if (!empty($input['search']) && is_numeric($input['search']) ){
