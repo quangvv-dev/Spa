@@ -143,9 +143,7 @@ class OrderController extends Controller
             $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
         }
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
-        $param['branch_id'] = Auth::user()->branch_id > 0 ? Auth::user()->branch_id : $customer->branch_id;
-
-
+        $param['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
         DB::beginTransaction();
         try {
 
@@ -418,7 +416,7 @@ class OrderController extends Controller
         try {
             $input = $request->except('customer_id');
             $customer = Customer::find($request->customer_id);
-            $input['branch_id'] = Auth::user()->id > 0 ? Auth::user()->id : $customer->branch_id;
+            $input['branch_id'] =  !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
             $paymentHistory = PaymentHistoryService::create($input, $id);
 
             if ($paymentHistory->payment_type != 3) {
@@ -453,7 +451,7 @@ class OrderController extends Controller
                                 $input_raw['branch'] = @$check3->order->branch->name;
                                 $input_raw['phoneBranch'] = @$check3->order->branch->phone;
                                 $input_raw['addressBranch'] = @$check3->order->branch->address;
-                                $input_raw['full_name'] = $check3->order->customer->full_name;
+                                $input_raw['full_name'] = @$check3->order->customer->full_name;
                                 $input_raw['phone'] = @$check3->order->customer->phone;
                                 $exactly_value = Functions::getExactlyTime($sms);
                                 $text = $sms->configs->content;

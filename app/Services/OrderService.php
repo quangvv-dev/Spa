@@ -37,7 +37,6 @@ class OrderService
         if (!empty($data['spa_therapisst_id']) && !empty($data['count_day'])) {
             $countDay = $data['count_day'] - 1;
         }
-
         $input = [
             'member_id'         => $data['user_id'],
             'branch_id'         => $data['branch_id'],
@@ -59,7 +58,6 @@ class OrderService
         $model->save();
         $model->code = $model->id < 10 ? 'DH0' . $model->id : 'DH' . $model->id;
         $model->save();
-
         return $model;
 
     }

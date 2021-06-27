@@ -13,9 +13,11 @@
                     <div class="tabs-menu1 ">
                         <!-- Tabs -->
                         <ul class="nav panel-tabs">
-                            <li><a href="#tab1" class="pages active" id="click1" data-id="'.click1'" data-toggle="tab">Cài đặt chung
+                            <li><a href="#tab1" class="pages active" id="click1" data-id="'.click1'" data-toggle="tab">Cài
+                                    đặt chung
                                     CRM</a></li>
-                            <li><a href="#tab2" class="pages" id="click2" data-id="'.click2'" data-toggle="tab">QL chi nhánh</a></li>
+                            <li><a href="#tab2" class="pages" id="click2" data-id="'.click2'" data-toggle="tab">QL chi
+                                    nhánh</a></li>
                         </ul>
                     </div>
                 </div>
@@ -24,7 +26,7 @@
                         <div class="tab-pane active" id="tab1">
                             <div class="col-md-12 col-lg-12">
                                 <span class="bold text-warning" style="font-size: 12px"><i
-                                        class="fa fa-info-circle"></i><i>Hạn mức thăng hạng khách hàng theo số đơn hàng KH đã sử dụng !!!</i></span>
+                                            class="fa fa-info-circle"></i><i>Hạn mức thăng hạng khách hàng theo số đơn hàng KH đã sử dụng !!!</i></span>
                                 <div class="card">
                                     {!! Form::open(array('url' => route('settings.storeRank'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','class'=>'sent-sms')) !!}
                                     <div class="col row">
@@ -33,13 +35,13 @@
                                                 {!! Form::label('silver', 'Thăng hạn rank Khách hàng (Sliver)', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('silver',@number_format(setting('silver')), array('class' => 'form-control')) !!}
                                                 <span
-                                                    class="help-block">{{ $errors->first('silver', ':message') }}</span>
+                                                        class="help-block">{{ $errors->first('silver', ':message') }}</span>
                                             </div>
                                             <div class="form-group">
                                                 {!! Form::label('platinum', 'Thăng hạn rank Cộng tác viên (Platinum)', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('platinum',@number_format(setting('platinum')), array('class' => 'form-control')) !!}
                                                 <span
-                                                    class="help-block">{{ $errors->first('platinum', ':message') }}</span>
+                                                        class="help-block">{{ $errors->first('platinum', ':message') }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
@@ -95,9 +97,7 @@
                 url: '{{route('settings.storeBranch')}}',
                 method: 'POST',
                 success: function (data) {
-                    if (data) {
-                        location.reload();
-                    }
+                    location.reload();
                 }
             })
         })
