@@ -143,7 +143,7 @@ class OrderController extends Controller
             $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
         }
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
-        $param['branch_id'] = Auth::user()->branch_id;
+        $param['branch_id'] = Auth::user()->branch_id > 0 ? Auth::user()->branch_id : $customer->branch_id;
 
 
         DB::beginTransaction();
