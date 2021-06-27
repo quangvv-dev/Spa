@@ -9,8 +9,8 @@
             <thead class="bg-primary text-white">
             <tr>
                 <th class="text-white text-center">Trừ liệu trình</th>
-                <th class="text-white text-center">Ngày tạo</th>
                 <th class="text-white text-center">C.Nhánh</th>
+                <th class="text-white text-center">Ngày tạo</th>
                 <th class="text-white text-center">Ng.hết hạn</th>
                 <th class="text-white text-center">Tên SP</th>
                 <th class="text-white text-center">Loại đơn</th>

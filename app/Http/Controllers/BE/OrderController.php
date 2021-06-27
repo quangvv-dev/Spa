@@ -418,7 +418,7 @@ class OrderController extends Controller
         try {
             $input = $request->except('customer_id');
             $customer = Customer::find($request->customer_id);
-            $input['branch_id'] = !empty(Auth::user()->id) ? Auth::user()->id : $customer->branch_id;
+            $input['branch_id'] = Auth::user()->id > 0 ? Auth::user()->id : $customer->branch_id;
             $paymentHistory = PaymentHistoryService::create($input, $id);
 
             if ($paymentHistory->payment_type != 3) {
