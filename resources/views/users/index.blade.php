@@ -19,6 +19,15 @@
                         @endforelse
                     </select>
                 </div>
+                <div class="col-xs-12 col-md-3">
+                    <select id="branch" name="branch_id" class="form-control">
+                        <option value="">Tất cả chi nhánh</option>
+                        @forelse($branchs as $k => $item)
+                            <option value="{{$k}}">{{$item}}</option>
+                        @empty
+                        @endforelse
+                    </select>
+                </div>
             </div>
             <div id="registration-form">
                 @include('users.ajax')
