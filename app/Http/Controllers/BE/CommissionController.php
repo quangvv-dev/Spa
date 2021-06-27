@@ -85,7 +85,10 @@ class CommissionController extends Controller
         }
         $category_price = Category::select('price', 'id')->pluck('price', 'id')->toArray();
         $input = $request->all();
-        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS, UserConstant::CSKH])->get();
+        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS, UserConstant::CSKH])
+            ->when(isset($input['branch_id']), function ($query) use ($input) {
+                $query->where('branch_id', $input['branch_id']);
+            })->get();
         if (count($data)) {
 
             foreach ($data as $item) {
@@ -94,12 +97,12 @@ class CommissionController extends Controller
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
                 $order = Order::getAll($input);
-                $history_orders = HistoryUpdateOrder::search($input,'id')->with('service');
+                $history_orders = HistoryUpdateOrder::search($input, 'id')->with('service');
                 $history = $history_orders->get();
 
                 if (count($history)) {
                     foreach ($history as $item2) {
-                        if (isset($item2->service)){
+                        if (isset($item2->service)) {
                             $category_id = $item2->service->category_id ?: 0;
                             if (!empty($category_price[$category_id])) {
                                 $price[] = (int)$category_price[$category_id];

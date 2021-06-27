@@ -31,7 +31,7 @@ class OrderController extends BaseApiController
         $data['sumTotal'] = $orders->sum('all_total');
         $data['sumRevenue'] = $orders->sum('gross_revenue');
         $data['sumRest'] = $orders->sum('the_rest');
-        $orders = $orders->select('id','member_id','all_total','gross_revenue','the_rest')->paginate(StatusCode::PAGINATE_20);
+        $orders = $orders->select('id', 'member_id', 'all_total', 'gross_revenue', 'the_rest')->paginate(StatusCode::PAGINATE_20);
         $data['lastPage'] = $orders->lastPage();
         $data['records'] = OrderResource::collection($orders);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -76,14 +76,16 @@ class OrderController extends BaseApiController
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
                 $order = Order::getAll($input);
-                $history_orders = HistoryUpdateOrder::search($input)->with('service');
+                $history_orders = HistoryUpdateOrder::search($input, 'id')->with('service');
                 $history = $history_orders->get();
 
                 if (count($history)) {
                     foreach ($history as $item2) {
-                        $category_id = isset($item2->service) ? $item2->service->category_id : 0;
-                        if (!empty($category_price[$category_id])) {
-                            $price[] = (int)$category_price[$category_id];
+                        if (isset($item2->service)) {
+                            $category_id = $item2->service->category_id ?: 0;
+                            if (!empty($category_price[$category_id])) {
+                                $price[] = (int)$category_price[$category_id];
+                            }
                         }
                     }
                 }
@@ -96,7 +98,7 @@ class OrderController extends BaseApiController
 //                    'all_total' => $order->sum('all_total'),
                     'gross_revenue' => $order->sum('gross_revenue'),
                     'days' => $history_orders->count(),
-                    'rose_money' => Commission::search($input)->sum('earn'),
+                    'rose_money' => Commission::search($input,'earn')->sum('earn'),
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
                 $docs[] = $doc;
