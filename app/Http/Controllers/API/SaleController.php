@@ -37,7 +37,7 @@ class SaleController extends BaseApiController
 
 
             $input['telesales'] = $item->id;
-            $detail = PaymentHistory::search($input);
+            $detail = PaymentHistory::search($input,'price');
             $detail_total = clone $detail;
             $detail2 = clone $detail;
             $total_old = $detail_total->whereIn('order_id',$order_old->pluck('id')->toArray())->sum('price');
@@ -47,11 +47,11 @@ class SaleController extends BaseApiController
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
             $input['creator_id'] = $item->id;
-            $item->schedules = Schedule::getBooks($input);
+            $item->schedules = Schedule::getBooks($input,'id');
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';
 
-            $item->call = !empty($input['caller_number']) ? CallCenter::search($input) : 0;
+            $item->call = !empty($input['caller_number']) ? CallCenter::search($input,'id')->count() : 0;
             $item->thu_no = $detail->sum('price') - $total_new - $total_old;
 
             $item->totalNew =$total_new;
