@@ -74,11 +74,11 @@ class SalesController extends Controller
             $item->order_new = $order_new->count();
             $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('all_total');
-            $item->revenue_old = $orders->sum('all_total') - $order_new->sum('all_total');
+            $item->revenue_old = $order_old->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
-            $item->payment_old = $orders->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
-            $item->revenue_total = $orders->sum('all_total');
+            $item->payment_old = $order_old->sum('gross_revenue') + $order_new->sum('gross_revenue'); //da thu trong ky
+            $item->revenue_total =  $order_new->sum('all_total') - $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
         })->sortByDesc('all_payment');
