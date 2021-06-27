@@ -73,7 +73,7 @@
             </div>
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter table-primary">
+                    <table class="table card-table table-vcenter text-nowrap table-primary">
                         <thead class="bg-primary text-white">
                         <tr style="white-space: nowrap">
                             <th class="text-white text-center">Dịch vụ</th>
