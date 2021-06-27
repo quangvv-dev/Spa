@@ -33,9 +33,9 @@ class HistoryUpdateOrder extends Model
         return $map[$this->type] ?? null;
     }
 
-    public static function search($input)
+    public static function search($input, $select = '*')
     {
-        $data = self::orderBy('id', 'desc')->when(!empty($input['data_time']) && ($input['data_time'] == 'THIS_WEEK' ||
+        $data = self::select($select)->orderBy('id', 'desc')->when(!empty($input['data_time']) && ($input['data_time'] == 'THIS_WEEK' ||
                 $input['data_time'] == 'LAST_WEEK' ||
                 $input['data_time'] == 'THIS_MONTH' ||
                 $input['data_time'] == 'LAST_MONTH'), function ($q) use ($input) {

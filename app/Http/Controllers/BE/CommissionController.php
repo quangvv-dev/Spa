@@ -83,7 +83,7 @@ class CommissionController extends Controller
         if (empty($request->data_time)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
-        $category_price = Category::pluck('price', 'id')->toArray();
+        $category_price = Category::select('price', 'id')->pluck('price', 'id')->toArray();
         $input = $request->all();
         $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS, UserConstant::CSKH])->get();
         if (count($data)) {
@@ -94,14 +94,16 @@ class CommissionController extends Controller
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
                 $order = Order::getAll($input);
-                $history_orders = HistoryUpdateOrder::search($input)->with('service');
+                $history_orders = HistoryUpdateOrder::search($input,'id')->with('service');
                 $history = $history_orders->get();
 
                 if (count($history)) {
                     foreach ($history as $item2) {
-                        $category_id = $item2->service->category_id ?: 0;
-                        if (!empty($category_price[$category_id])) {
-                            $price[] = (int)$category_price[$category_id];
+                        if (isset($item2->service)){
+                            $category_id = $item2->service->category_id ?: 0;
+                            if (!empty($category_price[$category_id])) {
+                                $price[] = (int)$category_price[$category_id];
+                            }
                         }
                     }
                 }
@@ -114,7 +116,7 @@ class CommissionController extends Controller
                     'all_total' => $order->sum('all_total'),
                     'gross_revenue' => $order->sum('gross_revenue'),
                     'days' => $history_orders->count(),
-                    'earn' => Commission::search($input)->sum('earn'),
+                    'earn' => Commission::search($input, 'earn')->sum('earn'),
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
                 $docs[] = $doc;

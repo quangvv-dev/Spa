@@ -279,7 +279,7 @@ class Order extends Model
 
     public static function getAll($input)
     {
-        $data = self::orderBy('id', 'desc');
+        $data = self::select('id', 'all_total', 'gross_revenue')->orderBy('id', 'desc');
 
         if (isset($input)) {
             $data = $data->when(isset($input['data_time']), function ($query) use ($input) {
