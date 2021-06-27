@@ -49,9 +49,9 @@ class CallCenter extends Model
         return '';
     }
 
-    public static function search($param)
+    public static function search($param, $select='*')
     {
-        $data = self::when(isset($param['call_status']) && $param['call_status'], function ($q) use ($param) {
+        $data = self::select($select)->when(isset($param['call_status']) && $param['call_status'], function ($q) use ($param) {
             $q->where('call_status', $param['call_status']);
         })->when(isset($param['caller_number']) && $param['caller_number'], function ($q) use ($param) {
             $q->where('caller_number', $param['caller_number']);
