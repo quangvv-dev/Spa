@@ -171,7 +171,7 @@ class OrderController extends Controller
                         HistoryUpdateOrder::create([
                             'user_id'    => $request->spa_therapisst_id,
                             'order_id'   => $order->id,
-                            'branch_id'  => Auth::user()->branch_id,
+                            'branch_id'  => !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id,
                             'service_id' => $param['service_id'][$k] ?: 0,
                         ]);
                     }
@@ -781,7 +781,8 @@ class OrderController extends Controller
                                 'branch_id'         => isset($branch) && $branch ? $branch->id : '',
                                 'type'              => empty($row['ktv_lieu_trinh']) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
                                 'spa_therapisst_id' => '',
-                                'created_at'        => Carbon::createFromFormat('d/m/Y', $row['ngay_dat_hang'])->format('Y-m-d'),
+                                'created_at'        => Carbon::createFromFormat('d/m/Y',
+                                    $row['ngay_dat_hang'])->format('Y-m-d'),
                             ]);
                         } else {
                             $order = isset($checkOrder) && $checkOrder ? $checkOrder : 0;
@@ -822,10 +823,11 @@ class OrderController extends Controller
                                 $date_lt = explode('||', $row['ngay_lam_lt']);
                                 $dv_ktvs = Services::whereIn('name', $dv_ktv)->get();
                                 foreach ($dv_ktvs as $k2 => $i_service) {
-                                    if (isset($ktv[$k2]) && $ktv[$k2]){
-                                        $curentUser = User::select('id')->where('full_name', 'like', '%' . $ktv[$k2] . '%')->first();
+                                    if (isset($ktv[$k2]) && $ktv[$k2]) {
+                                        $curentUser = User::select('id')->where('full_name', 'like',
+                                            '%' . $ktv[$k2] . '%')->first();
                                     }
-                                    $currentId = isset($curentUser) && $curentUser ?$curentUser->id : Auth::user()->id;
+                                    $currentId = isset($curentUser) && $curentUser ? $curentUser->id : Auth::user()->id;
                                     HistoryUpdateOrder::insert([
                                         'user_id'    => @$currentId,
                                         'order_id'   => @$order->id,
