@@ -70,11 +70,13 @@ class User extends Authenticatable
 
     public static function search($param)
     {
-        $data = self::when($param['search'], function ($query) use ($param) {
+        $data = self::when(isset($param['search']), function ($query) use ($param) {
             $query->where('full_name', 'like', '%' . $param['search'] . '%')
                 ->orWhere('phone', 'like', '%' . $param['search'] . '%');
         })->when(isset($param['branch_id']) && $param['branch_id'], function ($q) use ($param) {
             $q->where('branch_id', $param['branch_id']);
+        })->when(isset($param['department_id']) && $param['department_id'], function ($q) use ($param) {
+            $q->where('department_id', $param['department_id']);
         })
             ->latest('id')->paginate(StatusCode::PAGINATE_10);
 

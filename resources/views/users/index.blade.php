@@ -8,22 +8,22 @@
                             class="fa fa-plus-circle"></i>Thêm mới</a></div>
             </div>
             <div class="card-header">
-                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Search…" tabindex="1"
-                       type="text" id="search">
-                <div class="col-xs-12 col-md-3">
-                    <select id="branch" name="branch_id" class="form-control">
-                        <option value="">Tất cả chi nhánh</option>
-                        @forelse($branchs as $k => $item)
-                            <option value="{{$k}}">{{$item}}</option>
+                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"
+                       type="text" id="search" value="{{@$input['search']}}">
+                <div class="col-xs-12 col-md-2">
+                    <select id="department_id" name="department_id" class="form-control">
+                        <option value="">Tất cả phòng ban</option>
+                        @forelse($department as $k => $item)
+                            <option {{@$input['branch_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>
                         @empty
                         @endforelse
                     </select>
                 </div>
-                <div class="col-xs-12 col-md-3">
+                <div class="col-xs-12 col-md-2">
                     <select id="branch" name="branch_id" class="form-control">
                         <option value="">Tất cả chi nhánh</option>
                         @forelse($branchs as $k => $item)
-                            <option value="{{$k}}">{{$item}}</option>
+                            <option {{@$input['department_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>
                         @empty
                         @endforelse
                     </select>
@@ -39,22 +39,52 @@
     <script type="text/javascript">
         $(document).on('keyup', '#search', function (e) {
             e.preventDefault();
-            var search = $(this).val();
+            let search = $(this).val();
+            let branch = $('#branch_id').val();
+            let department_id = $('#department_id').val();
             $.ajax({
                 url: "{{ Url('users/') }}",
                 method: "get",
-                data: {search: search}
+                data: {
+                    search: search,
+                    branch_id: branch,
+                    department_id: department_id,
+                }
             }).done(function (data) {
                 $('#registration-form').html(data);
 
             });
         });
         $(document).on('change', '#branch', function () {
-            var branch = $(this).val();
+            let branch = $(this).val();
+            let search = $('#search').val();
+            let department_id = $('#department_id').val();
             $.ajax({
                 url: "{{ Url('users/') }}",
                 method: "get",
-                data: {branch_id: branch}
+                data: {
+                    branch_id: branch,
+                    search: search,
+                    department_id: department_id,
+                }
+            }).done(function (data) {
+                $('#registration-form').html(data);
+
+            });
+        });
+        $(document).on('change', '#department_id', function () {
+            let department_id = $(this).val();
+            let search = $('#search').val();
+            let branch = $('#branch_id').val();
+
+            $.ajax({
+                url: "{{ Url('users/') }}",
+                method: "get",
+                data: {
+                    department_id: department_id,
+                    branch_id: branch,
+                    search: search
+                }
             }).done(function (data) {
                 $('#registration-form').html(data);
 

@@ -46,14 +46,16 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::search($request);
+        $department = Department::select('id', 'name')->pluck('name', 'id')->toArray();
+        $input = $request->all();
+        $users = User::search($input);
         $title = 'Quản lý người dùng';
 
         if ($request->ajax()) {
-            return Response::json(view('users.ajax', compact('users', 'title'))->render());
+            return Response::json(view('users.ajax', compact('department', 'input', 'users', 'title'))->render());
         }
 
-        return view('users.index', compact('users', 'title'));
+        return view('users.index', compact('department', 'input', 'users', 'title'));
     }
 
     /**

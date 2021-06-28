@@ -24,9 +24,11 @@
                     <td class="text-center">{{ $user->role_text }}</td>
                     <td class="text-center">{{ isset($user->branch)?$user->branch->name:'Tất cả chi nhánh'}}</td>
                     <td class="text-center">
-                        <a title="sửa tài khoản" class="btn" href="{{ route('users.edit', $user->id) }}"><i class="fas fa-edit"></i></a>
-                    @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
-                            <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)" data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
+                        <a title="sửa tài khoản" class="btn" href="{{ route('users.edit', $user->id) }}"><i
+                                class="fas fa-edit"></i></a>
+                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
+                            <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)"
+                               data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
                     </td>
                 </tr>
@@ -44,7 +46,7 @@
         </div>
     </div>
     <div class="pull-right">
-        {{ $users->appends(['search' => request()->search ])->links() }}
+        {{ $users->appends(['search' => @$input['search'],'branch_id' => @$input['branch_id'],'department_id' => @$input['department_id'] ])->links() }}
     </div>
 </div>
 <!-- table-responsive -->
