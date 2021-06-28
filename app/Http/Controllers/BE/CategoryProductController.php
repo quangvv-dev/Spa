@@ -58,9 +58,9 @@ class CategoryProductController extends Controller
         $input['type_category'] = StatusCode::PRODUCT;
         $docs = Category::search($input);
 
-        if ($request->ajax()) return Response::json(view('category.ajax', compact('docs', 'title'))->render());
+        if ($request->ajax()) return Response::json(view('category.ajax', compact('input', 'docs', 'title'))->render());
 
-        return view('category-product.index', compact('title', 'docs'));
+        return view('category-product.index', compact('input', 'title', 'docs'));
     }
 
     /**

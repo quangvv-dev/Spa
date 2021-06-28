@@ -9,9 +9,9 @@
             </div>
             <div class="card-header">
                 <input class="form-control name col-md-2" name="search" placeholder="Tìm kiếm" tabindex="1"
-                       type="search">
+                       type="search" value="{{@$input['name']}}">
                 <div class="col-md-2" style="font-size: 16px;">
-                    {!! Form::select('type', $category_pluck, null, array('class' => 'form-control type','placeholder'=>'Danh mục cha')) !!}
+                    {!! Form::select('type', $category_pluck, @$input['type_category'], array('class' => 'form-control type','placeholder'=>'Danh mục cha')) !!}
                 </div>
             </div>
             <div id="registration-form">

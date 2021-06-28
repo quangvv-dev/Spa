@@ -46,6 +46,6 @@
         </div>
     </div>
     <div class="pull-right">
-        {{ $docs->appends(['search' => request()->search ])->links() }}
+        {{ $docs->appends(['category_id' => @$input['category_id'],'search' => @$input['search'] ])->links() }}
     </div>
 </div>

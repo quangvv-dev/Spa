@@ -52,12 +52,11 @@ class ServiceController extends Controller
                     ->orwhere('enable', 'like', '%' . $input['search'] . '%');
             });
         $docs = $docs->paginate(StatusCode::PAGINATE_10);
-
         $title = 'Quản lý dịch vụ';
         if ($request->ajax()) {
-            return Response::json(view('service.ajax', compact('docs', 'title'))->render());
+            return Response::json(view('service.ajax', compact('input', 'docs', 'title'))->render());
         }
-        return view('service.index', compact('title', 'docs'));
+        return view('service.index', compact('input', 'title', 'docs'));
     }
 
     /**

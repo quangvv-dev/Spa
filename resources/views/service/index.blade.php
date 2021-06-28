@@ -19,10 +19,10 @@
             </div>
             <form>
                 <div class="card-header" style="align-items: flex-end">
-                    <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
-                           type="search">
+                    <input class="form-control header-search col-2" name="search" placeholder="Tìm kiếm…" tabindex="1"
+                           type="search" value="{{ @$input['search']}}">
                     <div class="col-md-2" style="font-size: 16px;">
-                        {!! Form::select('category', $category_pluck, null, array('class' => 'form-control select2 category','data-placeholder'=>'Danh mục cha')) !!}
+                        {!! Form::select('category', $category_pluck, @$input['category_id'], array('class' => 'form-control select2 category','data-placeholder'=>'Danh mục cha')) !!}
                     </div>
                 </div>
             </form>
@@ -37,10 +37,14 @@
     <script type="text/javascript">
         $(document).on('change', '.category', function (e) {
             var id = $(this).val();
+            let search = $('.header-search').val();
             $.ajax({
                 url: "{{ Url('services/') }}",
                 method: "get",
-                data: {category_id: id}
+                data: {
+                    category_id: id,
+                    search: search
+                }
             }).done(function (data) {
                 $('.table-responsive').html(data);
 
@@ -49,11 +53,15 @@
 
         $(document).on('keyup', '.header-search', function (e) {
             e.preventDefault();
-            var search = $(this).val();
+            let search = $(this).val();
+            let category = $('.category').val();
             $.ajax({
                 url: "{{ Url('services/') }}",
                 method: "get",
-                data: {search: search}
+                data: {
+                    search: search,
+                    category_id: category
+                }
             }).done(function (data) {
                 $('.table-responsive').html(data);
 

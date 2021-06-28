@@ -33,21 +33,22 @@ class CategoryServiceController extends Controller
 
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
         $input = $request->all();
         $input['type_category'] = StatusCode::SERVICE;
         $title = 'Quản lý danh mục';
-
         $docs = Category::search($input);
 
-        if ($request->ajax()) return Response::json(view('category.ajax', compact('docs', 'title'))->render());
+        if ($request->ajax()) return Response::json(view('category.ajax', compact('input', 'docs', 'title'))->render());
 
-        return view('category.index', compact('title', 'docs'));
+        return view('category.index', compact('input', 'title', 'docs'));
     }
 
     /**
