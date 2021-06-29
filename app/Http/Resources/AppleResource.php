@@ -19,7 +19,7 @@ class AppleResource extends JsonResource
             'id' => @$this->id,
             'name' => @$this->name,
             'description' => @$this->user->full_name,
-            'images' => @$this->images[0],
+            'images' => !empty(@$this->images[0]) ? '/uploads/services/' . @$this->images[0] : '',
             'price' => @$this->price_sell,
             'category' => @$this->category->name,
         ];
