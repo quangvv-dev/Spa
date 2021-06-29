@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Http\Resources\AppleResource;
+use App\Models\Order;
 use App\Models\Services;
 use App\Services\OrderService;
 use App\Services\OrderDetailService;
@@ -42,9 +43,9 @@ class AppleController extends BaseApiController
         $param['service_id'] = (array)json_decode($param['service_id']);
         $param['total_price'] = (array)json_decode($param['price']);
         $param['price'] = (array)json_decode($param['price']);
-        $param['quantity'] = [1,1,1,1,1,1,1,1,1,1,1,1,1];
-        $param['vat'] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        $param['number_discount'] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        $param['quantity'] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+        $param['vat'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $param['number_discount'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $param['service_note'] = null;
         $param['discount'] = 0;
         $param['address'] = null;
@@ -57,7 +58,14 @@ class AppleController extends BaseApiController
         $orderDetail = $this->orderDetailService->create($param, $order->id);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $orderDetail);
+    }
 
-
+    public function listOrders(Request $request)
+    {
+        $request->merge(['api_type' => 2]);
+        $user = User::find(1);
+        $orders = Order::where('member_id', $user->id)->with('orderDetails')->get();
+        $data = AppleResource::collection($orders);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 }

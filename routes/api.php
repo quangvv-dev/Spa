@@ -22,6 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
 
+Route::get('list-orders', 'API\AppleController@listOrders');
+
+
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
     //Đẩy chợ apple
     Route::get('services', 'AppleController@services');
