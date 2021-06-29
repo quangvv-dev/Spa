@@ -23,6 +23,11 @@ Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
+    //Đẩy chợ apple
+    Route::get('services', 'AppleController@services');
+    Route::post('orders', 'AppleController@storeOrder');
+
+    //End đẩy chợ apple
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('get-profile', 'AuthController@getProfile');
     Route::post('change-profile', 'AuthController@changeProfile');
