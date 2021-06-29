@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PaymentHistory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppleResource extends JsonResource
@@ -24,11 +25,13 @@ class AppleResource extends JsonResource
             'category' => @$this->category->name,
         ];
         if ($request->api_type == 2) {
+            $payment = PaymentHistory::where('order_id', @$this->id)->first();
             $result = [
                 'id' => @$this->id,
                 'services' => @$this->service_text,
                 'all_total' => @$this->all_total,
                 'images' => @$this->orderDetails[0]->services->images[0],
+                'status' => isset($payment) && $payment ? 1 : 0,
             ];
             return $result;
         }
