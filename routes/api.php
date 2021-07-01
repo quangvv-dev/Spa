@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
+Route::get('uri', 'API\AuthController@uri');
 
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
