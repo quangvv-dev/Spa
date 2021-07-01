@@ -16,24 +16,25 @@ class AppleResource extends JsonResource
      */
     public function toArray($request)
     {
-        $result = [
-            'id' => @$this->id,
-            'name' => @$this->name,
-            'description' => @$this->user->full_name,
-            'images' => !empty(@$this->images[0]) ? '/uploads/services/' . @$this->images[0] : '',
-            'price' => @$this->price_sell,
-            'category' => @$this->category->name,
-        ];
+
         if ($request->api_type == 2) {
             $payment = PaymentHistory::where('order_id', @$this->id)->first();
             $result = [
-                'id' => @$this->id,
-                'services' => @$this->service_text,
+                'id'        => @$this->id,
+                'services'  => @$this->service_text,
                 'all_total' => @$this->all_total,
-                'images' => @$this->orderDetails[0]->services->images[0],
-                'status' => isset($payment) && $payment ? 1 : 0,
+                'images'    => @$this->orderDetails[0]->services->images[0],
+                'status'    => isset($payment) && $payment ? 1 : 0,
             ];
-            return $result;
+        } else {
+            $result = [
+                'id'          => @$this->id,
+                'name'        => @$this->name,
+                'description' => @$this->description,
+                'images'      => !empty(@$this->images[0]) ? '/uploads/services/' . @$this->images[0] : '',
+                'price'       => @$this->price_sell,
+                'category'    => @$this->category->name,
+            ];
         }
         return $result;
     }

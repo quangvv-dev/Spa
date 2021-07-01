@@ -48,7 +48,7 @@ class AppleController extends BaseApiController
         $param['number_discount'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $param['service_note'] = null;
         $param['discount'] = 0;
-        $param['days'] = [0,0,0,0,0];
+        $param['days'] = [0, 0, 0, 0, 0];
         $param['address'] = null;
         $param['discount_order'] = 0;
         $param['count_day'] = 0;
@@ -65,7 +65,7 @@ class AppleController extends BaseApiController
     {
         $request->merge(['api_type' => 2]);
         $user = User::find(1);
-        $orders = Order::where('member_id', $user->id)->with('orderDetails')->get();
+        $orders = Order::where('member_id', $user->id)->with('orderDetails')->orderByDesc('id')->get();
         $data = AppleResource::collection($orders);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
