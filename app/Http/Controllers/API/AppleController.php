@@ -63,9 +63,9 @@ class AppleController extends BaseApiController
 
     public function listOrders(Request $request)
     {
+        $user = User::find($request->jwtUser->id);
         $request->merge(['api_type' => 2]);
-        $user = User::find(1);
-        $orders = Order::where('member_id', $user->id)->with('orderDetails')->orderByDesc('id')->get();
+        $orders = Order::where('member_id', $user->id)->with('orderDetails')->has('orderDetails')->orderByDesc('id')->get();
         $data = AppleResource::collection($orders);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
