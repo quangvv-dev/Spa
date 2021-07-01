@@ -39,8 +39,9 @@ class OrderDetailService
                 'branch_id'       => $data['branch_id'],
             ];
             $service = Services::where('id', $data['service_id'][$key])->first();
-
-            $service->update(['description' => $data['service_note'][$key]]);
+            if (isset($data['service_note']) && count($data['service_note'])){
+                $service->update(['description' => $data['service_note'][$key]]);
+            }
         }
         if (!empty($dataArr)) {
             $model = OrderDetail::insert($dataArr);

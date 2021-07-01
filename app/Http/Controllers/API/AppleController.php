@@ -48,6 +48,7 @@ class AppleController extends BaseApiController
         $param['number_discount'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $param['service_note'] = null;
         $param['discount'] = 0;
+        $param['days'] = [0,0,0,0,0];
         $param['address'] = null;
         $param['discount_order'] = 0;
         $param['count_day'] = 0;
