@@ -73,18 +73,18 @@ class CustomerController extends Controller
             return $item;
         });
         $the_rest = [
-            OrderConstant::THE_REST  => 'Còn nợ',
+            OrderConstant::THE_REST => 'Còn nợ',
             OrderConstant::NONE_REST => 'Đã thanh toán',
         ];
         view()->share([
-            'the_rest'       => $the_rest,
-            'status'         => $status,
-            'group'          => $group,
-            'source'         => $source,
-            'branchs'        => $branchs,
-            'telesales'      => $telesales,
+            'the_rest' => $the_rest,
+            'status' => $status,
+            'group' => $group,
+            'source' => $source,
+            'branchs' => $branchs,
+            'telesales' => $telesales,
             'marketingUsers' => $marketingUsers,
-            'genitives'      => $genitives,
+            'genitives' => $genitives,
         ]);
     }
 
@@ -109,14 +109,12 @@ class CustomerController extends Controller
             unset($input['branch_id']);
         }
         $statuses = Status::getRelationshipByCustomer($input);
-//        if (empty($input['search']) && empty($input['group']) && empty($input['telesales']) && empty($input['status']) && empty($input['source'])) {
-//            $input['data_time'] = 'THIS_MONTH';
-//        }
-        $customers = Customer::search($input);
+        $page = $request->page;
+        $customers = Customer::search($input)->take(StatusCode::PAGINATE_60)->get();
         if (isset($input['limit'])) {
-            $customers = $customers->latest()->paginate($input['limit']);
+            $customers = Functions::customPaginate($customers, $page, $input['limit']);
         } else {
-            $customers = $customers->paginate(StatusCode::PAGINATE_20);
+            $customers = Functions::customPaginate($customers, $page);
         }
 
         $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
@@ -167,7 +165,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'fb_name'   => $request->full_name,
+            'fb_name' => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
         ]);
         $input = $request->except(['group_id', 'image']);
@@ -308,7 +306,7 @@ class CustomerController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -462,22 +460,22 @@ class CustomerController extends Controller
                         if (empty($check)) {
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
-                                    'full_name'    => $row['ten_khach_hang'],
+                                    'full_name' => $row['ten_khach_hang'],
                                     'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : '',
-                                    'mkt_id'       => @Auth::user()->id,
+                                    'mkt_id' => @Auth::user()->id,
                                     'telesales_id' => isset($telesale) ? $telesale->id : 1,
-                                    'status_id'    => isset($status) ? $status->id : 1,
-                                    'source_id'    => isset($source) ? $source->id : 18,
-                                    'phone'        => $row['so_dien_thoai'],
-                                    'birthday'     => $row['sinh_nhat'],
-                                    'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
-                                    'address'      => $row['dia_chi'] ?: '',
-                                    'facebook'     => $row['link_facebook'] ?: '',
-                                    'description'  => $row['mo_ta'],
-                                    'wallet'       => $row['so_du_vi'],
-                                    'branch_id'    => isset($branch) && $branch ? $branch->id : '',
-                                    'created_at'   => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
-                                    'updated_at'   => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                    'status_id' => isset($status) ? $status->id : 1,
+                                    'source_id' => isset($source) ? $source->id : 18,
+                                    'phone' => $row['so_dien_thoai'],
+                                    'birthday' => $row['sinh_nhat'],
+                                    'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                                    'address' => $row['dia_chi'] ?: '',
+                                    'facebook' => $row['link_facebook'] ?: '',
+                                    'description' => $row['mo_ta'],
+                                    'wallet' => $row['so_du_vi'],
+                                    'branch_id' => isset($branch) && $branch ? $branch->id : '',
+                                    'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                    'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                 ]);
                                 if (count($category)) {
                                     foreach ($category as $item) {
@@ -505,11 +503,11 @@ class CustomerController extends Controller
                                         $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
                                         $comment_value[] = [
                                             'customer_id' => $data->id,
-                                            'user_id'     => Auth::user()->id,
-                                            'messages'    => @$row['noi_dung_trao_doi'][$key_date],
-                                            'created_at'  => $item,
-                                            'updated_at'  => $item,
-                                            'branch_id'   => $data->branch_id,
+                                            'user_id' => Auth::user()->id,
+                                            'messages' => @$row['noi_dung_trao_doi'][$key_date],
+                                            'created_at' => $item,
+                                            'updated_at' => $item,
+                                            'branch_id' => $data->branch_id,
                                         ];
                                     }
                                     GroupComment::insertOrIgnore($comment_value);
@@ -526,11 +524,11 @@ class CustomerController extends Controller
                                     $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
                                     $comment_value[] = [
                                         'customer_id' => $check->id,
-                                        'user_id'     => Auth::user()->id,
-                                        'messages'    => @$row['noi_dung_trao_doi'][$key_date],
-                                        'created_at'  => $item,
-                                        'updated_at'  => $item,
-                                        'branch_id'   => $check->branch_id,
+                                        'user_id' => Auth::user()->id,
+                                        'messages' => @$row['noi_dung_trao_doi'][$key_date],
+                                        'created_at' => $item,
+                                        'updated_at' => $item,
+                                        'branch_id' => $check->branch_id,
                                     ];
                                 }
                                 GroupComment::insertOrIgnore($comment_value);
@@ -587,11 +585,11 @@ class CustomerController extends Controller
                             $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
                             if (isset($err) && $err) {
                                 HistorySms::insert([
-                                    'phone'       => @$customer->phone,
+                                    'phone' => @$customer->phone,
                                     'campaign_id' => 0,
-                                    'message'     => $text,
-                                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                    'updated_at'  => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                    'message' => $text,
+                                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                    'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
                                 ]);
                             }
                         }
@@ -630,7 +628,7 @@ class CustomerController extends Controller
         $services = Services::handleChart($arr, $input);
         $service1 = $services->orderBy('count_order', 'desc')->paginate(10);
         $orders = [
-            'sum'   => $services->get()->sum('count_order'),
+            'sum' => $services->get()->sum('count_order'),
             'count' => $services->get()->sum('count'),
         ];
 
@@ -741,7 +739,7 @@ class CustomerController extends Controller
 
         return [
             'customer' => $customer,
-            'data'     => $telesales,
+            'data' => $telesales,
         ];
     }
 }

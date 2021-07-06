@@ -107,7 +107,7 @@ class Customer extends Model
             })
             ->when(isset($conditions['birthday']), function ($query) use ($conditions) {
                 $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'));
-            });
+            })->orderByDesc('id');
 
         return $builder;
     }

@@ -2,6 +2,10 @@
 
 namespace App\Helpers;
 
+use App\Constants\StatusCode;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use nusoap_client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Carbon\Carbon;
@@ -443,5 +447,18 @@ class Functions
             }
         }
         return 1;
+    }
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     * @return LengthAwarePaginator
+     */
+    public static function customPaginate($items, $page = null, $perPage = StatusCode::PAGINATE_20, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }
