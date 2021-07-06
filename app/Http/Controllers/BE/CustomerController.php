@@ -109,9 +109,9 @@ class CustomerController extends Controller
             unset($input['branch_id']);
         }
         $statuses = Status::getRelationshipByCustomer($input);
-        if (empty($input['search']) && empty($input['group']) && empty($input['telesales']) && empty($input['status']) && empty($input['source'])) {
-            $input['data_time'] = 'THIS_MONTH';
-        }
+//        if (empty($input['search']) && empty($input['group']) && empty($input['telesales']) && empty($input['status']) && empty($input['source'])) {
+//            $input['data_time'] = 'THIS_MONTH';
+//        }
         $customers = Customer::search($input);
         if (isset($input['limit'])) {
             $customers = $customers->latest()->paginate($input['limit']);
