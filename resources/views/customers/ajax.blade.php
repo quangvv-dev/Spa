@@ -17,6 +17,9 @@
         width: 28px;
         height: 20px;
     }
+   .class-index{
+        z-index: 100;
+   }
 </style>
 <div class="card-header filter-box filterbox-sticky">
     <div class="display btn-group open">
@@ -128,7 +131,7 @@
         </div>
     </div>
 </div>
-<div class="table-responsive fixed-scrollbar" style="position: relative;font-size: 12px">
+<div class="table-responsive fixed-scrollbar" style="font-size: 12px">
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
         <thead class="bg-primary text-white">
         <tr>
@@ -140,9 +143,8 @@
             <th class="text-white text-center">Nhóm KH</th>
             <th class="text-white text-center">Trạng Thái</th>
             <th class="text-white text-center">Người phụ trách</th>
-            <th class="text-white text-center" style="min-width: 121px;z-index: 600">Mô tả</th>
+            <th class="text-white text-center mota" style="min-width: 121px;">Mô tả</th>
             <th class="text-white text-center">C.Nhánh</th>
-            {{--<th class="text-white text-center">Nhóm tính cách</th>--}}
             <th class="text-white text-center">Lich Hẹn</th>
             <th class="text-white text-center">Ngày sinh</th>
             <th class="text-white text-center">Người tạo KH</th>
@@ -194,8 +196,6 @@
                         <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
                     </td>
                     <td class="text-center">{{@$customer->branch->name}}</td>
-                    {{--<td class="text-center genitive-db" title="{{@$customer->genitive->description}}"--}}
-                        {{--data-id="{{$customer->id}}">{{ @$customer->genitive->name }}</td>--}}
                     <td class="text-center"
                         title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}

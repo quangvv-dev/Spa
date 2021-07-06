@@ -29,9 +29,9 @@
             box-shadow: 0 0 10px #ddd;
         }
 
-        /*th.text-white.text-center{*/
-        /*z-index: 900;*/
-        /*}*/
+        th.text-white.text-center{
+        z-index: 50;
+        }
     </style>
 @endsection
 @section('content')
@@ -91,7 +91,7 @@
                     </a>
                     @if($roleGlobal->permission('customers.add'))
                         <a class="right btn btn-primary btn-flat"
-                           href="{{ route('customers.create') }}"><i class="fa fa-plus-circle"></i>Thêm mới</a>
+                           href="{{ route('customers.create') }}"><i style="color: #fff" class="fa fa-plus-circle"></i>Thêm mới</a>
                     @endif
                 </div>
                 <div class="heading-elements">
@@ -922,20 +922,21 @@
             //     top: 196,
             //     position: 'absolute'
             // });
-            window.onload = function (e) {
-                $('html, body').animate({scrollTop: '1000px'}, 200);
-                $.ajax({
-                    url: '{{ url()->current() }}',
-                    method: "get",
-                    data: {
-                        page: 1,
-                    },
-                }).done(function (data) {
-                    $('#registration-form').html(data);
-                }).fail(function () {
-                    alert('Articles could not be loaded.');
-                });
-            }
+
+            {{--window.onload = function (e) {--}}
+                {{--$('html, body').animate({scrollTop: '1000px'}, 200);--}}
+                {{--$.ajax({--}}
+                    {{--url: '{{ url()->current() }}',--}}
+                    {{--method: "get",--}}
+                    {{--data: {--}}
+                        {{--page: 1,--}}
+                    {{--},--}}
+                {{--}).done(function (data) {--}}
+                    {{--$('#registration-form').html(data);--}}
+                {{--}).fail(function () {--}}
+                    {{--alert('Articles could not be loaded.');--}}
+                {{--});--}}
+            {{--}--}}
 
             // $(window).on("scroll", function (e) {
             //     if ($(window).scrollTop() >= 66) {
