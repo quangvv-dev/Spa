@@ -18,7 +18,7 @@
         height: 20px;
     }
    .class-index{
-        z-index: 100;
+        z-index: 1;
    }
 </style>
 <div class="card-header filter-box filterbox-sticky">
