@@ -30,7 +30,7 @@
         }
 
         th.text-white.text-center{
-        z-index: 50;
+        z-index: 1;
         }
     </style>
 @endsection

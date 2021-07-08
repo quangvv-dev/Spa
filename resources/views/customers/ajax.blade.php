@@ -17,9 +17,6 @@
         width: 28px;
         height: 20px;
     }
-   .class-index{
-        z-index: 1;
-   }
 </style>
 <div class="card-header filter-box filterbox-sticky">
     <div class="display btn-group open">
