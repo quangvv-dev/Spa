@@ -22,13 +22,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
 Route::get('uri', 'API\AuthController@uri');
+Route::get('services', 'AppleController@services');
 
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
     //Đẩy chợ apple
-    Route::get('services', 'AppleController@services');
-    Route::post('orders', 'AppleController@storeOrder');
     Route::get('list-orders', 'AppleController@listOrders');
+    Route::post('orders', 'AppleController@storeOrder');
 
     //End đẩy chợ apple
     Route::post('change-password', 'AuthController@changePassword');
