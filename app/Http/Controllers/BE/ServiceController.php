@@ -24,8 +24,8 @@ class ServiceController extends Controller
         $this->middleware('permission:services.delete', ['only' => ['destroy']]);
 
         $this->list[0] = ('category.parent');
-        $categories = Category::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')->get()->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
-        $trademarks = Trademark::get()->pluck('name', 'id');
+        $categories = Category::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')->pluck('name', 'id')->prepend('--Chọn--', '')->toArray();
+        $trademarks = Trademark::orderBy('id', 'desc')->pluck('name', 'id')->toArray();
         view()->share([
             'category_pluck' => $categories,
             'trademarks' => $trademarks,

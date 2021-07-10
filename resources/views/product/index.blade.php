@@ -18,7 +18,10 @@
                     <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
                            type="search">
                     <div class="col-md-2" style="font-size: 16px;">
-                        {!! Form::select('category', $category_pluck, null, array('class' => 'form-control select2 category','data-placeholder'=>'Danh mục cha')) !!}
+                        {!! Form::select('trademarks', $trademarks, null, array('class' => 'form-control trademarks','placeholder'=>'--Nhà cung cấp--')) !!}
+                    </div>
+                    <div class="col-md-2" style="font-size: 16px;">
+                        {!! Form::select('category', $category_pluck, null, array('class' => 'form-control select2 category','data-placeholder'=>'--Danh mục cha--')) !!}
                     </div>
                 </div>
             </form>
@@ -31,13 +34,28 @@
     </div>
 @endsection
 @section('_script')
+
     <script type="text/javascript">
+
+
         $(document).on('change', '.category', function (e) {
             var id = $(this).val();
             $.ajax({
                 url: "{{ Url('products/') }}",
                 method: "get",
                 data: {category_id: id}
+            }).done(function (data) {
+                $('.table-responsive').html(data);
+
+            });
+        })
+
+        $(document).on('change', '.trademarks', function (e) {
+            var id = $(this).val();
+            $.ajax({
+                url: "{{ Url('products/') }}",
+                method: "get",
+                data: {trademark: id}
             }).done(function (data) {
                 $('.table-responsive').html(data);
 

@@ -49,7 +49,10 @@ class ProductController extends Controller
         $docs = Service::where('type', StatusCode::PRODUCT)->orderBy('id', 'desc')
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $q->where('category_id', $input['category_id']);
-            })->when(isset($input['search']) && $input['search'], function ($q) use ($input) {
+            })->when(isset($input['trademark']), function ($q) use ($input) {
+                $q->where('trademark', $input['trademark']);
+            })
+            ->when(isset($input['search']) && $input['search'], function ($q) use ($input) {
                 $q->where('name', 'like', '%' . $input['search'] . '%')
                     ->orwhere('code', 'like', '%' . $input['search'] . '%')
                     ->orwhere('trademark', 'like', '%' . $input['search'] . '%')
