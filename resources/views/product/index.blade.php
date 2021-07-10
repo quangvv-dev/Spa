@@ -15,13 +15,13 @@
             </div>
             <form>
                 <div class="card-header" style="align-items: flex-end">
-                    <input class="form-control header-search col-2" name="search" placeholder="Search…" tabindex="1"
-                           type="search">
+                    <input class="form-control header-search col-2" name="search" placeholder="Tìm kiếm…" tabindex="1"
+                           type="search" value="{{@$input['search']}}">
                     <div class="col-md-2" style="font-size: 16px;">
-                        {!! Form::select('trademarks', $trademarks, null, array('class' => 'form-control trademarks','placeholder'=>'--Nhà cung cấp--')) !!}
+                        {!! Form::select('trademarks', $trademarks, @$input['trademark'], array('class' => 'form-control trademarks','placeholder'=>'--Nhà cung cấp--')) !!}
                     </div>
                     <div class="col-md-2" style="font-size: 16px;">
-                        {!! Form::select('category', $category_pluck, null, array('class' => 'form-control select2 category','data-placeholder'=>'--Danh mục cha--')) !!}
+                        {!! Form::select('category', $category_pluck, @$input['category'], array('class' => 'form-control select2 category','data-placeholder'=>'--Danh mục cha--')) !!}
                     </div>
                 </div>
             </form>
