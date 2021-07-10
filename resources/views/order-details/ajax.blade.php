@@ -51,7 +51,7 @@
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
                     <td class="text-center">{{ number_format($order->discount)}}</td>
                     <td class="text-center">{{ $order->name_payment_type }}</td>
-                    <td class="text-center">{{ @$order->customer->marketing->full_name }}</td>
+                    <td class="text-center">{{ @$order->owner->full_name }}</td>
                 </tr>
             @endforeach
             <tr class="fixed2">

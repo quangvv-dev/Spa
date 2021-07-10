@@ -21,7 +21,7 @@
                                                                 href="{{url('customers/'.$order->customer->id)}}">{{ @$order->customer->full_name }}</a>
                             </td>
                             <td style="width:50%">
-                                <b>Người thực hiện:</b>&nbsp;{{ @$order->customer->marketing->full_name }}
+                                <b>Người lên đơn:</b>&nbsp;{{ @$order->owner->full_name }}
                             </td>
                         </tr>
                         <tr>

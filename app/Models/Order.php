@@ -55,6 +55,11 @@ class Order extends Model
         return $this->belongsTo(User::class, 'support_id', 'id');
     }
 
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id', 'id');
+    }
+
     public static function search($input)
     {
         $data = self::with('orderDetails');

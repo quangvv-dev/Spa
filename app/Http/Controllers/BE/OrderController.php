@@ -45,14 +45,15 @@ class OrderController extends Controller
     /**
      * OrderController constructor.
      *
-     * @param OrderService       $orderService
+     * @param OrderService $orderService
      * @param OrderDetailService $orderDetailService
      */
     public function __construct(
         OrderService $orderService,
         OrderDetailService $orderDetailService,
         TaskService $taskService
-    ) {
+    )
+    {
         $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
 
         $this->orderService = $orderService;
@@ -69,10 +70,10 @@ class OrderController extends Controller
 
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
-            'services'   => $services,
-            'status'     => $status,
+            'services' => $services,
+            'status' => $status,
             'order_type' => $order_type,
-            'branchs'    => $branchs,
+            'branchs' => $branchs,
         ]);
     }
 
@@ -167,9 +168,9 @@ class OrderController extends Controller
                 foreach ($param['days'] as $k => $item) {
                     if ($item > 0) {
                         HistoryUpdateOrder::create([
-                            'user_id'    => $request->spa_therapisst_id,
-                            'order_id'   => $order->id,
-                            'branch_id'  => !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id,
+                            'user_id' => $request->spa_therapisst_id,
+                            'order_id' => $order->id,
+                            'branch_id' => !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id,
                             'service_id' => $param['service_id'][$k] ?: 0,
                         ]);
                     }
@@ -210,9 +211,9 @@ class OrderController extends Controller
             $orders = Order::searchAll($input);
 
             View::share([
-                'allTotal'     => $orders->sum('all_total'),
+                'allTotal' => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
-                'theRest'      => $orders->sum('the_rest'),
+                'theRest' => $orders->sum('the_rest'),
             ]);
             if (isset($request->download)) {
                 $orders2 = $orders->get();
@@ -275,9 +276,9 @@ class OrderController extends Controller
             }
             $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
-                'allTotalPage'     => $orders->sum('all_total'),
+                'allTotalPage' => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
-                'theRestPage'      => $orders->sum('the_rest'),
+                'theRestPage' => $orders->sum('the_rest'),
             ]);
 
         } else {
@@ -289,15 +290,15 @@ class OrderController extends Controller
                     $q->where('branch_id', $input['branch_id']);
                 })->orderBy('id', 'desc');
             View::share([
-                'allTotal'     => $orders->sum('all_total'),
+                'allTotal' => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
-                'theRest'      => $orders->sum('the_rest'),
+                'theRest' => $orders->sum('the_rest'),
             ]);
             $orders = $orders->paginate(StatusCode::PAGINATE_20);
             View::share([
-                'allTotalPage'     => $orders->sum('all_total'),
+                'allTotalPage' => $orders->sum('all_total'),
                 'grossRevenuePage' => $orders->sum('gross_revenue'),
-                'theRestPage'      => $orders->sum('the_rest'),
+                'theRestPage' => $orders->sum('the_rest'),
             ]);
         }
 
@@ -346,7 +347,7 @@ class OrderController extends Controller
         } else {
             $input = [
                 'start_date' => Carbon::now()->startOfMonth()->format('Y-m-d'),
-                'end_date'   => Carbon::now()->endOfMonth()->format('Y-m-d'),
+                'end_date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
             ];
             $detail = PaymentHistory::search($input);
 
@@ -416,7 +417,7 @@ class OrderController extends Controller
         try {
             $input = $request->except('customer_id');
             $customer = Customer::find($request->customer_id);
-            $input['branch_id'] =  !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
+            $input['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
             $paymentHistory = PaymentHistoryService::create($input, $id);
 
             if ($paymentHistory->payment_type != 3) {
@@ -462,11 +463,11 @@ class OrderController extends Controller
                                     $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
                                     if (isset($err) && $err) {
                                         HistorySms::insert([
-                                            'phone'       => $input_raw['phone'],
+                                            'phone' => $input_raw['phone'],
                                             'campaign_id' => 0,
-                                            'message'     => $text,
-                                            'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                            'updated_at'  => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                            'message' => $text,
+                                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                            'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
                                         ]);
                                     }
                                 } catch (Exception $exception) {
@@ -490,20 +491,20 @@ class OrderController extends Controller
                                 }
 
                                 $input = [
-                                    'customer_id'    => @$check3->order->customer->id,
-                                    'date_from'      => Carbon::now()->addDays($day)->format('Y-m-d'),
-                                    'time_from'      => '07:00',
-                                    'time_to'        => '16:00',
-                                    'code'           => 'CSKH',
-                                    'user_id'        => @!empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0,
-                                    'all_day'        => 'on',
-                                    'priority'       => 1,
+                                    'customer_id' => @$check3->order->customer->id,
+                                    'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                    'time_from' => '07:00',
+                                    'time_to' => '16:00',
+                                    'code' => 'CSKH',
+                                    'user_id' => @!empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0,
+                                    'all_day' => 'on',
+                                    'priority' => 1,
                                     'amount_of_work' => 1,
-                                    'type'           => 2,
-                                    'sms_content'    => Functions::vi_to_en($sms_content),
-                                    'name'           => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category,
+                                    'type' => 2,
+                                    'sms_content' => Functions::vi_to_en($sms_content),
+                                    'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category,
                                             ',') . ' ,' . @$check3->order->branch->name,
-                                    'description'    => replaceVariable($sms_content,
+                                    'description' => replaceVariable($sms_content,
                                         @$check3->order->customer->full_name, @$check3->order->customer->phone,
                                         @$check3->order->branch->name, @$check3->order->branch->phone,
                                         @$check3->order->branch->address),
@@ -521,13 +522,13 @@ class OrderController extends Controller
                                 $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
                                     : '📅📅📅 Bạn có công việc chăm sóc mới !';
                                 Notification::insert([
-                                    'title'      => $title,
-                                    'user_id'    => $task->user_id,
-                                    'type'       => $task->type,
-                                    'task_id'    => $task->id,
-                                    'status'     => NotificationConstant::HIDDEN,
+                                    'title' => $title,
+                                    'user_id' => $task->user_id,
+                                    'type' => $task->type,
+                                    'task_id' => $task->id,
+                                    'status' => NotificationConstant::HIDDEN,
                                     'created_at' => $task->date_from . ' ' . $task->time_from,
-                                    'data'       => json_encode((array)['task_id' => $task->id]),
+                                    'data' => json_encode((array)['task_id' => $task->id]),
                                 ]);
                             }
                         }
@@ -569,10 +570,10 @@ class OrderController extends Controller
             return "Failed";
         }
         HistoryUpdateOrder::create([
-            'user_id'     => $request->user_id,
-            'order_id'    => $order->id,
-            'service_id'  => $request->service_id,
-            'type'        => $request->type_delete,
+            'user_id' => $request->user_id,
+            'order_id' => $order->id,
+            'service_id' => $request->service_id,
+            'type' => $request->type_delete,
             'description' => $request->description,
         ]);
 
@@ -767,19 +768,19 @@ class OrderController extends Controller
                     if (!empty($service)) {
                         if (!empty($customer) && empty($checkOrder)) {
                             $order = Order::create([
-                                'code'              => $row['ma_dh'],
-                                'member_id'         => $customer->id,
-                                'all_total'         => $row['doanh_so'],
-                                'count_day'         => $row['buoi_con_lai'] ?: 0,
-                                'the_rest'          => $row['con_no'],
-                                'description'       => @$row['mo_ta'],
-                                'gross_revenue'     => $row['doanh_thu'],
-                                'payment_type'      => $paymentType,
-                                'payment_date'      => $payment_date,
-                                'branch_id'         => isset($branch) && $branch ? $branch->id : '',
-                                'type'              => empty($row['ktv_lieu_trinh']) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+                                'code' => $row['ma_dh'],
+                                'member_id' => $customer->id,
+                                'all_total' => $row['doanh_so'],
+                                'count_day' => $row['buoi_con_lai'] ?: 0,
+                                'the_rest' => $row['con_no'],
+                                'description' => @$row['mo_ta'],
+                                'gross_revenue' => $row['doanh_thu'],
+                                'payment_type' => $paymentType,
+                                'payment_date' => $payment_date,
+                                'branch_id' => isset($branch) && $branch ? $branch->id : '',
+                                'type' => empty($row['ktv_lieu_trinh']) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
                                 'spa_therapisst_id' => '',
-                                'created_at'        => Carbon::createFromFormat('d/m/Y',
+                                'created_at' => Carbon::createFromFormat('d/m/Y',
                                     $row['ngay_dat_hang'])->format('Y-m-d'),
                             ]);
                         } else {
@@ -789,27 +790,27 @@ class OrderController extends Controller
                         if (!empty($customer) && count($service) && !empty($order) && empty($checkOrder)) {
                             foreach ($service as $item) {
                                 OrderDetail::create([
-                                    'order_id'         => $order->id,
+                                    'order_id' => $order->id,
                                     //                                'code' => !empty($row['ma_sp']) ? $row['ma_sp'] : '',
-                                    'booking_id'       => $item->id,
-                                    'quantity'         => 1,
-                                    'total_price'      => $item->price_sell,
-                                    'user_id'          => $customer ? $customer->id : $order->member_id,
-                                    'address'          => $customer ? $customer->address : '',
-                                    'vat'              => 0,
+                                    'booking_id' => $item->id,
+                                    'quantity' => 1,
+                                    'total_price' => $item->price_sell,
+                                    'user_id' => $customer ? $customer->id : $order->member_id,
+                                    'address' => $customer ? $customer->address : '',
+                                    'vat' => 0,
                                     'percent_discount' => 0,
-                                    'number_discount'  => '',
-                                    'price'            => $item->price_sell,
-                                    'branch_id'        => $customer->branch_id,
-                                    'days'             => 0,
+                                    'number_discount' => '',
+                                    'price' => $item->price_sell,
+                                    'branch_id' => $customer->branch_id,
+                                    'days' => 0,
                                 ]);
                             }
 
                             if ($row['doanh_thu'] > 0) {
                                 PaymentHistory::create([
-                                    'order_id'     => $order->id,
-                                    'price'        => $row['doanh_thu'],
-                                    'branch_id'    => $customer->branch_id,
+                                    'order_id' => $order->id,
+                                    'price' => $row['doanh_thu'],
+                                    'branch_id' => $customer->branch_id,
                                     'payment_date' => $payment_date,
                                 ]);
                             }
@@ -827,12 +828,12 @@ class OrderController extends Controller
                                     }
                                     $currentId = isset($curentUser) && $curentUser ? $curentUser->id : Auth::user()->id;
                                     HistoryUpdateOrder::insert([
-                                        'user_id'    => @$currentId,
-                                        'order_id'   => @$order->id,
+                                        'user_id' => @$currentId,
+                                        'order_id' => @$order->id,
                                         'service_id' => @$i_service->id,
                                         'created_at' => @$date_lt[$k2],
-                                        'branch_id'  => @$customer->branch_id,
-                                        'type'       => @$type[$k2],
+                                        'branch_id' => @$customer->branch_id,
+                                        'type' => @$type[$k2],
                                     ]);
                                 }
 
@@ -889,9 +890,9 @@ class OrderController extends Controller
         ]);
 
         $map = [
-            Order::TYPE_ORDER_PROCESS   => 'Trong liệu trình',
+            Order::TYPE_ORDER_PROCESS => 'Trong liệu trình',
             Order::TYPE_ORDER_GUARANTEE => 'Đã bảo hành',
-            Order::TYPE_ORDER_RESERVE   => 'Đang bảo lưu',
+            Order::TYPE_ORDER_RESERVE => 'Đang bảo lưu',
         ];
 
         return $map[$order->type] ?? null;
