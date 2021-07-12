@@ -296,7 +296,7 @@ class AuthController extends BaseApiController
         return response()->json([
             'code' => ResponseStatusCode::OK,
             'messages' => 'SUCCESS',
-            'data' => true,
+            'data' => false,
         ]);
     }
 }
