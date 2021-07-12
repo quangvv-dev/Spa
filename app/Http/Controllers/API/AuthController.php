@@ -293,6 +293,10 @@ class AuthController extends BaseApiController
 
     public function uri()
     {
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', false);
+        return response()->json([
+            'code' => ResponseStatusCode::OK,
+            'messages' => 'SUCCESS',
+            'data' => false,
+        ]);
     }
 }
