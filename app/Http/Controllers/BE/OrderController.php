@@ -193,14 +193,14 @@ class OrderController extends Controller
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
             $orders = Order::searchAll($request->all());
-
+            $orders2 = clone $orders;
             View::share([
                 'allTotal' => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
                 'theRest' => $orders->sum('the_rest'),
             ]);
             if (isset($request->download)) {
-                $orders2 = $orders->with('historyUpdateOrders')->get();
+                $orders2 = $orders2->with('historyUpdateOrders')->get();
                 Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
                     $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
                         $sheet->cell('A1:S1', function ($row) {
@@ -225,6 +225,7 @@ class OrderController extends Controller
                             'Ngày thanh toán',
                             'Người lên đơn',
                             'KTV liệu trình',
+                            'Buổi còn lại',
                             'Dịch vụ',
                             'Loại',
                             'Ngày làm LT'
@@ -242,10 +243,12 @@ class OrderController extends Controller
                                     $type = [];
                                     foreach ($ex->historyUpdateOrders as $item) {
                                         $user = User::find($item->user_id);
-                                        $ktv[] = $user->full_name;
-                                        $service[] = @$item->service->name;
-                                        $type[] = @$item->type;
-                                        $updated[] = @date('Y-m-d H:i',strtotime($item->updated_at));
+                                        if (isset($user) && $user) {
+                                            $ktv[] = $user->full_name;
+                                            $service[] = @$item->service->name;
+                                            $type[] = @$item->type;
+                                            $updated[] = @date('Y-m-d H:i', strtotime($item->updated_at));
+                                        }
                                     }
                                 }
                                 $i++;
@@ -271,6 +274,7 @@ class OrderController extends Controller
                                     @$date,
                                     @$ex->customer->marketing->full_name,
                                     count($ktv) ? implode("||", $ktv) : '',
+                                    $ex->count_day,
                                     count($service) ? implode("||", $service) : '',
                                     count($type) ? implode("||", $type) : '',
                                     count($updated) ? implode("||", $updated) : '',
