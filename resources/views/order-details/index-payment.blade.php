@@ -60,7 +60,7 @@
                 <div class="col">
                 </div>
             </div>
-            <div class="card-header col-md-12">
+            <div class="card-header">
                 <div class="col-md-2">
                     {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                 </div>

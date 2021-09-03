@@ -65,7 +65,7 @@
                             class="fas fa-cloud-download-alt"></i></a>
                 </div>
             </div>
-            <div class="card-header col-md-12">
+            <div class="card-header">
                 <div class="col-md-3">
                     @include('order-details.search')
                 </div>
@@ -95,7 +95,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-header col-md-12">
+            <div class="card-header">
                 <div class="col-md-12">
                     <div class="btn-group ml5" id="more_filters">
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"

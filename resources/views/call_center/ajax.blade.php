@@ -4,7 +4,7 @@
                $sec = round(($answers->sum('answer_time') % 3600)%60);
                $time_call =  ($hours > 0 ? $hours . ' giờ ' : '').($minutes > 0 ? $minutes . ' phút ' : '') . ($sec > 0 ? $sec . ' giây' : '');
 @endphp
-<div class="card-header col-md-12">
+<div class="card-header">
     <div class="col-md-3 bold">
         Tổng cuộc gọi : <span class="text-success">{{@$docs->total()}}</span>
     </div>
