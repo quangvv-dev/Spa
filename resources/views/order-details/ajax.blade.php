@@ -44,7 +44,7 @@
                     <td class="text-center">{{ @$order->customer->full_name }}</td>
                     <td class="text-center">{{ @$order->customer->phone }}</td>
                     <td class="text-center">{!! @$order->service_text !!}</td>
-                    <td class="text-center">{{ $order->orderDetails->sum('quantity') }}</td>
+                    <td class="text-center">{{ @$order->orderDetails->sum('quantity') }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
