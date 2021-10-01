@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusCode;
+use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
 use App\Components\Filesystem\Filesystem;
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\Status;
+use App\User;
 use Illuminate\Http\Request;
 
 
@@ -101,5 +106,26 @@ class SettingController extends Controller
             $branch->delete();
             return 1;
         }
+    }
+
+    public function phanbo()
+    {
+        $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
+        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::TP_SALE])->pluck('full_name', 'id');
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
+        return view('settings.phanbo', compact('branchs', 'telesales', 'status'));
+
+    }
+
+    public function postPhanBo(Request $request)
+    {
+        $customers = Customer::where('branch_id',$request->branch_id)
+        ->whereIn('status_id',$request->status_id)->whereBetween('created_at', [
+                Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                Functions::yearMonthDay($request->end_date) . " 23:59:59",
+            ])->whereNotIn('telesales_id',$request->telesales_id)->get();
+
+        dd($request->all());
+
     }
 }
