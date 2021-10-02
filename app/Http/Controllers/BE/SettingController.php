@@ -119,13 +119,26 @@ class SettingController extends Controller
 
     public function postPhanBo(Request $request)
     {
-        $customers = Customer::where('branch_id',$request->branch_id)
-        ->whereIn('status_id',$request->status_id)->whereBetween('created_at', [
+        $customers = Customer::select('id')->where('branch_id', $request->branch_id)
+            ->whereIn('status_id', $request->status_id)
+            ->whereBetween('created_at', [
                 Functions::yearMonthDay($request->start_date) . " 00:00:00",
                 Functions::yearMonthDay($request->end_date) . " 23:59:59",
-            ])->whereNotIn('telesales_id',$request->telesales_id)->get();
+            ])->whereNotIn('telesales_id', $request->telesales_id)->pluck('id')->toArray();
+        $telesale = $request->telesales_id;
+        $key = count($request->telesales_id);
+        $number_key = round(count($customers) / $key);
 
-        dd($request->all());
+        for ($i = 1; $i <= $key; $i++) {
+            $bd = 0;
+            if ($i > 1) {
+                $bd = $number_key;
+            }
+            $arr = array_slice($customers, $bd, $number_key * $i);
+            Customer::whereIn('id', $arr)->update(['telesales_id' => $telesale[$i - 1]]);
+        }
+
+        return back()->with('status', 'Đã cập nhật thông tin khách hàng thành công !!!');
 
     }
 }

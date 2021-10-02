@@ -24,7 +24,7 @@
                         <div class="tab-pane active" id="tab1">
                             <div class="col-md-12 col-lg-12">
                                 <span class="bold text-warning" style="font-size: 12px"><i
-                                            class="fa fa-info-circle"></i><i>Hạn mức thăng hạng khách hàng theo số đơn hàng KH đã sử dụng !!!</i></span>
+                                            class="fa fa-info-circle"></i><i>Phân bổ data khách hàng hàng loạt !!!</i></span>
                                 <div class="card">
                                     {!! Form::open(array('url' => route('settings.postPhanBo'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','class'=>'sent-sms')) !!}
                                     <div class="col row">
@@ -53,11 +53,17 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-xs-12 col-md-6">
-                                                <input type="hidden" name="start_date" id="start_date">
-                                                <input type="hidden" name="end_date" id="end_date">
-                                                {!! Form::label('s', 'Ngày tháng', array('class' => ' required')) !!}
-                                                <input id="reportrange1" type="text" class="form-control square">
+                                            <div class="col-xs-12 col-md-6 row">
+                                                <div class="col">
+                                                    {!! Form::label('','Ngày bắt đầu') !!}
+                                                    <input type="text" class="form-control filter_start_date" id="datepicker"
+                                                           data-toggle="datepicker" name="start_date">
+                                                </div>
+                                                <div class="col">
+                                                    {!! Form::label('','Ngày kết thúc') !!}
+                                                    <input type="text" class="form-control filter_end_date" id="datepicker"
+                                                           data-toggle="datepicker" name="end_date">
+                                                </div>
                                             </div>
                                             <div class="col bot" style="margin-top: 5px">
                                                 <button type="submit" class="btn btn-success">Lưu
@@ -77,10 +83,17 @@
 
         </div>
     </div>
-    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
-    <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 @section('_script')
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="datepicker"]').datepicker({
+                format: 'dd-mm-yyyy',
+                autoHide: true,
+                zIndex: 2048,
+            });
+        });
+    </script>
     {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>--}}
 
 
