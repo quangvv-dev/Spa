@@ -129,14 +129,15 @@ class SettingController extends Controller
             })->pluck('id')->toArray();
         $telesale = $request->telesales_id;
         $key = count($request->telesales_id);
-        $number_key = round(count($customers) / $key);
+        $number_key =  (int)round(count($customers) / $key);
 
         for ($i = 1; $i <= $key; $i++) {
             $bd = 0;
             if ($i > 1) {
                 $bd = $number_key;
             }
-            $arr = array_slice($customers, $bd, $number_key * $i);
+            $arr = array_slice($customers, $bd, $number_key);
+
             Customer::whereIn('id', $arr)->update(['telesales_id' => $telesale[$i - 1]]);
         }
 

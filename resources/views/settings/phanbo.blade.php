@@ -39,6 +39,7 @@
                                                 <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                                                     {!! Form::label('status_id', 'Mối quan hệ', array('class' => ' required')) !!}
                                                     {!! Form::select('status_id[]',@$status, null, array('class' => 'select2 form-control','data-placeholder'=>'Chọn trạng thái','multiple'=>true,'required'=>true)) !!}
+
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-6">
