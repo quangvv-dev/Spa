@@ -126,7 +126,7 @@ class SettingController extends Controller
                     Functions::yearMonthDay($request->start_date) . " 00:00:00",
                     Functions::yearMonthDay($request->end_date) . " 23:59:59",
                 ]);
-            })->whereNotIn('telesales_id', $request->telesales_id)->pluck('id')->toArray();
+            })->pluck('id')->toArray();
         $telesale = $request->telesales_id;
         $key = count($request->telesales_id);
         $number_key = round(count($customers) / $key);
