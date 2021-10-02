@@ -121,10 +121,12 @@ class SettingController extends Controller
     {
         $customers = Customer::select('id')->where('branch_id', $request->branch_id)
             ->whereIn('status_id', $request->status_id)
-            ->whereBetween('created_at', [
-                Functions::yearMonthDay($request->start_date) . " 00:00:00",
-                Functions::yearMonthDay($request->end_date) . " 23:59:59",
-            ])->whereNotIn('telesales_id', $request->telesales_id)->pluck('id')->toArray();
+            ->when(isset($request->start_date), function ($q) use ($request) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                    Functions::yearMonthDay($request->end_date) . " 23:59:59",
+                ]);
+            })->whereNotIn('telesales_id', $request->telesales_id)->pluck('id')->toArray();
         $telesale = $request->telesales_id;
         $key = count($request->telesales_id);
         $number_key = round(count($customers) / $key);
