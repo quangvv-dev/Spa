@@ -129,12 +129,12 @@ class SettingController extends Controller
             })->pluck('id')->toArray();
         $telesale = $request->telesales_id;
         $key = count($request->telesales_id);
-        $number_key =  (int)round(count($customers) / $key);
+        $number_key = (int)round(count($customers) / $key);
 
         for ($i = 1; $i <= $key; $i++) {
             $bd = 0;
             if ($i > 1) {
-                $bd = $number_key;
+                $bd = $number_key * $i - 1;
             }
             $arr = array_slice($customers, $bd, $number_key);
 
