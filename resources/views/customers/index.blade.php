@@ -973,6 +973,7 @@
                 });
             });
 
+            @if(\Illuminate\Support\Facades\Auth::user()->role != \App\Constants\UserConstant::TELESALES)
             $(document).on('dblclick', '.telesale-customer', function (e) {
                 let target = $(e.target).parent();
                 $(target).find('.telesale-customer').empty();
@@ -995,6 +996,7 @@
                     $(target).find(".telesale-customer").append(html);
                 });
             });
+            @endif
 
             $(document).on('change', '.telesales-result', function (e) {
                 let target = $(e.target).parent();
