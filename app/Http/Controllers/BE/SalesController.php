@@ -103,12 +103,17 @@ class SalesController extends Controller
         if (empty($request->data_time)) {
             $request->merge(['data_time' => 'THIS_WEEK']);
         }
+        if (!isset($request->branch_id)){
+            $request->merge(['branch_id' => 1]);
+        }elseif($request->branch_id == (-1)){
+            $request->merge(['branch_id' => null]);
+        }
         $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
         $branchs = Branch::search()->pluck('name', 'id');
 
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request) {
-            $arr_customer = CustomerGroup::where('category_id', $item->id)->pluck('customer_id');
+            $arr_customer = CustomerGroup::select('customer_id')->where('category_id', $item->id);
             $arr_customer = self::searchBranch($arr_customer, $request)->get()->toArray();
 
             if ($request->telesale_id) {

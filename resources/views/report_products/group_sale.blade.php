@@ -111,7 +111,13 @@
                         {{Form::select('type',$telesales, null, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Tất cả nhân viên'))}}
                     </div>
                     <div class="col-md-2" style="position: absolute;right: 21%">
-                        {{Form::select('branch_id',$branchs, null, array('class' => 'form-control','id'=>'branch_id','placeholder'=>'Tất cả chi nhánh'))}}
+                        {{--{{Form::select('branch_id',$branchs, 1, array('class' => 'form-control','id'=>'branch_id','placeholder'=>'Tất cả chi nhánh'))}}--}}
+                        <select name="branch_id" id="branch_id" class="form-control">
+                            <option value="-1">Tất cả chi nhánh</option>
+                            @foreach($branchs as $k=> $item)
+                                <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"
                        href="javascript:void(0)">
