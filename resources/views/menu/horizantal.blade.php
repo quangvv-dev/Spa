@@ -183,6 +183,20 @@
                     </ul>
                 </div>
             </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}"
+                       href="{{route('tasks.index')}}">
+                        <i class="fas fa-tasks"></i><span>KHO VẬN</span></a>
+                    <div class="sub-item">
+                        <ul>
+                            @if($roleGlobal->permission('tasks.employee'))
+                                <li><a href="{{url('tasks')}}">CSKH nhân viên</a></li>
+                                <li><a href="{{url('tasks-employee')}}">CSKH phòng ban</a></li>
+                            @endif
+                        </ul>
+                    </div>
+                </li>
         </ul>
         <div class="div-info">
             <div class="left">
