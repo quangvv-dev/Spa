@@ -98,6 +98,9 @@
         font-size: 11px;
         color: #999;
     }
+    a{
+        cursor: pointer;
+    }
 </style>
 <div id="global-loader">
     <div class="showbox">

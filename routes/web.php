@@ -177,4 +177,13 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('form/{id}', 'PostsController@showForm');
     Route::get('customer-post', 'AjaxController@ListCustomerPost')->name('post.customer');
 
+//KHO VAN
+    Route::group(['prefix' => 'depots', 'as' => 'depots.', 'namespace' => 'Depot'], function () {
+        Route::resource('product', 'ProductDepotController');
+        Route::resource('history', 'HistoryDepotController');
+        Route::resource('list', 'DepotController');
+        Route::post('import-product', 'ProductDepotController@import')->name('import');
+
+    });
+
 });

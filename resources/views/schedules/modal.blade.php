@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
-                        {!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control'))!!}
+                        {!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control select2'))!!}
                     </div>
                     <div class="col-md-12 ">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}

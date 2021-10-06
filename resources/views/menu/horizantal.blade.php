@@ -184,19 +184,16 @@
                 </div>
             </li>
 
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}"
-                       href="{{route('tasks.index')}}">
-                        <i class="fas fa-tasks"></i><span>KHO VẬN</span></a>
-                    <div class="sub-item">
-                        <ul>
-                            @if($roleGlobal->permission('tasks.employee'))
-                                <li><a href="{{url('tasks')}}">CSKH nhân viên</a></li>
-                                <li><a href="{{url('tasks-employee')}}">CSKH phòng ban</a></li>
-                            @endif
-                        </ul>
-                    </div>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('depots/product') ? 'active' : '' }}" href="#">
+                    <i class="fas fa-tasks"></i><span>KHO VẬN</span></a>
+                <div class="sub-item">
+                    <ul>
+                        <li><a href="{{url('depots/product')}}">Sản phẩm kho</a></li>
+                        <li><a href="{{url('depots/history')}}">Lich sử nhập, xuất kho</a></li>
+                    </ul>
+                </div>
+            </li>
         </ul>
         <div class="div-info">
             <div class="left">
