@@ -120,6 +120,10 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');
 
         Route::get('find-role/{department_id}', 'AjaxController@getRoleWithDepartment');
+
+
+        Route::get('product-depot/{id}', 'AjaxController@getRoleWithDepartment');
+
     });
 
     Route::resource('rules', 'RuleController');//Automation

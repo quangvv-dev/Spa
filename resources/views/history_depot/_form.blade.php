@@ -1,6 +1,6 @@
 <div class="modal fade text-left" id="add_new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel35"
      style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-main">
                 <h5 class="modal-title" id="myModalLabel"> Nhập, xuất kho</h5>
@@ -42,8 +42,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-outline-primary"><i class="fa fa-save"> Lưu</i></button>
-                <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">
+                <button type="submit" class="btn btn-success"><i class="fa fa-save"> Lưu</i></button>
+                <button type="reset" class="btn btn-warning" data-dismiss="modal">
                     <i class="fa fa-refresh"> Làm lại</i></button>
             </div>
             {{ Form::close() }}

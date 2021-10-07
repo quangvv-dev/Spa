@@ -55,7 +55,7 @@ class HistoryDepotController extends Controller
             return view('backend.history_depot.ajax', compact('docs'));
         }
 
-        return view('BE.history_depot.index', compact('docs'));
+        return view('history_depot.index', compact('docs'));
     }
 
     /**
@@ -190,7 +190,7 @@ class HistoryDepotController extends Controller
                     }
                 }
             });
-            return redirect()->back()->with('success', 'Tải lịch sử thành công');
+            return redirect()->back()->with('status', 'Tải lịch sử thành công');
         }
         return redirect()->back()->with('danger', 'File không đúng định dạng *xlsx');
     }

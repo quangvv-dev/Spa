@@ -1,26 +1,18 @@
-@extends('backend.layouts.master')
+@extends('layout.app')
 @section('content')
-    <div class="content-body">
+    <div class="content-body" style="width: 100%">
         <section id="card-actions">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
                         <div class="card-header fix-header bottom-card add-paginate">
-                            <div class="row" style="align-items: baseline">
-                                <h4 class="col-lg-3">6.4 Lịch sử nhập, xuất kho</h4>
-                                <div class="col-lg-3 col-md-6">
-                                    <input name="code_order" type="text" class="form-control square" placeholder="Mã đơn">
-                                </div>
-                                <button type="submit" class="btn btn-primary searchData" id="btnSearch"><i class="fa fa-search"></i> Tìm kiếm
-                                </button>
-                            </div>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0"><li><a data-action="expand"><i class="ft-maximize"></i></a></li></ul>
+                            <div class="row">
+                                <h4 class="col-lg-12">6.4 Lịch sử nhập, xuất kho</h4>
                             </div>
                         </div>
                         <div class="card-header fix-header bottom-card">
-                            <div class="row">
+                            <div class="row" style="width: 100%">
                                 <input type="hidden" name="start_date" id="start_date">
                                 <input type="hidden" name="end_date" id="end_date">
                                 <div class="col-lg-3 col-md-6">
@@ -32,10 +24,10 @@
                                 <div class="col-lg-2 col-md-6">
                                     {!! Form::select('status', $status, null, array('class' => 'form-control square','placeholder'=>'--Nghiệp vụ kho--')) !!}
                                 </div>
-                                <div class="col-lg-2 col-md-6">
+                                <div class="col-lg-3 col-md-6">
                                     {!! Form::select('product_id', $products, null, array('class' => 'form-control square select2','data-placeholder'=>'--Chọn sản phẩm--')) !!}
                                 </div>
-                                <div class="col-lg-3 col-md-6">
+                                <div class="col-lg-2 col-md-6">
                                     <button class="btn btn-warning" data-toggle="modal" data-target="#import"><i
                                                 class="fa fa-file-excel-o"></i> Import lịch sử
                                     </button>
@@ -46,8 +38,8 @@
                         {{ Form::close() }}
                         <div class="card-content collapse show">
                             <div class="card-body">
-                                @include('backend.history_depot.ajax')
-                                @include('backend.history_depot._form')
+                                @include('history_depot.ajax')
+                                @include('history_depot._form')
                                 {{--@include('backend.history_depot.import')--}}
                             </div>
                         </div>
@@ -60,7 +52,7 @@
 
 @endsection
 @section('script')
-    @include('backend.layouts.script')
+    {{--@include('backend.layouts.script')--}}
     <!-- file upload -->
     <script src="/js/file_upload.js"></script>
 
@@ -74,7 +66,7 @@
             $('.list-product').html('');
             let html = '';
             $.ajax({
-                url:'/ajax/product-deport/' + $(this).val(),
+                url:'/ajax/product-depot/' + $(this).val(),
                 success:function (data) {
                     html = '<option value="">--Chọn sản phẩm--</option>';
                     let product_id = $(document).find('.products')
@@ -124,6 +116,8 @@
                 }
             })
         });
-
+        $(document).on('change', '.type, .name', function () {
+            $('#gridForm').submit();
+        });
     </script>
 @endsection
