@@ -110,7 +110,7 @@ class CustomerController extends Controller
         }
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
-        $customers = Customer::search($input)->take(StatusCode::PAGINATE_60)->get();
+        $customers = Customer::search($input)->take(StatusCode::PAGINATE_1000)->get();
         if (isset($input['limit'])) {
             $customers = Functions::customPaginate($customers, $page, $input['limit']);
         } else {

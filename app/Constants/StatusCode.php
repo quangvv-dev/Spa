@@ -49,6 +49,7 @@ class StatusCode
     const PAGINATE_10 = 10;
     const PAGINATE_20 = 20;
     const PAGINATE_60 = 60;
+    const PAGINATE_1000 = 1000;
 
     const ON = 1;
     const OFF = 0;
