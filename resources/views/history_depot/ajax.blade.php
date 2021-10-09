@@ -33,7 +33,7 @@
                         <td class="text-center">{{$item->created_at}}</td>
                         <td class="text-center">
                             @if($item->status == \App\Constants\OrderConstant::NHAP_KHO)
-                                <a class="btn delete" href="javascript:void(0)" data-id="{{ $item->id }}"><i class="fa fa-trash"></i></a>
+                                <a class="btn delete" href="javascript:void(0)" data-url="{{url('/depots/history/'.$item->id)}}"><i class="fa fa-trash"></i></a>
                             @endif
                         </td>
                     </tr>
