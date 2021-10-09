@@ -115,7 +115,6 @@ class ProductDepotController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
         $this->productDepost->delete($id);
 
         return 1;
