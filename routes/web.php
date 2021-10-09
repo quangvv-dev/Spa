@@ -122,7 +122,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('find-role/{department_id}', 'AjaxController@getRoleWithDepartment');
 
 
-        Route::get('product-depot/{id}', 'AjaxController@getRoleWithDepartment');
+        Route::get('product-depot/{id}', 'Depot/ProductDepotController@getDetail');
 
     });
 

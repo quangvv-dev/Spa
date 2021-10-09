@@ -5,22 +5,30 @@
             <div class="card-header">
                 <h3 class="card-title">DS Sản phẩm kho</h3></br>
                 <div class="col">
-                    <a title="Upload Data" class="btn"  href="#"
+                    <a title="Upload Data" class="btn" href="#"
                        data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-upload"></i></a>
                 </div>
             </div>
-            <form>
-                <div class="card-header" style="align-items: flex-end">
-                    <input class="form-control header-search col-2" name="search" placeholder="Tìm kiếm…" tabindex="1" type="search">
-                    <div class="col-md-2" style="font-size: 16px;">
-                        {!! Form::select('branch_id', $deposts, null, array('class' => 'form-control branch_id','placeholder'=>'--Chi nhánh--')) !!}
-                    </div>
-                    <div class="col-md-2" style="font-size: 16px;">
-                        {!! Form::select('product_id', $products, null, array('class' => 'form-control select2 product_id','placeholder'=>'--Chọn sản phẩm--')) !!}
-                    </div>
+            {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
+
+            <div class="card-header" style="align-items: flex-end">
+                {{--<input class="form-control header-search col-2" name="search" placeholder="Tìm kiếm…" tabindex="1"--}}
+                       {{--type="search">--}}
+                <div class="col-md-2" style="font-size: 16px;">
+                    {!! Form::select('branch_id', $deposts, null, array('class' => 'form-control branch_id','placeholder'=>'--Chi nhánh--')) !!}
                 </div>
-            </form>
+                <div class="col-md-3" style="font-size: 16px;">
+                    {!! Form::select('product_id', $products, null, array('class' => 'form-control select2 product_id','placeholder'=>'--Chọn sản phẩm--')) !!}
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <button type="submit" class="btn btn-primary"> Tìm kiếm
+                    </button>
+                </div>
+            </div>
+
+            {{ Form::close() }}
+
             <div class="header-search">
                 @include('product_depot.ajax')
                 @include('product_depot.modal')

@@ -52,7 +52,7 @@ class HistoryDepotController extends Controller
         $input = $request->except('name');
         $docs = HistoryDepot::search($input)->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return view('backend.history_depot.ajax', compact('docs'));
+            return view('history_depot.ajax', compact('docs'));
         }
 
         return view('history_depot.index', compact('docs'));

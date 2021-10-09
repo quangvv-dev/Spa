@@ -10,8 +10,8 @@ class ProductDepot extends Model
 
     public static function search($input)
     {
-        $data = self::when(!empty($input['depot_id']), function ($q) use ($input) {
-            $q->where('depot_id', $input['depot_id']);
+        $data = self::when(!empty($input['branch_id']), function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
         })->when(!empty($input['product_id']), function ($q) use ($input) {
             $q->where('product_id', $input['product_id']);
         })->when(!empty($input['name']), function ($q) use ($input) {

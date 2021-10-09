@@ -13,13 +13,8 @@
                         </div>
                         <div class="card-header fix-header bottom-card">
                             <div class="row" style="width: 100%">
-                                <input type="hidden" name="start_date" id="start_date">
-                                <input type="hidden" name="end_date" id="end_date">
-                                <div class="col-lg-3 col-md-6">
-                                    <input name="name" id="reportrange" type="text" class="form-control square" >
-                                </div>
                                 <div class="col-lg-2 col-md-6">
-                                    {!! Form::select('depot_id', $deposts, null, array('class' => 'form-control square','placeholder'=>'--Chọn kho--')) !!}
+                                    {!! Form::select('branch_id', $deposts, null, array('class' => 'form-control square','placeholder'=>'--Chọn kho--')) !!}
                                 </div>
                                 <div class="col-lg-2 col-md-6">
                                     {!! Form::select('status', $status, null, array('class' => 'form-control square','placeholder'=>'--Nghiệp vụ kho--')) !!}
@@ -28,8 +23,7 @@
                                     {!! Form::select('product_id', $products, null, array('class' => 'form-control square select2','data-placeholder'=>'--Chọn sản phẩm--')) !!}
                                 </div>
                                 <div class="col-lg-2 col-md-6">
-                                    <button class="btn btn-warning" data-toggle="modal" data-target="#import"><i
-                                                class="fa fa-file-excel-o"></i> Import lịch sử
+                                    <button type="submit" class="btn btn-primary"> Tìm kiếm
                                     </button>
                                 </div>
                             </div>
@@ -54,13 +48,16 @@
 @section('script')
     {{--@include('backend.layouts.script')--}}
     <!-- file upload -->
-    <script src="/js/file_upload.js"></script>
-
-    <script type="text/javascript" src="{{asset('js/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('js/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
-    <script type="text/javascript" src="{{asset('js/dateranger-config.js')}}"></script>
     <script>
+
+        // $("#gridForm").submit(function (e, page) {
+        //     console.log('aaaa');
+        //
+        //     $.get($(this).attr('action'), $(this).serialize(), function (data) {
+        //         console.log(data,'aaaa');
+        //         $('.table-responsive').html(data);
+        //     })
+        // })
 
         $('#depot_id').change(function () {
             $('.list-product').html('');

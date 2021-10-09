@@ -38,7 +38,7 @@ class ProductDepotController extends Controller
     {
         $docs = ProductDepot::search($request->all())->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return view('backend.product_depot.ajax', compact('docs'));
+            return view('product_depot.ajax', compact('docs'));
         }
 
         return view('product_depot.index', compact('docs'));

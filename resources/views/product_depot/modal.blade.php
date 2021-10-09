@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Lưu</button>
-                        <a href="{{asset('default/data.xlsx')}}" style="color: #ffffff" class="btn btn-warning">Mẫu
+                        <a href="{{asset('default/product-depot.xlsx')}}" style="color: #ffffff" class="btn btn-warning">Mẫu
                             upload</a>
                     </div>
                 </div>
