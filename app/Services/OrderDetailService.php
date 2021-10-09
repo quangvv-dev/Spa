@@ -46,8 +46,10 @@ class OrderDetailService
 
             if ($data['role_type'] == StatusCode::PRODUCT) {
                 $product = ProductDepot::where('branch_id', $data['branch_id'])->where('product_id', $data['service_id'][$key])->first();
-                $product->quantity = $product->quantity - $data['quantity'][$key];
-                $product->save();
+                if (isset($product)){
+                    $product->quantity = $product->quantity - $data['quantity'][$key];
+                    $product->save();
+                }
             }
         }
         if (!empty($dataArr)) {
