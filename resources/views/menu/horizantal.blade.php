@@ -191,6 +191,7 @@
                     <ul>
                         <li><a href="{{url('depots/product')}}">Sản phẩm kho</a></li>
                         <li><a href="{{url('depots/history')}}">Lich sử nhập, xuất kho</a></li>
+                        <li><a href="{{url('depots/statistical')}}">Báo cáo tồn</a></li>
                     </ul>
                 </div>
             </li>

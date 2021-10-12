@@ -292,6 +292,11 @@ class Functions
         return \Carbon\Carbon::parse($date)->format('Y-m-d');
     }
 
+    public static function yearMonthDayTime($date)
+    {
+        return \Carbon\Carbon::createFromFormat('d/m/Y H:i',$date)->format('Y-m-d H:i');
+    }
+
     /**
      * SMS VMG BRANDNAME
      *
@@ -460,5 +465,14 @@ class Functions
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+
+    public static function addSearchDate($request)
+    {
+        $date_check = Carbon::now()->subDays(7)->format('d/m/Y');
+        $date = Carbon::now()->format('d/m/Y');
+
+        $request->merge(['start_date' => $date_check.' 00:00']);
+        $request->merge(['end_date' => $date.' 23:59']);
     }
 }

@@ -4,8 +4,11 @@ namespace App\Http\Controllers\BE\Depot;
 
 use App\Constants\OrderConstant;
 use App\Constants\StatusConstant;
+use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\HistoryDepot;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Services;
 use App\Models\ProductDepot;
 use Illuminate\Http\Request;
@@ -32,7 +35,7 @@ class HistoryDepotController extends Controller
             OrderConstant::NHAP_KHO => 'Nhập kho',
             OrderConstant::XUAT_KHO => 'Xuất kho',
             OrderConstant::TIEU_HAO => 'Vật phẩm tiêu hao',
-            OrderConstant::HONG_VO  => 'Hàng rơi, hỏng',
+            OrderConstant::HONG_VO => 'Hàng rơi, hỏng',
         ];
 
         view()->share([
@@ -88,7 +91,7 @@ class HistoryDepotController extends Controller
                         return redirect(route('depots.history.index'))->with('waring', 'Chưa điền số tiền');
                     if ($input['status'] == OrderConstant::NHAP_KHO && !empty($request->quantity[$key])) {
                         $doc->quantity = $doc->quantity + (int)$request->quantity[$key];
-                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO,OrderConstant::TIEU_HAO]) && !empty($request->quantity[$key])) {
+                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO]) && !empty($request->quantity[$key])) {
                         $doc->quantity = $doc->quantity - (int)$request->quantity[$key];
                     }
                     $doc->save();
@@ -149,49 +152,44 @@ class HistoryDepotController extends Controller
         return 1;
     }
 
-
     /**
-     * import excel
+     * Thống kê
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function import(Request $request)
+    public function statistical(Request $request)
     {
-        $user_id = Auth::user()->id;
-        if ($request->hasFile('file') && ($request->file('file')->getClientMimeType() == Setting::ExcelType || $request->file('file')->getClientMimeType() == Setting::ExcelTypeV2)) {
-            Excel::load($request->file('file')->getRealPath(), function ($render) use ($user_id) {
-                $result = $render->toArray();
-                foreach ($result as $k => $row) {
-                    if ($row['ma_san_pham']) {
-                        $product = Product::where('code', $row['ma_san_pham'])->first();
-                        $product_depot = ProductDepot::where('product_id', $product->id)->first();
-
-                        $depot = Depot::where('name', $row['kho'])->first();
-                        $status = $row['nghiep_vu'] == 'Nhập kho' ? 1 : ($row['nghiep_vu'] == 'Xuất kho' ? 2 : 3);
-                        $quantity_rest = $status == 1 ? $product_depot->quantity + $row['so_luong'] : $product_depot->quantity - $row['so_luong'];
-                        if (isset($product) && $product) {
-                            $input = [
-                                'depot_id' => $depot->id,
-                                'product_id' => $product->id,
-                                'quantity' => $row['so_luong'],
-                                'status' => $status,
-                                'note' => $row['ghi_chu'],
-                                'user_id' => $user_id,
-                                'quantity_rest' => $quantity_rest
-                            ];
-
-                            HistoryDepot::create($input);
-                            $product_depot->update(['quantity' => $quantity_rest]);
-                        } else {
-                            return redirect()->back()->with('danger', 'Đã có lỗi xảy ra');
-                        }
-
-                    }
-                }
-            });
-            return redirect()->back()->with('status', 'Tải lịch sử thành công');
+        if (!$request->start_date) {
+            Functions::addSearchDate($request);
         }
-        return redirect()->back()->with('danger', 'File không đúng định dạng *xlsx');
+        $input = $request->all();
+
+        $orders = Order::select('id')->whereBetween('created_at', [
+            Functions::yearMonthDayTime($input['start_date']),
+            Functions::yearMonthDayTime($input['end_date']),
+        ])->get()->pluck('id');
+        $docs = ProductDepot::select('branch_id', 'product_id', 'quantity')
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
+                $q->where('branch_id', $input['branch_id']);
+            })->get()->map(function ($item) use ($input, $orders) {
+                $item->xuat_ban = OrderDetail::select('quantity')->whereIn('order_id', $orders)->where('booking_id', $item->product_id)
+                    ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
+                        $q->where('branch_id', $input['branch_id']);
+                    })->sum('quantity');
+                $item->tieu_hao = HistoryDepot::select('quantity')->where('product_id', $item->product_id)
+                    ->whereIn('status', [OrderConstant::TIEU_HAO, OrderConstant::HONG_VO, OrderConstant::XUAT_KHO])
+                    ->whereBetween('created_at', [
+                        Functions::yearMonthDayTime($input['start_date']),
+                        Functions::yearMonthDayTime($input['end_date']),
+                    ])->sum('quantity');
+                return $item;
+            });
+
+        if ($request->ajax()) {
+            return view('history_depot.statisticalAjax', compact('docs'));
+        }
+
+        return view('history_depot.statistical', compact('docs'));
     }
 }

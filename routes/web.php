@@ -186,6 +186,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::resource('product', 'ProductDepotController');
         Route::resource('history', 'HistoryDepotController');
         Route::resource('list', 'DepotController');
+        Route::get('statistical', 'HistoryDepotController@statistical');
         Route::post('import-product', 'ProductDepotController@import')->name('import');
 
     });
