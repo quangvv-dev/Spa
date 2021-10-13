@@ -129,9 +129,9 @@ class OrderService
             $order_detail = OrderDetail::select('booking_id', 'quantity')->where('order_id', $order->id)
                 ->where('branch_id', $order->branch_id)->get();
             foreach ($order_detail as $item) {
-                $product = ProductDepot::where('branch_id', $order->branch_id)->where('product_id', $order_detail->booking_id)->first();
+                $product = ProductDepot::where('branch_id', $order->branch_id)->where('product_id', $item->booking_id)->first();
                 if (isset($product)) {
-                    $product->quantity = $product->quantity - $order_detail->quantity;
+                    $product->quantity = $product->quantity - $item->quantity;
                     $product->save();
                 }
             }
