@@ -10,10 +10,7 @@
                 <th class="text-center">Xuất bán</th>
                 <th class="text-center">Tiêu hao/hỏng</th>
                 <th class="text-center">Dự kiến bán hết</th>
-                <th class="text-center">
-                    <a data-toggle="modal" data-target="#add_new"><i class="fa fa-plus"></i> Thêm mới
-                    </a>
-                </th>
+
             </tr>
             <tr class="bold">
                 <td class="text-center bold" colspan="2">Tổng</td>
@@ -21,7 +18,6 @@
                 <td class="text-center bold">{{@number_format($docs->sum('quantity'))}} </td>
                 <td class="text-center bold">{{@number_format($docs->sum('xuat_ban'))}}</td>
                 <td class="text-center bold">{{@number_format($docs->sum('tieu_hao'))}}</td>
-                <td class="text-center"></td>
                 <td class="text-center"></td>
 
             </tr>
@@ -38,11 +34,6 @@
                         <td class="text-center">{{@number_format($item->xuat_ban)}}</td>
                         <td class="text-center">{{@number_format($item->tieu_hao)}}</td>
                         <td class="text-center">{{$item->created_at}}</td>
-                        <td class="text-center">
-                            @if($item->status == \App\Constants\OrderConstant::NHAP_KHO)
-                                <a class="btn delete" href="javascript:void(0)" data-url="{{url('/depots/history/'.$item->id)}}"><i class="fa fa-trash"></i></a>
-                            @endif
-                        </td>
                     </tr>
                 @endforeach
             @else

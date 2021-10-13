@@ -36,12 +36,17 @@ class ProductDepotController extends Controller
      */
     public function index(Request $request)
     {
+        $input = $request->all();
+        $checkRole = checkRoleAlready();
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
+        }
         $docs = ProductDepot::search($request->all())->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return view('product_depot.ajax', compact('docs'));
+            return view('product_depot.ajax', compact('docs','checkRole'));
         }
 
-        return view('product_depot.index', compact('docs'));
+        return view('product_depot.index', compact('docs','checkRole'));
     }
 
     /**
@@ -131,7 +136,7 @@ class ProductDepotController extends Controller
 
     public function getDetail($id)
     {
-        $search['depot_id'] = $id;
+        $search['branch_id'] = $id;
         $product = ProductDepot::search($search)->with('product')->get();
         return response()->json([
             'product' => $product

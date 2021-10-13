@@ -13,7 +13,7 @@
                 <div class="col-md-6">
                     <div class="col">
                         {!! Form::label('depot_id', 'Mã', array('class' => 'control-label required')) !!}
-                        {!! Form::select('depot_id', $deposts, null, array('id'=>'depot_id','class' => 'form-control square','placeholder'=>'--Chọn kho--')) !!}
+                        {!! Form::select('branch_id', $deposts, null, array('id'=>'depot_id','class' => 'form-control square','placeholder'=>'--Chọn kho--')) !!}
                     </div>
                     <div class="col">
                         {!! Form::label('status', 'Nghiệp vụ kho', array('class' => 'control-label required')) !!}
@@ -27,8 +27,8 @@
                 <div class="col-md-6">
                     <div class="col">
                         {!! Form::label('', 'Sản phẩm', array('class' => 'control-label required')) !!}
-{{--                        {!! Form::select('product_id', $products, null, array('id'=>'product_id','class' => 'form-control square select2','placeholder'=>'--Chọn sản phẩm--')) !!}--}}
-                        <select name="product_id" id="product_id" class="products form-control square select2" data-placeholder="--Chọn sản phẩm--">
+                        <select name="product_id" id="product_id" class="products form-control square select2"
+                                data-placeholder="--Chọn sản phẩm--">
                             <option value=""></option>
                         </select>
                     </div>

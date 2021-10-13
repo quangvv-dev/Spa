@@ -13,9 +13,11 @@
                         </div>
                         <div class="card-header fix-header bottom-card">
                             <div class="row" style="width: 100%">
-                                <div class="col-lg-2 col-md-6">
-                                    {!! Form::select('branch_id', $deposts, null, array('class' => 'form-control square','placeholder'=>'--Chọn kho--')) !!}
-                                </div>
+                                @if(empty($checkRole))
+                                    <div class="col-lg-2 col-md-6">
+                                        {!! Form::select('branch_id', $deposts, null, array('class' => 'form-control square','placeholder'=>'--Chọn kho--')) !!}
+                                    </div>
+                                @endif
                                 <div class="col-lg-2 col-md-6">
                                     {!! Form::select('status', $status, null, array('class' => 'form-control square','placeholder'=>'--Nghiệp vụ kho--')) !!}
                                 </div>
@@ -43,11 +45,6 @@
         </section>
         <!-- // card-actions section end -->
     </div>
-
-@endsection
-@section('script')
-    {{--@include('backend.layouts.script')--}}
-    <!-- file upload -->
     <script>
 
         // $("#gridForm").submit(function (e, page) {
@@ -59,42 +56,44 @@
         //     })
         // })
 
-        $('#depot_id').change(function () {
-            $('.list-product').html('');
-            let html = '';
-            $.ajax({
-                url:'/ajax/product-depot/' + $(this).val(),
-                success:function (data) {
-                    html = '<option value="">--Chọn sản phẩm--</option>';
-                    let product_id = $(document).find('.products')
-                    if(data.product.length > 0){
-                        data.product.forEach(function (item) {
-                            html += `
+        $('document').ready(function () {
+            $('#depot_id').change(function () {
+                $('.list-product').html('');
+                let html = '';
+                $.ajax({
+                    url:'/ajax/product-depot/' + $(this).val(),
+                    success:function (data) {
+                        html = '<option value="">--Chọn sản phẩm--</option>';
+                        let product_id = $(document).find('.products')
+                        if(data.product.length > 0){
+                            data.product.forEach(function (item) {
+                                html += `
                                 <option value="`+item.product_id+`">`+item.product.name+`</option>
                             `
-                        })
+                            })
 
-                    } else {
-                        html = '';
+                        } else {
+                            html = '';
+                        }
+                        product_id.html(html)
                     }
-                    product_id.html(html)
-                }
 
+                })
             })
-        })
 
-        $('#product_id').change(function () {
-            let id = $(this).val();
-            if (!id) return false;
-            var text = $(this).find(":selected").text();
-            var html = `<tr>
+            $('#product_id').change(function () {
+                let id = $(this).val();
+                if (!id) return false;
+                var text = $(this).find(":selected").text();
+                var html = `<tr>
                 <input type="hidden" name="product[]" value="` + id + `">
                 <td><span id="">` + text + `</span></td>
                 <td style="width: 20%;">
                     <input type="text" maxlength="5" class="form-control text-center txt-dotted"style="height: 23px !important;" name="quantity[]">
                 </td>
             </tr>`;
-            $('.list-product').append(html);
+                $('.list-product').append(html);
+            })
         })
 
         $().ready(function () {
@@ -118,3 +117,4 @@
         });
     </script>
 @endsection
+

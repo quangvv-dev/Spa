@@ -118,11 +118,10 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('convert-customer-post', 'AjaxController@convertCustomerPost')->name('customer_post.convert');
         Route::get('export-customer-post', 'AjaxController@exportCustomer')->name('customer_post.export');
         Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');
-
         Route::get('find-role/{department_id}', 'AjaxController@getRoleWithDepartment');
 
 
-        Route::get('product-depot/{id}', 'Depot/ProductDepotController@getDetail');
+        Route::get('product-depot/{id}', 'Depot\ProductDepotController@getDetail');
 
     });
 

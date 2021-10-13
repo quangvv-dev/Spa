@@ -13,11 +13,11 @@
             {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
 
             <div class="card-header" style="align-items: flex-end">
-                {{--<input class="form-control header-search col-2" name="search" placeholder="Tìm kiếm…" tabindex="1"--}}
-                       {{--type="search">--}}
-                <div class="col-md-2" style="font-size: 16px;">
-                    {!! Form::select('branch_id', $deposts, null, array('class' => 'form-control branch_id','placeholder'=>'--Chi nhánh--')) !!}
-                </div>
+                @if(empty($checkRole))
+                    <div class="col-md-2" style="font-size: 16px;">
+                        {!! Form::select('branch_id', $deposts, null, array('class' => 'form-control branch_id','placeholder'=>'--Chi nhánh--')) !!}
+                    </div>
+                @endif
                 <div class="col-md-3" style="font-size: 16px;">
                     {!! Form::select('product_id', $products, null, array('class' => 'form-control select2 product_id','placeholder'=>'--Chọn sản phẩm--')) !!}
                 </div>

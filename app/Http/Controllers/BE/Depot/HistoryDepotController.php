@@ -53,12 +53,17 @@ class HistoryDepotController extends Controller
     public function index(Request $request)
     {
         $input = $request->except('name');
-        $docs = HistoryDepot::search($input)->paginate(StatusCode::PAGINATE_20);
-        if ($request->ajax()) {
-            return view('history_depot.ajax', compact('docs'));
+        $checkRole = checkRoleAlready();
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
         }
 
-        return view('history_depot.index', compact('docs'));
+        $docs = HistoryDepot::search($input)->paginate(StatusCode::PAGINATE_20);
+        if ($request->ajax()) {
+            return view('history_depot.ajax', compact('docs','checkRole'));
+        }
+
+        return view('history_depot.index', compact('docs','checkRole'));
     }
 
     /**
@@ -95,7 +100,7 @@ class HistoryDepotController extends Controller
                         $doc->quantity = $doc->quantity - (int)$request->quantity[$key];
                     }
                     $doc->save();
-                    $input['quantity_rest'] = $doc->quantity;
+//                    $input['quantity_rest'] = $doc->quantity;
                     $input['quantity'] = (int)$request->quantity[$key];
                     $this->historyDepot->create($input);
                 }
@@ -164,7 +169,10 @@ class HistoryDepotController extends Controller
             Functions::addSearchDate($request);
         }
         $input = $request->all();
-
+        $checkRole = checkRoleAlready();
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
+        }
         $orders = Order::select('id')->whereBetween('created_at', [
             Functions::yearMonthDayTime($input['start_date']),
             Functions::yearMonthDayTime($input['end_date']),
@@ -187,9 +195,9 @@ class HistoryDepotController extends Controller
             });
 
         if ($request->ajax()) {
-            return view('history_depot.statisticalAjax', compact('docs'));
+            return view('history_depot.statisticalAjax', compact('docs','checkRole'));
         }
 
-        return view('history_depot.statistical', compact('docs'));
+        return view('history_depot.statistical', compact('docs','checkRole'));
     }
 }
