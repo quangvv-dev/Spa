@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Models\GroupComment;
 use App\Models\Order;
 use App\Helpers\Functions;
+use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Constants\StatusCode;
+use App\Models\ProductDepot;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +32,7 @@ class OrderService
 
         $now = Carbon::now()->format('H:i:s');
 
-        if (!empty($data['count_day'])){
+        if (!empty($data['count_day'])) {
             $countDay = $data['count_day'];
         }
 
@@ -38,21 +40,21 @@ class OrderService
             $countDay = $data['count_day'] - 1;
         }
         $input = [
-            'member_id'         => $data['user_id'],
-            'branch_id'         => $data['branch_id'],
-            'the_rest'          => $theRest,
-            'discount_order'    => $data['discount_order'],
-            'role_type'         => $data['role_type'],
-            'hsd'               => isset($data['hsd']) ? $data['hsd'] : null,
-            'support_id'        => isset($data['support_id']) ? $data['support_id'] : 0,
-            'count_day'         => $countDay,
-            'type'              => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total'         => $theRest,
-            'owner_id'          => Auth::user()->id,
-            'discount'          => $data['discount'] ?: 0,
-            'voucher_id'        => $data['voucher_id'] ?: 0,
+            'member_id' => $data['user_id'],
+            'branch_id' => $data['branch_id'],
+            'the_rest' => $theRest,
+            'discount_order' => $data['discount_order'],
+            'role_type' => $data['role_type'],
+            'hsd' => isset($data['hsd']) ? $data['hsd'] : null,
+            'support_id' => isset($data['support_id']) ? $data['support_id'] : 0,
+            'count_day' => $countDay,
+            'type' => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'all_total' => $theRest,
+            'owner_id' => Auth::user()->id,
+            'discount' => $data['discount'] ?: 0,
+            'voucher_id' => $data['voucher_id'] ?: 0,
             'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : 0,
-            'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
+            'created_at' => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
         ];
         $model = $this->order->fill($input);
 
@@ -103,7 +105,7 @@ class OrderService
         $model = $this->find($id);
 
         $order = [
-            'cash'        => $data['gross_revenue'] ?: 0,
+            'cash' => $data['gross_revenue'] ?: 0,
             'remain_cash' => $model->the_rest - $data['gross_revenue'],
             'return_cash' => $data['gross_revenue'] > $model->the_rest ? $data['gross_revenue'] - $model->the_rest : 0,
         ];
@@ -120,9 +122,21 @@ class OrderService
         $order = $this->find($id);
         GroupComment::create([
             'customer_id' => $order->member_id,
-            'user_id'     => Auth::user()->id,
-            'messages'    => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . $order->all_total,
+            'user_id' => Auth::user()->id,
+            'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . $order->all_total,
         ]);
+        if ($order->role_type == StatusCode::PRODUCT) {
+            $order_detail = OrderDetail::select('booking_id', 'quantity')->where('order_id', $order->id)
+                ->where('branch_id', $order->branch_id)->get();
+            foreach ($order_detail as $item) {
+                $product = ProductDepot::where('branch_id', $order->branch_id)->where('product_id', $order_detail->booking_id)->first();
+                if (isset($product)) {
+                    $product->quantity = $product->quantity - $order_detail->quantity;
+                    $product->save();
+                }
+            }
+
+        }
 
         return $order->delete();
     }
@@ -160,7 +174,7 @@ class OrderService
         }
 
         return $data = [
-            'order'         => $order,
+            'order' => $order,
             'order_details' => $orderDetails,
         ];
     }
@@ -168,7 +182,7 @@ class OrderService
     public function update($id, $attibutes)
     {
         $order = $this->find($id);
-        $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue - $order->discount -  $order->discount_order;
+        $theRest = array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->gross_revenue - $order->discount - $order->discount_order;
         $now = Carbon::now()->format('H:i:s');
 
         if (empty($attibutes) && is_array($attibutes) == false) {
@@ -176,16 +190,16 @@ class OrderService
         }
 
         $attibutes = [
-            'member_id'         => $attibutes['user_id'],
-            'the_rest'          => $theRest,
-            'role_type'         => $attibutes['role_type'],
-            'hsd'               => isset($attibutes['hsd']) ? $attibutes['hsd'] : null,
-            'support_id'        => isset($attibutes['support_id']) ? $attibutes['support_id'] : 0,
-            'count_day'         => $attibutes['count_day'],
-            'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount - $order->discount_order,
+            'member_id' => $attibutes['user_id'],
+            'the_rest' => $theRest,
+            'role_type' => $attibutes['role_type'],
+            'hsd' => isset($attibutes['hsd']) ? $attibutes['hsd'] : null,
+            'support_id' => isset($attibutes['support_id']) ? $attibutes['support_id'] : 0,
+            'count_day' => $attibutes['count_day'],
+            'type' => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'all_total' => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount - $order->discount_order,
             'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
-            'created_at'        => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
+            'created_at' => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
         ];
 
         $order->update($attibutes);
@@ -201,7 +215,7 @@ class OrderService
 
         $order->update([
             'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
-            'the_rest'      => $order->the_rest + $paymentHistory->price,
+            'the_rest' => $order->the_rest + $paymentHistory->price,
         ]);
         if ($paymentHistory->payment_type != 3) {
             $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
