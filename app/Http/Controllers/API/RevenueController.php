@@ -186,11 +186,10 @@ class RevenueController extends BaseApiController
             'end_date' => $request->old_end,
         ];
         $schedule_old = 0;
-        if (isset($request->old_start) && isset($request->old_end)) {
-            $schedule_old = Schedule::search($input_old)->count();
-        }
-
         $schedule = Schedule::search($input)->select('status');
+        if (isset($request->old_start) && isset($request->old_end)) {
+            $schedule_old = Schedule::search($input_old)->select('status')->count();
+        }
         $schedule2 = clone $schedule;
         $schedule3 = clone $schedule;
 

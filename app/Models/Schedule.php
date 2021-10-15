@@ -130,25 +130,26 @@ class Schedule extends Model
 
     public static function search($request)
     {
-        $docs = self::orderBy('id', 'desc')
-            ->when(isset($request['branch_id']), function ($q) use ($request) {
-                $q->where('branch_id', $request['branch_id']);
-            })
-            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($request) {
+        $docs = self::orderBy('id', 'desc');
+        if (!empty($request['date'])) {
+            $docs = $docs->where('date', $request['date']);
+        } else {
+            $docs = $docs->whereYear('date', Carbon::now()->format('Y'));
+        }
+        $docs->when(isset($request['branch_id']), function ($q) use ($request) {
+            $q->where('branch_id', $request['branch_id']);
+        })
+            ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
                 $q->whereBetween('date', [
-                    Functions::yearMonthDay($request['start_date']) . " 00:00:00",
-                    Functions::yearMonthDay($request['end_date']) . " 23:59:59",
+                    Functions::yearMonthDay($request['start_date']),
+                    Functions::yearMonthDay($request['end_date']),
                 ]);
             });
 
         if (!empty($request['search'])) {
             $docs = $docs->whereIn('status', $request['search']);
         }
-        if (!empty($request['date'])) {
-            $docs = $docs->where('date', $request['date']);
-        } else {
-            $docs = $docs->whereYear('date', Carbon::now()->format('Y'));
-        }
+
         if (!empty($request['user'])) {
             $docs = $docs->where('creator_id', $request['user']);
         }
