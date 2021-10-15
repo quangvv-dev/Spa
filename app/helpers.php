@@ -30,7 +30,7 @@ function getTime($dataTime)
     if ($dataTime == 'THIS_MONTH') {
         return ([
             Carbon\Carbon::today()->startOfMonth()->format('Y-m-d'),
-            Carbon\Carbon::tomorrow()->format('Y-m-d'),
+            Carbon\Carbon::today()->endOfMonth()->format('Y-m-d'),
         ]);
     }
 

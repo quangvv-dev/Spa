@@ -75,16 +75,16 @@ class Schedule extends Model
                     $input['data_time'] == 'LAST_WEEK' ||
                     $input['data_time'] == 'THIS_MONTH' ||
                     $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('date', getTime(($input['data_time'])));
+                    $q->whereBetween('date', getTime($input['data_time']));
                 });
         })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('date', [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                Functions::yearMonthDay($input['start_date']),
+                Functions::yearMonthDay($input['end_date']),
             ]);
         })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
-        })->when(!empty($input['status_schedule']), function ($q) use ($input) {
+        })->when(isset($input['status_schedule']) && $input['status_schedule'], function ($q) use ($input) {
             $q->where('status', $input['status_schedule']);
         })->when(isset($input['creator_id']) && $input['creator_id'], function ($q) use ($input) {
             $q->where('creator_id', $input['creator_id']);
