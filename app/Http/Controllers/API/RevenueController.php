@@ -251,7 +251,7 @@ class RevenueController extends BaseApiController
                 ],
                 [
                     'name' => 'Dịch vụ',
-                    'all_total' => $orders2->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+                    'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
                 ],
             ];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
