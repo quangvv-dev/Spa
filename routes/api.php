@@ -70,3 +70,7 @@ Route::get('posts/{id}', 'API\PostController@show');
 Route::get('voucher-services', 'API\PromotionController@listVoucherServices');
 Route::get('voucher', 'API\PromotionController@listVoucher');
 
+
+Route::get('product-depot', 'API\DepotController@productDepot');
+Route::get('depots/statistical', 'API\DepotController@index');
+

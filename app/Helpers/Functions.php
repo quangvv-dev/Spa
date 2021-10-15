@@ -297,6 +297,11 @@ class Functions
         return \Carbon\Carbon::createFromFormat('d/m/Y H:i',$date)->format('Y-m-d H:i');
     }
 
+    public static function createYearMonthDay($date)
+    {
+        return \Carbon\Carbon::createFromFormat('d-m-Y',$date)->format('Y-m-d');
+    }
+
     /**
      * SMS VMG BRANDNAME
      *
