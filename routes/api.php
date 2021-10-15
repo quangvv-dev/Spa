@@ -48,7 +48,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
         Route::get('revenue-month', 'RevenueController@revenueMonth');
         Route::get('revenue-days', 'RevenueController@revevueDays');
         Route::get('revenue-branch', 'RevenueController@revevueBranch');
-//        Route::get('tab-schedules', 'RevenueController@tabSchedules');
+        Route::get('tab-schedules', 'RevenueController@tabSchedules');
     });
 
 });
@@ -73,5 +73,5 @@ Route::get('voucher', 'API\PromotionController@listVoucher');
 
 Route::get('product-depot', 'API\DepotController@productDepot');
 Route::get('depots/statistical', 'API\DepotController@index');
-Route::get('tab-schedules', 'API\RevenueController@tabSchedules');
+//Route::get('tab-schedules', 'API\RevenueController@tabSchedules');
 
