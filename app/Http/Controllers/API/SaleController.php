@@ -46,7 +46,6 @@ class SaleController extends BaseApiController
                     $q->where('branch_id', $input['branch_id']);
                 })->with('orderDetails');
 
-
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
             $detail_total = clone $detail;
@@ -58,12 +57,20 @@ class SaleController extends BaseApiController
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
             $input['creator_id'] = $item->id;
-            $item->schedules = Schedule::getBooks($input, 'id');
+            $schedules = Schedule::getBooks2($input, 'id');
+            $schedulesDen = clone $schedules;
+
+            $item->schedulesNew = $schedules->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 0);
+            })->count();
+
+            $item->schedules = $schedulesDen->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';
 
             $item->call = !empty($input['caller_number']) ? CallCenter::search($input, 'id')->count() : 0;
-            $item->thu_no = $detail->sum('price') - $total_new - $total_old;
+            $item->thu_no = ($detail->sum('price') - $total_new - $total_old) > 0 ? $detail->sum('price') - $total_new - $total_old : 0;
 
             $item->totalNew = $total_new;
             $item->totalOld = $total_old;
@@ -113,6 +120,7 @@ class SaleController extends BaseApiController
             $item->orderNew = $order_new->count();
             $input['creator_id'] = $item->id;
             $item->schedules = Schedule::getBooks($input, 'id');
+
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';
 

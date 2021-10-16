@@ -21,6 +21,7 @@ class SaleResource extends JsonResource
             'avatar'    => $this->avatar,
             'phoneNew'  => $this->phoneNew,
             'orderNew'  => $this->orderNew,
+            'schedulesNew' => $this->schedulesNew,
             'schedules' => $this->schedules,
             'call'      => $this->call,
             'thu_no'    => $this->thu_no,
