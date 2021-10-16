@@ -14,6 +14,7 @@ class ProductDepotResource extends JsonResource
      */
     public function toArray($request)
     {
+
         return [
             'branch'    => @$this->branch->name,
             'product'   => @$this->product->name,

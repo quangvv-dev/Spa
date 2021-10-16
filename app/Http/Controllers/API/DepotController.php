@@ -59,6 +59,13 @@ class DepotController extends BaseApiController
             });
 
         $docs = ProductDepotResource::collection($docs);
+        $docs = [[
+            'branch' => 'Chi nhánh Q10',
+            'product' => 'Viên uống chống nắng BIO',
+            'quantity' => 1022,
+            'sell' => 100,
+            'failed' => 22,
+        ]];
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
     }
