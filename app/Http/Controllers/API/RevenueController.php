@@ -134,7 +134,7 @@ class RevenueController extends BaseApiController
         } elseif ($request->type_api == 3) {
             $payment = PaymentHistory::search($input, 'price');
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
-                $payment_old = PaymentHistory::search($input_old, 'payment_type,price');
+                $payment_old = PaymentHistory::search($input_old, 'price');
             }
             $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 

@@ -98,7 +98,7 @@ class OrderController extends BaseApiController
 //                    'all_total' => $order->sum('all_total'),
                     'gross_revenue' => $order->sum('gross_revenue'),
                     'days' => $history_orders->count(),
-                    'rose_money' => Commission::search($input,'earn')->sum('earn'),
+                    'rose_money' => Commission::search($input, 'earn')->sum('earn'),
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
                 $docs[] = $doc;
@@ -113,7 +113,10 @@ class OrderController extends BaseApiController
     {
         $input = $request->all();
         $docs = [];
-        $data = User::select('id', 'full_name', 'avatar')->where('department_id', UserConstant::PHONG_TVV)->get();
+        $data = User::select('id', 'full_name', 'avatar')->where('department_id', UserConstant::PHONG_TVV)
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->get();
         if (count($data)) {
 
             foreach ($data as $item) {
