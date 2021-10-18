@@ -247,7 +247,7 @@ class OrderController extends Controller
                         if ($orders2) {
                             foreach ($orders2 as $k => $ex) {
                                 $history_payment = PaymentHistory::where('order_id', $ex->id)->first();
-                                $payment_type = @$history_payment->payment_type == 1 ? 'Tiền mặt' : (@$history_payment->payment_type == 2 ? 'Thẻ' : 'Điểm');
+                                $payment_type = @$history_payment->payment_type == 1 ? 'Tiền mặt' : (@$history_payment->payment_type == 2 ? 'Thẻ' :(@$history_payment->payment_type == 3 ? 'Điểm':'Chuyển khoản'));
                                 $date = !empty($history_payment) ?
                                     Carbon::createFromFormat('Y-m-d',
                                         $history_payment->payment_date)->format('d/m/Y') : '';
@@ -757,6 +757,8 @@ class OrderController extends Controller
                         $paymentType = 1;
                     } elseif ($row['hinh_thuc_thanh_toan'] == "Thẻ") {
                         $paymentType = 2;
+                    }elseif ($row['hinh_thuc_thanh_toan'] == "Chuyển khoản") {
+                        $paymentType = 4;
                     } else {
                         $paymentType = 3;
                     }

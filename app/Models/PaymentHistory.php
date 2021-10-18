@@ -22,6 +22,8 @@ class PaymentHistory extends Model
             return "Tiền mặt";
         } elseif ($this->payment_type === 2) {
             return "Thẻ";
+        }elseif ($this->payment_type === 4) {
+            return "Chuyển khoản";
         } else {
             return "Điểm";
         }

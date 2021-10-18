@@ -36,19 +36,6 @@
         </div>
     </div>
 
-    {{--<div class="col">--}}
-    {{--<div class="card  overflow-hidden bg-gradient-indigo text-white">--}}
-    {{--<div class="card-body text-center">--}}
-    {{--<div class="h5">Tổng số lịch hẹn</div>--}}
-    {{--<div class="h3 font-weight-bold mb-4 font-30"><span--}}
-    {{--class="">{{@number_format($schedules)}}</span></div>--}}
-    {{--<div class="progress progress-sm">--}}
-    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-
     <div class="col-md-6 col-xs-12">
         <div class="card overflow-hidden bg-gradient-indigo text-white">
             <div class="card-body text-center">
@@ -140,7 +127,7 @@
             <div class="card-body text-center bg-gradient-gray text-white">
                 <div class="h5">Nguồn tiền từ đơn hàng</div>
                 <div
-                    class="h3 font-weight-bold mb-4 font-30" style="margin-bottom: 2.3rem !important;">{{@number_format($data['payment'])}}</div>
+                    class="h3 font-weight-bold mb-4 font-30">{{@number_format($data['payment'])}}</div>
                 <div class="row">
                     <div class="col-12 row">
                         <div class="title col-5">Tiền mặt:</div>
@@ -149,6 +136,10 @@
                     <div class="col-12 row">
                         <div class="title col-5">Thẻ:</div>
                         <div class="col-7">{{@number_format($list_payment['card'])}}</div>
+                    </div>
+                    <div class="col-12 row">
+                        <div class="title col-5">Chuyển khoản:</div>
+                        <div class="col-7">{{@number_format($list_payment['CK'])}}</div>
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Tiêu từ ví:</div>

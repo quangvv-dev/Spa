@@ -69,7 +69,7 @@ class StatisticController extends Controller
             $q->where('branch_id', $input['branch_id']);
         })->whereBetween('created_at', getTime($input['data_time']));
         $schedules = Schedule::getBooks($input, 'id');
-        $payment = PaymentHistory::search($input, 'payment_type,price');
+        $payment = PaymentHistory::search($input, 'price');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
         $orders = Order::returnRawData($input);
@@ -168,15 +168,18 @@ class StatisticController extends Controller
             $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
             $revenue_year[$i] = $newOrder;
         }
-        $wallets = [
-            'orders' => $wallet->count(),
-            'revenue' => $wallet->sum('order_price'),
-            'used' => $payment->where('payment_type', 3)->sum('price'),
-        ];
+        $all_payment = $payment->sum('price');
         $list_payment = [
-            'money' => $payment2->where('payment_type', 1)->sum('price'),
-            'card' => $payment3->where('payment_type', 2)->sum('price'),
+            'money'     => $payment2->where('payment_type', 1)->sum('price'),
+            'card'      => $payment3->where('payment_type', 2)->sum('price'),
+            'CK'        => $payment->where('payment_type', 4)->sum('price'),
         ];
+        $wallets = [
+            'orders'    => $wallet->count(),
+            'revenue'   => $wallet->sum('order_price'),
+            'used'      => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
+        ];
+
         if ($request->ajax()) {
             return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'list_payment', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'))->render());
         }

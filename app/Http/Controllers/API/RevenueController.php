@@ -103,7 +103,7 @@ class RevenueController extends BaseApiController
             'start_date' => $request->old_start,
             'end_date' => $request->old_end,
         ];
-        $wallet = WalletHistory::search($input, 'order_price,payment_type');
+        $wallet = WalletHistory::search($input, 'order_price');
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders_old = [];
@@ -132,7 +132,7 @@ class RevenueController extends BaseApiController
                 'total_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             ];
         } elseif ($request->type_api == 3) {
-            $payment = PaymentHistory::search($input, 'payment_type,price');
+            $payment = PaymentHistory::search($input, 'price');
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old, 'payment_type,price');
             }
@@ -149,22 +149,24 @@ class RevenueController extends BaseApiController
             ];
         } elseif ($request->type_api == 4) {
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
-                $payment_old = PaymentHistory::search($input_old, 'payment_type,price');
+                $payment_old = PaymentHistory::search($input_old, 'price');
             }
             $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 
-            $payment = PaymentHistory::search($input, 'payment_type,price');
+            $payment = PaymentHistory::search($input, 'price');
             $payment2 = clone $payment;
             $payment3 = clone $payment;
+            $all_payment = $payment->sum('price');
 
             $data = [
-                'payment' => $payment->sum('price'),
-                'percent' => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
+                'payment' => (int)$payment->sum('price'),
+                'percent' => !empty($all_payment) && !empty($payment_old) ? round(($all_payment - $payment_old) / $payment_old * 100,
                     2) : 0,
-                'cash' => $payment->whereIn('payment_type', [0, 1])->sum('price'),
-                'card' => $payment2->where('payment_type', 2)->sum('price'),
+                'cash' => (int)$payment->whereIn('payment_type', [0, 1])->sum('price'),
+                'card' => (int)$payment2->where('payment_type', 2)->sum('price'),
                 'wallet_used' => $payment3->where('payment_type', 3)->sum('price'),
             ];
+            $data['CK'] = $all_payment - $data['cash'] - $data['card'] - $data['wallet_used'];
         }
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);

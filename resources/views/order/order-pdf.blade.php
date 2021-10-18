@@ -102,7 +102,7 @@
                 <td class="font-bold" colspan="4"><strong>Khách T.Toán</strong></td>
             </tr>
             <tr>
-                <td class="font12" colspan="3">{{$payment->payment_type==1?'Tiền mặt':($payment->payment_type==2?'Thẻ':'Điểm')}}</td>
+                <td class="font12" colspan="3">{{$payment->payment_type==1?'Tiền mặt':($payment->payment_type==2?'Thẻ':($payment->payment_type==4?'Chuyển khoản':'Điểm'))}}</td>
                 <td class="tr bold"><strong>{{ @number_format($payment->price) }}</strong></td>
             </tr>
             <tr>
