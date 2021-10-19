@@ -28,7 +28,7 @@ class SaleController extends BaseApiController
     public function sale(Request $request)
     {
         $input = $request->all();
-        $users = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
+        $users = User::select('id', 'full_name', 'avatar','caller_number')->whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
 
             $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
@@ -71,7 +71,7 @@ class SaleController extends BaseApiController
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';
 
-            $item->call = !empty($input['caller_number']) ? CallCenter::search($input, 'id')->count() : 0;
+            $item->call = $input['caller_number'] ? CallCenter::search($input, 'id')->count() : 0;
             $item->thu_no = ($detail->sum('price') - $total_new - $total_old) > 0 ? $detail->sum('price') - $total_new - $total_old : 0;
 
             $item->totalNew = $total_new;
