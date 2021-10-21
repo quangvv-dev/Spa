@@ -51,9 +51,10 @@ class StatisticController extends BaseApiController
     {
         $input = $request->all();
         $users = User::select('id', 'full_name')
-            ->whereIn('role',
-                [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::CSKH, UserConstant::TP_CSKH])
-            ->get()->map(function ($item) use ($input) {
+            ->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::CSKH, UserConstant::TP_CSKH])
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->get()->map(function ($item) use ($input) {
                 $schedule = Schedule::select('status')->where('person_action', $item->id)->whereBetween('date', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
@@ -116,7 +117,7 @@ class StatisticController extends BaseApiController
         $input = $request->all();
         $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item
         ) use ($input) {
-            $services = Services::select('id')->where('category_id',$item->id)->pluck('id')->toArray();
+            $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
             $order_id = OrderDetail::select('order_id')->whereIn('booking_id', $services)
                 ->when(!empty($input['start_date']) && !empty($input['end_date']),
                     function ($q) use ($input) {
@@ -128,7 +129,7 @@ class StatisticController extends BaseApiController
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
                 })->groupBy('order_id')->pluck('order_id')->toArray();
-            $order = Order::select('gross_revenue', 'total','member_id')->whereIn('id', $order_id)
+            $order = Order::select('gross_revenue', 'total', 'member_id')->whereIn('id', $order_id)
                 ->when(!empty($input['start_date']) && !empty($input['end_date']),
                     function ($q) use ($input) {
                         $q->whereBetween('created_at', [
