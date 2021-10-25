@@ -85,9 +85,9 @@ class OrderController extends Controller
         $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
-        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
+//        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
-        $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
+//        $combo = Services::whereIn('type', [StatusCode::PRODUCT, StatusCode::SERVICE])->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
         return view('order.index',
             compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'products',
@@ -109,11 +109,12 @@ class OrderController extends Controller
         $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
-        $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
+        $combo = Services::whereIn('type', [StatusCode::SERVICE, StatusCode::PRODUCT])->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
         return view('order.indexService',
-            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'combo'));
+            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'combo','products'));
     }
 
     public function getInfoService(Request $request)
@@ -138,6 +139,7 @@ class OrderController extends Controller
     {
         $customer = Customer::find($request->user_id);
         $param = $request->all();
+
         $param['count_day'] = isset($param['days']) && count($param['days']) ? array_sum($param['days']) : 0;
         if ($param['role_type'] == StatusCode::COMBOS) {
             $combo = Services::find($param['service_id'][0]);
@@ -247,7 +249,7 @@ class OrderController extends Controller
                         if ($orders2) {
                             foreach ($orders2 as $k => $ex) {
                                 $history_payment = PaymentHistory::where('order_id', $ex->id)->first();
-                                $payment_type = @$history_payment->payment_type == 1 ? 'Tiền mặt' : (@$history_payment->payment_type == 2 ? 'Thẻ' :(@$history_payment->payment_type == 3 ? 'Điểm':'Chuyển khoản'));
+                                $payment_type = @$history_payment->payment_type == 1 ? 'Tiền mặt' : (@$history_payment->payment_type == 2 ? 'Thẻ' : (@$history_payment->payment_type == 3 ? 'Điểm' : 'Chuyển khoản'));
                                 $date = !empty($history_payment) ?
                                     Carbon::createFromFormat('Y-m-d',
                                         $history_payment->payment_date)->format('d/m/Y') : '';
@@ -757,7 +759,7 @@ class OrderController extends Controller
                         $paymentType = 1;
                     } elseif ($row['hinh_thuc_thanh_toan'] == "Thẻ") {
                         $paymentType = 2;
-                    }elseif ($row['hinh_thuc_thanh_toan'] == "Chuyển khoản") {
+                    } elseif ($row['hinh_thuc_thanh_toan'] == "Chuyển khoản") {
                         $paymentType = 4;
                     } else {
                         $paymentType = 3;

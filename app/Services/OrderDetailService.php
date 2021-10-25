@@ -44,7 +44,7 @@ class OrderDetailService
 
             $service->update(['description' => $data['service_note'][$key]]);
 
-            if ($data['role_type'] == StatusCode::PRODUCT) {
+            if ($data['role_type'] == StatusCode::PRODUCT || $data['role_type'] == StatusCode::COMBOS) {
                 $product = ProductDepot::where('branch_id', $data['branch_id'])->where('product_id', $data['service_id'][$key])->first();
                 if (isset($product)){
                     $product->quantity = $product->quantity - $data['quantity'][$key];

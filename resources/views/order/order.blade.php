@@ -77,7 +77,8 @@
                                 <td class="tl position"><a class="blue" href="#">{{ @$orderDetail->service->name }}</a>
                                 </td>
                                 <td class="tc"></td>
-                                <td class="tc">{{$order->role_type==2? $orderDetail->quantity:$orderDetail->days }}</td>
+                                <td class="tc">{{$orderDetail->service->type == 2? $orderDetail->quantity : $orderDetail->days }}
+                                </td>
                                 <td class="tc">{{ number_format(@$orderDetail->price) }}</td>
                                 <td class="tc">{{ $orderDetail->vat }}</td>
                                 <td class="tc">{{ $orderDetail->percent_discount }}</td>
