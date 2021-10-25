@@ -76,7 +76,7 @@
                         <thead style="width: 100%" class="bg-primary text-white">
                         <tr style="white-space: nowrap">
                             <th class="text-white text-center">Dịch vụ</th>
-                            <th class="text-white text-center">Số buổi</th>
+                            <th class="text-white text-center">S.buổi | SL</th>
                             <th class="text-white text-center">Đơn giá</th>
                             <th class="text-white text-center">VAT (%)</th>
                             <th class="text-white text-center">CK(%)</th>
