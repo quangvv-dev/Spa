@@ -1,18 +1,18 @@
 <div class="modal fade" id="roleTypeModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <!-- Modal content-->
-        <div class="modal-content" style="height: 60%">
+        <div class="modal-content">
             <div class="modal-body">
 
                 <div class="row">
                     <div class="col-md-4 text-center">
-                        <a href="{{ route('ordersService.create', $customer->id) }}?type=services" class="btn btn-success">Đơn dịch vụ</a>
+                        <a href="{{ route('ordersService.create', $customer->id) }}?type=services" class="btn btn-success">Dịch vụ</a>
                     </div>
                     <div class="col-md-4 text-center">
-                        <a href="{{ route('orders.create', $customer->id) }}?type=products" class="btn btn-danger">Đơn sản phẩm</a>
+                        <a href="{{ route('orders.create', $customer->id) }}?type=products" class="btn btn-danger">Sản phẩm</a>
                     </div>
                     <div class="col-md-4 text-center">
-                        <a href="{{ route('ordersService.create', $customer->id) }}?type=combos" class="btn btn-info">Đơn combo</a>
+                        <a href="{{ route('ordersService.create', $customer->id) }}?type=combos" class="btn btn-info">Sản phẩm & dịch vu</a>
                     </div>
                 </div>
             </div>

@@ -136,53 +136,6 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        @else
-
-                            <tr>
-                                <td class="width350">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-md-10">
-
-                                            <select class="select2 form-control service" required id="service"
-                                                    name="service_id[]">
-                                                    <option>-Chọn dịch vụ-</option>
-                                                    @foreach($services as $service)
-                                                        <option value="{{$service->id}}">{{@$service->category->name}}
-                                                            - {{$service->name}}</option>
-                                                    @endforeach
-                                            </select>
-
-                                        </div>
-                                        <span class="btn btn-default col-md-1 no-padd add_note" style="height:34px; background-color: #ffffff;"> <i class="fa fa-plus font16"
-                                                aria-hidden="true"></i> </span>
-                                        <textarea class="product_note form-control pt5 italic"
-                                                  style="margin-left: 12px; display: none" placeholder="Ghi chú"
-                                                  name="service_note[]"></textarea>
-                                    </div>
-                                </td>
-                                <td class="text-center" width="50">
-                                    {!! Form::text('days[]', 1, array('class' => 'form-control', 'required' => true)) !!}
-                                    {!! Form::hidden('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                                </td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control CK1" value="0">
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                                </td>
-                                <td class="text-center">
-                                    {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                                </td>
-                                <td class="tc vertical-middle remove_row">
-                                    <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
-                                </td>
-                            </tr>
                         @endif
                         </tbody>
                         <tfoot>

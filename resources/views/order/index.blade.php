@@ -188,8 +188,7 @@
                         <tfoot>
                         <tr>
                             <td>
-                                <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Thêm sản
-                                        phẩm</a></div>
+                                <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Sản phẩm</a></div>
                             </td>
                             <td colspan="5">
                                 @if(empty($order))
