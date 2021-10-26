@@ -34,7 +34,7 @@ class OrderDetailService
                 'days'            => isset($data['days']) && count($data['days']) ? $data['days'][$key] : 0,
                 'quantity'        => $data['quantity'][$key],
                 'price'           => replaceNumberFormat($data['price'][$key]),
-                'vat'             => $data['vat'][$key],
+                'vat'             => 0,
                 'address'         => $data['address'],
                 'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
                 'total_price'     => replaceNumberFormat($data['total_price'][$key]),
