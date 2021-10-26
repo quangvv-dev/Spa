@@ -361,7 +361,7 @@
                                                         <a href="javascript:void(0)" data-value="2"
                                                            class="type-order btn btn-danger">Sản phẩm</a>
                                                         <a href="javascript:void(0)" data-value="3"
-                                                           class="type-order btn btn-info">Combo</a>
+                                                           class="type-order btn btn-info">S.phẩm & D.vụ</a>
                                                     </div>
                                                     <input type="hidden" id="order_value">
                                                     <div class="select" style="margin-left: 4px">
@@ -374,7 +374,7 @@
                                                         <a class="right btn btn-primary btn-flat text-white"
                                                            data-toggle="modal"
                                                            data-target="#roleTypeModal"><i
-                                                                class="fa fa-plus-circle text-white"></i>Thêm đơn</a>
+                                                                class="fa fa-plus-circle text-white"></i>  Tạo</a>
                                                     @endif
                                                 </div>
                                                 @include('order.role_type_modal')
@@ -391,14 +391,6 @@
                                         {{--    Modal thêm --}}
                                         @include('schedules.modal')
                                         {{--    END Modal thêm --}}
-                                        {{--<div class="tab-pane " id="tab8">--}}
-                                            {{--<a style="color: #ffffff;margin-bottom: 8px;"--}}
-                                               {{--class="right btn btn-primary btn-flat text-white" data-toggle="modal"--}}
-                                               {{--data-target="#task"><i class="fa fa-plus-circle text-white"></i>Thêm--}}
-                                                {{--CV</a>--}}
-                                            {{--@include('tasks.ajax')--}}
-                                            {{--@include('tasks._form_customer')--}}
-                                        {{--</div>--}}
                                         <div class="tab-pane " id="tab10">
                                             @if(count($wallet))
                                                 @include('wallet.history')
