@@ -72,15 +72,15 @@
             </div>
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
-                        <thead style="width: 100%" class="bg-primary text-white">
+                    <table class="table table-vcenter text-nowrap">
+                        <thead class="bg-primary text-white">
                         <tr style="white-space: nowrap">
                             <th class="text-white text-center">Dịch vụ</th>
                             <th class="text-white text-center">S.buổi | SL</th>
                             <th class="text-white text-center">Đơn giá</th>
-                            <th class="text-white text-center">VAT (%)</th>
+                            {{--<th class="text-white text-center">VAT (%)</th>--}}
                             <th class="text-white text-center">CK(%)</th>
-                            <th class="text-white text-center" style="width: 100px">CK(đ)</th>
+                            <th class="text-white text-center">CK(đ)</th>
                             <th class="text-white text-center">Thành tiền</th>
                             <th class="text-white text-center"></th>
                         </tr>
@@ -119,9 +119,9 @@
                                     <td class="text-center">
                                         {!! Form::text('price[]', number_format($orderDetail->price), array('class' => 'form-control price', 'required' => true)) !!}
                                     </td>
-                                    <td class="text-center">
-                                        {!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}
-                                    </td>
+                                    {{--<td class="text-center">--}}
+                                        {{--{!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}--}}
+                                    {{--</td>--}}
                                     <td class="text-center">
                                         <input type="text" class="form-control CK1" value="0">
                                     </td>
@@ -217,9 +217,9 @@
                         </tr>
                         <tr class="bold">
                             <td colspan="5"></td>
-                            <td class="text-center"><b>Tổng thanh toán (VNĐ)</b></td>
-                            <td class="text-center"
-                                id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>
+                            <td class="text-center bold">Tổng thanh toán (VNĐ)</td>
+                            <td class="text-center bold" id="sum_total" style="color: red">
+                                {{isset($order)?@number_format($order->all_total):0}}</td>
                             <td></td>
                         </tr>
                         </tfoot>
@@ -270,9 +270,9 @@
                     <td class="text-center">
                 {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
                     </td>
-                    <td class="text-center">
-                {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                    </td>
+                    {{--<td class="text-center">--}}
+                {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
+                    {{--</td>--}}
                     <td class="text-center">
                 <input type="text" class="form-control CK1" value="0">
                 </td>
@@ -309,9 +309,9 @@
                     <td class="text-center">
                 {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
                     </td>
-                    <td class="text-center">
-                {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                    </td>
+                    {{--<td class="text-center">--}}
+                {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
+                    {{--</td>--}}
                     <td class="text-center">
                 <input type="text" class="form-control CK1" value="0">
                 </td>
@@ -354,9 +354,9 @@
                 <td class="text-center">
             {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
                 </td>
-                <td class="text-center">
-            {!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}
-                </td>
+                {{--<td class="text-center">--}}
+            {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
+                {{--</td>--}}
                 <td class="text-center">
                     <input type="text" class="form-control CK1" value="0">
                 </td>
@@ -405,8 +405,11 @@
         $('body').on('keyup', '.price, .VAT, .CK1, .CK2, .quantity', function (e) {
             let target = $(e.target).parent().parent();
             let quantity = $(target).find('.quantity').val();
+            if (quantity == 'NaN' || quantity==undefined) {
+                quantity =1;
+            }
             console.log(quantity,'quantity');
-            let VAT = $(target).find('.VAT').val();
+            // let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
             let CK2 = $(target).find('.CK2').val();
             let CK1 = $(target).find('.CK1').val();
@@ -415,7 +418,7 @@
             if (CK1 > 0) {
                 CK2 = CK1 * price * quantity / 100;
             }
-            let total_service = parseInt(price)* parseInt(quantity) + parseInt(price) * parseInt(quantity) * (VAT / 100) - parseInt(replaceNumber(CK2));
+            let total_service = parseInt(price)* parseInt(quantity) - parseInt(replaceNumber(CK2));
             console.log(total_service,'quantity');
 
             $(target).find('.price').val(formatNumber(price));
