@@ -111,10 +111,10 @@ class OrderController extends Controller
         $title = 'Tạo đơn hàng';
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
-        $combo = Services::whereIn('type', [StatusCode::SERVICE, StatusCode::PRODUCT])->with('category')->get();
+//        $combo = Services::whereIn('type', [StatusCode::SERVICE)->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
         return view('order.indexService',
-            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'combo','products'));
+            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services','products'));
     }
 
     public function getInfoService(Request $request)

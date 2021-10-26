@@ -245,7 +245,7 @@
         var param2 = {{@$role_type?:0}};
         $(document).on('click', '#add_row', function () {
 
-            if (param === 'services' || param2 === 1) {
+
 
                 $('.order').append(`
                 <tr>
@@ -285,46 +285,6 @@
                     <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
                 </tr>
 `);
-            } else if (param === 'combos' || param2 === 3) {
-                $('.order').append(`
-                <tr>
-                    <td class="width350">
-                <div class="row">
-                    <div class="col-xs-12 col-md-10">
-                        <select class="select2 select3 form-control service" required id="service" name="service_id[]">
-                            <option>-Chọn dịch vụ-</option>
-                            @foreach($combo as $com)
-                    <option value="{{@$com->id}}">{{@$com->category->name}} - {{@$com->name}} </option>
-                            @endforeach
-                    </select>
-                </div>
-                <span class="btn btn-default col-md-1 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
-                <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
-                <div class="row">
-                </td>
-                <td class="text-center" width="50">
-                {!! Form::text('days[]', 0, array('class' => 'form-control', 'required' => true)) !!}
-                    {!! Form::hidden('quantity[]', 1, array('class' => 'form-control', 'required' => true)) !!}
-                    </td>
-                    <td class="text-center">
-                {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                    </td>
-                    {{--<td class="text-center">--}}
-                {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
-                    {{--</td>--}}
-                    <td class="text-center">
-                <input type="text" class="form-control CK1" value="0">
-                </td>
-                    <td class="text-center">
-                {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
-                    </td>
-                    <td class="text-center">
-                {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                    </td>
-                    <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
-                </tr>
-`);
-            }
             $('.select3').select2({ //apply select2 to my element
                 allowClear: true
             });
