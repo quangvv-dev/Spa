@@ -75,13 +75,13 @@
                     <table class="table table-vcenter text-nowrap">
                         <thead class="bg-primary text-white">
                         <tr style="white-space: nowrap">
-                            <th class="text-white text-center">Dịch vụ</th>
+                            <th class="text-white text-center" width="250px">Dịch vụ</th>
                             <th class="text-white text-center">S.buổi | SL</th>
                             <th class="text-white text-center">Đơn giá</th>
                             {{--<th class="text-white text-center">VAT (%)</th>--}}
                             <th class="text-white text-center">CK(%)</th>
                             <th class="text-white text-center">CK(đ)</th>
-                            <th class="text-white text-center">Thành tiền</th>
+                            <th class="text-white text-center" colspan="2">Thành tiền</th>
                             <th class="text-white text-center"></th>
                         </tr>
                         </thead>
@@ -128,7 +128,7 @@
                                     <td class="text-center">
                                         {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2')) !!}
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center" colspan="2">
                                         {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total','readonly'=>true)) !!}
                                     </td>
                                     <td class="tc vertical-middle remove_row">
@@ -245,8 +245,6 @@
         var param2 = {{@$role_type?:0}};
         $(document).on('click', '#add_row', function () {
 
-
-
                 $('.order').append(`
                 <tr>
                     <td class="width350">
@@ -279,7 +277,7 @@
                     <td class="text-center">
                 {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" colspan="2">
                 {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                     </td>
                     <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
@@ -323,7 +321,7 @@
                 <td class="text-center">
             {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
                 </td>
-                <td class="text-center">
+                <td class="text-center" colspan="2">
             {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
                 </td>
                 <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
