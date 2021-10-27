@@ -13735,11 +13735,11 @@ body *::-webkit-scrollbar {
 }
 
 body *::-webkit-scrollbar-thumb {
-    background: #ced4da;
+    background: #57affb3d;
 }
 
 body *:hover::-webkit-scrollbar-thumb {
-    background: #adb5bd;
+    background: #43a2f559;
 }
 
 .lead {
