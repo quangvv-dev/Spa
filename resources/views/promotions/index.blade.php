@@ -5,7 +5,7 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('promotions.create') }}"><i
-                            class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                            class="fa fa-plus-circle"></i> Tạo mới</a></div>
             </div>
             {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="card-header">

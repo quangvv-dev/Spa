@@ -91,7 +91,7 @@
                     </a>
                     @if($roleGlobal->permission('customers.add'))
                         <a class="right btn btn-primary btn-flat"
-                           href="{{ route('customers.create') }}">Thêm mới</a>
+                           href="{{ route('customers.create') }}">Tạo mới</a>
                     @endif
                 </div>
                 <div class="heading-elements">

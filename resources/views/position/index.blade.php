@@ -8,7 +8,7 @@
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col"><a style="color: #ffffff" class="right btn btn-primary btn-flat" data-toggle="modal"
                                     data-target="#myModal"><i
-                                class="fa fa-plus-circle"></i>Thêm mới</a></div>
+                                class="fa fa-plus-circle"></i> Tạo mới</a></div>
             </div>
 
             <div class="card-header">

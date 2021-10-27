@@ -10,7 +10,7 @@
                 {{--<th class="text-center">SL chờ xuất</th>--}}
                 <th class="text-center">Cập nhật</th>
                 <th class="text-center">
-                    <a id="add_new"><i class="fa fa-plus"></i> Thêm mới</a></th>
+                    <a id="add_new"><i class="fa fa-plus"></i> Tạo mới</a></th>
             </tr>
             </thead>
             <tbody>

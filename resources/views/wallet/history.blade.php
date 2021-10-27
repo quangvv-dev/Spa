@@ -2,7 +2,7 @@
     {{--<h3>Số dư ví :</h3>--}}
     <a style="color: #ffffff;margin-bottom: 8px;"
        class="right btn btn-primary btn-flat" data-toggle="modal"
-       data-target="#wallet"><i class="fa fa-plus-circle"></i>Nạp tiền</a>
+       data-target="#wallet">Nạp tiền</a>
 </div>
 
 <div class="col">

@@ -14,7 +14,7 @@
                             <i class="fas fa-upload"></i></a>
                     @endif
                     <a class="right btn btn-primary btn-flat" href="{{request()->url().'/create' }}"><i
-                            class="fa fa-plus-circle"></i>Thêm mới</a>
+                            class="fa fa-plus-circle"></i> Tạo mới</a>
                 </div>
             </div>
             <form>

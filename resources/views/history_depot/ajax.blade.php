@@ -13,8 +13,7 @@
                 <th class="text-center">Ghi chú</th>
                 <th class="text-center">Cập nhật</th>
                 <th class="text-center">
-                    <a data-toggle="modal" data-target="#add_new"><i class="fa fa-plus"></i> Thêm mới
-                    </a>
+                    <a data-toggle="modal" data-target="#add_new"><i class="fa fa-plus"></i> Tạo mới</a>
                 </th>
             </tr>
             </thead>

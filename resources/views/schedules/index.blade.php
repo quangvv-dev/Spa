@@ -8,8 +8,8 @@
 {{--                    <a style="margin-left: 0.5%;" class="right btn btn-primary btn-flat" href="{{ url('orders') }}"><i--}}
 {{--                                class="fa fa-arrow-right"></i>Tới tạo đơn hàng</a>--}}
 {{--                @endif--}}
-                <a style="color: #ffffff" class="right btn btn-primary btn-flat" data-toggle="modal"
-                   data-target="#myModal"><i class="fa fa-plus-circle"></i>Thêm mới</a>
+                <a style="color: #ffffff" class="right btn btn-primary" data-toggle="modal"
+                   data-target="#myModal">Tạo mới</a>
             </div>
         </div>
 

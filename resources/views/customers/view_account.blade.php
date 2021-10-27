@@ -133,14 +133,14 @@
             <div style="height:5px" class="color-picker-bg-41"></div>
             <div class="col-md-12 no-padd">
                 <div class="col-md-2 no-padd" style="float: left; display: block">
-                    <div class="full2 pb20 mt10" id="info_bar">
+                    <div class="full2 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2"><h3 class="uppercase pb5 mb10 font12 bold mg0">Mối
                                 quan hệ</h3>
                             <div class="">{{ @$customer->status->name }}
                             </div>
                         </div>
                     </div>
-                    <div class="full2 pb20 mt10" id="info_bar">
+                    <div class="full2 mt10" id="info_bar">
                         <div class="border padding infor-list-ct ml2">
                             <div class="row">
                                 <div class="col-md-4">
@@ -371,14 +371,12 @@
                                                 </div>
                                                 <div class="col relative">
                                                     @if($roleGlobal->permission('order.add'))
-                                                        <a class="right btn btn-primary btn-flat text-white"
+                                                        <a class="right btn btn-primary text-white"
                                                            data-toggle="modal"
-                                                           data-target="#roleTypeModal"><i
-                                                                class="fa fa-plus-circle text-white"></i>  Tạo</a>
+                                                           data-target="#roleTypeModal">Tạo mới</a>
                                                     @endif
                                                 </div>
                                                 @include('order.role_type_modal')
-
 
                                             </div>
                                             <div id="order_customer">
