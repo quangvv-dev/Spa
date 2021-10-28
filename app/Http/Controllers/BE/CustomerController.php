@@ -120,13 +120,15 @@ class CustomerController extends Controller
         } else {
             $customers = Functions::customPaginate($customers, $page);
         }
-        $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get()->map(function ($item) use ($input) {
-            $customer = CustomerGroup::select('id')->where('category_id', $item->id)->when(isset($input['branch_id']), function ($query) use ($input) {
-                $query->where('branch_id', 'like', $input['branch_id']);
-            })->count();
-            $item->count = $customer;
-            return $item;
-        });
+        $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->with('customers')->get();
+
+//        ->map(function ($item) use ($input) {
+//        $customer = CustomerGroup::select('id')->where('category_id', $item->id)->when(isset($input['branch_id']), function ($query) use ($input) {
+//            $query->where('branch_id', 'like', $input['branch_id']);
+//        })->count();
+//        $item->count = $customer;
+//        return $item;
+//        })
         $rank = $customers->firstItem();
         if ($request->ajax()) {
 
