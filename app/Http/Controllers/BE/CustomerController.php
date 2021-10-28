@@ -102,7 +102,7 @@ class CustomerController extends Controller
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
-        } elseif (count($input)<1) {
+        } elseif (count($input) < 1) {
             $input['branch_id'] = 1;
         }
 
@@ -111,14 +111,22 @@ class CustomerController extends Controller
         }
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
-        $customers = Customer::search($input)->take(StatusCode::PAGINATE_1000)->get();
+        $customers = Customer::search($input);
+
+        $customers = $customers->take(StatusCode::PAGINATE_1000)->get();
+
         if (isset($input['limit'])) {
             $customers = Functions::customPaginate($customers, $page, $input['limit']);
         } else {
             $customers = Functions::customPaginate($customers, $page);
         }
-
-        $categories = Category::where('type', StatusCode::SERVICE)->with('customers')->get();
+        $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get()->map(function ($item) use ($input) {
+            $customer = CustomerGroup::select('id')->where('category_id', $item->id)->when(isset($input['branch_id']), function ($query) use ($input) {
+                $query->where('branch_id', 'like', $input['branch_id']);
+            })->count();
+            $item->count = $customer;
+            return $item;
+        });
         $rank = $customers->firstItem();
         if ($request->ajax()) {
 

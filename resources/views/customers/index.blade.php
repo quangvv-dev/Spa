@@ -57,7 +57,7 @@
                     <select name="group" class="form-control group">
                         <option value="">Nhóm dịch vụ</option>
                         @foreach($categories as $item)
-                            <option value="{{$item->id}}">{{ $item->name}}({{ $item->customers->count() }})</option>
+                            <option value="{{$item->id}}">{{ $item->name}}({{ $item->count }})</option>
                         @endforeach
                     </select>
                 </div>
