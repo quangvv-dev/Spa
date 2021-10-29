@@ -96,7 +96,7 @@
                                                 {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                                 <select class="select2 form-control service" required id="service" name="service_id[]">
                                                         <option>-Chọn dịch vụ-</option>
-                                                        @foreach($services as $service)
+                                                        @foreach($combo as $service)
                                                             <option
                                                                 value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
                                                                 - {{$service->name}}</option>
@@ -111,7 +111,7 @@
                                     </td>
                                     <td class="text-center" width="50">
                                         @if($orderDetail->service->type == 2)
-                                            {!! Form::hidden('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                            {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
                                         @else
                                             {!! Form::text('days[]', @$orderDetail->days, array('class' => 'form-control', 'required' => true)) !!}
                                         @endif
@@ -141,7 +141,7 @@
                         <tfoot>
                         <tr>
                             <td>
-                                @if(request()->get('type')=='combos')
+                                @if(request()->get('type')=='combos'||@$role_type ==3)
                                     <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Dịch vụ</a></div>
                                     <div class="col-md-12"><a href="javascript:void(0)" id="add_row2" class="red">(+) Sản phẩm</a></div>
                                 @else
