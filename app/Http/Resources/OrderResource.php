@@ -20,8 +20,8 @@ class OrderResource extends JsonResource
             'name'           => @$this->customer->full_name,
             'phone'          => @$this->customer->phone,
             'total'          => @$this->all_total,
-            'gross_revenue'  => !empty($this->gross_revenue)?$this->gross_revenue:0,
-            'the_rest'       => !empty($this->the_rest)?$this->the_rest:0,
+            'gross_revenue'  => !empty($this->gross_revenue)?$this->gross_revenue:"0",
+            'the_rest'       => !empty($this->the_rest)?$this->the_rest:"0",
         ];
     }
 }
