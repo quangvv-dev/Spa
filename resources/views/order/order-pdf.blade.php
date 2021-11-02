@@ -56,7 +56,7 @@
         <table class="table mt0">
             <tbody>
             <tr>
-                <td colspan="2" class="text-center"><h3>VIỆN THẨM MỸ ROYAL</h3><br></td>
+                <td colspan="2" class="text-center"><h3>{{!empty(setting('title_website'))?setting('title_website'):'Hệ Thống Royal Spa'}}</h3><br></td>
             </tr>
             <tr>
                 <td colspan="2" class="text-center"><b >ĐƠN HÀNG BÁN</b></td>
@@ -87,9 +87,6 @@
                     <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
                 </tr>
             @endforeach
-            {{--<tr>--}}
-                {{--<td style="border-bottom:dotted 1px !important;" colspan="4"></td>--}}
-            {{--</tr>--}}
             <tr>
                 <td class="bold" colspan="3"><strong>Giảm giá</strong></td>
                 <td class="tr bold"><strong>{{ @number_format($order->discount) }}</strong></td>
@@ -128,7 +125,8 @@
             <tr>
                 <td colspan="4">
                     <div class="text-center"><b>CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
-                    <div class="text-center font12">Website: thammyroyal.com</div>
+                    <div class="text-center font12">{{'Hotline: '.@$order->branch->phone.' Địa chỉ: '.@$order->branch->address}}</div>
+                    {{--<div class="text-center font12">Website: thammyroyal.com</div>--}}
                 </td>
             </tr>
             </tfoot>
