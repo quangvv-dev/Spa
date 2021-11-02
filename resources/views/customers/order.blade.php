@@ -28,10 +28,17 @@
                 @foreach($orders as $order)
                     <tr>
                         <td class="text-center">
-                            <a class="btn" href="{{$order->role_type== 2 ?url('/orders/'.$order->id.'/edit'):url('/orders-service/'.$order->id.'/edit')}}" title="Chỉnh sửa"><i class="fas fa-edit"></i></a>
+                            <a class="btn tooltip-nav" href="{{$order->role_type== 2 ?url('/orders/'.$order->id.'/edit'):url('/orders-service/'.$order->id.'/edit')}}"><i class="fas fa-edit"></i>
+                                <span class="tooltiptext">Chỉnh sửa đơn</span>
+                            </a>
                             @if($order->count_day > 0 && Auth::user()->role != \App\Constants\UserConstant::CSKH)
-                                <a title="Trừ liệu trình" class="btn edit-order" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i></a>
+                                <a class="btn edit-order tooltip-nav" data-order-id="{{ $order->id }}"><i class="fas fa-check-square"></i>
+                                    <span class="tooltiptext">Trừ liệu trình</span>
+                                </a>
                             @endif
+                            <a title="Thanh toán" class="btn tooltip-nav" href="{{ url('order/' . $order->id . '/show') }}"><i class="fas fa-file-invoice-dollar"></i>
+                                <span class="tooltiptext">Thanh toán (IN)</span>
+                            </a>
                         </td>
                         <td class="text-center">{{ @$order->branch->name }}</td>
                         <td class="text-center">{{ date('d/m/Y',strtotime($order->created_at)) }}</td>
@@ -51,8 +58,6 @@
                         <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                         <td class="text-center">{{ number_format($order->the_rest) }}</td>
                         <td class="text-center">
-                            <a title="Thanh toán" class="btn" href="{{ url('order/' . $order->id . '/show') }}"><i
-                                    class="fas fa-file-invoice-dollar"></i></a>
                             @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER||Auth::user()->role == \App\Constants\UserConstant::CSKH)
                                 <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)" data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
                             @endif
