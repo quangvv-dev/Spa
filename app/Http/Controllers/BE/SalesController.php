@@ -145,9 +145,6 @@ class SalesController extends Controller
 
                 $data_new = $data2->whereBetween('created_at', getTime($request->data_time));
 
-//                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0])->where('old_customer', 1);
-//                $data_old = self::searchBranch($data_old, $request);
-
                 $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time));
                 $schedules_old = Schedule::select('id')->whereBetween('date', getTime($request->data_time))->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 1);
@@ -174,7 +171,7 @@ class SalesController extends Controller
                 $qr->where('old_customer', 1);
             });
 
-            $comment = GroupComment::select('id')->whereBetween('created_at', getTime($request->data_time));
+            $comment = GroupComment::select('id')->whereBetween('created_at', getTime($request->data_time))->whereIn('customer_id',$arr_customer);
             $comment2 = clone $comment;
 
             $comment_new = $comment->whereHas('customer', function ($qr) {
