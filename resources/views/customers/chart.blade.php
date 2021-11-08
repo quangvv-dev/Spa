@@ -22,8 +22,7 @@
                         <div class="card-header">
                             <h3 class="card-title">{{ $title }}</h3>
                         </div>
-                        <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow"
-                             style="width: 100%; padding: 10px;">
+                        <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow">
                             <div class="col-md-4 no-padd">
                             </div>
                             <div class="col-md-8 no-padd">

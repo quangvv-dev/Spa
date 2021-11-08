@@ -146,7 +146,7 @@
 @section('content')
 
     <div class="col-md-12">
-        <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow" style="width: 100%; padding: 10px;">
+        <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow">
             <div class="col-md-8 no-padd">
                 <ul class="fr mg0 pt10 no-padd">
                     <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time border padding0-5 b-gray active">Tháng

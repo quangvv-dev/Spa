@@ -21,7 +21,7 @@ class OrderDetail extends Model
 
     public function service()
     {
-        return $this->belongsTo(Services::class, 'booking_id', 'id');
+        return $this->belongsTo(Services::class, 'booking_id', 'id')->withTrashed();
     }
 
     public function order()

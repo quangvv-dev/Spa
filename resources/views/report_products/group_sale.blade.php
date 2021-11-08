@@ -94,7 +94,7 @@
 @section('content')
 
     <div class="col-md-12">
-        <div id="fix-scroll" class="row padding mb10 header-card border-bot shadow" style="width: 100%; padding: 10px;">
+        <div id="fix-scroll" class="row padding mb10 header-card border-bot shadow">
             <div class="card">
                 <div class="card-header">
                     <div class="col-md-4 no-padd">
