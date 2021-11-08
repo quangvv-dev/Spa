@@ -10,8 +10,10 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\GroupComment;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
+use App\Models\Services;
 use App\Services\TaskService;
 use App\User;
 use Illuminate\Http\Request;
@@ -78,7 +80,7 @@ class SalesController extends Controller
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
             $item->payment_old = $order_old->sum('gross_revenue') + $order_new->sum('gross_revenue'); //da thu trong ky
-            $item->revenue_total =  $order_new->sum('all_total') - $order_old->sum('all_total');;
+            $item->revenue_total = $order_new->sum('all_total') - $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
         })->sortByDesc('all_payment');
@@ -103,69 +105,89 @@ class SalesController extends Controller
         if (empty($request->data_time)) {
             $request->merge(['data_time' => 'THIS_WEEK']);
         }
-        if (!isset($request->branch_id)){
+        if (!isset($request->branch_id)) {
             $request->merge(['branch_id' => 1]);
-        }elseif($request->branch_id == (-1)){
+        } elseif ($request->branch_id == (-1)) {
             $request->merge(['branch_id' => null]);
         }
         $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
         $branchs = Branch::search()->pluck('name', 'id');
 
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
-        $users = Category::where('type', $type)->get()->map(function ($item) use ($request) {
+        $users = Category::where('type', $type)->get()->map(function ($item) use ($request, $type) {
             $arr_customer = CustomerGroup::select('customer_id')->where('category_id', $item->id);
+
+            $booking = Services::select('id')->where('type', $type)->where('category_id', $item->id)->pluck('id')->toArray();
+            $arr_orders = OrderDetail::select('order_id')->whereIn('booking_id', $booking)->pluck('order_id')->toArray();
+
             $arr_customer = self::searchBranch($arr_customer, $request)->get()->toArray();
 
             if ($request->telesale_id) {
-                $data_new = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->whereBetween('created_at', getTime($request->data_time));
-                $data_new = self::searchBranch($data_new, $request);
-
-                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id)->where('created_at', '<', getTime($request->data_time)[0]);
-                $data_old = self::searchBranch($data_old, $request);
 
                 $data = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id);
                 $data = self::searchBranch($data, $request);
+                $data2 = clone $data;
+
+                $data_new = $data2->whereBetween('created_at', getTime($request->data_time));
 
                 $schedules_new = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time));
-                $schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time));
+                $schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereBetween('date', getTime($request->data_time))
+                    ->whereHas('customer', function ($qr) {
+                        $qr->where('old_customer', 1);
+                    });
 
                 $item->schedules_new = self::searchBranch($schedules_new, $request)->get()->count();//lich hen
                 $item->schedules_old = self::searchBranch($schedules_old, $request)->get()->count();//lich hen
             } else {
-                $data_new = Customer::select('id')->whereIn('id', $arr_customer)->whereBetween('created_at', getTime($request->data_time));
-                $data_new = self::searchBranch($data_new, $request);
-
-                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0])->where('old_customer', 1);
-                $data_old = self::searchBranch($data_old, $request);
-
                 $data = Customer::select('id')->whereIn('id', $arr_customer);
                 $data = self::searchBranch($data, $request);
+                $data2 = clone $data;
+
+                $data_new = $data2->whereBetween('created_at', getTime($request->data_time));
+
+//                $data_old = Customer::select('id')->whereIn('id', $arr_customer)->where('created_at', '<', getTime($request->data_time)[0])->where('old_customer', 1);
+//                $data_old = self::searchBranch($data_old, $request);
+
                 $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time));
-                $schedules_old = Schedule::select('id')->whereIn('user_id', $data_old->pluck('id')->toArray())->whereBetween('date', getTime($request->data_time));
+                $schedules_old = Schedule::select('id')->whereBetween('date', getTime($request->data_time))->whereHas('customer', function ($qr) {
+                    $qr->where('old_customer', 1);
+                });
 
                 $item->schedules_new = self::searchBranch($schedules_new, $request)->get()->count();//lich hen
                 $item->schedules_old = self::searchBranch($schedules_old, $request)->get()->count();//lich hen
             }
 
-            $orderLast = Order::whereDate('created_at', '<', getTime($request->data_time)[0])->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
+            $orderLast = Order::select('id')->whereDate('created_at', '<', getTime($request->data_time)[0])->whereIn('id', $arr_orders)->with('orderDetails');
             $orderLast = self::searchBranch($orderLast, $request);
 
-            $order = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data->pluck('id')->toArray())->with('orderDetails');
+            $order = Order::select('all_total', 'gross_revenue')->whereIn('id', $arr_orders)->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');
             $order = self::searchBranch($order, $request);
 
-            $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');//doanh so
-            $order_new = self::searchBranch($order_new, $request);
+            $order_ds = clone $order;
+            $order_ds2 = clone $order;
 
-            $order_old = Order::whereBetween('created_at', getTime($request->data_time))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
-            $order_old = self::searchBranch($order_old, $request);
+            $order_new = $order_ds->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 0);
+            });
 
-            $comment_new = GroupComment::select('id')->whereIn('customer_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time));
-            $comment_old = GroupComment::select('id')->whereIn('customer_id', $data_old->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time));
+            $order_old = $order_ds2->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 1);
+            });
+
+            $comment = GroupComment::select('id')->whereBetween('created_at', getTime($request->data_time));
+            $comment2 = clone $comment;
+
+            $comment_new = $comment->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 0);
+            });
+            $comment_old = $comment2->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 1);
+            });
 
             $item->comment_new = self::searchBranch($comment_new, $request)->get()->count();// trao doi moi
             $item->comment_old = self::searchBranch($comment_old, $request)->get()->count(); // trao doi cu
 
-            $payment_history = PaymentHistory::whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $orderLast->pluck('id')->toArray());
+            $payment_history = PaymentHistory::select('price')->whereBetween('payment_date', getTime($request->data_time))->whereIn('order_id', $orderLast->pluck('id')->toArray());
             $payment_history = self::searchBranch($payment_history, $request);
 
             $item->customer_new = $data_new->get()->count();
