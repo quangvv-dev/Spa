@@ -717,6 +717,7 @@ class OrderController extends Controller
             }
 
             $orderDetail = $this->orderDetailService->update($input, $id);
+
             if (!$orderDetail) {
                 DB::rollBack();
             }

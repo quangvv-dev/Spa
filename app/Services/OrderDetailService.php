@@ -71,18 +71,20 @@ class OrderDetailService
                 'order_id'        => $orderId,
                 'user_id'         => $data['user_id'],
                 'booking_id'      => $data['service_id'][$key],
-                'quantity'        => $data['quantity'][$key],
+                'quantity'        => isset($data['quantity'][$key])?$data['quantity'][$key]:0,
                 'price'           => replaceNumberFormat($data['price'][$key]),
-                'vat'             => $data['vat'][$key],
+                'vat'             => 0,
                 'address'         => $data['address'],
                 'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
                 'total_price'     => replaceNumberFormat($data['total_price'][$key]),
                 'updated_at'      => Carbon::now()->format('Y-m-d H:i:s'),
             ];
-            $service = Services::where('id', $data['service_id'][$key])->first();
+            $service = Services::where('id', $data['service_id'][$key])->withTrashed()->first();
 
             $service->update(['description' => $data['service_note'][$key]]);
+
         }
+
         OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
         foreach ($dataArr as $item) {
             if (!empty($item['id'])) {
