@@ -358,32 +358,32 @@
         chart.draw(data, options);
     }
 </script>
-<script type="text/javascript">
-    google.charts.load('current', {'packages': ['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
+{{--<script type="text/javascript">--}}
+    {{--google.charts.load('current', {'packages': ['corechart']});--}}
+    {{--google.charts.setOnLoadCallback(drawChart);--}}
 
-    function drawChart() {
+    {{--function drawChart() {--}}
 
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-                @if(count($revenue_genitive))
-                @foreach($revenue_genitive as $k => $item)
-            ['{{$k}}', {{@array_sum($item)}}],
-            @endforeach
-            @endif
-        ]);
+        {{--var data = google.visualization.arrayToDataTable([--}}
+            {{--['Task', 'Hours per Day'],--}}
+                {{--@if(count($revenue_genitive))--}}
+                {{--@foreach($revenue_genitive as $k => $item)--}}
+            {{--['{{$k}}', {{@array_sum($item)}}],--}}
+            {{--@endforeach--}}
+            {{--@endif--}}
+        {{--]);--}}
 
-        var options = {
-            title: 'DOANH THU THEO NHÓM TÍNH CÁCH',
-            width: 500,
-            height: 300,
-        };
+        {{--var options = {--}}
+            {{--title: 'DOANH THU THEO NHÓM TÍNH CÁCH',--}}
+            {{--width: 500,--}}
+            {{--height: 300,--}}
+        {{--};--}}
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart-8'));
+        {{--var chart = new google.visualization.PieChart(document.getElementById('piechart-8'));--}}
 
-        chart.draw(data, options);
-    }
-</script>
+        {{--chart.draw(data, options);--}}
+    {{--}--}}
+{{--</script>--}}
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
