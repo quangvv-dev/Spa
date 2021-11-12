@@ -258,17 +258,18 @@ class RevenueController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 5) {
             $revenue_gender = [];
-            $orders = Order::returnRawData($input)->get();;
+            $orders = Order::returnRawData($input)->get();
             if (count($orders)) {
-                foreach ($orders as $item) {
-                    if (isset($item->customer->gender) && $item->customer->gender) {
+                foreach ($orders as $k => $item) {
+
+                    if (isset($item->customer)) {
                         $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
                     }
                 }
                 if (count($revenue_gender)) {
                     foreach ($revenue_gender as $k => $item) {
                         $data[] = [
-                            'name' => $k == 0 ? 'Nữ' : 'Nam',
+                            'name' => ($k == 0) ? 'Nữ' : 'Nam',
                             'all_total' => array_sum($item),
                         ];
                     }
