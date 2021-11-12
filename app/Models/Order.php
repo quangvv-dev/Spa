@@ -271,7 +271,7 @@ class Order extends Model
     public function getServiceTextAttribute()
     {
         $raw = OrderDetail::where('order_id', $this->id)->pluck('booking_id')->toArray();
-        $service = Services::whereIn('id', $raw)->pluck('name')->toArray();
+        $service = Services::whereIn('id', $raw)->withTrashed()->pluck('name')->toArray();
         return count($service) ? implode($service, '<br>') : '';
     }
 
