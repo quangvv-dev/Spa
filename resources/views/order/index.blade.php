@@ -95,7 +95,7 @@
                                         <div class="row">
                                             <div class="col-xs-12 col-md-10">
                                                 {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
-                                                <select class="select2 form-control service" required id="service"
+                                                <select class="select2 form-control service" required id="service" required
                                                         name="service_id[]">
                                                     <option>-Chọn sản phẩm-</option>
                                                     @foreach($products as $product)

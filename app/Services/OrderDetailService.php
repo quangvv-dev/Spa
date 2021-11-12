@@ -27,18 +27,18 @@ class OrderDetailService
 
         foreach ($data['service_id'] as $key => $value) {
             $dataArr[] = [
-                'created_at'      => Carbon::now()->format('Y-m-d H:i'),
-                'order_id'        => $orderId,
-                'user_id'         => $data['user_id'],
-                'booking_id'      => $data['service_id'][$key],
-                'days'            => isset($data['days']) && count($data['days']) ? $data['days'][$key] : 0,
-                'quantity'        => $data['quantity'][$key],
-                'price'           => replaceNumberFormat($data['price'][$key]),
-                'vat'             => 0,
-                'address'         => $data['address'],
+                'created_at' => Carbon::now()->format('Y-m-d H:i'),
+                'order_id' => $orderId,
+                'user_id' => $data['user_id'],
+                'booking_id' => $data['service_id'][$key],
+                'days' => isset($data['days']) && count($data['days']) ? $data['days'][$key] : 0,
+                'quantity' => $data['quantity'][$key],
+                'price' => replaceNumberFormat($data['price'][$key]),
+                'vat' => 0,
+                'address' => $data['address'],
                 'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
-                'total_price'     => replaceNumberFormat($data['total_price'][$key]),
-                'branch_id'       => $data['branch_id'],
+                'total_price' => replaceNumberFormat($data['total_price'][$key]),
+                'branch_id' => $data['branch_id'],
             ];
             $service = Services::where('id', $data['service_id'][$key])->first();
 
@@ -46,7 +46,7 @@ class OrderDetailService
 
             if ($data['role_type'] == StatusCode::PRODUCT || $data['role_type'] == StatusCode::COMBOS) {
                 $product = ProductDepot::where('branch_id', $data['branch_id'])->where('product_id', $data['service_id'][$key])->first();
-                if (isset($product)){
+                if (isset($product)) {
                     $product->quantity = $product->quantity - $data['quantity'][$key];
                     $product->save();
                 }
@@ -66,33 +66,40 @@ class OrderDetailService
         }
         $dataArr = [];
         foreach ($data['service_id'] as $key => $value) {
-            $dataArr[] = [
-                'id'              => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key] : '',
-                'order_id'        => $orderId,
-                'user_id'         => $data['user_id'],
-                'booking_id'      => $data['service_id'][$key],
-                'quantity'        => isset($data['quantity'][$key])?$data['quantity'][$key]:0,
-                'price'           => replaceNumberFormat($data['price'][$key]),
-                'vat'             => 0,
-                'address'         => $data['address'],
-                'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
-                'total_price'     => replaceNumberFormat($data['total_price'][$key]),
-                'updated_at'      => Carbon::now()->format('Y-m-d H:i:s'),
-            ];
-            $service = Services::where('id', $data['service_id'][$key])->withTrashed()->first();
+            if (is_numeric($data['service_id'])){
+                $dataArr[] = [
+                    'id' => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key] : '',
+                    'order_id' => $orderId,
+                    'user_id' => $data['user_id'],
+                    'booking_id' => $data['service_id'][$key],
+                    'quantity' => isset($data['quantity'][$key]) ? $data['quantity'][$key] : 0,
+                    'price' => replaceNumberFormat($data['price'][$key]),
+                    'vat' => 0,
+                    'address' => $data['address'],
+                    'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
+                    'total_price' => replaceNumberFormat($data['total_price'][$key]),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                ];
+                $service = Services::where('id', $data['service_id'][$key])->withTrashed()->first();
 
-            $service->update(['description' => $data['service_note'][$key]]);
+                if (isset($data['service_note'][$key])) {
+                    $service->update(['description' => $data['service_note'][$key]]);
+
+                }
+            }
 
         }
-
-        OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
-        foreach ($dataArr as $item) {
-            if (!empty($item['id'])) {
-                $orderDetail = OrderDetail::where('id', $item['id'])->first();
-                $orderDetail->update($item);
-            }
-            if (empty($item['id'])) {
-                $orderDetail = OrderDetail::create($item);
+        $orderDetail =[];
+        if (count($dataArr)){
+            OrderDetail::whereNotIn('id', $data['order_detail_id'])->where('order_id', $orderId)->delete();
+            foreach ($dataArr as $item) {
+                if (!empty($item['id'])) {
+                    $orderDetail = OrderDetail::where('id', $item['id'])->first();
+                    $orderDetail->update($item);
+                }
+                if (empty($item['id'])) {
+                    $orderDetail = OrderDetail::create($item);
+                }
             }
         }
 
