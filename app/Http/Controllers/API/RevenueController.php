@@ -278,12 +278,19 @@ class RevenueController extends BaseApiController
         } elseif ($request->type_api == 6) {
             $payment = PaymentHistory::search($input, 'price');
             $orders = Order::returnRawData($input);
+            $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
+                function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            });
             $orders_old = clone $orders->whereHas('customer', function ($q) {
                 $q->where('old_customer', 1);
             });
-            $orders_new = clone $orders->whereHas('customer', function ($q) {
-                $q->where('old_customer', 0);
-            });
+            $orders_new = clone $orders->whereIn('member_id', $customers->pluck('id')->toArray());
             $data = [
                 [
                     'name' => 'Khách hàng mới',
