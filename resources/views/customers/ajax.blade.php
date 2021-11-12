@@ -179,8 +179,7 @@
                         <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
                             <i class="fas fa-info-circle"></i>
                         </a>
-                        <a target="_blank"
-                           href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
+                        <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                     </td>
                     <td class="text-center phone-customer"

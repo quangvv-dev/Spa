@@ -181,9 +181,6 @@ class SalesController extends Controller
             $item->comment_new = self::searchBranch($comment_new, $request)->get()->count();// trao doi moi
             $item->comment_old = self::searchBranch($comment_old, $request)->get()->count(); // trao doi cu
 
-//            $orderLast = Order::select('id')->whereDate('created_at', '<', getTime($request->data_time)[0])->whereIn('id', $arr_orders)->with('orderDetails');
-//            $orderLast = self::searchBranch($orderLast, $request);
-
             $payment_history = PaymentHistory::select('price')->whereBetween('payment_date', getTime($request->data_time))
                 ->whereHas('order',function ($qr) use ($request){
                     $qr->whereDate('created_at', '<', getTime($request->data_time)[0]);
