@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Models\GroupComment as Model;
 use Excel;
+use function PHPSTORM_META\type;
 
 class CustomerController extends Controller
 {
@@ -114,14 +115,13 @@ class CustomerController extends Controller
         $customers = Customer::search($input);
 
         $customers = $customers->take(StatusCode::PAGINATE_1000)->get();
-
         if (isset($input['limit'])) {
             $customers = Functions::customPaginate($customers, $page, $input['limit']);
         } else {
             $customers = Functions::customPaginate($customers, $page);
         }
 
-        $categories = Category::select('id', 'name')->with('customers')->get();
+        $categories = Category::select('id', 'name')->where('type',StatusCode::SERVICE)->get();
 
 //        ->map(function ($item) use ($input) {
 //        $customer = CustomerGroup::select('id')->where('category_id', $item->id)->when(isset($input['branch_id']), function ($query) use ($input) {
@@ -579,42 +579,42 @@ class CustomerController extends Controller
             $customer = $this->customerService->update($input, $id);
             $check2 = RuleOutput::where('event', 'change_relation')->first();
 
-//            if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
-//                $rule = $check2->rules;
-//                $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
-//                $rule_status = Functions::checkRuleStatusCustomer($config);
-//                foreach (array_values($rule_status) as $k1 => $item) {
-//                    $list_status = $item->configs->group1;
-//                    $list_relation = $item->configs->group;
-//                    $relation = array_intersect($category, $list_relation);
-//                    if (in_array($customer->status_id, $list_status) && count($relation)) {
-//                        $sms_ws = Functions::checkRuleSms($config);
-//                        if (count($sms_ws)) {
-//                            foreach (@array_values($sms_ws) as $k2 => $sms) {
-//                                $input_raw['full_name'] = @$customer->full_name;
-//                                $exactly_value = Functions::getExactlyTime($sms);
-//                                $text = $sms->configs->content;
-//                                $phone = Functions::convertPhone(@$customer->phone);
-//                                $text = Functions::replaceTextForUser($input_raw, $text);
-//                                $text = Functions::vi_to_en($text);
-//                                $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
-//                                if (isset($err) && $err) {
-//                                    HistorySms::insert([
-//                                        'phone' => @$customer->phone,
-//                                        'campaign_id' => 0,
-//                                        'message' => $text,
-//                                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-//                                        'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
-//                                    ]);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            if (isset($request->category_ids) && $request->category_ids) {
-//                $customer->categories()->sync($request->category_ids);
-//            }
+            if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
+                $rule = $check2->rules;
+                $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
+                $rule_status = Functions::checkRuleStatusCustomer($config);
+                foreach (array_values($rule_status) as $k1 => $item) {
+                    $list_status = $item->configs->group1;
+                    $list_relation = $item->configs->group;
+                    $relation = array_intersect($category, $list_relation);
+                    if (in_array($customer->status_id, $list_status) && count($relation)) {
+                        $sms_ws = Functions::checkRuleSms($config);
+                        if (count($sms_ws)) {
+                            foreach (@array_values($sms_ws) as $k2 => $sms) {
+                                $input_raw['full_name'] = @$customer->full_name;
+                                $exactly_value = Functions::getExactlyTime($sms);
+                                $text = $sms->configs->content;
+                                $phone = Functions::convertPhone(@$customer->phone);
+                                $text = Functions::replaceTextForUser($input_raw, $text);
+                                $text = Functions::vi_to_en($text);
+                                $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
+                                if (isset($err) && $err) {
+                                    HistorySms::insert([
+                                        'phone' => @$customer->phone,
+                                        'campaign_id' => 0,
+                                        'message' => $text,
+                                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                        'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (isset($request->category_ids) && $request->category_ids) {
+                $customer->categories()->sync($request->category_ids);
+            }
 
             $data = Customer::with('status', 'categories', 'telesale', 'genitive')->where('id', $id)->first();
             if (isset($data->birthday)) {
