@@ -572,6 +572,7 @@ class CustomerController extends Controller
     {
         $input = $request->except('category_ids');
         $before = $this->customerService->find($id);
+        $data = [];
         if (isset($before) && $before) {
             $category = CustomerGroup::where('customer_id', $before->id)->pluck('category_id')->toArray();
 
@@ -622,7 +623,7 @@ class CustomerController extends Controller
         }
 
 
-        return isset($data) ? $data : [];
+        return $data;
     }
 
     public function reportCustomer(Request $request)
