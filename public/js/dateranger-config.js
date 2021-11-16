@@ -32,7 +32,7 @@ $('#reportrange').daterangepicker({
     // timePicker24Hour: true,
     // timePickerIncrement: 30,
     locale: {
-        format: "DD/MM/YYYY H:mm",
+        // format: "DD/MM/YYYY",
         separator: " - ",
         applyLabel: "Đồng ý",
         cancelLabel: "Hủy",

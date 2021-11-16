@@ -657,7 +657,7 @@
             });
 
 
-            $(document).on('focusout', '.description-cus', function (e) {
+            $(document).on('change', '.description-cus', function (e) {
                 let target = $(e.target).parent();
                 let description = $(target).find('.description-cus').val();
                 let id = $(this).data('id');

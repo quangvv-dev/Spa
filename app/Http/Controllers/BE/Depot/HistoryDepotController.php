@@ -166,7 +166,7 @@ class HistoryDepotController extends Controller
     public function statistical(Request $request)
     {
         if (!$request->start_date) {
-            Functions::addSearchDate($request);
+            Functions::addSearchDateTime($request);
         }
         $input = $request->all();
         $checkRole = checkRoleAlready();

@@ -472,12 +472,21 @@ class Functions
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
-    public static function addSearchDate($request)
+    public static function addSearchDateTime($request)
     {
         $date_check = Carbon::now()->subDays(7)->format('d/m/Y');
         $date = Carbon::now()->format('d/m/Y');
 
         $request->merge(['start_date' => $date_check.' 00:00']);
         $request->merge(['end_date' => $date.' 23:59']);
+    }
+
+    public static function addSearchDate($request)
+    {
+        $date_check = Carbon::now()->subDays(7)->format('d/m/Y');
+        $date = Carbon::now()->format('d/m/Y');
+
+        $request->merge(['start_date' => $date_check]);
+        $request->merge(['end_date' => $date]);
     }
 }
