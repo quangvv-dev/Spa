@@ -121,7 +121,7 @@ class CustomerController extends Controller
             $customers = Functions::customPaginate($customers, $page);
         }
 
-        $categories = Category::select('id', 'name')->where('type',StatusCode::SERVICE)->get();
+        $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
 
 //        ->map(function ($item) use ($input) {
 //        $customer = CustomerGroup::select('id')->where('category_id', $item->id)->when(isset($input['branch_id']), function ($query) use ($input) {
@@ -466,9 +466,34 @@ class CustomerController extends Controller
                         $status = Status::where('name', $row['moi_quan_he'])->first();
                         $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
                         $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
-                        $check = Customer::where('phone', $row['so_dien_thoai'])->withTrashed()->first();
+                        $check = Customer::where('phone', $row['so_dien_thoai'])->first();
                         $category = explode(',', $row['nhom_khach_hang']);
                         $branch = Branch::where('name', $row['chi_nhanh'])->first();
+
+//                        if (isset($check) && $check) {
+//                            if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
+////                                GroupComment::where('customer_id', $check->id)->delete();
+//                                $comment = GroupComment::where('customer_id', $check->id)->get();
+//                                if (count($comment) < 1) {
+//                                    $comment_value = [];
+//                                    $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
+//                                    $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
+//                                    foreach ($row['ngay_trao_doi'] as $key_date => $item) {
+//                                        $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
+//                                        $comment_value[] = [
+//                                            'customer_id' => $check->id,
+//                                            'user_id' => Auth::user()->id,
+//                                            'messages' => @$row['noi_dung_trao_doi'][$key_date],
+//                                            'created_at' => $item,
+//                                            'updated_at' => $item,
+//                                            'branch_id' => $check->branch_id,
+//                                        ];
+//                                    }
+//                                    GroupComment::insertOrIgnore($comment_value);
+//                                }
+//                            }
+//                        }
+
                         if (empty($check)) {
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
@@ -525,29 +550,6 @@ class CustomerController extends Controller
                                     GroupComment::insertOrIgnore($comment_value);
                                 }
 
-                            }
-                        } else {
-                            if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
-                                GroupComment::where('customer_id', $check->id)->delete();
-                                $comment_value = [];
-                                $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
-                                $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
-                                foreach ($row['ngay_trao_doi'] as $key_date => $item) {
-                                    $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
-                                    $comment_value[] = [
-                                        'customer_id' => $check->id,
-                                        'user_id' => Auth::user()->id,
-                                        'messages' => @$row['noi_dung_trao_doi'][$key_date],
-                                        'created_at' => $item,
-                                        'updated_at' => $item,
-                                        'branch_id' => $check->branch_id,
-                                    ];
-                                }
-                                GroupComment::insertOrIgnore($comment_value);
-                            }
-                            if (isset($check) && $check) {
-                                $check->wallet = $check->wallet + $row['so_du_vi'];
-                                $check->save();
                             }
                         }
                     }
