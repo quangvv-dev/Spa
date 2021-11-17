@@ -59,20 +59,16 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         if (!$request->start_date) {
-            Functions::addSearchDate($request);
+            Functions::addSearchDateFormat($request,'d-m-Y');
         }
         $input = $request->all();
-        if (count($input) < 1) {
+
+        if (count($input)==2) {
             $input['branch_id'] = 1;
         }
-//        dd($input);
-        dd(Functions::yearMonthDay($input['start_date']));
-//        if (empty($request->data_time)) {
-//            $input['data_time'] = 'THIS_MONTH';
-//        }
         $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
-        })->whereBetween('created_at', [Functions::createYearMonthDay($input['start_date']) . " 00:00:00", Functions::createYearMonthDay($input['end_date']) . " 23:59:59"]);
+        })->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
 
 
         $schedules = Schedule::getBooks($input, 'id');
@@ -82,7 +78,6 @@ class StatisticController extends Controller
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders3 = clone $orders;
-//        $orders4 = clone $orders;
         $ordersYear = Order::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
@@ -123,10 +118,10 @@ class StatisticController extends Controller
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })
-            ->whereBetween('created_at', [Functions::createYearMonthDay($input['start_date']) . " 00:00:00", Functions::createYearMonthDay($input['end_date']) . " 23:59:59"])
+            ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
             ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
 
-        $groupComment = GroupComment::whereBetween('created_at', [Functions::createYearMonthDay($input['start_date']) . " 00:00:00", Functions::createYearMonthDay($input['end_date']) . " 23:59:59"]);
+        $groupComment = GroupComment::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
@@ -160,15 +155,7 @@ class StatisticController extends Controller
                 }
             }
         }
-        $revenue_genitive = [];
-//        $orders4 = $orders4->get();
-//        if (count($orders4)) {
-//            foreach ($orders4 as $item) {
-//                if (isset($item->customer->genitive)) {
-//                    $revenue_genitive[@$item->customer->genitive->name][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
-//                }
-//            }
-//        }
+
         $revenue_year = [];
         for ($i = 1; $i <= 12; $i++) {
             $newOrder = clone $ordersYear;
@@ -188,10 +175,9 @@ class StatisticController extends Controller
         ];
 
         if ($request->ajax()) {
-//            return Response::json(view('statistics.ajax', compact('data', 'services', 'products', 'list_payment', 'statusRevenues', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'))->render());
-            return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'));
+            return view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue', 'revenue_genitive'));
+        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
     }
 
     /**
@@ -220,17 +206,17 @@ class StatisticController extends Controller
     {
         $data_new = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
-        })->whereBetween('created_at', getTime($request['data_time']));
+        })->whereBetween('created_at', [Functions::yearMonthDay($request['start_date']) . " 00:00:00", Functions::yearMonthDay($request['end_date']) . " 23:59:59"]);
         $data_old = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
         })->where('old_customer', 1);
 
         $order_new = Order::select('gross_revenue')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
-        })->whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request['data_time']))->with('orderDetails');//doanh so
+        })->whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', [Functions::yearMonthDay($request['start_date']) . " 00:00:00", Functions::yearMonthDay($request['end_date']) . " 23:59:59"])->with('orderDetails');//doanh so
         $order_old = Order::select('gross_revenue')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
-        })->whereBetween('created_at', getTime($request['data_time']))->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+        })->whereBetween('created_at', [Functions::yearMonthDay($request['start_date']) . " 00:00:00", Functions::yearMonthDay($request['end_date']) . " 23:59:59"])->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
         return [
             'revenueNew' => $order_new->sum('gross_revenue'),
             'revenueOld' => $order_old->sum('gross_revenue'),

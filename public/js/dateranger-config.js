@@ -2,8 +2,8 @@ var start = moment().subtract(29, 'days');
 var end = moment();
 
 function cb(start, end) {
-    $('#start_date').val(start.format('DD/MM/YYYY')).change();
-    $('#end_date').val(end.format('DD/MM/YYYY')).change();
+    $('#start_date').val(start.format('DD-MM-YYYY')).change();
+    $('#end_date').val(end.format('DD-MM-YYYY')).change();
     $('#reportrange').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
 }
 
@@ -32,7 +32,7 @@ $('#reportrange').daterangepicker({
     // timePicker24Hour: true,
     // timePickerIncrement: 30,
     locale: {
-        // format: "DD/MM/YYYY",
+        format: "DD/MM/YYYY",
         separator: " - ",
         applyLabel: "Đồng ý",
         cancelLabel: "Hủy",

@@ -104,7 +104,7 @@
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Thu nợ:</div>
-                        <div class="col-7">{{@number_format($data['payment']-$data['gross_revenue'])}}</div>
+                        <div class="col-7">{{$data['payment']>$data['gross_revenue'] ? number_format($data['payment']-$data['gross_revenue']):0}}</div>
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Nạp ví:</div>
@@ -358,32 +358,7 @@
         chart.draw(data, options);
     }
 </script>
-{{--<script type="text/javascript">--}}
-    {{--google.charts.load('current', {'packages': ['corechart']});--}}
-    {{--google.charts.setOnLoadCallback(drawChart);--}}
 
-    {{--function drawChart() {--}}
-
-        {{--var data = google.visualization.arrayToDataTable([--}}
-            {{--['Task', 'Hours per Day'],--}}
-                {{--@if(count($revenue_genitive))--}}
-                {{--@foreach($revenue_genitive as $k => $item)--}}
-            {{--['{{$k}}', {{@array_sum($item)}}],--}}
-            {{--@endforeach--}}
-            {{--@endif--}}
-        {{--]);--}}
-
-        {{--var options = {--}}
-            {{--title: 'DOANH THU THEO NHÓM TÍNH CÁCH',--}}
-            {{--width: 500,--}}
-            {{--height: 300,--}}
-        {{--};--}}
-
-        {{--var chart = new google.visualization.PieChart(document.getElementById('piechart-8'));--}}
-
-        {{--chart.draw(data, options);--}}
-    {{--}--}}
-{{--</script>--}}
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
