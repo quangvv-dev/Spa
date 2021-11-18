@@ -61,66 +61,6 @@
         }
     </style>
     <style>
-
-        .tableFixHead {
-            overflow-y: auto;
-            height: 800px;
-        }
-
-        .tableFixHead thead th {
-            position: sticky;
-            top: 0;
-        }
-
-        .tableFixHead thead .number_index th {
-            position: sticky;
-            top: 118px;
-        }
-        @media(min-width:1681px)  {
-            .tableFixHead thead .number_index th {
-                position: sticky;
-                top: 97px;
-            }
-        }
-
-        .tableFixHead thead .tr1 th{
-            position: sticky;
-            top: 38px;
-        }
-
-
-        .tableFixHead tbody tr {
-            position: sticky;
-            top: 0;
-        }
-
-        .tableFixHead tbody .fixed th {
-            position: sticky;
-            bottom: 0;
-        }
-
-        .tableFixHead tbody .fixed2 td {
-            position: sticky;
-            bottom: 46px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th {
-            background: #3b8fec;
-        }
-
-        .tableFixHead tbody .fixed th {
-            background: #3b8fec;
-        }
-
-        .tableFixHead tbody .fixed2 td {
-            background: #3b8fec;
-        }
-
         .form-control {
             font-size: 14px;
         }
@@ -139,50 +79,52 @@
         td.text-center {
             font-size: 12px;
         }
+        .row-cards{
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            box-shadow: 0 0 0 1px rgb(61 119 180 / 12%), 0 8px 16px 0 rgb(91 139 199 / 24%);
+        }
     </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 
 @endsection
 @section('content')
 
     <div class="col-md-12">
-        <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow">
-            <div class="col-md-8 no-padd">
-                <ul class="fr mg0 pt10 no-padd">
-                    <li class="display pl5"><a data-time="THIS_MONTH" class="btn_choose_time border padding0-5 b-gray active">Tháng
-                            này</a></li>
-                    <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
-                            trước</a></li>
-                </ul>
-                <input type="hidden" id="time_choose" value="THIS_MONTH">
+        <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow row">
+            {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="card-title bold">XẾP HẠNG TELESALE</h3></br>
+
+                </div>
+                <div class="col-md-4">
+                    <input type="hidden" name="start_date" id="start_date">
+                    <input type="hidden" name="end_date" id="end_date">
+                    <input id="reportrange" type="text" class="form-control square">
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <button type="submit" class="btn btn-primary"> Tìm kiếm
+                    </button>
+                </div>
             </div>
+            {{ Form::close() }}
             <a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"
                href="javascript:void(0)">
                 <i class="fas fa-download"></i></a>
         </div>
     </div>
-    <div class="col-md-12 col-lg-12 list-data">
+    <div class="col-md-12 col-lg-12" id="registration-form">
         @include('report_products.ajax_sale')
     </div>
-
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 @section('_script')
     <script>
-        $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
-            let target = $(e.target).parent();
-            $('a.btn_choose_time').removeClass('border b-gray');
-            $(target).find('.btn_choose_time').addClass('border b-gray');
-            const data_time = $(target).find('.btn_choose_time').data('time');
-            $.ajax({
-                url: "{{ Url('report/sales') }}",
-                method: "get",
-                data: {
-                    data_time: data_time,
-                }
-            }).done(function (data) {
-                $('.list-data').html(data);
-            });
-        });
         $(document).on('click', '.download-pdf', function (e) {
             let time_choose = $('#time_choose').val();
             let url = location.href + '?data_time=' + time_choose + '&dowload_pdf=1';

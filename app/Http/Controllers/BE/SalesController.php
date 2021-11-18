@@ -46,14 +46,16 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
-        if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
 
         $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', getTime($request->data_time));
-            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereBetween('created_at', getTime($request->data_time))->with('orderDetails')
-                ->whereHas('customer', function ($qr) use ($item) {
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+            $orders = Order::select('member_id', 'all_total', 'gross_revenue')
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
             $orders2 = clone $orders;
@@ -64,11 +66,16 @@ class SalesController extends Controller
                 $qr->where('old_customer', 1);
             });
 
-            $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();// trao doi moi
-            $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count(); // trao doi cu
+            $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $order_new->pluck('member_id')->toArray())
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();// trao doi moi
+            $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $order_old->pluck('member_id')->toArray())
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->get()->count(); // trao doi cu
 
-            $item->schedules_new = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_new->pluck('member_id')->toArray())->whereBetween('created_at', getTime($request->data_time))->get()->count();//lich hen
-            $item->schedules_old = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_old->pluck('member_id')->toArray())->whereBetween('date', getTime($request->data_time))->get()->count();//lich hen
+            $item->schedules_new = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_new->pluck('member_id')->toArray())
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();//lich hen
+            $item->schedules_old = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_old->pluck('member_id')->toArray())
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();//lich hen
 
             $request->merge(['telesales' => $item->id]);
             $detail = PaymentHistory::search($request->all(), 'price');

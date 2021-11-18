@@ -11,7 +11,7 @@
             <div class="avatar-container  blink">
                 <img class="avatar-img" src="{{asset(@$value->avatar)}}">
             </div>
-            <div class="item-info {{'item-info'.($int)}}">
+            <div class="item-info {{'item-info'.($int)}}" style="font-size: 12px">
                 <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
                 <div class="item-tennv">{{$value->full_name}}</div>
                 <div class="">{{number_format($value->all_payment)}}</div>
