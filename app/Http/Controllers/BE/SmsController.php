@@ -281,14 +281,15 @@ class SmsController extends Controller
      */
     public function history(Request $request)
     {
-        $input = $request->all();
-        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
-            $input['data_time'] = 'THIS_MONTH';
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $input = $request->all();
+
         $title = 'Lich sử gửi tin nhắn';
         $docs = HistorySms::search($input)->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return Response::json(view('history_sms.ajax', compact('docs'))->render());
+            return view('history_sms.ajax', compact('docs'));
         }
         return view('history_sms.index', compact('docs', 'title'));
 

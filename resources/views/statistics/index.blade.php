@@ -1,6 +1,5 @@
 @extends('layout.app')
 @section('_style')
-    {{--    <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>--}}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>
@@ -16,7 +15,7 @@
                 <h3 class="card-title col-md-7 bold">THỐNG KÊ DOANH THU</h3>
 
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">

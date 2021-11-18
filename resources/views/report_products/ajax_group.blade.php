@@ -1,4 +1,4 @@
-<div style="width: 100%; overflow-y: auto;margin-top: 20px;height: 570px;font-size: 12px" class="tableFixHead">
+<div style="width: 100%; overflow-y: auto;margin-top: 20px;height: 570px;font-size: 12px" id="registration-form">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
         <tr>

@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('_style')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>
         .bxh-container {
@@ -114,19 +115,19 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Thống kê hoa hồng</h3>
-            <div class="col-md-10">
-                <ul class="col-md-9 no-padd mt5 tr right">
-                    {{--<li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>--}}
-                    {{--<li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>--}}
-                    <li class="display pl5"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần này</a></li>
-                    <li class="display pl5"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần trước</a></li>
-                    <li class="display pl5"><a data-time="THIS_MONTH"
-                                               class="display padding0-5 btn_choose_time border b-gray">Tháng
-                            này</a>
-                    </li>
-                    <li class="display pl5"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng trước</a></li>
-                </ul>
+            <h3 class="card-title col-lg-9">Thống kê hoa hồng</h3>
+            <div class="col-md-6">
+                {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
+                <div class="col-md-4">
+                    <input type="hidden" name="start_date" id="start_date">
+                    <input type="hidden" name="end_date" id="end_date">
+                    <input id="reportrange" type="text" class="form-control square">
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <button type="submit" class="btn btn-primary"> Tìm kiếm
+                    </button>
+                </div>
+                {{ Form::close() }}
             </div>
         </div>
         <input type="hidden" id="time_choose" value="THIS_MONTH">
@@ -135,21 +136,12 @@
         <div id="registration-form">
             @include('report_products.ajax_commision')
         </div>
-        {{--@include('report_products.commision_modal')--}}
     </div>
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 @section('_script')
     <script>
-        function searchAjax(data) {
-            $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
-            $.ajax({
-                url: window.location.href,
-                method: "get",
-                data: data,
-            }).done(function (data) {
-                $('#registration-form').html(data);
-            });
-        }
 
         function urlParam(name, url) {
             var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
@@ -161,14 +153,6 @@
             }
         }
 
-        $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
-            let target = $(e.target).parent();
-            $('a.btn_choose_time').removeClass('border b-gray');
-            $(target).find('.btn_choose_time').addClass('border b-gray');
-            const data_time = $(target).find('.btn_choose_time').data('time');
-            $('#time_choose').val(data_time).change();
-            searchAjax({data_time: data_time})
-        });
 
         $(document).on('click', '#click_detail', function (e) {
             let id = $(this).data('id');

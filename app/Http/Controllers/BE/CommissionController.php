@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Customer;
@@ -80,8 +81,8 @@ class CommissionController extends Controller
     public function statistical(Request $request)
     {
         $docs = [];
-        if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $category_price = Category::select('price', 'id')->pluck('price', 'id')->toArray();
         $input = $request->all();
@@ -127,7 +128,9 @@ class CommissionController extends Controller
         }
         $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
         if ($request->ajax()) {
-            return Response::json(view('report_products.ajax_commision', compact('data'))->render());
+//            return Response::json(view('report_products.ajax_commision', compact('data'))->render());
+            return view('report_products.ajax_commision', compact('data'));
+
         }
         return view('report_products.index_commision', compact('data'));
     }

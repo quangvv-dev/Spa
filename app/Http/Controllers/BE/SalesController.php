@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
@@ -102,14 +103,15 @@ class SalesController extends Controller
 
     public function indexGroupCategory(Request $request, $type)
     {
-        if (empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_WEEK']);
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         if (!isset($request->branch_id)) {
             $request->merge(['branch_id' => 1]);
         } elseif ($request->branch_id == (-1)) {
             $request->merge(['branch_id' => null]);
         }
+
         $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
         $branchs = Branch::search()->pluck('name', 'id');
 
@@ -128,10 +130,11 @@ class SalesController extends Controller
                 $data = self::searchBranch($data, $request);
                 $data2 = clone $data;
 
-                $data_new = $data2->whereBetween('created_at', getTime($request->data_time));
+                $data_new = $data2->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
 
-                $schedules_new = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time));
-                $schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereBetween('date', getTime($request->data_time))
+                $schedules_new = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_new->pluck('id')->toArray())
+                    ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+                $schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                     ->whereHas('customer', function ($qr) {
                         $qr->where('old_customer', 1);
                     });
@@ -143,18 +146,21 @@ class SalesController extends Controller
                 $data = self::searchBranch($data, $request);
                 $data2 = clone $data;
 
-                $data_new = $data2->whereBetween('created_at', getTime($request->data_time));
+                $data_new = $data2->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
 
-                $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', getTime($request->data_time));
-                $schedules_old = Schedule::select('id')->whereBetween('date', getTime($request->data_time))->whereHas('customer', function ($qr) {
-                    $qr->where('old_customer', 1);
-                });
+                $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())
+                    ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+                $schedules_old = Schedule::select('id')->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                    ->whereHas('customer', function ($qr) {
+                        $qr->where('old_customer', 1);
+                    });
 
                 $item->schedules_new = self::searchBranch($schedules_new, $request)->get()->count();//lich hen
                 $item->schedules_old = self::searchBranch($schedules_old, $request)->get()->count();//lich hen
             }
 
-            $order = Order::select('all_total', 'gross_revenue')->whereIn('id', $arr_orders)->whereBetween('created_at', getTime($request->data_time))->with('orderDetails');
+            $order = Order::select('all_total', 'gross_revenue')->whereIn('id', $arr_orders)
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->with('orderDetails');
             $order = self::searchBranch($order, $request);
 
             $order_ds = clone $order;
@@ -168,7 +174,8 @@ class SalesController extends Controller
                 $qr->where('old_customer', 1);
             });
 
-            $comment = GroupComment::select('id')->whereBetween('created_at', getTime($request->data_time))->whereIn('customer_id',$arr_customer);
+            $comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->whereIn('customer_id', $arr_customer);
             $comment2 = clone $comment;
 
             $comment_new = $comment->whereHas('customer', function ($qr) {
@@ -181,9 +188,10 @@ class SalesController extends Controller
             $item->comment_new = self::searchBranch($comment_new, $request)->get()->count();// trao doi moi
             $item->comment_old = self::searchBranch($comment_old, $request)->get()->count(); // trao doi cu
 
-            $payment_history = PaymentHistory::select('price')->whereBetween('payment_date', getTime($request->data_time))
-                ->whereHas('order',function ($qr) use ($request){
-                    $qr->whereDate('created_at', '<', getTime($request->data_time)[0]);
+            $payment_history = PaymentHistory::select('price')
+                ->whereBetween('payment_date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->whereHas('order', function ($qr) use ($request) {
+                    $qr->whereDate('created_at', '<', Functions::yearMonthDay($request->start_date) . " 00:00:00");
                 });
             $payment_history = self::searchBranch($payment_history, $request);
 
