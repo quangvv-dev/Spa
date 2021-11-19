@@ -98,9 +98,6 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="choose-time">
-    <input type="hidden" id="filter-start-date">
-    <input type="hidden" id="filter-end-date">
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="/js/player.js"></script>
 
@@ -140,32 +137,19 @@
         $(document).on('click', 'a.page-link', function (e) {
             e.preventDefault();
             let pages = $(this).attr('href').split('page=')[1];
-            let telesales = $('#telesales-input').val();
-            let data_time = $('#choose-time').val();
-            let start_date = $('#filter-start-date').val();
-            let end_date = $('#filter-end-date').val();
-            let bor_none = $('#bor-none').val();
-            let branch_id = $('.branch_id').val();
+            let telesales = $('#caller_number').val();
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+            let call_status = $('#call_status').val();
+            // let branch_id = $('.branch_id').val();
             let dest_number = $('#dest_number').val();
-
-
-            $.ajax({
-                url: '{{ url()->current() }}',
-                method: "get",
-                data: {
-                    telesales: telesales,
-                    data_time: data_time,
-                    start_date: start_date,
-                    end_date: end_date,
-                    bor_none: bor_none,
-                    page: pages,
-                    branch_id: branch_id,
-                    dest_number: dest_number,
-                },
-            }).done(function (data) {
-                $('#registration-form').html(data);
-            }).fail(function () {
-                alert('Articles could not be loaded.');
+            searchAjax({
+                telesales: telesales,
+                start_date: start_date,
+                end_date: end_date,
+                call_status: call_status,
+                page: pages,
+                dest_number: dest_number,
             });
         });
     </script>
