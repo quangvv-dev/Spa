@@ -233,23 +233,24 @@ class StatisticController extends Controller
      */
     public function taskSchedules(Request $request)
     {
-        $input = $request->all();
-        if (empty($request->data_time) && empty($request->end_date) && empty($request->start_date)) {
-            $input['data_time'] = 'THIS_MONTH';
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $input = $request->all();
+
         $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
             if (isset($input['data_time']) && $input['data_time']) {
-                $schedule = Schedule::where('person_action', $item->id)->whereBetween('date', getTime($input['data_time']));
-                $schedule2 = Schedule::where('person_action', $item->id)->whereBetween('date', getTime($input['data_time']));
-                $schedule3 = Schedule::where('person_action', $item->id)->whereBetween('date', getTime($input['data_time']));
-                $task = Task::where('user_id', $item->id)->whereBetween('date_from', getTime($input['data_time']));
-                $task1 = Task::where('user_id', $item->id)->whereBetween('date_from', getTime($input['data_time']));
-            } else {
-                $schedule = Schedule::where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                $schedule2 = Schedule::where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                $schedule3 = Schedule::where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $schedule2 = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $schedule3 = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
                 $task1 = Task::where('user_id', $item->id)->whereBetween('date_from', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+            } else {
+                $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $schedule2 = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $schedule3 = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $task = Task::select('id')->where('user_id', $item->id)->whereBetween('date_from', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $task1 = Task::select('id')->where('user_id', $item->id)->whereBetween('date_from', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             }
             $item->all_schedules = $schedule->count();
             $item->schedules_buy = $schedule->where('status', 3)->count();
@@ -263,7 +264,7 @@ class StatisticController extends Controller
         })->sortByDesc('all_schedules');
 
         if ($request->ajax()) {
-            return Response::json(view('statistics.ajax_taskSchedule', compact('users'))->render());
+            return view('statistics.ajax_taskSchedule', compact('users'));
         }
 
         return view('statistics.task_schedule', compact('users'));

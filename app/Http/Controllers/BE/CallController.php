@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use App\Models\CallCenter;
 use App\User;
 use Illuminate\Http\Request;
@@ -32,11 +33,11 @@ class CallController extends Controller
     public function index(Request $request)
     {
         $title = 'Quản lý tổng đài';
-        $input = $request->all();
 
-        if (empty($request->data_time)) {
-            $input['data_time'] = 'TODAY';
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $input = $request->all();
 
         $docs = CallCenter::search($input);
         $answers = clone $docs;
@@ -44,7 +45,7 @@ class CallController extends Controller
 
         $docs = $docs->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return Response::json(view('call_center.ajax', compact('docs', 'answers'))->render());
+            return view('call_center.ajax', compact('docs', 'answers'));
         }
         return view('call_center.index', compact('title', 'docs', 'answers'));
     }
@@ -98,7 +99,7 @@ class CallController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
