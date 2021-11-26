@@ -61,7 +61,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
                        href="{!! route('customers.index') !!}"><i
-                            class="fas fa-users"></i><span>Quản lý khách hàng</span></a>
+                                class="fas fa-users"></i><span>Quản lý khách hàng</span></a>
                 </li>
             @endif
             <li class="nav-item with-sub">
@@ -195,15 +195,32 @@
                     </ul>
                 </div>
             </li>
+
+            @if($roleGlobal->permission('thu-chi.list'))
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"
+                       href="#">
+                        <i class="fas fa-tasks"></i><span>THU CHI</span></a>
+                    <div class="sub-item">
+                        <ul>
+                            @if($roleGlobal->permission('danh-muc-thu-chi.index'))
+                                <li><a href="{{url('danh-muc-thu-chi')}}">Danh mục thu chi</a></li>
+                            @endif
+                            <li><a href="{{url('thu-chi')}}">Danh sách thu chi</a></li>
+                        </ul>
+                    </div>
+                </li>
+            @endif
+
         </ul>
         <div class="div-info">
             <div class="left">
                 <input id="check_notify" type="hidden">
                 <div class="dropdown dropdown-notification d-none d-md-flex">
                     <a class="nav-link icon notification margin-right0" data-toggle="dropdown"><i
-                            style="color: #3691ef;"
-                            class="fas fa-bell"></i> <span
-                            class="badge badge-danger badge-pill position0">10</span></a>
+                                style="color: #3691ef;"
+                                class="fas fa-bell"></i> <span
+                                class="badge badge-danger badge-pill position0">10</span></a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
                          style="overflow: auto;max-height: 400px">
                         <a class="dropdown-item text-center text-dark" href="#">2 New Messages</a>
@@ -238,15 +255,15 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                         <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
-                                class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
+                                    class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
                         @if($roleGlobal->permission('users.list'))
                             <a class="dropdown-item" href="{!! route('users.index') !!}"><i
-                                    class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
+                                        class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
                         @endif
 
                         @if($roleGlobal->permission('department.list'))
                             <a class="dropdown-item" href="{!! route('department.index') !!}"><i
-                                    class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
+                                        class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
                         @endif
 
                         @if(empty($permissions) || !in_array('sms.index',$permissions))
@@ -258,24 +275,24 @@
                         @endif
                         @if($roleGlobal->permission('status.list'))
                             <a class="dropdown-item" href="{!! route('status.index') !!}"><i
-                                    class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
+                                        class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
                         @endif
                         @if(empty($permissions) || !in_array('package.index',$permissions))
                             @if($roleGlobal->permission('settings'))
                                 <a class="dropdown-item" href="{!! route('package.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
+                                            class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
                             @endif
                         @endif
                         @if(empty($permissions) || !in_array('settings.index',$permissions))
                             @if($roleGlobal->permission('settings'))
                                 <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
+                                            class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
                             @endif
                         @endif
 
                         @if($roleGlobal->permission('roles.list'))
                             <a class="dropdown-item" href="{!! route('roles.index') !!}"><i
-                                    class="dropdown-icon mdi mdi-percent"></i> Quản lý phân quyền</a>
+                                        class="dropdown-icon mdi mdi-percent"></i> Quản lý phân quyền</a>
                         @endif
 
                         @if($roleGlobal->permission('leaderSale'))

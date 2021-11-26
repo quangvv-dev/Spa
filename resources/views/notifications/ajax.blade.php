@@ -3,8 +3,11 @@
         <tbody>
         @if(count($docs))
             @foreach($docs as $doc)
+                @php
+                    $url = $doc->type == \App\Constants\NotificationConstant::THU_CHI ? '/thu-chi?id='.$doc->data['thu_chi_id'] : '/tasks/' .$doc->task_id . '/edit';
+                @endphp
                 <tr style="{{$doc->status==\App\Constants\NotificationConstant::UNREAD?'background:#edf2fa':'background:#fff'}}">
-                    <td data-id="{{$doc->id}}" data-url="{{'/tasks/' .$doc->task_id . '/edit'}}">
+                    <td data-id="{{$doc->id}}" data-url="{{$url}}">
                         <div class="content">{{$doc->title}}</div>
                         <div class="date">{{$doc->created_at}}</div>
                     </td>

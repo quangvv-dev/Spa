@@ -79,6 +79,29 @@
                        onclick="checkAll('group17', 'input17')">
             </td>
         </tr>
+        <tr>
+            <td>QL thu chi</td>
+            <td>
+                <input type="checkbox" id="input181" name="permissions[]"
+                       value="thu-chi.list" {{@$doc && $doc->hasAccess('thu-chi.list') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input183" name="permissions[]"
+                       value="thu-chi.edit" {{@$doc && $doc->hasAccess('thu-chi.edit') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input182" name="permissions[]"
+                       value="thu-chi.add" {{@$doc && $doc->hasAccess('thu-chi.add') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input184" name="permissions[]"
+                       value="thu-chi.delete" {{@$doc && $doc->hasAccess('thu-chi.delete') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="group18"
+                       onclick="checkAll('group18', 'input18')">
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -120,6 +143,13 @@
                 </td>
             </tr>
         @endforeach
+        <tr>
+            <td>QL danh mục thu chi</td>
+            <td>
+                <input type="checkbox" id="input9" name="permissions[]"
+                       value="danh-muc-thu-chi.index" {{@$doc && $doc->hasAccess('danh-muc-thu-chi.index') ? 'checked' : ''}}>
+            </td>
+        </tr>
         </tbody>
     </table>
 

@@ -123,6 +123,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
         Route::get('product-depot/{id}', 'Depot\ProductDepotController@getDetail');
 
+        Route::post('change-status-thu-chi','ThuChi\ThuChiController@changeStatus');
+
     });
 
     Route::resource('rules', 'RuleController');//Automation
@@ -190,4 +192,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     });
 
+    Route::resource('danh-muc-thu-chi','ThuChi\DanhMucController');
+    Route::resource('thu-chi','ThuChi\ThuChiController');
 });

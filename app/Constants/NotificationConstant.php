@@ -15,5 +15,6 @@ class NotificationConstant
 
     const CSKH = 2; //công việc CSKH
     const CALL = 1; //công việc gọi điện
+    const THU_CHI = 3; // thu chi
 
 }
