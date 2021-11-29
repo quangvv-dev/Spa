@@ -1,38 +1,26 @@
 @extends('layout.app')
 @section('_style')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Thống kê công việc & lịch hẹn</h3>
-                <div class="col-md-9">
-                    <ul class="col-md-9 no-padd mt5 tr right">
-                        <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time">Tuần này</a></li>
-                        <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
-                        <li class="display pl5"><a data-time="THIS_MONTH" class="display padding0-5 choose_time border b-gray">Tháng này</a>
-                        </li>
-                        <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                        <li class="display position"><a class="other_time ">Khác</a>
-                            <div class="add-drop add-d-right other_time_panel"
-                                 style="left: auto; right: 0px; z-index: 999; display: none;"><s
-                                    class="gf-icon-neotop"></s>
-                                <div class="padding tl"><p>Ngày bắt đầu</p>
-                                    <input type="text" class="form-control filter_start_date" id="datepicker"
-                                           data-toggle="datepicker" name="payment_date">
-                                </div>
-                                <div class="padding tl"><p>Ngày kết thúc</p>
-                                    <input type="text" class="form-control filter_end_date" id="datepicker"
-                                           data-toggle="datepicker" name="payment_date">
-                                </div>
-                                <div class="padding5-10 tl mb5">
-                                    <button class="btn btn-info" id="submit_other_time">Tìm kiếm</button>
-                                    <button class="btn btn-default cancel_other_time">Đóng</button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                <h3 class="card-title col-md-8">Thống kê công việc & lịch hẹn</h3>
+                <div class="col-md-7">
+                    {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
+                    <div class="col-md-4">
+                        <input type="hidden" name="start_date" id="start_date">
+                        <input type="hidden" name="end_date" id="end_date">
+                        <input id="reportrange" type="text" class="form-control square">
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <button type="submit" class="btn btn-primary"> Tìm kiếm
+                        </button>
+                    </div>
+                    {{ Form::close() }}
+
                 </div>
             </div>
             <div id="registration-form">
@@ -41,11 +29,8 @@
         </div>
         <!-- table-responsive -->
     </div>
-    <input type="hidden" id="data-time">
-    <input type="hidden" id="start-date">
-    <input type="hidden" id="end-date">
-    <input type="hidden" id="search-user">
-    </div>
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 @section('_script')
     <script type="text/javascript">
