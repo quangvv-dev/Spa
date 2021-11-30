@@ -82,7 +82,7 @@ class SalesController extends Controller
             $item->schedules_old = $schedules->whereIn('user_id', $order_old->pluck('member_id')->toArray())->count();//lich hen
 
             $request->merge(['telesales' => $item->id]);
-            $detail = PaymentHistory::search($request->all(), 'price');
+            $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
 
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
@@ -91,7 +91,7 @@ class SalesController extends Controller
             $item->revenue_old = $order_old->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
-            $item->payment_old = $order_old->sum('gross_revenue') + $order_new->sum('gross_revenue'); //da thu trong ky
+            $item->payment_old = $order_old->sum('gross_revenue'); //da thu trong ky
             $item->revenue_total = $order_new->sum('all_total') - $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
