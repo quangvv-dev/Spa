@@ -194,4 +194,18 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     Route::resource('danh-muc-thu-chi','ThuChi\DanhMucController');
     Route::resource('thu-chi','ThuChi\ThuChiController');
+
+
+
+    Route::group(['prefix' => 'marketing', 'as' => 'marketing.'], function () {
+        Route::resource('fanpage', 'FanpageController');
+        Route::resource('fanpage-post', 'FanpagePostController');
+    });
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    //Login Facebook
+    Route::get('login/facebook', 'HomeController@postLoginFB')->name('facebook.login');
+    Route::get('login/facebook/callback', 'HomeController@callbackFB');
+    Route::get('remove-account-facebook', 'HomeController@removeAccount')->name('facebook.removeAccount');
 });

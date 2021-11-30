@@ -3,6 +3,7 @@
 @include('layout.assets_head')
 @yield('_style')
 <link href="{{ asset('css/menu-left.css') }}" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 <body class="app">
 <style>

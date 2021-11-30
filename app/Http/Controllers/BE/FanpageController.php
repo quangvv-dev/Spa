@@ -33,7 +33,8 @@ class FanpageController extends Controller
 
     public function index()
     {
-        return view('fanpage.index');
+        $fanpages = [];
+        return view('marketing.fanpage.index',compact('fanpages'));
     }
 
     /**
