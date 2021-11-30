@@ -58,21 +58,27 @@ class PromotionController extends BaseApiController
             }
         }
         if ($promotion->type == PromotionConstant::PERCENT) {//check trường hợp voucher phần trăm
-            if ($total_price >= $promotion->min_price) {
-                $check = (int)($total_price / 100) * (int)$promotion->percent_promotion;
-                if ($check >= $promotion->max_discount) {
-                    $discount = $promotion->max_discount;
-                } else {
-                    $discount = $check;
-                }
-                $data = [
-                    'voucher_id' => $promotion->id,
-                    'discount' => $discount,
-                ];
-                return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
+//            if ($total_price >= $promotion->min_price) {
+            $check = (int)($total_price / 100) * (int)$promotion->percent_promotion;
+            if ($check >= $promotion->max_discount) {
+                $discount = $promotion->max_discount;
             } else {
-                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'total_price < min price_promotion');
+                $discount = $check;
             }
+            if ($discount > $total_price) {
+                $discount = $total_price;
+            }
+
+            $data = [
+                'voucher_id' => $promotion->id,
+                'discount' => $discount,
+            ];
+
+            return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
+//            }
+//            else {
+//                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'total_price < min price_promotion');
+//            }
         }
     }
 }
