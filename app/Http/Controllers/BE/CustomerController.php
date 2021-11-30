@@ -382,14 +382,20 @@ class CustomerController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $now = Carbon::now()->format('d/m/Y');
-        $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
-        $data = $data->when(!empty($request->group), function ($query) use ($request) {
-            $arr = CustomerGroup::where('category_id', $request->group)->pluck('customer_id')->toArray();
-            $query->whereIn('id', $arr);
-        })->when(!empty($request->status), function ($query) use ($request) {
+        $data = Customer::orderBy('id', 'desc')
+            ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+            ->with('orders', 'categories');
+        $data = $data->when(!empty($request->status), function ($query) use ($request) {
             $query->where('status_id', $request->status);
         })->when(!empty($input['branch_id']), function ($query) use ($input) {
             $query->where('branch_id', $input['branch_id']);
+        })->when(!empty($request->group), function ($query) use ($request) {
+            $arr = CustomerGroup::where('category_id', $request->group)->pluck('customer_id');
+            if (!empty($request->branch_id)) {
+                $arr = $arr->where('branch_id', $request->branch_id);
+            }
+            $arr = $arr->toArray();
+            $query->whereIn('id', $arr);
         })->get();
 
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {

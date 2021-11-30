@@ -186,7 +186,7 @@
 
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('depots/product') ? 'active' : '' }}" href="#">
-                    <i class="fas fa-tasks"></i><span>KHO VẬN</span></a>
+                    <i class="fas fa-tasks"></i><span>Kho Vận</span></a>
                 <div class="sub-item">
                     <ul>
                         <li><a href="{{url('depots/product')}}">Sản phẩm kho</a></li>
@@ -200,7 +200,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"
                        href="#">
-                        <i class="fas fa-tasks"></i><span>THU CHI</span></a>
+                        <i class="fas fa-tasks"></i><span>Thu Chi</span></a>
                     <div class="sub-item">
                         <ul>
                             @if($roleGlobal->permission('danh-muc-thu-chi.index'))
