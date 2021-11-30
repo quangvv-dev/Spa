@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
@@ -66,16 +67,19 @@ class SalesController extends Controller
                 $qr->where('old_customer', 1);
             });
 
-            $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $order_new->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();// trao doi moi
-            $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $order_old->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->get()->count(); // trao doi cu
+            $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+            $comment_new = clone $group_comment;
 
-            $item->schedules_new = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_new->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();//lich hen
-            $item->schedules_old = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_old->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();//lich hen
+            $item->comment_new = $comment_new->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi
+            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
+
+            $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+            $schedules_den = clone $schedules;
+            $schedules_new = clone $schedules;
+
+            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            $item->schedules_new = $schedules_new->whereIn('user_id', $order_new->pluck('member_id')->toArray())->count();//lich hen
+            $item->schedules_old = $schedules->whereIn('user_id', $order_old->pluck('member_id')->toArray())->count();//lich hen
 
             $request->merge(['telesales' => $item->id]);
             $detail = PaymentHistory::search($request->all(), 'price');

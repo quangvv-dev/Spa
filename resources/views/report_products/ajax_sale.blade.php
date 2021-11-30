@@ -26,7 +26,7 @@
         <tr>
             <th class="text-center" colspan="1">STT</th>
             <th class="text-center" colspan="1">SALE</th>
-            <th class="text-center" colspan="9">KHÁCH HÀNG MỚI</th>
+            <th class="text-center" colspan="10">KHÁCH HÀNG MỚI</th>
             <th class="text-center" colspan="6">KHÁCH HÀNG CŨ</th>
             <th class="text-center" colspan="4">TỔNG CHUNG</th>
         </tr>
@@ -37,6 +37,7 @@
             <th class="text-center">Trao đổi</th>
             <th class="text-center">Lịch hẹn</th>
             <th class="text-center">Đơn chốt</th>
+            <th class="text-center">Khách hàng đến</th>
             <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
             <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
@@ -60,6 +61,7 @@
             <th class="text-center">(4)</th>
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
+            <th class="text-center">(6.1)</th>
             <th class="text-center">(5)/(3)</th>
             <th class="text-center">(6)/(3)</th>
             <th class="text-center">(7)</th>
@@ -94,6 +96,7 @@
             $revenue_old = 0;
             $payment_old = 0;
             $all_payment = 0;
+            $all_schedules_den = 0;
         @endphp
 
         @if(count($users))
@@ -113,6 +116,7 @@
                 $revenue_old += $item->revenue_old;
                 $payment_old += $item->payment_old;
                 $all_payment += $item->all_payment;
+                $all_schedules_den += $item->schedules_den;
 
                 @endphp
                 <tr class="">
@@ -122,6 +126,7 @@
                     <td class="text-center pdr10">{{$item->comment_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
+                    <td class="text-center pdr10">{{$item->schedules_den}}</td>
                     <td class="text-center pdr10">{{!empty($item->schedules_new) && !empty($item->customer_new) ?round(($item->schedules_new/$item->customer_new)*100):0}}
                         %
                     </td>
@@ -144,28 +149,29 @@
                 </tr>
             @endforeach
         @endif
-        <tr class="fixed">
-            <th class="text-center"></th>
-            <th class="text-center bold">Tổng cộng</th>
-            <th class="text-center bold">{{@number_format($customer_new)}}</th>
-            <th class="text-center bold">{{@number_format($comment_new)}}</th>
-            <th class="text-center bold">{{@number_format($schedules_new)}}</th>
-            <th class="text-center bold">{{@number_format($order_new)}}</th>
-            <th class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</th>
-            <th class="text-center bold">{{@number_format($order_percent/count($users))}}%</th>
-            <th class="text-center bold">{{@number_format($revenue_new)}}</th>
-            <th class="text-center bold">{{@number_format($payment_new)}}</th>
-            <th class="text-center bold">{{!empty($payment_new)&& !empty($order_new)?number_format($payment_new/$order_new):0}}</th>
-            <th class="text-center bold">{{@number_format($schedules_old)}}</th>
-            <th class="text-center bold">{{@number_format($comment_old)}}</th>
-            <th class="text-center bold">{{@number_format($order_old)}}</th>
-            <th class="text-center bold">{{@number_format($revenue_old)}}</th>
-            <th class="text-center bold">{{@number_format($payment_old)}}</th>
-            <th class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</th>
-            <th class="bold">{{number_format($allTotal)}}</th>
-            <th class="bold">{{number_format($grossRevenue)}}</th>
-            <th class="bold">{{number_format($all_payment - $grossRevenue)}}</th>
-            <th class="bold">{{number_format($all_payment)}}</th>
+        <tr >
+            <td class="text-center"></td>
+            <td class="text-center bold">Tổng cộng</td>
+            <td class="text-center bold">{{@number_format($customer_new)}}</td>
+            <td class="text-center bold">{{@number_format($comment_new)}}</td>
+            <td class="text-center bold">{{@number_format($schedules_new)}}</td>
+            <td class="text-center bold">{{@number_format($order_new)}}</td>
+            <td class="text-center bold">{{@number_format($all_schedules_den)}}</td>
+            <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
+            <td class="text-center bold">{{@number_format($order_percent/count($users))}}%</td>
+            <td class="text-center bold">{{@number_format($revenue_new)}}</td>
+            <td class="text-center bold">{{@number_format($payment_new)}}</td>
+            <td class="text-center bold">{{!empty($payment_new)&& !empty($order_new)?number_format($payment_new/$order_new):0}}</td>
+            <td class="text-center bold">{{@number_format($schedules_old)}}</td>
+            <td class="text-center bold">{{@number_format($comment_old)}}</td>
+            <td class="text-center bold">{{@number_format($order_old)}}</td>
+            <td class="text-center bold">{{@number_format($revenue_old)}}</td>
+            <td class="text-center bold">{{@number_format($payment_old)}}</td>
+            <td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>
+            <td class="bold">{{number_format($allTotal)}}</td>
+            <td class="bold">{{number_format($grossRevenue)}}</td>
+            <td class="bold">{{number_format($all_payment - $grossRevenue)}}</td>
+            <td class="bold">{{number_format($all_payment)}}</td>
         </tr>
 
         </tbody>
