@@ -143,7 +143,8 @@
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
                     <td class="text-center pdr10">{{!empty($item->payment_old) && !empty($item->order_old) ? number_format($item->payment_old/$item->order_old):0}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->payment_new+$item->payment_old)}}</td>
+
+                    <td class="text-center pdr10">{{number_format($item->payment_new + $item->payment_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->all_payment - $item->payment_new - $item->payment_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
                 </tr>
