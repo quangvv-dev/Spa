@@ -104,8 +104,8 @@
                 $customer_new += $item->customer_new;
                 $comment_new += $item->comment_new;
                 $order_new += $item->order_new;
-                $schedules_percent += $item->schedules_den >0 && $item->customer_new>0 ?round(($item->schedules_den/$item->customer_new)*100,2):0;
-                $order_percent += $item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100,2):0;
+                $schedules_percent += $item->schedules_den >0 && $item->customer_new>0 ?round(($item->schedules_den/$item->customer_new)*100,1):0;
+                $order_percent += $item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100,1):0;
                 $revenue_new += $item->revenue_new;
                 $payment_new += $item->payment_new;
                 $schedules_old += $item->schedules_old;
@@ -125,10 +125,10 @@
                     <td class="text-center pdr10">{{$item->schedules_den}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
                     {{--<td class="text-center pdr10">{{$item->schedules_den}}</td>--}}
-                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ?round(($item->schedules_den/$item->customer_new)*100,2):0}}
+                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ?round(($item->schedules_den/$item->customer_new)*100,1):0}}
                         %
                     </td>
-                    <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100,2):0}}
+                    <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100,1):0}}
                         %
                     </td>
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
