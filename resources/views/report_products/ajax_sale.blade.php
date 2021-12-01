@@ -150,7 +150,7 @@
                 </tr>
             @endforeach
         @endif
-        <tr >
+        <tr>
             <td class="text-center"></td>
             <td class="text-center bold">Tổng cộng</td>
             <td class="text-center bold">{{@number_format($customer_new)}}</td>
@@ -170,9 +170,8 @@
             <td class="text-center bold">{{@number_format($payment_old)}}</td>
             <td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>
             <td class="bold">{{number_format($allTotal)}}</td>
-            <td class="bold">{{number_format($grossRevenue)}}</td>
             <td class="bold">{{number_format($all_payment - $grossRevenue)}}</td>
-            <td class="bold">{{number_format($all_payment)}}</td>
+            <td class="bold">{{number_format($all_payment)}}da thu trong ky</td>
         </tr>
 
         </tbody>
