@@ -418,10 +418,7 @@
                             html += `<div class="header m-t-5">
                             <ul class="promotionRules col">
                                 <li>
-                                    <span class="ruleName">Giảm giá: </span><span class="ruleValue">` + item.percent_promotion + `%</span>
-                                </li>
-                                <li>
-                                    <span class="ruleName">Tối đa: </span><span class="ruleValue">` + formatNumber(item.max_discount) + `</span>
+                                    <span class="ruleName">Giảm giá: </span><span class="ruleValue">` + formatNumber(item.money_promotion) + `</span>
                                 </li>
                                 <li>
                                     <span class="ruleName">Đơn hàng từ: </span><span class="ruleValue">` + formatNumber(item.min_price) + `</span>
@@ -430,7 +427,7 @@
                             <div class="div">
                                 <a href="#" data-id="` + item.id + `" class="btn btn-warning chooseVoucher">Áp dụng</a>
                             </div>
-                        </div>`;
+                        </div> `;
                         }
                     });
                 } else {
@@ -452,6 +449,7 @@
             }).done(function (response) {
                 let html = '';
                 let data = response.data;
+                console.log(data);
                 if (data.length > 0) {
                     data.forEach(function (item) {
                         if (item.type == {{\App\Constants\PromotionConstant::PERCENT}}) {
@@ -471,7 +469,23 @@
                                 <a href="#" data-id="` + item.id + `" class="btn btn-warning chooseVoucher">Áp dụng</a>
                             </div>
                         </div>`;
-                        }
+                        } else {
+                        html +=  html += `<div class="header m-t-5">
+                            <ul class="promotionRules col">
+                                <li>
+                                    <span class="ruleName">Giảm giá: </span><span class="ruleValue">` + formatNumber(item.money_promotion) + `</span>
+                                </li>
+                                <li>
+                                    <span class="ruleName">Đơn hàng từ: </span><span class="ruleValue">` + formatNumber(item.min_price) + `</span>
+                                </li>
+                            </ul>
+                            <div class="div">
+                                <a href="#" data-id="` + item.id + `" class="btn btn-warning chooseVoucher">Áp dụng</a>
+                            </div>
+                        </div> `;
+                    }
+
+
                     });
                 } else {
                     html = `<span style="color: red"><i>Không có mã khuyến mại khả dụng !!!</i></span>`;
@@ -546,7 +560,7 @@
                 method: "get",
                 data: {total_price: parseInt(replaceNumber(total))}
             }).done(function (response) {
-                if (response.ok == 200) {
+                if (response.code == 200) {
                     $('#voucher').html(formatNumber(response.data.discount));
                     $('#discount').val(response.data.discount);
                     value_total = 0;
