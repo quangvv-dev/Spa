@@ -37,7 +37,7 @@
             <th class="text-center">Trao đổi</th>
             <th class="text-center">Lịch hẹn</th>
             <th class="text-center">Đơn chốt</th>
-            <th class="text-center">Khách hàng đến</th>
+            {{--<th class="text-center">Khách hàng đến</th>--}}
             <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
             <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
@@ -61,7 +61,7 @@
             <th class="text-center">(4)</th>
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
-            <th class="text-center">(6.1)</th>
+            {{--<th class="text-center">(6.1)</th>--}}
             <th class="text-center">(5)/(3)</th>
             <th class="text-center">(6)/(3)</th>
             <th class="text-center">(7)</th>
@@ -84,7 +84,6 @@
         @php
             $customer_new = 0;
             $comment_new = 0;
-            $schedules_new = 0;
             $order_new = 0;
             $schedules_percent = 0;
             $order_percent = 0;
@@ -104,9 +103,8 @@
                 @php $i++ ;
                 $customer_new += $item->customer_new;
                 $comment_new += $item->comment_new;
-                $schedules_new += $item->schedules_new;
                 $order_new += $item->order_new;
-                $schedules_percent += $item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0;
+                $schedules_percent += $item->schedules_den >0 && $item->customer_new>0 ?round(($item->schedules_den/$item->customer_new)*100):0;
                 $order_percent += $item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0;
                 $revenue_new += $item->revenue_new;
                 $payment_new += $item->payment_new;
@@ -124,9 +122,9 @@
                     <td class="text-center pdr10">{{$item->full_name}}
                     <td class="text-center pdr10">{{$item->customer_new}}</td>
                     <td class="text-center pdr10">{{$item->comment_new}}</td>
-                    <td class="text-center pdr10">{{$item->schedules_new}}</td>
-                    <td class="text-center pdr10">{{$item->order_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_den}}</td>
+                    <td class="text-center pdr10">{{$item->order_new}}</td>
+                    {{--<td class="text-center pdr10">{{$item->schedules_den}}</td>--}}
                     <td class="text-center pdr10">{{!empty($item->schedules_new) && !empty($item->customer_new) ?round(($item->schedules_new/$item->customer_new)*100):0}}
                         %
                     </td>
@@ -155,9 +153,9 @@
             <td class="text-center bold">Tổng cộng</td>
             <td class="text-center bold">{{@number_format($customer_new)}}</td>
             <td class="text-center bold">{{@number_format($comment_new)}}</td>
-            <td class="text-center bold">{{@number_format($schedules_new)}}</td>
-            <td class="text-center bold">{{@number_format($order_new)}}</td>
             <td class="text-center bold">{{@number_format($all_schedules_den)}}</td>
+            <td class="text-center bold">{{@number_format($order_new)}}</td>
+            {{--<td class="text-center bold">{{@number_format($all_schedules_den)}}</td>--}}
             <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
             <td class="text-center bold">{{@number_format($order_percent/count($users))}}%</td>
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>

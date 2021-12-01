@@ -54,6 +54,7 @@ class SalesController extends Controller
         $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+
             $orders = Order::select('member_id', 'all_total', 'gross_revenue')
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
@@ -75,10 +76,10 @@ class SalesController extends Controller
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
             $schedules_den = clone $schedules;
-            $schedules_new = clone $schedules;
+//            $schedules_new = clone $schedules;
 
             $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            $item->schedules_new = $schedules_new->whereIn('user_id', $order_new->pluck('member_id')->toArray())->count();//lich hen
+//            $item->schedules_new = $schedules_new->whereIn('user_id', $order_new->pluck('member_id')->toArray())->count();//lich hen
             $item->schedules_old = $schedules->whereIn('user_id', $order_old->pluck('member_id')->toArray())->count();//lich hen
 
             $request->merge(['telesales' => $item->id]);
