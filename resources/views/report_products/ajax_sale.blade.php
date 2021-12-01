@@ -125,7 +125,7 @@
                     <td class="text-center pdr10">{{$item->schedules_den}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
                     {{--<td class="text-center pdr10">{{$item->schedules_den}}</td>--}}
-                    <td class="text-center pdr10">{{!empty($item->schedules_new) && !empty($item->customer_new) ?round(($item->schedules_new/$item->customer_new)*100):0}}
+                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ?round(($item->schedules_den/$item->customer_new)*100):0}}
                         %
                     </td>
                     <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0}}
