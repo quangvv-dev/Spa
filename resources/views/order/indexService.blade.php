@@ -418,6 +418,9 @@
                             html += `<div class="header m-t-5">
                             <ul class="promotionRules col">
                                 <li>
+                                    <span class="ruleName"></span><span class="ruleValue">` + item.title + `</span>
+                                </li>
+                                <li>
                                     <span class="ruleName">Giảm giá: </span><span class="ruleValue">` + formatNumber(item.money_promotion) + `</span>
                                 </li>
                                 <li>
@@ -472,6 +475,9 @@
                         } else {
                         html +=  html += `<div class="header m-t-5">
                             <ul class="promotionRules col">
+                                <li>
+                                    <span class="ruleName"></span><span class="ruleValue">` + item.title + `</span>
+                                </li>
                                 <li>
                                     <span class="ruleName">Giảm giá: </span><span class="ruleValue">` + formatNumber(item.money_promotion) + `</span>
                                 </li>
