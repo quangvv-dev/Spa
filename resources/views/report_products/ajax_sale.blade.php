@@ -172,7 +172,7 @@
             <td class="bold">{{number_format($allTotal)}}</td>
             <td class="bold">{{number_format($all_payment - $grossRevenue)}}</td>
 
-            <td class="bold">{{number_format($all_payment - $payment_new - $payment_old)}} thu nợ</td>
+            <td class="bold">{{number_format($all_payment - $payment_new - $payment_old)}}</td>
 
             <td class="bold">{{number_format($all_payment)}}</td>
         </tr>
