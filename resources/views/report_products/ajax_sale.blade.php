@@ -63,7 +63,7 @@
             <th class="text-center">(6)</th>
             <th class="text-center">(6.1)</th>
             <th class="text-center">(5)/(3)</th>
-            <th class="text-center">(6.1)/(6)</th>
+            <th class="text-center">(6.1)/(5)</th>
             <th class="text-center">(6)/(3)</th>
             <th class="text-center">(7)</th>
             <th class="text-center">(8)</th>
