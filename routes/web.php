@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('store-branch', 'SettingController@storeBranch')->name('settings.storeBranch');
     Route::put('branch/{id}', 'SettingController@updateBranch')->name('settings.updateBranch');
     Route::delete('branch/{id}', 'SettingController@destroy')->name('settings.destroy');
-    Route::get('settings/phan-bo-data', 'SettingController@phanbo')->name('settings.phanbo');
+    Route::get('settings/phan-bo-data', 'SettingController@phanbo')->name('settings.phanbo');//Phân bổ data Sale
     Route::post('settings/post', 'SettingController@postPhanBo')->name('settings.postPhanBo');
 
 
