@@ -498,4 +498,5 @@ class Functions
         $request->merge(['start_date' => $date_check]);
         $request->merge(['end_date' => $date]);
     }
+
 }
