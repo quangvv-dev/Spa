@@ -390,11 +390,11 @@ class CustomerController extends Controller
         })->when(!empty($input['branch_id']), function ($query) use ($input) {
             $query->where('branch_id', $input['branch_id']);
         })->when(!empty($request->group), function ($query) use ($request) {
-            $arr = CustomerGroup::where('category_id', $request->group)->pluck('customer_id');
+            $arr = CustomerGroup::where('category_id', $request->group);
             if (!empty($request->branch_id)) {
                 $arr = $arr->where('branch_id', $request->branch_id);
             }
-            $arr = $arr->toArray();
+            $arr = $arr->pluck('customer_id')->toArray();
             $query->whereIn('id', $arr);
         })->get();
 
