@@ -66,7 +66,7 @@ class ThuChiController extends Controller
             $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
         })->pluck('full_name', 'id');
 
-        $type = collect(['0' => 'Tại quầy', '1' => 'Trong két']);
+        $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
 
         $categories = DanhMucThuChi::pluck('name', 'id');
 
@@ -126,7 +126,7 @@ class ThuChiController extends Controller
         $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
             $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
         })->pluck('full_name', 'id');
-        $type = collect(['0' => 'Tại quầy', '1' => 'Trong két']);
+        $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
         return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type'));
     }
