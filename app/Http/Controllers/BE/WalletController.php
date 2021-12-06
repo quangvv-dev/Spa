@@ -60,11 +60,12 @@ class WalletController extends Controller
         $package = PackageWallet::findOrFail($request->package_id);
         $customer = Customer::findOrFail($request->customer_id);
         $input = [
-            'package_id' => $package->id,
-            'customer_id' => $customer->id,
-            'user_id' => Auth::user()->id,
-            'price' => $package->price,
-            'order_price' => $package->order_price,
+            'package_id'    => $package->id,
+            'customer_id'   => $customer->id,
+            'user_id'       => Auth::user()->id,
+            'price'         => $package->price,
+            'order_price'   => $package->order_price,
+            'branch_id'     => $customer->branch_id,
         ];
         $this->walletService->create($input);
         $customer->wallet = $customer->wallet + $package->price;

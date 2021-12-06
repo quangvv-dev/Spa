@@ -23,7 +23,7 @@ Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
-    Route::get('upload/images', 'BaseApiController@apiUpload');
+    Route::post('upload/images', 'BaseApiController@apiUpload');
 
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('get-profile', 'AuthController@getProfile');
