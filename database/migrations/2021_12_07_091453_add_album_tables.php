@@ -15,9 +15,9 @@ class AddAlbumTables extends Migration
     {
         Schema::create('albums', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('customer_id')->comment('SĐT');
+            $table->string('customer_id')->comment('SĐT')->unique()->index();
             $table->integer('branch_id')->comment('chi nhánh');
-            $table->longText('images')->comment('Ảnh');
+            $table->longText('images')->comment('Ảnh')->nullable();
             $table->timestamps();
         });
     }

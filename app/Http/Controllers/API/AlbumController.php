@@ -6,7 +6,9 @@ use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Http\Resources\AlbumResource;
 use App\Models\Album;
+use App\Models\Customer;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class AlbumController extends BaseApiController
@@ -49,7 +51,7 @@ class AlbumController extends BaseApiController
                 $doc = Album::create($input);
             }
         }
-        $data['records'] = new AlbumResource($doc);
+        $data = new AlbumResource($doc);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
@@ -70,7 +72,7 @@ class AlbumController extends BaseApiController
             unset($img_default[$key]);
             $doc->images = json_encode(array_values($img_default));
             $doc->save();
-            $data['records'] = new AlbumResource($doc);
+            $data = new AlbumResource($doc);
         }
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -84,10 +86,49 @@ class AlbumController extends BaseApiController
      */
     public function index(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'phone' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
         $input = $request->all();
-        $doc = Album::search($input)->paginate(StatusCode::PAGINATE_10);
-        $doc = AlbumResource::collection($doc);
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $doc);
+        $customer = Customer::select('id', 'full_name', 'phone', 'branch_id')->where('phone', $input['phone'])->first();
+        if (isset($customer) && $customer) {
+            $data = [
+                'id' => $customer->id,
+                'name' => $customer->full_name,
+                'phone' => $customer->phone,
+                'branch_id' => $customer->branch_id,
+            ];
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+        }
+        return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND CUSTOMER ALBUM');
+
+    }
+
+    /**
+     * Chi tiết Album
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Request $request, $id)
+    {
+        $input = $request->all();
+        $doc = Album::where('customer_id', $id)->first();
+
+        if (empty($doc)) {
+            $input['customer_id'] = $id;
+            $doc = Album::create($input);
+        }
+        $data = new AlbumResource($doc);
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
 }

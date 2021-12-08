@@ -26,6 +26,9 @@ class Album extends Model
                 $query->whereHas('customer', function ($qr) use ($input) {
                     $qr->where('phone', $input['phone']);
                 });
+            })
+            ->when(isset($input['customer_id']), function ($query) use ($input) {
+                $query->where('customer_id', $input['customer_id']);
             });
 
         return $data;

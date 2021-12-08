@@ -28,9 +28,12 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::post('albums', 'AlbumController@store');
     Route::delete('albums/{id}', 'AlbumController@delete');
     Route::get('albums', 'AlbumController@index');
+    Route::get('albums/{id}', 'AlbumController@show');
     //THU CHI
-    Route::get('thu-chi', 'ThuChiController@index');
-    Route::post('thu-chi/{id}', 'ThuChiController@update');
+    Route::get('pay', 'ThuChiController@index');
+    Route::post('pay/{id}', 'ThuChiController@update');
+    Route::get('notification-pay', 'ThuChiController@getNotification');
+    Route::get('read-notification-pay', 'ThuChiController@readNotification');
 
 
     Route::post('change-password', 'AuthController@changePassword');
