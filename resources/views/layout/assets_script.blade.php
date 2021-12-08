@@ -52,6 +52,32 @@
 <script src="{{asset('js/datepicker.js')}}"></script>
 <script src="{{asset('assets/js/tableHeadFixer.js')}}"></script>
 
+{{--<script type="module">--}}
+    {{--// Import the functions you need from the SDKs you need--}}
+    {{--import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";--}}
+    {{--import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-analytics.js";--}}
+    {{--// TODO: Add SDKs for Firebase products that you want to use--}}
+    {{--// https://firebase.google.com/docs/web/setup#available-libraries--}}
+
+    {{--// Your web app's Firebase configuration--}}
+    {{--// For Firebase JS SDK v7.20.0 and later, measurementId is optional--}}
+    {{--const firebaseConfig = {--}}
+        {{--apiKey: "AIzaSyDObsXEJVbvmu5RRjCqMPaWHyFIfsh8NDU",--}}
+        {{--authDomain: "spa-super-app.firebaseapp.com",--}}
+        {{--projectId: "spa-super-app",--}}
+        {{--storageBucket: "spa-super-app.appspot.com",--}}
+        {{--messagingSenderId: "74887372305",--}}
+        {{--appId: "1:74887372305:web:eb5e7aff120194ba831bb0",--}}
+        {{--measurementId: "${config.measurementId}"--}}
+    {{--};--}}
+    {{--const server_key = "AIzaSyDObsXEJVbvmu5RRjCqMPaWHyFIfsh8NDU";--}}
+
+    {{--// Initialize Firebase--}}
+    {{--const app = initializeApp(firebaseConfig);--}}
+    {{--const analytics = getAnalytics(app);--}}
+
+{{--</script>--}}
+
 <script>
     $.ajaxSetup({
         headers: {

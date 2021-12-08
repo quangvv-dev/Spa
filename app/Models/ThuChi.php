@@ -16,7 +16,7 @@ class ThuChi extends Model
     {
         $data = self::when(isset($param['category_id']) && $param['category_id'], function ($query) use ($param) {
             $query->where('danh_muc_thu_chi_id', $param['category_id']);
-        })->when(isset($param['status']) , function ($query) use ($param) {
+        })->when(isset($param['status']), function ($query) use ($param) {
             $query->where('status', $param['status']);
         })->when(isset($param['thuc_hien_id']) && $param['thuc_hien_id'], function ($query) use ($param) {
             $query->where('thuc_hien_id', $param['thuc_hien_id']);
@@ -40,7 +40,8 @@ class ThuChi extends Model
     {
         return $this->belongsTo(User::class, 'duyet_id');
     }
-    public function thucHien()
+
+    public function thucHien()//người tạo đơn
     {
         return $this->belongsTo(User::class, 'thuc_hien_id');
     }

@@ -24,6 +24,14 @@ Route::post('register', 'API\AuthController@register');
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
     Route::post('upload/images', 'BaseApiController@apiUpload');
+    //ALBUM
+    Route::post('albums', 'AlbumController@store');
+    Route::delete('albums/{id}', 'AlbumController@delete');
+    Route::get('albums', 'AlbumController@index');
+    //THU CHI
+    Route::get('thu-chi', 'ThuChiController@index');
+    Route::post('thu-chi/{id}', 'ThuChiController@update');
+
 
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('get-profile', 'AuthController@getProfile');

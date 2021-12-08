@@ -91,8 +91,11 @@ class ThuChiController extends Controller
         $thu_chi = ThuChi::create($data);
         if($request->duyet_id){
             $data_noti = json_encode((array)['thu_chi_id' => $thu_chi->id]);
-            $title = 'Bạn có thông báo thu chi mới !';
+            $title = '💸💸💸 Bạn có thông báo thu chi mới !';
             $type = NotificationConstant::THU_CHI;
+
+            fcmSendCloudMessage('/topics/all', $title, 'Chạm để xem','notification',['thu_chi_id' => $thu_chi->id]);
+
             Notification::insert(['user_id'=>$request->duyet_id,'title'=>$title,'data'=>$data_noti,'type' =>$type,'status'=>1]);
         }
 
