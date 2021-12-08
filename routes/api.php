@@ -33,7 +33,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('pay', 'ThuChiController@index');
     Route::post('pay/{id}', 'ThuChiController@update');
     Route::get('notification-pay', 'ThuChiController@getNotification');
-    Route::get('read-notification-pay', 'ThuChiController@readNotification');
+    Route::post('notification-pay/{id}', 'ThuChiController@readNotification');
 
 
     Route::post('change-password', 'AuthController@changePassword');

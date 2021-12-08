@@ -65,15 +65,16 @@ class AlbumController extends BaseApiController
      */
     public function delete(Request $request, $id)
     {
-        $doc = Album::find($id);
+        $doc = Album::where('customer_id', $id)->first();
         $img_default = json_decode($doc->images);
         $key = array_search($request->images, array_column($img_default, 'fileName'));
-        if ($key) {
+        if (is_numeric($key)) {
+            unlink(public_path('/images/album/'.$img_default[$key]->fileName));
             unset($img_default[$key]);
             $doc->images = json_encode(array_values($img_default));
             $doc->save();
-            $data = new AlbumResource($doc);
         }
+        $data = new AlbumResource($doc);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
@@ -99,7 +100,7 @@ class AlbumController extends BaseApiController
         $customer = Customer::select('id', 'full_name', 'phone', 'branch_id')->where('phone', $input['phone'])->first();
         if (isset($customer) && $customer) {
             $data = [
-                'id' => $customer->id,
+                'customer_id' => $customer->id,
                 'name' => $customer->full_name,
                 'phone' => $customer->phone,
                 'branch_id' => $customer->branch_id,

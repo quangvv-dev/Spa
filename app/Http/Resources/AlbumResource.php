@@ -16,7 +16,7 @@ class AlbumResource extends JsonResource
     {
 
         return [
-            'id'               => @$this->id,
+//            'id'               => @$this->id,
             'customer_id'      => @$this->customer->id,
             'customer_name'    => @$this->customer->full_name,
             'phone'            => @$this->customer->phone,
