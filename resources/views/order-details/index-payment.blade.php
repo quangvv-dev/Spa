@@ -3,7 +3,7 @@
     $checkRole = checkRoleAlready();
 @endphp
 @section('_style')
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <style>

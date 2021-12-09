@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+<link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
 <div class="modal fade" id="myModalExport" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
