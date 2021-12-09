@@ -96,7 +96,7 @@ class ThuChiController extends Controller
             $title = '💸💸💸 Bạn có thông báo thu chi mới !';
             $type = NotificationConstant::THU_CHI;
 
-            fcmSendCloudMessage('/topics/all', $title, 'Chạm để xem', 'notification', ['pay_id' => $thu_chi->id]);
+//            fcmSendCloudMessage('/topics/all', $title, 'Chạm để xem', 'notification', ['pay_id' => $thu_chi->id]);
 
             Notification::insert(
                 [
