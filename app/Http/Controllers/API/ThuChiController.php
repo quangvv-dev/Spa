@@ -11,6 +11,7 @@ use App\Http\Resources\NotificationResource;
 use App\Models\Notification;
 use App\Models\ThuChi;
 use App\User;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class ThuChiController extends BaseApiController
@@ -37,7 +38,11 @@ class ThuChiController extends BaseApiController
             $docs = ThuChi::search($search)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             $doc = ThuChiResource::collection($docs);
         }
+        if ($request->pay_id){
+            $docs = ThuChi::where('id',$request->pay_id)->first();
+            $doc = isset($docs) ? new ThuChiResource($docs):[];
 
+        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $doc);
     }
 
@@ -91,6 +96,57 @@ class ThuChiController extends BaseApiController
         }
         $docs = new NotificationResource($docs);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
+    }
+
+    /**
+     * Update device token firebase
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateDevicesToken(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'devices_token' => ['required'],
+            'customer_id' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
+
+        $user = User::where('id', $request->customer_id)->first();
+        if (isset($user) && $user) {
+            $user->devices_token = $request->devices_token;
+            $user->save();
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+        } else {
+            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND USER');
+        }
+
+    }
+
+    /**
+     * Test firebase
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function testSendFirebase(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'devices_token' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
+        fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification', ['pay_id' => 1]);
+
     }
 
 }

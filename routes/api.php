@@ -35,6 +35,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('notification-pay', 'ThuChiController@getNotification');
     Route::post('notification-pay/{id}', 'ThuChiController@readNotification');
 
+    Route::post('update-firebase_token', 'ThuChiController@updateDevicesToken');
 
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('get-profile', 'AuthController@getProfile');
