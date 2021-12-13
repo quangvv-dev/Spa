@@ -159,8 +159,7 @@ class ThuChiController extends BaseApiController
                 'message' => $validator->errors()->first(),
             ]);
         }
-        fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification', ['pay_id' => 1]);
-
+        fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification', ['pay_id' => $request->pay_id]);
     }
 
 }
