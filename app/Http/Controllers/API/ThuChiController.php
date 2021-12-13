@@ -123,7 +123,6 @@ class ThuChiController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'devices_token' => ['required'],
-            'customer_id' => ['required'],
         ]);
         if ($validator->fails()) {
             return response()->json([
