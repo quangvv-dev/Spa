@@ -50,7 +50,7 @@
                     <td class="text-center">
                         <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal"
                               data-target="#largeModal">
-                                {{str_limit(str_replace('<br>',',',$order->service_text),200)}}
+                                {{str_limit(str_replace('<br>',',',$order->service_text),100)}}
                             </a></b>
                     </td>
                     <td class="text-center order-type" data-id="{{ $order->id }}">{{ $order->name_type }}</td>
