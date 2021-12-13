@@ -78,14 +78,15 @@ class StatisticController extends Controller
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders3 = clone $orders;
+        $orders_combo = clone $orders;
         $ordersYear = Order::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
         $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
-            $services = Services::where('trademark', $item->id)->pluck('id')->toArray();
+            $services = Services::select('id')->where('trademark', $item->id)->pluck('id')->toArray();
             $input['booking_id'] = $services;
-            $item->price = OrderDetail::search($input)->sum('total_price');
+            $item->price = OrderDetail::search($input)->select('total_price')->sum('total_price');
             return $item;
         })->sortByDesc('price')->take(5);
 
@@ -111,7 +112,6 @@ class StatisticController extends Controller
         //END
 //        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
 
-
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
@@ -123,25 +123,26 @@ class StatisticController extends Controller
 
         $groupComment = GroupComment::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
         $data = [
-            'all_total' => $orders->sum('all_total'),
-            'gross_revenue' => $orders->sum('gross_revenue'),
-            'payment' => $payment->sum('price'),
-            'orders' => $orders->count(),
-            'customers' => $customers->count(),
+            'all_total'         => $orders->sum('all_total'),
+            'gross_revenue'     => $orders->sum('gross_revenue'),
+            'payment'           => $payment->sum('price'),
+            'orders'            => $orders->count(),
+            'customers'         => $customers->count(),
 //            'category_service' => $category_service,
-            'category_product' => $category_product,
-            'revenue_month' => $revenue_month,
-            'groupComment' => $groupComment->count(),
+            'category_product'  => $category_product,
+            'revenue_month'     => $revenue_month,
+            'groupComment'      => $groupComment->count(),
         ];
         $products = [
-            'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
-            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+            'gross_revenue'     => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'all_total'         => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+            'orders'            => $orders->where('role_type', StatusCode::PRODUCT)->count(),
         ];
         $services = [
-            'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
-            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
+            'gross_revenue'     => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'all_total'         => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+            'combo_total'       => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
+            'orders'            => $orders2->where('role_type', StatusCode::SERVICE)->count(),
         ];
 
         $revenue = self::getRevenueCustomer($input, $payment);
