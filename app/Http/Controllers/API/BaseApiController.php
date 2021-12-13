@@ -48,8 +48,8 @@ class BaseApiController extends Controller
     public function apiUpload(Request $request)
     {
         $validate = [
-//            'nameValidate' => "required",
             'folder' => "required",
+            'images' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -74,20 +74,27 @@ class BaseApiController extends Controller
             $imgs = [];
             if (@count(@$media_file)) {
                 foreach ($media_file as $k1 => $v1) {
-
-                    $filename = $v1->getClientOriginalName();
-                    $v1->move('images/' . $folder, $filename);
-                    $path_file = base_path() . '/public/images/' . $folder . '/' . $filename;
-                    $path_file_new = base_path() . '/public/images/' . $folder . '/thumb/' . $filename;
-                    $command = 'cp ' . $path_file . ' ' . $path_file_new;
-                    exec($command);
-                    // to finally create image instances
-                    $size = '480x480';
-                    $new_name = $path_file_new;
-                    // @codingStandardsIgnoreLine
-                    $cmd = "convert $new_name -resize $size\> -auto-orient -size $size xc:white +swap -gravity center -composite $new_name";
-                    exec($cmd, $output_laravel);
-                    $imgs[] = $filename;
+                    //Upload moved
+                    $extension = $v1->getClientOriginalExtension();
+                    $MIME_TYPE_IMAGE = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif', 'JPG', 'JPEG', 'PNG', 'GIF', 'BMP', 'TIF'];
+                    if (in_array($extension, $MIME_TYPE_IMAGE)) {
+                        $filename = $v1->getClientOriginalName();
+                        $picture = str_slug(substr($filename, 0, strrpos($filename, "."))) . '_' . time() . '.' . $extension;
+                        $image = $v1->move($destinationPath, $picture);
+                        if ($image) {
+//                            $sourcePath = $image->getPath() . '/' . $image->getFilename();
+                            $size = '480x480';
+                            $new_name = $thumb_path . '/' . $picture;
+                            // @codingStandardsIgnoreLine
+                            $cmd = "convert $new_name -resize $size\> -auto-orient -size $size xc:white +swap -gravity center -composite $new_name";
+                            exec($cmd, $output_laravel);
+                            $imgs[] = $image->getFilename();
+//                      // to finally create image instances
+                        }
+                    } else {
+                        $error = ['images' => ['The images field must jpg,jpeg,png']];
+                        return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $error);
+                    }
                 }
             }
             return $imgs;

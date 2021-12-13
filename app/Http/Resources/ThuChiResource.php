@@ -23,7 +23,7 @@ class ThuChiResource extends JsonResource
             'censor'           => @$this->duyet->full_name,
             'type'             => @$this->type==0?'Tiền mặt':'Chuyển Khoản',
             'note'             => @$this->note,
-            'status'           => @$this->note==0?"Chờ duyệt":'Đã duyệt',
+            'status'           => @$this->status==0?"Chờ duyệt":'Đã duyệt',
             'branch'           => @$this->branch->name,
         ];
     }

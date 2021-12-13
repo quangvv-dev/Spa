@@ -66,17 +66,22 @@ class AlbumController extends BaseApiController
     public function delete(Request $request, $id)
     {
         $doc = Album::where('customer_id', $id)->first();
-        $img_default = json_decode($doc->images);
-        $key = array_search($request->images, array_column($img_default, 'fileName'));
-        if (is_numeric($key)) {
-            unlink(public_path('/images/album/'.$img_default[$key]->fileName));
-            unset($img_default[$key]);
-            $doc->images = json_encode(array_values($img_default));
-            $doc->save();
-        }
-        $data = new AlbumResource($doc);
+        if (isset($doc) && $doc) {
+            $img_default = json_decode($doc->images);
+            $key = array_search($request->images, array_column($img_default, 'fileName'));
+            if (is_numeric($key)) {
+                unlink(public_path('/images/album/' . $img_default[$key]->fileName));
+                unset($img_default[$key]);
+                $doc->images = json_encode(array_values($img_default));
+                $doc->save();
+            }
+            $data = new AlbumResource($doc);
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+        } else {
+            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND ABLMUM');
+        }
+
     }
 
     /**
