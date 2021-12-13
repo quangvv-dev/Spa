@@ -78,7 +78,22 @@ class ThuChiController extends BaseApiController
             ->where('status', '<>', NotificationConstant::HIDDEN)->orderByDesc('created_at')->paginate(StatusCode::PAGINATE_10);
         $docs = NotificationResource::collection($docs);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
+    }
 
+    /**
+     * Đếm số lượng thông báo chưa đọc
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function countNotification(Request $request)
+    {
+        $user = User::find($request->jwtUser->id);
+        $docs = Notification::select('id')->where('user_id', $user->id)
+            ->where('status', NotificationConstant::UNREAD)->count();
+        $doc =['unread'=>$docs];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $doc);
     }
 
     /**

@@ -34,6 +34,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::post('pay/{id}', 'ThuChiController@update');
     Route::get('notification-pay', 'ThuChiController@getNotification');
     Route::post('notification-pay/{id}', 'ThuChiController@readNotification');
+    Route::get('count-notification-pay', 'ThuChiController@countNotification');
 
     Route::post('update-firebase_token', 'ThuChiController@updateDevicesToken');
 
