@@ -152,7 +152,7 @@ if (!function_exists('fcmSendCloudMessage')) {
     ) {
         //$deviceToken truyền mảng device hoặc 1 chuỗi device hoặc là 1 topic  ( '/topics/all' )
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $serverKey = env('FCM_API_KEY');
+        $serverKey = 'AAAAEW-inhE:APA91bGs0Q22Q6edvM83RJ8Dlqt9EZ32mA-EvIDHpdKG_VHNel-32-vd2Xqz-pf_8ata2f3oWSngnSuB9DZtEY8JORGOhxKbrmtTZGwcpxobkk1XfoD4AoBDE4zd2pmE0dAN_tdilv0K';
         $fields = [
             'priority'     => 'high',
             'time_to_live' => 60 * 60 * 24,
