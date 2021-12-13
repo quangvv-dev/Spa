@@ -50,9 +50,7 @@
                     <td class="text-center">
                         <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal"
                               data-target="#largeModal">
-                                @foreach($order->orderDetails as $orderDetail)
-                                    {{ @$orderDetail->service->name }},
-                                @endforeach
+                                {{str_limit(str_replace('<br>',',',$order->service_text),200)}}
                             </a></b>
                     </td>
                     <td class="text-center order-type" data-id="{{ $order->id }}">{{ $order->name_type }}</td>

@@ -215,6 +215,11 @@
             let grossRevenue = $('.gross-revenue').val();
             let description = $('.description').val();
             let customer_id = '{{@$order->customer->id}}';
+            let maxWallet = $('#maxWallet').val();
+            if (paymentType == 3 && (grossRevenue > maxWallet)){
+                $('#wallet-error').show();
+                return false;
+            }
 
             $.ajax({
                 url: "{{ Url('order/'.$order->id. '/show') }}",
