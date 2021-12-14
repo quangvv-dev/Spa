@@ -35,6 +35,10 @@ class ThuChi extends Model
     {
         return $this->belongsTo(DanhMucThuChi::class);
     }
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 
     public function duyet()
     {
