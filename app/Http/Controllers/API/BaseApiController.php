@@ -82,9 +82,11 @@ class BaseApiController extends Controller
                         $picture = str_slug(substr($filename, 0, strrpos($filename, "."))) . '_' . time() . '.' . $extension;
                         $image = $v1->move($destinationPath, $picture);
                         if ($image) {
-//                            $sourcePath = $image->getPath() . '/' . $image->getFilename();
-                            $size = '480x480';
+                            $sourcePath = $image->getPath() . '/' . $image->getFilename();
                             $new_name = $thumb_path . '/' . $picture;
+                            $command = 'cp ' . $sourcePath . ' ' . $new_name;
+                            exec($command);
+                            $size = '480x480';
                             // @codingStandardsIgnoreLine
                             $cmd = "convert $new_name -resize $size\> -auto-orient -size $size xc:white +swap -gravity center -composite $new_name";
                             exec($cmd, $output_laravel);
