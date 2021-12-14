@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Http\Resources\ChartResource;
@@ -54,6 +55,7 @@ class RevenueController extends BaseApiController
             ]);
         });
         $schedules = Schedule::getBooks($input, 'id');
+        $schedulesDen = clone $schedules;
         $groupComment = GroupComment::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
             function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
@@ -70,17 +72,11 @@ class RevenueController extends BaseApiController
                 Functions::yearMonthDay($input['old_end']) . " 23:59:59",
             ]);
         }
-        $history = HistoryUpdateOrder::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
-                function ($q) use ($input) {
-                    $q->where('branch_id', $input['branch_id']);
-                })
-            ->when(isset($input['start_date']) && isset($input['end_date']),
-            function ($q) use ($input) {
-                $q->whereBetween('created_at', [
-                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                ]);
-            });
+
+        $history = $schedulesDen->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+            ->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 0);
+            })->count();
         $data = [
             'customer_new' => $customers->count(),
             'schedules' => $schedules,
@@ -136,7 +132,7 @@ class RevenueController extends BaseApiController
                     2) : 0,
                 'total_product' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
                 'total_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
-                'total_combo' => $orders_combo->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+                'total_combo' => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
                 'wallet' => $wallet->sum('order_price'),
             ];
         } elseif ($request->type_api == 3) {
