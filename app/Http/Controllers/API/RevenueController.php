@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
+use App\Models\Services;
 use App\Models\Status;
 use App\Models\WalletHistory;
 use Illuminate\Http\Request;
@@ -235,8 +236,27 @@ class RevenueController extends BaseApiController
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($statusRevenues));
         } elseif ($request->type_api == 2) {
+
+
+            $category = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get()->map(function ($item
+            ) use ($input) {
+                $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
+                $orders = OrderDetail::select('price')->whereIn('booking_id', $services)
+                    ->when(!empty($input['start_date']) && !empty($input['end_date']),
+                        function ($q) use ($input) {
+                            $q->whereBetween('created_at', [
+                                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                            ]);
+                        })
+                    ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                        $q->where('branch_id', $input['branch_id']);
+                    });
+                $item->all_total = $orders->sum('price');//da thu trong ky thu thêm
+                return $item;
+            })->sortByDesc('all_total')->take(5);
 //            $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
-//            $data = ChartResource::collection($category_service);
+            $data = ChartResource::collection($category);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 3) {
             $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);

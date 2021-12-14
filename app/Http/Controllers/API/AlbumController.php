@@ -35,7 +35,6 @@ class AlbumController extends BaseApiController
                         'date' => Carbon::now()->format('d/m/Y'),
                     ];
                 }
-
                 $doc->images = json_encode($images);
                 $doc->save();
             }

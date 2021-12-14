@@ -40,9 +40,6 @@ class SaleController extends BaseApiController
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('old_customer', 0);
                 });
-//            $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('old_customer', 1)->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-//                $q->where('branch_id', $input['branch_id']);
-//            });
             $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);

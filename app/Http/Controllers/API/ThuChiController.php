@@ -27,9 +27,12 @@ class ThuChiController extends BaseApiController
     {
         $user = User::find($request->jwtUser->id);
         if ($user) {
-            $search = $request->all();
             $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
             $quan_ly = $user->department_id == 1 && $user->role != 1 ? true : false;
+
+            if ($request->pay_id) {
+                $search['pay_id'] = $request->pay_id;
+            }
 
             if (!$admin) {
                 if ($quan_ly) {
@@ -37,16 +40,39 @@ class ThuChiController extends BaseApiController
                 } else {
                     $search['thuc_hien_id'] = $user->id;
                 }
+            } else {
+                $search = $request->except('creator_id', 'censor_id');
+                $search['thuc_hien_id'] = @$request->creator_id;
+                $search['duyet_id'] = @$request->censor_id;
             }
-            $docs = ThuChi::search($search)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            $docs = ThuChi::search($search)->orderByDesc('id');
+            $data['sumPrice'] = $docs->sum('so_tien');
+            $docs = $docs->paginate(StatusCode::PAGINATE_20);
             $doc = ThuChiResource::collection($docs);
         }
         if ($request->pay_id) {
             $docs = ThuChi::where('id', $request->pay_id)->first();
             $doc = isset($docs) ? new ThuChiResource($docs) : [];
-
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $doc);
+
+        $data['records'] = $doc;
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+    }
+
+    /**
+     * list người tạo và người duyệt
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listUserThuChi()
+    {
+        $creator = User::select('id', 'full_name')->where('department_id', 5)->get();//lễ tân
+        $centor = User::select('id', 'full_name')->where('department_id', 1)->get();//ban giám đốc
+        $data['creator'] = $creator;
+        $data['centor'] = $centor;
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
     }
 
     /**
