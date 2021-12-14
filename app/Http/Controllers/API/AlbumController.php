@@ -71,6 +71,7 @@ class AlbumController extends BaseApiController
             $key = array_search($request->images, array_column($img_default, 'fileName'));
             if (is_numeric($key)) {
                 unlink(public_path('/images/album/' . $img_default[$key]->fileName));
+                unlink(public_path('/images/album/thumb/' . $img_default[$key]->fileName));
                 unset($img_default[$key]);
                 $doc->images = json_encode(array_values($img_default));
                 $doc->save();
