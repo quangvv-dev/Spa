@@ -28,19 +28,22 @@ class ThuChiController extends BaseApiController
         $user = User::find($request->jwtUser->id);
         if ($user) {
             $search = $request->all();
+            $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
             $quan_ly = $user->department_id == 1 && $user->role != 1 ? true : false;
 
-            if ($quan_ly) {
-                $search['duyet_id'] = $user->id;
-            } else {
-                $search['thuc_hien_id'] = $user->id;
+            if (!$admin) {
+                if ($quan_ly) {
+                    $search['duyet_id'] = $user->id;
+                } else {
+                    $search['thuc_hien_id'] = $user->id;
+                }
             }
             $docs = ThuChi::search($search)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             $doc = ThuChiResource::collection($docs);
         }
-        if ($request->pay_id){
-            $docs = ThuChi::where('id',$request->pay_id)->first();
-            $doc = isset($docs) ? new ThuChiResource($docs):[];
+        if ($request->pay_id) {
+            $docs = ThuChi::where('id', $request->pay_id)->first();
+            $doc = isset($docs) ? new ThuChiResource($docs) : [];
 
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $doc);
@@ -92,7 +95,7 @@ class ThuChiController extends BaseApiController
         $user = User::find($request->jwtUser->id);
         $docs = Notification::select('id')->where('user_id', $user->id)
             ->where('status', NotificationConstant::UNREAD)->count();
-        $doc =['unread'=>$docs];
+        $doc = ['unread' => $docs];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $doc);
     }
 
@@ -160,7 +163,7 @@ class ThuChiController extends BaseApiController
             ]);
         }
         $result = fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification', ['pay_id' => $request->pay_id]);
-        return $this->responseApi(ResponseStatusCode::OK,$result);
+        return $this->responseApi(ResponseStatusCode::OK, $result);
 
     }
 
