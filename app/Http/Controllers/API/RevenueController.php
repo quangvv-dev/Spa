@@ -111,6 +111,7 @@ class RevenueController extends BaseApiController
         $wallet = WalletHistory::search($input, 'order_price');
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
+        $orders_combo = clone $orders;
         $orders_old = [];
         $payment_old = [];
         if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
@@ -130,11 +131,13 @@ class RevenueController extends BaseApiController
             $orders_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $orders_old->sum('all_total') : 0;
 
             $data = [
-                'total' => $orders->sum('all_total'),
+                'total' => $orders->sum('all_total')+$wallet->sum('order_price'),
                 'percent' => !empty($orders->sum('all_total')) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
                     2) : 0,
                 'total_product' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
                 'total_services' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+                'total_combo' => $orders_combo->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+                'wallet' => $wallet->sum('order_price'),
             ];
         } elseif ($request->type_api == 3) {
             $payment = PaymentHistory::search($input, 'price');
@@ -170,6 +173,7 @@ class RevenueController extends BaseApiController
                 'cash' => (int)$payment->whereIn('payment_type', [0, 1])->sum('price'),
                 'card' => (int)$payment2->where('payment_type', 2)->sum('price'),
                 'wallet_used' => $payment3->where('payment_type', 3)->sum('price'),
+                'wallet' => $wallet->sum('order_price'),
             ];
             $data['CK'] = $all_payment - $data['cash'] - $data['card'] - $data['wallet_used'];
         }
