@@ -19,7 +19,7 @@
                 </div>
                 <div class="card-header">
                     <div class="col-2">
-                        {!! Form::select('category_id', $categories, null, array('class' => 'form-control select2 categoryId', 'data-placeholder' => 'Chọn danh mục')) !!}
+                        {!! Form::select('category_id', $categories, null, array('class' => 'form-control select2 categoryId', 'placeholder' => 'Chọn danh mục')) !!}
                     </div>
                 </div>
             </form>

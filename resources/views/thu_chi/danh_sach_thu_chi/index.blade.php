@@ -23,6 +23,17 @@
                     <a class="right btn btn-primary btn-flat" href="{{request()->url().'/create' }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li>
+                            <a style="display: none" href="#" class="angleDoubleUp">
+                                <i class="fa fa-angle-double-up"></i></a>
+                        </li>
+                        <li>
+                            <a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="card-header" style="align-items: flex-end">
                 <div class="row" style="width: 100%">
@@ -49,14 +60,9 @@
                     <div class="col-2">
                         <button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm</button>
                     </div>
-                    <div class="col-2 mt-2">
-                        {!! Form::select('thuc_hien_id', $users, null, array('class' => 'form-control select2','id'=>'branch','placeholder'=>'Chọn người tạo')) !!}
-                    </div>
-                    <div class="col-2 mt-2">
-                        {!! Form::select('duyet_id', $users, null, array('class' => 'form-control select2','id'=>'branch','placeholder'=>'Chọn người duyệt')) !!}
-                    </div>
                 </div>
             </div>
+            @include('thu_chi.danh_sach_thu_chi.dropdownFilter')
             </form>
             <div class="header-search">
                 @include('thu_chi.danh_sach_thu_chi.ajax')
