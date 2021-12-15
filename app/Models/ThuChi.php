@@ -61,4 +61,9 @@ class ThuChi extends Model
     {
         return $this->belongsTo(User::class, 'thuc_hien_id');
     }
+
+    public function lydo()//người tạo đơn
+    {
+        return $this->belongsTo(LyDoThuChi::class, 'ly_do_id');
+    }
 }

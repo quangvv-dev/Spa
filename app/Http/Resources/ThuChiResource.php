@@ -19,6 +19,7 @@ class ThuChiResource extends JsonResource
         return [
             'id'               => @$this->id,
             'category_name'    => @$this->danhMucThuChi->name,
+            'result'           => @$this->lydo->name,
             'price'            => @$this->so_tien,
             'creator'          => @$this->thucHien->full_name,
             'censor'           => @$this->duyet->full_name,
