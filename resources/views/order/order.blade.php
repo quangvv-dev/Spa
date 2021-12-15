@@ -210,13 +210,17 @@
         });
 
         $(document).on('click', '#finish', function () {
+            $('#wallet-error').hide();
             let paymentDate = $('.payment-date').val();
             let paymentType = $('.payment-type').val();
             let grossRevenue = $('.gross-revenue').val();
             let description = $('.description').val();
             let customer_id = '{{@$order->customer->id}}';
             let maxWallet = $('#maxWallet').val();
-            if (paymentType == 3 && (replaceNumber(grossRevenue) > maxWallet)){
+            let check = replaceNumber(grossRevenue);
+            console.log(maxWallet,replaceNumber(grossRevenue));
+            if (paymentType == 3 && (parseInt(check) > parseInt(maxWallet))){
+
                 $('#wallet-error').show();
                 return false;
             }
