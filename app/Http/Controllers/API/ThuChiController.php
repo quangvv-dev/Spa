@@ -8,6 +8,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Resources\ThuChiResource;
 use App\Http\Resources\NotificationResource;
+use App\Models\DanhMucThuChi;
 use App\Models\Notification;
 use App\Models\ThuChi;
 use App\User;
@@ -41,12 +42,14 @@ class ThuChiController extends BaseApiController
                     $search['thuc_hien_id'] = $user->id;
                 }
             } else {
-                $search = $request->except('creator_id', 'censor_id');
-                $search['thuc_hien_id'] = @$request->creator_id;
-                $search['duyet_id'] = @$request->censor_id;
+                $search = $request->except('creator_id', 'censor_id', 'category_id');
+                $search['thuc_hien_id']         = @$request->creator_id;
+                $search['duyet_id']             = @$request->censor_id;
+                $search['danh_muc_thu_chi_id']  = @$request->category_id;
             }
             $docs = ThuChi::search($search)->orderByDesc('id');
             $data['sumPrice'] = $docs->sum('so_tien');
+            $data['sumCount'] = $docs->count();
             $docs = $docs->paginate(StatusCode::PAGINATE_20);
             $doc = ThuChiResource::collection($docs);
         }
@@ -90,6 +93,18 @@ class ThuChiController extends BaseApiController
         }
         $docs = new ThuChiResource($docs);
 
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
+
+    }
+
+    /**
+     * Danh sách danh mục thu chi
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCategory()
+    {
+        $docs = DanhMucThuChi::select('id', 'name')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
 
     }
