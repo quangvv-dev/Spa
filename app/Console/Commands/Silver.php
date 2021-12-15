@@ -52,9 +52,12 @@ class  Silver extends Command
 //            })->pluck('member_id');
 //        Customer::whereIn('id', $customers)->update(['old_customer' => 1]);
 
-        $arr = Customer::select('id')->where('branch_id', 1)->pluck('id')->toArray();
-        foreach (array_chunk($arr, 1000) as $item) {
-            CustomerGroup::whereIn('customer_id', $item)->update(['branch_id' => 1]);
+//        $arr = Customer::select('id')->where('branch_id', 1)->pluck('id')->toArray();
+        $arr = CustomerGroup::select('customer_id')->where('branch_id', 0)->pluck('customer_id')->toArray();
+        $customer2 = Customer::find($arr)->pluck('branch_id', 'id')->toArray();
+//        foreach (array_chunk($customer2, 1000) as $key => $item) {
+        foreach ($customer2 as $key => $item) {
+        CustomerGroup::where('customer_id', $key)->update(['branch_id' => $item]);
         }
     }
 }

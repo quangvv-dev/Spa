@@ -10,6 +10,7 @@ use App\Models\Notification;
 use App\Models\Role;
 use App\Models\ThuChi;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,7 @@ class ThuChiController extends Controller
         $this->middleware('permission:thu-chi.add', ['only' => ['create']]);
         $this->middleware('permission:thu-chi.delete', ['only' => ['destroy']]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +38,7 @@ class ThuChiController extends Controller
         $quan_ly = $user->department_id == 1 && $user->role != 1 ? true : false;
         $branches = [];
         if ($admin) {
-            $branches = Branch::pluck('name','id');
+            $branches = Branch::pluck('name', 'id');
         } else {
             if ($quan_ly) {
                 $search['duyet_id'] = $user->id;
@@ -50,7 +52,7 @@ class ThuChiController extends Controller
         if ($request->ajax()) {
             return view('thu_chi.danh_sach_thu_chi.ajax', compact('docs'));
         }
-        return view('thu_chi.danh_sach_thu_chi.index', compact('docs', 'categories','branches'));
+        return view('thu_chi.danh_sach_thu_chi.index', compact('docs', 'categories', 'branches'));
     }
 
     /**
@@ -89,11 +91,22 @@ class ThuChiController extends Controller
         $data['branch_id'] = $user->branch_id ? $user->branch_id : 0;
 
         $thu_chi = ThuChi::create($data);
-        if($request->duyet_id){
-            $data_noti = json_encode((array)['thu_chi_id' => $thu_chi->id]);
-            $title = 'Bạn có thông báo thu chi mới !';
+        if ($request->duyet_id) {
+            $data_noti = json_encode((array)['pay_id' => $thu_chi->id]);
+            $title = '💸💸💸 Bạn có yêu cầu duyệt chi';
             $type = NotificationConstant::THU_CHI;
-            Notification::insert(['user_id'=>$request->duyet_id,'title'=>$title,'data'=>$data_noti,'type' =>$type,'status'=>1]);
+
+//            fcmSendCloudMessage('/topics/all', $title, 'Chạm để xem', 'notification', ['pay_id' => $thu_chi->id]);
+
+            Notification::insert(
+                [
+                    'user_id' => $request->duyet_id,
+                    'title' => $title,
+                    'data' => $data_noti,
+                    'type' => $type,
+                    'status' => 1,
+                    'created_at' => Carbon::now()
+                ]);
         }
 
         return redirect('thu-chi');
@@ -126,7 +139,7 @@ class ThuChiController extends Controller
         $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
             $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
         })->pluck('full_name', 'id');
-        $type = collect(['0' => 'Tại quầy', '1' => 'Trong két']);
+        $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
         return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type'));
     }
@@ -135,7 +148,7 @@ class ThuChiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -176,10 +189,10 @@ class ThuChiController extends Controller
         $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
         $quan_ly = $user->id == $thu_chi->duyet_id ? true : false;
 
-        $status = $request->status =='true' ? 1 : 0;
+        $status = $request->status == 'true' ? 1 : 0;
 
         if ($admin || $quan_ly) {
-            $thu_chi->update(['status'=>$status]);
+            $thu_chi->update(['status' => $status]);
             return 1;
         } else {
             return 0;

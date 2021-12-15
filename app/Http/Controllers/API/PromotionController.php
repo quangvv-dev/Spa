@@ -18,7 +18,7 @@ class PromotionController extends BaseApiController
      */
     public function listVoucherServices(Request $request)
     {
-        $data = Promotion::where('service_id', '<>', 0)->where('service_id', $request->service)->where('current_quantity', '>', 0)->where('group', 'like', '%"' . $request->status . '"%')->get();
+        $data = Promotion::where('service_id', $request->service)->where('current_quantity', '>', 0)->where('group', 'like', '%"' . $request->status . '"%')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
     }
 
@@ -30,7 +30,7 @@ class PromotionController extends BaseApiController
      */
     public function listVoucher(Request $request)
     {
-        $data = Promotion::where('service_id', 0)->where('current_quantity', '>', 0)->where('group', 'like', '%"' . $request->status . '"%')->get();
+        $data = Promotion::where('current_quantity', '>', 0)->where('group', 'like', '%"' . $request->status . '"%')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
     }
 
@@ -44,6 +44,7 @@ class PromotionController extends BaseApiController
      */
     public function checkVoucher(Request $request, $id)
     {
+
         $total_price = $request->total_price ?: 0;
         $promotion = Promotion::findOrFail($id);
         if ($promotion->type == PromotionConstant::MONEY) {//check trường hợp voucher tiền
@@ -58,21 +59,22 @@ class PromotionController extends BaseApiController
             }
         }
         if ($promotion->type == PromotionConstant::PERCENT) {//check trường hợp voucher phần trăm
-            if ($total_price >= $promotion->min_price) {
-                $check = (int)($total_price / 100) * (int)$promotion->percent_promotion;
-                if ($check >= $promotion->max_discount) {
-                    $discount = $promotion->max_discount;
-                } else {
-                    $discount = $check;
-                }
-                $data = [
-                    'voucher_id' => $promotion->id,
-                    'discount' => $discount,
-                ];
-                return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
+            $check = (int)($total_price / 100) * (int)$promotion->percent_promotion;
+            if ($check >= $promotion->max_discount) {
+                $discount = $promotion->max_discount;
             } else {
-                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'total_price < min price_promotion');
+                $discount = $check;
             }
+            if ($discount > $total_price) {
+                $discount = $total_price;
+            }
+
+            $data = [
+                'voucher_id' => $promotion->id,
+                'discount' => $discount,
+            ];
+            return $this->responseApi(ResponseStatusCode::OK, 'success', $data);
+
         }
     }
 }

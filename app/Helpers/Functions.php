@@ -419,7 +419,7 @@ class Functions
      */
     public static function sumOrder($id)
     {
-        $total = Order::where('member_id', $id)->count();
+        $total = Order::select('id')->where('member_id', $id)->count();
 //        $payment = Order::where('member_id', $id)->sum('gross_revenue');
 //        $wallet = WalletHistory::where('customer_id', $id)->sum('order_price');
 //        $total = (int)$payment + (int)$wallet;
@@ -498,4 +498,5 @@ class Functions
         $request->merge(['start_date' => $date_check]);
         $request->merge(['end_date' => $date]);
     }
+
 }

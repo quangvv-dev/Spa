@@ -190,10 +190,8 @@ class CustomerController extends Controller
             $request->merge(['telesales_id' => Auth::user()->id]);
         }
         $customer = $this->customerService->create($input);
-        $update = $this->update_code($customer);
-        $category = Category::find($request->group_id);
-        $customer->categories()->attach($category);
-
+        $this->update_code($customer);
+        self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
         return redirect('customers/' . $customer->id)->with('status', 'Tạo người dùng thành công');
     }
 
@@ -330,7 +328,9 @@ class CustomerController extends Controller
             $input['status_id'] = StatusCode::NEW;
         }
         $customer = $this->customerService->update($input, $id);
-        $customer->categories()->sync($request->group_id);
+        CustomerGroup::where('customer_id', $customer->id)->delete();
+        self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
+
 
         return redirect(route('customers.index'))->with('status', 'Cập nhật khách hàng thành công');
     }
@@ -382,14 +382,20 @@ class CustomerController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $now = Carbon::now()->format('d/m/Y');
-        $data = Customer::orderBy('id', 'desc')->with('orders', 'categories');
-        $data = $data->when(!empty($request->group), function ($query) use ($request) {
-            $arr = CustomerGroup::where('category_id', $request->group)->pluck('customer_id')->toArray();
-            $query->whereIn('id', $arr);
-        })->when(!empty($request->status), function ($query) use ($request) {
+        $data = Customer::orderBy('id', 'desc')
+            ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+            ->with('orders', 'categories');
+        $data = $data->when(!empty($request->status), function ($query) use ($request) {
             $query->where('status_id', $request->status);
         })->when(!empty($input['branch_id']), function ($query) use ($input) {
             $query->where('branch_id', $input['branch_id']);
+        })->when(!empty($request->group), function ($query) use ($request) {
+            $arr = CustomerGroup::where('category_id', $request->group);
+            if (!empty($request->branch_id)) {
+                $arr = $arr->where('branch_id', $request->branch_id);
+            }
+            $arr = $arr->pluck('customer_id')->toArray();
+            $query->whereIn('id', $arr);
         })->get();
 
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
@@ -521,6 +527,8 @@ class CustomerController extends Controller
                                             CustomerGroup::create([
                                                 'customer_id' => $data->id,
                                                 'category_id' => isset($field) ? $field->id : 0,
+                                                'branch_id'   => $data->branch_id,
+                                                'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
                                             ]);
                                         }
                                     }
@@ -528,6 +536,8 @@ class CustomerController extends Controller
                                     CustomerGroup::create([
                                         'customer_id' => $data->id,
                                         'category_id' => 0,
+                                        'branch_id'   => $data->branch_id,
+                                        'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
                                     ]);
                                 }
 
@@ -759,5 +769,21 @@ class CustomerController extends Controller
             'customer' => $customer,
             'data' => $telesales,
         ];
+    }
+
+
+    protected function createCustomerGroup($group_id, $customer_id, $branch_id)
+    {
+        $category = Category::find($group_id);
+        if (count($category)) {
+            foreach ($category as $item) {
+                CustomerGroup::create([
+                    'customer_id' => $customer_id,
+                    'category_id' => $item->id,
+                    'branch_id' => $branch_id,
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                ]);
+            }
+        }
     }
 }

@@ -139,3 +139,94 @@ if (!function_exists('checkRoleAlready')) {
         return $user;
     }
 }
+
+if (!function_exists('fcmSendCloudMessage')) {
+    function fcmSendCloudMessage(
+        $deviceToken = "",
+        $title,
+        $body,
+//        $log_action = '',
+//        $notification_id = null,
+        $notification_type = 'notification',
+        $push_data = []
+    ) {
+        //$deviceToken truyền mảng device hoặc 1 chuỗi device hoặc là 1 topic  ( '/topics/all' )
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $serverKey = 'AAAAEW-inhE:APA91bGs0Q22Q6edvM83RJ8Dlqt9EZ32mA-EvIDHpdKG_VHNel-32-vd2Xqz-pf_8ata2f3oWSngnSuB9DZtEY8JORGOhxKbrmtTZGwcpxobkk1XfoD4AoBDE4zd2pmE0dAN_tdilv0K';
+        $fields = [
+            'priority'     => 'high',
+            'time_to_live' => 60 * 60 * 24,
+        ];
+        if (!empty($push_data)) {
+            $fields['data'] = $push_data;
+        }
+        $fields['notification'] = [
+            "body"  => $body,
+            "title" => $title,
+            "sound" => "default",
+            "badge" => "1",
+            "color" => "#990000",
+            //            "click_action" => $action_web,
+        ];
+        // cấu hình android
+        $fields['android'] = [
+            'ttl'          => 3600 * 1000,
+            'notification' => [
+                'color' => '#f45342'
+                //'icon'  => 'stock_ticker_update',
+            ],
+        ];
+
+        // cấu hình ios
+        $fields['apns'] = [
+            'payload' => [
+                'aps' => [
+                    'badge' => 42,
+                ],
+            ],
+        ];
+        // cấu hình web
+//        $fields['webpush'] = [
+//            'notification' => [
+//                "body"  => $body,
+//                "title" => $title,
+//            ],
+//        ];
+
+        if (is_array($deviceToken)) {
+            $fields['registration_ids'] = $deviceToken;
+        } else {
+            $fields['to'] = $deviceToken;
+        }
+        $headers = [
+            'Content-Type:application/json',
+            'Authorization:key=' . $serverKey,
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        $result = curl_exec($ch);
+        @$rs = @json_decode($result);
+        curl_close($ch);
+//        if (@$rs->multicast_id) {
+//            LogFcm::create([
+//                'action'          => $log_action,
+//                'notification_id' => $notification_id,
+//                'type'            => $notification_type,
+//                'multicast_id'    => $rs->multicast_id,
+//                'success'         => $rs->success,
+//                'failure'         => $rs->failure,
+//                'canonical_ids'   => $rs->canonical_ids,
+//                'results'         => $rs->results,
+//                'body'            => $fields,
+//            ]);
+//        }
+        return $rs;
+    }
+}

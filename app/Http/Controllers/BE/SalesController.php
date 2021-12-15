@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
@@ -53,32 +54,41 @@ class SalesController extends Controller
         $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+
             $orders = Order::select('member_id', 'all_total', 'gross_revenue')
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
             $orders2 = clone $orders;
-            $order_new = $orders->whereHas('customer', function ($qr) use ($item) {
+            $order_new = $orders->whereIn('member_id', $data_new->pluck('id')->toArray())->whereHas('customer', function ($qr) use ($item) {
                 $qr->where('old_customer', 0);
             });
             $order_old = $orders2->whereHas('customer', function ($qr) use ($item) {
                 $qr->where('old_customer', 1);
             });
 
-            $item->comment_new = GroupComment::select('id')->whereIn('customer_id', $order_new->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();// trao doi moi
-            $item->comment_old = GroupComment::select('id')->whereIn('customer_id', $order_old->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->get()->count(); // trao doi cu
+            $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+            $comment_new = clone $group_comment;
 
-            $item->schedules_new = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_new->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();//lich hen
-            $item->schedules_old = Schedule::select('id')->where('creator_id', $item->id)->whereIn('user_id', $order_old->pluck('member_id')->toArray())
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->get()->count();//lich hen
+            $item->comment_new = $comment_new->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi
+            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
+
+            $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+            $schedules_den = clone $schedules;
+            $schedules_new = clone $schedules;
+
+            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+                ->whereHas('customer', function ($qr) {
+                    $qr->where('old_customer', 0);
+                })->count();
+            $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 0);
+            })->count();//lich hen
+            $item->schedules_old = $schedules->whereIn('user_id', $order_old->pluck('member_id')->toArray())->count();//lich hen
 
             $request->merge(['telesales' => $item->id]);
-            $detail = PaymentHistory::search($request->all(), 'price');
+            $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
 
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
@@ -87,8 +97,8 @@ class SalesController extends Controller
             $item->revenue_old = $order_old->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
-            $item->payment_old = $order_old->sum('gross_revenue') + $order_new->sum('gross_revenue'); //da thu trong ky
-            $item->revenue_total = $order_new->sum('all_total') - $order_old->sum('all_total');;
+            $item->payment_old = $order_old->sum('gross_revenue'); //da thu trong ky
+            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
         })->sortByDesc('all_payment');

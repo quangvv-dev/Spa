@@ -325,16 +325,19 @@ class OrderController extends Controller
     public function listOrderPayment(Request $request)
     {
         $title = 'ĐƠN THU TRONG KỲ';
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
         $input = $request->all();
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        $group = Category::pluck('name', 'id')->toArray();
-        $marketingUsers = User::pluck('full_name', 'id')->toArray();
-        $telesales = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
+        $group = Category::select('id', 'name')->pluck('name', 'id')->toArray();
+        $marketingUsers = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
+        $telesales = User::select('id', 'full_name')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
             ->pluck('full_name', 'id')->toArray();
-        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+        $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
             $detail = PaymentHistory::search($input);

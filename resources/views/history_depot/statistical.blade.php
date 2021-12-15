@@ -1,6 +1,6 @@
 @extends('layout.app')
 @section('content')
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <div class="content-body" style="width: 100%">
         <section id="card-actions">
             <div class="row">

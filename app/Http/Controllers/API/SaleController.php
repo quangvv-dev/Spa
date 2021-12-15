@@ -28,7 +28,7 @@ class SaleController extends BaseApiController
     public function sale(Request $request)
     {
         $input = $request->all();
-        $users = User::select('id', 'full_name', 'avatar','caller_number')->whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
+        $users = User::select('id', 'full_name', 'avatar', 'caller_number')->whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
 
             $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
@@ -37,14 +37,15 @@ class SaleController extends BaseApiController
             $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->with('orderDetails');
-            $data_old = Customer::select('id')->where('telesales_id', $item->id)->where('old_customer', 1)->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-                $q->where('branch_id', $input['branch_id']);
-            });
-            $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])->whereIn('member_id', $data_old->pluck('id')->toArray())
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('old_customer', 0);
+                });
+            $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->with('orderDetails');
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('old_customer', 1);
+                });
 
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
@@ -65,7 +66,10 @@ class SaleController extends BaseApiController
                 $qr->where('old_customer', 0);
             })->count();
 
-            $item->schedules = $schedulesDen->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            $item->schedules = $schedulesDen->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+                ->whereHas('customer', function ($qr) {
+                    $qr->where('old_customer', 0);
+                })->count();
             $item->schedulesHuy = $schedulesHuy->where('status', ScheduleConstant::HUY)->count();
 
             $input['caller_number'] = $item->caller_number;

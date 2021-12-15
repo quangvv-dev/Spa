@@ -31,6 +31,7 @@
                         <div class="form-group required" style="margin-top: 29px">
                             {!! Form::text('gross_revenue', null, array('class' => 'form-control gross-revenue', "data-type"=>"currency", 'required' => true)) !!}
                         </div>
+                        <input type="hidden" id="maxWallet" value="{{@$order->customer->wallet}}">
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <p>Thanh toán
@@ -50,12 +51,13 @@
                     <div class="col-xs-12 col-md-12">
                         {!! Form::label('description', 'Ghi chú', array('class' => ' required')) !!}
                         <textarea row="2" class="form-control description" name="description"></textarea>
+                        <span id="wallet-error" class="help-block" style="display: none">Số dư ví không đủ (tối đa {{ number_format(@$order->customer->wallet) }})</span>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button type="button" id="finish" data-dismiss="modal" class="btn btn-info" style="">
+                <button type="button" id="finish" class="btn btn-info" style="">
                     <a>Thanh toán</a></button>
                 <button type="button" class="btn btn-info" data-dismiss="modal" id="btn_repaid" style="display: none;">
                     Hoàn tiền

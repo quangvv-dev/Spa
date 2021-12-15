@@ -22,7 +22,7 @@ class WalletHistory extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public static function search($input,$select='*')
+    public static function search($input, $select = '*')
     {
         $data = self::select($select)->when(isset($input['data_time']), function ($query) use ($input) {
             $query->when($input['data_time'] == 'TODAY' ||
@@ -37,6 +37,8 @@ class WalletHistory extends Model
                 });
         })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        })->when(isset($input['branch_id']), function ($query) use ($input) {
+            $query->where('branch_id', $input['branch_id']);
         });
         return $data;
     }
