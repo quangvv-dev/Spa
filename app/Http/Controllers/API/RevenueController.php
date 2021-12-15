@@ -85,7 +85,7 @@ class RevenueController extends BaseApiController
             ->whereHas('customer', function ($qr) {
                 $qr->where('old_customer', 0);
             })->count();
-        $data['become'] = $history->count();
+        $data['become'] = $history;
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
