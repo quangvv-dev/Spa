@@ -26,13 +26,13 @@ class LyDoController extends Controller
      */
     public function index(Request $request)
     {
-        $docs = LyDoThuChi::when(isset($request->name) && $request->name, function ($query) use ($request) {
-            $query->where('name', $request->name);
+        $docs = LyDoThuChi::when(isset($request->category_id) && $request->category_id, function ($query) use ($request) {
+            $query->where('category_id', $request->category_id);
         })->get();
 
         $categories = DanhMucThuChi::pluck('name','id')->toArray();
         if ($request->ajax()) {
-            return Response::json(view('thu_chi.ly_do_thu_chi.ajax', compact('docs'))->render());
+            return Response::json(view('thu_chi.ly_do_thu_chi.ajax', compact('docs','categories'))->render());
         }
         return view('thu_chi.ly_do_thu_chi.index', compact('docs','categories'));
     }

@@ -38,6 +38,7 @@ class ThuChiController extends Controller
         $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
         $quan_ly = $user->department_id == 1 && $user->role != 1 ? true : false;
         $branches = [];
+        $users = User::pluck('full_name','id')->toArray();
         if ($admin) {
             $branches = Branch::pluck('name', 'id');
         } else {
@@ -53,7 +54,7 @@ class ThuChiController extends Controller
         if ($request->ajax()) {
             return view('thu_chi.danh_sach_thu_chi.ajax', compact('docs'));
         }
-        return view('thu_chi.danh_sach_thu_chi.index', compact('docs', 'categories', 'branches'));
+        return view('thu_chi.danh_sach_thu_chi.index', compact('docs', 'categories', 'branches','users'));
     }
 
     /**

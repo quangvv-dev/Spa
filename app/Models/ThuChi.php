@@ -15,6 +15,7 @@ class ThuChi extends Model
 
     public static function search($param)
     {
+
         $data = self::when(isset($param['category_id']) && $param['category_id'], function ($query) use ($param) {
             $query->where('danh_muc_thu_chi_id', $param['category_id']);
         })->when(isset($param['status']), function ($query) use ($param) {
@@ -27,8 +28,8 @@ class ThuChi extends Model
             $query->where('id', $param['id']);
         })->when(isset($param['branch_id']) && $param['branch_id'], function ($query) use ($param) {
             $query->where('branch_id', $param['branch_id']);
-        })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($param) {
-            $q->whereBetween('date', [
+        })->when(isset($param['start_date']) && isset($param['end_date']), function ($query) use ($param) {
+            $query->whereBetween('created_at', [
                 Functions::yearMonthDay($param['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($param['end_date']) . " 23:59:59",
             ]);

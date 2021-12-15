@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive" id="registration-form">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
@@ -16,11 +16,11 @@
             @foreach($docs as $k => $s)
                 <tr>
                     <td scope="row">{{$k+1}}</td>
-                    <td class="text-center">
-                        <input type="text" class="name txt-dotted" value="{{$s->name}}">
-                    </td>
                     <td>
                         {!! Form::select('category_id',$categories,@$s->category_id, array('class' => 'form-control select2 category_id','placeholder'=>'Chọn danh mục')) !!}
+                    </td>
+                    <td class="text-center">
+                        <input type="text" class="name txt-dotted" value="{{$s->name}}">
                     </td>
                     <td class="text-center">
                         <a class="btn save-cate" data-id="{{$s->id}}"><i
