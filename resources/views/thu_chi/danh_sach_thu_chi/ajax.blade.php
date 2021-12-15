@@ -3,7 +3,7 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
-            <th class="text-white text-center">Danh mục</th>
+            <th class="text-white text-center">Lý do</th>
             <th class="text-white text-center">Số tiền</th>
             <th class="text-white text-center">Người duyệt</th>
             <th class="text-white text-center">Loại</th>
@@ -17,7 +17,7 @@
             @foreach($docs as $k => $s)
                 <tr>
                     <th scope="row">{{$k+1}}</th>
-                    <td class="text-center">{{@$s->danhMucThuChi->name}}</td>
+                    <td class="text-center">{{@$s->lyDoThuChi->name}}</td>
                     <td class="text-center">{{number_format($s->so_tien)}}</td>
                     <td class="text-center">{{@$s->duyet->full_name}}</td>
                     <td class="text-center">{{$s->type == 0?'Tiền mặt' : 'Chuyển khoản'}}</td>

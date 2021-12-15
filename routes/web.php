@@ -192,7 +192,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     });
 
     Route::resource('danh-muc-thu-chi','ThuChi\DanhMucController');
+    Route::resource('ly-do-thu-chi','ThuChi\LyDoController');
     Route::resource('thu-chi','ThuChi\ThuChiController');
+    Route::get('get-ly-do-thu-chi/{category_id}','ThuChi\ThuChiController@category');
 
 
 

@@ -6,6 +6,7 @@ use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Models\Branch;
 use App\Models\DanhMucThuChi;
+use App\Models\LyDoThuChi;
 use App\Models\Notification;
 use App\Models\Role;
 use App\Models\ThuChi;
@@ -100,12 +101,12 @@ class ThuChiController extends Controller
 
             Notification::insert(
                 [
-                    'user_id' => $request->duyet_id,
-                    'title' => $title,
-                    'data' => $data_noti,
-                    'type' => $type,
-                    'status' => 1,
-                    'created_at' => Carbon::now()
+                    'user_id'    => $request->duyet_id,
+                    'title'      => $title,
+                    'data'       => $data_noti,
+                    'type'       => $type,
+                    'status'     => 1,
+                    'created_at' => Carbon::now(),
                 ]);
         }
 
@@ -134,21 +135,23 @@ class ThuChiController extends Controller
     public function edit($id)
     {
         $doc = ThuChi::find($id);
+        $li_do = LyDoThuChi::where('category_id', $doc->danh_muc_thu_chi_id)->pluck('name', 'id')->toArray();
         $roles = Role::where('department_id', 1)->pluck('id')->toArray();
         $user = Auth::user();
+
         $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
             $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
         })->pluck('full_name', 'id');
         $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
-        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -197,5 +200,11 @@ class ThuChiController extends Controller
         } else {
             return 0;
         }
+    }
+
+    public function category($category_id)
+    {
+        $data = LyDoThuChi::where('category_id',$category_id)->get();
+        return $data;
     }
 }

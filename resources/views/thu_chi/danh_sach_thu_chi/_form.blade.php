@@ -16,10 +16,20 @@
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('danh_muc_thu_chi_id') ? 'has-error' : '' }}">
                             {!! Form::label('danh_muc_thu_chi_id', 'Chọn danh mục', array('class' => ' required')) !!}
-                            {!! Form::select('danh_muc_thu_chi_id',$categories,@$doc->danh_muc_thu_chi_id, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn danh mục')) !!}
+                            {!! Form::select('danh_muc_thu_chi_id',$categories,@$doc->danh_muc_thu_chi_id, array('class' => 'form-control select2 changeDanhMuc','id'=>'changeDanhMuc', 'required' => true,'placeholder'=> 'Chọn danh mục')) !!}
                             <span class="help-block">{{ $errors->first('danh_muc_thu_chi_id', ':message') }}</span>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group required {{ $errors->has('ly_do_id') ? 'has-error' : '' }}">
+                            {!! Form::label('ly_do_id', 'Chọn lý do', array('class' => ' required')) !!}
+                            {!! Form::select('ly_do_id',isset($li_do)?$li_do:[],@$doc->ly_do_id, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn lý do thu chi')) !!}
+                            {{--<select name="" id=""></select>--}}
+                            <span class="help-block">{{ $errors->first('ly_do_id', ':message') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('so_tien') ? 'has-error' : '' }}">
                             {!! Form::label('so_tien', 'Số tiền', array('class' => ' required')) !!}
@@ -27,8 +37,6 @@
                             <span class="help-block">{{ $errors->first('so_tien', ':message') }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('duyet_id') ? 'has-error' : '' }}">
                             {!! Form::label('duyet_id', 'Người duyệt', array('class' => ' required')) !!}
@@ -36,6 +44,8 @@
                             <span class="help-block">{{ $errors->first('duyet_id', ':message') }}</span>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('type') ? 'has-error' : '' }}">
                             {!! Form::label('type', 'Chọn kiểu', array('class' => ' required')) !!}
@@ -44,8 +54,6 @@
                             <span class="help-block">{{ $errors->first('type', ':message') }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                             {!! Form::label('note', 'Ghi chú') !!}
@@ -90,6 +98,26 @@
             let price = $(target).find('.price').val();
             price = replaceNumber(price);
             $(target).find('.price').val(formatNumber(price));
+        });
+
+        $('#changeDanhMuc').on('select2:select', function (e) {
+            let data = e.target.value;
+            let html = '';
+            let row = $('#ly_do_id');
+
+            $.ajax({
+                url:'/get-ly-do-thu-chi/' + data,
+                success:function (data) {
+                    if(data){
+                        data.forEach(item=>{
+                            html+= `
+                                    <option value=`+item.id+`>`+item.name+`</option>
+                                `
+                        })
+                        row.html(html);
+                    }
+                }
+            })
         });
     </script>
 @endsection

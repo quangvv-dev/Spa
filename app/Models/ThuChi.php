@@ -41,6 +41,10 @@ class ThuChi extends Model
     {
         return $this->belongsTo(DanhMucThuChi::class);
     }
+    public function lyDoThuChi()
+    {
+        return $this->belongsTo(LyDoThuChi::class,'ly_do_id');
+    }
 
     public function branch()
     {
