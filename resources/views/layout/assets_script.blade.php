@@ -42,11 +42,16 @@
 <script src="{{ asset('assets/plugins/date-picker/jquery-ui.js') }}"></script>
 <script src="{{ asset('assets/plugins/input-mask/jquery.maskedinput.js') }}"></script>
 
+<!-- Alert -->
+<script src="{{ asset('assets/plugins/alertify/alertify.min.js') }}"></script>
+
 <!-- Select2 js -->
 <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
 <!-- Custom js -->
 <script src="{{asset('assets/js/custom.js')}}"></script>
 <!-- User js -->
+
+
 
 <script src="{{asset('js/user.js')}}"></script>
 <script src="{{asset('js/datepicker.js')}}"></script>

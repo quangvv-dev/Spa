@@ -66,7 +66,7 @@ class ThuChiController extends Controller
             $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
         })->pluck('full_name', 'id');
 
-        $type = collect(['0' => 'Tại quầy', '1' => 'Trong két']);
+        $type = collect(['0' => 'Tiền mặt', '1' => 'Chuyển khoản']);
 
         $categories = DanhMucThuChi::pluck('name', 'id');
 

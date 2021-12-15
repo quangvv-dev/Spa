@@ -47,7 +47,7 @@
     }
 </style>
 <!-- Horizantal menu-->
-<div class="ren-navbar fixed-header" id="headerMenuCollapse">
+<div class="ren-navbar fixed-header1" id="headerMenuCollapse">
     <div class="container">
         <ul class="nav">
             @if($roleGlobal->permission('schedules.list'))
@@ -72,6 +72,10 @@
                         @if($roleGlobal->permission('fanpage'))
                             <li><a href="{{route('fanpage.index')}}">Fanpage </a></li>
                         @endif
+                        
+                        <li><a href="/marketing/fanpage-post">Danh sách bài post</a></li>
+                        <li><a href="/marketing/seeding-number">Kho số seeding</a></li>
+                        <li><a href="/marketing/source-fb">Nguồn dữ liệu</a></li>
 
                         @if(empty($permissions) || !in_array('rules.index',$permissions))
                             @if($roleGlobal->permission('rules.list'))

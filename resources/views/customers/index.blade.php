@@ -32,6 +32,27 @@
         th.text-white.text-center{
         z-index: 1;
         }
+        body.fixed-header1 .page {
+            padding-top: 4.5rem;
+        }
+        body.fixed-header1 .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+        .fixed-header1 {
+            position: fixed;
+            left: 0;
+            right: 0;
+            box-shadow: 0 0 0 1px rgba(61, 119, 180, .12), 0 8px 16px 0 rgba(91, 139, 199, .24);
+            margin: 0 auto;
+            z-index: 10;
+        }
+        .ren-navbar.fixed-header1.visible-title {
+            top: 0;
+        }
     </style>
 @endsection
 @section('content')

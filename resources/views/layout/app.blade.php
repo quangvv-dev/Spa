@@ -3,6 +3,8 @@
 @include('layout.assets_head')
 @yield('_style')
 <link href="{{ asset('css/menu-left.css') }}" rel="stylesheet"/>
+<!-- Alertify -->
+<link href="{{ asset('assets/plugins/alertify/alertify.min.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 <body class="app">

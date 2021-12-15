@@ -6,3 +6,7 @@
     white-space: normal;
     z-index: 1;
 }
+
+.page-header {
+    margin: 1.5rem 0 0.5rem;
+}

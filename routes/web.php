@@ -197,9 +197,16 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
 
 
-    Route::group(['prefix' => 'marketing', 'as' => 'marketing.'], function () {
+    Route::group(['namespace' => 'Marketing', 'prefix' => 'marketing', 'as' => 'marketing.'], function () {
         Route::resource('fanpage', 'FanpageController');
         Route::resource('fanpage-post', 'FanpagePostController');
+        Route::post('storePost', 'FanpagePostController@storeCustom')->name('fanpage_post.storeCustom');
+        Route::resource('seeding-number', 'SeedingNumberController');
+        Route::resource('source-fb', 'SourceController');
+        Route::post('update-accept-source', 'SourceController@updateAcceptSource');
+
+
+
     });
 });
 

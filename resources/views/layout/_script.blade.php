@@ -136,8 +136,13 @@
                         var html = '';
                         $.each(data, function (i, v) {
                             console.log(v.data.task_id,'data list');
-                            var obj = v.data
-                            var type = '/tasks/' + obj.task_id + '/edit';
+                            var obj = v.data;
+
+                            if(v.type == 3){
+                                var type = '/thu-chi?id='+ obj.pay_id;
+                            } else {
+                                var type = '/tasks/' + obj.task_id + '/edit';
+                            }
 
                             if (v.status == {{\App\Constants\NotificationConstant::UNREAD}}) {
                                 var color = '#edf2fa';
