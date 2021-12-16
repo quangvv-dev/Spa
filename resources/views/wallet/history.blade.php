@@ -15,6 +15,7 @@
             <th class="text-white text-center">Số tiền nạp</th>
             <th class="text-white text-center">Số tiền được hưởng</th>
             <th class="text-white text-center">Nhân viên nạp</th>
+            {{--<th class="text-white text-center"></th>--}}
         </tr>
         </thead>
         <tbody>
@@ -26,6 +27,7 @@
                 <td class="text-center">{{@number_format($item->order_price)}}</td>
                 <td class="text-center">{{@number_format($item->price)}}</td>
                 <td class="text-center">{{@$item->user->full_name}}</td>
+                {{--<td class="text-center">{{@$item->user->full_name}}</td>--}}
             </tr>
         @endforeach
         </tbody>

@@ -118,11 +118,12 @@ class RevenueController extends BaseApiController
         if ($request->type_api == 1) {
             $orders_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $orders_old->count() : 0;
             $data = [
-                'orders' => $orders->count(),
+                'orders' => $orders->count() + $wallet->count(),
                 'percent' => !empty($orders->count()) && !empty($orders_old) ? round(($orders->count() - $orders_old) / $orders_old * 100,
                     2) : 0,
                 'order_product' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
                 'order_services' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
+                'order_combo'   => $orders_combo->where('role_type', StatusCode::COMBOS)->count(),
                 'wallets' => $wallet->count(),
             ];
         } elseif ($request->type_api == 2) {
