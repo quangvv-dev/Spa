@@ -123,7 +123,7 @@ class RevenueController extends BaseApiController
                     2) : 0,
                 'order_product' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
                 'order_services' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
-                'order_combo'   => $orders_combo->where('role_type', StatusCode::COMBOS)->count(),
+                'order_combo' => $orders_combo->where('role_type', StatusCode::COMBOS)->count(),
                 'wallets' => $wallet->count(),
             ];
         } elseif ($request->type_api == 2) {
@@ -146,7 +146,6 @@ class RevenueController extends BaseApiController
             $payment_old = isset($input_old['start_date']) && isset($input_old['end_date']) ? $payment_old->sum('price') : 0;
 
             $data = [
-                'payment' => $payment->sum('price'),
                 'percent' => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
                     2) : 0,
                 'gross_revenue' => $orders->sum('gross_revenue'),
@@ -154,6 +153,10 @@ class RevenueController extends BaseApiController
                 'thu_no' => $payment->sum('price') - $orders->sum('gross_revenue'),
                 'con_no' => $orders->sum('all_total') - $orders->sum('gross_revenue'),
             ];
+            $total_payment = $payment->sum('price');
+            $wallet_used = $payment->where('payment_type', 3)->sum('price');
+            $data['payment'] = $total_payment + $wallet->sum('order_price') - $wallet_used;
+
         } elseif ($request->type_api == 4) {
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old, 'price');
@@ -166,7 +169,7 @@ class RevenueController extends BaseApiController
             $all_payment = $payment->sum('price');
 
             $data = [
-                'payment' => (int)$payment->sum('price'),
+                'payment' => (int)$payment->sum('price') + $wallet->sum('order_price'),
                 'percent' => !empty($all_payment) && !empty($payment_old) ? round(($all_payment - $payment_old) / $payment_old * 100,
                     2) : 0,
                 'cash' => (int)$payment->whereIn('payment_type', [0, 1])->sum('price'),

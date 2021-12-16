@@ -70,7 +70,7 @@
         <div class="card  overflow-hidden bg-gradient-gray text-white">
             <div class="card-body text-center">
                 <div class="h5">Tổng doanh số</div>
-                <div class="h3 font-weight-bold mb-4 font-30" style="margin-bottom: 2.3rem !important;">
+                <div class="h3 font-weight-bold mb-4 font-30">
                     <span class="">{{@number_format($data['all_total'] + $wallets['revenue'])}}</span>
                 </div>
                 <div class="col-12 row">
@@ -100,7 +100,7 @@
         <div class="card overflow-hidden">
             <div class="card-body text-center bg-gradient-gray text-white">
                 <div class="h5">Thực thu</div>
-                <div class="h3 font-weight-bold mb-4 font-30" style="margin-bottom: 2.3rem !important;">
+                <div class="h3 font-weight-bold mb-4 font-30">
                     {{@number_format($data['payment'] + $wallets['revenue']-$wallets['used'])}}</div>
                 <div class="row">
                     <div class="col-12 row">
@@ -151,10 +151,10 @@
                         <div class="title col-5">Tiêu từ ví:</div>
                         <div class="col-7">{{@number_format($wallets['used'])}}</div>
                     </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Nạp ví:</div>
-                        <div class="col-7">{{@number_format($wallets['revenue'])}}</div>
-                    </div>
+                    {{--<div class="col-12 row">--}}
+                        {{--<div class="title col-5">Nạp ví:</div>--}}
+                        {{--<div class="col-7">{{@number_format($wallets['revenue'])}}</div>--}}
+                    {{--</div>--}}
                 </div>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
