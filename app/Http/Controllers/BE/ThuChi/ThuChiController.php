@@ -38,7 +38,7 @@ class ThuChiController extends Controller
         $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
         $quan_ly = $user->department_id == 1 && $user->role != 1 ? true : false;
         $branches = [];
-        $users = User::pluck('full_name','id')->toArray();
+        $users = User::pluck('full_name', 'id')->toArray();
         if ($admin) {
             $branches = Branch::pluck('name', 'id');
         } else {
@@ -54,7 +54,7 @@ class ThuChiController extends Controller
         if ($request->ajax()) {
             return view('thu_chi.danh_sach_thu_chi.ajax', compact('docs'));
         }
-        return view('thu_chi.danh_sach_thu_chi.index', compact('docs', 'categories', 'branches','users'));
+        return view('thu_chi.danh_sach_thu_chi.index', compact('docs', 'categories', 'branches', 'users'));
     }
 
     /**
@@ -93,20 +93,23 @@ class ThuChiController extends Controller
         $data['branch_id'] = $user->branch_id ? $user->branch_id : 0;
 
         $thu_chi = ThuChi::create($data);
-        if ($request->duyet_id) {
+        $centor = User::select()->where('id', $request->duyet_id)->first();
+        if (isset($centor) && $centor) {
             $data_noti = json_encode((array)['pay_id' => $thu_chi->id]);
             $title = '💸💸💸 Bạn có yêu cầu duyệt chi';
             $type = NotificationConstant::THU_CHI;
-
-//            fcmSendCloudMessage('/topics/all', $title, 'Chạm để xem', 'notification', ['pay_id' => $thu_chi->id]);
+            if (!empty($centor->devices_token)){
+                $devices_token = [$centor->devices_token];
+                fcmSendCloudMessage($devices_token, $title, 'Chạm để xem', 'notification', ['pay_id' => $thu_chi->id]);
+            }
 
             Notification::insert(
                 [
-                    'user_id'    => $request->duyet_id,
-                    'title'      => $title,
-                    'data'       => $data_noti,
-                    'type'       => $type,
-                    'status'     => 1,
+                    'user_id' => $request->duyet_id,
+                    'title' => $title,
+                    'data' => $data_noti,
+                    'type' => $type,
+                    'status' => 1,
                     'created_at' => Carbon::now(),
                 ]);
         }
@@ -152,7 +155,7 @@ class ThuChiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -205,7 +208,7 @@ class ThuChiController extends Controller
 
     public function category($category_id)
     {
-        $data = LyDoThuChi::where('category_id',$category_id)->get();
+        $data = LyDoThuChi::where('category_id', $category_id)->get();
         return $data;
     }
 }
