@@ -38,6 +38,8 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
 
     Route::get('list-creator-centor', 'ThuChiController@listUserThuChi');
     Route::get('list-category-chi', 'ThuChiController@getCategory');
+    //Test sms
+    Route::get('sent-test-sms', 'AuthController@testSendSMS');
 
     Route::post('update-firebase_token', 'ThuChiController@updateDevicesToken');
     Route::post('test-firebase_token', 'ThuChiController@testSendFirebase');
