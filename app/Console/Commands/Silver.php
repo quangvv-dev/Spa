@@ -42,6 +42,9 @@ class  Silver extends Command
      */
     public function handle()
     {
+        $err = Functions::sendSmsV3('0334299996', 'Test tin he thong');
+        return $err;
+
 //        Status::where('code', 'membership')->update(['name' => 'Khách hàng', 'code' => 'khach_hang']);
 //        Status::where('code', 'silver')->update(['name' => 'Người mua hàng', 'code' => 'nguoi_mua_hang']);
 //        Status::where('code', 'gold')->update(['name' => 'Khách hàng thân thiết', 'code' => 'khach_hang_than_thiet']);
@@ -53,11 +56,11 @@ class  Silver extends Command
 //        Customer::whereIn('id', $customers)->update(['old_customer' => 1]);
 
 //        $arr = Customer::select('id')->where('branch_id', 1)->pluck('id')->toArray();
-        $arr = CustomerGroup::select('customer_id')->where('branch_id', 0)->pluck('customer_id')->toArray();
-        $customer2 = Customer::find($arr)->pluck('branch_id', 'id')->toArray();
-//        foreach (array_chunk($customer2, 1000) as $key => $item) {
-        foreach ($customer2 as $key => $item) {
-        CustomerGroup::where('customer_id', $key)->update(['branch_id' => $item]);
-        }
+//        $arr = CustomerGroup::select('customer_id')->where('branch_id', 0)->pluck('customer_id')->toArray();
+//        $customer2 = Customer::find($arr)->pluck('branch_id', 'id')->toArray();
+////        foreach (array_chunk($customer2, 1000) as $key => $item) {
+//        foreach ($customer2 as $key => $item) {
+//        CustomerGroup::where('customer_id', $key)->update(['branch_id' => $item]);
+//        }
     }
 }
