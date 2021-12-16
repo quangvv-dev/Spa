@@ -11,7 +11,7 @@
 </style>
 <div class="col-md-12 col-lg-12">
     <div class="card">
-        {!! Form::open(array('url' => route('sms.saveSchedules'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','class'=>'sent-sms')) !!}
+        {!! Form::open(array('url' => route('sms.sentMultiple'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate','class'=>'sent-sms')) !!}
         <div class="col row">
             <div class="col-md-12 row">
                 <div class="col-6 form-group">
