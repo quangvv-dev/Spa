@@ -117,7 +117,13 @@ class SalesController extends Controller
         return view('report_products.sale', compact('users'));
     }
 
-
+    /**
+     * Thống kê nhóm sản phẩm dịch vụ
+     *
+     * @param Request $request
+     * @param $type
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function indexGroupCategory(Request $request, $type)
     {
         if (!$request->start_date) {
@@ -134,106 +140,47 @@ class SalesController extends Controller
 
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request, $type) {
-            $arr_customer = CustomerGroup::select('customer_id')->where('category_id', $item->id);
-
             $booking = Services::select('id')->where('type', $type)->where('category_id', $item->id)->pluck('id')->toArray();
-            $arr_orders = OrderDetail::select('order_id')->whereIn('booking_id', $booking)->pluck('order_id')->toArray();
-
-            $arr_customer = self::searchBranch($arr_customer, $request)->get()->toArray();
-
-            if ($request->telesale_id) {
-
-                $data = Customer::select('id')->whereIn('id', $arr_customer)->where('telesales_id', $request->telesale_id);
-                $data = self::searchBranch($data, $request);
-                $data2 = clone $data;
-
-                $data_new = $data2->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
-
-                $schedules_new = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereIn('user_id', $data_new->pluck('id')->toArray())
-                    ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
-                $schedules_old = Schedule::select('id')->where('creator_id', $request->telesale_id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                    ->whereHas('customer', function ($qr) {
-                        $qr->where('old_customer', 1);
-                    });
-
-                $item->schedules_new = self::searchBranch($schedules_new, $request)->get()->count();//lich hen
-                $item->schedules_old = self::searchBranch($schedules_old, $request)->get()->count();//lich hen
-            } else {
-                $data = Customer::select('id')->whereIn('id', $arr_customer);
-                $data = self::searchBranch($data, $request);
-                $data2 = clone $data;
-
-                $data_new = $data2->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
-
-                $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray())
-                    ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
-                $schedules_old = Schedule::select('id')->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                    ->whereHas('customer', function ($qr) {
-                        $qr->where('old_customer', 1);
-                    });
-
-                $item->schedules_new = self::searchBranch($schedules_new, $request)->get()->count();//lich hen
-                $item->schedules_old = self::searchBranch($schedules_old, $request)->get()->count();//lich hen
-            }
-
-            $order = Order::select('all_total', 'gross_revenue')->whereIn('id', $arr_orders)
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])->with('orderDetails');
-            $order = self::searchBranch($order, $request);
-
-            $order_ds = clone $order;
-            $order_ds2 = clone $order;
-
-            $order_new = $order_ds->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 0);
+            $arr_customer = CustomerGroup::select('customer_id')->where('category_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+            $arr_customer = self::searchBranch($arr_customer, $request);
+            $data_new = $arr_customer->pluck('customer_id')->toArray();
+            $schedules = Schedule::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+            ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                $q->where('branch_id', $request->branch_id);
             });
+            $schedules_new = $schedules->whereIn('user_id', $data_new);
+            $item->schedules_new = $schedules_new->count();//lich hen
 
-            $order_old = $order_ds2->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 1);
-            });
+            $detail = OrderDetail::select('order_id', \DB::raw('SUM(total_price) AS all_total'), \DB::raw('COUNT(order_id) AS COUNTS'))->whereIn('booking_id', $booking)
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                });
+            $detail_new = clone $detail;
+            $detail_new = $detail_new->whereIn('user_id',$data_new)->groupBy('order_id');
 
             $comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->whereIn('customer_id', $arr_customer);
-            $comment2 = clone $comment;
+                ->whereIn('customer_id', $data_new);
 
-            $comment_new = $comment->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 0);
-            });
-            $comment_old = $comment2->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 1);
-            });
+            $item->comment_new = self::searchBranch($comment, $request)->get()->count();// trao doi moi
 
-            $item->comment_new = self::searchBranch($comment_new, $request)->get()->count();// trao doi moi
-            $item->comment_old = self::searchBranch($comment_old, $request)->get()->count(); // trao doi cu
-
-            $payment_history = PaymentHistory::select('price')
-                ->whereBetween('payment_date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->whereHas('order', function ($qr) use ($request) {
-                    $qr->whereDate('created_at', '<', Functions::yearMonthDay($request->start_date) . " 00:00:00");
-                });
-            $payment_history = self::searchBranch($payment_history, $request);
-
-            $item->customer_new = $data_new->get()->count();
-            $item->order_new = $order_new->count();
-            $item->order_old = $order_old->count();
-            $item->revenue_new = $order_new->sum('all_total');
-            $item->revenue_old = $order->sum('all_total') - $order_new->sum('all_total');
-            $item->payment_revenue = $order->sum('gross_revenue');
-            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
-            $item->payment_old = $order->sum('gross_revenue') - $order_new->sum('gross_revenue'); //da thu trong ky
-            $price = $payment_history->sum('price');//da thu trong ky thu thêm
-            $item->payment_rest = $price;
-            $item->revenue_total = $order->sum('all_total');
+            $item->customer_new = count($data_new);
+            $item->order_new = $detail_new->get()->count();
+            $item->order_old = $detail->get()->sum('COUNTS') - $detail_new->get()->sum('COUNTS');
+            $item->revenue_new = $detail_new->get()->sum('all_total');
+            $item->revenue_old = $detail->groupBy('order_id')->get()->sum('all_total') - $item->revenue_new;
+            $item->revenue_total = $detail->groupBy('order_id')->get()->sum('all_total');
             return $item;
-        })->sortByDesc('revenue_total');
+        })->sortByDesc('revenue_total')->filter(function ($item){
+            if ($item->revenue_total>0){
+                return $item;
+            }
+        });
+
         \View::share([
             'allTotal' => $users->sum('revenue_total'),
-            'grossRevenue' => $users->sum('payment_revenue'),
         ]);
 
-        if (!empty($request->dowload_pdf)) {
-            $pdf = \PDF::loadView('report_products.category_pdf', compact('users', 'telesales'))->setPaper('A4', 'landscape');
-            return $pdf->download('category_report.pdf');
-        }
         if ($request->ajax()) {
             return view('report_products.ajax_group', compact('users', 'telesales'));
         }

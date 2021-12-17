@@ -330,8 +330,7 @@ class AuthController extends BaseApiController
         ));
         $response = curl_exec($curl);
         curl_close($curl);
-        $error_code = json_decode($response)->errorCode;
 
-        return $response;
+        return json_decode($response);
     }
 }
