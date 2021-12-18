@@ -8,6 +8,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\CustomerPost;
 use App\Helpers\Functions;
+use App\Models\Album;
 use App\Models\Branch;
 use App\Models\CallCenter;
 use App\Models\Category;
@@ -122,14 +123,6 @@ class CustomerController extends Controller
         }
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
-
-//        ->map(function ($item) use ($input) {
-//        $customer = CustomerGroup::select('id')->where('category_id', $item->id)->when(isset($input['branch_id']), function ($query) use ($input) {
-//            $query->where('branch_id', 'like', $input['branch_id']);
-//        })->count();
-//        $item->count = $customer;
-//        return $item;
-//        })
         $rank = $customers->firstItem();
         if ($request->ajax()) {
 
@@ -208,7 +201,7 @@ class CustomerController extends Controller
             $input['mkt_id'] = null;
             $input['status_id'] = StatusCode::NEW;
             $customer = $this->customerService->create($input);
-            $update = $this->update_code($customer);
+            $this->update_code($customer);
             $category = Category::find($request->group_id[$k]);
             $customer->categories()->attach($category);
         }
@@ -279,6 +272,12 @@ class CustomerController extends Controller
             return Response::json(view('call_center.customer', compact('call_center'))->render());
         }
 
+        if ($request->albums) {
+            $albums = Album::where('customer_id', $request->albums)->first();
+            $albums = !empty($albums) ? json_decode($albums->images) : [];
+            return Response::json(view('albums.index', compact('albums'))->render());
+        }
+
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
             if (!empty($request->page_order)) {
                 $request->merge(['page' => $request->page_order]);
@@ -291,8 +290,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'customer_post',
-                'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet',
+                'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet',
                 'package', 'call_center', 'orders'));
     }
 
@@ -527,8 +525,8 @@ class CustomerController extends Controller
                                             CustomerGroup::create([
                                                 'customer_id' => $data->id,
                                                 'category_id' => isset($field) ? $field->id : 0,
-                                                'branch_id'   => $data->branch_id,
-                                                'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                                                'branch_id' => $data->branch_id,
+                                                'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
                                             ]);
                                         }
                                     }
@@ -536,8 +534,8 @@ class CustomerController extends Controller
                                     CustomerGroup::create([
                                         'customer_id' => $data->id,
                                         'category_id' => 0,
-                                        'branch_id'   => $data->branch_id,
-                                        'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                                        'branch_id' => $data->branch_id,
+                                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
                                     ]);
                                 }
 
