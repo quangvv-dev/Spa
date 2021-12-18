@@ -274,7 +274,7 @@ class CustomerController extends Controller
 
         if ($request->albums) {
             $albums = Album::where('customer_id', $request->albums)->first();
-            $albums = !empty($albums) ? json_decode($albums->images) : [];
+            $albums = !empty($albums) && !empty($albums->images) ? json_decode($albums->images) : [];
             return Response::json(view('albums.index', compact('albums'))->render());
         }
 
