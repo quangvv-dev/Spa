@@ -45,7 +45,7 @@
                            class="big">
                             <img
                                 src="{{'/images/album/thumb/'.$item->fileName}}"
-                                alt="" title="{{$item->fileName}}"/></a>
+                                alt="" title="{{$item->date}}"/></a>
                             @endforeach
                         @endif
                         <div class="clear"></div>
