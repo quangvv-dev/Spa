@@ -436,8 +436,6 @@
     <script src="{{asset('assets/js/main.js')}}"></script>
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script src="{{asset('js/jquery.textcomplete.min.js')}}"></script>
-    <script src="{{asset('assets/plugins/simple-lightbox/simple-lightbox.min.js?v2.8.0')}}"></script>
-
 
     <script type="text/javascript">
 

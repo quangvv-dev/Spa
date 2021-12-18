@@ -39,10 +39,6 @@
                         {{date('d-m-Y H:i',strtotime($doc->start_time))}}
                         </br>
                         <span class="small-tip">{{@$doc->expired_text}}</span>
-                        {{--</br>--}}
-                        {{--<span--}}
-                            {{--class="small-tip"--}}
-                            {{--style="color: orangered">{{!empty($doc->after_time)?'Sau '.$doc->after_time:''}}</span>--}}
                     </td>
                     <td class="text-center">
                         @if($doc->recording_url !='None')

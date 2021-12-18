@@ -54,7 +54,5 @@
             </div>
         </div>
     </div>
-{{--@endsection--}}
-{{--@section('_script')--}}
+<script src="{{asset('assets/plugins/simple-lightbox/simple-lightbox.min.js?v2.8.0')}}"></script>
 
-{{--@endsection--}}
