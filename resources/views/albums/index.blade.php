@@ -54,5 +54,9 @@
             </div>
         </div>
     </div>
-<script src="{{asset('assets/plugins/simple-lightbox/simple-lightbox.min.js?v2.8.0')}}"></script>
 
+<script>
+    (function () {
+        var $gallery = new SimpleLightbox('.gallery a', {});
+    })();
+</script>
