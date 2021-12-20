@@ -79,10 +79,10 @@
                     <td class="text-center pdr10">{{$item->comment_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
-                    <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100):0}}
+                    <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100,1):0}}
                         %
                     </td>
-                    <td class="text-center pdr10">{{!empty($item->become)?($item->become/$item->schedules_new)*100:0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->become)?round(($item->become/$item->schedules_new)*100,1):0}}%</td>
 
                     <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0}}
                         %
@@ -103,7 +103,7 @@
             <td class="text-center bold">{{@number_format($schedules_new)}}</td>
             <td class="text-center bold">{{@number_format($order_new)}}</td>
             <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
-            <td class="text-center bold">{{@number_format(!empty($users->sum('become'))?($users->sum('become')/$schedules_new)*100:0)}}%</td>
+            <td class="text-center bold">{{@number_format(!empty($users->sum('become'))?round(($users->sum('become')/$schedules_new)*100,1):0)}}%</td>
             <td class="text-center bold">{{@number_format($order_percent/count($users))}}%</td>
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>
             <td class="text-center bold">{{!empty($revenue_new)&&!empty($order_new)?number_format($revenue_new/$order_new):0}}</td>
