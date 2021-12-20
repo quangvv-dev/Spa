@@ -23,10 +23,11 @@
                         SĐT: {{@number_format($data['customers'])}}
                     </div>
                     <div class="col-md-4 col-xs-12">
-                        Lịch hẹn: {{@number_format($schedules)}}
+                        Lịch hẹn: {{@number_format($schedules['all_schedules'])}}
                     </div>
                     <div class="col-md-4 col-xs-12">
-                        Tương tác: {{@number_format($data['groupComment'])}}
+                        SL khách đến: {{@number_format($schedules['become'])}}
+                        {{--Tương tác: {{@number_format($data['groupComment'])}}--}}
                     </div>
                 </div>
                 <div class="progress progress-sm">
@@ -152,8 +153,8 @@
                         <div class="col-7">{{@number_format($wallets['used'])}}</div>
                     </div>
                     {{--<div class="col-12 row">--}}
-                        {{--<div class="title col-5">Nạp ví:</div>--}}
-                        {{--<div class="col-7">{{@number_format($wallets['revenue'])}}</div>--}}
+                    {{--<div class="title col-5">Nạp ví:</div>--}}
+                    {{--<div class="col-7">{{@number_format($wallets['revenue'])}}</div>--}}
                     {{--</div>--}}
                 </div>
                 <div class="progress progress-sm">
