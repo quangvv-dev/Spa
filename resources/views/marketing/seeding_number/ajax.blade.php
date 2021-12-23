@@ -21,16 +21,16 @@
                     <td class="text-center">{{$key+1}}</td>
                     <td class="text-center">{{$item->seeding_number}}</td>
                     <td class="text-center">
-                        {{$item->user->name}} <br>
+                        {{$item->user->full_name}} <br>
                         <span class="small-tip">{{$item->created_at}}</span>
                     </td>
                     <td class="text-center">
-                        {{$item->user->name}} <br>
+                        {{$item->user->full_name}} <br>
                         <span class="small-tip">{{$item->updated_at}}</span>
                     </td>
                     <td class="text-center">
-                        <a class="action-control delete" data-id="{{$item->id}}" href="javascript:void(0)">
-                            <i class="fa fa-trash fa-2x"></i>
+                        <a class="action-control delete" data-url="/marketing/seeding-number/{{$item->id}}" href="javascript:void(0)">
+                            <i class="fa fa-trash"></i>
                         </a>
                     </td>
                 </tr>

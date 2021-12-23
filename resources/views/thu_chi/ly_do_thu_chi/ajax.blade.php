@@ -41,13 +41,13 @@
         </tbody>
 
     </table>
-    {{--<div class="pull-left">--}}
-    {{--<div class="page-info">--}}
-    {{--{{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="pull-right">--}}
-    {{--{{ $docs->appends(['search' => request()->search ])->links() }}--}}
-    {{--</div>--}}
+    <div class="pull-left">
+        <div class="page-info">
+            {{ 'Tổng số ' . $docs->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+        </div>
+    </div>
+    <div class="pull-right">
+        {{ $docs->appends(['search' => request()->search ])->links() }}
+    </div>
 </div>
 

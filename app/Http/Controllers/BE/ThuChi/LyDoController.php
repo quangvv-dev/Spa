@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\ThuChi;
 
+use App\Constants\StatusCode;
 use App\Models\DanhMucThuChi;
 use App\Models\LyDoThuChi;
 use App\Models\ThuChi;
@@ -28,7 +29,7 @@ class LyDoController extends Controller
     {
         $docs = LyDoThuChi::when(isset($request->category_id) && $request->category_id, function ($query) use ($request) {
             $query->where('category_id', $request->category_id);
-        })->get();
+        })->paginate(StatusCode::PAGINATE_20);
 
         $categories = DanhMucThuChi::pluck('name','id')->toArray();
         if ($request->ajax()) {

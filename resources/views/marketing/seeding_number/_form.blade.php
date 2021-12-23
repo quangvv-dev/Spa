@@ -13,6 +13,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary btnAdd"><i class="fa fa-plus"> Thêm mới</i></button>
+        <button type="submit" class="btn btn-primary btnAdd"><i class="fa fa-plus"> Thêm mới</i></button>
     </div>
 </form>

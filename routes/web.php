@@ -203,17 +203,12 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::resource('fanpage-post', 'FanpagePostController');
         Route::post('storePost', 'FanpagePostController@storeCustom')->name('fanpage_post.storeCustom');
         Route::resource('seeding-number', 'SeedingNumberController');
+        Route::delete('delete-seeding', 'SeedingNumberController@deleteSeeding');
         Route::resource('source-fb', 'SourceController');
         Route::post('update-accept-source', 'SourceController@updateAcceptSource');
-
-
-
     });
-});
 
-Route::group(['middleware' => 'auth'], function () {
-    //Login Facebook
-    Route::get('login/facebook', 'HomeController@postLoginFB')->name('facebook.login');
-    Route::get('login/facebook/callback', 'HomeController@callbackFB');
-    Route::get('remove-account-facebook', 'HomeController@removeAccount')->name('facebook.removeAccount');
+    Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');
+    Route::get('login/facebook/callback', 'Marketing\FanpageController@callbackFB');
+    Route::get('remove-account-facebook', 'Marketing\FanpageController@removeAccount')->name('facebook.removeAccount');
 });

@@ -1,23 +1,18 @@
 @extends('layout.app')
 @section('content')
     <div class="card">
-
-
-        {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
+        {!! Form::open(array('url' => url()->current(), 'id'=> 'gridForm','role'=>'form')) !!}
         <div class="card-header fix-header bottom-card add-paginate">
-            <div class="row" style="align-items: baseline">
-                <h4 class="col-lg-3">2.9 Kho số seeding</h4>
-                <div class="col-lg-3 col-md-6">
-                    <div class="form-group">
-                        <input name="searchPhone" type="text" class="form-control square" placeholder="Tìm kiếm ...">
+            <div class="col-12">
+                <div class="row" style="align-items: baseline">
+                    <h4 class="col-lg-3">2.9 Kho số seeding</h4>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="form-group">
+                            <input name="searchPhone" type="text" class="form-control square" placeholder="Tìm kiếm ...">
+                        </div>
                     </div>
+                    <button class="btn btn-primary"><i class="fa fa-search"></i> Tìm kiếm</button>
                 </div>
-                <button class="btn btn-primary"><i class="fa fa-search"></i> Tìm kiếm</button>
-            </div>
-            <div class="heading-elements">
-                <ul class="list-inline mb-0">
-                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                </ul>
             </div>
         </div>
         {{ Form::close() }}
@@ -56,9 +51,10 @@
     </div>
 
 @endsection
-@section('script')
+@section('_script')
     <script>
         $("#checkAll").click(function () {
+            console.log(23424234);
             $('input:checkbox').not(this).prop('checked', this.checked);
         });
 
@@ -68,15 +64,21 @@
                 favorite.push($(this).val());
             });
 
+            if(favorite.length <1){
+                alertify.warning('Vui lòng chọn số muốn xoá !');
+                return;
+            }
+
             swal({
-                title: 'Bạn chắc chắn muốn xóa?',
-                type: 'warning',
+                title: 'Bạn có muốn xóa ?',
+                text: "Nếu bạn xóa tất cả các thông tin sẽ không thể khôi phục!",
+                type: 'error',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 showCloseButton: true,
-            }).then(function () {
+            },function () {
                 $.ajax({
-                    url: '/ajax/delete-seeding',
+                    url: '/marketing/delete-seeding',
                     method: 'delete',
                     data: {
                         data_delete: favorite
@@ -92,15 +94,6 @@
                         }
                     }
                 });
-            })
-
-
-        })
-
-        $(document).ready(function () {
-            $(document).on('click', '.btnAdd', function () {
-                console.log(234234234);
-                $('#myFormId').submit();
             })
         })
 

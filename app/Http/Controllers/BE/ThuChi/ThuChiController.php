@@ -66,6 +66,7 @@ class ThuChiController extends Controller
     {
         $roles = Role::where('department_id', 1)->pluck('id')->toArray();
         $user = Auth::user();
+        $li_do = LyDoThuChi::pluck('name','id')->toArray();
         $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
             $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
         })->pluck('full_name', 'id');
@@ -74,7 +75,7 @@ class ThuChiController extends Controller
 
         $categories = DanhMucThuChi::pluck('name', 'id');
 
-        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet', 'type'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet', 'type','li_do'));
     }
 
     /**
@@ -91,6 +92,7 @@ class ThuChiController extends Controller
         $data['so_tien'] = replaceNumberFormat($request->so_tien);
         $data['thuc_hien_id'] = $user->id;
         $data['branch_id'] = $user->branch_id ? $user->branch_id : 0;
+        $data['danh_muc_thu_chi_id'] = LyDoThuChi::find($request->ly_do_id)->category_id;
 
         $thu_chi = ThuChi::create($data);
         $centor = User::select()->where('id', $request->duyet_id)->first();
@@ -139,7 +141,8 @@ class ThuChiController extends Controller
     public function edit($id)
     {
         $doc = ThuChi::find($id);
-        $li_do = LyDoThuChi::where('category_id', $doc->danh_muc_thu_chi_id)->pluck('name', 'id')->toArray();
+//        $li_do = LyDoThuChi::where('category_id', $doc->danh_muc_thu_chi_id)->pluck('name', 'id')->toArray();
+        $li_do = LyDoThuChi::pluck('name','id')->toArray();
         $roles = Role::where('department_id', 1)->pluck('id')->toArray();
         $user = Auth::user();
 

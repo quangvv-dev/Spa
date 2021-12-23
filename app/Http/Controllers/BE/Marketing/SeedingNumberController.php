@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Models\SeedingNumber;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class SeedingNumberController extends Controller
 {
@@ -12,10 +14,14 @@ class SeedingNumberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = [];
-        return view('marketing.seeding_number.index',compact('data'));
+        $search = $request->all();
+        $data = SeedingNumber::search($search)->paginate(50);
+        if ($request->ajax()) {
+            return view('marketing.seeding_number.ajax', compact('data'));
+        }
+        return view('marketing.seeding_number.index', compact('data'));
     }
 
     /**
@@ -31,18 +37,34 @@ class SeedingNumberController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->seeding_number;
+        $data_replace = str_replace("\r\n", ';', $data);
+        $arr_data = explode(';', $data_replace);
+        if (count($arr_data)) {
+            foreach ($arr_data as $item) {
+                $check = SeedingNumber::where('seeding_number', $item)->first();
+                if (!$check) {
+                    SeedingNumber::create([
+                        'seeding_number' => $item,
+                        'user_id'        => Auth::user()->id,
+                    ]);
+                }
+            }
+        }
+        return back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -53,7 +75,8 @@ class SeedingNumberController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -64,8 +87,9 @@ class SeedingNumberController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -76,11 +100,19 @@ class SeedingNumberController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        SeedingNumber::find($id)->delete();
+        return 1;
+    }
+
+    public function deleteSeeding(Request $request)
+    {
+        SeedingNumber::whereIn('id', $request->data_delete)->delete();
+        return 1;
     }
 }
