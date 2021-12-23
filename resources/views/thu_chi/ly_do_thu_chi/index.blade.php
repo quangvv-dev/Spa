@@ -48,7 +48,7 @@
 
         $(document).on('click', '.save-cate', function () {
             let id = $(this).data('id');
-            let category_id = $('.category_id').val();
+            let category_id = $(this).closest('tr').find('.category_ids').val()
             if (!category_id) {
                 alertify.warning('vui lòng chọn danh mục !');
                 return;
@@ -62,7 +62,7 @@
                     category_id: category_id
                 },
                 success: function (data) {
-                    location.reload();
+                    // location.reload();
                 }
             })
 

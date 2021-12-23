@@ -17,7 +17,7 @@
                 <tr>
                     <td scope="row">{{$k+1}}</td>
                     <td>
-                        {!! Form::select('category_id',$categories,@$s->category_id, array('class' => 'form-control select2 category_id','placeholder'=>'Chọn danh mục')) !!}
+                        {!! Form::select('category_id',$categories,@$s->category_id, array('class' => 'form-control select2 category_ids','placeholder'=>'Chọn danh mục')) !!}
                     </td>
                     <td class="text-center">
                         <input type="text" class="name txt-dotted" value="{{$s->name}}">
