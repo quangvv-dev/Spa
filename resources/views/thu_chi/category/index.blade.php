@@ -12,7 +12,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Danh mục thu chi</h3></br>
+                <h3 class="card-title">Danh mục chi</h3></br>
             </div>
             <div id="registration-form">
                 @include('thu_chi.category.ajax')

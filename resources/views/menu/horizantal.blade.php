@@ -208,10 +208,10 @@
                     <div class="sub-item">
                         <ul>
                             @if($roleGlobal->permission('danh-muc-thu-chi.index'))
-                                <li><a href="{{url('danh-muc-thu-chi')}}">Danh mục thu chi</a></li>
+                                <li><a href="{{url('danh-muc-thu-chi')}}">Danh mục chi</a></li>
                             @endif
-                            <li><a href="{{url('ly-do-thu-chi')}}">Lý do thu chi</a></li>
-                            <li><a href="{{url('thu-chi')}}">Danh sách thu chi</a></li>
+                            <li><a href="{{url('ly-do-thu-chi')}}">Lý do chi</a></li>
+                            <li><a href="{{url('thu-chi')}}">Danh sách chi</a></li>
                         </ul>
                     </div>
                 </li>

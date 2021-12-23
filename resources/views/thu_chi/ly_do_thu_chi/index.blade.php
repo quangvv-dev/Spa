@@ -14,7 +14,7 @@
             <form action="">
                 <div class="card-header">
                     <div class="col-2">
-                        <h3 class="card-title">Lý do thu chi</h3></br>
+                        <h3 class="card-title">Lý do chi</h3></br>
                     </div>
                 </div>
                 <div class="card-header">

@@ -8,7 +8,7 @@
             {!! Form::open(array('url' => url()->current(), 'id'=> 'gridForm','role'=>'form')) !!}
 
             <div class="card-header">
-                <h3 class="card-title">Danh sách thu chi</h3></br>
+                <h3 class="card-title">Danh sách chi</h3></br>
 
                 <div class="col">
                     @if(\Request::is('products'))
