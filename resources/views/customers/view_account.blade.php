@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/style.css') }}" media="all">
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/mobilelightbox.css') }}" media="all">
     <link href="{{ asset('css/progres-bar.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('/assets/plugins/simple-lightbox/simple-lightbox.min.css')}}"/>
 
     <style>
         #snoAlertBox1 {
@@ -294,6 +295,8 @@
                                                    data-toggle="tab">Khuyến mại</a></li>
                                             <li><a href="#tab12" id="click_tab_12" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Tổng đài</a></li>
+                                            <li><a href="#tab13" id="click_tab_13" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">ALBUMS</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -410,6 +413,9 @@
                                         <div class="tab-pane " id="tab12">
                                             @include('call_center.customer')
                                         </div>
+                                        <div class="tab-pane" id="tab13">
+                                            @include('albums.index')
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -430,6 +436,7 @@
     <script src="{{asset('assets/js/main.js')}}"></script>
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script src="{{asset('js/jquery.textcomplete.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/simple-lightbox/simple-lightbox.min.js?v2.8.0')}}"></script>
 
     <script type="text/javascript">
 
@@ -596,6 +603,18 @@
                 data: {call_center: phone}
             }).done(function (data) {
                 $('#tab12').html(data);
+            });
+        })
+        $(document).on('click', '#click_tab_13', function () {
+            const id = $(this).data('id');
+            $('#tab13').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {albums: id}
+            }).done(function (data) {
+                $('#tab13').html(data);
             });
         })
         $(document).on('dblclick', '.order-type', function () {

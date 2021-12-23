@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
 use App\Models\Branch;
@@ -59,11 +60,11 @@ class StatisticController extends Controller
     public function index(Request $request)
     {
         if (!$request->start_date) {
-            Functions::addSearchDateFormat($request,'d-m-Y');
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
 
-        if (count($input)==2) {
+        if (count($input) == 2) {
             $input['branch_id'] = 1;
         }
         $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
@@ -71,7 +72,15 @@ class StatisticController extends Controller
         })->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
 
 
-        $schedules = Schedule::getBooks($input, 'id');
+        $schedule = Schedule::getBooks2($input, 'id');
+
+        $schedules = [
+            'all_schedules' => $schedule->count(),
+            'become'        => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+                ->whereHas('customer', function ($qr) {
+                    $qr->where('old_customer', 0);
+                })->count(),
+        ];
         $payment = PaymentHistory::search($input, 'price');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
@@ -121,28 +130,28 @@ class StatisticController extends Controller
             ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
             ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
 
-        $groupComment = GroupComment::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+//        $groupComment = GroupComment::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
         $data = [
-            'all_total'         => $orders->sum('all_total'),
-            'gross_revenue'     => $orders->sum('gross_revenue'),
-            'payment'           => $payment->sum('price'),
-            'orders'            => $orders->count(),
-            'customers'         => $customers->count(),
+            'all_total' => $orders->sum('all_total'),
+            'gross_revenue' => $orders->sum('gross_revenue'),
+            'payment' => $payment->sum('price'),
+            'orders' => $orders->count(),
+            'customers' => $customers->count(),
 //            'category_service' => $category_service,
-            'category_product'  => $category_product,
-            'revenue_month'     => $revenue_month,
-            'groupComment'      => $groupComment->count(),
+            'category_product' => $category_product,
+            'revenue_month' => $revenue_month,
+//            'groupComment' => $groupComment->count(),
         ];
         $products = [
-            'gross_revenue'     => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'all_total'         => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
-            'orders'            => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+            'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
         ];
         $services = [
-            'gross_revenue'     => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-            'all_total'         => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
-            'combo_total'       => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
-            'orders'            => $orders2->where('role_type', StatusCode::SERVICE)->count(),
+            'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+            'combo_total' => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
+            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
         ];
 
         $revenue = self::getRevenueCustomer($input, $payment);
@@ -165,14 +174,14 @@ class StatisticController extends Controller
         }
         $all_payment = $payment->sum('price');
         $list_payment = [
-            'money'     => $payment2->where('payment_type', 1)->sum('price'),
-            'card'      => $payment3->where('payment_type', 2)->sum('price'),
-            'CK'        => $payment->where('payment_type', 4)->sum('price'),
+            'money' => $payment2->where('payment_type', 1)->sum('price'),
+            'card' => $payment3->where('payment_type', 2)->sum('price'),
+            'CK' => $payment->where('payment_type', 4)->sum('price'),
         ];
         $wallets = [
-            'orders'    => $wallet->count(),
-            'revenue'   => $wallet->sum('order_price'),
-            'used'      => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
+            'orders' => $wallet->count(),
+            'revenue' => $wallet->sum('order_price'),
+            'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
         ];
 
         if ($request->ajax()) {

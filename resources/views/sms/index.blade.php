@@ -35,17 +35,18 @@
                     <div class="tabs-menu1 ">
                         <!-- Tabs -->
                         <ul class="nav panel-tabs">
-                            <li class=""><a href="#tab5" class="active"
+                            <li class=""><a href="#tab5" class=""
                                             data-toggle="tab">Chiến dịch nhắn tin</a>
                             </li>
-                            <li><a href="#tab7" class="" data-toggle="tab">Gủi tin hệ thống</a></li>
+                            <li><a href="#tab7" class="" data-toggle="tab">Gửi tin chiến dịch</a></li>
+                            <li><a href="#tab9" class="active" data-toggle="tab">Gửi tin hàng loạt</a></li>
                             <li><a href="#tab8" class="" data-toggle="tab">Tin báo lịch hẹn</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="panel-body tabs-menu-body">
                     <div class="tab-content">
-                        <div class="tab-pane active " id="tab5">
+                        <div class="tab-pane " id="tab5">
                             @include('sms.content_automation')
                         </div>
                         <div class="tab-pane" id="tab7">
@@ -53,6 +54,9 @@
                         </div>
                         <div class="tab-pane" id="tab8">
                             @include('sms.schedules_sms')
+                        </div>
+                        <div class="tab-pane active" id="tab9">
+                            @include('sms.sms_multiple')
                         </div>
                     </div>
                 </div>

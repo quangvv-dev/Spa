@@ -100,23 +100,20 @@ class Category extends Model
      */
     public static function getTotalPrice($input, $type, $paginate)
     {
-//        dd($input, $type, $paginate);
         $data = self::select('id', 'name')->where('type', $type)->get()->map(function ($item) use ($input) {
-            $arr_customer = CustomerGroup::where('category_id', $item->id)
+            $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
+            $orders = OrderDetail::select('price')->whereIn('booking_id', $services)
+                ->when(!empty($input['start_date']) && !empty($input['end_date']),
+                    function ($q) use ($input) {
+                        $q->whereBetween('created_at', [
+                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                        ]);
+                    })
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->pluck('customer_id')->toArray();
-            $order = Order::select('all_total')->whereIn('member_id', $arr_customer)
-                ->when(isset($input['data_time']) && $input['data_time'], function ($q) use ($input) {
-                    $q->whereBetween('created_at', getTime($input['data_time']));
-                })
-                ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-                    $q->where('branch_id', $input['branch_id']);
-                })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                    $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-                })
-                ->with('orderDetails');//doanh so
-            $item->all_total = $order->sum('all_total');
+                });
+            $item->all_total = $orders->sum('total_price');//da thu trong ky thu thêm
             return $item;
         })->sortByDesc('all_total')->take($paginate);
         return $data;

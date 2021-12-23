@@ -161,10 +161,10 @@
                             <li><a href="{{url('statistics')}}">Doanh thu</a></li>
                         @endif
                         @if($roleGlobal->permission('report.groupSale'))
-                            <li><a href="{{url('report/group-sale/services')}}">Doanh thu nhóm DV</a></li>
+                            <li><a href="{{url('report/group-sale/services')}}">Doanh số nhóm DV</a></li>
                         @endif
                         @if($roleGlobal->permission('report.groupSale'))
-                            <li><a href="{{url('report/group-sale/products')}}">Doanh thu nhóm SP</a></li>
+                            <li><a href="{{url('report/group-sale/products')}}">Doanh số nhóm SP</a></li>
                         @endif
                         @if($roleGlobal->permission('sms.history'))
                             <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>

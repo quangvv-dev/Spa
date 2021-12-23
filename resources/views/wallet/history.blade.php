@@ -15,6 +15,7 @@
             <th class="text-white text-center">Số tiền nạp</th>
             <th class="text-white text-center">Số tiền được hưởng</th>
             <th class="text-white text-center">Nhân viên nạp</th>
+            <th class="text-white text-center"></th>
         </tr>
         </thead>
         <tbody>
@@ -26,6 +27,12 @@
                 <td class="text-center">{{@number_format($item->order_price)}}</td>
                 <td class="text-center">{{@number_format($item->price)}}</td>
                 <td class="text-center">{{@$item->user->full_name}}</td>
+                <td class="text-center">
+                    @if(\Illuminate\Support\Facades\Auth::user()->role==1)
+                        <a class="btn delete" href="javascript:void(0)"
+                           data-url="{{ url('wallet/' . $item->id) }}"><i class="fas fa-trash-alt"></i></a>
+                    @endif
+                </td>
             </tr>
         @endforeach
         </tbody>

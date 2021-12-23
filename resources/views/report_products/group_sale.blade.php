@@ -32,6 +32,10 @@
     <div class="col-md-12">
         <div id="fix-scroll" class="row padding mb10 header-card border-bot shadow">
             <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title bold">Doanh số nhóm</h3>
+                </div>
+
                 <div class="card-header row">
 
                     {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-lg-12', 'id'=> 'gridForm','role'=>'form')) !!}
@@ -42,9 +46,9 @@
                            <input type="hidden" name="end_date" id="end_date">
                            <input id="reportrange" type="text" class="form-control square">
                        </div>
-                       <div class="col-md-2">
-                           {{Form::select('type',$telesales, null, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Tất cả nhân viên'))}}
-                       </div>
+                       {{--<div class="col-md-2">--}}
+                           {{--{{Form::select('type',$telesales, null, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Tất cả nhân viên'))}}--}}
+                       {{--</div>--}}
                        <div class="col-md-2">
                            <select name="branch_id" id="branch_id" class="form-control">
                                <option value="-1">Tất cả chi nhánh</option>
@@ -64,7 +68,7 @@
                     {{ Form::close() }}
 
                 </div>
-                <div class="col-md-12 col-lg-12 list-data">
+                <div class="col-md-12 col-lg-12">
                     @include('report_products.ajax_group')
                 </div>
             </div>

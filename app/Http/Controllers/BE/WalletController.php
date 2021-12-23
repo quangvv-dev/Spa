@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Models\Customer;
 use App\Models\PackageWallet;
+use App\Models\WalletHistory;
 use App\Services\WalletService;
 use App\User;
 use Carbon\Carbon;
@@ -60,12 +61,12 @@ class WalletController extends Controller
         $package = PackageWallet::findOrFail($request->package_id);
         $customer = Customer::findOrFail($request->customer_id);
         $input = [
-            'package_id'    => $package->id,
-            'customer_id'   => $customer->id,
-            'user_id'       => Auth::user()->id,
-            'price'         => $package->price,
-            'order_price'   => $package->order_price,
-            'branch_id'     => $customer->branch_id,
+            'package_id' => $package->id,
+            'customer_id' => $customer->id,
+            'user_id' => Auth::user()->id,
+            'price' => $package->price,
+            'order_price' => $package->order_price,
+            'branch_id' => $customer->branch_id,
         ];
         $this->walletService->create($input);
         $customer->wallet = $customer->wallet + $package->price;
@@ -117,8 +118,18 @@ class WalletController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $walet = WalletHistory::find($id);
+        if (!empty($walet)) {
+            $customer = Customer::find($walet->customer_id);
+            $balance = ($customer->wallet - $walet->price) > 0 ? ($customer->wallet - $walet->price) : 0;
+            $customer->wallet = $balance;
+            $customer->save();
+            $walet->delete();
+            $request->session()->flash('error', 'Xóa thành công danh mục!');
+        } else {
+            $request->session()->flash('error', 'Không thể xóa vì lịch sử ví!');
+        }
     }
 }

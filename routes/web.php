@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('sent-sms', 'SmsController@sentSms')->name('sms.sent');
     Route::post('save-sms', 'SmsController@saveSmsSchedules')->name('sms.saveSchedules');
     Route::get('history-sms', 'SmsController@history')->name('sms.history');
+    Route::post('sent-sms-multiple', 'SmsController@sendSmsMultiple')->name('sms.sentMultiple');
 
     Route::resource('department', 'DepartmentController');
     Route::get('position/{id}', 'PositionController@index')->name('position.index');
@@ -122,7 +123,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
         Route::get('product-depot/{id}', 'Depot\ProductDepotController@getDetail');
 
-        Route::post('change-status-thu-chi','ThuChi\ThuChiController@changeStatus');
+        Route::post('change-status-thu-chi', 'ThuChi\ThuChiController@changeStatus');
 
     });
 
@@ -191,11 +192,10 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     });
 
-    Route::resource('danh-muc-thu-chi','ThuChi\DanhMucController');
-    Route::resource('ly-do-thu-chi','ThuChi\LyDoController');
-    Route::resource('thu-chi','ThuChi\ThuChiController');
-    Route::get('get-ly-do-thu-chi/{category_id}','ThuChi\ThuChiController@category');
-
+    Route::resource('danh-muc-thu-chi', 'ThuChi\DanhMucController');
+    Route::resource('ly-do-thu-chi', 'ThuChi\LyDoController');
+    Route::resource('thu-chi', 'ThuChi\ThuChiController');
+    Route::get('get-ly-do-thu-chi/{category_id}', 'ThuChi\ThuChiController@category');
 
 
     Route::group(['namespace' => 'Marketing', 'prefix' => 'marketing', 'as' => 'marketing.'], function () {

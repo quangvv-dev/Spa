@@ -144,10 +144,10 @@ class SmsController extends Controller
             if (count($users)) {
                 foreach ($users as $key => $item) {
                     if (strlen($item) == 10) {
-                        $phone = Functions::convertPhone($item);
+//                        $phone = Functions::convertPhone($item);
                         $body = replaceVariable($request->sms_group, $key, '', @$branch->name, @$branch->phone, @$branch->address);
                         $body = Functions::vi_to_en($body);
-                        $err = Functions::sendSmsV3($phone, $body);
+                        $err = Functions::sendSmsV3($item, $body);
                         if (isset($err) && $err) {
                             $number++;
                             $input['phone'] = $item;
@@ -180,7 +180,7 @@ class SmsController extends Controller
             $phone = Functions::convertPhone($customer->phone);
             $body = replaceVariable($request->sms_group, @$customer->name, '', @$branch->name, @$branch->phone, @$branch->address);
             $body = Functions::vi_to_en($body);
-            try{
+            try {
                 $err = Functions::sendSmsV3($phone, $body);
                 if (isset($err) && $err) {
                     $input['phone'] = $customer->phone;
@@ -189,7 +189,7 @@ class SmsController extends Controller
                     HistorySms::create($input);
                     return back()->with('status', 'GỬI TIN THÀNH CÔNG !!!');
                 }
-            }catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 return back()->with('error', 'GỬI TIN THẤT BẠI !!!');
             }
         }
@@ -305,5 +305,32 @@ class SmsController extends Controller
     {
         setting(['sms_schedules' => $request->sms_schedules])->save();
         return back()->with('status', 'LƯU NỘI DUNG THÀNH CÔNG !!!');
+    }
+
+    public function sendSmsMultiple(Request $request)
+    {
+        $data = $request->all();
+        $data_replace = str_replace("\r\n", ';', $data['list_phone']);
+        $arr_data = explode(';', $data_replace);
+        $number = 0;
+        setting(['content_multiple_sms' => $data['content']])->save();
+        if (count($arr_data)) {
+            foreach ($arr_data as $item) {
+                if (strlen($item) == 10) {
+                    $body = Functions::vi_to_en($data['content']);
+                    $err = Functions::sendSmsV3($item, $body);
+                    if (isset($err) && $err) {
+                        $number++;
+                        $input['phone'] = $item;
+                        $input['campaign_id'] = 0;
+                        $input['message'] = $body;
+                        HistorySms::create($input);
+                    }
+                }
+            }
+        }
+
+        return back()->with('status', 'GỬI TIN THÀNH CÔNG CHO ' . $number . ' KHÁCH HÀNG !!!');
+
     }
 }
