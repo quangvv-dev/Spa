@@ -62,7 +62,7 @@
                     category_id: category_id
                 },
                 success: function (data) {
-                    // location.reload();
+                    location.reload();
                 }
             })
 
