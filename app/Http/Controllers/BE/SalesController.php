@@ -124,7 +124,7 @@ class SalesController extends Controller
      * @param $type
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function indexGroupCategory(Request $request, $type)
+    public function indexGroupCategory(Request $request)
     {
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
@@ -135,7 +135,8 @@ class SalesController extends Controller
             $request->merge(['branch_id' => null]);
         }
 
-        $type = $type == 'products' ? StatusCode::PRODUCT : StatusCode::SERVICE;
+        $type = isset($request->type) ? $request->type : StatusCode::SERVICE;
+
         $branchs = Branch::search()->pluck('name', 'id');
 
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
@@ -145,9 +146,9 @@ class SalesController extends Controller
             $arr_customer = self::searchBranch($arr_customer, $request);
             $data_new = $arr_customer->pluck('customer_id')->toArray();
             $schedules = Schedule::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-            ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                $q->where('branch_id', $request->branch_id);
-            });
+                ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                });
             $schedules_new = $schedules->whereIn('user_id', $data_new);
             $item->schedules_new = $schedules_new->count();//lich hen
             $item->become = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();//lich hen
@@ -158,7 +159,7 @@ class SalesController extends Controller
                     $q->where('branch_id', $request->branch_id);
                 });
             $detail_new = clone $detail;
-            $detail_new = $detail_new->whereIn('user_id',$data_new)->groupBy('order_id');
+            $detail_new = $detail_new->whereIn('user_id', $data_new)->groupBy('order_id');
 
             $comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->whereIn('customer_id', $data_new);
@@ -172,8 +173,8 @@ class SalesController extends Controller
             $item->revenue_old = $detail->groupBy('order_id')->get()->sum('all_total') - $item->revenue_new;
             $item->revenue_total = $detail->groupBy('order_id')->get()->sum('all_total');
             return $item;
-        })->sortByDesc('revenue_total')->filter(function ($item){
-            if ($item->revenue_total>0){
+        })->sortByDesc('revenue_total')->filter(function ($item) {
+            if ($item->revenue_total > 0) {
                 return $item;
             }
         });
@@ -182,9 +183,9 @@ class SalesController extends Controller
             'allTotal' => $users->sum('revenue_total'),
         ]);
         if ($request->ajax()) {
-            return view('report_products.ajax_group', compact('users', 'telesales'));
+            return view('report_products.ajax_group', compact('users', 'telesales','type'));
         }
-        return view('report_products.group_sale', compact('branchs', 'users', 'telesales'));
+        return view('report_products.group_sale', compact('branchs', 'users', 'telesales','type'));
     }
 
     public function searchBranch($query, $input)

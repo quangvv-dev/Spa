@@ -4,10 +4,8 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
-use App\Constants\StatusConstant;
 use App\Models\Branch;
 use App\Models\Customer;
-use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
@@ -18,9 +16,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Response;
 use App\Models\Services;
-use App\Models\Category;
 use App\Models\Schedule;
 use App\Models\Task;
 use App\Constants\UserConstant;
@@ -130,7 +126,6 @@ class StatisticController extends Controller
             ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
             ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
 
-//        $groupComment = GroupComment::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
         $data = [
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
@@ -140,7 +135,6 @@ class StatisticController extends Controller
 //            'category_service' => $category_service,
             'category_product' => $category_product,
             'revenue_month' => $revenue_month,
-//            'groupComment' => $groupComment->count(),
         ];
         $products = [
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),

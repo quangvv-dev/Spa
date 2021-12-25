@@ -10,7 +10,7 @@
         </tr>
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center"></th>
-            <th class="text-center">{{request()->segment(3)=='products'?'Nhóm sản phẩm':'Nhóm dịch vụ'}}</th>
+            <th class="text-center">{{$type==2?'Nhóm sản phẩm':'Nhóm dịch vụ'}}</th>
             <th class="text-center no-wrap">SĐT</th>
             <th class="text-center">Trao đổi</th>
             <th class="text-center">Lịch hẹn</th>
