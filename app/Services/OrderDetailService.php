@@ -66,19 +66,20 @@ class OrderDetailService
         }
         $dataArr = [];
         foreach ($data['service_id'] as $key => $value) {
-            if (is_numeric($data['service_id'])){
+            if ($data['service_id']){
                 $dataArr[] = [
-                    'id' => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key] : '',
-                    'order_id' => $orderId,
-                    'user_id' => $data['user_id'],
-                    'booking_id' => $data['service_id'][$key],
-                    'quantity' => isset($data['quantity'][$key]) ? $data['quantity'][$key] : 0,
-                    'price' => replaceNumberFormat($data['price'][$key]),
-                    'vat' => 0,
-                    'address' => $data['address'],
+                    'id'            => isset($data['order_detail_id'][$key]) ? $data['order_detail_id'][$key] : '',
+                    'order_id'      => $orderId,
+                    'user_id'       => $data['user_id'],
+                    'booking_id'    => $data['service_id'][$key],
+                    'days'          => $data['days'][$key],
+                    'quantity'      => isset($data['quantity'][$key]) ? $data['quantity'][$key] : 0,
+                    'price'         => replaceNumberFormat($data['price'][$key]),
+                    'vat'           => 0,
+                    'address'       => $data['address'],
                     'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
-                    'total_price' => replaceNumberFormat($data['total_price'][$key]),
-                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'total_price'   => replaceNumberFormat($data['total_price'][$key]),
+                    'updated_at'    => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
                 $service = Services::where('id', $data['service_id'][$key])->withTrashed()->first();
 

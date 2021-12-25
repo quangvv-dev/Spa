@@ -404,7 +404,7 @@ class OrderController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $order = $this->orderService->delete($id);
+        $this->orderService->delete($id);
         $request->session()->flash('error', 'Xóa đơn hàng thành công!');
     }
 
@@ -696,6 +696,14 @@ class OrderController extends Controller
                 'products', 'role_type', 'combo'));
     }
 
+    /**
+     * Update orders
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws Exception
+     */
     public function update(Request $request, $id)
     {
         $input = $request->all();
@@ -717,7 +725,6 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
-
             $orderDetail = $this->orderDetailService->update($input, $id);
 
             if (!$orderDetail) {

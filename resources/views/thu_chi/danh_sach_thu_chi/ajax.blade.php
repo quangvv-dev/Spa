@@ -15,7 +15,7 @@
         </thead>
         <tbody>
         <tr>
-            <td class="text-center" colspan="2">Tổng:</td>
+            <td class="text-center bold" colspan="2">Tổng:</td>
             <td class="text-center bold">{{number_format($allPrice)}}</td>
             <td></td>
             <td></td>
