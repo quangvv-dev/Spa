@@ -3,6 +3,25 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
 @endsection
 @section('content')
+    <style>
+        .table-responsive{
+            overflow: scroll;
+            height: 67vh;
+        }
+        .table thead th {
+            position: sticky;
+            top: 0;
+            color: #fff;
+            vertical-align: middle;
+            white-space: normal;
+            z-index: 1;
+        }
+        .table .tr-n td{
+            position: sticky;
+            top: 36px;
+            z-index: 1;
+        }
+    </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
             {!! Form::open(array('url' => url()->current(), 'id'=> 'gridForm','role'=>'form')) !!}

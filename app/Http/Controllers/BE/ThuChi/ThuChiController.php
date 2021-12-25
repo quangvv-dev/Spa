@@ -72,9 +72,14 @@ class ThuChiController extends Controller
         $roles = Role::where('department_id', 1)->pluck('id')->toArray();
         $user = Auth::user();
         $li_do = LyDoThuChi::pluck('name','id')->toArray();
-        $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
-            $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
-        })->pluck('full_name', 'id');
+        $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
+        if($admin){
+            $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
+        }else {
+            $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
+                $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
+            })->pluck('full_name', 'id');
+        }
 
         $type = collect(['0' => 'Tiền mặt', '1' => 'Chuyển khoản']);
 
@@ -150,10 +155,15 @@ class ThuChiController extends Controller
         $li_do = LyDoThuChi::pluck('name','id')->toArray();
         $roles = Role::where('department_id', 1)->pluck('id')->toArray();
         $user = Auth::user();
+        $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
+        if($admin){
+            $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
+        }else {
+            $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
+                $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
+            })->pluck('full_name', 'id');
+        }
 
-        $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
-            $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
-        })->pluck('full_name', 'id');
         $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
         return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do'));
