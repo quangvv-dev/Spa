@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class ThuChiController extends Controller
 {
@@ -48,8 +49,12 @@ class ThuChiController extends Controller
                 $search['thuc_hien_id'] = $user->id;
             }
         }
-        $docs = ThuChi::search($search)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+        $docs = ThuChi::search($search)->orderByDesc('id');
+        View::share([
+            'allPrice' => $docs->sum('so_tien'),
+        ]);
 
+        $docs = $docs->paginate(StatusCode::PAGINATE_20);
         $categories = DanhMucThuChi::pluck('name', 'id');
         if ($request->ajax()) {
             return view('thu_chi.danh_sach_thu_chi.ajax', compact('docs'));

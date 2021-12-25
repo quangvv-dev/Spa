@@ -11,8 +11,19 @@
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
+
         </thead>
         <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="text-center bold">{{number_format($allPrice)}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
         @if(count($docs))
             @foreach($docs as $k => $s)
                 <tr>
