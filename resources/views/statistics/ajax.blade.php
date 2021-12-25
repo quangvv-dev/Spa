@@ -152,10 +152,6 @@
                         <div class="title col-5">Tiêu từ ví:</div>
                         <div class="col-7">{{@number_format($wallets['used'])}}</div>
                     </div>
-                    {{--<div class="col-12 row">--}}
-                    {{--<div class="title col-5">Nạp ví:</div>--}}
-                    {{--<div class="col-7">{{@number_format($wallets['revenue'])}}</div>--}}
-                    {{--</div>--}}
                 </div>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
@@ -173,12 +169,6 @@
 <div class="d-none col-xs-none d-md-block">
     <div class="h4 text-center">BIỂU ĐỒ</div>
 
-    <div class="row row-cards">
-
-        {{--<div class="col-md-6">--}}
-        {{--<div id="piechart-2"></div>--}}
-        {{--</div>--}}
-    </div>
     <div class="row row-cards">
         <div class="col-md-6">
             <div id="piechart-1" style="margin-left: 15px"></div>
@@ -202,7 +192,6 @@
             <div id="piechart-8" style="margin-left: 15px"></div>
         </div>
     </div>
-
     <div class="row row-cards">
         <div class="col-md-12">
             <div id="column" style="margin-left: 15px"></div>
@@ -213,10 +202,14 @@
             <div id="column2" style="margin-left: 15px"></div>
         </div>
     </div>
+    <div class="row row-cards">
+        <div class="col-md-12">
+            <div id="barchart" style="overflow-x: scroll;overflow-y: hidden;margin-left: 15px"></div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
-
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
@@ -244,30 +237,6 @@
         chart.draw(data, options);
     }
 </script>
-{{--<script type="text/javascript">--}}
-{{--google.charts.load('current', {'packages': ['corechart']});--}}
-{{--google.charts.setOnLoadCallback(drawChart);--}}
-
-{{--function drawChart() {--}}
-
-{{--var data = google.visualization.arrayToDataTable([--}}
-{{--['Task', 'Hours per Day'],--}}
-{{--@foreach($data['category_service'] as $k =>$item)--}}
-{{--['{{$item->name}}', {{$item->all_total}}],--}}
-{{--@endforeach--}}
-{{--]);--}}
-
-{{--var options = {--}}
-{{--title: 'TOP 5 NHÓM DICH VỤ CÓ DOANH THU CAO NHẤT',--}}
-{{--width: 500,--}}
-{{--height: 300,--}}
-{{--};--}}
-
-{{--var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));--}}
-
-{{--chart.draw(data, options);--}}
-{{--}--}}
-{{--</script>--}}
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
@@ -369,7 +338,6 @@
         chart.draw(data, options);
     }
 </script>
-
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
@@ -394,7 +362,6 @@
         chart.draw(data, options);
     }
 </script>
-
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
 
@@ -420,7 +387,6 @@
         chart.draw(data, options);
     }
 </script>
-
 <script>
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
 
@@ -446,3 +412,51 @@
         chart.draw(data, options);
     }
 </script>
+{{--Barchart--}}
+{{--<script>--}}
+    {{--google.charts.load('current', {callback: drawBasic, packages: ['corechart']});--}}
+    {{--var heights = {{count($response)*70}}--}}
+    {{--function drawBasic() {--}}
+        {{--var data = google.visualization.arrayToDataTable([--}}
+                {{--@if(count($response))--}}
+            {{--['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],--}}
+                {{--@foreach($response as $k =>$item1)--}}
+            {{--['{{$k}}',{{$item1->data->all_total}}, '{{number_format($item1->data->all_total)}}',{{$item1->data->gross_revenue}}, '{{number_format($item1->data->gross_revenue)}}',{{$item1->data->payment}} , '{{number_format($item1->data->payment)}}'],--}}
+                {{--@endforeach--}}
+                {{--@else--}}
+            {{--['Năm', 0, '#fffff', '0%'],--}}
+            {{--@endif--}}
+
+        {{--]);--}}
+
+        {{--var options = {--}}
+            {{--title: 'THỐNG KÊ NGUỒN THU TOÀN HỆ THỐNG (VNĐ)',--}}
+            {{--height: heights,--}}
+            {{--width: '100%',--}}
+            {{--titleFontSize: 13,--}}
+            {{--chartArea: {--}}
+                {{--height: '100%',--}}
+                {{--left: 150,--}}
+                {{--top: 70,--}}
+            {{--},--}}
+            {{--vAxis: {--}}
+                {{--textStyle: {--}}
+                    {{--bold: true,--}}
+                {{--},--}}
+            {{--},--}}
+            {{--annotations: {--}}
+                {{--highContrast: false,--}}
+                {{--textStyle: {--}}
+                    {{--color: '#000000',--}}
+                    {{--fontSize: 11,--}}
+                    {{--bold: true--}}
+                {{--}--}}
+            {{--},--}}
+        {{--};--}}
+
+        {{--var chart = new google.visualization.BarChart(document.getElementById('barchart'));--}}
+        {{--chart.draw(data, options);--}}
+    {{--};--}}
+    {{--// column chart--}}
+{{--</script>--}}
+{{--end barchart--}}
