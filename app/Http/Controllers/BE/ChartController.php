@@ -57,7 +57,9 @@ class ChartController extends Controller
                 'gross_revenue' => $data['gross_revenue'],
                 'payment' => $data['payment'] + $wallets['revenue'] - $wallets['used'],
             ];
-
+            usort($result, function ($a, $b) {
+                return $b['payment'] <=> $a['payment'];
+            });
         }
         if ($request->ajax()) {
             return view('chart_revenue.ajax', compact('result'));
