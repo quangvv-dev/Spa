@@ -1,45 +1,30 @@
 @extends('layout.app')
+@section('_style')
+    <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
+@endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title" style="margin-right: 100px;">{{$title}}</h3></br>
+                {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
+                <div class="col-md-10">
+                    <input type="hidden" name="start_date" id="start_date">
+                    <input type="hidden" name="end_date" id="end_date">
+                    <input id="reportrange" type="text" class="form-control square">
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <button type="submit" class="btn btn-primary"> Tìm kiếm
+                    </button>
+                </div>
+                {{ Form::close() }}
             </div>
-{{--            <div class="card-header">--}}
-{{--                <input class="form-control header-search col-md-2" name="search" placeholder="Search…" tabindex="1"--}}
-{{--                       type="search">--}}
-{{--            </div>--}}
             <div id="registration-form">
                 @include('chart_revenue.ajax')
             </div>
             <!-- table-responsive -->
         </div>
     </div>
-@endsection
-@section('_script')
-    <script type="text/javascript">
-        $(document).on('keyup', '.header-search', function (e) {
-            e.preventDefault();
-            var search = $(this).val();
-            $.ajax({
-                url: "{{ Url('category/') }}",
-                method: "get",
-                data: {search: search}
-            }).done(function (data) {
-                $('#registration-form').html(data);
-
-            });
-        });
-        $(document).on('change', '.header-search', function () {
-            var search = $(this).val();
-            $.ajax({
-                url: "{{ Url('category/') }}",
-                method: "get",
-                data: {search: search}
-            }).done(function (data) {
-                $('#registration-form').html(data);
-
-            });
-        });
-    </script>
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection

@@ -202,11 +202,6 @@
             <div id="column2" style="margin-left: 15px"></div>
         </div>
     </div>
-    <div class="row row-cards">
-        <div class="col-md-12">
-            <div id="barchart" style="overflow-x: scroll;overflow-y: hidden;margin-left: 15px"></div>
-        </div>
-    </div>
 </div>
 
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
@@ -412,51 +407,3 @@
         chart.draw(data, options);
     }
 </script>
-{{--Barchart--}}
-{{--<script>--}}
-    {{--google.charts.load('current', {callback: drawBasic, packages: ['corechart']});--}}
-    {{--var heights = {{count($response)*70}}--}}
-    {{--function drawBasic() {--}}
-        {{--var data = google.visualization.arrayToDataTable([--}}
-                {{--@if(count($response))--}}
-            {{--['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],--}}
-                {{--@foreach($response as $k =>$item1)--}}
-            {{--['{{$k}}',{{$item1->data->all_total}}, '{{number_format($item1->data->all_total)}}',{{$item1->data->gross_revenue}}, '{{number_format($item1->data->gross_revenue)}}',{{$item1->data->payment}} , '{{number_format($item1->data->payment)}}'],--}}
-                {{--@endforeach--}}
-                {{--@else--}}
-            {{--['Năm', 0, '#fffff', '0%'],--}}
-            {{--@endif--}}
-
-        {{--]);--}}
-
-        {{--var options = {--}}
-            {{--title: 'THỐNG KÊ NGUỒN THU TOÀN HỆ THỐNG (VNĐ)',--}}
-            {{--height: heights,--}}
-            {{--width: '100%',--}}
-            {{--titleFontSize: 13,--}}
-            {{--chartArea: {--}}
-                {{--height: '100%',--}}
-                {{--left: 150,--}}
-                {{--top: 70,--}}
-            {{--},--}}
-            {{--vAxis: {--}}
-                {{--textStyle: {--}}
-                    {{--bold: true,--}}
-                {{--},--}}
-            {{--},--}}
-            {{--annotations: {--}}
-                {{--highContrast: false,--}}
-                {{--textStyle: {--}}
-                    {{--color: '#000000',--}}
-                    {{--fontSize: 11,--}}
-                    {{--bold: true--}}
-                {{--}--}}
-            {{--},--}}
-        {{--};--}}
-
-        {{--var chart = new google.visualization.BarChart(document.getElementById('barchart'));--}}
-        {{--chart.draw(data, options);--}}
-    {{--};--}}
-    {{--// column chart--}}
-{{--</script>--}}
-{{--end barchart--}}

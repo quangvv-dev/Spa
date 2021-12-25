@@ -1,62 +1,56 @@
-<div class="row">
-    <div class="col-md-4 col-xs-12">
-        <div id="piechart"></div>
-    </div>
-    <div class="col-md-4 col-xs-12">
-        <div id="sourcechart"></div>
+<div class="row row-cards">
+    <div class="col-md-12">
+        <div id="barchart" style="overflow-x: scroll;overflow-y: hidden;margin-left: 15px"></div>
     </div>
 </div>
 
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
-
-<script type="text/javascript">
-    // Load google charts
-    google.charts.load('current', {'packages': ['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    // Draw the chart and set the chart values
-    function drawChart() {
+{{--Barchart--}}
+<script>
+    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
+    var heights = {{count($result)*70}}
+    function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Task', 'Doanh số'],
-                @foreach($tmp2 as $k =>$item2)
-                @foreach($item2 as $k22 =>$value2)
-            ['{{$k22}}', {{$value2}}],
-            @endforeach
-            @endforeach
+                @if(count($result))
+            ['Năm', 'Doanh số', {role: 'annotation'}, 'Doanh thu', {role: 'annotation'}, 'Đã thu trong kỳ', {role: 'annotation'}],
+                @foreach($result as $k =>$item1)
+            ['{{$item1['branch']}}',{{$item1['all_total']}}, '{{number_format($item1['all_total'])}}',{{$item1['gross_revenue']}}, '{{number_format($item1['gross_revenue'])}}',{{$item1['payment']}} , '{{number_format($item1['payment'])}}'],
+                @endforeach
+                @else
+            ['Năm', 0, '#fffff', '0%'],
+            @endif
 
         ]);
 
-        // Optional; add a title and set the width and height of the chart
-        var options = {'title': 'Doanh thu theo nhóm KH', 'width': 650, 'height': 500};
+        var options = {
+            title: 'THỐNG KÊ NGUỒN THU TOÀN HỆ THỐNG (VNĐ)',
+            height: heights,
+            width: '100%',
+            titleFontSize: 13,
+            chartArea: {
+                height: '100%',
+                left: 150,
+                top: 70,
+            },
+            vAxis: {
+                textStyle: {
+                    bold: true,
+                },
+            },
+            annotations: {
+                highContrast: false,
+                textStyle: {
+                    color: '#000000',
+                    fontSize: 11,
+                    bold: true
+                }
+            },
+        };
 
-        // Display the chart inside the <div> element with id="piechart"
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var chart = new google.visualization.BarChart(document.getElementById('barchart'));
         chart.draw(data, options);
-    }
+    };
+    // column chart
 </script>
-<script type="text/javascript">
-    // Load google charts
-    google.charts.load('current', {'packages': ['corechart']});
-    google.charts.setOnLoadCallback(drawChart2);
-
-    // Draw the chart and set the chart values
-    function drawChart2() {
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'Doanh số'],
-                @foreach($tmp as $k =>$item)
-                @foreach($item as $k2 =>$value)
-            ['{{$k2}}', {{$value}}],
-            @endforeach
-            @endforeach
-
-        ]);
-
-        // Optional; add a title and set the width and height of the chart
-        var options = {'title': 'Doanh thu theo nguồn KH', 'width': 650, 'height': 500};
-
-        // Display the chart inside the <div> element with id="piechart"
-        var chart = new google.visualization.PieChart(document.getElementById('sourcechart'));
-        chart.draw(data, options);
-    }
-</script>
+{{--end barchart--}}
 
