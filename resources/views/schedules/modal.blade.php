@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-6">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control select2','required'=>true)) !!}
+                        {!! Form::select('status',array(2 => 'Đặt lịch'), null, array('class' => 'form-control select2','required'=>true)) !!}
                     </div>
                     <div class="col-md-12">
                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
@@ -82,7 +82,11 @@
                     </div>
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                        @if(\Illuminate\Support\Facades\Auth::user()->department->name =='Telesale')
+                            {!! Form::select('status',array(2 => 'Đặt lịch',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                        @else
+                            {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                        @endif
                     </div>
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
