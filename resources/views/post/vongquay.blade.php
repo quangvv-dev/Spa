@@ -273,6 +273,22 @@
             // 'image':'img/2022_1.png',
 
         }, {
+            'fillStyle': '#0f514d',
+            'text': 'Tặng voucher khuyến mại \n 20% DV trắng da',
+            // 'size': winwheelPercentToDegrees(12),
+            'textFontSize': 10,
+            'textFillStyle': '#ffffff',
+            // 'image':'img/2022_1.png',
+
+        }, {
+            'fillStyle': '#0f514d',
+            'text': 'Tặng voucher khuyến mại \n 20% DV trắng da',
+            // 'size': winwheelPercentToDegrees(12),
+            'textFontSize': 10,
+            'textFillStyle': '#ffffff',
+            // 'image':'img/2022_1.png',
+
+        }, {
             'fillStyle': '#ffffff',
             'text': 'Món quà đặc biệt',
             // 'size': winwheelPercentToDegrees(13),
