@@ -234,7 +234,7 @@
     // );
     let theWheel = new Winwheel({
         // 'outerRadius': 220, // Bán kính ngoài
-        'innerRadius': 0, // Size lỗ trung tâm
+        'innerRadius': 15, // Size lỗ trung tâm
         'textFontSize': 10, // Size chữ
         'textOrientation': 'horizontal', // Chữ nằm ngang
         'textAlignment': 'center', // Căn chỉnh văn bản ra bên ngoài bánh xe.
@@ -252,7 +252,7 @@
             'text': '1 buổi triệt lông miễn phí (350K)',
             // 'text': 'Ô mất lượt',
             // 'size': winwheelPercentToDegrees(15),
-            'textFontSize': 10,
+            'textFontSize': 12,
             'textFillStyle': '#ffffff',
             // 'image':'img/2022_1.png',
 
@@ -260,7 +260,7 @@
             'fillStyle': '#ffffff',
             'text': 'Combo 1 buổi tắm trắng & \n massage mặt (299K)',
             // 'size': winwheelPercentToDegrees(12),
-            'textFontSize': 10,
+            'textFontSize': 12,
             'textFillStyle': '#0f514d',
             // 'image':'img/2022_1.png',
 
@@ -268,7 +268,7 @@
             'fillStyle': '#0f514d',
             'text': 'Tặng voucher khuyến mại 20% DV trắng da',
             // 'size': winwheelPercentToDegrees(12),
-            'textFontSize': 10,
+            'textFontSize': 12,
             'textFillStyle': '#ffffff',
             // 'image':'img/2022_1.png',
 
@@ -276,7 +276,7 @@
             'fillStyle': '#0f514d',
             'text': 'Tặng voucher khuyến mại \n 20% DV trắng da',
             // 'size': winwheelPercentToDegrees(12),
-            'textFontSize': 10,
+            'textFontSize': 12,
             'textFillStyle': '#ffffff',
             // 'image':'img/2022_1.png',
 
@@ -284,7 +284,7 @@
             'fillStyle': '#0f514d',
             'text': 'Tặng voucher khuyến mại \n 20% DV trắng da',
             // 'size': winwheelPercentToDegrees(12),
-            'textFontSize': 10,
+            'textFontSize': 12,
             'textFillStyle': '#ffffff',
             // 'image':'img/2022_1.png',
 
@@ -292,7 +292,7 @@
             'fillStyle': '#ffffff',
             'text': 'Món quà đặc biệt',
             // 'size': winwheelPercentToDegrees(13),
-            'textFontSize': 10,
+            'textFontSize': 12,
             'textFillStyle': '#0f514d',
             // 'image':'img/2022_1.png',
         }],
