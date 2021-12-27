@@ -1,6 +1,9 @@
 <?php
 
 Auth::routes();
+Route::get('vong-quay-may-man', function () {
+    return view('post.vongquay');
+});
 Route::get('post/{slug}', 'BE\AjaxController@indexPost');
 Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
 Route::get('optin-form/{id}', 'BE\PostsController@showOptinForm');

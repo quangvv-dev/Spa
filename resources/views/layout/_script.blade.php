@@ -19,7 +19,6 @@
             $(this).hide();
         });
         $('.angleDoubleDown').on('click', function () {
-            console.log(11111);
             $('.isShowView').show();
             $('.angleDoubleUp').show();
             $(this).hide();
