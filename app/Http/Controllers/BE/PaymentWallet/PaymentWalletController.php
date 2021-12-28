@@ -144,9 +144,12 @@ class PaymentWalletController extends Controller
                 $customer->wallet = $customer->wallet - $payment->price - ($order->price - $order->order_price);
                 $customer->wallet = $customer->wallet > 0 ? $customer->wallet : 0;
             }
+            $order->gross_revenue = ($order->gross_revenue - $payment->price) > 0 ? $order->gross_revenue - $payment->price : 0;
+            $order->save();
             $customer->save();
+
             $payment->delete();
-            $request->session()->flash('error', 'Xóa lịch sử thanh toán!');
+            $request->session()->flash('error', 'Xóa lịch sử thanh toán thành công!');
         } else {
             $request->session()->flash('error', 'Không tồn tại đơn nạp ví !');
         }

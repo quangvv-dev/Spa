@@ -46,10 +46,12 @@
         float: left;
     }
 </style>
+
 <!-- Horizantal menu-->
 <div class="ren-navbar fixed-header1" id="headerMenuCollapse">
     <div class="container">
         <ul class="nav">
+
             @if($roleGlobal->permission('schedules.list'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('schedules*')||Request::is('schedules*') ? 'active' : '' }}"
@@ -65,14 +67,13 @@
                 </li>
             @endif
             <li class="nav-item with-sub">
-                <a class="nav-link {{ Request::is('fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}"
-                   href="#"><i class="fas fa-magnet"></i><span>Marketing</span></a>
+                <a class="nav-link {{ Request::is('fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}" href="#"><i class="fas fa-magnet"></i><span>Marketing</span></a>
                 <div class="sub-item">
                     <ul>
                         @if($roleGlobal->permission('fanpage'))
                             <li><a href="{{route('fanpage.index')}}">Fanpage </a></li>
                         @endif
-                        
+
                         {{--<li><a href="/marketing/fanpage-post">Danh sách bài post</a></li>--}}
                         {{--<li><a href="/marketing/seeding-number">Kho số seeding</a></li>--}}
                         {{--<li><a href="/marketing/source-fb">Nguồn dữ liệu</a></li>--}}
@@ -108,33 +109,50 @@
                    href="#"><i class="fas fa-newspaper"></i><span>Quản lý bán hàng</span></a>
                 <div class="sub-item">
                     <ul>
-                        @if($roleGlobal->permission('category.list'))
-                            <li><a href="{!! route('category.index') !!}">Nhóm dịch vụ</a></li>
-                        @endif
-                        @if($roleGlobal->permission('category-product.list'))
-                            <li><a href="{!! route('category-product.index') !!}">Nhóm sản phẩm</a></li>
-                        @endif
-                        @if($roleGlobal->permission('services.list'))
-                            <li><a href="{!! route('services.index') !!}">Danh sách dịch vụ</a></li>
-                        @endif
-                        @if($roleGlobal->permission('products.list'))
-                            <li><a href="{!! route('products.index') !!}">Danh sách sản phẩm</a></li>
-                        @endif
+                        <li class="sub-with-sub">
+                            <a href="#">Quản lý nhóm</a>
+                            <ul>
+                                @if($roleGlobal->permission('category.list'))
+                                    <li><a href="{!! route('category.index') !!}">Nhóm dịch vụ</a></li>
+                                @endif
+                                @if($roleGlobal->permission('category-product.list'))
+                                    <li><a href="{!! route('category-product.index') !!}">Nhóm sản phẩm</a></li>
+                                @endif
+                                @if($roleGlobal->permission('genitives.list'))
+                                    <li><a href="{!! route('genitives.index') !!}">Nhóm tính cách</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                        <li class="sub-with-sub">
+                            <a href="#">Quản lý S.Phẩm & D.Vụ</a>
+                            <ul>
+                                @if($roleGlobal->permission('services.list'))
+                                    <li><a href="{!! route('services.index') !!}">Danh sách dịch vụ</a></li>
+                                @endif
+                                @if($roleGlobal->permission('products.list'))
+                                    <li><a href="{!! route('products.index') !!}">Danh sách sản phẩm</a></li>
+                                @endif
+                            </ul>
+                        </li>
+
+
                         @if($roleGlobal->permission('trademark.list'))
                             <li><a href="{!! route('trademark.index') !!}">Nhà cung cấp</a></li>
                         @endif
-                        @if($roleGlobal->permission('genitives.list'))
-                            <li><a href="{!! route('genitives.index') !!}">Nhóm tính cách</a></li>
-                        @endif
-                        @if($roleGlobal->permission('combos.list'))
-                            <li><a href="{!! route('combos.index') !!}">Danh sách combo</a></li>
-                        @endif
-                        @if($roleGlobal->permission('order.list'))
-                            <li><a href="{!! route('order.list') !!}">Danh sách đơn hàng</a></li>
-                        @endif
-                        @if($roleGlobal->permission('order.index_payment'))
-                            <li><a href="{!! route('order.index_payment') !!}">Đã thu trong kỳ</a></li>
-                        @endif
+                        {{--@if($roleGlobal->permission('combos.list'))--}}
+                            {{--<li><a href="{!! route('combos.index') !!}">Danh sách combo</a></li>--}}
+                        {{--@endif--}}
+                        <li class="sub-with-sub">
+                            <a href="#">Quản lý đơn hàng</a>
+                            <ul>
+                                @if($roleGlobal->permission('order.list'))
+                                    <li><a href="{!! route('order.list') !!}">Danh sách đơn hàng</a></li>
+                                @endif
+                                @if($roleGlobal->permission('order.index_payment'))
+                                    <li><a href="{!! route('order.index_payment') !!}">Đã thu trong kỳ</a></li>
+                                @endif
+                            </ul>
+                        </li>
 
                     </ul>
                 </div>
@@ -157,15 +175,20 @@
                    href="#"><i class="fas fa-search"></i><span>Thống kê</span></a>
                 <div class="sub-item">
                     <ul>
-                        @if($roleGlobal->permission('statistics.index'))
-                            <li><a href="{{url('statistics')}}">Doanh thu</a></li>
-                        @endif
-                            @if($roleGlobal->permission('statistics.index'))
-                            <li><a href="{{url('chart-revenue')}}">Doanh thu hệ thống</a></li>
-                        @endif
-                        @if($roleGlobal->permission('report.groupSale'))
-                            <li><a href="{{url('report/group-sale')}}">Doanh số nhóm SP&DV</a></li>
-                        @endif
+                        <li class="sub-with-sub">
+                            <a href="#">Doanh số & Doanh thu</a>
+                            <ul>
+                                @if($roleGlobal->permission('statistics.index'))
+                                    <li><a href="{{url('statistics')}}">Doanh thu</a></li>
+                                @endif
+                                @if($roleGlobal->permission('statistics.index'))
+                                    <li><a href="{{url('chart-revenue')}}">Doanh thu hệ thống</a></li>
+                                @endif
+                                @if($roleGlobal->permission('report.groupSale'))
+                                    <li><a href="{{url('report/group-sale')}}">Doanh số nhóm SP&DV</a></li>
+                                @endif
+                            </ul>
+                        </li>
                         @if($roleGlobal->permission('sms.history'))
                             <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
                         @endif
@@ -202,16 +225,15 @@
 
             @if($roleGlobal->permission('thu-chi.list'))
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"
-                       href="#">
-                        <i class="fas fa-tasks"></i><span>Thu Chi</span></a>
+                    <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}" href="#">
+                        <i class="fas fa-tasks"></i><span>Duyệt chi</span></a>
                     <div class="sub-item">
                         <ul>
                             @if($roleGlobal->permission('danh-muc-thu-chi.index'))
-                                <li><a href="{{url('danh-muc-thu-chi')}}">Danh mục chi</a></li>
+                                <li><a href="{{url('danh-muc-thu-chi')}}">Danh mục duyệt chi</a></li>
                             @endif
-                            <li><a href="{{url('ly-do-thu-chi')}}">Lý do chi</a></li>
-                            <li><a href="{{url('thu-chi')}}">Danh sách chi</a></li>
+                            <li><a href="{{url('ly-do-thu-chi')}}">Lý do duyệt chi</a></li>
+                            <li><a href="{{url('thu-chi')}}">Danh sách duyệt chi</a></li>
                         </ul>
                     </div>
                 </li>
