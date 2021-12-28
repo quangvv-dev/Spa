@@ -5,13 +5,19 @@
         a.white {
             color: #fff;
         }
+        .fz-12{
+            font-size: 12px;
+        }
+        td.mb5{
+            padding: 3px;
+        }
     </style>
 @endsection
 @section('content')
     <div class="row" style="">
         <div class="col-lg-9 col-lg-offset-1">
             <div class="invoice">
-                <div class="text-center"><strong style="font-size: 20px">ĐƠN HÀNG BÁN</strong></div>
+                <div class="text-center"><strong style="font-size: 20px">ĐƠN HÀNG NẠP THẺ</strong></div>
                 <div class="row">
                     <table class="table table-bordered">
                         <tbody>
@@ -21,7 +27,7 @@
                                                                 href="{{url('customers/'.$order->customer->id)}}">{{ @$order->customer->full_name }}</a>
                             </td>
                             <td style="width:50%">
-                                <b>Người lên đơn:</b>&nbsp;{{ @$order->owner->full_name }}
+                                <b>Người lên đơn:</b>&nbsp;{{ @$order->user->full_name }}
                             </td>
                         </tr>
                         <tr>
@@ -38,9 +44,6 @@
                             </td>
                             <td style="width:50%">
                                 <b>Ngày tạo đơn:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}&emsp;
-                                @if($order->hsd)
-                                    <b>Ngày hết hạn:</b>&nbsp; {{ date('d-m-Y', strtotime($order->hsd)) }}
-                                @endif
 
                             </td>
                         </tr>
@@ -60,40 +63,32 @@
                         <tbody>
                         <tr class="bold b-gray">
                             <td class="padding5">STT</td>
-                            <td class="padding5">Mã</td>
-                            <td class="padding5">Sản phẩm|Dịch vụ</td>
-                            <td class="padding5">Đơn vị tính</td>
-                            <td class="padding5">Số lượng|Số buổi</td>
+                            <td class="padding5">Gói nạp</td>
+                            <td class="padding5">Số lượng</td>
                             <td class="padding5">Đơn giá</td>
                             <td class="padding5">VAT (%)</td>
                             <td class="padding5">CK (%)</td>
                             <td class="padding5">CK (đ)</td>
                             <td class="padding5">Thành tiền</td>
                         </tr>
-                        @foreach($order->orderDetails as $key => $orderDetail)
                             <tr><input type="hidden" class="product_id" value="16">
-                                <td class="tc">{{ $key + 1 }}</td>
-                                <td class="tc"></td>
-                                <td class="tl position"><a class="blue" href="#">{{ @$orderDetail->service->name }}</a>
+                                <td class="tc">1</td>
+                                <td class="tl position"><a class="blue" href="#">{{ @$order->package->name }}</a>
                                 </td>
-                                <td class="tc"></td>
-                                {{--<td class="tc">{{$orderDetail->service->type == 2? $orderDetail->quantity : $orderDetail->days }}--}}
-                                <td class="tc">{{@$orderDetail->quantity}}
-                                </td>
-                                <td class="tc">{{ number_format(@$orderDetail->price) }}</td>
-                                <td class="tc">{{ $orderDetail->vat }}</td>
-                                <td class="tc">{{ $orderDetail->percent_discount }}</td>
-                                <td class="tc">{{ number_format($orderDetail->number_discount) }}</td>
-                                <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
+                                <td class="tc">1</td>
+                                <td class="tc">{{ number_format(@$order->order_price) }}</td>
+                                <td class="tc">0</td>
+                                <td class="tc">0</td>
+                                <td class="tc">0</td>
+                                <td class="tr">{{ number_format(@$order->order_price) }}</td>
                             </tr>
-                        @endforeach
                         <tr>
-                            <td class="font-bold" colspan="9">Khuyến mại (voucher)</td>
-                            <td class="tr bold">{{ number_format($order->discount) }}</td>
+                            <td class="font-bold" colspan="7">Khuyến mại (voucher)</td>
+                            <td class="tr bold">0</td>
                         </tr>
                         <tr>
-                            <td class="font-bold" colspan="9">Tổng cộng</td>
-                            <td class="tr bold"> {{ number_format($order->all_total) }}</td>
+                            <td class="font-bold" colspan="7">Tổng cộng</td>
+                            <td class="tr bold"> {{ number_format($order->order_price) }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -126,31 +121,16 @@
                             <tbody>
                             <tr>
                                 <td class="mb5">Doanh số:</td>
-                                <td class="tr mb5" id="all_total">{{ number_format($order->all_total) }}</td>
+                                <td class="tr mb5" id="all_total">{{ number_format($order->order_price) }}</td>
                             </tr>
                             <tr>
                                 <td class="mb5">Đã thanh toán:</td>
                                 <td class="tr mb5" id="gross_revenue">{{ number_format($order->gross_revenue) }}</td>
                             </tr>
-                            {{--<tr>--}}
-                                {{--<td class="mb5">Thực tế phải thanh toán:</td>--}}
-                                {{--<td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>--}}
-                            {{--</tr>--}}
-                            <tr>
-                                <td class="mb5">Khuyến mại (voucher):</td>
-                                <td class="tr mb5" id="all_total1">{{ number_format($order->discount) }}</td>
-                            </tr>
-                            <tr>
-                                <td class="mb5">Chiết khấu :</td>
-                                <td class="tr mb5" id="all_total1">{{ number_format($order->discount_order) }}</td>
-                            </tr>
-                            {{--<tr>--}}
-                                {{--<td class="mb5">Đã thanh toán:</td>--}}
-                                {{--<td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>--}}
-                            {{--</tr>--}}
+
                             <tr>
                                 <td class="mb5">Còn lại:</td>
-                                <td class="tr mb5" id="the_rest">{{ number_format($order->the_rest) }}</td>
+                                <td class="tr mb5" id="the_rest">{{ number_format($order->order_price - $order->gross_revenue) }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -173,11 +153,6 @@
                                 class="fa fa-print"></i>&nbsp;In</a>
                 </button>
             </div>
-            <div class="btn-group dropup fl task_footer_box">
-                <button class="btn btn-warning ml5" data-number="2"><a class="white" href="/commission/{{$order->id}}"><i
-                                class="fas fa-dollar-sign"></i>&nbsp;Hoa hồng</a>
-                </button>
-            </div>
             <div class="fl task_footer_box cancel_order">
                 <button class="btn btn-default fr ml5">
                     <a href="{{route('order.list')}}">Trở lại</a>
@@ -185,7 +160,7 @@
             </div>
         </div>
     </div>
-    @include('order.modal')
+    @include('payment_wallet.modal')
 @endsection
 @section('_script')
     <script src="{{ asset('js/format-number.js') }}"></script>
@@ -198,31 +173,26 @@
             });
         });
 
-        $(document).on('click', '#finish', function () {
-            $('#wallet-error').hide();
+        $(document).on('click', '#finish_wallet', function () {
+            let the_rest = replaceNumber($('.title-total').html());
+            if (parseInt(the_rest) <= 0){
+                return false;
+            }
             let paymentDate = $('.payment-date').val();
             let paymentType = $('.payment-type').val();
             let grossRevenue = $('.gross-revenue').val();
             let description = $('.description').val();
-            let customer_id = '{{@$order->customer->id}}';
-            let maxWallet = $('#maxWallet').val();
-            let check = replaceNumber(grossRevenue);
-            console.log(maxWallet,replaceNumber(grossRevenue));
-            if (paymentType == 3 && (parseInt(check) > parseInt(maxWallet))){
-
-                $('#wallet-error').show();
-                return false;
-            }
+            let order_wallet_id = '{{@$order->id}}';
 
             $.ajax({
-                url: "{{ Url('order/'.$order->id. '/show') }}",
-                method: "put",
+                url: "{{ Url('payment-wallet') }}",
+                method: "post",
                 data: {
                     payment_date: paymentDate,
                     payment_type: paymentType,
-                    gross_revenue: grossRevenue,
+                    gross_revenue: replaceNumber(grossRevenue),
                     description: description,
-                    customer_id: customer_id,
+                    order_wallet_id: order_wallet_id,
                 }
             }).done(function () {
                 window.location.reload();
@@ -231,18 +201,11 @@
 
         $(document).on('focusout', '.gross-revenue', function () {
             let grossRevenue = $('.gross-revenue').val();
+            let the_rest = {{$order->order_price - $order->gross_revenue}} - replaceNumber(grossRevenue);
+            $(".cash").text(formatNumber(grossRevenue));
 
-            $.ajax({
-                url: "{{ Url('ajax/info-order-payment/'.$order->id) }}",
-                method: "get",
-                data: {
-                    gross_revenue: grossRevenue
-                }
-            }).done(function (data) {
-                $(".cash").text(formatNumber(data.cash));
-                $('.remain_cash').text(formatNumber(data.remain_cash));
-                $('.return_cash').text(formatNumber(data.return_cash));
-            });
+            $('.remain_cash').text(formatNumber(the_rest));
+            // $('.return_cash').text(formatNumber(data.return_cash));
         });
     </script>
 @endsection

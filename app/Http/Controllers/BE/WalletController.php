@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Models\Customer;
 use App\Models\PackageWallet;
+use App\Models\PaymentWallet;
 use App\Models\WalletHistory;
 use App\Services\WalletService;
 use App\User;
@@ -69,8 +70,6 @@ class WalletController extends Controller
             'branch_id' => $customer->branch_id,
         ];
         $this->walletService->create($input);
-        $customer->wallet = $customer->wallet + $package->price;
-        $customer->save();
         return back()->with('status', 'Nạp tiền thành công');
     }
 
@@ -83,6 +82,9 @@ class WalletController extends Controller
      */
     public function show($id)
     {
+        $order = $this->walletService->find($id);
+        $payment = PaymentWallet::where('order_wallet_id', $order->id)->get();
+        return view('payment_wallet.index', compact('order', 'payment'));
 
     }
 
@@ -123,8 +125,11 @@ class WalletController extends Controller
         $walet = WalletHistory::find($id);
         if (!empty($walet)) {
             $customer = Customer::find($walet->customer_id);
-            $balance = ($customer->wallet - $walet->price) > 0 ? ($customer->wallet - $walet->price) : 0;
-            $customer->wallet = $balance;
+            if ($walet->gross_revenue < $walet->order_price) {
+                $customer->wallet = ($customer->wallet - $walet->gross_revenue) > 0 ? $customer->wallet - $walet->gross_revenue : 0;
+            } elseif ($walet->gross_revenue >= $walet->order_price) {
+                $customer->wallet = ($customer->wallet - $walet->price) > 0 ? $customer->wallet - $walet->price : 0;
+            }
             $customer->save();
             $walet->delete();
             $request->session()->flash('error', 'Xóa thành công danh mục!');

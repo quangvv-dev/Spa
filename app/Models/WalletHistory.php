@@ -22,6 +22,16 @@ class WalletHistory extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+
     public static function search($input, $select = '*')
     {
         $data = self::select($select)->when(isset($input['data_time']), function ($query) use ($input) {

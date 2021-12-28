@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumsDevicesToken extends Migration
+class AddColumnsGrossRevenueWalletHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddColumsDevicesToken extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->text('devices_token')->comment('firebase token')->nullable();
+        Schema::table('wallet_histories', function (Blueprint $table) {
+            $table->bigInteger('gross_revenue')->after('order_price')->comment('Đã thanh toán')->nullable()->default(0);
+
         });
     }
 
@@ -25,8 +26,8 @@ class AddColumsDevicesToken extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
+        Schema::table('wallet_histories', function (Blueprint $table) {
+
         });
     }
 }

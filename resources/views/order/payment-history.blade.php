@@ -10,15 +10,15 @@
             <th class="tc gray" width="10%"></th>
         </tr>
         </thead>
-        <tbody id="payment-history">
-        @foreach($data as $item)
-            <tr data-payment-id="628">
-                <td class="tc pl10">{{ date('d-m-Y', strtotime($item->payment_date)) }}</td>
-                <td class="tc">{{ number_format($item->price) }}</td>
-                <td>{{ $item->description }}</td>
-                <td class="tc">
+        <tbody id="payment-history" style="font-size: 12px">
+        @foreach($payment as $item)
+            <tr>
+                <td class="fz-12">{{ date('d-m-Y', strtotime($item->payment_date)) }}</td>
+                <td class="fz-12">{{ number_format($item->price) }}</td>
+                <td class="fz-12">{{ $item->description }}</td>
+                <td class="fz-12">
                     <a title="Xóa" class="btn delete" href="javascript:void(0)"
-                       data-url="{{ url('order/' . $item->id . '/delete-payment') }}"><i class="fas fa-trash-alt"></i></a>
+                       data-url="{{ url('payment-wallet/' . $item->id) }}"><i class="fas fa-trash-alt"></i></a>
                 </td>
             </tr>
         @endforeach

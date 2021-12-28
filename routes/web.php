@@ -177,6 +177,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('tasks', 'TaskController');
     Route::get('tasks-employee', 'TaskController@statisticIndex')->name('tasks.employee');
     Route::get('notifications', 'AjaxController@getNotificationOutView')->name('notifications.index');
+    Route::resource('payment-wallet', 'PaymentWallet\PaymentWalletController');
     Route::resource('wallet', 'WalletController');
     Route::resource('package', 'PackageController');
     Route::post('tasks-customer', 'TaskController@storeCustomer')->name('task.customer');

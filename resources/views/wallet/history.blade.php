@@ -13,6 +13,7 @@
             <th class="text-white text-center">Ngày nạp</th>
             <th class="text-white text-center">Gói nạp</th>
             <th class="text-white text-center">Số tiền nạp</th>
+            <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Số tiền được hưởng</th>
             <th class="text-white text-center">Nhân viên nạp</th>
             <th class="text-white text-center"></th>
@@ -25,9 +26,14 @@
                 <td class="text-center">{{$item->created_at}}</td>
                 <td class="text-center">{{@$item->package->name}}</td>
                 <td class="text-center">{{@number_format($item->order_price)}}</td>
+                <td class="text-center">{{@number_format($item->gross_revenue)}}</td>
                 <td class="text-center">{{@number_format($item->price)}}</td>
                 <td class="text-center">{{@$item->user->full_name}}</td>
                 <td class="text-center">
+                    <a title="Thanh toán" class="btn tooltip-nav" href="{{ url('wallet/' . $item->id) }}">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span class="tooltiptext">Thanh toán (IN)</span>
+                    </a>
                     @if(\Illuminate\Support\Facades\Auth::user()->role==1)
                         <a class="btn delete" href="javascript:void(0)"
                            data-url="{{ url('wallet/' . $item->id) }}"><i class="fas fa-trash-alt"></i></a>
