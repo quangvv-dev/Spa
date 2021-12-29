@@ -3,6 +3,7 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
+            <th class="text-white text-center">Đề xuất</th>
             <th class="text-white text-center">Lý do</th>
             <th class="text-white text-center">Số tiền</th>
             <th class="text-white text-center">Người duyệt</th>
@@ -15,7 +16,7 @@
         </thead>
         <tbody>
         <tr class="tr-n">
-            <td class="text-center bold" colspan="2">Tổng:</td>
+            <td class="text-center bold" colspan="3">Tổng:</td>
             <td class="text-center bold">{{number_format($allPrice)}}</td>
             <td></td>
             <td></td>
@@ -27,6 +28,12 @@
             @foreach($docs as $k => $s)
                 <tr>
                     <th scope="row">{{$k+1}}</th>
+                    <td class="text-center">
+                        {{@$s->thucHien->full_name}}
+                        <br>
+                        <span class="small-tip">( {{date("d-m-Y", strtotime($s->created_at))}} )</span>
+
+                    </td>
                     <td class="text-center">{{@$s->lyDoThuChi->name}}</td>
                     <td class="text-center">{{number_format($s->so_tien)}}</td>
                     <td class="text-center">{{@$s->duyet->full_name}}</td>

@@ -1,6 +1,12 @@
 @extends('layout.app')
 @section('_style')
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
+    <style>
+        .small-tip {
+            font-size: 11px;
+            color: #999;
+        }
+    </style>
 @endsection
 @section('content')
     <style>
