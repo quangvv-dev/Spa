@@ -69,8 +69,8 @@ class WalletController extends Controller
             'order_price' => $package->order_price,
             'branch_id' => $customer->branch_id,
         ];
-        $this->walletService->create($input);
-        return back()->with('status', 'Nạp tiền thành công');
+        $wallet = $this->walletService->create($input);
+        return redirect('/wallet/'.$wallet->id);
     }
 
     /**
