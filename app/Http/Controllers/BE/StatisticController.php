@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
+use App\Models\PaymentWallet;
 use App\Models\Status;
 use App\Models\Trademark;
 use App\Models\WalletHistory;
@@ -96,6 +97,7 @@ class StatisticController extends Controller
         })->sortByDesc('price')->take(5);
 
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
+        $payment_wallet = PaymentWallet::search($input,'price');
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
         //Status Revuenue
@@ -173,6 +175,7 @@ class StatisticController extends Controller
             'CK' => $payment->where('payment_type', 4)->sum('price'),
         ];
         $wallets = [
+            'payment' => $payment_wallet->sum('price'),
             'orders' => $wallet->count(),
             'revenue' => $wallet->sum('order_price'),
             'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],

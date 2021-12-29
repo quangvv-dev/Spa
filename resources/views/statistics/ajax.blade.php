@@ -102,7 +102,7 @@
             <div class="card-body text-center bg-gradient-gray text-white">
                 <div class="h5">Thực thu</div>
                 <div class="h3 font-weight-bold mb-4 font-30">
-                    {{@number_format($data['payment'] + $wallets['revenue']-$wallets['used'])}}</div>
+                    {{@number_format($data['payment'] + $wallets['payment'] - $wallets['used'])}}</div>
                 <div class="row">
                     <div class="col-12 row">
                         <div class="title col-5">Doanh thu:</div>
@@ -115,7 +115,7 @@
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Nạp ví:</div>
-                        <div class="col-7">{{@number_format($wallets['revenue'])}}</div>
+                        <div class="col-7">{{@number_format($wallets['payment'])}}</div>
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Còn nợ:</div>
@@ -134,7 +134,7 @@
             <div class="card-body text-center bg-gradient-gray text-white">
                 <div class="h5">Nguồn tiền từ đơn hàng</div>
                 <div
-                    class="h3 font-weight-bold mb-4 font-30">{{@number_format($data['payment'] + $wallets['revenue'])}}</div>
+                    class="h3 font-weight-bold mb-4 font-30">{{@number_format($data['payment'] + $wallets['payment'])}}</div>
                 <div class="row">
                     <div class="col-12 row">
                         <div class="title col-5">Tiền mặt:</div>
