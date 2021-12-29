@@ -382,8 +382,8 @@ class OrderController extends Controller
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
         $now = Carbon::now()->format('d-m-Y');
         $order->now = $now;
-        $data = $order->paymentHistories;
-        return view('order.order', compact('order', 'data'));
+        $payment = $order->paymentHistories;
+        return view('order.order', compact('order', 'payment'));
     }
 
     /**

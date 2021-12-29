@@ -11,7 +11,7 @@
         </tr>
         </thead>
         <tbody id="payment-history" style="font-size: 12px">
-        @if(count($payment))
+        @if(isset($payment) &&count($payment))
             @foreach($payment as $item)
                 <tr>
                     <td class="fz-12">{{ date('d-m-Y', strtotime($item->payment_date)) }}</td>
