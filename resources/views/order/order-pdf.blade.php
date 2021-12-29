@@ -134,7 +134,7 @@
                 </table>
             </div>
             @else
-            Chưa thanh toán đơn hàng
+            <td class="text-center">Chưa thanh toán đơn hàng</td>
         @endif
 
     </div>
