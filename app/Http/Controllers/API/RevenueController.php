@@ -13,6 +13,7 @@ use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
+use App\Models\PaymentWallet;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\Models\Status;
@@ -107,6 +108,8 @@ class RevenueController extends BaseApiController
             'end_date' => $request->old_end,
         ];
         $wallet = WalletHistory::search($input, 'order_price');
+        $payment_wallet = PaymentWallet::search($input,'price');
+
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders_combo = clone $orders;
@@ -149,7 +152,8 @@ class RevenueController extends BaseApiController
                 'percent' => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
                     2) : 0,
                 'gross_revenue' => $orders->sum('gross_revenue'),
-                'wallet' => $wallet->sum('order_price'),
+//                'wallet' => $wallet->sum('order_price'),
+                'wallet' => $payment_wallet->sum('price'),
                 'thu_no' => $payment->sum('price') - $orders->sum('gross_revenue'),
                 'con_no' => $orders->sum('all_total') - $orders->sum('gross_revenue'),
             ];
@@ -175,7 +179,7 @@ class RevenueController extends BaseApiController
                 'cash' => (int)$payment->whereIn('payment_type', [0, 1])->sum('price'),
                 'card' => (int)$payment2->where('payment_type', 2)->sum('price'),
                 'wallet_used' => $payment3->where('payment_type', 3)->sum('price'),
-                'wallet' => $wallet->sum('order_price'),
+                'wallet' => $payment_wallet->sum('price'),
             ];
             $data['CK'] = $all_payment - $data['cash'] - $data['card'] - $data['wallet_used'];
         }
