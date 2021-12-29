@@ -59,10 +59,10 @@
                 <td colspan="2" class="text-center"><h3>{{!empty(setting('title_website'))?setting('title_website'):'Hệ Thống Royal Spa'}}</h3><br></td>
             </tr>
             <tr>
-                <td colspan="2" class="text-center"><b >ĐƠN HÀNG BÁN</b></td>
+                <td colspan="2" class="text-center"><b >ĐƠN HÀNG NẠP VÍ</b></td>
             </tr>
             <tr class="font12">
-                <td class="padding5">Ngày : {{ date('d-m-Y', strtotime($payment->created_at)) }}</td>
+                <td class="padding5">Ngày : {{ date('d-m-Y', strtotime($payment->payment_date)) }}</td>
                 <td class="padding5">HĐ: {{ $order->code }}</td>
             </tr>
             <tr class="font12">
@@ -79,21 +79,21 @@
                 <td class="padding5"><strong>SL</strong></td>
                 <td class="padding5"><strong>T.Tiền</strong></td>
             </tr>
-            @foreach($order->orderDetails as $key => $orderDetail)
-                <tr class="font12">
-                    <td class="tl position">{{ $orderDetail->service->name }}</td>
-                    <td class="tc">{{ number_format($orderDetail->price) }}</td>
-                    <td class="tc">{{ $orderDetail->quantity }}</td>
-                    <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
-                </tr>
-            @endforeach
-            <tr>
-                <td class="bold" colspan="3"><strong>Giảm giá</strong></td>
-                <td class="tr bold"><strong>{{ @number_format($order->discount) }}</strong></td>
+
+            <tr class="font12">
+                <td class="tl position">{{ @$order->package->name }}</td>
+                <td class="tc">{{ @number_format($order->order_price) }}</td>
+                <td class="tc">1</td>
+                <td class="tr">{{ number_format($order->order_price) }}</td>
             </tr>
+
+            {{--<tr>--}}
+                {{--<td class="bold" colspan="3"><strong>Giảm giá</strong></td>--}}
+                {{--<td class="tr bold"><strong>000</strong></td>--}}
+            {{--</tr>--}}
             <tr>
                 <td class="font-bold" colspan="3"><strong>Tổng Tiền</strong></td>
-                <td class="tr bold"><strong>{{ @number_format($order->all_total) }}</strong></td>
+                <td class="tr bold"><strong>{{ @number_format($order->order_price) }}</strong></td>
             </tr>
             <tr>
                 <td class="font-bold" colspan="4"><strong>Khách T.Toán</strong></td>
@@ -104,7 +104,7 @@
             </tr>
             <tr>
                 <td class="font-bold" colspan="3"><strong>Còn lại</strong></td>
-                <td class="tr bold"><strong>{{ number_format($order->the_rest) }}</strong></td>
+                <td class="tr bold"><strong>{{ number_format($order->order_price - $order->gross_revenue) }}</strong></td>
             </tr>
             </tbody>
             <tfoot>

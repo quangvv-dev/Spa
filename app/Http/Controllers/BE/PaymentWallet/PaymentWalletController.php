@@ -3,20 +3,17 @@
 namespace App\Http\Controllers\BE\PaymentWallet;
 
 use App\Constants\StatusCode;
-use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Customer;
-use App\Models\PackageWallet;
 use App\Models\PaymentWallet;
 use App\Models\WalletHistory;
-use App\Services\WalletService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use App\Services\WalletService;
 
 class PaymentWalletController extends Controller
 {
@@ -25,10 +22,11 @@ class PaymentWalletController extends Controller
     /**
      * PaymentWalletController constructor.
      */
-    public function __construct()
+    public function __construct(WalletService $walletService)
     {
+        $this->walletService = $walletService;
         $branchs = Branch::search()->pluck('name', 'id');
-        $letan = User::where('department_id',5)->pluck('full_name', 'id');
+        $letan = User::where('department_id', 5)->pluck('full_name', 'id');
         view()->share([
             'branchs' => $branchs,
             'letan' => $letan
@@ -178,5 +176,12 @@ class PaymentWalletController extends Controller
         } else {
             $request->session()->flash('error', 'Không tồn tại đơn nạp ví !');
         }
+    }
+
+    public function pdf($id)
+    {
+        $order = $this->walletService->find($id);
+        $payment = PaymentWallet::where('order_wallet_id', $id)->latest()->first();
+        return view('payment_wallet.order-pdf', compact('order','payment'));
     }
 }
