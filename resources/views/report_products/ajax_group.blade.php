@@ -4,7 +4,7 @@
         <tr>
             <th class="text-center" colspan="1">STT</th>
             <th class="text-center" colspan="1"></th>
-            <th class="text-center" colspan="9">KHÁCH HÀNG MỚI</th>
+            <th class="text-center" colspan="10">KHÁCH HÀNG MỚI</th>
             <th class="text-center" colspan="2">KHÁCH HÀNG CŨ</th>
             <th class="text-center" colspan="1">TỔNG CHUNG</th>
         </tr>
@@ -14,6 +14,7 @@
             <th class="text-center no-wrap">SĐT</th>
             <th class="text-center">Trao đổi</th>
             <th class="text-center">Lịch hẹn</th>
+            <th class="text-center">SL khách đến</th>
             <th class="text-center">Đơn chốt</th>
             <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
             <th class="text-center">Tỷ lệ<span class=""><br>đến</span></th>
@@ -31,13 +32,14 @@
             <th class="text-center">(4)</th>
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
+            <th class="text-center">(7)</th>
             <th class="text-center">(5)/(3)</th>
-            <th class="text-center">(7)</th>
-            <th class="text-center">(6)/(3)</th>
-            <th class="text-center">(7)</th>
             <th class="text-center">(8)</th>
+            <th class="text-center">(7)/(3)</th>
             <th class="text-center">(9)</th>
             <th class="text-center">(10)</th>
+            <th class="text-center">(11)</th>
+            <th class="text-center">(12)</th>
             <th class="text-center"></th>
         </tr>
         </thead>
@@ -78,6 +80,7 @@
                     <td class="text-center pdr10">{{$item->customer_new}}</td>
                     <td class="text-center pdr10">{{$item->comment_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
+                    <td class="text-center pdr10">{{$item->become}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100,1):0}}
                         %
@@ -101,6 +104,7 @@
             <td class="text-center bold">{{@number_format($customer_new)}}</td>
             <td class="text-center bold">{{@number_format($comment_new)}}</td>
             <td class="text-center bold">{{@number_format($schedules_new)}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('become'))}}</td>
             <td class="text-center bold">{{@number_format($order_new)}}</td>
             <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
             <td class="text-center bold">{{@number_format(!empty($users->sum('become'))?round(($users->sum('become')/$schedules_new)*100,1):0)}}%</td>
