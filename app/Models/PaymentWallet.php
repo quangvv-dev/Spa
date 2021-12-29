@@ -18,6 +18,11 @@ class PaymentWallet extends Model
         return $this->belongsTo(WalletHistory::class, 'order_wallet_id');
     }
 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+
     public function getNamePaymentTypeAttribute()
     {
         if ($this->payment_type === 1) {
@@ -31,25 +36,23 @@ class PaymentWallet extends Model
 
     public static function search($input, $select = '*')
     {
-
-        if (isset($input['start_date']) && isset($input['end_date'])) {
-            $detail = self::select($select)->whereBetween('payment_date', [
+        $detail = self::select($select)->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('payment_date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ])->with('order_wallet');
-        }
-
-        if (!empty($input['branch_id'])) {
-            $detail = $detail->where('branch_id', $input['branch_id']);
-        }
-        if (!empty($input['payment_type'])) {
-            $detail = $detail->where('payment_type', $input['payment_type']);
-        }
-        if (isset($input['user_id'])) {
-            $detail = $detail->whereHas('order_wallet', function ($qr) use ($input) {
+            ]);
+        })
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
+        })
+            ->when(isset($input['payment_type']) && $input['payment_type'], function ($q) use ($input) {
+            $q->where('payment_type', $input['payment_type']);
+        })
+            ->when(isset($input['user_id']) && $input['user_id'], function ($q) use ($input) {
+            $q->whereHas('order_wallet', function ($qr) use ($input) {
                 $qr->where('user_id', $input['user_id']);
             });
-        }
+        })->with('order_wallet');
 
         return $detail;
     }

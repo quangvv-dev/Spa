@@ -153,6 +153,14 @@
                                 @endif
                             </ul>
                         </li>
+                        <li class="sub-with-sub">
+                            <a href="#">Quản lý đơn nạp ví</a>
+                            <ul>
+                                @if($roleGlobal->permission('order.index_payment'))
+                                    <li><a href="{!! route('payment-wallet.index') !!}">Đã thu trong kỳ</a></li>
+                                @endif
+                            </ul>
+                        </li>
 
                     </ul>
                 </div>

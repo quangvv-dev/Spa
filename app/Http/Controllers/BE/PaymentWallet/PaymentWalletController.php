@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\BE\PaymentWallet;
 
+use App\Constants\StatusCode;
+use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\PackageWallet;
 use App\Models\PaymentWallet;
@@ -13,20 +16,24 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class PaymentWalletController extends Controller
 {
     private $walletService;
 
     /**
-     * TaskController constructor.
-     *
-     * @param TaskService $taskService
+     * PaymentWalletController constructor.
      */
-    public function __construct(WalletService $walletService)
+    public function __construct()
     {
+        $branchs = Branch::search()->pluck('name', 'id');
+        $letan = User::where('department_id',5)->pluck('full_name', 'id');
+        view()->share([
+            'branchs' => $branchs,
+            'letan' => $letan
+        ]);
 
-        $this->walletService = $walletService;
     }
 
     /**
@@ -36,7 +43,26 @@ class PaymentWalletController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $title = 'ĐÃ THU TRONG KỲ ĐƠN NẠP';
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+        $input = $request->all();
+        $checkRole = checkRoleAlready();
+        if (!empty($checkRole)) {
+            $input['branch_id'] = $checkRole;
+        }
+        $datas = PaymentWallet::search($input);
+        View::share([
+            'allTotal' => $datas->sum('price'),
+        ]);
+        $datas = $datas->paginate(StatusCode::PAGINATE_20);
+
+        if ($request->ajax()) {
+            return view('payment_wallet.ajax-payment', compact('datas'));
+        }
+        return view('payment_wallet.index-payment', compact('datas', 'title'));
+
     }
 
     /**
@@ -81,7 +107,6 @@ class PaymentWalletController extends Controller
             $customer->save();
         }
 
-//        $this->walletService->create($input);
         return back()->with('status', 'Nạp tiền thành công');
     }
 
