@@ -62,7 +62,7 @@
                 <td colspan="2" class="text-center"><b >ĐƠN HÀNG BÁN</b></td>
             </tr>
             <tr class="font12">
-                <td class="padding5">Ngày : {{ date('d-m-Y', strtotime($payment->created_at)) }}</td>
+                <td class="padding5">Ngày : {{ date('d-m-Y', strtotime($payment->payment_date)) }}</td>
                 <td class="padding5">HĐ: {{ $order->code }}</td>
             </tr>
             <tr class="font12">
