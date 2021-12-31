@@ -20,7 +20,7 @@
                             {{--<span class="help-block">{{ $errors->first('danh_muc_thu_chi_id', ':message') }}</span>--}}
                         {{--</div>--}}
                     {{--</div>--}}
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-md-6">
                         <div class="form-group required {{ $errors->has('ly_do_id') ? 'has-error' : '' }}">
                             {!! Form::label('ly_do_id', 'Chọn lý do', array('class' => ' required')) !!}
                             {!! Form::select('ly_do_id',$li_do,@$doc->ly_do_id, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn lý do thu chi')) !!}
@@ -28,23 +28,21 @@
                             <span class="help-block">{{ $errors->first('ly_do_id', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-md-6">
                         <div class="form-group required {{ $errors->has('so_tien') ? 'has-error' : '' }}">
                             {!! Form::label('so_tien', 'Số tiền', array('class' => ' required')) !!}
                             {!! Form::text('so_tien',@number_format($doc->so_tien), array('class' => 'form-control price')) !!}
                             <span class="help-block">{{ $errors->first('so_tien', ':message') }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-md-6">
                         <div class="form-group required {{ $errors->has('duyet_id') ? 'has-error' : '' }}">
                             {!! Form::label('duyet_id', 'Người duyệt', array('class' => ' required')) !!}
                             {!! Form::select('duyet_id',$user_duyet,@$doc->duyet_id, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn người duyệt')) !!}
                             <span class="help-block">{{ $errors->first('duyet_id', ':message') }}</span>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-md-6">
                         <div class="form-group required {{ $errors->has('type') ? 'has-error' : '' }}">
                             {!! Form::label('type', 'Chọn kiểu', array('class' => ' required')) !!}
                             {!! Form::select('type',$type,@$doc->type, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn kiểu')) !!}
@@ -52,9 +50,15 @@
                             <span class="help-block">{{ $errors->first('type', ':message') }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
+                    <div class="col-6">
+                        <div class="form-group required {{ $errors->has('created_at') ? 'has-error' : '' }}">
+                            {!! Form::label('created_at', 'Chọn ngày', array('class' => ' required')) !!}
+{{--                            {!! Form::select('created_at',null,@$doc->created_at, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn người duyệt')) !!}--}}
+                            {!! Form::text('created_at', @\App\Helpers\Functions::dayMonthYear($doc->created_at), array('class' => 'form-control fc-datepicker')) !!}
+                            <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                             {!! Form::label('note', 'Ghi chú') !!}
                             {!! Form::textarea('note', null, array('class' => 'form-control', 'rows' => 3)) !!}

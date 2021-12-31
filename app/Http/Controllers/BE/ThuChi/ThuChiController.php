@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE\ThuChi;
 
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\DanhMucThuChi;
 use App\Models\LyDoThuChi;
@@ -103,6 +104,7 @@ class ThuChiController extends Controller
         $data['thuc_hien_id'] = $user->id;
         $data['branch_id'] = $user->branch_id ? $user->branch_id : 0;
         $data['danh_muc_thu_chi_id'] = LyDoThuChi::find($request->ly_do_id)->category_id;
+        $data['created_at'] = Functions::yearMonthDay($request->created_at);
 
         $thu_chi = ThuChi::create($data);
         $centor = User::select()->where('id', $request->duyet_id)->first();
@@ -180,6 +182,7 @@ class ThuChiController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        $data['created_at'] = Functions::yearMonthDay($request->created_at);
         $data['so_tien'] = replaceNumberFormat($request->so_tien);
         $thu_chi = ThuChi::find($id);
         if ($thu_chi->status == 1) {
