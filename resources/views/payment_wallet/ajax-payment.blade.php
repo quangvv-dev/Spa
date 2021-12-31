@@ -28,7 +28,7 @@
                     <td class="text-center">{{isset($data->order_wallet) && isset($data->order_wallet->customer) ? @$data->order_wallet->customer->phone :''}}</td>
                     <td class="text-center">{{isset($data->order_wallet) && isset($data->order_wallet->package) ? @$data->order_wallet->package->name :''}}
                     <td class="text-center">{{ @number_format($data->price) }}</td>
-                    <td class="text-center">{{isset($data->order_wallet) ? ($data->order_wallet->order_price - $data->order_wallet->price)>0? @number_format($data->order_wallet->order_price - $data->price) :0:0}}
+                    <td class="text-center">{{isset($data->order_wallet) ? ($data->order_wallet->order_price - $data->price)>0? @number_format($data->order_wallet->order_price - $data->price) :0:0}}
                     <td class="text-center">{{ @$data->name_payment_type }}</td>
                     <td class="text-center">{{isset($data->order_wallet) && isset($data->order_wallet->user) ? @$data->order_wallet->user->full_name :''}}</td>
                     <td class="text-center">{{@$data->branch->name}}</td>

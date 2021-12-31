@@ -52,7 +52,7 @@ class PaymentWallet extends Model
             $q->whereHas('order_wallet', function ($qr) use ($input) {
                 $qr->where('user_id', $input['user_id']);
             });
-        })->with('order_wallet');
+        })->with('order_wallet')->has('order_wallet');
 
         return $detail;
     }

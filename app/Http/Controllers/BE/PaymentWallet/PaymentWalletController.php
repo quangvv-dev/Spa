@@ -54,8 +54,8 @@ class PaymentWalletController extends Controller
         View::share([
             'allTotal' => $datas->sum('price'),
         ]);
-        $datas = $datas->paginate(StatusCode::PAGINATE_20);
 
+        $datas = $datas->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
             return view('payment_wallet.ajax-payment', compact('datas'));
         }
