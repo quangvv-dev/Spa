@@ -17,7 +17,13 @@
         </thead>
         <tbody>
         @if (count($datas))
+{{--            @php--}}
+{{--            $theRest =0;--}}
+{{--            @endphp--}}
             @foreach($datas as $key => $data)
+{{--                @php--}}
+{{--                    $theRest += $data->order_wallet->order_price - $data->price;--}}
+{{--                @endphp--}}
                 <tr>
                     <td class="text-center">{{ $key+1 }}</td>
                     <td class="text-center">{{isset($data->order_wallet) ? @date("d-m-Y", strtotime($data->order_wallet->created_at)):'' }}</td>

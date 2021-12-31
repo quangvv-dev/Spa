@@ -53,7 +53,6 @@ class PaymentWalletController extends Controller
         $datas = PaymentWallet::search($input);
         View::share([
             'allTotal' => $datas->sum('price'),
-            'theRest' => $datas->order_wallet->sum('price') - $datas->sum('price'),
         ]);
 
         $datas = $datas->paginate(StatusCode::PAGINATE_20);
