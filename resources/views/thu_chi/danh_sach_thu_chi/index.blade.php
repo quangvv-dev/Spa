@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('_style')
+    <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <style>
         .small-tip {
@@ -119,7 +120,5 @@
                 }
             })
         })
-
-
     </script>
 @endsection

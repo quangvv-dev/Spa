@@ -54,7 +54,10 @@
                         <div class="form-group required {{ $errors->has('created_at') ? 'has-error' : '' }}">
                             {!! Form::label('created_at', 'Chọn ngày', array('class' => ' required')) !!}
 {{--                            {!! Form::select('created_at',null,@$doc->created_at, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn người duyệt')) !!}--}}
-                            {!! Form::text('created_at', @\App\Helpers\Functions::dayMonthYear($doc->created_at), array('class' => 'form-control fc-datepicker')) !!}
+                            {{--{!! Form::text('created_at', @\App\Helpers\Functions::dayMonthYear($doc->created_at), array('class' => 'form-control fc-datepicker')) !!}--}}
+                            {{--<span class="help-block">{{ $errors->first('created_at', ':message') }}</span>--}}
+
+                            <input type="text" class="form-control payment-date" id="datepicker" data-toggle="datepicker" name="created_at" value="{{ @\App\Helpers\Functions::dayMonthYear($doc->created_at) }}" required>
                             <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
                         </div>
                     </div>
@@ -76,6 +79,8 @@
 
         </div>
     </div>
+    {{--<script src="{{asset('assets/plugins/date-picker/spectrum.js')}}"></script>--}}
+    {{--<script src="{{asset('assets/plugins/date-picker/jquery-ui.js')}}"></script>--}}
 @endsection
 @section('_script')
     <script src="{{asset('js/format-number.js')}}"></script>
@@ -123,5 +128,10 @@
         //         }
         //     })
         // });
+        $('[data-toggle="datepicker"]').datepicker({
+            format: 'dd-mm-yyyy',
+            autoHide: true,
+            zIndex: 2048,
+        });
     </script>
 @endsection
