@@ -143,6 +143,7 @@ class RevenueController extends BaseApiController
             ];
         } elseif ($request->type_api == 3) {
             $payment = PaymentHistory::search($input, 'price');
+
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old, 'price');
             }
@@ -159,7 +160,7 @@ class RevenueController extends BaseApiController
             ];
             $total_payment = $payment->sum('price');
             $wallet_used = $payment->where('payment_type', 3)->sum('price');
-            $data['payment'] = $total_payment + $wallet->sum('order_price') - $wallet_used;
+            $data['payment'] = $total_payment + $payment_wallet - $wallet_used;
 
         } elseif ($request->type_api == 4) {
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
