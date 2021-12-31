@@ -32,7 +32,7 @@
                                     <div class="col row">
                                         <div class="col-md-6 col-xs-12">
                                             <div class="form-group">
-                                                {!! Form::label('silver', 'Thăng hạn rank Khách hàng (Sliver)', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('silver', 'Thăng hạn rank Người mua hàng (Sliver)', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('silver',@number_format(setting('silver')), array('class' => 'form-control')) !!}
                                                 <span
                                                         class="help-block">{{ $errors->first('silver', ':message') }}</span>
@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="form-group">
-                                                {!! Form::label('gold', 'Thăng hạn rank Khách hàng thân thiết (GOLD)', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('gold', 'Thăng hạn rank Khách hàng (GOLD)', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('gold',@@number_format(setting('gold')), array('class' => 'form-control')) !!}
                                                 <span class="help-block">{{ $errors->first('gold', ':message') }}</span>
                                             </div>

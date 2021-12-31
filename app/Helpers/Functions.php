@@ -444,11 +444,12 @@ class Functions
         $silver = setting('silver') ?: 0;
         $gold = setting('gold') ?: 0;
         $platinum = setting('platinum') ?: 0;
-        if (isset($silver) && isset($gold) && isset($platinum) && $silver > 0 && $gold > 0 && $platinum > 0) {
+//        if (isset($silver) && isset($gold) && isset($platinum) && $silver > 0 && $gold > 0 && $platinum > 0) {
+        if (isset($silver) && isset($gold) && isset($platinum)) {
             if ($silver <= $total && $total < $gold) {
                 $status = Functions::getStatusWithCode('nguoi_mua_hang');
-            } elseif ($gold <= $total && $total < $platinum) {
-                $status = Functions::getStatusWithCode('khach_hang_than_thiet');
+            } elseif ($gold <= $total && $total > $silver) {
+                $status = Functions::getStatusWithCode('khach_hang');
             } elseif ($platinum <= $total) {
                 $status = Functions::getStatusWithCode('cong_tac_vien');
             }
