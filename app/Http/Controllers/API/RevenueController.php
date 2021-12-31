@@ -160,7 +160,7 @@ class RevenueController extends BaseApiController
             ];
             $total_payment = $payment->sum('price');
             $wallet_used = $payment->where('payment_type', 3)->sum('price');
-            $data['payment'] = $total_payment + $payment_wallet - $wallet_used;
+            $data['payment'] = $total_payment + $payment_wallet->sum('price') - $wallet_used;
 
         } elseif ($request->type_api == 4) {
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
@@ -174,7 +174,7 @@ class RevenueController extends BaseApiController
             $all_payment = $payment->sum('price');
 
             $data = [
-                'payment' => (int)$payment->sum('price') + $payment_wallet,
+                'payment' => (int)$payment->sum('price') + $payment_wallet->sum('price'),
                 'percent' => !empty($all_payment) && !empty($payment_old) ? round(($all_payment - $payment_old) / $payment_old * 100,
                     2) : 0,
                 'cash' => (int)$payment->whereIn('payment_type', [0, 1])->sum('price'),
