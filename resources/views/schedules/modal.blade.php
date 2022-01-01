@@ -82,7 +82,7 @@
                     </div>
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                        @if(\Illuminate\Support\Facades\Auth::user()->department->name =='Telesale')
+                        @if(@\Illuminate\Support\Facades\Auth::user()->department->name =='Telesale')
                             {!! Form::select('status',array(2 => 'Đặt lịch',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                         @else
                             {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
