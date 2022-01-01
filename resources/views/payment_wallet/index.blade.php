@@ -137,7 +137,7 @@
                     </div>
                 </div>
             <div class="detail-pay-dvh position col-md-12 no-padd">
-                @include('order.payment-history')
+                @include('payment_wallet.payment-history')
             </div>
         </div>
     </div>
