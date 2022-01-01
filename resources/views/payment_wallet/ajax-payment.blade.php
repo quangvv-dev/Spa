@@ -13,6 +13,7 @@
             <th class="text-white text-center">Phương thức thanh toán</th>
             <th class="text-white text-center">Người lên đơn</th>
             <th class="text-white text-center">Chi nhánh</th>
+            <th class="text-white text-center"></th>
         </tr>
         </thead>
         <tbody>
@@ -38,6 +39,10 @@
                     <td class="text-center">{{ @$data->name_payment_type }}</td>
                     <td class="text-center">{{isset($data->order_wallet) && isset($data->order_wallet->user) ? @$data->order_wallet->user->full_name :''}}</td>
                     <td class="text-center">{{@$data->branch->name}}</td>
+                    <td class="text-center">
+                        <a title="Xóa" class="btn delete" href="javascript:void(0)"
+                           data-url="{{ url('payment-wallet/' . $data->id) }}"><i class="fas fa-trash-alt"></i></a>
+                    </td>
 
                 </tr>
             @endforeach
@@ -49,10 +54,7 @@
                 <td class="text-center"></td>
                 <td class="text-center bold">Tổng trang</td>
                 <td class="text-center bold">{{ @number_format($datas->sum('price')) }}</td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+                <td class="text-center" colspan="5"></td>
             </tr>
             <tr class="fixed">
                 <td class="text-center"></td>
@@ -62,10 +64,7 @@
                 <td class="text-center"></td>
                 <td class="text-center bold">Tổng cộng</td>
                 <td class="text-center bold">{{ @number_format($allTotal) }}</td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+                <td class="text-center" colspan="5"></td>
 
             </tr>
         @else
