@@ -74,7 +74,10 @@ class ThuChiController extends Controller
         $user = Auth::user();
         $li_do = LyDoThuChi::pluck('name','id')->toArray();
         $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
+        $mkt = $user->department_id == 3 ? true : false;
         if($admin){
+            $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
+        }elseif($mkt){
             $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
         }else {
             $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
