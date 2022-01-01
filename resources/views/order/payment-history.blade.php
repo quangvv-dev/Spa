@@ -19,7 +19,7 @@
                     <td class="fz-12">{{ $item->description }}</td>
                     <td class="fz-12">
                         <a title="Xóa" class="btn delete" href="javascript:void(0)"
-                           data-url="{{ url('payment-wallet/' . $item->id) }}"><i class="fas fa-trash-alt"></i></a>
+                           data-url="{{ url('order/' . $item->id).'/delete-payment' }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
             @endforeach
