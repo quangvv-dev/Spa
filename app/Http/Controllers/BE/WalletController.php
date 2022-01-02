@@ -131,6 +131,7 @@ class WalletController extends Controller
                 $customer->wallet = ($customer->wallet - $walet->price) > 0 ? $customer->wallet - $walet->price : 0;
             }
             $customer->save();
+            PaymentWallet::where('order_wallet_id',$walet->id)->delete();
             $walet->delete();
             $request->session()->flash('error', 'Xóa thành công danh mục!');
         } else {
