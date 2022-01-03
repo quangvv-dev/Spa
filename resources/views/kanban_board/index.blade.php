@@ -1,6 +1,6 @@
 @extends('layout.app')
 <link rel="stylesheet" href="{{asset('assets/plugins/kanban-board/jkanban.min.css')}}"/>
-<link rel="stylesheet" href="{{asset('css/daterangepicker.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
 <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
 {{--<style>--}}
 {{--.title {--}}
@@ -99,48 +99,26 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Chăm sóc khách hàng</h3></br>
-
             </div>
-            {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
 
-            <ul class="col-md-9 no-padd mt5 tr right">
-                <li class="display pl5"><a data-time="TODAY" class="choose_time">Hôm nay</a></li>
-                <li class="display pl5"><a data-time="YESTERDAY" class="choose_time">Hôm qua</a></li>
-                <li class="display pl5"><a data-time="THIS_WEEK" class="choose_time border b-gray">Tuần này</a></li>
-                <li class="display pl5"><a data-time="LAST_WEEK" class="choose_time">Tuần trước</a></li>
-                <li class="display pl5">
-                    <a data-time="THIS_MONTH" class="display padding0-5 choose_time ">Tháng này</a>
-                </li>
-                <li class="display pl5"><a data-time="LAST_MONTH" class="choose_time">Tháng trước</a></li>
-                <li class="display position"><a class="other_time choose_time ">Khác</a>
-                    <div class="add-drop add-d-right other_time_panel"
-                         style="left: auto; right: 0px; z-index: 999; display: none;"><s
-                            class="gf-icon-neotop"></s>
-                        <div class="padding tl"><p>Ngày bắt đầu</p>
-                            <input type="text" class="form-control filter_start_date" id="datepicker"
-                                   data-toggle="datepicker" name="payment_date">
-                        </div>
-                        <div class="padding tl"><p>Ngày kết thúc</p>
-                            <input type="text" class="form-control filter_end_date" id="datepicker"
-                                   data-toggle="datepicker" name="payment_date">
-                        </div>
-                        <div class="padding5-10 tl mb5">
-                            <button class="btn btn-info submit_other_time">Tìm kiếm</button>
-                            <button class="btn btn-default cancel_other_time">Đóng</button>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-
-            <div class="col-md-2">
-                @if($roleGlobal->permission('tasks.employee'))
-                    {!! Form::select('type', [1=>'Của tôi'], null, array('class' => 'form-control type', 'placeholder'=>'Toàn phòng ban')) !!}
-                @endif
+            <div class="card-header">
+                {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-12 row', 'id'=> 'gridForm','role'=>'form')) !!}
+                <div class="col-md-3">
+                    <input type="hidden" name="start_date" id="start_date">
+                    <input type="hidden" name="end_date" id="end_date">
+                    <input id="reportrange" type="text" class="form-control square">
+                </div>
+                <div class="col-md-2">
+                    @if($roleGlobal->permission('tasks.employee'))
+                        {!! Form::select('type', [1=>'Của tôi'], null, array('class' => 'form-control type', 'placeholder'=>'Toàn phòng ban')) !!}
+                    @endif
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <button type="submit" class="btn btn-primary"> Tìm kiếm
+                    </button>
+                </div>
+                {!! Form::close() !!}
             </div>
-            {!! Form::close() !!}
-            <input type="hidden" id="start-date">
-            <input type="hidden" id="end-date">
-            <input type="hidden" id="data-time">
 
             <div id="registration-form">
                 @include('kanban_board.ajax')
@@ -150,68 +128,11 @@
         <!-- table-responsive -->
         </div>
     </div>
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 
 @section('_script')
     <script src="{{asset('assets/plugins/kanban-board/jkanban.min.js')}}"></script>
-
-    <script>
-
-        function searchAjax(data) {
-            $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
-            $.ajax({
-                url: "{{ Url('tasks/') }}",
-                method: "get",
-                data: data
-            }).done(function (data) {
-                $('#registration-form').html(data);
-            });
-        }
-
-        $(document).on('change', '.type', function (e) {
-            let data = $(this).val();
-            let start_date = $('#start-date').val();
-            let end_date = $('#end-date').val();
-            let data_time = $('#data-time').val();
-            console.log(data, start_date, end_date, data_time);
-            searchAjax({
-                data_time: data_time,
-                start_date: start_date,
-                end_date: end_date,
-                type: data,
-            });
-        })
-
-        $(document).on('click', '.choose_time, .submit_other_time', function (e) {
-            e.preventDefault();
-            let target = $(e.target).parent();
-            let data_time = $(target).find('.choose_time').data('time');
-            let class_name = target.attr('class');
-            if (class_name === 'display pl5') {
-                $('.filter_start_date').val('');
-                $('.filter_end_date').val('');
-            }
-            $('a.choose_time').removeClass('border b-gray');
-            $(target).find('.choose_time').addClass('border b-gray');
-            let start_date = $('.filter_start_date').val();
-            let end_date = $('.filter_end_date').val();
-            // let user_id = $('#search-user').val();
-
-            if (typeof data_time === "undefined") {
-                $('#data-time').val();
-            } else {
-                $('#data-time').val(data_time);
-            }
-            $('#start-date').val(start_date);
-            $('#end-date').val(end_date);
-            let type = $('.type').val();
-            searchAjax({
-                data_time: data_time,
-                start_date: start_date,
-                end_date: end_date,
-                type: type,
-            });
-        });
-    </script>
 @endsection
 
