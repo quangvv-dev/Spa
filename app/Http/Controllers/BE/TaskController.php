@@ -65,9 +65,9 @@ class TaskController extends Controller
         if (count($docs))
             foreach ($docs as $item) {
                 if ($item->task_status_id == 1)
-                    $new[] = ['id' => $item->id, 'title' => $item->name];
+                    $new[] = $item;
                 if ($item->task_status_id == 2)
-                    $fail[] = ['id' => $item->id, 'title' => $item->name];
+                    $fail[] = $item;
                 if ($item->task_status_id == 3)
                     $done[] = $item;
             }
