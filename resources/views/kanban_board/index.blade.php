@@ -83,6 +83,12 @@
             overflow-y: auto;
         }
     }
+    .img-card{
+        width: 30px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid #f3f3f3;
+    }
 
 </style>
 @section('content')
@@ -131,15 +137,6 @@
                     {!! Form::select('type', [1=>'Của tôi'], null, array('class' => 'form-control type', 'placeholder'=>'Toàn phòng ban')) !!}
                 @endif
             </div>
-            {{--<div class="card-header">--}}
-            {{--<input type="hidden" name="start_date" id="start_date">--}}
-            {{--<input type="hidden" name="end_date" id="end_date">--}}
-            {{--<div class="col-lg-4 col-md-6">--}}
-            {{--<input id="reportrange" type="text" class="form-control square">--}}
-            {{--</div>--}}
-            {{--<button type="submit" class="btn btn-primary" id="btnSearch"><i class="fa fa-search"></i> Tìm kiếm--}}
-            {{--</button>--}}
-            {{--</div>--}}
             {!! Form::close() !!}
             <input type="hidden" id="start-date">
             <input type="hidden" id="end-date">
@@ -156,8 +153,6 @@
 @endsection
 
 @section('_script')
-    {{--<script src="{{asset('js/daterangepicker.min.js')}}"></script>--}}
-    {{--<script src="{{asset('js/dateranger-config.js')}}"></script>--}}
     <script src="{{asset('assets/plugins/kanban-board/jkanban.min.js')}}"></script>
 
     <script>

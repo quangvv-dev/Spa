@@ -46,8 +46,9 @@
                     @if(count($new))
                     @foreach($new as $item)
                     {
-                        'id': '{{$item['id']}}',
-                        'title': '{{$item['title']}}',
+                        'id': '{{$item->id}}',
+                        'title': '<img class="img-card" src="{{$item->avatar?:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
+
                     },
                     @endforeach
                     @endif
@@ -62,8 +63,8 @@
                     @if(count($done))
                     @foreach($done as $item)
                     {
-                        'id': '{{$item['id']}}',
-                        'title': '{{$item['title']}}',
+                        'id': '{{$item->id}}',
+                        'title': '<img class="img-card" src="{{$item->avatar?:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
 
                     },
                     @endforeach
@@ -77,12 +78,13 @@
                 'title': 'Quá hạn',
                 'class': 'error',
                 'item': [
-                        @if(count($fail))
-                        @foreach($fail as $item)
-                    {
-                        'id': '{{$item['id']}}',
-                        'title': '{{$item['title']}}',
-                    },
+                    @if(count($fail))
+                    @foreach($fail as $item)
+                        {
+                            'id': '{{$item->id}}',
+                            'title': '<img class="img-card" src="{{$item->avatar?:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
+
+                        },
                     @endforeach
 
                     @endif

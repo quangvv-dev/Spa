@@ -55,7 +55,10 @@ class TaskController extends Controller
         if (isset($request->type) && $request->type) {
             $input['sale_id'] = Auth::user()->id;
         }
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from')->get();
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from','user_id')
+            ->with(['user' => function ($query) {
+                $query->select('avatar');
+            }])->get();
         $new = [];
         $done = [];
         $fail = [];
@@ -66,7 +69,7 @@ class TaskController extends Controller
                 if ($item->task_status_id == 2)
                     $fail[] = ['id' => $item->id, 'title' => $item->name];
                 if ($item->task_status_id == 3)
-                    $done[] = ['id' => $item->id, 'title' => $item->name];
+                    $done[] = $item;
             }
         if ($request->ajax()) {
             return view('kanban_board.ajax', compact('new', 'done', 'fail'));
