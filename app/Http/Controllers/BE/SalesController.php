@@ -61,7 +61,7 @@ class SalesController extends Controller
                     $qr->where('telesales_id', $item->id);
                 });
             $orders2 = clone $orders;
-            $order_new = $orders->whereIn('member_id', $data_new->pluck('id')->toArray())->whereHas('customer', function ($qr) use ($item) {
+            $order_new = $orders->whereHas('customer', function ($qr) use ($item) {
                 $qr->where('old_customer', 0);
             });
             $order_old = $orders2->whereHas('customer', function ($qr) use ($item) {
