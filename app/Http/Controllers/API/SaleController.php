@@ -39,12 +39,16 @@ class SaleController extends BaseApiController
                 ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->where('is_upsale', OrderConstant::NON_UPSALE)->with('orderDetails');
+                })->where('is_upsale', OrderConstant::NON_UPSALE)->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('telesales_id', $item->id);
+                })->with('orderDetails');
             $order_old = Order::whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
             ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->where('is_upsale', OrderConstant::IS_UPSALE)->with('orderDetails');
+                })->where('is_upsale', OrderConstant::IS_UPSALE)->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('telesales_id', $item->id);
+                })->with('orderDetails');
 
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
