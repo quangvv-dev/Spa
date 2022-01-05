@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
@@ -61,12 +62,8 @@ class SalesController extends Controller
                     $qr->where('telesales_id', $item->id);
                 });
             $orders2 = clone $orders;
-            $order_new = $orders->whereHas('customer', function ($qr) use ($item) {
-                $qr->where('old_customer', 0);
-            });
-            $order_old = $orders2->whereHas('customer', function ($qr) use ($item) {
-                $qr->where('old_customer', 1);
-            });
+            $order_new = $orders->where('is_upsale',OrderConstant::NON_UPSALE);
+            $order_old = $orders2->where('is_upsale',OrderConstant::IS_UPSALE);
 
             $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
             $comment_new = clone $group_comment;

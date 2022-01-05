@@ -157,6 +157,8 @@ class OrderController extends Controller
             if (@$countOrders > 1) {
                 $customer->old_customer = 1;
                 $customer->save();
+                $order->is_upsale = 1;
+                $order->save();
             }
 
             if ($order->discount > 0) {

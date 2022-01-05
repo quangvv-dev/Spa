@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
@@ -37,15 +38,11 @@ class SaleController extends BaseApiController
             $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
-                    $qr->where('old_customer', 0);
-                });
+                })->with('orderDetails')->where('is_upsale',OrderConstant::NON_UPSALE);
             $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
-                    $qr->where('old_customer', 1);
-                });
+                })->with('orderDetails')->where('is_upsale',OrderConstant::IS_UPSALE);
 
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');

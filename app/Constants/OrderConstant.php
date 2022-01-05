@@ -17,4 +17,7 @@ class OrderConstant
     const TIEU_HAO = 3;//Tiêu Hao
     const HONG_VO = 4;//Hỏng vỡ
 
+    const IS_UPSALE = 1;//đơn upsale
+    const NON_UPSALE = 0;//đơn mới
+
 }
