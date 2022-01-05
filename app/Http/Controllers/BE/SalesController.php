@@ -56,7 +56,7 @@ class SalesController extends Controller
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
 
-            $orders = Order::select('member_id', 'all_total', 'gross_revenue')
+            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
@@ -69,8 +69,8 @@ class SalesController extends Controller
 //            $order_old = $orders2->whereHas('customer', function ($qr) use ($item) {
 //                $qr->where('old_customer', 1);
 //            });
-            $order_new = $orders->where('is_upsale',OrderConstant::NON_UPSALE);
-            $order_old = $orders2->where('is_upsale',OrderConstant::IS_UPSALE);
+            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
             $comment_new = clone $group_comment;
@@ -163,7 +163,9 @@ class SalesController extends Controller
                     $q->where('branch_id', $request->branch_id);
                 });
             $detail_new = clone $detail;
-            $detail_new = $detail_new->whereIn('user_id', $data_new)->groupBy('order_id');
+            $detail_new = $detail_new->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+            })->groupBy('order_id');
 
             $comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->whereIn('customer_id', $data_new);
@@ -187,9 +189,9 @@ class SalesController extends Controller
             'allTotal' => $users->sum('revenue_total'),
         ]);
         if ($request->ajax()) {
-            return view('report_products.ajax_group', compact('users', 'telesales','type'));
+            return view('report_products.ajax_group', compact('users', 'telesales', 'type'));
         }
-        return view('report_products.group_sale', compact('branchs', 'users', 'telesales','type'));
+        return view('report_products.group_sale', compact('branchs', 'users', 'telesales', 'type'));
     }
 
     public function searchBranch($query, $input)

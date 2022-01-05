@@ -35,14 +35,16 @@ class SaleController extends BaseApiController
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
                 });
-            $order_new = Order::whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            $order_new = Order::whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+                ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->with('orderDetails')->where('is_upsale',OrderConstant::NON_UPSALE);
-            $order_old = Order::whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+                })->where('is_upsale', OrderConstant::NON_UPSALE)->with('orderDetails');
+            $order_old = Order::whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->with('orderDetails')->where('is_upsale',OrderConstant::IS_UPSALE);
+                })->where('is_upsale', OrderConstant::IS_UPSALE)->with('orderDetails');
 
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
@@ -50,7 +52,6 @@ class SaleController extends BaseApiController
             $detail2 = clone $detail;
             $total_old = $detail_total->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');
             $total_new = $detail2->whereIn('order_id', $order_new->pluck('id')->toArray())->sum('price');
-
 
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
