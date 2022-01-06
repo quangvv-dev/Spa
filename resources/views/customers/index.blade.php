@@ -351,7 +351,7 @@
                 let data_time = $('#btn_choose_time').val();
                 let search = $('#search_value').val();
                 let group = $('#group').val();
-                let marketing = $('#group-product').val();
+                let marketing = $('#group_product').val();
                 let source = $('#source').val();
                 let telesales = $('#telesales').val();
                 let branch_id = $('.branch_id').val();
@@ -398,7 +398,7 @@
                 let group = $('#group').val();
                 let telesales = $('#telesales').val();
                 let status = $('#status').val();
-                let marketing = $('#group-product').val();
+                let marketing = $('#group_product').val();
                 let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
 
@@ -412,6 +412,7 @@
                     marketing: marketing,
                     branch_id: branch_id,
                 };
+                console.log(data,'daaâ')
 
                 searchAjax(data);
             });
@@ -467,7 +468,7 @@
                 let group = $('#group').val();
                 let telesales = $('#telesales').val();
                 let status = $('#status').val();
-                let marketing = $('#group-product').val();
+                let marketing = $('#group_product').val();
                 let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
 
@@ -775,7 +776,7 @@
                 let group = $('.group').val();
                 let telesales = $('.telesales').val();
                 let search = $('#search_value').val();
-                let marketing = $('#group-product').val();
+                let marketing = $('#group_product').val();
                 let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
                 let status = $('#status').val();
