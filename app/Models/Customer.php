@@ -219,8 +219,8 @@ class Customer extends Model
                 }
             }
         }
-        $text = implode($text, ',');
-        return $text;
+//        $text = implode($text, ',');
+        return '';
     }
 
     public static function boot()

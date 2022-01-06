@@ -178,4 +178,11 @@
     }).ajaxStop(function () {
         $('.load').hide();
     });
+
+    function showLoading() {
+        $('.loading-custom').show();
+    }
+    function hideLoading() {
+        $('.loading-custom').hide();
+    }
 </script>

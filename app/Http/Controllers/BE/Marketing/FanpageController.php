@@ -2,20 +2,44 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Constants\StatusCode;
+use App\Models\Source;
+use App\Services\FanpageService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Socialite;
 
 class FanpageController extends Controller
 {
+    private $fanpage;
+
+    public function __construct(FanpageService $fanpage)
+    {
+        $this->fanpage = $fanpage;
+//        $source = Source::pluck('name', 'id')->toArray();
+//        view()->share([
+//            'source' => $source,
+//        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $fanpages = $this->fanpage->index($request)->paginate(StatusCode::PAGINATE_20);
+        $source = Source::pluck('name', 'id')->toArray();
+        if ($request->session()->has('login-facebook')) {
+            $data_login_fb = $request->session()->get('login-facebook');
+        } else {
+            $data_login_fb = null;
+        }
+        if ($request->ajax()) {
+            return view('marketing.fanpage.ajax', compact('fanpages', 'data_login_fb'));
+        }
+        return view('marketing.fanpage.index',compact('fanpages','data_login_fb','source'));
     }
 
     /**
@@ -93,7 +117,7 @@ class FanpageController extends Controller
     {
         $user = Socialite::driver('facebook')->user();
         session(['login-facebook' => $user]);
-        return redirect(route('marketing.fanpage.index'));
+        return redirect('/marketing/fanpage');
     }
 
     public function removeAccount(Request $request)

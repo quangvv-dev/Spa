@@ -171,6 +171,11 @@
             <!--footer-->
         </div>
         <!--footer-->
+        <div class="loading-custom" style="display: none;">
+            <div class="" style="position: absolute; margin: auto;top: 45%;left: 48%;">
+                <i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i>
+            </div>
+        </div>
     @include('layout.footer')
     <!-- End Footer-->
     </div>

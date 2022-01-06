@@ -221,6 +221,13 @@ class Functions
         }
     }
 
+    public static function unlinkUpload2($path)
+    {
+        if (!empty($path)) {
+            @unlink(public_path($path));
+        }
+    }
+
     /**
      * Upload multiple file-input
      *
@@ -498,6 +505,41 @@ class Functions
 
         $request->merge(['start_date' => $date_check]);
         $request->merge(['end_date' => $date]);
+    }
+
+    /**
+     * @param $token
+     * @param $method
+     * @param $uri
+     * @param $field
+     *
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public static function getDataFaceBook($token, $method, $uri, $field)
+    {
+        $params = [
+            'query' => [
+                'access_token' => $token,
+                'fields' => $field,
+            ],
+        ];
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $res = $client->request($method, $uri, $params);
+
+            if ($res->getStatusCode() == 200) { // 200 OK
+                $response_data = $res->getBody()->getContents();
+                $datas = json_decode($response_data)->data;
+                return $datas;
+            }
+        } catch (\Exception $e) {
+            report($e);
+            return [];
+        }
+
+
     }
 
 }

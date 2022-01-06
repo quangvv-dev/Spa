@@ -67,11 +67,11 @@
                 </li>
             @endif
             <li class="nav-item with-sub">
-                <a class="nav-link {{ Request::is('fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}" href="#"><i class="fas fa-magnet"></i><span>Marketing</span></a>
+                <a class="nav-link {{ Request::is('marketing/fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}" href="#"><i class="fas fa-magnet"></i><span>Marketing</span></a>
                 <div class="sub-item">
                     <ul>
                         @if($roleGlobal->permission('fanpage'))
-                            <li><a href="{{route('fanpage.index')}}">Fanpage </a></li>
+                            <li><a href="{{route('marketing.fanpage.index')}}">Fanpage </a></li>
                         @endif
 
                         {{--<li><a href="/marketing/fanpage-post">Danh sách bài post</a></li>--}}

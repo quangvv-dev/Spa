@@ -182,6 +182,7 @@
                         alertify.success('Cập nhật thành công !')
                     }
                     hideLoading();
+                    $('#bootstrap').modal('hide');
                 }
             })
         })

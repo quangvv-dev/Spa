@@ -230,3 +230,27 @@ if (!function_exists('fcmSendCloudMessage')) {
         return $rs;
     }
 }
+
+function uploadFromUrl($url)
+{
+    $name = str_slug(str_random(3) . '_' . time()) . '.png';
+    $to = public_path() . '/images/fpage/' . $name;
+    return saveImage($url, $to, $name);
+}
+
+function saveImage($url, $saveTo, $name)
+{
+    if (empty($url)) {
+        return null;
+    }
+    $fp = fopen($saveTo, 'w+');
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_FILE, $fp);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return $code == 200 ? $name : null;
+}
