@@ -10,7 +10,7 @@ class DBController extends Controller
 {
     public function index()
     {
-        $orders = Order::select('member_id')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->whereBetween('created_at', ["2022-01-01 00:00:00", "2022-01-31 23:59:59"])
+        $orders = Order::select('member_id')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->whereBetween('created_at', ["2021-12-01 00:00:00", "2022-12-31 23:59:59"])
             ->whereHas('customer', function ($qr) {
                 $qr->where('old_customer', 1);
             })->groupBy('member_id')
