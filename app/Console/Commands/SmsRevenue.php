@@ -58,7 +58,6 @@ class  SmsRevenue extends Command
 //        Functions::sendSmsBK('84986898662', $text);//chithuan
 //        Functions::sendSmsBK('84989996738', $text);//Athien
 //        $time = '13-05-2020 14:55';
-        Functions::sendSmsV3('0334299996', $text);
-//        Functions::sendSmsBK('84334299996', $text);//Sy
+//        Functions::sendSmsV3('0334299996', $text);//gửi cho SỸ
     }
 }
