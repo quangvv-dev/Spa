@@ -38,7 +38,7 @@
                     <div class="col-md-12 col-xs-12">
 
                         {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
-                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description','rows' => 3)) !!}
+                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description','rows' => 6)) !!}
                     </div>
                     <!-- Modal footer -->
                 </div>
