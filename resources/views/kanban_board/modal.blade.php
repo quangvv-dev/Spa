@@ -36,6 +36,7 @@
                         {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'time_to')) !!}
                     </div>
                     <div class="col-md-12 col-xs-12">
+
                         {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
                         {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description','rows' => 3)) !!}
                     </div>

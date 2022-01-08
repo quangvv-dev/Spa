@@ -484,7 +484,7 @@ class OrderController extends Controller
                             }
                         }
                         $jobs = Functions::checkRuleJob($config);
-                        $controlRule = $item->rules;
+//                        $controlRule = $item->rules;
                         if (count($jobs)) {
                             foreach ($jobs as $job) {
                                 $day = $job->configs->delay_value;
@@ -496,9 +496,9 @@ class OrderController extends Controller
                                         $text_category[] = $item->name;
                                     }
                                 }
-                                $text_order = 'Đơn hàng : '.number_format($check3->order->all_total).'\n Đã thanh toán: '
-                                .number_format($check3->order->gross_revenue).'\n Còn nợ : '.number_format($check3->order->the_rest)
-                                .'\n Các dịch vụ : '.@str_replace('<br>', '\n', @$check3->order->service_text);
+                                $text_order = 'Đơn hàng : '.number_format($check3->order->all_total)." Đã thanh toán: "
+                                .number_format($check3->order->gross_revenue)." Còn nợ : ".number_format($check3->order->the_rest)
+                                ."--Các dịch vụ :".@str_replace('<br>', "|", @$check3->order->service_text);
                                 $input = [
                                     'customer_id' => @$check3->order->customer->id,
                                     'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
@@ -513,7 +513,7 @@ class OrderController extends Controller
                                     'sms_content' => Functions::vi_to_en($sms_content),
                                     'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category,
                                             ',') . ' ,' . @$check3->order->branch->name,
-                                    'description' => $text_order.'\n'.replaceVariable($sms_content,
+                                    'description' => $text_order."--".replaceVariable($sms_content,
                                         @$check3->order->customer->full_name, @$check3->order->customer->phone,
                                         @$check3->order->branch->name, @$check3->order->branch->phone,
                                         @$check3->order->branch->address),

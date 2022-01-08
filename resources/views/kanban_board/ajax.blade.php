@@ -11,11 +11,12 @@
                 url: '/ajax/tasks/' + el.dataset.eid,
                 method: 'GET',
                 success: function (data) {
+                    let abc = data.description.replaceAll("--", '\n');
                     $('#name').val(data.name).change();
                     $('#date_from').val(data.date_from).change();
                     $('#time_from').val(data.time_from).change();
                     $('#time_to').val(data.time_to).change();
-                    $('#description').html(data.description).change();
+                    $('#description').html(abc).change();
                     $('#myModal').modal('show');
                 }
             })
