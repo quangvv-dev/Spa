@@ -322,7 +322,7 @@ class CustomerController extends Controller
     {
         $request->merge(['full_name' => str_replace("'", "", $request->full_name)]);
         $input = $request->except('group_id');
-        if ((int)$input['x'] == StatusCode::ALL) {
+        if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
         }
         $customer = $this->customerService->update($input, $id);
