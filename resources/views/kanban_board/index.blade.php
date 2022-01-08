@@ -83,7 +83,8 @@
             overflow-y: auto;
         }
     }
-    .img-card{
+
+    .img-card {
         width: 30px;
         height: 30px;
         border-radius: 5px;
@@ -108,11 +109,14 @@
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
                 </div>
-                <div class="col-md-2">
-                    @if($roleGlobal->permission('tasks.employee'))
+                @if($roleGlobal->permission('tasks.employee'))
+                    <div class="col-md-2">
                         {!! Form::select('type', [1=>'Của tôi'], null, array('class' => 'form-control type', 'placeholder'=>'Toàn phòng ban')) !!}
-                    @endif
-                </div>
+                    </div>
+                    <div class="col-md-2">
+                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                    </div>
+                @endif
                 <div class="col-lg-2 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
                     </button>

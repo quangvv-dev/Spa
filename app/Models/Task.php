@@ -171,6 +171,8 @@ class Task extends Model
                 $q->where('user_id', $input['sale_id']);
             })->when(isset($input['type']) && isset($input['type']), function ($q) use ($input) {
                 $q->where('type', $input['type']);
+            })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
             })->when(isset($input['task_status_id']) && isset($input['task_status_id']), function ($q) use ($input) {
                 $q->where('task_status_id', $input['task_status_id']);
             })

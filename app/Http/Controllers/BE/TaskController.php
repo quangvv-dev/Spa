@@ -5,6 +5,8 @@ namespace App\Http\Controllers\BE;
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Department;
 use App\Models\Notification;
@@ -43,9 +45,9 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-
-        if (empty($request->start_date) && empty($request->end_date) && empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_WEEK']);
+        $branchs = Branch::pluck('name','id')->toArray();
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
         $admin = auth()->user();
@@ -75,7 +77,7 @@ class TaskController extends Controller
             return view('kanban_board.ajax', compact('new', 'done', 'fail'));
         }
 
-        return view('kanban_board.index', compact('new', 'done', 'fail'));
+        return view('kanban_board.index', compact('new', 'done', 'fail','branchs'));
     }
 
     /**
