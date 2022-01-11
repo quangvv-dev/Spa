@@ -27,7 +27,7 @@ class TaskService
 
     public function find($id)
     {
-        $task = $this->task->where('id', $id)->first();
+        $task = $this->task->where('id', $id)->with('customer','user')->first();
         return $task;
     }
 

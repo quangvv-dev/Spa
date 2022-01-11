@@ -496,7 +496,7 @@ class OrderController extends Controller
                                         $text_category[] = $item->name;
                                     }
                                 }
-                                $text_order = 'Đơn hàng : '.number_format($check3->order->all_total)." Đã thanh toán: "
+                                $text_order ="Ngày tạo đơn: " .$check3->order->created_at.' Đơn hàng: '.number_format($check3->order->all_total)." Đã thanh toán: "
                                 .number_format($check3->order->gross_revenue)." Còn nợ : ".number_format($check3->order->the_rest)
                                 ."--Các dịch vụ :".@str_replace('<br>', "|", @$check3->order->service_text);
                                 $input = [

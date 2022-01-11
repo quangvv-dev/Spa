@@ -18,6 +18,15 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-4">
+                        {!! Form::label('customer_id', 'Khách hàng', array('class' => ' required')) !!}
+                        <a id="customer" href=""><span class="form-group bold"> Q|khách hàng </span></a>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        {!! Form::label('user_id', 'Người phụ trách', array('class' => ' required')) !!}
+                        {!! Form::text('user_id', null, array('class' => 'form-control','id'=>'user_id','readonly'=>'true')) !!}
+                    </div>
+                    <div class="col-xs-12 col-md-4"></div>
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('date_from', 'Ngày hẹn(Từ)', array('class' => ' required')) !!}
                             {!! Form::text('date_from', null, array('class' => 'form-control','id'=>'date_from', 'data-toggle' => 'datepicker')) !!}
