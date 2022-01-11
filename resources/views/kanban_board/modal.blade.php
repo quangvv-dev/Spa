@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-xs-12 col-md-4">
                         {!! Form::label('customer_id', 'Khách hàng', array('class' => ' required')) !!}
-                        <a id="customer" href=""><span class="form-group bold"> Q|khách hàng </span></a>
+                        <a id="customer" href=""><span class="form-group bold name-customer"> </span></a>
                     </div>
                     <div class="col-xs-12 col-md-4">
                         {!! Form::label('user_id', 'Người phụ trách', array('class' => ' required')) !!}
