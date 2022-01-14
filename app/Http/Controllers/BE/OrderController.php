@@ -484,8 +484,7 @@ class OrderController extends Controller
                             }
                         }
                         $jobs = Functions::checkRuleJob($config);
-//                        $controlRule = $item->rules;
-                        if (count($jobs)) {
+                        if (count($jobs) && $order->role_type != StatusCode::PRODUCT) {
                             foreach ($jobs as $job) {
                                 $day = $job->configs->delay_value;
                                 $sms_content = $job->configs->sms_content;

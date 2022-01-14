@@ -284,7 +284,8 @@
                                                    data-toggle="tab">Lịch hẹn</a></li>
                                             <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Đơn hàng</a></li>
-                                            {{--<li><a href="#tab8" data-toggle="tab">Công việc</a></li>--}}
+                                            <li><a href="#tab8" id="click_tab_8" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Công việc</a></li>
                                             @if(empty($permissions) || !in_array('package.customer',$permissions))
                                                 <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                        data-toggle="tab">Ví tiền</a></li>
@@ -383,11 +384,24 @@
 
                                             </div>
                                             <div id="order_customer">
-                                                @include('customers.order')
+                                                {{--@include('customers.order')--}}
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="tab7">
                                             @include('schedules.index')
+                                        </div>
+                                        <div class="tab-pane" id="tab8">
+                                            <div class="card-header row">
+                                                <div class="col">
+                                                    {{--@if($roleGlobal->permission('tasks.index'))--}}
+                                                        <a class="right btn btn-primary text-white"
+                                                           data-toggle="modal"
+                                                           data-target="#modalTask">Tạo mới</a>
+                                                    {{--@endif--}}
+                                                </div>
+                                            </div>
+                                            <div class="col index-task"></div>
+                                            @include('tasks.modal')
                                         </div>
                                         {{--    Modal thêm --}}
                                         @include('schedules.modal')
@@ -500,7 +514,17 @@
             //     zIndex: 2048,
             // });
         })
-
+        $(document).on('click', '.name-task', function () {
+            $('#modalUpdateTask').modal('show');
+            let id = $(this).data('id');
+            $.ajax({
+                url: "/ajax/tasks/"+id,
+                method: "get",
+                // data: {member_id: id}
+            }).done(function (data) {
+                // $('#order_customer').html(data);
+            });
+        });
         $(document).on('click', '#click_tab_6', function () {
             const id = $(this).data('id');
             $('#order_customer').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
@@ -510,6 +534,17 @@
                 data: {member_id: id}
             }).done(function (data) {
                 $('#order_customer').html(data);
+            });
+        })
+        $(document).on('click', '#click_tab_8', function () {
+            const id = $(this).data('id');
+            $('.index-task').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {tasks: id}
+            }).done(function (data) {
+                $('.index-task').html(data);
             });
         })
 

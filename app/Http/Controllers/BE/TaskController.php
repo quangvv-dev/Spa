@@ -45,7 +45,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $branchs = Branch::pluck('name','id')->toArray();
+        $branchs = Branch::pluck('name', 'id')->toArray();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
@@ -58,7 +58,7 @@ class TaskController extends Controller
             $input['sale_id'] = Auth::user()->id;
         }
 //        $user = User::whereIn('department_id',[UserConstant::TELESALES,UserConstant::WAITER,UserConstant::CSKH]);
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from','user_id')
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id')
             ->with(['user' => function ($query) {
                 $query->select('avatar');
             }])->get();
@@ -78,7 +78,7 @@ class TaskController extends Controller
             return view('kanban_board.ajax', compact('new', 'done', 'fail'));
         }
 
-        return view('kanban_board.index', compact('new', 'done', 'fail','branchs'));
+        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs'));
     }
 
     /**
@@ -100,18 +100,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->description) {
-            $note = str_replace("\r\n", ' ', $request->description);
-            $note = str_replace("\n", ' ', $note);
-            $note = str_replace('"', ' ', $note);
-            $note = str_replace("'", ' ', $note);
-            $request->merge(['description' => $note]);
-        }
-        $input = $request->except('user_id2');
+        $customer = Customer::find($request->customer_id);
+        $request->merge([
+            'user_id' => Auth::user()->id,
+            'priority' => 1,
+            'branch_id' => $customer->branch_id,
+            'type' => 2,
+        ]);
+        $input = $request->except('ajax');
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
-
+        if ($request->ajax){
+            return back();
+        }
         return redirect('tasks')->with('status', 'Tạo người dùng thành công');
     }
 
@@ -204,13 +206,13 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->description) {
-            $note = str_replace("\r\n", ' ', $request->description);
-            $note = str_replace("\n", ' ', $note);
-            $note = str_replace('"', ' ', $note);
-            $note = str_replace("'", ' ', $note);
-            $request->merge(['description' => $note]);
-        }
+//        if ($request->description) {
+//            $note = str_replace("\r\n", ' ', $request->description);
+//            $note = str_replace("\n", ' ', $note);
+//            $note = str_replace('"', ' ', $note);
+//            $note = str_replace("'", ' ', $note);
+//            $request->merge(['description' => $note]);
+//        }
         $input = $request->except('user_id2', 'status_name');
 
         $task = $this->taskService->update($input, $id);

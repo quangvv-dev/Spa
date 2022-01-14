@@ -1,85 +1,49 @@
-<!-- The Modal -->
-<div class="modal fade" id="task">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            @if (isset($task))
-                {!! Form::model($task, array('url' => url('tasks/'.$task->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
-            @else
-                {!! Form::open(array('url' => route('tasks.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-            @endif
-            <div class="modal-body">
-                <h4>Tạo mới công việc</h4>
-                <div class="col row">
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('name', 'Tên công việc', array('class' => ' required')) !!}
-                            {!! Form::text('name', null, array('class' => 'form-control', 'required' => true)) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col row">
-                    <div class="col-xs-12 col-md-4">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('type', 'Loại công việc', array('class' => ' required')) !!}
-                            {!! Form::select('type', $type, null, array('class' => 'form-control select2','placeholder'=>'Loại công việc', 'required' => true)) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('date_from', 'Ngày hẹn(Từ)', array('class' => ' required')) !!}
-                            {!! Form::text('date_from', null, array('class' => 'form-control','id'=>'update_date', 'data-toggle' => 'datepicker')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
-                        {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
-                        {!! Form::text('time_from', null, array('class' => 'form-control','id'=>'update_time1')) !!}
-                    </div>
-                    <div class="col-md-2 col-xs-12 clockpicker" data-placement="left" data-align="top" data-autoclose="true">
-                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
-                        {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'update_time2')) !!}
-                    </div>
-                </div>
-                <div class="col row">
-                </div>
-                <div class="col row">
-                    <div class="col-md-12 col-xs-12">
-                        {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
-                        {!! Form::textarea('description', null, array('class' => 'form-control', 'rows' => 6)) !!}
-                    </div>
-                </div>
-                {{--<div class="col row" style="margin-top: 15px">--}}
-                    {{--<div class="col-md-12 mb10 task_file"><p class="fl pr10 mt5">Tài liệu đính kèm</p>--}}
-                        {{--<input type="file" name="file_document">--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                <div class="col row">
-                    <div class="col-xs-12 col-md-5">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('user_id', 'Người thực hiện', array('class' => ' required')) !!}
-                            {!! Form::select('user_id', $users, null, array('class' => 'form-control select2', 'required' => true, 'placeholder'=>'Người thực hiện',)) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-7">
-                        <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('users', 'Người tham gia', array('class' => ' required')) !!}
-                            {!! Form::select('user_id2[]', $users, null, array('class' => 'form-control select2', 'multiple' => 'multiple' , 'data-placeholder'=>'Người tham gia')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Lưu</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-            </div>
-
+<div class="table-responsive">
+    <table class="table card-table table-vcenter text-nowrap table-primary">
+        <thead class="bg-primary text-white">
+        <tr>
+            {{--<th class="text-white">STT</th>--}}
+            <th class="text-white text-center">Ngày thực hiện</th>
+            <th class="text-white text-center">Nhân viên</th>
+            {{--<th class="text-white text-center">Khách hàng</th>--}}
+            <th class="text-white text-center">Công việc</th>
+            <th class="text-white text-center">Loại công việc</th>
+            <th class="text-white text-center">Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(@count($tasks))
+            @foreach($tasks as $k => $s)
+                <tr>
+                    {{--<th scope="row">{{$k}}</th>--}}
+                    <td class="text-center">{{$s->date_from}}</td>
+                    <td class="text-center">{{@$s->user->full_name}}</td>
+                    {{--<td class="text-center">{{@$s->customer->full_name}}</td>--}}
+                    <td class="text-center name-task" data-id="{{$s->id}}">
+                        <span style="color: dodgerblue;cursor: pointer">{{$s->name}}</span>
+                    </td>
+                    <td class="text-center">{{$s->type==\App\Constants\NotificationConstant::CALL?'Gọi điên':'CSKH'}}</td>
+                    <td class="text-center">
+                        @if($s->task_status_id ==  \App\Constants\StatusCode::NEW_TASK)
+                            <span class="tag tag-azure">Mới</span>
+                        @elseif($s->task_status_id ==  \App\Constants\StatusCode::DONE_TASK)
+                            <span class="tag tag-success">Hoàn thành</span>
+                        @else
+                            <span class="tag tag-danger">Quá hạn</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        @else
+            <tr>
+                <td id="no-data" class="text-center" colspan="7">Không tồn tại dữ liệu</td>
+            </tr>
+        @endif
+        </tbody>
+    </table>
+    <div class="pull-left">
+        <div class="page-info">
+            {{ 'Tổng số ' . $tasks->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
         </div>
-        {{ Form::close() }}
     </div>
 </div>

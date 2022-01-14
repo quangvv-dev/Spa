@@ -248,34 +248,37 @@ class CustomerController extends Controller
         if ($request->history_sms) {
             $history = HistorySms::where('phone',
                 $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
-            return Response::json(view('sms.history',
-                compact('history'))->render());
+            return view('sms.history', compact('history'));
         }
         if ($request->post) {
             $customer_post = CustomerPost::where('phone', $request->post)->where('status', '<>',
                 0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
-            return Response::json(view('post.history',
-                compact('customer_post'))->render());
+            return view('post.history', compact('customer_post'));
         }
         if ($request->history_wallet) {
             $wallet = WalletHistory::where('customer_id',
                 $request->history_wallet)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             $package = PackageWallet::pluck('name', 'id')->toArray();
-            return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
+            return view('wallet.history', compact('wallet', 'package'));
         }
         if ($request->schedules) {
-            return Response::json(view('schedules.index', compact('schedules', 'id', 'staff'))->render());
+            return view('schedules.index', compact('schedules', 'id', 'staff'));
         }
 
         if ($request->call_center) {
             $call_center = CallCenter::where('dest_number', $request->call_center)->paginate(StatusCode::PAGINATE_20);
-            return Response::json(view('call_center.customer', compact('call_center'))->render());
+            return view('call_center.customer', compact('call_center'));
+        }
+
+        if ($request->tasks) {
+            $tasks = Task::where('customer_id', $request->tasks)->orderByDesc('date_from')->paginate(StatusCode::PAGINATE_20);
+            return view('tasks._form', compact('tasks'));
         }
 
         if ($request->albums) {
             $albums = Album::where('customer_id', $request->albums)->first();
             $albums = !empty($albums) && !empty($albums->images) ? json_decode($albums->images) : [];
-            return Response::json(view('albums.index', compact('albums'))->render());
+            return view('albums.index', compact('albums'));
         }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
@@ -284,7 +287,7 @@ class CustomerController extends Controller
             }
             $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
-            return Response::json(view('customers.order', compact('orders', 'waiters'))->render());
+            return view('customers.order', compact('orders', 'waiters'));
         }
         //END
 
