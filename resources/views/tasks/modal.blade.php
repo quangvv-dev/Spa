@@ -64,23 +64,23 @@
                 <h4>Cập nhật công việc</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            {!! Form::open(array('url' => "", 'method' => 'post', 'files'=> true,'id'=>'fvalidate','enctype'=>'multipart/form-data','autocomplete'=>'off')) !!}
+            {!! Form::open(array('url' => "", 'method' => 'put', 'files'=> true,'id'=>'fvalidate','enctype'=>'multipart/form-data','autocomplete'=>'off')) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('name', 'Tên công việc', array('class' => ' required')) !!}
-                            {!! Form::text('name', null, array('class' => 'form-control','id'=>'name', 'required' => true)) !!}
+                            {!! Form::text('name', null, array('class' => 'form-control','id'=>'name_update', 'required' => true)) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
-                    {!! Form::hidden('customer_id', @$customer->id, array('class' => 'form-control','id'=>'name_update')) !!}
-                    {!! Form::hidden('code', 'CSKH', array('class' => 'form-control')) !!}
-                    {!! Form::hidden('ajax', 'Task', array('class' => 'form-control')) !!}
+                    {!! Form::hidden('customer_id', @$customer->id, array('class' => 'form-control','id'=>'customer_update')) !!}
+                    {{--{!! Form::hidden('code', 'CSKH', array('class' => 'form-control')) !!}--}}
+                    {{--{!! Form::hidden('ajax', 'Task', array('class' => 'form-control')) !!}--}}
                     <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('date_from', 'Ngày hẹn(Từ)', array('class' => ' required')) !!}
-                            {!! Form::text('date_from', null, array('class' => 'form-control','id'=>'date_from', 'data-toggle' => 'datepicker')) !!}
+                            {!! Form::text('date_from', null, array('class' => 'form-control date_update','id'=>'date_from', 'data-toggle' => 'datepicker')) !!}
 
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
@@ -88,17 +88,17 @@
                     <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"
                          data-autoclose="true">
                         {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}
-                        {!! Form::text('time_from', null, array('class' => 'form-control','required'=>true)) !!}
+                        {!! Form::text('time_from', null, array('class' => 'form-control time_from','required'=>true)) !!}
                     </div>
                     <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"
                          data-autoclose="true">
                         {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
-                        {!! Form::text('time_to', null, array('class' => 'form-control','required'=>true)) !!}
+                        {!! Form::text('time_to', null, array('class' => 'form-control time_to','required'=>true)) !!}
                     </div>
                     <div class="col-md-12 col-xs-12">
 
                         {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
-                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description','rows' => 6)) !!}
+                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description_update','rows' => 6)) !!}
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Lưu</button>

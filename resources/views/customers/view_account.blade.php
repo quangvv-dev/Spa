@@ -522,6 +522,12 @@
                 method: "get",
                 // data: {member_id: id}
             }).done(function (data) {
+                console.log(data,'dataa');
+                $('#name_update').val(data.name);
+                $('.date_update').val(data.date_from.toLocaleString());
+                $('.time_from').val(data.time_from);
+                $('.time_to').val(data.time_to);
+                $('#description_update').val(data.description);
                 // $('#order_customer').html(data);
             });
         });
