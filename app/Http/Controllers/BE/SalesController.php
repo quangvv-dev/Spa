@@ -82,7 +82,7 @@ class SalesController extends Controller
             $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
                 $qr->where('old_customer', 0);
             })->count();//lich hen
-            $item->schedules_old = $schedules->whereIn('user_id', $order_old->pluck('member_id')->toArray())->count();//lich hen
+//            $item->schedules_old = $schedules->whereIn('user_id', $order_old->pluck('member_id')->toArray())->count();//lich hen
 
             $request->merge(['telesales' => $item->id]);
             $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
