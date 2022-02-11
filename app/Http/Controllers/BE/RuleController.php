@@ -171,11 +171,18 @@ class RuleController extends Controller
             }
         }
         $key = array_keys(array_column((array)$configs->nodeDataArray, 'key'), 3);
-        $category_data = $configs->nodeDataArray[$key[0]];
-        $category_ids = $category_data->configs->group;
+        $key_status = array_keys(array_column((array)$configs->nodeDataArray, 'key'), 4);
+        if (count($key)){
+            $category_data = $configs->nodeDataArray[$key[0]];
+            $category_ids = $category_data->configs->group;
+        }if (count($key_status)){
+            $status_data = $configs->nodeDataArray[$key_status[0]];
+            $status_ids = $status_data->configs->group;
+//            dd($status_ids);
+        }
         foreach ($link_nodes as $key => $record) {
             $new = [];
-            if (count($category_ids)) {
+            if (isset($category_ids) && count($category_ids)) {
                 foreach ($category_ids as $item) {
                     $new['rule_id'] = $rule->id;
                     $new['category_id'] = $item;
@@ -189,6 +196,20 @@ class RuleController extends Controller
                             $new['actor'] = $gr;
                             array_push($arr, $new);
                         }
+                    }
+                }
+            }elseif(isset($status_ids) && count($status_ids)){
+                $new['rule_id'] = $rule->id;
+                $new['category_id'] = 0;
+                $new['status'] = $rule->status;
+                $new['event'] = $nodes[$record[0]]->value;
+                $new['action'] = $nodes[$record[2]]->value;
+                $new['configs'] = isset($nodes[$record[2]]->configs) ? json_encode($nodes[$record[2]]->configs) : null;
+
+                if (isset($nodes[$record[1]]->configs) && isset($nodes[$record[1]]->configs->group) && count($nodes[$record[1]]->configs->group)) {
+                    foreach ($nodes[$record[1]]->configs->group as $key => $gr) {
+                        $new['actor'] = $gr;
+                        array_push($arr, $new);
                     }
                 }
             }

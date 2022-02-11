@@ -597,20 +597,21 @@ class CustomerController extends Controller
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
                 $rule_status = Functions::checkRuleStatusCustomer($config);
                 foreach (array_values($rule_status) as $k1 => $item) {
-                    $list_status = $item->configs->group1;
-                    $list_relation = $item->configs->group;
-                    $relation = array_intersect($category, $list_relation);
-                    if (in_array($customer->status_id, $list_status) && count($relation)) {
+                    $list_status = $item->configs->group;
+//                    $list_relation = $item->configs->group;
+//                    $relation = array_intersect($category, $list_relation);
+//                    if (in_array($customer->status_id, $list_status) && count($relation)) {
+                    if (in_array($customer->status_id, $list_status)) {
                         $sms_ws = Functions::checkRuleSms($config);
                         if (count($sms_ws)) {
                             foreach (@array_values($sms_ws) as $k2 => $sms) {
                                 $input_raw['full_name'] = @$customer->full_name;
                                 $exactly_value = Functions::getExactlyTime($sms);
                                 $text = $sms->configs->content;
-                                $phone = Functions::convertPhone(@$customer->phone);
+//                                $phone = Functions::convertPhone(@$customer->phone);
                                 $text = Functions::replaceTextForUser($input_raw, $text);
                                 $text = Functions::vi_to_en($text);
-                                $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
+                                $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
                                 if (isset($err) && $err) {
                                     HistorySms::insert([
                                         'phone' => @$customer->phone,

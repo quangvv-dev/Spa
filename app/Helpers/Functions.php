@@ -43,7 +43,7 @@ class Functions
     public static function checkRuleStatusCustomer($config)
     {
         return array_filter($config, function ($k) {
-            return $k->type == 'actor' && $k->value == 'staff_customer';
+            return $k->type == 'actor' && $k->value == 'staff';
         });
     }
 
@@ -69,11 +69,11 @@ class Functions
      */
     public static function replaceTextForUser($input, $text)
     {
-        $text = str_replace('%full_name%', $input['full_name'], $text);
-        $text = str_replace('%phone%', $input['phone'], $text);
-        $text = str_replace('%branch%', $input['branch'], $text);
-        $text = str_replace('%phoneBranch%', $input['phoneBranch'], $text);
-        $text = str_replace('%addressBranch%', $input['addressBranch'], $text);
+        $text = isset($input['full_name']) ? str_replace('%full_name%', $input['full_name'], $text) : $text;
+        $text = isset($input['phone']) ? str_replace('%phone%', $input['phone'], $text) : $text;
+        $text = isset($input['branch']) ? str_replace('%branch%', $input['branch'], $text) : $text;
+        $text = isset($input['phoneBranch']) ? str_replace('%phoneBranch%', $input['phoneBranch'], $text) : $text;
+        $text = isset($input['addressBranch']) ? str_replace('%addressBranch%', $input['addressBranch'], $text) : $text;
         return $text;
 
     }
@@ -294,12 +294,12 @@ class Functions
 
     public static function yearMonthDayTime($date)
     {
-        return \Carbon\Carbon::createFromFormat('d/m/Y H:i',$date)->format('Y-m-d H:i');
+        return \Carbon\Carbon::createFromFormat('d/m/Y H:i', $date)->format('Y-m-d H:i');
     }
 
     public static function createYearMonthDay($date)
     {
-        return \Carbon\Carbon::createFromFormat('d-m-Y',$date)->format('Y-m-d');
+        return \Carbon\Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
     }
 
     /**
@@ -478,8 +478,8 @@ class Functions
         $date_check = Carbon::now()->subDays(7)->format('d/m/Y');
         $date = Carbon::now()->format('d/m/Y');
 
-        $request->merge(['start_date' => $date_check.' 00:00']);
-        $request->merge(['end_date' => $date.' 23:59']);
+        $request->merge(['start_date' => $date_check . ' 00:00']);
+        $request->merge(['end_date' => $date . ' 23:59']);
     }
 
     public static function addSearchDate($request)
@@ -491,7 +491,7 @@ class Functions
         $request->merge(['end_date' => $date]);
     }
 
-    public static function addSearchDateFormat($request,$format = 'd/m/Y')
+    public static function addSearchDateFormat($request, $format = 'd/m/Y')
     {
         $date_check = Carbon::now()->subDays(7)->format($format);
         $date = Carbon::now()->format($format);
