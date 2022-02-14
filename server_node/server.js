@@ -5,9 +5,9 @@ const https = require("https");
 const port = process.env.PORT || 2022;
 
 const fs = require('fs');
-const key = fs.readFileSync('C:\\laragon\\data\\mysql\\public_key.pem');
-const cert = fs.readFileSync('C:\\laragon\\data\\mysql\\client-cert.pem');
-const ca = fs.readFileSync('C:\\laragon\\data\\mysql\\ca-key.pem');
+const key = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/privkey.pem');
+const cert = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/cert.pem');
+const ca = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/chain.pem');
 const options = {
     key: key,
     cert: cert,
