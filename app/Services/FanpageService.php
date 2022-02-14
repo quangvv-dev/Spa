@@ -11,7 +11,7 @@ class FanpageService
     {
         $user_id = Auth::user()->id;
 
-        $token = $request->session()->has('login-facebook') ? $request->session()->get('login-facebook')->token : null;
+        $token = $request->session()->has('login-facebook1') ? $request->session()->get('login-facebook1')->token : null;
         $method = 'GET';
         $uri = 'https://graph.facebook.com/v8.0/me/accounts';
         $field = 'picture,id,name,access_token,tasks';
