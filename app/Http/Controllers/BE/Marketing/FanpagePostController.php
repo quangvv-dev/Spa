@@ -21,12 +21,9 @@ class FanpagePostController extends Controller
      */
     public function index(Request $request)
     {
-
-      dd( public_path());
         $source = Source::pluck('name', 'id')->toArray();
         $my_page = Fanpage::pluck('name', 'id')->toArray();
         $posts = FanpagePost::paginate(StatusCode::PAGINATE_20);
-//        dd($posts);
         if ($request->ajax()) {
             return view('marketing.fanpage_post.ajax', compact('posts'));
         }
