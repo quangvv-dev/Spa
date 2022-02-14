@@ -4,10 +4,10 @@ var connection=mysql.createPool({
 
     host:process.env.DB_HOST || 'localhost',
     // user:process.env.DB_USERNAME || 'root',
-    user:process.env.DB_USERNAME || 'root',
-    password:process.env.DB_PASSWORD || '',
+    user:process.env.DB_USERNAME || 'test-spa',
+    password:process.env.DB_PASSWORD || 's7bk0wu8YVC5LWU0',
     // password:process.env.DB_PASSWORD || '',
-    database:process.env.DB_DATABASE || 'crm-spa-branch'
+    database:process.env.DB_DATABASE || 'crm-spa-test'
 
 });
 module.exports=connection;
