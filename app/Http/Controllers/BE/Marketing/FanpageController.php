@@ -31,8 +31,8 @@ class FanpageController extends Controller
     {
         $fanpages = $this->fanpage->index($request)->paginate(StatusCode::PAGINATE_20);
         $source = Source::pluck('name', 'id')->toArray();
-        if ($request->session()->has('login-facebook')) {
-            $data_login_fb = $request->session()->get('login-facebook');
+        if ($request->session()->has('login-facebook1')) {
+            $data_login_fb = $request->session()->get('login-facebook1');
         } else {
             $data_login_fb = null;
         }
@@ -116,13 +116,13 @@ class FanpageController extends Controller
     public function callbackFB(Request $request)
     {
         $user = Socialite::driver('facebook')->user();
-        session(['login-facebook' => []]);
+        session(['login-facebook1' => $user]);
         return redirect('/marketing/fanpage');
     }
 
     public function removeAccount(Request $request)
     {
-        $request->session()->forget('login-facebook');
+        $request->session()->forget('login-facebook1');
         return redirect(route('marketing.fanpage.index'));
     }
 }
