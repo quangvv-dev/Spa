@@ -20,7 +20,6 @@ function userExists(seeding_number, arr) {
  * @constructor
  */
 exports.SetCustomers = (phone, recipientId, text, senderId) => {
-
     let FB_ID = senderId;
     let page_id = recipientId;
     model.CheckFanpage(recipientId, async function (err, rows) {

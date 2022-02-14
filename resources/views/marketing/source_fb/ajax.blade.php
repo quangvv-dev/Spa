@@ -9,7 +9,7 @@
             <th class="text-center">Nhóm dịch vụ</th>
             <th class="text-center nowrap">Ưu tiên sale</th>
             <th class="text-center nowrap">Duyệt</th>
-            <th class="text-center required" style="width: 10%;">Cập nhật</th>
+            <th class="text-center required" style="width: 10%;">Chi nhánh</th>
             <th class="text-center" style="width: 105px"><a class="text-white add_new"><i class="fa fa-plus"></i> Thêm</a></th>
         </tr>
         </thead>
@@ -23,7 +23,7 @@
                     <td class="text-center">{{$item->category_text}}</td>
                     <td class="text-center">{{$item->sale_text}}</td>
                     <td class="text-center"><input type="checkbox" class="onAccept" data-id="{{$item->id}}" {{$item->accept ? 'checked' : ''}}></td>
-                    <td class="text-center">{{$item->updated_at}}</td>
+                    <td class="text-center">{{@$item->branch->name}}</td>
                     <td class="text-center">
                         <a class="action-control edit mr-1" data-id="{{$item->id}}" data-item="{{$item}}"
                            href="javascript:void(0)" title="Lưu">

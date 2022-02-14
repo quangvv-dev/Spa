@@ -13,7 +13,9 @@
                             </div>
                             <div class="col-2">
                                 {!! Form::select('searchCategory',$categories, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn dịch vụ')) !!}
-
+                            </div>
+                            <div class="col-2">
+                                {!! Form::select('searchBranch',$branch_ids, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn chi nhánh')) !!}
                             </div>
                             <div class="col-2">
                                 <input name="searchName" type="text" class="form-control" placeholder="Tên source">

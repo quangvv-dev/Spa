@@ -24,6 +24,11 @@
                     {!! Form::select('sale_id[]', $sales,null, array('class' => 'select2 form-control sale_id','multiple'=>true)) !!}
                     <label id="phone-error" class="error" for="service_id"></label>
                 </div>
+                <div class="col-12">
+                    {!! Form::label('branch_id', 'Chọn chi nhánh', array('class' => 'control-label required')) !!}
+                    {!! Form::select('branch_id', $branch_ids,null, array('class' => 'select2 form-control','required'=>true)) !!}
+                    <label id="phone-error" class="error" for="service_id"></label>
+                </div>
 
             </div>
             <div class="modal-footer">

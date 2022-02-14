@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE\Marketing;
 
 use App\Constants\UserConstant;
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Services;
@@ -26,11 +27,12 @@ class SourceController extends Controller
 
         $categories = Category::pluck('name','id');
         $sales = User::where('department_id',2)->pluck('full_name','id');
+        $branch_ids = Branch::pluck('name','id');
         $marketings = User::where('department_id',3)->pluck('full_name','id')->prepend('', '');
         if($request->ajax()){
             return view('marketing.source_fb.ajax',compact('sources'));
         }
-        return view('marketing.source_fb.index', compact('sources','sales','marketings','categories'));
+        return view('marketing.source_fb.index', compact('sources','sales','marketings','categories','branch_ids'));
     }
 
     /**
@@ -59,6 +61,7 @@ class SourceController extends Controller
         if($request->sale_id){
             $data['sale_id'] = json_encode($request->sale_id);
         }
+        $data['branch_id'] = $request->branch_id;
         $data['mkt_id'] = Auth::user()->id;
 //        dd($data);
         Source::create($data);
