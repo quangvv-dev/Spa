@@ -368,7 +368,8 @@ class Functions
         ));
         $response = curl_exec($curl);
         curl_close($curl);
-        $error_code = json_decode($response)->errorCode;
+
+        $error_code = !empty(json_decode($response))?json_decode($response)->errorCode:404;
         if ($error_code == '000') {
             return 1;
         }

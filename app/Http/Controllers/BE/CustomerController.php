@@ -22,6 +22,7 @@ use App\Models\HistorySms;
 use App\Models\Order;
 use App\Models\PackageWallet;
 use App\Models\Schedule;
+use App\Models\SchedulesSms;
 use App\Models\Services;
 use App\Models\Status;
 use App\Models\Task;
@@ -587,9 +588,9 @@ class CustomerController extends Controller
         $before = $this->customerService->find($id);
         $data = [];
         if (isset($before) && $before) {
-            $category = CustomerGroup::where('customer_id', $before->id)->pluck('category_id')->toArray();
-
+//            $category = CustomerGroup::where('customer_id', $before->id)->pluck('category_id')->toArray();
             $customer = $this->customerService->update($input, $id);
+            SchedulesSms::where('status_customer', '<>', $customer->status_id)->delete();
             $check2 = RuleOutput::where('event', 'change_relation')->first();
 
             if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
@@ -611,14 +612,23 @@ class CustomerController extends Controller
 //                                $phone = Functions::convertPhone(@$customer->phone);
                                 $text = Functions::replaceTextForUser($input_raw, $text);
                                 $text = Functions::vi_to_en($text);
-                                $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
-                                if (isset($err) && $err) {
-                                    HistorySms::insert([
-                                        'phone' => @$customer->phone,
-                                        'campaign_id' => 0,
-                                        'message' => $text,
-                                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                        'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                if (empty($exactly_value)) {
+                                    $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
+                                    if (isset($err) && $err) {
+                                        HistorySms::insert([
+                                            'phone' => @$customer->phone,
+                                            'campaign_id' => 0,
+                                            'message' => $text,
+                                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                            'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                        ]);
+                                    }
+                                } else {
+                                    SchedulesSms::create([
+                                        'phone' => $customer->phone,
+                                        'content' => @$text,
+                                        'exactly_value' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                        'status_customer' => @$customer->status_id,
                                     ]);
                                 }
                             }
