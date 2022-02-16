@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Còn nợ:</div>
-                        <div class="col-7">{{@number_format($data['payment']-$data['gross_revenue'])}}</div>
+                        <div class="col-7">{{@number_format($data['all_total']-$data['gross_revenue'])}}</div>
                     </div>
                 </div>
                 <div class="progress progress-sm">
