@@ -297,31 +297,38 @@ class StatisticController extends Controller
             'card' => $payment3->where('payment_type', 2)->sum('price') + $payment_wallet2->where('payment_type', 2)->sum('price'),
             'CK' => $payment->where('payment_type', 4)->sum('price') + $payment_wallet3->where('payment_type', 4)->sum('price'),
         ];
-        $pay = ThuChi::search($input,'so_tien');
+        $payCurrent = ThuChi::when(isset($input['branch_id']) && $input['branch_id'], function ($query) use ($input) {
+            $query->where('branch_id', $input['branch_id']);
+        })->when(isset($input['start_date']) && isset($input['end_date']), function ($query) use ($input) {
+            $query->whereBetween('created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
+        });
+        $payTwice = clone $payCurrent;
+        $pay = $payCurrent->where('status', UserConstant::ACTIVE);
         $pay2 = clone $pay;
         $pay3 = clone $pay;
-
+        $payAll = clone $pay;
+        $payAll = $payAll->select('so_tien', 'danh_muc_thu_chi_id', \DB::raw('SUM(so_tien) AS sum_price'))
+            ->with('danhMucThuChi')->groupBy('danh_muc_thu_chi_id')->get();
+        $payStatus = $payTwice->select('so_tien', 'status', \DB::raw('SUM(so_tien) AS sum_price'))
+            ->groupBy('status')->get();
         $list_pay = [
             'money' => $pay2->where('type', 1)->sum('so_tien'),
             'card' => $pay3->where('type', 2)->sum('so_tien'),
             'CK' => $pay->where('type', 4)->sum('so_tien'),
         ];
 
-
-//        $orders = Order::returnRawData($input);
-
         $data = [
             'payment' => $all_payment,
             'wallet_payment' => $payment_wallet->sum('price'),
-//            'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
-//            'gross_revenue' => $orders->sum('gross_revenue'),
-//            'all_total' => $orders->sum('all_total'),
         ];
 
         if ($request->ajax()) {
-            return view('thu_chi.statistics.ajax', compact('list_payment', 'data', 'list_pay'));
+            return view('thu_chi.statistics.ajax', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus'));
         }
 
-        return view('thu_chi.statistics.index', compact('list_payment', 'data', 'list_pay'));
+        return view('thu_chi.statistics.index', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus'));
     }
 }

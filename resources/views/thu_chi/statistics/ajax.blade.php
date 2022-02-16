@@ -107,7 +107,7 @@
             <div id="piechart-1" style="margin-left: 15px"></div>
         </div>
         <div class="col-md-6">
-            <div id="piechart-3" style="margin-left: 15px"></div>
+            <div id="piechart-2" style="margin-left: 15px"></div>
         </div>
         <div class="col-md-6">
             <div id="piechart-4" style="margin-left: 15px"></div>
@@ -138,3 +138,57 @@
 </div>
 
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Danh mục', 'Số tiền'],
+                @foreach($payAll as $k =>$item)
+            ['{{ @$item->danhMucThuChi->name }}', {{ $item->sum_price }}],
+            @endforeach
+        ]);
+
+        var options = {
+            title: 'BĐ DUYỆT CHI THEO DANH MỤC',
+            width: 500,
+            height: 300,
+            hAxis: {
+                width: 200
+            }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-1'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Danh mục', 'Số tiền'],
+                @foreach($payStatus as $k =>$item)
+            ['{{ @$item->status==1?'Đã duyệt':'Chưa duyệt' }}', {{ $item->sum_price }}],
+            @endforeach
+        ]);
+
+        var options = {
+            title: 'BĐ PHÂN BỔ DUYỆT CHI',
+            width: 500,
+            height: 300,
+            hAxis: {
+                width: 200
+            }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-2'));
+
+        chart.draw(data, options);
+    }
+</script>
