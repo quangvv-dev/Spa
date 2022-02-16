@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE\Marketing;
 
 use App\Constants\StatusCode;
+use App\Models\Fanpage;
 use App\Models\Source;
 use App\Services\FanpageService;
 use Illuminate\Http\Request;
@@ -94,7 +95,10 @@ class FanpageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $fanpage = Fanpage::find($id);
+        $fanpage->used = $request->used;
+        $fanpage->source_id = $request->source_id;
+        $fanpage->save();
     }
 
     /**

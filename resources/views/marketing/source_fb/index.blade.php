@@ -62,6 +62,7 @@
             $('#name').val(item.name);
             $('.category_id').val(JSON.parse(item.category_id)).change();
             $('.sale_id').val(JSON.parse(item.sale_id)).change();
+            $('.branch_id').val(JSON.parse(item.branch_id)).change();
             $('#modalSourceFB').modal('show');
         })
 
