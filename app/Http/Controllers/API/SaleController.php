@@ -35,7 +35,7 @@ class SaleController extends BaseApiController
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
                 });
-            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            $orders = Order::select('id','member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
                 ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
