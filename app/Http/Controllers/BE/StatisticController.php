@@ -68,12 +68,11 @@ class StatisticController extends Controller
             $q->where('branch_id', $input['branch_id']);
         })->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
 
-
         $schedule = Schedule::getBooks2($input, 'id');
 
         $schedules = [
             'all_schedules' => $schedule->count(),
-            'become'        => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+            'become' => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
                 ->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count(),
@@ -97,7 +96,7 @@ class StatisticController extends Controller
         })->sortByDesc('price')->take(5);
 
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
-        $payment_wallet = PaymentWallet::search($input,'price');
+        $payment_wallet = PaymentWallet::search($input, 'price');
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
         //Status Revuenue
@@ -276,5 +275,48 @@ class StatisticController extends Controller
 
         return view('statistics.task_schedule', compact('users'));
 
+    }
+
+    public function chartPay(Request $request)
+    {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+        $input = $request->all();
+        $payment = PaymentHistory::search($input, 'price');
+        $payment2 = clone $payment;
+        $payment3 = clone $payment;
+        $payment_wallet = PaymentWallet::search($input, 'price');
+        $payment_wallet2 = clone $payment_wallet;
+        $payment_wallet3 = clone $payment_wallet;
+
+        $all_payment = $payment->sum('price');
+
+        $list_payment = [
+            'money' => $payment2->where('payment_type', 1)->sum('price'),
+            'card' => $payment3->where('payment_type', 2)->sum('price'),
+            'CK' => $payment->where('payment_type', 4)->sum('price'),
+        ];
+        $wallets = [
+            'money' => $payment_wallet->where('payment_type', 1)->sum('price'),
+            'card' => $payment_wallet2->where('payment_type', 2)->sum('price'),
+            'CK' => $payment_wallet3->where('payment_type', 4)->sum('price'),
+        ];
+
+        $orders = Order::returnRawData($input);
+
+        $data = [
+            'payment' => $all_payment,
+            'wallet_payment' => $payment_wallet->sum('price'),
+            'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
+            'gross_revenue' => $orders->sum('gross_revenue'),
+            'all_total' => $orders->sum('all_total'),
+        ];
+
+        if ($request->ajax()) {
+            return view('thu_chi.statistics.ajax', compact('list_payment','data'));
+        }
+
+        return view('thu_chi.statistics.index', compact('list_payment','data'));
     }
 }
