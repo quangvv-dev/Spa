@@ -111,7 +111,7 @@ class TaskController extends Controller
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
-        if ($request->ajax){
+        if ($request->ajax) {
             return back();
         }
         return redirect('tasks')->with('status', 'Tạo người dùng thành công');
@@ -306,8 +306,8 @@ class TaskController extends Controller
         if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
-        $users = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
-
+        $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::TP_SALE])
+            ->pluck('full_name', 'id')->toArray();
         $title = 'Danh sách công việc';
         $input = $request->all();
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
