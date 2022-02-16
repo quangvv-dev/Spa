@@ -10,7 +10,7 @@
     }
 </style>
 
-<div class="h4 text-center">THỰC THU</div>
+<div class="h4 text-center">SỐ LIỆU</div>
 <div class="row row-cards">
     <div class="col-md-4 col-xs-12">
         <div class="card overflow-hidden">

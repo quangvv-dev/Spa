@@ -278,6 +278,12 @@ class StatisticController extends Controller
 
     }
 
+    /**
+     * BĐ duyệt chi
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function chartPay(Request $request)
     {
         if (!$request->start_date) {

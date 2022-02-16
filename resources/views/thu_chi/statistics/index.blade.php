@@ -12,7 +12,7 @@
     <div class="col-md-12 col-lg-12" style="margin-top: 3%;">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title col-md-7 bold">THỐNG KÊ DOANH THU</h3>
+                <h3 class="card-title col-md-7 bold">THỐNG KÊ THU VÀ DUYỆT CHI</h3>
 
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row', 'id'=> 'gridForm','role'=>'form')) !!}
                 <div class="col-md-6">
