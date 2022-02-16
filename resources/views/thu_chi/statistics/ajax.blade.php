@@ -19,22 +19,21 @@
                 <div class="h3 font-weight-bold mb-4 font-30">
                     {{@number_format($data['payment'] + $data['wallet_payment'] - $data['used'])}}</div>
                 <div class="row">
+                    {{--<div class="col-12 row">--}}
+                    {{--<div class="title col-5">Doanh thu:</div>--}}
+                    {{--<div class="col-7">{{@number_format($data['gross_revenue'])}}</div>--}}
+                    {{--</div>--}}
                     <div class="col-12 row">
-                        <div class="title col-5">Doanh thu:</div>
-                        <div class="col-7">{{@number_format($data['gross_revenue'])}}</div>
+                        <div class="title col-5">Tiền mặt:</div>
+                        <div class="col-7">{{number_format($list_payment['money'])}}</div>
                     </div>
                     <div class="col-12 row">
-                        <div class="title col-5">Thu nợ:</div>
-                        <div
-                            class="col-7">{{$data['payment']>$data['gross_revenue'] ? number_format($data['payment']-$data['gross_revenue']):0}}</div>
+                        <div class="title col-5">Chuyển khoản:</div>
+                        <div class="col-7">{{@number_format($list_payment['CK'])}}</div>
                     </div>
                     <div class="col-12 row">
-                        <div class="title col-5">Nạp ví:</div>
-                        <div class="col-7">{{@number_format($data['wallet_payment'])}}</div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="title col-5">Còn nợ:</div>
-                        <div class="col-7">{{@number_format($data['payment']-$data['gross_revenue'])}}</div>
+                        <div class="title col-5">Thẻ:</div>
+                        <div class="col-7">{{@number_format($list_payment['card'])}}</div>
                     </div>
                 </div>
                 <div class="progress progress-sm">
@@ -47,25 +46,22 @@
     <div class="col-md-4 col-xs-12">
         <div class="card  overflow-hidden bg-gradient-gray text-white">
             <div class="card-body text-center">
-                <div class="h5">Tổng doanh số</div>
+                <div class="h5">Tổng chi</div>
                 <div class="h3 font-weight-bold mb-4 font-30">
-                    <span class="">{{@number_format($data['all_total'] + $wallets['revenue'])}}</span>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">Sản phẩm:</div>
-                    <div class="col-7">{{@number_format($products['all_total'])}}</div>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">Dịch vụ:</div>
-                    <div class="col-7">{{@number_format($services['all_total'])}}</div>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">S.phẩm và Dịch vụ:</div>
-                    <div class="col-7">{{@number_format($services['combo_total'])}}</div>
-                </div>
-                <div class="col-12 row">
-                    <div class="title col-5">Nạp ví:</div>
-                    <div class="col-7">{{@number_format($wallets['revenue'])}}</div>
+                    {{@number_format($list_pay['money'] + $list_pay['CK'] +$list_pay['card'])}}</div>
+                <div class="row">
+                    <div class="col-12 row">
+                        <div class="title col-5">Tiền mặt:</div>
+                        <div class="col-7">{{number_format($list_pay['money'])}}</div>
+                    </div>
+                    <div class="col-12 row">
+                        <div class="title col-5">Chuyển khoản:</div>
+                        <div class="col-7">{{@number_format($list_pay['CK'])}}</div>
+                    </div>
+                    <div class="col-12 row">
+                        <div class="title col-5">Thẻ:</div>
+                        <div class="col-7">{{@number_format($list_pay['card'])}}</div>
+                    </div>
                 </div>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
@@ -74,36 +70,32 @@
         </div>
     </div>
 
-    {{--<div class="col-md-4 col-xs-12">--}}
-        {{--<div class="card  overflow-hidden">--}}
-            {{--<div class="card-body text-center bg-gradient-gray text-white">--}}
-                {{--<div class="h5">Nguồn tiền từ đơn hàng</div>--}}
-                {{--<div--}}
-                    {{--class="h3 font-weight-bold mb-4 font-30">{{@number_format($data['payment'] + $wallets['payment'])}}</div>--}}
-                {{--<div class="row">--}}
-                    {{--<div class="col-12 row">--}}
-                        {{--<div class="title col-5">Tiền mặt:</div>--}}
-                        {{--<div class="col-7">{{@number_format($list_payment['money'])}}</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-12 row">--}}
-                        {{--<div class="title col-5">Thẻ:</div>--}}
-                        {{--<div class="col-7">{{@number_format($list_payment['card'])}}</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-12 row">--}}
-                        {{--<div class="title col-5">Chuyển khoản:</div>--}}
-                        {{--<div class="col-7">{{@number_format($list_payment['CK'])}}</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-12 row">--}}
-                        {{--<div class="title col-5">Tiêu từ ví:</div>--}}
-                        {{--<div class="col-7">{{@number_format($wallets['used'])}}</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="progress progress-sm">--}}
-                    {{--<div class="progress-bar bg-gradient-orange" style="width: 100%"></div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
+    <div class="col-md-4 col-xs-12">
+        <div class="card  overflow-hidden bg-gradient-gray text-white">
+            <div class="card-body text-center">
+                <div class="h5">Còn lại</div>
+                <div class="h3 font-weight-bold mb-4 font-30">
+                    {{@number_format(($data['payment'] + $data['wallet_payment'] - $data['used'])-($list_pay['money'] + $list_pay['CK'] +$list_pay['card']))}}</div>
+                <div class="row">
+                    <div class="col-12 row">
+                        <div class="title col-5">Tiền mặt:</div>
+                        <div class="col-7">{{number_format($list_payment['money'] - $list_pay['money'])}}</div>
+                    </div>
+                    <div class="col-12 row">
+                        <div class="title col-5">Chuyển khoản:</div>
+                        <div class="col-7">{{@number_format($list_payment['CK'] - $list_pay['CK'])}}</div>
+                    </div>
+                    <div class="col-12 row">
+                        <div class="title col-5">Thẻ:</div>
+                        <div class="col-7">{{@number_format($list_payment['card'] - $list_pay['card'])}}</div>
+                    </div>
+                </div>
+                <div class="progress progress-sm">
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

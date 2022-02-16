@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\PaymentWallet;
 use App\Models\Status;
+use App\Models\ThuChi;
 use App\Models\Trademark;
 use App\Models\WalletHistory;
 use App\User;
@@ -289,34 +290,38 @@ class StatisticController extends Controller
         $payment_wallet = PaymentWallet::search($input, 'price');
         $payment_wallet2 = clone $payment_wallet;
         $payment_wallet3 = clone $payment_wallet;
-
         $all_payment = $payment->sum('price');
 
         $list_payment = [
-            'money' => $payment2->where('payment_type', 1)->sum('price'),
-            'card' => $payment3->where('payment_type', 2)->sum('price'),
-            'CK' => $payment->where('payment_type', 4)->sum('price'),
+            'money' => $payment2->where('payment_type', 1)->sum('price') + $payment_wallet->where('payment_type', 1)->sum('price'),
+            'card' => $payment3->where('payment_type', 2)->sum('price') + $payment_wallet2->where('payment_type', 2)->sum('price'),
+            'CK' => $payment->where('payment_type', 4)->sum('price') + $payment_wallet3->where('payment_type', 4)->sum('price'),
         ];
-        $wallets = [
-            'money' => $payment_wallet->where('payment_type', 1)->sum('price'),
-            'card' => $payment_wallet2->where('payment_type', 2)->sum('price'),
-            'CK' => $payment_wallet3->where('payment_type', 4)->sum('price'),
+        $pay = ThuChi::search($input,'so_tien');
+        $pay2 = clone $pay;
+        $pay3 = clone $pay;
+
+        $list_pay = [
+            'money' => $pay2->where('type', 1)->sum('so_tien'),
+            'card' => $pay3->where('type', 2)->sum('so_tien'),
+            'CK' => $pay->where('type', 4)->sum('so_tien'),
         ];
 
-        $orders = Order::returnRawData($input);
+
+//        $orders = Order::returnRawData($input);
 
         $data = [
             'payment' => $all_payment,
             'wallet_payment' => $payment_wallet->sum('price'),
-            'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
-            'gross_revenue' => $orders->sum('gross_revenue'),
-            'all_total' => $orders->sum('all_total'),
+//            'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
+//            'gross_revenue' => $orders->sum('gross_revenue'),
+//            'all_total' => $orders->sum('all_total'),
         ];
 
         if ($request->ajax()) {
-            return view('thu_chi.statistics.ajax', compact('list_payment','data'));
+            return view('thu_chi.statistics.ajax', compact('list_payment', 'data', 'list_pay'));
         }
 
-        return view('thu_chi.statistics.index', compact('list_payment','data'));
+        return view('thu_chi.statistics.index', compact('list_payment', 'data', 'list_pay'));
     }
 }
