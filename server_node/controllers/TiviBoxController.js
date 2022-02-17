@@ -75,7 +75,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
 
                                                     let exisits = userExists(phone, list);
                                                     if (exisits == false) {
-
+                                                        console.log('ngon ngay');
                                                         model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
                                                                 if (err) {
                                                                     console.log(err);
