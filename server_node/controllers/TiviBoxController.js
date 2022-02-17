@@ -22,6 +22,8 @@ function userExists(seeding_number, arr) {
 exports.SetCustomers = (phone, recipientId, text, senderId) => {
     let FB_ID = senderId;
     let page_id = recipientId;
+    console.log(123456,FB_ID,page_id);
+
     model.CheckFanpage(recipientId, async function (err, rows) {
         console.log('ngon ngay12');
         if (err) {
