@@ -178,7 +178,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                                             console.log(err);
                                                         } else {
                                                             if (vl.length <= 0) {
-                                                                model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, duplicate, 0, 1, 1, created_at, function (err) {
+                                                                model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, 0, 1, 1, created_at, function (err) {
                                                                     if (err) {
                                                                         console.log(err);
                                                                     } else {
