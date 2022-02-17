@@ -23,9 +23,11 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
     let FB_ID = senderId;
     let page_id = recipientId;
     model.CheckFanpage(recipientId, async function (err, rows) {
+        console.log('ngon ngay12');
         if (err) {
             console.log(err, 'err');
         } else {
+            console.log('ngon ngay13');
             if (rows.length > 0) {
                 //call api get name with PSID
                 let url = 'https://graph.facebook.com/v10.0/' + senderId + '/?access_token=' + rows[0].access_token;
