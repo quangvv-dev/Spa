@@ -56,9 +56,11 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                 let post_id = 0;
 
                                 model.CheckPhone(phone, function (err, checkPhone) {
+                                    console.log('ngon ngay1');
                                         if (err) {
                                             console.log(err);
                                         } else {
+                                            console.log('ngon ngay2');
                                             if (checkPhone.length > 0) {
                                                 duplicate = 1;
                                                 user_id = checkPhone[0].user_id;
@@ -72,10 +74,9 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                             }
 
                                             model.ListSeeding(function (err, list) {
-
+                                                console.log('ngon ngay3');
                                                     let exisits = userExists(phone, list);
                                                     if (exisits == false) {
-                                                        console.log('ngon ngay');
                                                         model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
                                                                 if (err) {
                                                                     console.log(err);
