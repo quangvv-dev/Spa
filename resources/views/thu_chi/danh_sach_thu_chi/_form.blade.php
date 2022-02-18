@@ -36,6 +36,13 @@
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
+                            {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
+                            {!! Form::select('branch_id',$branches,@$doc->branch_id, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn chi nhánh')) !!}
+                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group required {{ $errors->has('duyet_id') ? 'has-error' : '' }}">
                             {!! Form::label('duyet_id', 'Người duyệt', array('class' => ' required')) !!}
                             {!! Form::select('duyet_id',$user_duyet,@$doc->duyet_id, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn người duyệt')) !!}

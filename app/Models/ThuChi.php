@@ -11,7 +11,8 @@ class ThuChi extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
+
 
     public static function search($param,$select="*")
     {
