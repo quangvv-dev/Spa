@@ -10,6 +10,11 @@ var connection=mysql.createPool({
     database:process.env.DB_DATABASE || 'crm-spa-test'
 
 });
+if(connection){
+    console.log('login thành công');
+} else {
+    console.log('thất bại');
+}
 module.exports=connection;
 
 // var mysql=require('mysql');
