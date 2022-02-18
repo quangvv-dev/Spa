@@ -20,17 +20,10 @@ function userExists(seeding_number, arr) {
  * @constructor
  */
 exports.SetCustomers = (phone, recipientId, text, senderId) => {
+
     let FB_ID = senderId;
     let page_id = recipientId;
-    console.log(456,FB_ID,page_id);
-
-    model.ListSeeding( function (err, rows) {
-        console.log(1234,rows);
-    })
-
-    model.CheckFanpage('104351897844467', async function (err, rows) {
-
-        console.log(1234,rows);
+    model.CheckFanpage(recipientId, async function (err, rows) {
         if (err) {
             console.log(err, 'err');
         } else {
@@ -42,8 +35,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     await axios.get(url).then(response => {
                         name = response.data.last_name + ' ' + response.data.first_name;
                     });
-                    console.log('name',name);
-
                 } catch (err) {
                     console.log('Không Hiển Thị Tên')
                 } finally {
@@ -51,7 +42,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     console.log(name, 'Name Customer');
                     const created_at = new Date();
                     model.CheckSource(rows[0].source_id, function (err, row2) {
-                        console.log('checksource 123');
                         if (err) {
                             console.log(err);
                         } else {
@@ -83,14 +73,16 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                             }
 
                                             model.ListSeeding(function (err, list) {
+
                                                     let exisits = userExists(phone, list);
                                                     if (exisits == false) {
+
                                                         model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
                                                                 if (err) {
                                                                     console.log(err);
                                                                 } else {
                                                                     if (vl.length <= 0) {
-                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1,  created_at, function (err) {
+                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1, created_at, function (err) {
                                                                             if (err) {
                                                                                 console.log(err);
                                                                             } else {
@@ -182,7 +174,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                                             console.log(err);
                                                         } else {
                                                             if (vl.length <= 0) {
-                                                                model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, 0, 1, 1, created_at, function (err) {
+                                                                model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, duplicate, 0, 1, 1, created_at, function (err) {
                                                                     if (err) {
                                                                         console.log(err);
                                                                     } else {

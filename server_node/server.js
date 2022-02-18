@@ -8,7 +8,6 @@ const fs = require('fs');
 const key = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/privkey.pem');
 const cert = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/cert.pem');
 const ca = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/chain.pem');
-
 const options = {
     key: key,
     cert: cert,
@@ -50,18 +49,12 @@ app.post('/webhook', function (req, res) {
                         text = text.replace("o", "0");
                         console.log('Noi dung tin nhan', text); // In tin nhắn người dùng
                         let letr = text.match(/\d+/g);
-                        console.log(123456788,letr);
-
                         if (!letr){
-                            console.log(123456789);
                             return false;
                         }
                         letr.every(function (i) {
-                            console.log(121212,i);
                             if (i.length === 10) {
-                                console.log(456456);
-
-                                // controller.SetCustomers(i, recipientId, message.message.text, senderId);
+                                controller.SetCustomers(i, recipientId, message.message.text, senderId);
                                 return false;
                             }
                         })
