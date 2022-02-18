@@ -37,13 +37,6 @@ connection.getConnection(function(err, connection) {
     // ...
 });
 
-connection.connect((err) => {
-    if(err){
-        reject(222,err);
-    }
-    resolve(connection);
-});
-
 
 app.get('/', (req, res) => {
     res.send("Home page. Server running okay.");
