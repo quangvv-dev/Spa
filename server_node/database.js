@@ -2,6 +2,9 @@ var mysql=require('mysql');
 require('dotenv').config();
 var connection=mysql.createPool({
 
+    connectionLimit: 1000,
+    connectTimeout: 60 * 60 * 1000,
+    acquireTimeout: 60 * 60 * 1000,
     host:process.env.DB_HOST || 'localhost',
     // user:process.env.DB_USERNAME || 'root',
     user:process.env.DB_USERNAME || 'test-spa',
