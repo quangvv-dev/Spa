@@ -22,13 +22,12 @@ function userExists(seeding_number, arr) {
 exports.SetCustomers = (phone, recipientId, text, senderId) => {
     let FB_ID = senderId;
     let page_id = recipientId;
-    console.log(123456,FB_ID,page_id);
-
     model.CheckFanpage(recipientId, async function (err, rows) {
         if (err) {
             console.log(err, 'err');
         } else {
             if (rows.length > 0) {
+                console.log(123,rows);
                 //call api get name with PSID
                 let url = 'https://graph.facebook.com/v10.0/' + senderId + '/?access_token=' + rows[0].access_token;
                 var name = 'Người dùng Facebook';
@@ -36,6 +35,8 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     await axios.get(url).then(response => {
                         name = response.data.last_name + ' ' + response.data.first_name;
                     });
+                    console.log('name',name);
+
                 } catch (err) {
                     console.log('Không Hiển Thị Tên')
                 } finally {
@@ -43,6 +44,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     console.log(name, 'Name Customer');
                     const created_at = new Date();
                     model.CheckSource(rows[0].source_id, function (err, row2) {
+                        console.log('checksource 123');
                         if (err) {
                             console.log(err);
                         } else {
