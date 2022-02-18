@@ -56,8 +56,9 @@ app.post('/webhook', function (req, res) {
                             return false;
                         }
                         letr.every(function (i) {
-                            console.log(121212);
+                            console.log(121212,i);
                             if (i.length === 10) {
+                                console.log(456456);
                                 controller.SetCustomers(i, recipientId, message.message.text, senderId);
                                 return false;
                             }
