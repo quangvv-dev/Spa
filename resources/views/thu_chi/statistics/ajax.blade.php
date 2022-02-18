@@ -109,30 +109,10 @@
         <div class="col-md-6">
             <div id="piechart-2" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
-            <div id="piechart-4" style="margin-left: 15px"></div>
-        </div>
-        <div class="col-md-6">
-            <div id="piechart-5" style="margin-left: 15px"></div>
-        </div>
-        <div class="col-md-6">
-            <div id="piechart-6" style="margin-left: 15px"></div>
-        </div>
-        <div class="col-md-6">
-            <div id="piechart-7" style="margin-left: 15px"></div>
-        </div>
-        <div class="col-md-6">
-            <div id="piechart-8" style="margin-left: 15px"></div>
-        </div>
     </div>
     <div class="row row-cards">
         <div class="col-md-12">
-            <div id="column" style="margin-left: 15px"></div>
-        </div>
-    </div>
-    <div class="row row-cards">
-        <div class="col-md-12">
-            <div id="column2" style="margin-left: 15px"></div>
+            <div id="barchart" style="overflow-x: scroll;overflow-y: hidden;margin-left: 15px"></div>
         </div>
     </div>
 </div>
@@ -191,4 +171,51 @@
 
         chart.draw(data, options);
     }
+</script>
+{{--Chi toàn bộ các chi nhánh--}}
+<script>
+    google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
+    var heights = {{count($payBranch)*70}}
+    function drawBasic() {
+        var data = google.visualization.arrayToDataTable([
+                @if(count($payBranch))
+            ['Năm', 'Tổng chi', {role: 'annotation'}],
+                @foreach($payBranch as $k =>$item1)
+            ['{{@$item1->branch->name}}',{{$item1->sum_price}}, '{{number_format($item1->sum_price)}}'],
+                @endforeach
+                @else
+            ['Năm', 0, '#fffff', '0%'],
+            @endif
+
+        ]);
+
+        var options = {
+            title: 'THỐNG KÊ DUYỆT CHI TOÀN HỆ THỐNG (VNĐ)',
+            height: heights,
+            width: '100%',
+            titleFontSize: 13,
+            chartArea: {
+                height: '100%',
+                left: 150,
+                top: 70,
+            },
+            vAxis: {
+                textStyle: {
+                    bold: true,
+                },
+            },
+            annotations: {
+                highContrast: false,
+                textStyle: {
+                    color: '#000000',
+                    fontSize: 11,
+                    bold: true
+                }
+            },
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('barchart'));
+        chart.draw(data, options);
+    };
+    // column chart
 </script>

@@ -316,10 +316,13 @@ class StatisticController extends Controller
         $pay2 = clone $pay;
         $pay3 = clone $pay;
         $payAll = clone $pay;
+        $payBranch = clone $pay;
         $payAll = $payAll->select('so_tien', 'danh_muc_thu_chi_id', \DB::raw('SUM(so_tien) AS sum_price'))
             ->with('danhMucThuChi')->groupBy('danh_muc_thu_chi_id')->get();
         $payStatus = $payTwice->select('so_tien', 'status', \DB::raw('SUM(so_tien) AS sum_price'))
             ->groupBy('status')->get();
+        $payBranch = $payBranch->select('so_tien', 'branch_id', \DB::raw('SUM(so_tien) AS sum_price'))->with('branch')
+            ->groupBy('branch_id')->orderByDesc('sum_price')->get();
         $list_pay = [
             'money' => $pay2->where('type', 1)->sum('so_tien'),
             'card' => $pay3->where('type', 2)->sum('so_tien'),
@@ -332,9 +335,9 @@ class StatisticController extends Controller
         ];
 
         if ($request->ajax()) {
-            return view('thu_chi.statistics.ajax', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus'));
+            return view('thu_chi.statistics.ajax', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus','payBranch'));
         }
 
-        return view('thu_chi.statistics.index', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus'));
+        return view('thu_chi.statistics.index', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus','payBranch'));
     }
 }
