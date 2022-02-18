@@ -25,6 +25,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
     console.log(456,FB_ID,page_id);
 
     model.CheckFanpage('104351897844467', async function (err, rows) {
+
         console.log(1234,rows);
         if (err) {
             console.log(err, 'err');
