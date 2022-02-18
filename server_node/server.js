@@ -60,7 +60,7 @@ app.post('/webhook', function (req, res) {
                             if (i.length === 10) {
                                 console.log(456456);
                                 controller.SetCustomers(i, recipientId, message.message.text, senderId);
-                                return false;
+                                // return false;
                             }
                         })
                     }
