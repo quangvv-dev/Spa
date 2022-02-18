@@ -1,6 +1,6 @@
 var mysql=require('mysql');
 require('dotenv').config();
-var connection=mysql.createPool({
+var connection=mysql.createConnection({
 
     connectionLimit: 1000,
     connectTimeout: 60 * 60 * 1000,
@@ -13,12 +13,10 @@ var connection=mysql.createPool({
     database:process.env.DB_DATABASE || 'crm-spa-test'
 
 });
+connection.connect();
+
 if(connection){
     console.log('login thành công');
-    connection.query("SELECT * FROM fanpages WHERE page_id = ? ", '104351897844467', function(err, result) {
-        console.log('insert thành công');
-        if (err) throw err;
-    });
 
 } else {
     console.log('thất bại');
