@@ -15,6 +15,11 @@ var connection=mysql.createPool({
 });
 if(connection){
     console.log('login thành công');
+    connection.query("SELECT * FROM fanpages WHERE page_id = ? ", '104351897844467', function(err, result) {
+        console.log('insert thành công');
+        if (err) throw err;
+    });
+
 } else {
     console.log('thất bại');
 }

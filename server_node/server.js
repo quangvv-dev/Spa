@@ -8,7 +8,6 @@ const fs = require('fs');
 const key = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/privkey.pem');
 const cert = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/cert.pem');
 const ca = fs.readFileSync('/etc/letsencrypt/live/testspa.adamtech.vn/chain.pem');
-var db = require('../database');
 
 const options = {
     key: key,
@@ -62,10 +61,6 @@ app.post('/webhook', function (req, res) {
                             if (i.length === 10) {
                                 console.log(456456);
 
-                                db.query("SELECT * FROM fanpages WHERE page_id = ? ", '104351897844467', function(err, result) {
-                                    console.log('insert thành công');
-                                    if (err) throw err;
-                                });
                                 // controller.SetCustomers(i, recipientId, message.message.text, senderId);
                                 return false;
                             }
