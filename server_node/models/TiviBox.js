@@ -32,8 +32,8 @@ var TiviBox = {
         return db.query("SELECT * FROM sources WHERE id = ? ", [source_id], callback);
     },
 
-    CreateCustomer: function (source_id, name, phone, message, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, status, expired_time_boolean, created_at, callback) {
-        return db.query("INSERT INTO customers (source_id,full_name,phone,user_id,mkt_id,post_id,FB_ID, page_id,status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)", [source_id, name, phone, user_id, mkt_id, post_id, FB_ID, page_id, status, created_at, created_at], callback);
+    CreateCustomer: function (source_id, name, phone, message, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, status, created_at, callback) {
+        return db.query("INSERT INTO customers (source_id,full_name,phone,message,telesale_id,mkt_id,post_id,FB_ID, page_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)", [source_id, name, phone, message, user_id, mkt_id, post_id, FB_ID, page_id, created_at, created_at], callback);
     },
 
     UpdateSource: function (source_id, position, callback) {

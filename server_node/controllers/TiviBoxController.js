@@ -81,7 +81,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                     console.log(err);
                                                                 } else {
                                                                     if (vl.length <= 0) {
-                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1, created_at, function (err) {
+                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1,  created_at, function (err) {
                                                                             if (err) {
                                                                                 console.log(err);
                                                                             } else {
