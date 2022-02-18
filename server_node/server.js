@@ -56,6 +56,7 @@ app.post('/webhook', function (req, res) {
                             return false;
                         }
                         letr.every(function (i) {
+                            console.log(121212);
                             if (i.length === 10) {
                                 controller.SetCustomers(i, recipientId, message.message.text, senderId);
                                 return false;
