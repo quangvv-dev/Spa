@@ -22,12 +22,13 @@ function userExists(seeding_number, arr) {
 exports.SetCustomers = (phone, recipientId, text, senderId) => {
     let FB_ID = senderId;
     let page_id = recipientId;
+    console.log(456,FB_ID,page_id);
     model.CheckFanpage(recipientId, async function (err, rows) {
+        console.log(1234,rows);
         if (err) {
             console.log(err, 'err');
         } else {
             if (rows.length > 0) {
-                console.log(123,rows);
                 //call api get name with PSID
                 let url = 'https://graph.facebook.com/v10.0/' + senderId + '/?access_token=' + rows[0].access_token;
                 var name = 'Người dùng Facebook';

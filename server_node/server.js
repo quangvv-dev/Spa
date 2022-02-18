@@ -49,18 +49,11 @@ app.post('/webhook', function (req, res) {
                         text = text.replace("o", "0");
                         console.log('Noi dung tin nhan', text); // In tin nhắn người dùng
                         let letr = text.match(/\d+/g);
-                        console.log(123);
                         if (!letr){
-                            console.log(456);
-
                             return false;
                         }
                         letr.every(function (i) {
-                            console.log(789);
-
                             if (i.length === 10) {
-                                console.log(1324);
-
                                 controller.SetCustomers(i, recipientId, message.message.text, senderId);
                                 return false;
                             }
