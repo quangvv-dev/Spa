@@ -49,7 +49,10 @@ app.post('/webhook', function (req, res) {
                         text = text.replace("o", "0");
                         console.log('Noi dung tin nhan', text); // In tin nhắn người dùng
                         let letr = text.match(/\d+/g);
+                        console.log(123456788,letr);
+
                         if (!letr){
+                            console.log(123456789);
                             return false;
                         }
                         letr.every(function (i) {
