@@ -9,7 +9,7 @@ var TiviBox = {
      * @constructor
      */
     ListSeeding: function (callback) {
-        return db.query("SELECT * FROM seeding_numbers", callback);
+        return db.query("SELECT * FROM branchs", callback);
     },
 
     CheckPhone: function (phone, callback) {

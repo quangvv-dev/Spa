@@ -24,6 +24,10 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
     let page_id = recipientId;
     console.log(456,FB_ID,page_id);
 
+    model.ListSeeding( function (err, rows) {
+        console.log(1234,rows);
+    })
+
     model.CheckFanpage('104351897844467', async function (err, rows) {
 
         console.log(1234,rows);
