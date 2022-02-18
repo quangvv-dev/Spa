@@ -1,10 +1,7 @@
 var mysql=require('mysql');
 require('dotenv').config();
-var connection=mysql.createConnection({
+var connection=mysql.createPool({
 
-    connectionLimit: 1000,
-    connectTimeout: 60 * 60 * 1000,
-    acquireTimeout: 60 * 60 * 1000,
     host:process.env.DB_HOST || 'localhost',
     // user:process.env.DB_USERNAME || 'root',
     user:process.env.DB_USERNAME || 'test-spa',
@@ -13,14 +10,6 @@ var connection=mysql.createConnection({
     database:process.env.DB_DATABASE || 'crm-spa-test'
 
 });
-connection.connect();
-
-if(connection){
-    console.log('login thành công');
-
-} else {
-    console.log('thất bại');
-}
 module.exports=connection;
 
 // var mysql=require('mysql');
