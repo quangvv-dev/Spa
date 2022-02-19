@@ -369,7 +369,7 @@ class Functions
         $response = curl_exec($curl);
         curl_close($curl);
 
-        $error_code = !empty(json_decode($response))?json_decode($response)->errorCode:404;
+        $error_code = !empty(json_decode($response)) ? json_decode($response)->errorCode : 404;
         if ($error_code == '000') {
             return 1;
         }
@@ -420,11 +420,15 @@ class Functions
      */
     public static function sumOrder($id)
     {
-        $total = Order::select('id')->where('member_id', $id)->count();
+        $total = Order::select('id', 'gross_revenue')->where('member_id', $id);
 //        $payment = Order::where('member_id', $id)->sum('gross_revenue');
 //        $wallet = WalletHistory::where('customer_id', $id)->sum('order_price');
 //        $total = (int)$payment + (int)$wallet;
-        return $total;
+        $money = [
+            'total' => $total->count(),
+            'payment' => $total->sum('gross_revenue'),
+        ];
+        return $money;
     }
 
     public static function getStatusWithCode($code)
@@ -442,20 +446,24 @@ class Functions
     public static function updateRank($customer_id)
     {
         $total = Functions::sumOrder($customer_id);
+        $customer = Customer::find($customer_id);
+        $statusVip = Functions::getStatusWithCode('khach_hang_vip');
+
         $silver = setting('silver') ?: 0;
         $gold = setting('gold') ?: 0;
         $platinum = setting('platinum') ?: 0;
-//        if (isset($silver) && isset($gold) && isset($platinum) && $silver > 0 && $gold > 0 && $platinum > 0) {
-        if (isset($silver) && isset($gold) && isset($platinum)) {
-            if ($silver <= $total && $total < $gold) {
+        if (isset($silver) && isset($gold) && isset($platinum) && $customer->status != $statusVip) {
+            if ($silver <= $total['total']) {
                 $status = Functions::getStatusWithCode('nguoi_mua_hang');
-            } elseif ($gold <= $total && $total > $silver) {
+            } elseif ($gold <= $total['total']) {
                 $status = Functions::getStatusWithCode('khach_hang');
-            } elseif ($platinum <= $total) {
-                $status = Functions::getStatusWithCode('cong_tac_vien');
+            }
+            if ($platinum <= $total['payment']) {
+                $status = $statusVip;
             }
             if (isset($status) && $status) {
-                Customer::find($customer_id)->update(['status_id' => $status]);
+                $customer->status_id = $status;
+                $customer->save();
             }
         }
         return 1;
