@@ -131,6 +131,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
             if (rows.length > 0) {
                 const created_at = new Date();
                 model.CheckSource(rows[0].source_id, function (err, row2) {
+                    console.log(234234,row2);
                     if (err) {
                         console.log(err);
                     } else {
