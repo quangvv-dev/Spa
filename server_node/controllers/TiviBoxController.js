@@ -24,7 +24,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
     let FB_ID = senderId;
     let page_id = recipientId;
     model.CheckFanpage(recipientId, async function (err, rows) {
-        console.log(11111,rows);
         if (err) {
             console.log(err, 'err');
         } else {
@@ -34,6 +33,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                 var name = 'Người dùng Facebook';
                 try {
                     await axios.get(url).then(response => {
+                        console.log(1231234,response);
                         name = response.data.last_name + ' ' + response.data.first_name;
                     });
                 } catch (err) {
@@ -43,7 +43,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     console.log(name, 'Name Customer');
                     const created_at = new Date();
                     model.CheckSource(rows[0].source_id, function (err, row2) {
-                        console.log(22222,row2);
                         if (err) {
                             console.log(err);
                         } else {
