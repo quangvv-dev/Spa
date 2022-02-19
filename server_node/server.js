@@ -17,26 +17,6 @@ const server = https.createServer(options, app);
 // const server = http.createServer(app);
 const model = require("./models/TiviBox");
 
-var mysql=require('mysql');
-var connection=mysql.createPool({
-
-    host: 'localhost',
-    user: 'root',
-    // user:process.env.DB_USERNAME || 'test-spa',
-    // password:process.env.DB_PASSWORD || 's7bk0wu8YVC5LWU0',
-    password: 'bITt@wO2uR3*',
-    database: 'crm-spa-test'
-});
-
-connection.getConnection(function(err, connection) {
-    if(err){
-        console.log(err);
-    }else {
-        console.log('passed')
-    }
-    // ...
-});
-
 
 app.get('/', (req, res) => {
     res.send("Home page. Server running okay.");
