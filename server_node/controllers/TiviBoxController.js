@@ -51,7 +51,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                 let new_position = 0;
                                 let array = JSON.parse(row2[0].sale_id);
                                 let user_id = array[row2[0].position];
-                                let mkt_id = row2[0].user_id;
+                                let mkt_id = row2[0].mkt_id;
                                 if (row2[0].position < array.length - 1 && array.length > 1) {
                                     new_position = row2[0].position + 1;
                                 }
