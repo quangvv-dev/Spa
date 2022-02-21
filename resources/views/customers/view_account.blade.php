@@ -285,7 +285,7 @@
                                             <li><a href="#tab6" id="click_tab_6" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Đơn hàng</a></li>
                                             <li><a href="#tab8" id="click_tab_8" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Công việc</a></li>
+                                                   data-toggle="tab">Lịch CSKH</a></li>
                                             @if(empty($permissions) || !in_array('package.customer',$permissions))
                                                 <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                        data-toggle="tab">Ví tiền</a></li>

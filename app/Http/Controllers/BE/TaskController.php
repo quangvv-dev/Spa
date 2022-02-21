@@ -59,9 +59,7 @@ class TaskController extends Controller
         }
 //        $user = User::whereIn('department_id',[UserConstant::TELESALES,UserConstant::WAITER,UserConstant::CSKH]);
         $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id')
-            ->with(['user' => function ($query) {
-                $query->select('avatar');
-            }])->get();
+            ->with('user')->get();
         $new = [];
         $done = [];
         $fail = [];
