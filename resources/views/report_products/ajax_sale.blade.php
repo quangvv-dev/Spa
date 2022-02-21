@@ -172,7 +172,7 @@
             <td class="text-center bold">{{@number_format($order_old)}}</td>
             <td class="text-center bold">{{@number_format($revenue_old)}}</td>
             <td class="text-center bold">{{@number_format($payment_old)}}</td>
-            <td class="text-center bold">{{@number_format($all_payment - $payment_new - $payment_old)}}</td>
+            <td class="text-center bold">{{@number_format($all_payment - $all_detail_new - $payment_old)}}</td>
             <td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>
             <td class="bold">{{number_format($allTotal)}}</td>
             <td class="bold">{{number_format($payment_new + $payment_old)}}</td>
