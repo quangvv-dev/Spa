@@ -502,7 +502,7 @@ class OrderController extends Controller
                                     'customer_id' => @$check3->order->customer->id,
                                     'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
                                     'time_from' => '07:00',
-                                    'time_to' => '16:00',
+                                    'time_to' => '21:00',
                                     'code' => 'CSKH',
                                     'user_id' => @$check3->order->customer->telesales_id,
                                     'all_day' => 'on',

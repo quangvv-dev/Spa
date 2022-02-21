@@ -26,7 +26,7 @@
         <tr>
             <th class="text-center" colspan="1">STT</th>
             <th class="text-center" colspan="1">SALE</th>
-            <th class="text-center" colspan="11">KHÁCH HÀNG MỚI</th>
+            <th class="text-center" colspan="12">KHÁCH HÀNG MỚI</th>
             <th class="text-center" colspan="6">KHÁCH HÀNG CŨ</th>
             <th class="text-center" colspan="4">TỔNG CHUNG</th>
         </tr>
@@ -44,6 +44,7 @@
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
             <th class="text-center">Doanh thu</th>
             <th class="text-center no-wrap">Thu nợ</th>
+            <th class="text-center no-wrap">Thực thu</th>
             <th class="text-center no-wrap">Trao đổi</th>
             <th class="text-center no-wrap">Đơn chốt</th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
@@ -140,6 +141,7 @@
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->detail_new - $item->payment_new)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->detail_new)}}</td>
                     <td class="text-center pdr10">{{$item->comment_old}}</td>
                     <td class="text-center pdr10">{{$item->order_old}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
@@ -168,6 +170,7 @@
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>
             <td class="text-center bold">{{@number_format($payment_new)}}</td>
             <td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>
+            <td class="text-center bold">{{@number_format($all_detail_new)}}</td>
             <td class="text-center bold">{{@number_format($comment_old)}}</td>
             <td class="text-center bold">{{@number_format($order_old)}}</td>
             <td class="text-center bold">{{@number_format($revenue_old)}}</td>
