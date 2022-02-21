@@ -86,6 +86,11 @@
             background-clip: border-box;
             box-shadow: 0 0 0 1px rgb(61 119 180 / 12%), 0 8px 16px 0 rgb(91 139 199 / 24%);
         }
+        @media (min-width: 1280px){
+            .container {
+                max-width: 97%;
+            }
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
