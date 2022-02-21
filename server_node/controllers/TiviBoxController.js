@@ -33,7 +33,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                 var name = 'Người dùng Facebook';
                 try {
                     await axios.get(url).then(response => {
-                        console.log(1231234,response);
                         name = response.data.last_name + ' ' + response.data.first_name;
                     });
                 } catch (err) {
