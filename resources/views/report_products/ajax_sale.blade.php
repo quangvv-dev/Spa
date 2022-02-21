@@ -80,6 +80,7 @@
             <th class="text-center">(8)+(13)</th>
             <th class="text-center"></th>
             <th class="text-center"></th>
+            <th class="text-center"></th>
         </tr>
         </thead>
 
