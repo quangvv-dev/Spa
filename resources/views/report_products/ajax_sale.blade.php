@@ -43,12 +43,12 @@
             <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
             <th class="text-center">Doanh thu</th>
-            <th class="text-center no-wrap">Còn lại</th>
+            <th class="text-center no-wrap">Thu nợ</th>
             <th class="text-center no-wrap">Trao đổi</th>
             <th class="text-center no-wrap">Đơn chốt</th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
             <th class="text-center">Doanh thu</th>
-            <th class="text-center">Còn lại</th>
+            <th class="text-center">Thu nợ</th>
             <th class="text-center">Doanh thu<span class=""><br>TB/đơn</span></th>
             <th class="text-center">Doanh<span class=""><br>số</span></th>
             <th class="text-center">Doanh<span class=""><br>thu</span></th>
