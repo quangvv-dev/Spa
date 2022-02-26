@@ -35,7 +35,7 @@
                     <td class="text-center">{{number_format($s->so_tien)}}</td>
                     <td class="text-center">{{@$s->duyet->full_name}}</td>
                     <td class="text-center">{{$s->type == 0?'Tiền mặt' : 'Chuyển khoản'}}</td>
-                    <td class="text-center">{{$s->note}}</td>
+                    <td class="text-center">{{str_limit($s->note,70)}}</td>
                     <td class="text-center">
                         <label class="switch">
                             <input class="change_status" data-id="{{$s->id}}" type="checkbox" {{$s->status == 1? 'checked' : ''}}>
