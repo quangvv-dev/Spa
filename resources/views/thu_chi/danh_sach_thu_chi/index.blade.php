@@ -78,7 +78,7 @@
                             <option value="1">Đã duyệt</option>
                         </select>
                     </div>
-
+                    <input type="hidden" name="page" id="page">
 
                     <div class="col-2">
                         {!! Form::select('branch_id', $branches, null, array('class' => 'form-control select2','id'=>'branch','placeholder'=>'Chọn chi nhánh')) !!}
@@ -120,5 +120,11 @@
                 }
             })
         })
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            let pages = $(this).attr('href').split('page=')[1];
+            $('#page').val(pages);
+            $('#gridForm').submit();
+        });
     </script>
 @endsection
