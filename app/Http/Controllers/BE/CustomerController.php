@@ -100,7 +100,6 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        dd(1);
         $input = $request->all();
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
