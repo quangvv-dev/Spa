@@ -20,6 +20,7 @@ function userExists(seeding_number, arr) {
  * @constructor
  */
 exports.SetCustomers = (phone, recipientId, text, senderId) => {
+
     let FB_ID = senderId;
     let page_id = recipientId;
     model.CheckFanpage(recipientId, async function (err, rows) {
@@ -48,7 +49,8 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                 let new_position = 0;
                                 let array = JSON.parse(row2[0].sale_id);
                                 let user_id = array[row2[0].position];
-                                let mkt_id = row2[0].user_id;
+                                let mkt_id = row2[0].mkt_id;
+                                let branch_id = row2[0].branch_id;
                                 if (row2[0].position < array.length - 1 && array.length > 1) {
                                     new_position = row2[0].position + 1;
                                 }
@@ -81,7 +83,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                     console.log(err);
                                                                 } else {
                                                                     if (vl.length <= 0) {
-                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1, created_at, function (err) {
+                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1,branch_id, created_at, function (err) {
                                                                             if (err) {
                                                                                 console.log(err);
                                                                             } else {
@@ -130,6 +132,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
             if (rows.length > 0) {
                 const created_at = new Date();
                 model.CheckSource(rows[0].source_id, function (err, row2) {
+                    console.log('row2',row2);
                     if (err) {
                         console.log(err);
                     } else {
@@ -139,6 +142,9 @@ exports.SetComment = (phone, post_id, text, sender) => {
                             let array = JSON.parse(row2[0].sale_id);
                             let user_id = array[row2[0].position];
                             let mkt_id = row2[0].user_id;
+
+                            console.log('mkt_id',mkt_id);
+
                             if (row2[0].position < array.length - 1 && array.length > 1) {
                                 new_position = row2[0].position + 1;
                             }
