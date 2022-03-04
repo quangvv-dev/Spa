@@ -115,7 +115,7 @@ class CustomerController extends Controller
         $page = $request->page;
         $customers = Customer::search($input);
 
-        $customers = $customers->take(StatusCode::PAGINATE_1000)->orderByDesc('updated_at')->get();
+        $customers = $customers->take(StatusCode::PAGINATE_1000)->orderByDesc('created_at')->get();
         if (isset($input['limit'])) {
             $customers = Functions::customPaginate($customers, $page, $input['limit']);
         } else {
