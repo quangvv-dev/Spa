@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\PaymentWallet;
 use App\Models\Status;
+use App\Models\ThuChi;
 use App\Models\Trademark;
 use App\Models\WalletHistory;
 use App\User;
@@ -68,12 +69,11 @@ class StatisticController extends Controller
             $q->where('branch_id', $input['branch_id']);
         })->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
 
-
         $schedule = Schedule::getBooks2($input, 'id');
 
         $schedules = [
             'all_schedules' => $schedule->count(),
-            'become'        => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+            'become' => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
                 ->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count(),
@@ -97,7 +97,7 @@ class StatisticController extends Controller
         })->sortByDesc('price')->take(5);
 
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
-        $payment_wallet = PaymentWallet::search($input,'price');
+        $payment_wallet = PaymentWallet::search($input, 'price');
         $arr = Services::getIdServiceType();
         $input['list_booking'] = $arr;
         //Status Revuenue
@@ -276,5 +276,68 @@ class StatisticController extends Controller
 
         return view('statistics.task_schedule', compact('users'));
 
+    }
+
+    /**
+     * BĐ duyệt chi
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function chartPay(Request $request)
+    {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+        $input = $request->all();
+        $payment = PaymentHistory::search($input, 'price');
+        $payment2 = clone $payment;
+        $payment3 = clone $payment;
+        $payment_wallet = PaymentWallet::search($input, 'price');
+        $payment_wallet2 = clone $payment_wallet;
+        $payment_wallet3 = clone $payment_wallet;
+        $all_payment = $payment->sum('price');
+
+        $list_payment = [
+            'money' => $payment2->where('payment_type', 1)->sum('price') + $payment_wallet->where('payment_type', 1)->sum('price'),
+            'card' => $payment3->where('payment_type', 2)->sum('price') + $payment_wallet2->where('payment_type', 2)->sum('price'),
+            'CK' => $payment->where('payment_type', 4)->sum('price') + $payment_wallet3->where('payment_type', 4)->sum('price'),
+        ];
+        $payCurrent = ThuChi::when(isset($input['branch_id']) && $input['branch_id'], function ($query) use ($input) {
+            $query->where('branch_id', $input['branch_id']);
+        })->when(isset($input['start_date']) && isset($input['end_date']), function ($query) use ($input) {
+            $query->whereBetween('created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
+        });
+        $payTwice = clone $payCurrent;
+        $pay = $payCurrent->where('status', UserConstant::ACTIVE);
+        $pay2 = clone $pay;
+        $pay3 = clone $pay;
+        $payAll = clone $pay;
+        $payBranch = clone $pay;
+        $payAll = $payAll->select('so_tien', 'danh_muc_thu_chi_id', \DB::raw('SUM(so_tien) AS sum_price'))
+            ->with('danhMucThuChi')->groupBy('danh_muc_thu_chi_id')->get();
+        $payStatus = $payTwice->select('so_tien', 'status', \DB::raw('SUM(so_tien) AS sum_price'))
+            ->groupBy('status')->get();
+        $payBranch = $payBranch->select('so_tien', 'branch_id', \DB::raw('SUM(so_tien) AS sum_price'))->with('branch')
+            ->groupBy('branch_id')->orderByDesc('sum_price')->get();
+        $list_pay = [
+            'money' => $pay2->where('type', 1)->sum('so_tien'),
+            'card' => $pay3->where('type', 2)->sum('so_tien'),
+            'CK' => $pay->where('type', 4)->sum('so_tien'),
+        ];
+
+        $data = [
+            'payment' => $all_payment,
+            'wallet_payment' => $payment_wallet->sum('price'),
+        ];
+
+        if ($request->ajax()) {
+            return view('thu_chi.statistics.ajax', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus','payBranch'));
+        }
+
+        return view('thu_chi.statistics.index', compact('list_payment', 'data', 'list_pay', 'payAll','payStatus','payBranch'));
     }
 }

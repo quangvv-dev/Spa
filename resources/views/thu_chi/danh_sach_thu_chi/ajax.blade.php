@@ -10,6 +10,7 @@
             <th class="text-white text-center">Loại</th>
             <th class="text-white text-center">Ghi chú</th>
             <th class="text-white text-center">Trạng thái</th>
+            <th class="text-white text-center">Chi nhánh</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
 
@@ -18,11 +19,7 @@
         <tr class="tr-n">
             <td class="text-center bold" colspan="3">Tổng:</td>
             <td class="text-center bold">{{number_format($allPrice)}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td colspan="6"></td>
         </tr>
         @if(count($docs))
             @foreach($docs as $k => $s)
@@ -38,14 +35,15 @@
                     <td class="text-center">{{number_format($s->so_tien)}}</td>
                     <td class="text-center">{{@$s->duyet->full_name}}</td>
                     <td class="text-center">{{$s->type == 0?'Tiền mặt' : 'Chuyển khoản'}}</td>
-                    <td class="text-center">{{$s->note}}</td>
+                    <td class="text-center">{{str_limit($s->note,70)}}</td>
                     <td class="text-center">
-                        {{--{{$s->status == 0 ? 'Chưa duyệt' :'Đã duyệt'}}--}}
                         <label class="switch">
                             <input class="change_status" data-id="{{$s->id}}" type="checkbox" {{$s->status == 1? 'checked' : ''}}>
                             <span class="slider round"></span>
                         </label>
                     </td>
+                    <td class="text-center">{{@$s->branch->name}}</td>
+
                     <td class="text-center">
                         <a class="btn" href="{{ url('thu-chi/' . $s->id . '/edit') }}"><i
                                     class="fas fa-edit"></i></a>

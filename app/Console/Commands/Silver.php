@@ -42,8 +42,8 @@ class  Silver extends Command
      */
     public function handle()
     {
-        $err = Functions::sendSmsV3('0975091435', 'Test tin he thong');
-        return $err;
+//        $err = Functions::sendSmsV3('0975091435', 'Test tin he thong');
+//        return $err;
 
 
 

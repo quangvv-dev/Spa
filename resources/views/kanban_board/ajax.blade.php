@@ -11,11 +11,18 @@
                 url: '/ajax/tasks/' + el.dataset.eid,
                 method: 'GET',
                 success: function (data) {
+                    let abc = data.description.replaceAll("--", '\n');
+                    let link = '/customers/'+data.customer.id;
+                    console.log(link,'link');
                     $('#name').val(data.name).change();
+                    $("a[href]").attr("href",link);
+                    $('.name-customer').html(data.customer.full_name).change();
+                    $('.phone-customer').val(data.customer.phone).change();
+                    $('#user_id').val(data.user.full_name).change();
                     $('#date_from').val(data.date_from).change();
                     $('#time_from').val(data.time_from).change();
                     $('#time_to').val(data.time_to).change();
-                    $('#description').html(data.description).change();
+                    $('#description').html(abc).change();
                     $('#myModal').modal('show');
                 }
             })
@@ -44,10 +51,10 @@
                 'class': 'info',
                 'item': [
                     @if(count($new))
-                    @foreach($new as $item)
+                        @foreach($new as $item)
                     {
                         'id': '{{$item->id}}',
-                        'title': '<img class="img-card" src="{{$item->avatar?:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
+                        'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
 
                     },
                     @endforeach
@@ -64,7 +71,7 @@
                     @foreach($done as $item)
                     {
                         'id': '{{$item->id}}',
-                        'title': '<img class="img-card" src="{{$item->avatar?:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
+                        'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
 
                     },
                     @endforeach
@@ -82,7 +89,7 @@
                     @foreach($fail as $item)
                         {
                             'id': '{{$item->id}}',
-                            'title': '<img class="img-card" src="{{$item->avatar?:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
+                            'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
 
                         },
                     @endforeach

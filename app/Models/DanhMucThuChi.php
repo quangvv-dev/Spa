@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class DanhMucThuChi extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 }

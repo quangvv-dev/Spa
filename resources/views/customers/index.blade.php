@@ -430,8 +430,9 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id', delay(function () {
+            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender', delay(function () {
                 let marketing = $('.group-product').val();
+                let gender = $('.gender').val();
                 let branch_id = $('.branch_id').val();
                 let source = $('.source').val();
                 let group = $('.group').val();
@@ -448,6 +449,7 @@
 
                 let data = {
                     marketing: marketing,
+                    gender: gender,
                     group: group,
                     telesales: telesales,
                     data_time: data_time,
@@ -471,9 +473,11 @@
                 let marketing = $('#group_product').val();
                 let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
+                let gender = $('.gender').val();
 
                 let data = {
                     search: search,
+                    gender: gender,
                     data_time: data_time,
                     group: group,
                     telesales: telesales,
@@ -778,6 +782,7 @@
                 let search = $('#search_value').val();
                 let marketing = $('#group_product').val();
                 let source = $('#source').val();
+                let gender = $('.gender').val();
                 let branch_id = $('.branch_id').val();
                 let status = $('#status').val();
                 let invalid_account = $('#invalid_account').val();
@@ -787,6 +792,7 @@
                     url: '{{ url()->current() }}',
                     method: "get",
                     data: {
+                        gender: gender,
                         marketing: marketing,
                         source: source,
                         page: pages,

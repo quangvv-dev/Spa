@@ -188,9 +188,9 @@
                             <ul>
                                 @if($roleGlobal->permission('statistics.index'))
                                     <li><a href="{{url('statistics')}}">Doanh thu</a></li>
-                                @endif
-                                @if($roleGlobal->permission('statistics.index'))
                                     <li><a href="{{url('chart-revenue')}}">Doanh thu hệ thống</a></li>
+                                    <li><a href="{{url('chart-pay')}}">Duyệt chi</a></li>
+
                                 @endif
                                 @if($roleGlobal->permission('report.groupSale'))
                                     <li><a href="{{url('report/group-sale')}}">Doanh số nhóm SP&DV</a></li>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\BE;
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Department;
 use App\Models\Notification;
@@ -43,9 +45,9 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-
-        if (empty($request->start_date) && empty($request->end_date) && empty($request->data_time)) {
-            $request->merge(['data_time' => 'THIS_WEEK']);
+        $branchs = Branch::pluck('name', 'id')->toArray();
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
         $admin = auth()->user();
@@ -55,10 +57,9 @@ class TaskController extends Controller
         if (isset($request->type) && $request->type) {
             $input['sale_id'] = Auth::user()->id;
         }
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from','user_id')
-            ->with(['user' => function ($query) {
-                $query->select('avatar');
-            }])->get();
+//        $user = User::whereIn('department_id',[UserConstant::TELESALES,UserConstant::WAITER,UserConstant::CSKH]);
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id')
+            ->with('user')->get();
         $new = [];
         $done = [];
         $fail = [];
@@ -75,7 +76,7 @@ class TaskController extends Controller
             return view('kanban_board.ajax', compact('new', 'done', 'fail'));
         }
 
-        return view('kanban_board.index', compact('new', 'done', 'fail'));
+        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs'));
     }
 
     /**
@@ -97,18 +98,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->description) {
-            $note = str_replace("\r\n", ' ', $request->description);
-            $note = str_replace("\n", ' ', $note);
-            $note = str_replace('"', ' ', $note);
-            $note = str_replace("'", ' ', $note);
-            $request->merge(['description' => $note]);
-        }
-        $input = $request->except('user_id2');
+        $customer = Customer::find($request->customer_id);
+        $request->merge([
+            'user_id' => Auth::user()->id,
+            'priority' => 1,
+            'branch_id' => $customer->branch_id,
+            'type' => 2,
+        ]);
+        $input = $request->except('ajax');
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
-
+        if ($request->ajax) {
+            return back();
+        }
         return redirect('tasks')->with('status', 'Tạo người dùng thành công');
     }
 
@@ -201,13 +204,13 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->description) {
-            $note = str_replace("\r\n", ' ', $request->description);
-            $note = str_replace("\n", ' ', $note);
-            $note = str_replace('"', ' ', $note);
-            $note = str_replace("'", ' ', $note);
-            $request->merge(['description' => $note]);
-        }
+//        if ($request->description) {
+//            $note = str_replace("\r\n", ' ', $request->description);
+//            $note = str_replace("\n", ' ', $note);
+//            $note = str_replace('"', ' ', $note);
+//            $note = str_replace("'", ' ', $note);
+//            $request->merge(['description' => $note]);
+//        }
         $input = $request->except('user_id2', 'status_name');
 
         $task = $this->taskService->update($input, $id);
@@ -301,8 +304,8 @@ class TaskController extends Controller
         if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
-        $users = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
-
+        $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::TP_SALE])
+            ->pluck('full_name', 'id')->toArray();
         $title = 'Danh sách công việc';
         $input = $request->all();
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);

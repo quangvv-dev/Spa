@@ -70,26 +70,16 @@ class ThuChiController extends Controller
      */
     public function create()
     {
+        $branches = Branch::pluck('name', 'id');
         $roles = Role::where('department_id', 1)->pluck('id')->toArray();
-        $user = Auth::user();
         $li_do = LyDoThuChi::pluck('name','id')->toArray();
-        $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
-        $mkt = $user->department_id == 3 ? true : false;
-        if($admin){
-            $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
-        }elseif($mkt){
-            $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
-        }else {
-            $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
-                $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
-            })->pluck('full_name', 'id');
-        }
+        $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
 
         $type = collect(['0' => 'Tiền mặt', '1' => 'Chuyển khoản']);
 
         $categories = DanhMucThuChi::pluck('name', 'id');
 
-        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet', 'type','li_do'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet', 'type','li_do','branches'));
     }
 
     /**
@@ -155,23 +145,15 @@ class ThuChiController extends Controller
      */
     public function edit($id)
     {
+        $branches = Branch::pluck('name', 'id');
         $doc = ThuChi::find($id);
 //        $li_do = LyDoThuChi::where('category_id', $doc->danh_muc_thu_chi_id)->pluck('name', 'id')->toArray();
         $li_do = LyDoThuChi::pluck('name','id')->toArray();
         $roles = Role::where('department_id', 1)->pluck('id')->toArray();
-        $user = Auth::user();
-        $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
-        if($admin){
-            $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
-        }else {
-            $user_duyet = User::whereIn('role', $roles)->where(function ($b) use ($user) {
-                $b->where('branch_id', $user->branch_id)->orWhereNull('branch_id');
-            })->pluck('full_name', 'id');
-        }
-
+        $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
         $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
-        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do','branches'));
     }
 
     /**

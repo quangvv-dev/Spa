@@ -35,20 +35,16 @@ class SaleController extends BaseApiController
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
                 });
-            $order_new = Order::whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            $orders = Order::select('id','member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
                 ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
-                })->where('is_upsale', OrderConstant::NON_UPSALE)->whereHas('customer', function ($qr) use ($item) {
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
-                })->with('orderDetails');
-            $order_old = Order::whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
-            ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
-                ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-                    $q->where('branch_id', $input['branch_id']);
-                })->where('is_upsale', OrderConstant::IS_UPSALE)->whereHas('customer', function ($qr) use ($item) {
-                    $qr->where('telesales_id', $item->id);
-                })->with('orderDetails');
+                });
+            $orders2 = clone $orders;
+            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
@@ -80,8 +76,8 @@ class SaleController extends BaseApiController
             $item->call = $input['caller_number'] ? CallCenter::search($input, 'id')->count() : 0;
             $item->thu_no = ($detail->sum('price') - $total_new - $total_old) > 0 ? $detail->sum('price') - $total_new - $total_old : 0;
 
-            $item->totalNew = $total_new;
-            $item->totalOld = $total_old;
+            $item->totalNew = $order_new->sum('gross_revenue');
+            $item->totalOld = $order_old->sum('gross_revenue');
 
             $item->totalAll = $detail->sum('price');//da thu trong ky
             return $item;

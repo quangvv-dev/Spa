@@ -11,12 +11,13 @@ class ThuChi extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
-    public static function search($param)
+
+    public static function search($param,$select="*")
     {
 
-        $data = self::when(isset($param['category_id']) && $param['category_id'], function ($query) use ($param) {
+        $data = self::select($select)->when(isset($param['category_id']) && $param['category_id'], function ($query) use ($param) {
             $query->where('danh_muc_thu_chi_id', $param['category_id']);
         })->when(isset($param['status']), function ($query) use ($param) {
             $query->where('status', $param['status']);

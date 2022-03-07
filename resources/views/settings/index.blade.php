@@ -38,7 +38,7 @@
                                                         class="help-block">{{ $errors->first('silver', ':message') }}</span>
                                             </div>
                                             <div class="form-group">
-                                                {!! Form::label('platinum', 'Thăng hạn rank Cộng tác viên (Platinum)', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('platinum', 'Thăng hạn rank Khách hàng VIP', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('platinum',@number_format(setting('platinum')), array('class' => 'form-control')) !!}
                                                 <span
                                                         class="help-block">{{ $errors->first('platinum', ':message') }}</span>

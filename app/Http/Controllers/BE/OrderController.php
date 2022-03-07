@@ -419,7 +419,7 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
-        $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
+//        $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
@@ -484,8 +484,7 @@ class OrderController extends Controller
                             }
                         }
                         $jobs = Functions::checkRuleJob($config);
-                        $controlRule = $item->rules;
-                        if (count($jobs)) {
+                        if (count($jobs) && $order->role_type != StatusCode::PRODUCT) {
                             foreach ($jobs as $job) {
                                 $day = $job->configs->delay_value;
                                 $sms_content = $job->configs->sms_content;
@@ -496,29 +495,31 @@ class OrderController extends Controller
                                         $text_category[] = $item->name;
                                     }
                                 }
-
+                                $text_order ="Ngày tạo đơn: " .$check3->order->created_at.' Đơn hàng: '.number_format($check3->order->all_total)." Đã thanh toán: "
+                                .number_format($check3->order->gross_revenue)." Còn nợ : ".number_format($check3->order->the_rest)
+                                ."--Các dịch vụ :".@str_replace('<br>', "|", @$check3->order->service_text);
                                 $input = [
                                     'customer_id' => @$check3->order->customer->id,
                                     'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
                                     'time_from' => '07:00',
-                                    'time_to' => '16:00',
+                                    'time_to' => '21:00',
                                     'code' => 'CSKH',
-                                    'user_id' => @!empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0,
+                                    'user_id' => @$check3->order->customer->telesales_id,
                                     'all_day' => 'on',
                                     'priority' => 1,
-                                    'amount_of_work' => 1,
+                                    'branch_id' => @$check3->order->branch_id,
                                     'type' => 2,
                                     'sms_content' => Functions::vi_to_en($sms_content),
                                     'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category,
                                             ',') . ' ,' . @$check3->order->branch->name,
-                                    'description' => replaceVariable($sms_content,
+                                    'description' => $text_order."--".replaceVariable($sms_content,
                                         @$check3->order->customer->full_name, @$check3->order->customer->phone,
                                         @$check3->order->branch->name, @$check3->order->branch->phone,
                                         @$check3->order->branch->address),
                                 ];
 
-                                $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
-                                $controlRule->save();
+//                                $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
+//                                $controlRule->save();
 
                                 $task = $this->taskService->create($input);
                                 $follow = User::where('role', UserConstant::ADMIN)->orWhere(function ($query) {

@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Chi tiết công việc</h4>
+                <h4>Lịch CSKH</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             {!! Form::open(array('url' => null, 'method' => 'post', 'files'=> true,'id'=>'fvalidate','enctype'=>'multipart/form-data','autocomplete'=>'off')) !!}
@@ -16,6 +16,19 @@
 
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        {!! Form::label('customer_id', 'Khách hàng', array('class' => ' required')) !!}
+                        <a id="customer" href=""><span class="form-group bold name-customer"> </span></a>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        {!! Form::label('phone', 'SĐT', array('class' => ' required')) !!}
+                        {!! Form::text('phone', null, array('class' => 'form-control phone-customer','readonly'=>'true')) !!}
+
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        {!! Form::label('user_id', 'Người phụ trách', array('class' => ' required')) !!}
+                        {!! Form::text('user_id', null, array('class' => 'form-control','id'=>'user_id','readonly'=>'true')) !!}
                     </div>
                     <div class="col-xs-12 col-md-4">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
@@ -36,8 +49,9 @@
                         {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'time_to')) !!}
                     </div>
                     <div class="col-md-12 col-xs-12">
+
                         {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
-                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description','rows' => 3)) !!}
+                        {!! Form::textarea('description', null, array('class' => 'form-control','id'=>'description','rows' => 6)) !!}
                     </div>
                     <!-- Modal footer -->
                 </div>

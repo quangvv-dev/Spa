@@ -22,6 +22,7 @@ use App\Models\HistorySms;
 use App\Models\Order;
 use App\Models\PackageWallet;
 use App\Models\Schedule;
+use App\Models\SchedulesSms;
 use App\Models\Services;
 use App\Models\Status;
 use App\Models\Task;
@@ -248,34 +249,37 @@ class CustomerController extends Controller
         if ($request->history_sms) {
             $history = HistorySms::where('phone',
                 $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
-            return Response::json(view('sms.history',
-                compact('history'))->render());
+            return view('sms.history', compact('history'));
         }
         if ($request->post) {
             $customer_post = CustomerPost::where('phone', $request->post)->where('status', '<>',
                 0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
-            return Response::json(view('post.history',
-                compact('customer_post'))->render());
+            return view('post.history', compact('customer_post'));
         }
         if ($request->history_wallet) {
             $wallet = WalletHistory::where('customer_id',
                 $request->history_wallet)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             $package = PackageWallet::pluck('name', 'id')->toArray();
-            return Response::json(view('wallet.history', compact('wallet', 'package'))->render());
+            return view('wallet.history', compact('wallet', 'package'));
         }
         if ($request->schedules) {
-            return Response::json(view('schedules.index', compact('schedules', 'id', 'staff'))->render());
+            return view('schedules.index', compact('schedules', 'id', 'staff'));
         }
 
         if ($request->call_center) {
             $call_center = CallCenter::where('dest_number', $request->call_center)->paginate(StatusCode::PAGINATE_20);
-            return Response::json(view('call_center.customer', compact('call_center'))->render());
+            return view('call_center.customer', compact('call_center'));
+        }
+
+        if ($request->tasks) {
+            $tasks = Task::where('customer_id', $request->tasks)->orderByDesc('date_from')->paginate(StatusCode::PAGINATE_20);
+            return view('tasks._form', compact('tasks'));
         }
 
         if ($request->albums) {
             $albums = Album::where('customer_id', $request->albums)->first();
             $albums = !empty($albums) && !empty($albums->images) ? json_decode($albums->images) : [];
-            return Response::json(view('albums.index', compact('albums'))->render());
+            return view('albums.index', compact('albums'));
         }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
@@ -284,7 +288,7 @@ class CustomerController extends Controller
             }
             $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
-            return Response::json(view('customers.order', compact('orders', 'waiters'))->render());
+            return view('customers.order', compact('orders', 'waiters'));
         }
         //END
 
@@ -584,9 +588,9 @@ class CustomerController extends Controller
         $before = $this->customerService->find($id);
         $data = [];
         if (isset($before) && $before) {
-            $category = CustomerGroup::where('customer_id', $before->id)->pluck('category_id')->toArray();
-
+//            $category = CustomerGroup::where('customer_id', $before->id)->pluck('category_id')->toArray();
             $customer = $this->customerService->update($input, $id);
+            SchedulesSms::where('status_customer', '<>', $customer->status_id)->delete();
             $check2 = RuleOutput::where('event', 'change_relation')->first();
 
             if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
@@ -594,27 +598,37 @@ class CustomerController extends Controller
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
                 $rule_status = Functions::checkRuleStatusCustomer($config);
                 foreach (array_values($rule_status) as $k1 => $item) {
-                    $list_status = $item->configs->group1;
-                    $list_relation = $item->configs->group;
-                    $relation = array_intersect($category, $list_relation);
-                    if (in_array($customer->status_id, $list_status) && count($relation)) {
+                    $list_status = $item->configs->group;
+//                    $list_relation = $item->configs->group;
+//                    $relation = array_intersect($category, $list_relation);
+//                    if (in_array($customer->status_id, $list_status) && count($relation)) {
+                    if (in_array($customer->status_id, $list_status)) {
                         $sms_ws = Functions::checkRuleSms($config);
                         if (count($sms_ws)) {
                             foreach (@array_values($sms_ws) as $k2 => $sms) {
                                 $input_raw['full_name'] = @$customer->full_name;
                                 $exactly_value = Functions::getExactlyTime($sms);
                                 $text = $sms->configs->content;
-                                $phone = Functions::convertPhone(@$customer->phone);
+//                                $phone = Functions::convertPhone(@$customer->phone);
                                 $text = Functions::replaceTextForUser($input_raw, $text);
                                 $text = Functions::vi_to_en($text);
-                                $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
-                                if (isset($err) && $err) {
-                                    HistorySms::insert([
-                                        'phone' => @$customer->phone,
-                                        'campaign_id' => 0,
-                                        'message' => $text,
-                                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                        'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                if (empty($exactly_value)) {
+                                    $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
+                                    if (isset($err) && $err) {
+                                        HistorySms::insert([
+                                            'phone' => @$customer->phone,
+                                            'campaign_id' => 0,
+                                            'message' => $text,
+                                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                            'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                        ]);
+                                    }
+                                } else {
+                                    SchedulesSms::create([
+                                        'phone' => $customer->phone,
+                                        'content' => @$text,
+                                        'exactly_value' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                        'status_customer' => @$customer->status_id,
                                     ]);
                                 }
                             }
