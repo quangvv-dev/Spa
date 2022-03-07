@@ -141,7 +141,9 @@
             <th class="text-white text-center">Ngày tạo KH</th>
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">SĐT</th>
-            <th class="text-white text-center">Tin nhắn</th>
+            @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
+                <th class="text-white text-center" style="min-width: 130px">Tin nhắn</th>
+            @endif
             <th class="text-white text-center">Nhóm KH</th>
             <th class="text-white text-center">Trạng Thái</th>
             <th class="text-white text-center">Người phụ trách</th>
@@ -188,9 +190,11 @@
                     </td>
                     <td class="text-center phone-customer"
                         data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
-                    <td class="text-center" style="position: relative;max-width: 146px">
-                        <textarea class="description-cus">{{ $customer->message }}</textarea>
-                    </td>
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
+                        <td class="text-center" style="position: relative;max-width: 146px">
+                            <textarea class="description-cus">{{ $customer->message }}</textarea>
+                        </td>
+                    @endif
                     <td class="text-center category-db"
                         data-id="{{$customer->id}}">{{str_limit($customer->group_text,30)}}</td>
                     <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
