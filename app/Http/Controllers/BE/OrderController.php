@@ -153,7 +153,7 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
-            $countOrders = Order::where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS,StatusCode::SERVICE])->count();
+            $countOrders = Order::where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
             if (@$countOrders > 1) {
                 $customer->old_customer = 1;
                 $customer->save();
@@ -406,8 +406,13 @@ class OrderController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $this->orderService->delete($id);
-        $request->session()->flash('error', 'Xóa đơn hàng thành công!');
+        $payment = PaymentHistory::where('order_id', $id)->get();
+        if (isset($payment) && count($payment)) {
+            $request->session()->flash('warning', 'Vui lòng xoá thanh toán đơn hàng trước khi xoá đơn !!!');
+        } else {
+            $this->orderService->delete($id);
+            $request->session()->flash('error', 'Xóa đơn hàng thành công!');
+        }
     }
 
     public function orderDetailPdf($id)
@@ -495,9 +500,9 @@ class OrderController extends Controller
                                         $text_category[] = $item->name;
                                     }
                                 }
-                                $text_order ="Ngày tạo đơn: " .$check3->order->created_at.' Đơn hàng: '.number_format($check3->order->all_total)." Đã thanh toán: "
-                                .number_format($check3->order->gross_revenue)." Còn nợ : ".number_format($check3->order->the_rest)
-                                ."--Các dịch vụ :".@str_replace('<br>', "|", @$check3->order->service_text);
+                                $text_order = "Ngày tạo đơn: " . $check3->order->created_at . ' Đơn hàng: ' . number_format($check3->order->all_total) . " Đã thanh toán: "
+                                    . number_format($check3->order->gross_revenue) . " Còn nợ : " . number_format($check3->order->the_rest)
+                                    . "--Các dịch vụ :" . @str_replace('<br>', "|", @$check3->order->service_text);
                                 $input = [
                                     'customer_id' => @$check3->order->customer->id,
                                     'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
@@ -512,10 +517,10 @@ class OrderController extends Controller
                                     'sms_content' => Functions::vi_to_en($sms_content),
                                     'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category,
                                             ',') . ' ,' . @$check3->order->branch->name,
-                                    'description' => $text_order."--".replaceVariable($sms_content,
-                                        @$check3->order->customer->full_name, @$check3->order->customer->phone,
-                                        @$check3->order->branch->name, @$check3->order->branch->phone,
-                                        @$check3->order->branch->address),
+                                    'description' => $text_order . "--" . replaceVariable($sms_content,
+                                            @$check3->order->customer->full_name, @$check3->order->customer->phone,
+                                            @$check3->order->branch->name, @$check3->order->branch->phone,
+                                            @$check3->order->branch->address),
                                 ];
 
 //                                $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;

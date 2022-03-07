@@ -143,7 +143,17 @@
                         </div>
                     </div>
                     <div>
-                        @if(Session::has('status'))
+                        @if(Session::has('warning'))
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>{{ Session::get('warning') }}</strong>
+                                @php
+                                    Session::forget('warning');
+                                @endphp
+                            </div>
+                        @elseif(Session::has('status'))
                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">×</span>
