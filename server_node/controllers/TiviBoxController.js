@@ -82,11 +82,12 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                     console.log(err);
                                                                 } else {
                                                                     if (vl.length <= 0) {
-                                                                        console.log(21431341142412);
                                                                         model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1,branch_id, created_at, function (err,customer) {
                                                                             if (err) {
                                                                                 console.log(err);
                                                                             } else {
+                                                                                console.log(123,customer);
+                                                                                console.log(456,customer[0]);
                                                                                 model.UpdateCodeCustomer(customer[0].id);
                                                                                 let arr_category_id = JSON.parse(row2[0].category_id);
                                                                                 for (const val of arr_category_id) {
