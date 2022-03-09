@@ -24,7 +24,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
     let FB_ID = senderId;
     let page_id = recipientId;
     model.CheckFanpage(recipientId, async function (err, rows) {
-        console.log(1,rows);
         if (err) {
             console.log(err, 'err');
         } else {
@@ -43,8 +42,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     console.log(name, 'Name Customer');
                     const created_at = new Date();
                     model.CheckSource(rows[0].source_id, function (err, row2) {
-                        console.log(2,row2);
-
                         if (err) {
                             console.log(err);
                         } else {
@@ -86,10 +83,16 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                 } else {
                                                                     if (vl.length <= 0) {
                                                                         console.log(21431341142412);
-                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1,branch_id, created_at, function (err) {
+                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1,branch_id, created_at, function (err,customer) {
                                                                             if (err) {
                                                                                 console.log(err);
                                                                             } else {
+                                                                                let abc = JSON.parse(row2[0].category_id)
+                                                                                console.log(12341234,abc);
+                                                                                for (const v of abc) {
+                                                                                    console.log(123,v);
+                                                                                }
+                                                                                console.log(23232323,customer);
                                                                                 console.log('Them KH thanh cong');
                                                                             }
                                                                         })
@@ -175,13 +178,10 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                                             console.log(err);
                                                         } else {
                                                             if (vl.length <= 0) {
-                                                                model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, duplicate, 0, 1, 1, created_at,function (err,customer) {
+                                                                model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, duplicate, 0, 1, 1, created_at,function (err) {
                                                                     if (err) {
                                                                         console.log(err);
                                                                     } else {
-                                                                        console.log(12341234,row2);
-                                                                        console.log(23232323,customer);
-
                                                                         console.log('Them KH thanh cong');
                                                                     }
                                                                 })
