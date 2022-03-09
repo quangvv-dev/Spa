@@ -92,13 +92,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
 
                                                                                 for (const val of arr_category_id) {
                                                                                     console.log(123,val)
-                                                                                    model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id,function (err,callback){
-                                                                                        if(err){
-                                                                                            console.log(12443,err);
-                                                                                        }else{
-                                                                                            console.log(64564,callback);
-                                                                                        }
-                                                                                    });
+                                                                                    model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id);
                                                                                 }
                                                                                 console.log('Them KH thanh cong');
                                                                             }
