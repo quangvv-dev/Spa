@@ -36,10 +36,10 @@ var TiviBox = {
         return db.query("INSERT INTO customers (source_id,full_name,phone,gender,message,telesales_id,mkt_id,status_id,fb_name,post_id,FB_ID, page_id,branch_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [source_id, name, phone,0, message, user_id, mkt_id,4,name, post_id, FB_ID, page_id, branch_id, created_at, created_at], callback);
     },
 
-    CreateCustomerGroup: function (customer_id, category_id, created_at, callback) {
-        return db.query("INSERT INTO customer_gpoup (customer_id,category_id,created_at,updated_at) VALUES(?,?,?,?)", [customer_id, category_id, created_at, created_at], callback);
+    CreateCustomerGroup: function (customer_id, category_id, created_at) {
+        return db.query("INSERT INTO customer_gpoups (customer_id,category_id,created_at,updated_at) VALUES(?,?,?,?)", [customer_id, category_id, created_at, created_at], callback);
     },
-    UpdateCodeCustomer: function (customer_id, callback) {
+    UpdateCodeCustomer: function (customer_id) {
         let code = 'KH'+customer_id;
         return db.query("UPDATE customers SET account_code = ? + WHERE id = ?", [ code, customer_id], callback);
     },
