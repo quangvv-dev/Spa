@@ -57,13 +57,16 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-lg-2 col-md-3">
+                            {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
+                        </div>
                         <div class="col-lg-2 col-md-6">
                             <button type="submit" class="btn btn-primary"> Tìm kiếm
                             </button>
                         </div>
-                        <a title="Download Data" class="btn download-pdf"
-                           href="javascript:void(0)">
-                            <i class="fas fa-download"></i></a>
+                        {{--<a title="Download Data" class="btn download-pdf"--}}
+                           {{--href="javascript:void(0)">--}}
+                            {{--<i class="fas fa-download"></i></a>--}}
                     </div>
                     {{ Form::close() }}
 
