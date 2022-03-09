@@ -135,20 +135,30 @@ class SalesController extends Controller
         } elseif ($request->branch_id == (-1)) {
             $request->merge(['branch_id' => null]);
         }
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
 
         $type = isset($request->type) ? $request->type : StatusCode::SERVICE;
 
         $branchs = Branch::search()->pluck('name', 'id');
 
+        $location = Branch::$location;
+
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request, $type) {
             $booking = Services::select('id')->where('type', $type)->where('category_id', $item->id)->pluck('id')->toArray();
-            $arr_customer = CustomerGroup::select('customer_id')->where('category_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
+            $arr_customer = CustomerGroup::select('customer_id')->where('category_id', $item->id)->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                $q->whereIn('branch_id', $request->group_branch);
+            })->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
             $arr_customer = self::searchBranch($arr_customer, $request);
             $data_new = $arr_customer->pluck('customer_id')->toArray();
             $schedules = Schedule::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                     $q->where('branch_id', $request->branch_id);
+                })->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
                 });
             $schedules_new = $schedules->whereIn('user_id', $data_new);
             $item->schedules_new = $schedules_new->count();//lich hen
@@ -158,6 +168,8 @@ class SalesController extends Controller
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                     $q->where('branch_id', $request->branch_id);
+                })->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
                 });
             $detail_new = clone $detail;
             $detail_new = $detail_new->whereHas('order', function ($qr) {
@@ -165,7 +177,9 @@ class SalesController extends Controller
             })->groupBy('order_id');
 
             $comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->whereIn('customer_id', $data_new);
+                ->whereIn('customer_id', $data_new)->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                });
 
             $item->comment_new = self::searchBranch($comment, $request)->get()->count();// trao doi moi
 
@@ -186,9 +200,9 @@ class SalesController extends Controller
             'allTotal' => $users->sum('revenue_total'),
         ]);
         if ($request->ajax()) {
-            return view('report_products.ajax_group', compact('users', 'telesales', 'type'));
+            return view('report_products.ajax_group', compact('users', 'telesales', 'type','location'));
         }
-        return view('report_products.group_sale', compact('branchs', 'users', 'telesales', 'type'));
+        return view('report_products.group_sale', compact('branchs', 'users', 'telesales', 'type','location'));
     }
 
     public function searchBranch($query, $input)
