@@ -89,7 +89,9 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                                 customer = JSON.parse(JSON.stringify(customer));
                                                                                 model.UpdateCodeCustomer(customer.insertId);
                                                                                 let arr_category_id = JSON.parse(row2[0].category_id);
+
                                                                                 for (const val of arr_category_id) {
+                                                                                    console.log(123,val)
                                                                                     model.CreateCustomerGroup(customer.insertId,val,created_at);
                                                                                 }
                                                                                 console.log('Them KH thanh cong');
