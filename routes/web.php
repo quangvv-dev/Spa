@@ -11,6 +11,9 @@ Route::get('call-content/{id}', 'BE\CallController@getStreamLink');
 Route::get('403', function () {
     return view('errors.403');
 });
+Route::get('privacy-policy', function () {
+    return view('policy');
+});
 
 
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
