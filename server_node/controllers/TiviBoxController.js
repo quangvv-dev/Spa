@@ -87,7 +87,8 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                             if (err) {
                                                                                 console.log(err);
                                                                             } else {
-                                                                                model.UpdateCodeCustomer(customer.insertId);
+                                                                                console.log(123123,customer);
+                                                                                model.UpdateCodeCustomer(customer[0].insertId);
 
                                                                                 let arr_category_id = JSON.parse(row2[0].category_id);
                                                                                 for (const val of arr_category_id) {
