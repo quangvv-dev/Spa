@@ -43,7 +43,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     console.log(name, 'Name Customer');
                     const created_at = new Date();
                     model.CheckSource(rows[0].source_id, function (err, row2) {
-                        console.log(2,rows2);
+                        console.log(2,row2);
 
                         if (err) {
                             console.log(err);
