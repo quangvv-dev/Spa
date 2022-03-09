@@ -49,6 +49,8 @@ class WalletHistory extends Model
             $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
         })->when(isset($input['branch_id']), function ($query) use ($input) {
             $query->where('branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('branch_id', $input['group_branch']);
         });
         return $data;
     }

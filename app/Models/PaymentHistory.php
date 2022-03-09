@@ -22,14 +22,15 @@ class PaymentHistory extends Model
             return "Tiền mặt";
         } elseif ($this->payment_type === 2) {
             return "Thẻ";
-        }elseif ($this->payment_type === 4) {
+        } elseif ($this->payment_type === 4) {
             return "Chuyển khoản";
         } else {
             return "Điểm";
         }
     }
 
-    public static function search($input, $select = '*'){
+    public static function search($input, $select = '*')
+    {
 
         if (isset($input['start_date']) && isset($input['end_date'])) {
             $detail = PaymentHistory::select($select)->whereBetween('payment_date', [
@@ -54,6 +55,9 @@ class PaymentHistory extends Model
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ])->with('order')->has('order');
+        }
+        if (isset($input['group_branch']) && count($input['group_branch'])) {
+            $detail = $detail->whereIn('branch_id', $input['group_branch']);
         }
         if (!empty($input['branch_id'])) {
             $detail = $detail->where('branch_id', $input['branch_id']);

@@ -61,4 +61,8 @@ class StatusCode
     const DONE_TASK = 3;
     const FAILED_TASK = 6;
 
+    //Khu vực cụm vùng miền
+    const CUM_MIEN_BAC = 1;
+    const CUM_MIEN_TRUNG = 2;
+    const CUM_MIEN_NAM = 3;
 }

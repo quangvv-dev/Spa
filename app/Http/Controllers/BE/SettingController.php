@@ -34,13 +34,15 @@ class SettingController extends Controller
     public function index()
     {
         $branchs = Branch::get();
-        return view('settings.index', compact('branchs'));
+        $location = Branch::$location;
+        return view('settings.index', compact('branchs', 'location'));
     }
 
     public function storeBranch()
     {
         Branch::create([
             'name' => 'Chi Nhánh',
+            'location_id' => StatusCode::CUM_MIEN_BAC,
         ]);
     }
 

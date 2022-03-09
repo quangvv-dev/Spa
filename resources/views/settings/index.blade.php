@@ -108,6 +108,7 @@
                 name: $(this).closest('tr').find('.name').val(),
                 phone: $(this).closest('tr').find('.phone').val(),
                 address: $(this).closest('tr').find('.address').val(),
+                location_id: $(this).closest('tr').find('.location').val(),
             }
             $.ajax({
                 url: 'branch/' + id,

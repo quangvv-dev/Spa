@@ -82,6 +82,9 @@ class OrderDetail extends Model
         })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })
+        ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('branch_id', $input['group_branch']);
+        })
             ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -108,7 +111,11 @@ class OrderDetail extends Model
         $data = self::select('booking_id', \DB::raw('SUM(total_price) AS total'))->groupBy('booking_id')
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
-            })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            })
+            ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            })
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
                 $q->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             })->when(isset($input['data_time']) && $input['data_time'], function ($q) use ($input) {
                 $q->whereBetween('created_at', getTime($input['data_time']));

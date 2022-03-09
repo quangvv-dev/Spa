@@ -113,6 +113,8 @@ class Schedule extends Model
                 Functions::yearMonthDay($input['start_date']),
                 Functions::yearMonthDay($input['end_date']),
             ]);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('branch_id', $input['group_branch']);
         })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })->when(isset($input['status_schedule']) && $input['status_schedule'], function ($q) use ($input) {

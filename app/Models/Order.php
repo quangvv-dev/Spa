@@ -342,6 +342,8 @@ class Order extends Model
                 $query->whereIn('member_arr', $input['member_arr']);
             })->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
             });
         return $data;
     }

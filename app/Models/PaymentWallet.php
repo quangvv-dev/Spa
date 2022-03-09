@@ -44,7 +44,9 @@ class PaymentWallet extends Model
         })
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
-        })
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            })
             ->when(isset($input['payment_type']) && $input['payment_type'], function ($q) use ($input) {
             $q->where('payment_type', $input['payment_type']);
         })
