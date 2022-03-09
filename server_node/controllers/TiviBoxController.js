@@ -87,12 +87,10 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                                 console.log(err);
                                                                             } else {
                                                                                 customer = JSON.parse(JSON.stringify(customer));
-                                                                                console.log(1233443,customer);
-                                                                                console.log(123,customer.insertId);
-                                                                                model.UpdateCodeCustomer(customer[0].id);
+                                                                                model.UpdateCodeCustomer(customer.insertId);
                                                                                 let arr_category_id = JSON.parse(row2[0].category_id);
                                                                                 for (const val of arr_category_id) {
-                                                                                    model.CreateCustomerGroup(customer[0].id,val,created_at);
+                                                                                    model.CreateCustomerGroup(customer.insertId,val,created_at);
                                                                                 }
                                                                                 console.log('Them KH thanh cong');
                                                                             }
