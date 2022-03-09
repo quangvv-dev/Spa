@@ -41,7 +41,7 @@ var TiviBox = {
     },
     UpdateCodeCustomer: function (customer_id) {
         let code = 'KH'+customer_id;
-        return db.query("UPDATE customers SET account_code = ? + WHERE id = ?", [ code, customer_id]);
+        return db.query("UPDATE customers SET account_code = ? WHERE id = ?", [ code, customer_id]);
     },
 
 
