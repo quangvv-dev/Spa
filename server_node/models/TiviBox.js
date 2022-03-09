@@ -36,6 +36,20 @@ var TiviBox = {
         return db.query("INSERT INTO customers (source_id,full_name,phone,gender,message,telesales_id,mkt_id,post_id,FB_ID, page_id,branch_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", [source_id, name, phone,0, message, user_id, mkt_id, post_id, FB_ID, page_id, branch_id, created_at, created_at], callback);
     },
 
+
+
+
+    CreateCustomerGroup: function (source_id, name, phone, message, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, status, expired_time_boolean, branch_id, created_at, callback) {
+        return db.query("INSERT INTO customers (source_id,full_name,phone,gender,message,telesales_id,mkt_id,post_id,FB_ID, page_id,branch_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", [source_id, name, phone,0, message, user_id, mkt_id, post_id, FB_ID, page_id, branch_id, created_at, created_at], callback);
+    },
+
+    UpdateCodeCustomer: function (source_id, name, phone, message, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, status, expired_time_boolean, branch_id, created_at, callback) {
+        return db.query("INSERT INTO customers (source_id,full_name,phone,gender,message,telesales_id,mkt_id,post_id,FB_ID, page_id,branch_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", [source_id, name, phone,0, message, user_id, mkt_id, post_id, FB_ID, page_id, branch_id, created_at, created_at], callback);
+    },
+
+
+
+
     UpdateSource: function (source_id, position, callback) {
         return db.query("UPDATE sources SET position = ? WHERE id = ?", [position, source_id], callback);
     },
