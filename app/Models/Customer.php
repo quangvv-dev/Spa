@@ -392,4 +392,8 @@ class Customer extends Model
     {
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
+
+    public function fanpage(){
+        return $this->belongsTo(Fanpage::class, 'page_id', 'page_id');
+    }
 }
