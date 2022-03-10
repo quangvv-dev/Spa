@@ -102,14 +102,17 @@
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow row">
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <h3 class="card-title bold">XẾP HẠNG TELESALE</h3></br>
 
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
                 </div>
                 <div class="col-lg-2 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
@@ -117,9 +120,9 @@
                 </div>
             </div>
             {{ Form::close() }}
-            <a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"
-               href="javascript:void(0)">
-                <i class="fas fa-download"></i></a>
+            {{--<a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"--}}
+               {{--href="javascript:void(0)">--}}
+                {{--<i class="fas fa-download"></i></a>--}}
         </div>
     </div>
     <div class="col-md-12 col-lg-12" id="registration-form">
@@ -129,12 +132,12 @@
     <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 @section('_script')
-    <script>
-        $(document).on('click', '.download-pdf', function (e) {
-            let time_choose = $('#time_choose').val();
-            let url = location.href + '?data_time=' + time_choose + '&dowload_pdf=1';
-            location.href = url;
-        });
-    </script>
+    {{--<script>--}}
+        {{--$(document).on('click', '.download-pdf', function (e) {--}}
+            {{--let time_choose = $('#time_choose').val();--}}
+            {{--let url = location.href + '?data_time=' + time_choose + '&dowload_pdf=1';--}}
+            {{--location.href = url;--}}
+        {{--});--}}
+    {{--</script>--}}
 @endsection
 
