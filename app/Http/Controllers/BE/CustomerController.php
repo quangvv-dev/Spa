@@ -384,22 +384,18 @@ class CustomerController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        if (isset($input['location_id'])) {
-            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
-            $input['group_branch'] = $group_branch;
-        }
         $now = Carbon::now()->format('d/m/Y');
         $data = Customer::orderBy('id', 'desc')
             ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-            ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-                $q->whereIn('branch_id', $input['group_branch']);
+            ->when(isset($request->gender), function ($query) use ($request) {
+                $query->where('gender', $request->gender);
             })->with('orders', 'categories');
         $data = $data->when(!empty($request->status), function ($query) use ($request) {
             $query->where('status_id', $request->status);
         })->when(!empty($input['branch_id']), function ($query) use ($input) {
             $query->where('branch_id', $input['branch_id']);
-        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-            $q->whereIn('branch_id', $input['group_branch']);
+        })->when(isset($request->gender), function ($query) use ($request) {
+            $query->where('gender', $request->gender);
         })->when(!empty($request->group), function ($query) use ($request) {
             $arr = CustomerGroup::where('category_id', $request->group);
             if (!empty($request->branch_id)) {

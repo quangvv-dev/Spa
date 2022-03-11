@@ -21,8 +21,8 @@
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <i style="color: red">Cụm chi nhánh</i><br>
-                            {!! Form::select('location_id',$location, null, array('class' => 'form-control select2','placeholder'=>'Tất cả cụm')) !!}
+                            <i style="color: red">Giới tính</i><br>
+                            {!! Form::select('gender',[0=>'Nữ',1=>'Nam'], null, array('class' => 'form-control select2','placeholder'=>'Tất cả giới tính')) !!}
                         </div>
                     @else
                         <input type="hidden" name="branch_id" value="{{$checkRole}}">
@@ -41,12 +41,12 @@
                             @endforeach
                         </select>
                     </div>
-                        <div class="col-md-12">
-                            <i style="color: red">Từ ngày - tới ngày</i><br>
-                            <input type="hidden" name="start_date" id="start_date">
-                            <input type="hidden" name="end_date" id="end_date">
-                            <input id="reportrange" type="text" class="form-control square">
-                        </div>
+                    <div class="col-md-12">
+                        <i style="color: red">Từ ngày - tới ngày</i><br>
+                        <input type="hidden" name="start_date" id="start_date">
+                        <input type="hidden" name="end_date" id="end_date">
+                        <input id="reportrange" type="text" class="form-control square">
+                    </div>
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Tải xuống</button>
                     </div>
