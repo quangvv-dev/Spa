@@ -141,7 +141,6 @@
             <input type="hidden" id="search_value">
             <input type="hidden" id="btn_choose_time">
             <input type="hidden" id="birthday_tab">
-            <input type="hidden" id="branch_id">
         </div>
     </div>
 @endsection
@@ -348,6 +347,7 @@
 
             $(document).on('click', '.status', function () {
                 let status = $(this).data('name');
+                let location = $('.location').val();
                 let data_time = $('#btn_choose_time').val();
                 let search = $('#search_value').val();
                 let group = $('#group').val();
@@ -366,6 +366,7 @@
                     source: source,
                     marketing: marketing,
                     branch_id: branch_id,
+                    location_id: location,
                 };
 
                 searchAjax(data);
@@ -401,6 +402,8 @@
                 let marketing = $('#group_product').val();
                 let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
+                let gender = $('.gender').val();
+                let location = $('.location').val();
 
                 let data = {
                     data_time: data_time,
@@ -411,9 +414,9 @@
                     source: source,
                     marketing: marketing,
                     branch_id: branch_id,
+                    gender: gender,
+                    location_id: location,
                 };
-                console.log(data,'daaâ')
-
                 searchAjax(data);
             });
 
@@ -430,9 +433,10 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender', delay(function () {
+            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location', delay(function () {
                 let marketing = $('.group-product').val();
                 let gender = $('.gender').val();
+                let location = $('.location').val();
                 let branch_id = $('.branch_id').val();
                 let source = $('.source').val();
                 let group = $('.group').val();
@@ -450,6 +454,7 @@
                 let data = {
                     marketing: marketing,
                     gender: gender,
+                    location_id: location,
                     group: group,
                     telesales: telesales,
                     data_time: data_time,
@@ -474,6 +479,7 @@
                 let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
                 let gender = $('.gender').val();
+                let location = $('.location').val();
 
                 let data = {
                     search: search,
@@ -485,6 +491,7 @@
                     marketing: marketing,
                     source: source,
                     branch_id: branch_id,
+                    location_id: location,
                 };
                 searchAjax(data);
 
@@ -788,10 +795,13 @@
                 let invalid_account = $('#invalid_account').val();
                 let btn_choose_time = $('#btn_choose_time').val();
                 let birthday = $('#birthday_tab').val();
+                let location = $('.location').val();
+
                 $.ajax({
                     url: '{{ url()->current() }}',
                     method: "get",
                     data: {
+                        location_id: location,
                         gender: gender,
                         marketing: marketing,
                         source: source,

@@ -67,8 +67,7 @@ class Customer extends Model
                 $query->whereHas('status', function ($q) use ($conditions) {
                     $q->where('name', $conditions['status']);
                 });
-            })
-            ->when(isset($conditions['group']), function ($query) use ($conditions) {
+            })->when(isset($conditions['group']), function ($query) use ($conditions) {
                 $group_customer = CustomerGroup::where('category_id', $conditions['group'])->pluck('customer_id')->toArray();
                 $query->whereIn('id', $group_customer);
             })
@@ -76,6 +75,8 @@ class Customer extends Model
                 $query->where('telesales_id', $conditions['telesales']);
             })->when(isset($conditions['branch_id']) && $conditions['branch_id'], function ($query) use ($conditions) {
                 $query->where('branch_id', $conditions['branch_id']);
+            })->when(isset($conditions['group_branch']) && count($conditions['group_branch']), function ($q) use ($conditions) {
+                $q->whereIn('branch_id', $conditions['group_branch']);
             })
             ->when(isset($conditions['marketing']), function ($query) use ($conditions) {
                 $query->where('mkt_id', $conditions['marketing']);
@@ -126,16 +127,6 @@ class Customer extends Model
             }
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
-//            $data = $data->with([
-//                'marketing' => function ($query) {
-//                    $query->select('id', 'full_name');
-//                }, 'status' => function ($query) {
-//                    $query->select('id', 'color', 'name');
-//                }, 'orders' => function ($query) {
-//                    $query->select('id', 'all_total', 'gross_revenue', 'the_rest');
-//                }, 'source_customer' => function ($query) {
-//                    $query->select('id', 'name');
-//                }, 'categories', 'groupComments']);
         }
         if (isset($param['branch_id']) && $param['branch_id']) {
             if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
