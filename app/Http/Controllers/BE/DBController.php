@@ -4,25 +4,19 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Helpers\Functions;
+use Illuminate\Http\Request;
 
 class DBController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::select('member_id')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->whereBetween('created_at', ["2021-12-01 00:00:00", "2022-12-31 23:59:59"])
-            ->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 1);
-            })->groupBy('member_id')
-            ->pluck('member_id')->toArray();
-
-        $update = Order::select('id', \DB::raw('COUNT(id) AS total'), 'is_upsale')->whereIn('member_id', $orders)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->groupBy('member_id')
-            ->having('total', '>', 1)->latest()->get();
-        foreach ($update as $item){
-
-            $item->is_upsale = 1;
-            $item->save();
-        }
-        return $orders;
+        $status = Functions::getStatusWithCode('nguoi_mua_hang');
+        $order = Order::select('member_id', \DB::raw('COUNT(member_id) AS total'))->where('branch_id', $request->branch)
+            ->groupBy('member_id')->havingRaw('total = 1')->pluck('member_id');
+        Customer::whereIn('id', $order)->update(['status_id' => $status]);
+        return "OKIE";
     }
 }
