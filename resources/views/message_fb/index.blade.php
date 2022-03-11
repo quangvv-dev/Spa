@@ -12,9 +12,6 @@
         -webkit-transition: .5s;
         transition: .5s
     }
-    .padding {
-        padding: 3rem !important
-    }
 
     .ps-container {
         position: relative

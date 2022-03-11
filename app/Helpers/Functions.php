@@ -459,13 +459,15 @@ class Functions
         $silver = setting('silver') ?: 0;
         $gold = setting('gold') ?: 0;
         $platinum = setting('platinum') ?: 0;
-        if (isset($silver) && isset($gold) && isset($platinum) && $customer->status != $statusVip) {
+
+        if (isset($silver) && isset($gold) && isset($platinum)) {
+
             if ($silver <= $total['total']) {
                 $status = Functions::getStatusWithCode('nguoi_mua_hang');
             } elseif ($gold <= $total['total']) {
                 $status = Functions::getStatusWithCode('khach_hang');
             }
-            if ($platinum <= $total['payment']) {
+            if ($platinum <= $total['payment'] && $customer->status != $statusVip) {
                 $status = $statusVip;
             }
             if (isset($status) && $status) {
