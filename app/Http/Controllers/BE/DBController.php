@@ -14,9 +14,9 @@ class DBController extends Controller
     public function index(Request $request)
     {
         for ($i = 1; $i < 17; $i++) {
-            $status = Functions::getStatusWithCode('khach_hang');
-            $order = Order::select('member_id', \DB::raw('COUNT(member_id) AS total'))->where('branch_id', $i)
-                ->groupBy('member_id')->havingRaw('total > 1')->pluck('member_id');
+            $status = Functions::getStatusWithCode('khach_hang_vip');
+            $order = Order::select('member_id','gross_revenue', \DB::raw('SUM(gross_revenue) AS total'))->where('branch_id', $i)
+                ->groupBy('member_id')->havingRaw('total > 20000000')->pluck('member_id');
             Customer::whereIn('id', $order)->update(['status_id' => $status]);
         }
         return "OKIE";
