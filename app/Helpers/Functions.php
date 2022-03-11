@@ -467,9 +467,10 @@ class Functions
             } elseif ($gold <= $total['total']) {
                 $status = Functions::getStatusWithCode('khach_hang');
             }
-            if ($platinum <= $total['payment'] && $customer->status != $statusVip) {
+            if ($platinum <= $total['payment'] && !empty($statusVip) && $customer->status_id != $statusVip) {
                 $status = $statusVip;
             }
+
             if (isset($status) && $status) {
                 $customer->status_id = $status;
                 $customer->save();
