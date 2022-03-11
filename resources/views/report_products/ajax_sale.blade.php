@@ -6,7 +6,7 @@
         @endphp
         <div {{$int>10?'style=display:none':''}} class="item-rank" style="right: {{$int*9}}%;top: {{$int*2}}%">
             <div class="king-sale">
-                <img src="{{$int==1?'https://pushsale.vn/Portals/_default/Skins/APP/images/bxh/bxh2.png':''}}">
+                <img src="{{$int==1?asset('default/bxh2.png'):''}}">
             </div>
             <div class="avatar-container  blink">
                 <img class="avatar-img" src="{{asset(@$value->avatar)}}">

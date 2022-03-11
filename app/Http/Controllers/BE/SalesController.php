@@ -38,8 +38,10 @@ class SalesController extends Controller
         $this->middleware('permission:report.groupSale', ['only' => ['indexGroupCategory']]);
         $this->middleware('permission:report.sale', ['only' => ['index']]);
         $location = Branch::$location;
+        $branchs = Branch::pluck('name', 'id');
         view()->share([
             'location' => $location,
+            'branchs' => $branchs,
         ]);
 
     }
@@ -64,14 +66,17 @@ class SalesController extends Controller
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                     $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
                 });
 
             $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                     $q->whereIn('branch_id', $request->group_branch);
-                })
-                ->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
             $orders2 = clone $orders;
@@ -79,9 +84,11 @@ class SalesController extends Controller
             $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-            ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                $q->whereIn('branch_id', $request->group_branch);
-            });
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                });
             $comment_new = clone $group_comment;
 
             $item->comment_new = $comment_new->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi
@@ -90,6 +97,8 @@ class SalesController extends Controller
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                     $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
                 });
             $schedules_den = clone $schedules;
             $schedules_new = clone $schedules;

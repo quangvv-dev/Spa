@@ -102,7 +102,7 @@
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow row">
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <h3 class="card-title bold">XẾP HẠNG TELESALE</h3></br>
 
                 </div>
@@ -114,7 +114,11 @@
                 <div class="col-lg-2 col-md-3">
                     {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
                 </div>
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-2 col-md-3">
+                    {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control', 'placeholder' => 'Tất cả chi nhánh')) !!}
+                </div>
+
+                <div class="col-lg-1 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
                     </button>
                 </div>
