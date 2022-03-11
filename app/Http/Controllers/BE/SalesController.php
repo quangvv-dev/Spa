@@ -57,6 +57,9 @@ class SalesController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        if (count($request->all()) == 2) {
+            $input['branch_id'] = 1;
+        }
         if (isset($request->location_id)) {
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
