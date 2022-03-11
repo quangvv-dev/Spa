@@ -20,6 +20,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-12">
+                            <i style="color: red">Cụm chi nhánh</i><br>
+                            {!! Form::select('location_id',$location, null, array('class' => 'form-control select2','placeholder'=>'Tất cả cụm')) !!}
+                        </div>
                     @else
                         <input type="hidden" name="branch_id" value="{{$checkRole}}">
                     @endif
