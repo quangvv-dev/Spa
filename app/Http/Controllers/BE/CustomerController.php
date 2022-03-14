@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
+use App\Constants\NotificationConstant;
 use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
@@ -19,6 +20,7 @@ use App\Models\Genitive;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
 
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\PackageWallet;
 use App\Models\Schedule;
@@ -37,26 +39,33 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Models\GroupComment as Model;
+
+use App\Services\TaskService;
+
 use Excel;
 use function PHPSTORM_META\type;
 
 class CustomerController extends Controller
 {
     private $customerService;
+    private $taskService;
+
 
     /**
      * UserController constructor.
      *
      * @param Filesystem $fileUpload
      */
-    public function __construct(CustomerService $customerService)
+    public function __construct(CustomerService $customerService,TaskService $taskService)
     {
         $this->middleware('permission:customers.list', ['only' => ['index']]);
         $this->middleware('permission:customers.edit', ['only' => ['edit']]);
         $this->middleware('permission:customers.add', ['only' => ['create']]);
         $this->middleware('permission:customers.delete', ['only' => ['destroy']]);
 
+        $this->taskService = $taskService;
         $this->customerService = $customerService;
+
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
@@ -486,30 +495,6 @@ class CustomerController extends Controller
                         $category = explode(',', $row['nhom_khach_hang']);
                         $branch = Branch::where('name', $row['chi_nhanh'])->first();
 
-//                        if (isset($check) && $check) {
-//                            if (!empty($row['ngay_trao_doi']) && !empty($row['noi_dung_trao_doi'])) {
-////                                GroupComment::where('customer_id', $check->id)->delete();
-//                                $comment = GroupComment::where('customer_id', $check->id)->get();
-//                                if (count($comment) < 1) {
-//                                    $comment_value = [];
-//                                    $row['ngay_trao_doi'] = explode('||', $row['ngay_trao_doi']);
-//                                    $row['noi_dung_trao_doi'] = explode('||', $row['noi_dung_trao_doi']);
-//                                    foreach ($row['ngay_trao_doi'] as $key_date => $item) {
-//                                        $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
-//                                        $comment_value[] = [
-//                                            'customer_id' => $check->id,
-//                                            'user_id' => Auth::user()->id,
-//                                            'messages' => @$row['noi_dung_trao_doi'][$key_date],
-//                                            'created_at' => $item,
-//                                            'updated_at' => $item,
-//                                            'branch_id' => $check->branch_id,
-//                                        ];
-//                                    }
-//                                    GroupComment::insertOrIgnore($comment_value);
-//                                }
-//                            }
-//                        }
-
                         if (empty($check)) {
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
@@ -596,7 +581,6 @@ class CustomerController extends Controller
         $before = $this->customerService->find($id);
         $data = [];
         if (isset($before) && $before) {
-//            $category = CustomerGroup::where('customer_id', $before->id)->pluck('category_id')->toArray();
             $customer = $this->customerService->update($input, $id);
             SchedulesSms::where('status_customer', '<>', $customer->status_id)->delete();
             $check2 = RuleOutput::where('event', 'change_relation')->first();
@@ -607,9 +591,6 @@ class CustomerController extends Controller
                 $rule_status = Functions::checkRuleStatusCustomer($config);
                 foreach (array_values($rule_status) as $k1 => $item) {
                     $list_status = $item->configs->group;
-//                    $list_relation = $item->configs->group;
-//                    $relation = array_intersect($category, $list_relation);
-//                    if (in_array($customer->status_id, $list_status) && count($relation)) {
                     if (in_array($customer->status_id, $list_status)) {
                         $sms_ws = Functions::checkRuleSms($config);
                         if (count($sms_ws)) {
@@ -641,6 +622,61 @@ class CustomerController extends Controller
                                 }
                             }
                         }
+                        // Tạo công việc
+                        $jobs = Functions::checkRuleJob($config);
+                        if (count($jobs)) {
+                            foreach ($jobs as $job) {
+                                $day = $job->configs->delay_value;
+                                $sms_content = $job->configs->sms_content;
+                                $category = @$customer->categories;
+                                $text_category = [];
+                                if (count($category)) {
+                                    foreach ($category as $item) {
+                                        $text_category[] = $item->name;
+                                    }
+                                }
+                                $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
+                                $input = [
+                                    'customer_id' => @$customer->id,
+                                    'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                    'time_from' => '07:00',
+                                    'time_to' => '21:00',
+                                    'code' => 'CSKH',
+                                    'user_id' => @$customer->telesales_id,
+                                    'all_day' => 'on',
+                                    'priority' => 1,
+                                    'branch_id' => @$customer->branch_id,
+                                    'type' => 2,
+                                    'sms_content' => Functions::vi_to_en($sms_content),
+                                    'name' => 'CSKH ' . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode($text_category,
+                                            ',') . ' ,' . @$customer->branch->name,
+                                    'description' => $text_order . "--" . replaceVariable($sms_content,
+                                            @$customer->full_name, @$customer->phone,
+                                            @$customer->branch->name, @$customer->branch->phone,
+                                            @$customer->branch->address),
+                                ];
+
+                                $task = $this->taskService->create($input);
+                                $follow = User::where('role', UserConstant::ADMIN)->orWhere(function ($query) {
+                                    $query->where('role', UserConstant::TELESALES)->where('is_leader',
+                                        UserConstant::IS_LEADER);
+                                })->get();
+                                $task->users()->attach($follow);
+                                $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
+                                    : '📅📅📅 Bạn có công việc chăm sóc mới !';
+                                Notification::insert([
+                                    'title' => $title,
+                                    'user_id' => $task->user_id,
+                                    'type' => $task->type,
+                                    'task_id' => $task->id,
+                                    'status' => NotificationConstant::HIDDEN,
+                                    'created_at' => $task->date_from . ' ' . $task->time_from,
+                                    'data' => json_encode((array)['task_id' => $task->id]),
+                                ]);
+                            }
+                        }
+ // end cong viec
+
                     }
                 }
             }

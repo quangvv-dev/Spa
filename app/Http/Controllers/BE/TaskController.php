@@ -304,7 +304,7 @@ class TaskController extends Controller
         if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
-        $users = User::whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::TP_SALE])
+        $users = User::whereIn('department_id', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::TP_SALE])
             ->pluck('full_name', 'id')->toArray();
         $title = 'Danh sách công việc';
         $input = $request->all();
