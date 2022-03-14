@@ -212,6 +212,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::resource('fanpage', 'FanpageController');
         Route::resource('fanpage-post', 'FanpagePostController');
         Route::post('storePost', 'FanpagePostController@storeCustom')->name('fanpage_post.storeCustom');
+
+        Route::post('storePost', 'FanpagePostController@storeCustom')->name('fanpage_post.storeCustom');
         Route::resource('seeding-number', 'SeedingNumberController');
         Route::delete('delete-seeding', 'SeedingNumberController@deleteSeeding');
         Route::resource('source-fb', 'SourceController');

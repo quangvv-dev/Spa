@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE\Marketing;
 
 use App\Constants\FanpageConstant;
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
 use App\Helpers\Functions;
 use App\Models\Fanpage;
 use App\Models\FanpagePost;
@@ -11,6 +12,7 @@ use App\Models\Post;
 use App\Models\Source;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Date;
 
 class FanpagePostController extends Controller
 {
@@ -123,5 +125,25 @@ class FanpagePostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function storeCustom(Request $request)
+    {
+        $page = Fanpage::where('id', $request->page_id)->where('used', StatusConstant::ACTIVE)->first();
+        if (isset($page)) {
+            FanpagePost::create([
+                'access_token' => $page->access_token,
+                'page_id' => $page->page_id,
+                'post_id' => $request->post_id,
+                'title' => $request->title,
+                'post_created' => Date::now()->format('Y-m-d H:i'),
+                'used' => FanpageConstant::FANPAGE_POST_USED,
+                'source_id' => $page->source_id
+            ]);
+            return back()->with('success', 'Thêm bài viết thành công !!!');
+        } else {
+            return back()->with('error', 'Fanpage chưa được sử dụng !!!');
+        }
+
     }
 }
