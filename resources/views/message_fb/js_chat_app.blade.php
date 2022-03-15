@@ -4,7 +4,7 @@
         let page_id = $('.chat-page_id').val();
         let sender_id = $('.chat-sender_id').val();
         let token = $('.chat-token').val();
-        let url = 'https://graph.facebook.com/v10.0/'+page_id+'/conversations?fields=messages{message,from,created_time}&user_id='+sender_id+'&access_token='+token;
+        let url = 'https://graph.facebook.com/v13.0/'+page_id+'/conversations?fields=messages{message,from,created_time}&user_id='+sender_id+'&access_token='+token;
         let html = '';
         if(page_id && sender_id && token){
             $.ajax({

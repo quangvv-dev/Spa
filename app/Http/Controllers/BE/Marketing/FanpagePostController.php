@@ -54,7 +54,7 @@ class FanpagePostController extends Controller
     {
         $token = $request->access_token;
         $method = 'GET';
-        $uri = 'https://graph.facebook.com/v10.0/me/posts';
+        $uri = 'https://graph.facebook.com/v13.0/me/posts';
         $field = '';
 
         $datas = Functions::getDataFaceBook($token, $method, $uri, $field);
