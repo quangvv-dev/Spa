@@ -74,7 +74,6 @@
                             <li><a href="{{route('marketing.fanpage.index')}}">Fanpage </a></li>
                         @endif
                             <li><a href="{{route('marketing.fanpage-post.index')}}">Fanpage Post</a></li>
-                            <li><a href="{{route('marketing.source-fb.index')}}">Source</a></li>
                             <li class="sub-with-sub">
                                 <a href="#">Nguồn dữ liệu</a>
                                 <ul>
@@ -92,11 +91,11 @@
                                 <li><a href="{{url('rules')}}">Automation </a></li>
                             @endif
                         @endif
-                        @if(empty($permissions) || !in_array('landipages.index',$permissions))
-                            @if($roleGlobal->permission('landipages.list'))
-                                <li><a href="{{route('landipages.index')}}">Landing Page</a></li>
-                            @endif
-                        @endif
+                        {{--@if(empty($permissions) || !in_array('landipages.index',$permissions))--}}
+                            {{--@if($roleGlobal->permission('landipages.list'))--}}
+                                {{--<li><a href="{{route('landipages.index')}}">Landing Page</a></li>--}}
+                            {{--@endif--}}
+                        {{--@endif--}}
                         @if($roleGlobal->permission('posts.list'))
                             <li><a href="{{route('posts.index')}}">Optin Form</a></li>
                         @endif

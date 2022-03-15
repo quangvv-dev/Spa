@@ -7,7 +7,7 @@
             <div class="card-header fix-header bottom-card add-paginate">
                     <div class="col-12">
                         <div class="row" style="align-items: baseline">
-                            <h4 class="col-2">Nguồn dữ liệu</h4>
+                            <h4 class="col-2">Nguồn Landipage</h4>
                             <div class="col-2">
                                 {!! Form::select('searchUser',$marketings, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn mkt')) !!}
                             </div>
