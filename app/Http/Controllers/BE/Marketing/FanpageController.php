@@ -99,6 +99,7 @@ class FanpageController extends Controller
         $fanpage->used = $request->used;
         $fanpage->source_id = $request->source_id;
         $fanpage->save();
+        return $fanpage;
     }
 
     /**
