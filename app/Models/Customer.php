@@ -42,6 +42,7 @@ class Customer extends Model
         'created_at',
         'wallet',
         'old_customer',
+        'source_fb'
     ];
 
 

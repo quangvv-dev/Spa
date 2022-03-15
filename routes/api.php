@@ -22,6 +22,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
 
+
+Route::group(['namespace' => 'API'], function () {
+    Route::post('Contact/ReceiveData/sc/{id}', 'SourceController@storeCustomerLandipage');
+});
+
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
     Route::post('upload/images', 'BaseApiController@apiUpload');
     //ALBUM
