@@ -217,6 +217,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::resource('seeding-number', 'SeedingNumberController');
         Route::delete('delete-seeding', 'SeedingNumberController@deleteSeeding');
         Route::resource('source-fb', 'SourceController');
+        Route::resource('source-landipage', 'LandipageController');
         Route::post('update-accept-source', 'SourceController@updateAcceptSource');
     });
 

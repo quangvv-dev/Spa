@@ -59,10 +59,12 @@ class Source extends Model
             return $query->where('chanel', $search['searchChanel']);
         })->when(isset($search['searchAccept']) && $search['searchAccept'], function ($query) use ($search) {
             return $query->where('accept', $search['searchAccept']);
-        })->when(isset($search['searchProduct']) && $search['searchProduct'], function ($query) use ($search) {
-            return $query->where('product_id', 'like', '%"' . $search['searchProduct'] . '"%');
+        })->when(isset($search['searchCategory']) && $search['searchCategory'], function ($query) use ($search) {
+            return $query->where('category_id', 'like', '%"' . $search['searchCategory'] . '"%');
         })->when(isset($search['searchId']) && $search['searchId'], function ($query) use ($search) {
             return $query->where('id', $search['searchId']);
+        })->when(isset($search['searchBranch']) && $search['searchBranch'], function ($query) use ($search) {
+            return $query->where('branch_id', $search['searchBranch']);
         })->orderBy('updated_at', 'desc');
         return $docs;
     }

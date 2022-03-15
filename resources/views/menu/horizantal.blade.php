@@ -75,6 +75,13 @@
                         @endif
                             <li><a href="{{route('marketing.fanpage-post.index')}}">Fanpage Post</a></li>
                             <li><a href="{{route('marketing.source-fb.index')}}">Source</a></li>
+                            <li class="sub-with-sub">
+                                <a href="#">Nguồn dữ liệu</a>
+                                <ul>
+                                    <li><a href="{!! route('marketing.source-fb.index') !!}">Kết nối FaceBook</a></li>
+                                    <li><a href="{!! route('marketing.source-landipage.index') !!}">Kết nối Landipage</a></li>
+                                </ul>
+                            </li>
 
                             {{--<li><a href="/marketing/fanpage-post">Danh sách bài post</a></li>--}}
                         {{--<li><a href="/marketing/seeding-number">Kho số seeding</a></li>--}}

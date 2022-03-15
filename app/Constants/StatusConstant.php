@@ -15,4 +15,10 @@ class StatusConstant
 
     const ACTIVE = 1;
     const INACTIVE = 0;
+
+    const GOOGLE_ADS = 1;
+    const FACEBOOK_ADS = 2;
+    const ZALO_ADS = 3;
+    const TIKTOK_ADS = 4;
+
 }
