@@ -107,9 +107,8 @@
 
         $(document).on('click', '.edit', function () {
             let item = $(this).data('item');
-            console.log(123123,item);
             let form = $('#validateForm');
-            form.attr('action', '/marketing/source-fb/' + item.id);
+            form.attr('action', '/marketing/source-landipage/' + item.id);
             form.attr('method', 'POST');
             $('#myModalLabel').html('Cập nhật nguồn').change();
             $('#validateForm').append('<input name="_method" class="_method" type="hidden" value="PUT" />');

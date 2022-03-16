@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\Models\Branch;
 use App\Models\Category;
@@ -23,6 +24,7 @@ class SourceController extends Controller
     public function index(Request $request)
     {
         $search = $request->all();
+        $search['searchType'] = StatusConstant::TYPE_CONNECT_FACEBOOK;
         $sources = Source::search($search)->paginate(20);
 
         $categories = Category::pluck('name','id');

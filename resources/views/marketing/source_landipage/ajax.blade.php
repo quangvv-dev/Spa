@@ -37,7 +37,7 @@
                            href="javascript:void(0)" title="Lưu">
                             <i class="fa fa-edit"></i>
                         </a>
-                        <a class="action-control delete" data-url="/marketing/source-fb/{{$item->id}}"
+                        <a class="action-control delete" data-url="/marketing/source-landipage/{{$item->id}}"
                            href="javascript:void(0)" title="Xoá">
                             <i class="fa fa-trash"></i>
                         </a>

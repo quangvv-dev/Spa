@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\StatusConstant;
 use App\Helpers\Functions;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -44,8 +45,8 @@ class Source extends Model
         })->when(isset($search['searchName']) && $search['searchName'], function ($query) use ($search) {
             return $query->where('name', 'like', '%' . $search['searchName'] . '%');
         })->when(isset($search['searchType']) && $search['searchType'], function ($query) use ($search) {
-            if ($search['searchType'] == SourceConstant::TYPE_CONNECT_WEBSITE) {
-                return $query->whereIn('type', [SourceConstant::TYPE_CONNECT_WEBSITE]);
+            if ($search['searchType'] == StatusConstant::TYPE_CONNECT_WEBSITE) {
+                return $query->whereIn('type', [StatusConstant::TYPE_CONNECT_WEBSITE]);
             } else {
                 return $query->where('type', $search['searchType']);
             }

@@ -21,4 +21,8 @@ class StatusConstant
     const ZALO_ADS = 3;
     const TIKTOK_ADS = 4;
 
+    const TYPE_CONNECT_FACEBOOK = 1;
+    const TYPE_CONNECT_LADIPAGE = 2;
+    const TYPE_CONNECT_WEBSITE = 3;
+
 }

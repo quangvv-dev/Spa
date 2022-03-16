@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Constants\StatusConstant;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Source;
@@ -20,6 +21,8 @@ class LandipageController extends Controller
     public function index(Request $request)
     {
         $search = $request->all();
+
+        $search['searchType'] = StatusConstant::TYPE_CONNECT_LADIPAGE;
         $sources = Source::search($search)->paginate(20);
 
         $categories = Category::pluck('name','id');
@@ -66,6 +69,7 @@ class LandipageController extends Controller
         $data['sale_id'] = json_encode($request->sale_id);
         $data['mkt_id'] = Auth::user()->id;
         $data['category_id'] = json_encode($request->category_id);
+        $data['type'] = StatusConstant::TYPE_CONNECT_LADIPAGE;
 
         $source = Source::create($data);
         $link = url('/api/Contact/ReceiveData/sc/' . $source->id);
