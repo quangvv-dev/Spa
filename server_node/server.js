@@ -72,7 +72,7 @@ app.post('/webhook', function (req, res) {
                     let text2 = value.value.message;
                     // text2 = text2.replace(".", "");
                     text2 = text2.replace("O", "0");
-                    text2 = text2.replace("o", "0");
+                    // text2 = text2.replace("o", "0");
                     let letr = text2.match(/\d+/g);
                     if (!letr){
                         return false;
