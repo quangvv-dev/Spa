@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE\Marketing;
 use App\Constants\StatusConstant;
 use App\Models\Branch;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Source;
 use App\User;
 use Illuminate\Http\Request;
@@ -119,6 +120,20 @@ class LandipageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $customer = Customer::where('source_fb',$id)->first();
+        if ($customer){
+            return 0;
+        }
+
+        $source = Source::find($id);
+        if ($source->accept == 1) {
+            $message = 'Source đã được sử dụng không được xóa';
+        } else {
+            $source->delete();
+            $message = 'Đã xóa thành công !';
+        }
+        return response()->json([
+            'message' => $message
+        ]);
     }
 }

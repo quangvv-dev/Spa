@@ -125,7 +125,7 @@ class SourceController extends Controller
      */
     public function destroy($id)
     {
-        $customer = Customer::where('source_id',$id)->first();
+        $customer = Customer::where('source_fb',$id)->first();
         if ($customer){
             return 0;
         }
