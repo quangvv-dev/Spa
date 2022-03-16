@@ -28,6 +28,11 @@
             border-bottom: 2px solid #ff8f5d;
             margin-bottom: 15px;
         }
+        @media (min-width: 1280px){
+            .container {
+                max-width: 96%;
+            }
+        }
 
         tr td {
             padding: 0.75rem !important;
