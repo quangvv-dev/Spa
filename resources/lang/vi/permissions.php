@@ -28,7 +28,8 @@ return [
     "report.sale"              => "Xếp hạng Telesales",
     "sms.history"              => "Tin nhắn đã gửi",
     //Quyền nâng cao
-    'marketing.fanpage_post'             => "Fanpage Post",
+    'marketing.seeding_number' => "Kho số seeding",
+    'marketing.fanpage_post'   => "Fanpage Post",
     'marketing.fanpage'        => "Fanpage",
     'post.customer'            => "DS khách hàng từ form",
     'order.list'               => "Danh sách đơn hàng",

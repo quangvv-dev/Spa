@@ -12,6 +12,7 @@ use App\Models\Post;
 use App\Models\Source;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 
 class FanpagePostController extends Controller
@@ -28,15 +29,30 @@ class FanpagePostController extends Controller
      */
     public function index(Request $request)
     {
-        $source = Source::pluck('name', 'id')->toArray();
-        $my_page = Fanpage::pluck('name', 'id')->toArray();
+        $user = Auth::user();
+        $my_page = Fanpage::where('user_id',$user->id)->pluck('name', 'id')->toArray();
+        $data = [];
+        if($user->permission('source.update')){
+            $source = Source::pluck('name', 'id')->toArray();
+        } else {
+            $data['searchUser'] = $user->id;
+            $source = Source::where('mkt_id',$user->id)->pluck('name', 'id')->toArray();
+        }
 
-        $posts = FanpagePost::search($request->all())->paginate(StatusCode::PAGINATE_20);
+        $arr_fanpage_id = Fanpage::search($data)->pluck('page_id')->toArray();
+
+        if (count($arr_fanpage_id)) {
+            $request['searchPage_Post'] = $arr_fanpage_id;
+            $posts = FanpagePost::search($request)->paginate(StatusCode::PAGINATE_20);
+        } else {
+            $posts = [];
+        }
+
 
         if ($request->ajax()) {
             return view('marketing.fanpage_post.ajax', compact('posts','source'));
         }
-        return view('marketing.fanpage_post.index',compact('posts','my_page','source'));
+        return view('marketing.fanpage_post.index',compact('posts','source','my_page'));
     }
 
     /**

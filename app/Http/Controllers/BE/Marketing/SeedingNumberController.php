@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SeedingNumberController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:marketing.seeding_number', ['only' => ['index']]);
+    }
+
+
     /**
      * Display a listing of the resource.
      *

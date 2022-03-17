@@ -89,6 +89,9 @@
                                 </ul>
                             </li>
                         @endif
+                        @if($roleGlobal->permission('marketing.seeding_number'))
+                            <li><a href="{{route('marketing.seeding-number.index')}}">Kho số seeding</a></li>
+                        @endif
                         {{--<li><a href="/marketing/fanpage-post">Danh sách bài post</a></li>--}}
                         {{--<li><a href="/marketing/seeding-number">Kho số seeding</a></li>--}}
                         {{--<li><a href="/marketing/source-fb">Nguồn dữ liệu</a></li>--}}

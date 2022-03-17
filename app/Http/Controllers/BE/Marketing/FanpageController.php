@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\BE\Marketing;
 
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
 use App\Models\Fanpage;
+use App\Models\Role;
 use App\Models\Source;
 use App\Services\FanpageService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Socialite;
 
 class FanpageController extends Controller
@@ -17,10 +20,6 @@ class FanpageController extends Controller
     public function __construct(FanpageService $fanpage)
     {
         $this->fanpage = $fanpage;
-//        $source = Source::pluck('name', 'id')->toArray();
-//        view()->share([
-//            'source' => $source,
-//        ]);
         $this->middleware('permission:marketing.fanpage', ['only' => ['index']]);
     }
 
@@ -31,7 +30,13 @@ class FanpageController extends Controller
      */
     public function index(Request $request)
     {
-        $fanpages = $this->fanpage->index($request)->paginate(1);
+        $user = Auth::user();
+
+        if(!$user->permission('source.update')){
+            $request['searchUser'] = $user->id;
+        }
+
+        $fanpages = $this->fanpage->index($request)->paginate(StatusCode::PAGINATE_20);
         $source = Source::pluck('name', 'id')->toArray();
         if ($request->session()->has('login-facebook1')) {
             $data_login_fb = $request->session()->get('login-facebook1');

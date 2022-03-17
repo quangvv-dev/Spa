@@ -1,4 +1,4 @@
-<div class="table-responsive tableFixHead table-bordered table-hover"
+<div id="registration-form" class="table-responsive tableFixHead table-bordered table-hover"
      style="width: 100%; overflow-x: auto;">
     <table class="table table-custom">
         <thead>

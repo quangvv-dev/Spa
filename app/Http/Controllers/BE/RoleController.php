@@ -55,6 +55,7 @@ class RoleController extends Controller
         'settings',
         'marketing.fanpage',
         'marketing.fanpage_post',
+        'marketing.seeding_number',
     ];
     protected $permissions = ['list', 'edit', 'add', 'delete'];
 

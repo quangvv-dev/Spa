@@ -35,6 +35,12 @@ class SourceController extends Controller
     {
         $search = $request->all();
         $search['searchType'] = StatusConstant::TYPE_CONNECT_FACEBOOK;
+
+        $user = Auth::user();
+
+        if(!$user->permission('source.update')){
+            $search['searchUser'] = $user->id;
+        }
         $sources = Source::search($search)->paginate(20);
 
         $categories = Category::pluck('name','id');
@@ -140,12 +146,17 @@ class SourceController extends Controller
             return 0;
         }
 
+        $user = Auth::user();
         $source = Source::find($id);
         if ($source->accept == 1) {
             $message = 'Source đã được sử dụng không được xóa';
         } else {
-            $source->delete();
-            $message = 'Đã xóa thành công !';
+            if($user->id == $source->mkt_id){
+                $source->delete();
+                $message = 'Đã xóa thành công !';
+            } else {
+                $message = 'Bạn không có quyền xoá !';
+            }
         }
         return response()->json([
             'message' => $message
