@@ -172,6 +172,9 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                         }
 
                                         model.ListSeeding(function (err, list) {
+                                            if(err){
+                                                console.log('Check seeding number',err);
+                                            }
                                             let exisits = userExists(phone, list);
                                             if (exisits == false) {
                                                 model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
@@ -197,7 +200,6 @@ exports.SetComment = (phone, post_id, text, sender) => {
                             );
 
                         }
-                        console.log('KHong co source');
                     }
                 })
             } else {
