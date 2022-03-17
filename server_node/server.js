@@ -67,7 +67,7 @@ app.post('/webhook', function (req, res) {
             console.log(comments, 'COMMENT LAN 2');
             for (var value of comments) {
                 console.log(value, 'comentt');
-                if (value.value.item === 'comment') {
+                if (value.value.item === 'comment' && value.value.message) {
                     let text2 = value.value.message;
                     text2 = text2.replace(".", "");
                     text2 = text2.replace("O", "0");
