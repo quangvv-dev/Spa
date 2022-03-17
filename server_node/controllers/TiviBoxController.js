@@ -71,40 +71,40 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                         console.log(err);
                                                     }
                                                 })
-                                            }
+                                                model.ListSeeding(function (err, list) {
+                                                        let exisits = userExists(phone, list);
+                                                        if (exisits == false) {
 
-                                            model.ListSeeding(function (err, list) {
-                                                    let exisits = userExists(phone, list);
-                                                    if (exisits == false) {
+                                                            model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
+                                                                    if (err) {
+                                                                        console.log(err);
+                                                                    } else {
+                                                                        if (vl.length <= 0) {
+                                                                            model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1,branch_id, created_at, function (err,customer) {
+                                                                                if (err) {
+                                                                                    console.log(err);
+                                                                                } else {
+                                                                                    customer = JSON.parse(JSON.stringify(customer));
+                                                                                    model.UpdateCodeCustomer(customer.insertId);
+                                                                                    let arr_category_id = JSON.parse(row2[0].category_id);
 
-                                                        model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
-                                                                if (err) {
-                                                                    console.log(err);
-                                                                } else {
-                                                                    if (vl.length <= 0) {
-                                                                        model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1,branch_id, created_at, function (err,customer) {
-                                                                            if (err) {
-                                                                                console.log(err);
-                                                                            } else {
-                                                                                customer = JSON.parse(JSON.stringify(customer));
-                                                                                model.UpdateCodeCustomer(customer.insertId);
-                                                                                let arr_category_id = JSON.parse(row2[0].category_id);
-
-                                                                                for (const val of arr_category_id) {
-                                                                                    console.log(123,val)
-                                                                                    model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id);
+                                                                                    for (const val of arr_category_id) {
+                                                                                        console.log(123,val)
+                                                                                        model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id);
+                                                                                    }
+                                                                                    console.log('Them KH thanh cong');
                                                                                 }
-                                                                                console.log('Them KH thanh cong');
-                                                                            }
-                                                                        })
+                                                                            })
+                                                                        }
                                                                     }
                                                                 }
-                                                            }
-                                                        );
-                                                    }
+                                                            );
+                                                        }
 
-                                                }
-                                            );
+                                                    }
+                                                );
+                                            }
+
                                         }
                                     }
                                 );
@@ -147,21 +147,19 @@ exports.SetComment = (phone, post_id, text, sender) => {
                             let new_position = 0;
                             let array = JSON.parse(row2[0].sale_id);
                             let user_id = array[row2[0].position];
-                            let mkt_id = row2[0].user_id;
+                            let branch_id = row2[0].branch_id;
+                            let mkt_id = row2[0].mkt_id;
                             if (row2[0].position < array.length - 1 && array.length > 1) {
                                 new_position = row2[0].position + 1;
                             }
                             // let splitted = post_id.split("_", 2);
-                            let duplicate = 0;
+                            // let duplicate = 0;
 
                             model.CheckPhone(phone, function (err, checkPhone) {
                                     if (err) {
-                                        console.log(err);
+                                        console.log(err,'CHECK PHONE LOG');
                                     } else {
-                                        if (checkPhone.length > 0) {
-                                            duplicate = 1;
-                                            user_id = checkPhone[0].user_id;
-                                        } else {
+                                        if (checkPhone.length <= 0) {
                                             model.UpdateSource(row2[0].id, new_position, function (err) {
                                                 if (err) {
                                                     console.log(err);
@@ -169,32 +167,32 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                                     console.log('Update vi tri source');
                                                 }
                                             })
-                                        }
 
-                                        model.ListSeeding(function (err, list) {
-                                            if(err){
-                                                console.log('Check seeding number',err);
-                                            }
-                                            let exisits = userExists(phone, list);
-                                            if (exisits == false) {
-                                                model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
-                                                        if (err) {
-                                                            console.log(err);
-                                                        } else {
-                                                            if (vl.length <= 0) {
-                                                                model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, duplicate, 0, 1, 1, created_at,function (err) {
-                                                                    if (err) {
-                                                                        console.log(err);
-                                                                    } else {
-                                                                        console.log('Them KH thanh cong');
-                                                                    }
-                                                                })
+                                            model.ListSeeding(function (err, list) {
+                                                if(err){
+                                                    console.log('Check seeding number',err);
+                                                }
+                                                let exisits = userExists(phone, list);
+                                                if (exisits == false) {
+                                                    model.CheckPhoneAdd(phone, row2[0].id, function (err, vl) {
+                                                            if (err) {
+                                                                console.log(err,);
+                                                            } else {
+                                                                if (vl.length <= 0) {
+                                                                    model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, 0, 0, 1, 1, branch_id, created_at,function (err) {
+                                                                        if (err) {
+                                                                            console.log(err);
+                                                                        } else {
+                                                                            console.log('Them KH thanh cong');
+                                                                        }
+                                                                    })
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                );
-                                            }
-                                        });
+                                                    );
+                                                }
+                                            });
+                                        }
                                     }
                                 }
                             );
