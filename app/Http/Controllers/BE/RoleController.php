@@ -53,7 +53,8 @@ class RoleController extends Controller
         'tasks.index',
         'sms',
         'settings',
-        'fanpage',
+        'marketing.fanpage',
+        'marketing.fanpage_post',
     ];
     protected $permissions = ['list', 'edit', 'add', 'delete'];
 

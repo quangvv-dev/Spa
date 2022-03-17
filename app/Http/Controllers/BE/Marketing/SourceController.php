@@ -16,6 +16,16 @@ use Illuminate\Support\Facades\Auth;
 
 class SourceController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('permission:source.list', ['only' => ['index']]);
+        $this->middleware('permission:source.edit', ['only' => ['update']]);
+        $this->middleware('permission:source.add', ['only' => ['store']]);
+        $this->middleware('permission:source.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:source.update', ['only' => ['updateAcceptSource']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -144,17 +154,11 @@ class SourceController extends Controller
 
     public function updateAcceptSource(Request $request)
     {
-        $user = Auth::user();
         $data['accept'] = $request->value == 'true' ? 1 : 0;
-        $id = $request->id;
-        if ($user->department_id == UserConstant::ADMIN) {
-            Source::find($id)->update($data);
-            $status_code = true;
-        } else {
-            $status_code = false;
-        }
+        Source::find($request->id)->update($data);
+
         return response()->json([
-            'statusCode' => $status_code,
+            'statusCode' => true,
         ]);
     }
 }

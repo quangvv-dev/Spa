@@ -102,6 +102,29 @@
                        onclick="checkAll('group18', 'input18')">
             </td>
         </tr>
+        <tr>
+            <td>QL nguồn dữ liệu</td>
+            <td>
+                <input type="checkbox" id="input191" name="permissions[]"
+                       value="source.list" {{@$doc && $doc->hasAccess('source.list') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input192" name="permissions[]"
+                       value="source.edit" {{@$doc && $doc->hasAccess('source.edit') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input193" name="permissions[]"
+                       value="source.add" {{@$doc && $doc->hasAccess('source.add') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="input194" name="permissions[]"
+                       value="source.delete" {{@$doc && $doc->hasAccess('source.delete') ? 'checked' : ''}}>
+            </td>
+            <td>
+                <input type="checkbox" id="group19"
+                       onclick="checkAll('group19', 'input19')">
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -148,6 +171,13 @@
             <td>
                 <input type="checkbox" id="input9" name="permissions[]"
                        value="danh-muc-thu-chi.index" {{@$doc && $doc->hasAccess('danh-muc-thu-chi.index') ? 'checked' : ''}}>
+            </td>
+        </tr>
+        <tr>
+            <td>Duyệt nguồn</td>
+            <td>
+                <input type="checkbox" id="input10" name="permissions[]"
+                       value="source.update" {{@$doc && $doc->hasAccess('source.update') ? 'checked' : ''}}>
             </td>
         </tr>
         </tbody>

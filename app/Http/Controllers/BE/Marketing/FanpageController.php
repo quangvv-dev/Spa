@@ -21,6 +21,7 @@ class FanpageController extends Controller
 //        view()->share([
 //            'source' => $source,
 //        ]);
+        $this->middleware('permission:marketing.fanpage', ['only' => ['index']]);
     }
 
     /**
@@ -30,7 +31,7 @@ class FanpageController extends Controller
      */
     public function index(Request $request)
     {
-        $fanpages = $this->fanpage->index($request)->paginate(StatusCode::PAGINATE_20);
+        $fanpages = $this->fanpage->index($request)->paginate(1);
         $source = Source::pluck('name', 'id')->toArray();
         if ($request->session()->has('login-facebook1')) {
             $data_login_fb = $request->session()->get('login-facebook1');
@@ -38,7 +39,7 @@ class FanpageController extends Controller
             $data_login_fb = null;
         }
         if ($request->ajax()) {
-            return view('marketing.fanpage.ajax', compact('fanpages', 'data_login_fb'));
+            return view('marketing.fanpage.ajax', compact('fanpages', 'data_login_fb','source'));
         }
         return view('marketing.fanpage.index',compact('fanpages','data_login_fb','source'));
     }

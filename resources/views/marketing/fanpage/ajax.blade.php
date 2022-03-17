@@ -1,4 +1,4 @@
-<div class="table-responsive tableFixHead table-bordered table-hover">
+<div id="registration-form" class="table-responsive tableFixHead table-bordered table-hover">
     <form action="">
         <table class="table table-custom">
             <thead>
@@ -59,6 +59,6 @@
         </table>
     </form>
     <div class="float-right">
-        {{--{{$fanpages->links()}}--}}
+        {{$fanpages->links()}}
     </div>
 </div>

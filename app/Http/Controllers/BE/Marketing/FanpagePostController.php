@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Date;
 
 class FanpagePostController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('permission:marketing.fanpage_post', ['only' => ['index']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,9 +30,11 @@ class FanpagePostController extends Controller
     {
         $source = Source::pluck('name', 'id')->toArray();
         $my_page = Fanpage::pluck('name', 'id')->toArray();
-        $posts = FanpagePost::paginate(StatusCode::PAGINATE_20);
+
+        $posts = FanpagePost::search($request->all())->paginate(StatusCode::PAGINATE_20);
+
         if ($request->ajax()) {
-            return view('marketing.fanpage_post.ajax', compact('posts'));
+            return view('marketing.fanpage_post.ajax', compact('posts','source'));
         }
         return view('marketing.fanpage_post.index',compact('posts','my_page','source'));
     }

@@ -29,8 +29,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('call-center', 'CallController');
 
     Route::resource('status', 'StatusController');
-    Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
-    Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
+//    Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
+//    Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryServiceController');
     Route::resource('category-product', 'CategoryProductController');
     Route::resource('services', 'ServiceController');
@@ -219,6 +219,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::resource('source-fb', 'SourceController');
         Route::resource('source-landipage', 'LandipageController');
         Route::post('update-accept-source', 'SourceController@updateAcceptSource');
+        Route::post('update-accept-source-landi', 'LandipageController@updateAcceptSource');
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');

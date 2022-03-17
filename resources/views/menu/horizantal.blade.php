@@ -67,22 +67,29 @@
                 </li>
             @endif
             <li class="nav-item with-sub">
-                <a class="nav-link {{ Request::is('marketing/fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}" href="#"><i class="fas fa-magnet"></i><span>Marketing</span></a>
+                <a class="nav-link {{ Request::is('marketing/fanpage*')||Request::is('posts*')||Request::is('customer-post*')||Request::is('rules*') ? 'active' : '' }}"
+                   href="#"><i class="fas fa-magnet"></i><span>Marketing</span></a>
                 <div class="sub-item">
                     <ul>
-                        @if($roleGlobal->permission('fanpage'))
+                        @if($roleGlobal->permission('marketing.fanpage'))
                             <li><a href="{{route('marketing.fanpage.index')}}">Fanpage </a></li>
                         @endif
+
+                        @if($roleGlobal->permission('marketing.fanpage_post'))
                             <li><a href="{{route('marketing.fanpage-post.index')}}">Fanpage Post</a></li>
+                        @endif
+
+                        @if($roleGlobal->permission('source.list'))
                             <li class="sub-with-sub">
                                 <a href="#">Nguồn dữ liệu</a>
                                 <ul>
                                     <li><a href="{!! route('marketing.source-fb.index') !!}">Kết nối FaceBook</a></li>
-                                    <li><a href="{!! route('marketing.source-landipage.index') !!}">Kết nối Landipage</a></li>
+                                    <li><a href="{!! route('marketing.source-landipage.index') !!}">Kết nối
+                                            Landipage</a></li>
                                 </ul>
                             </li>
-
-                            {{--<li><a href="/marketing/fanpage-post">Danh sách bài post</a></li>--}}
+                        @endif
+                        {{--<li><a href="/marketing/fanpage-post">Danh sách bài post</a></li>--}}
                         {{--<li><a href="/marketing/seeding-number">Kho số seeding</a></li>--}}
                         {{--<li><a href="/marketing/source-fb">Nguồn dữ liệu</a></li>--}}
 
@@ -92,9 +99,9 @@
                             @endif
                         @endif
                         {{--@if(empty($permissions) || !in_array('landipages.index',$permissions))--}}
-                            {{--@if($roleGlobal->permission('landipages.list'))--}}
-                                {{--<li><a href="{{route('landipages.index')}}">Landing Page</a></li>--}}
-                            {{--@endif--}}
+                        {{--@if($roleGlobal->permission('landipages.list'))--}}
+                        {{--<li><a href="{{route('landipages.index')}}">Landing Page</a></li>--}}
+                        {{--@endif--}}
                         {{--@endif--}}
                         @if($roleGlobal->permission('posts.list'))
                             <li><a href="{{route('posts.index')}}">Optin Form</a></li>
@@ -148,7 +155,7 @@
                             <li><a href="{!! route('trademark.index') !!}">Nhà cung cấp</a></li>
                         @endif
                         {{--@if($roleGlobal->permission('combos.list'))--}}
-                            {{--<li><a href="{!! route('combos.index') !!}">Danh sách combo</a></li>--}}
+                        {{--<li><a href="{!! route('combos.index') !!}">Danh sách combo</a></li>--}}
                         {{--@endif--}}
                         <li class="sub-with-sub">
                             <a href="#">Quản lý đơn hàng</a>
@@ -241,7 +248,8 @@
 
             @if($roleGlobal->permission('thu-chi.list'))
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"
+                       href="#">
                         <i class="fas fa-tasks"></i><span>Duyệt chi</span></a>
                     <div class="sub-item">
                         <ul>

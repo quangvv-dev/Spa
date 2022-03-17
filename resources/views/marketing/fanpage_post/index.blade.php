@@ -11,7 +11,7 @@
                                     data-placeholder="--tất cả--">
                                 <option></option>
                                 <option value="1">Đã gắn source</option>
-                                <option value="0">Chưa gắn source</option>
+                                <option value="2">Chưa gắn source</option>
                             </select>
                         </div>
                         <div class="col-lg-3 col-md-6">

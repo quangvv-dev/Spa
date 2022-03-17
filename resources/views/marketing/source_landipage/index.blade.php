@@ -139,7 +139,7 @@
                 value: value
             };
             $.ajax({
-                url:'/marketing/update-accept-source',
+                url:'/marketing/update-accept-source-landi',
                 method:'post',
                 data:data,
                 success:function (data) {
@@ -150,7 +150,7 @@
                             alertify.success('Hủy duyệt thành công !');
                         }
                     }else {
-                        alertify.error('Đã có lỗi xảy ra !');
+                        alertify.error('Bạn không có quyền duyệt !');
                     }
                 }
             })

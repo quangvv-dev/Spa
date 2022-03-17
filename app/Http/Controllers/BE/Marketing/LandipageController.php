@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class LandipageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:source.list', ['only' => ['index']]);
+        $this->middleware('permission:source.edit', ['only' => ['update']]);
+        $this->middleware('permission:source.add', ['only' => ['store']]);
+        $this->middleware('permission:source.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:source.update', ['only' => ['updateAcceptSource']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -109,7 +118,17 @@ class LandipageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+//        dd($request->all());
+        $source = Source::find($id);
+        $data['name'] = $request->name;
+        if($request->category_id){
+            $data['category_id'] = json_encode($request->category_id);
+        }
+        if($request->sale_id){
+            $data['sale_id'] = json_encode($request->sale_id);
+        }
+        $source->update($data);
+        return redirect()->back();
     }
 
     /**
@@ -134,6 +153,16 @@ class LandipageController extends Controller
         }
         return response()->json([
             'message' => $message
+        ]);
+    }
+
+    public function updateAcceptSource(Request $request)
+    {
+        $data['accept'] = $request->value == 'true' ? 1 : 0;
+        Source::find($request->id)->update($data);
+
+        return response()->json([
+            'statusCode' => true,
         ]);
     }
 }

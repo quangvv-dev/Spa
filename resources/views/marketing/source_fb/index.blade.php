@@ -12,10 +12,26 @@
                                 {!! Form::select('searchUser',$marketings, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn mkt')) !!}
                             </div>
                             <div class="col-2">
-                                {!! Form::select('searchCategory',$categories, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn dịch vụ')) !!}
+{{--                                {!! Form::select('searchCategory',$categories, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn dịch vụ')) !!}--}}
+                                <select name="searchCategory" id="" class="form-control select2" data-placeholder="Chọn dịch vụ">
+                                    <option></option>
+                                    @if(count($categories))
+                                        @foreach($categories as $key => $item)
+                                            <option value="{{$key}}">{{$item}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                             <div class="col-2">
-                                {!! Form::select('searchBranch',$branch_ids, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn chi nhánh')) !!}
+{{--                                {!! Form::select('searchBranch',$branch_ids, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn chi nhánh')) !!}--}}
+                                <select name="searchBranch" id="" class="form-control select2" data-placeholder="Chọn chi nhánh">
+                                    <option></option>
+                                    @if(count($branch_ids))
+                                        @foreach($branch_ids as $key => $item)
+                                            <option value="{{$key}}">{{$item}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                             <div class="col-2">
                                 <input name="searchName" type="text" class="form-control" placeholder="Tên source">
@@ -96,7 +112,7 @@
                             alertify.success('Hủy duyệt thành công !');
                         }
                     }else {
-                        alertify.error('Đã có lỗi xảy ra !');
+                        alertify.error('Bạn không có quyền duyệt !');
                     }
                 }
             })
