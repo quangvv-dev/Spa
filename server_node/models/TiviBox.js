@@ -17,7 +17,7 @@ var TiviBox = {
     },
 
     CheckPhoneAdd: function (phone, source_id, callback) {
-        return db.query("SELECT * FROM customers WHERE phone = ? AND  source_id = ?", [phone, source_id], callback);
+        return db.query("SELECT * FROM customers WHERE phone = ? AND  source_fb = ?", [phone, source_id], callback);
     },
 
     CheckPost: function (post_id, callback) {
