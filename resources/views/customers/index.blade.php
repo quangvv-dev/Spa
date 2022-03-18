@@ -154,11 +154,22 @@
 
                 $('.customer-chat').empty();
                 let id = $(this).data('customer-id');
-
+                let check_show_button = false;
                 $.ajax({
                     url: "{{ Url('/group_comments/') }}" + '/' + id,
                     method: "get",
                 }).done(function (data) {
+                    if(data.customer.page_id && data.customer.FB_ID && data.customer.fanpage){
+                        check_show_button = true;
+                        $('#view_chat .chat-page_id').val(data.customer.page_id);
+                        $('#view_chat .chat-sender_id').val(data.customer.FB_ID);
+                        $('#view_chat .chat-token').val(data.customer.fanpage.access_token);
+                    } else {
+                        check_show_button = false;
+                        $('#view_chat .chat-page_id').val('');
+                        $('#view_chat .chat-sender_id').val('');
+                        $('#view_chat .chat-token').val('');
+                    }
                     console.log(data.customer.categories, 'dadada');
                     let category = '';
 
@@ -211,14 +222,19 @@
                     </div>
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
+
+                        <button class="btn btn-warning message-chat float-right">Hội thoại</button>
+                        <button class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
                     </div>
                 </div>
+                @include('message_fb.index')
                 <div class="chat-ajax" >
 
-                </div>`;
+                        </div>`;
 
+                let html1 = '';
                     data.group_comments.forEach(function (item) {
-                        html += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
+                        html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
                                 <div class="no-padd col-md-12">
                                     <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.user ? item.user.full_name : "") + `</a>
                                         <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
@@ -236,10 +252,20 @@
                                 </div>
                             </div>`;
                     });
+
                     $(".status-result").val(data.customer.status_id).change();
                     $('.customer-chat').append(html);
+                    $('.chat-ajax').html(html1);
                     $('#view_chat').modal("show");
                     $('.chat-save').attr('data-customer-chat-id', data.customer.id);
+                    $('#view_chat .chatApplication').hide();
+                    if(!check_show_button){
+                        $('#view_chat .message-chat').hide();
+                        $('#view_chat .sale-note').hide();
+                    } else {
+                        $('#view_chat .message-chat').show();
+                        $('#view_chat .sale-note').show();
+                    }
                 });
             });
 
@@ -1174,5 +1200,26 @@
             $(window).resize(onscroll);
         });
 
+        $(document).on('click','#view_chat .message-chat',function () {
+
+            let page_id = $('.chat-page_id').val();
+            let sender_id = $('.chat-sender_id').val();
+            let token = $('.chat-token').val();
+
+            if(page_id && sender_id && token){
+                $('#view_chat .chat-ajax').hide();
+                $('#view_chat .chatApplication').show();
+                getMessage(page_id,sender_id,token);
+            } else {
+                alertify.warning('Không có đoạn hội thoại !');
+            }
+        })
+        $(document).on('click','#view_chat .sale-note',function () {
+            $('#view_chat .chat-ajax').show();
+            $('#view_chat .chatApplication').hide();
+        })
+
     </script>
+    @include('message_fb.js_chat_app')
+
 @endsection

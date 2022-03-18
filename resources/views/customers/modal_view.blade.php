@@ -10,6 +10,9 @@
             <div class="modal-body customer-chat">
 
             </div>
+            <input type="hidden" class="chat-page_id">
+            <input type="hidden" class="chat-sender_id">
+            <input type="hidden" class="chat-token">
         </div>
     </div>
 </div>

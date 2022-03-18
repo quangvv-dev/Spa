@@ -122,12 +122,28 @@
         background-color: #f5f6f7;
         border-radius: 3px
     }
+
     .publisher > *:first-child {
         margin-left: 0
     }
 
     .chatApplication .publisher > * {
         margin: 0 8px
+    }
+
+    .next{
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: solid 1px;
+        padding: 4px 13px;
+        padding-bottom: 7px;
+    }
+    .previous{
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border: solid 1px;
+        padding: 4px 13px;
+        padding-bottom: 7px;
     }
 
     button,
@@ -138,6 +154,7 @@
         font-family: Roboto, sans-serif;
         font-weight: 300
     }
+
     .chatApplication .file-group input[type="file"] {
         position: absolute;
         opacity: 0;
@@ -149,33 +166,45 @@
 
 <div class="page-content page-container chatApplication" id="page-content">
     <div class="row d-flex justify-content-center">
-            <div class="col-md-12">
-                <div class="card card-bordered chatContent">
-                    {{--<div class="ps-container ps-theme-default ps-active-y"--}}
-                    {{--style="overflow-y: scroll !important; height:400px !important;">--}}
+        <div class="col-md-12">
+            <div class="card card-bordered chatContent">
+                {{--<div class="ps-container ps-theme-default ps-active-y"--}}
+                {{--style="overflow-y: scroll !important; height:400px !important;">--}}
 
-                    {{--<div class="media media-chat">--}}
-                    {{--<img class="avatar" src="https://img.icons8.com/color/36/000000/administrator-male.png"--}}
-                    {{--alt="...">--}}
-                    {{--<div class="media-body">--}}
-                    {{--<p>What are you doing tomorrow?<br> Can we come up a bar?</p>--}}
-                    {{--<p class="meta">--}}
-                    {{--<time datetime="2018">23:58</time>--}}
-                    {{--</p>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
+                {{--<div class="media media-chat">--}}
+                {{--<img class="avatar" src="https://img.icons8.com/color/36/000000/administrator-male.png"--}}
+                {{--alt="...">--}}
+                {{--<div class="media-body">--}}
+                {{--<p>What are you doing tomorrow?<br> Can we come up a bar?</p>--}}
+                {{--<p class="meta">--}}
+                {{--<time datetime="2018">23:58</time>--}}
+                {{--</p>--}}
+                {{--</div>--}}
+                {{--</div>--}}
 
-                    {{--<div class="media media-chat media-chat-reverse">--}}
-                    {{--<div class="media-body">--}}
-                    {{--<p>Long time no see! Tomorrow office. will be free on sunday.11</p>--}}
-                    {{--<p class="meta">--}}
-                    {{--<time datetime="2018">00:06</time>--}}
-                    {{--</p>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
+                {{--<div class="media media-chat media-chat-reverse">--}}
+                {{--<div class="media-body">--}}
+                {{--<p>Long time no see! Tomorrow office. will be free on sunday.11</p>--}}
+                {{--<p class="meta">--}}
+                {{--<time datetime="2018">00:06</time>--}}
+                {{--</p>--}}
+                {{--</div>--}}
+                {{--</div>--}}
 
-                    {{--</div>--}}
-                </div>
+                {{--</div>--}}
             </div>
         </div>
+        <div class="col-md-2">
+            <input type="hidden" class="input-previous">
+            <a class="previous" href="javascript:void(0)" data-url="" aria-label="Previous" style="display: none;">
+                <span aria-hidden="true">«</span>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <input type="hidden" class="input-next">
+            <a class="next" href="javascript:void(0)" data-url="" aria-label="Next" style="display: none;">
+                <span aria-hidden="true">»</span>
+            </a>
+        </div>
+    </div>
 </div>

@@ -1037,6 +1037,12 @@
             });
         });
         // });
+        $(document).on('click','#click_tab_14',function () {
+            let page_id = $('.chat-page_id').val();
+            let sender_id = $('.chat-sender_id').val();
+            let token = $('.chat-token').val();
+            getMessage(page_id,sender_id,token);
+        })
     </script>
     @include('message_fb.js_chat_app')
 @endsection
