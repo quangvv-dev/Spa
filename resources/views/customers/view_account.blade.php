@@ -302,8 +302,8 @@
                                                 <input type="hidden" class="chat-page_id" value="{{@$customer->page_id}}">
                                                 <input type="hidden" class="chat-sender_id" value="{{@$customer->FB_ID}}">
                                                 <input type="hidden" class="chat-token" value="{{@$customer->fanpage->access_token}}">
-                                                <a href="#tab14" id="click_tab_14" data-id="{{$customer->id}}"
-                                                   data-toggle="tab">Hội thoại FB</a>
+                                                {{--<a href="#tab14" id="click_tab_14" data-id="{{$customer->id}}"--}}
+                                                   {{--data-toggle="tab">Hội thoại FB</a>--}}
                                             </li>
                                         </ul>
                                     </div>
@@ -437,9 +437,9 @@
                                         <div class="tab-pane" id="tab13">
                                             @include('albums.index')
                                         </div>
-                                        <div class="tab-pane" id="tab14">
-                                            @include('message_fb.index')
-                                        </div>
+                                        {{--<div class="tab-pane" id="tab14">--}}
+                                            {{--@include('message_fb.index')--}}
+                                        {{--</div>--}}
 
                                     </div>
                                 </div>
@@ -1037,12 +1037,12 @@
             });
         });
         // });
-        $(document).on('click','#click_tab_14',function () {
-            let page_id = $('.chat-page_id').val();
-            let sender_id = $('.chat-sender_id').val();
-            let token = $('.chat-token').val();
-            getMessage(page_id,sender_id,token);
-        })
+        // $(document).on('click','#click_tab_14',function () {
+        //     let page_id = $('.chat-page_id').val();
+        //     let sender_id = $('.chat-sender_id').val();
+        //     let token = $('.chat-token').val();
+        //     getMessage(page_id,sender_id,token);
+        // })
     </script>
-    @include('message_fb.js_chat_app')
+    {{--@include('message_fb.js_chat_app')--}}
 @endsection
