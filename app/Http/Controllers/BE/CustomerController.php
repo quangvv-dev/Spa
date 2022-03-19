@@ -249,7 +249,7 @@ class CustomerController extends Controller
         $tasks = Task::where('customer_id', $id)->orderBy('id', 'DESC')->get();
         $taskStatus = TaskStatus::with('tasks')->get();
         $status = TaskStatus::pluck('name', 'id')->toArray();
-        $progress = Task::PROGRESS;
+//        $progress = Task::PROGRESS;
         $departments = Department::pluck('name', 'id');
         //EndTask
         //History SMS
@@ -307,7 +307,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'progress', 'departments', 'history', 'wallet',
+                'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'departments', 'history', 'wallet',
                 'package', 'call_center', 'orders'));
     }
 
