@@ -646,6 +646,7 @@ class CustomerController extends Controller
                                     'all_day' => 'on',
                                     'priority' => 1,
                                     'branch_id' => @$customer->branch_id,
+                                    'customer_status' => @$customer->status_id,
                                     'type' => 2,
                                     'sms_content' => Functions::vi_to_en($sms_content),
                                     'name' => 'CSKH ' . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode($text_category,
