@@ -39,17 +39,22 @@ class ThuChiController extends Controller
         $user = Auth::user();
         $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
         $quan_ly = $user->department_id == 1 && $user->role != 1 ? true : false;
+        $ke_toan = $user->department_id == 8 ? true : false;
         $branches = [];
         $users = User::pluck('full_name', 'id')->toArray();
-        if ($admin) {
-            $branches = Branch::pluck('name', 'id');
-        } else {
+        if (!$admin) {
             if ($quan_ly) {
                 $search['duyet_id'] = $user->id;
-            } else {
+            }elseif ($ke_toan){
+                $branches = Branch::pluck('name', 'id');
+            }
+            else {
                 $search['thuc_hien_id'] = $user->id;
             }
+        }else{
+            $branches = Branch::pluck('name', 'id');
         }
+
         $docs = ThuChi::search($search)->orderByDesc('id');
         View::share([
             'allPrice' => $docs->sum('so_tien'),

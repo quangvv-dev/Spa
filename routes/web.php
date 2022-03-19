@@ -213,13 +213,15 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::resource('fanpage-post', 'FanpagePostController');
         Route::post('storePost', 'FanpagePostController@storeCustom')->name('fanpage_post.storeCustom');
 
-        Route::post('storePost', 'FanpagePostController@storeCustom')->name('fanpage_post.storeCustom');
         Route::resource('seeding-number', 'SeedingNumberController');
         Route::delete('delete-seeding', 'SeedingNumberController@deleteSeeding');
         Route::resource('source-fb', 'SourceController');
         Route::resource('source-landipage', 'LandipageController');
         Route::post('update-accept-source', 'SourceController@updateAcceptSource');
         Route::post('update-accept-source-landi', 'LandipageController@updateAcceptSource');
+
+        Route::get('leader', 'MarketingController@index');
+
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');

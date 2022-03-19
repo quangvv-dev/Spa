@@ -9,11 +9,11 @@
                         <div class="row" style="align-items: baseline">
                             <h4 class="col-2">Nguồn Facebook</h4>
                             <div class="col-2">
-                                {!! Form::select('searchUser',$marketings, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn mkt')) !!}
+                                {!! Form::select('mkt_id',$marketings, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn mkt')) !!}
                             </div>
                             <div class="col-2">
 {{--                                {!! Form::select('searchCategory',$categories, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn dịch vụ')) !!}--}}
-                                <select name="searchCategory" id="" class="form-control select2" data-placeholder="Chọn dịch vụ">
+                                <select name="category_id" id="" class="form-control select2" data-placeholder="Chọn nhóm dịch vụ">
                                     <option></option>
                                     @if(count($categories))
                                         @foreach($categories as $key => $item)
@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-2">
 {{--                                {!! Form::select('searchBranch',$branch_ids, null, array('class' => 'form-control select2','data-placeholder' => 'Chọn chi nhánh')) !!}--}}
-                                <select name="searchBranch" id="" class="form-control select2" data-placeholder="Chọn chi nhánh">
+                                <select name="branch_id" id="" class="form-control select2" data-placeholder="Chọn chi nhánh">
                                     <option></option>
                                     @if(count($branch_ids))
                                         @foreach($branch_ids as $key => $item)

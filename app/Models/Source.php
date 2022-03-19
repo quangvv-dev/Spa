@@ -52,20 +52,20 @@ class Source extends Model
             }
         })->when(isset($search['searchArrayUser']) && $search['searchArrayUser'], function ($query) use ($search) {
             return $query->whereIn('mkt_id', $search['searchArrayUser']);
-        })->when(isset($search['searchUser']) && $search['searchUser'], function ($query) use ($search) {
-            return $query->where('mkt_id', $search['searchUser']);
-        })->when(isset($search['searchId']) && $search['searchId'], function ($query) use ($search) {
-            return $query->where('id', $search['searchId']);
+        })->when(isset($search['mkt_id']) && $search['mkt_id'], function ($query) use ($search) {
+            return $query->where('mkt_id', $search['mkt_id']);
         })->when(isset($search['searchChanel']) && $search['searchChanel'], function ($query) use ($search) {
             return $query->where('chanel', $search['searchChanel']);
         })->when(isset($search['searchAccept']) && $search['searchAccept'], function ($query) use ($search) {
             return $query->where('accept', $search['searchAccept']);
-        })->when(isset($search['searchCategory']) && $search['searchCategory'], function ($query) use ($search) {
-            return $query->where('category_id', 'like', '%"' . $search['searchCategory'] . '"%');
+        })->when(isset($search['category_id']) && $search['category_id'], function ($query) use ($search) {
+            return $query->where('category_id', 'like', '%"' . $search['category_id'] . '"%');
         })->when(isset($search['searchId']) && $search['searchId'], function ($query) use ($search) {
             return $query->where('id', $search['searchId']);
-        })->when(isset($search['searchBranch']) && $search['searchBranch'], function ($query) use ($search) {
-            return $query->where('branch_id', $search['searchBranch']);
+        })->when(isset($search['branch_id']) && $search['branch_id'], function ($query) use ($search) {
+            return $query->where('branch_id', $search['branch_id']);
+        })->when(isset($search['group_branch']) && count($search['group_branch']), function ($q) use ($search) {
+            $q->whereIn('branch_id', $search['group_branch']);
         })->orderBy('updated_at', 'desc');
         return $docs;
     }

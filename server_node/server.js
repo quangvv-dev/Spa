@@ -64,9 +64,8 @@ app.post('/webhook', function (req, res) {
         } else {
 
             var comments = entry.changes;
-            console.log(comments, 'COMMENT LAN 2');
+            console.log(comments, 'COMMENT');
             for (var value of comments) {
-                console.log(value, 'comentt');
                 if (value.value.item === 'comment' && value.value.message) {
                     let text2 = value.value.message;
                     text2 = text2.replace(".", "");
@@ -83,6 +82,7 @@ app.post('/webhook', function (req, res) {
                         }
                     })
                 }
+                return false;
             }
         }
     }
