@@ -35,6 +35,9 @@ class ThuChiController extends Controller
      */
     public function index(Request $request)
     {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
         $search = $request->all();
         $user = Auth::user();
         $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
