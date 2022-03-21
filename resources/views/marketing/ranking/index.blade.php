@@ -278,6 +278,9 @@
             height: 72vh;
             overflow: hidden;
         }
+        .card-content .card-body .content1{
+            margin-top: 20px;
+        }
 
     </style>
         <!-- card actions section start -->
