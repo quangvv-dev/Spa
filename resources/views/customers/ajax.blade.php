@@ -183,7 +183,11 @@
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center name-customer" data-customer-id="{{ $customer->id }}">
                         <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
-                            <i class="fas fa-info-circle"></i>
+                            @if($customer->FB_ID)
+                            <i class="fab fa-facebook-messenger" style="font-size: 16px"></i>
+                            @else
+                                <i class="fas fa-info-circle"></i>
+                            @endif
                         </a>
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
