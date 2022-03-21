@@ -109,4 +109,9 @@ class MarketingController extends Controller
     {
         //
     }
+
+    public function ranking()
+    {
+        return view('marketing.ranking.index');
+    }
 }

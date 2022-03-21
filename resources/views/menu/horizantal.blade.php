@@ -233,6 +233,14 @@
                         @if($roleGlobal->permission('call-center'))
                             <li><a href="{{route('call-center.index')}}">Quản lý tổng đài</a></li>
                         @endif
+
+                        <li class="sub-with-sub">
+                            <a href="#">Marketing</a>
+                            <ul>
+                                <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </div>
             </li>

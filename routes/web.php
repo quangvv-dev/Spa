@@ -221,6 +221,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('update-accept-source-landi', 'LandipageController@updateAcceptSource');
 
         Route::get('leader', 'MarketingController@index');
+        Route::get('ranking', 'MarketingController@ranking');
 
     });
 
