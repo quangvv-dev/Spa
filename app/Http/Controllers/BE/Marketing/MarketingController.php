@@ -14,6 +14,7 @@ use App\Models\Source;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class MarketingController extends Controller
 {
@@ -146,9 +147,10 @@ class MarketingController extends Controller
             $data = Order::searchAll($input)->select('gross_revenue');
             $item->gross_revenue = $data->sum('gross_revenue');
             return $item;
-        })->sortByDesc('gross_revenue');
-        $my_key = [];
-//        dd($marketing);
+        })->sortByDesc('gross_revenue')->toArray();
+
+        $my_key = array_keys(array_column((array)$marketing, 'id'), Auth::user()->id);
+
         if ($request->ajax()) {
             return view('marketing.ranking.ajax', compact('marketing', 'my_key'));
         }
