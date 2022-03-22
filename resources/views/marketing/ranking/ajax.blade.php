@@ -16,7 +16,7 @@
                                 <div
                                     class="item-rank {{\Illuminate\Support\Facades\Auth::user()->id==$item['id']?'my-rank':''}} {{$key==1?'item-rank1':'item-rank'.($key)}}">
                                     <div class="king-sale">
-                                        <img src="{{asset('images/bxh2.png')}}">
+                                        <img src="{{asset('default/bxh2.png')}}">
                                     </div>
                                     <div
                                         class="avatar-container {{$key == 1?'blink1':'blink'.($key)}}">
@@ -35,9 +35,6 @@
                             @endforeach
                             @if((count($my_key) && $my_key[0]>9))
                                 <div class="item-rank my-rank item-rank11">
-                                    <div class="king-sale">
-                                        <img src="{{asset('images/bxh2.png')}}">
-                                    </div>
                                     <div
                                         class="avatar-container {{'blink'.($my_key[0]+1)}}">
                                         <img class="avatar-img"
