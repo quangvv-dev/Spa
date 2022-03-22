@@ -514,7 +514,6 @@ class Functions
     {
         $date_check = Carbon::now()->subDays(7)->format($format);
         $date = Carbon::now()->format($format);
-
         $request->merge(['start_date' => $date_check]);
         $request->merge(['end_date' => $date]);
     }

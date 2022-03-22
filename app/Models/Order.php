@@ -200,13 +200,12 @@ class Order extends Model
                             $q->whereBetween('created_at', getTime(($input['data_time'])));
                         });
                 })
-                ->when(empty($input['bor_none']) && isset($input['start_date']) && isset($input['end_date']),
-                    function ($q) use ($input) {
-                        $q->whereBetween('created_at', [
-                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                        ]);
-                    })
+                ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                    ]);
+                })
                 ->when(isset($input['bor_none']), function ($query) use ($input) {
                     $query->when($input['bor_none'] == 'unpaid', function ($q) use ($input) {
                         $q->where('the_rest', '<>', 0);
@@ -230,6 +229,9 @@ class Order extends Model
                 ->when(isset($input['branch_id']) && empty($input['phone']), function ($query) use ($input) {
                     $query->where('branch_id', $input['branch_id']);
                 })
+                ->when(isset($input['is_upsale']), function ($query) use ($input) {
+                    $query->where('is_upsale', $input['is_upsale']);
+                })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
                 });
@@ -249,7 +251,7 @@ class Order extends Model
             return "Tiền mặt";
         } elseif ($this->payment_type === 2) {
             return "Thẻ";
-        }elseif ($this->payment_type === 4) {
+        } elseif ($this->payment_type === 4) {
             return "Thẻ";
         } else {
             return "Điểm";

@@ -180,7 +180,9 @@ class Schedule extends Model
         if (!empty($request['search'])) {
             $docs = $docs->whereIn('status', $request['search']);
         }
-
+        if (!empty($request['group_user'])) {
+            $docs = $docs->whereIn('user_id', $request['group_user']);
+        }
         if (!empty($request['user'])) {
             $docs = $docs->where('creator_id', $request['user']);
         }
