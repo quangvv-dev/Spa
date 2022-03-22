@@ -40,7 +40,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                 } finally {
                     //create Customer
                     console.log(name, 'Name Customer');
-                    const created_at = new Date();
+                    const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
                     model.CheckSource(rows[0].source_id, function (err, row2) {
                         if (err) {
                             console.log(err);
@@ -137,7 +137,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
             console.log(err, 'err');
         } else {
             if (rows.length > 0) {
-                const created_at = new Date();
+                const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
                 model.CheckSource(rows[0].source_id, function (err, row2) {
                     if (err) {
                         console.log(err);
@@ -220,7 +220,7 @@ exports.UpdateTimeOrderOff = (socket_id, io) => {
                 const lecture_id = rows[0].lecture_id;
                 const user_id = rows[0].user_id;
                 const video_id = rows[0].video_id;
-                const created_at = new Date();
+                const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
                 model.UpdateLearn(user_id, lecture_id, video_id, time, created_at);
                 console.log('done disconnect');
             } else {
