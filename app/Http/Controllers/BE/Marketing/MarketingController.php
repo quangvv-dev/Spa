@@ -148,6 +148,7 @@ class MarketingController extends Controller
             return $item;
         })->sortByDesc('gross_revenue');
         $my_key = [];
+//        dd($marketing);
         if ($request->ajax()) {
             return view('marketing.ranking.ajax', compact('marketing', 'my_key'));
         }

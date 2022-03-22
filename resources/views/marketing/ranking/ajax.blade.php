@@ -7,8 +7,9 @@
                         <div
                             style="transform: rotate(-12.5deg); height: 8px; width: 100%; background-color: #ecedef; position: absolute; top: 13.5%;"></div>
                         @if(count($marketing))
-                            @foreach($marketing as $key =>$item)
-                                @php $key = $key+1 @endphp
+                            @php $key = 0 @endphp
+                            @foreach($marketing  as $item)
+                                @php $key ++ @endphp
                                 @if ($key >10)
                                     @break
                                 @endif
