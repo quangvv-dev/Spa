@@ -62,10 +62,8 @@ class MarketingController extends Controller
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
             $item->payment = $payment->sum('price');
-
             return $item;
-
-        });
+        })->sortByDesc('payment');
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
