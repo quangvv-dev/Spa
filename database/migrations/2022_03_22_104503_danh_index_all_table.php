@@ -27,18 +27,14 @@ class DanhIndexAllTable extends Migration
             $table->integer('person_action')->index()->change();
             $table->integer('category_id')->index()->change();
         });
-        Schema::table('customers', function (Blueprint $table) {
-            $table->integer('page_id')->index()->change();
-
+        Schema::table('payment_histories', function (Blueprint $table) {
+            $table->integer('order_id')->index()->change();
+            $table->integer('payment_type')->index()->change();
         });
-        Schema::table('customers', function (Blueprint $table) {
-            $table->integer('page_id')->index()->change();
-
-        });
-        Schema::table('customers', function (Blueprint $table) {
-            $table->integer('page_id')->index()->change();
-
-        });
+//        Schema::table('customers', function (Blueprint $table) {
+//            $table->integer('page_id')->index()->change();
+//
+//        });
 
     }
 

@@ -9,6 +9,7 @@ use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\PaymentHistory;
 use App\Models\Schedule;
 use App\Models\Source;
 use App\User;
@@ -37,15 +38,37 @@ class MarketingController extends Controller
      */
     public function index(Request $request)
     {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
         $input = $request->all();
-        $input['searchAccept'] = UserConstant::ACTIVE;
+//        dd($input);
         if (isset($input['location_id'])) {
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $marketing = Source::search($input)->with('user')->select('name', 'mkt_id', 'chanel')->get()->map(function ($item) use ($input) {
-            $customer = Customer::where('source_fb', $item->mkt_id);
+
+        $marketing = User::where('department_id', 3)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+            $input['marketing'] = $item->id;
+            $customer = Customer::search($input)->select('id');
+            $item->contact = $customer->count();
+            $input['group_user'] = $customer->pluck('id')->toArray();
+            $schedules = Schedule::search($input)->select('id');
+            $item->schedules = $schedules->count();
+            $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            $orders = Order::searchAll($input)->select('id', 'gross_revenue');
+            $payment = PaymentHistory::search($input, 'price')->whereIn('order_id', $orders->pluck('id')->toArray());
+            $item->orders = $orders->count();
+            $item->all_total = $orders->sum('all_total');
+            $item->gross_revenue = $orders->sum('gross_revenue');
+            $item->payment = $payment->sum('price');
+
+            return $item;
+
         });
+        if ($request->ajax()) {
+            return view('marketing.leader.ajax', compact('marketing'));
+        }
 
         return view('marketing.leader.index', compact('marketing'));
     }
@@ -83,15 +106,21 @@ class MarketingController extends Controller
             Functions::addSearchDate($request);
         }
         $input = $request->all();
+        $input['searchAccept'] = UserConstant::ACTIVE;
 
-        $marketing = User::where('department_id', 3)->select('id', 'name')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', 3)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $customer = Customer::search($input)->select('id');
             $item->contact = $customer->count();
             $input['group_user'] = $customer->pluck('id')->toArray();
             $schedules = Schedule::search($input)->select('id');
             $item->schedules = $schedules->count();
-            $item->schedules = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            $orders = Order::searchAll($input)->select('gross_revenue');
+
+            $item->all_total = $orders->sum('all_total');
+            $item->gross_revenue = $orders->sum('gross_revenue');
+
         });
     }
 
