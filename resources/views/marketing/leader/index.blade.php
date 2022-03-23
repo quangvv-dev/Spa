@@ -51,7 +51,7 @@
                         {{--</div>--}}
                         <div class="col-md-2">
                             <select name="branch_id" id="branch_id" class="form-control">
-                                <option value="-1">Tất cả chi nhánh</option>
+                                <option value="">Tất cả chi nhánh</option>
                                 @foreach($branchs as $k=> $item)
                                     <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
                                 @endforeach

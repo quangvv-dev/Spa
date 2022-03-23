@@ -62,7 +62,7 @@
                     <td class="text-center pdr10">{{number_format($item->all_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->gross_revenue)}}</td>
 
-                    <td class="text-center pdr10">{{number_format($item->payment - $item->gross_revenue)}}</td>
+                    <td class="text-center pdr10">{{number_format(($item->payment > $item->gross_revenue)?$item->payment - $item->gross_revenue:0)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment)}}</td>
                 </tr>
             @endforeach
