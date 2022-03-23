@@ -55,11 +55,14 @@ class MarketingController extends Controller
             $group_user = $customer->pluck('id')->toArray();
             $input['group_user'] = $group_user;
 
-            $schedules = Schedule::search($input)->select('id');
-
-            $item->schedules = $schedules->count();
-            $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-
+            if (count($group_user)) {
+                $schedules = Schedule::search($input)->select('id');
+                $item->schedules = $schedules->count();
+                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            } else {
+                $item->schedules = 0;
+                $item->schedules_den = 0;
+            }
             $orders = Order::searchAll($input)->select('id', 'gross_revenue');
             $payment = PaymentHistory::search($input, 'price')->whereIn('order_id', $orders->pluck('id')->toArray());
             $item->orders = $orders->count();
