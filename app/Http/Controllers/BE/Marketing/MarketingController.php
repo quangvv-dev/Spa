@@ -53,6 +53,8 @@ class MarketingController extends Controller
             $item->contact = $customer->count();
             $input['group_user'] = $customer->pluck('id')->toArray();
             $schedules = Schedule::search($input)->select('id');
+            $item->schedules = 0;
+            $item->schedules_den = 0;
             $item->schedules = $schedules->count();
             $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
             $orders = Order::searchAll($input)->select('id', 'gross_revenue');
