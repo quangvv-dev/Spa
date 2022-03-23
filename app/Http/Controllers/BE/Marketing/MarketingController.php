@@ -46,17 +46,20 @@ class MarketingController extends Controller
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
+//        $input['marketing'] = 0;
 
         $marketing = User::where('department_id', 3)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $customer = Customer::search($input)->select('id');
             $item->contact = $customer->count();
-            $input['group_user'] = $customer->pluck('id')->toArray();
+            $group_user = $customer->pluck('id')->toArray();
+            $input['group_user'] = $group_user;
+
             $schedules = Schedule::search($input)->select('id');
-            $item->schedules = 0;
-            $item->schedules_den = 0;
+
             $item->schedules = $schedules->count();
             $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+
             $orders = Order::searchAll($input)->select('id', 'gross_revenue');
             $payment = PaymentHistory::search($input, 'price')->whereIn('order_id', $orders->pluck('id')->toArray());
             $item->orders = $orders->count();
