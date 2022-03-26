@@ -67,7 +67,7 @@ class MarketingController extends Controller
                 $item->schedules = 0;
                 $item->schedules_den = 0;
             }
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue');
+            $orders = Order::searchAll($input)->select('id', 'gross_revenue','all_total');
             $payment = PaymentHistory::search($input, 'price')->whereIn('order_id', $orders->pluck('id')->toArray());
 
             unset($input['marketing']);
@@ -136,7 +136,7 @@ class MarketingController extends Controller
             $input['source_id'] = $item->id;
 
             $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
-                ->select('id', 'gross_revenue');
+                ->select('id', 'gross_revenue','all_total');
             unset($input['marketing']);
             $input['user_id'] = $item->id;
             $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
@@ -146,7 +146,7 @@ class MarketingController extends Controller
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
             return $item;
-        });
+        })->sortByDesc('payment');
         if ($request->ajax()) {
             return view('marketing.dashbroad.ajax', compact('source'));
         }
