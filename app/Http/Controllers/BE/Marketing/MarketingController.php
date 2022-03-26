@@ -69,6 +69,11 @@ class MarketingController extends Controller
             }
             $orders = Order::searchAll($input)->select('id', 'gross_revenue');
             $payment = PaymentHistory::search($input, 'price')->whereIn('order_id', $orders->pluck('id')->toArray());
+
+            unset($input['marketing']);
+            $input['user_id'] = $item->id;
+            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
+            $item->budget = $price->total_budget; //ngân sách
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
@@ -130,9 +135,11 @@ class MarketingController extends Controller
             }
             $input['source_id'] = $item->id;
 
-            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
             $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
                 ->select('id', 'gross_revenue');
+            unset($input['marketing']);
+            $input['user_id'] = $item->id;
+            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
             $item->budget = $price->total_budget; //ngân sách
             $item->customers = $customer->count();
             $item->orders = $orders->count();
