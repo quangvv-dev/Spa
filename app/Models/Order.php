@@ -139,6 +139,8 @@ class Order extends Model
                 })
                 ->when(isset($input['branch_id']), function ($query) use ($input) {
                     $query->where('branch_id', $input['branch_id']);
+                })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                    $q->whereIn('branch_id', $input['group_branch']);
                 })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
@@ -177,6 +179,10 @@ class Order extends Model
                     $query->whereHas('customer', function ($q) use ($input) {
                         $q->where('full_name', 'like', '%' . $input['customer'] . '%')
                             ->orWhere('phone', 'like', '%' . $input['customer'] . '%');
+                    });
+                })->when(isset($input['source_fb']), function ($query) use ($input) {
+                    $query->whereHas('customer', function ($q) use ($input) {
+                        $q->where('source_fb', $input['source_fb']);
                     });
                 })
                 ->when(isset($input['payment_type']), function ($query) use ($input) {
@@ -228,6 +234,8 @@ class Order extends Model
                 })
                 ->when(isset($input['branch_id']) && empty($input['phone']), function ($query) use ($input) {
                     $query->where('branch_id', $input['branch_id']);
+                })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                    $q->whereIn('branch_id', $input['group_branch']);
                 })
                 ->when(isset($input['is_upsale']), function ($query) use ($input) {
                     $query->where('is_upsale', $input['is_upsale']);
@@ -315,6 +323,8 @@ class Order extends Model
                     $query->where('support_id', $input['support_id']);
                 })->when(isset($input['branch_id']), function ($query) use ($input) {
                     $query->where('branch_id', $input['branch_id']);
+                })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                    $q->whereIn('branch_id', $input['group_branch']);
                 });
         }
 

@@ -81,8 +81,10 @@
                         <li class="sub-with-sub">
                             <a href="#">Xếp hạng</a>
                             <ul>
+                                <li><a href="{{route('marketing.dashboard')}}">Marketing Dashbroad</a></li>
                                 <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
                             </ul>
+
                         </li>
                         @if($roleGlobal->permission('source.list') || $roleGlobal->permission('marketing.seeding_number'))
                             <li class="sub-with-sub">

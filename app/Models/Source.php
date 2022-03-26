@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\SocialConstant;
 use App\Constants\StatusConstant;
 use App\Helpers\Functions;
 use App\User;
@@ -11,24 +12,43 @@ class Source extends Model
 {
     protected $guarded = [];
 
-    public function user(){
-        return $this->belongsTo(User::class,'mkt_id');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'mkt_id');
     }
-    public function branch(){
+
+    public function branch()
+    {
         return $this->belongsTo(Branch::class);
     }
 
     public function getCategoryTextAttribute()
     {
-        if($this->category_id){
+        if ($this->category_id) {
             $products = Category::whereIn('id', json_decode($this->category_id))->pluck('name')->toArray();
             return implode(', ', $products);
         }
         return '';
     }
+
+    public function getChanelTextAttribute()
+    {
+        $chanel = [
+            SocialConstant::GOOGLE_ADS => 'Google Ads',
+            SocialConstant::FACEBOOK_ADS => 'Facebook Ads',
+            SocialConstant::ZALO_ADS => 'Zalo Ads',
+            SocialConstant::TIKTOK_ADS => 'Tiktok Ads',
+        ];
+        if ($this->chanel) {
+            $value = isset($chanel[$this->chanel]) ? $chanel[$this->chanel] : 'Facebook Ads';
+            return $value;
+        }
+        return '';
+    }
+
     public function getSaleTextAttribute()
     {
-        if($this->sale_id){
+        if ($this->sale_id) {
             $products = User::whereIn('id', json_decode($this->sale_id))->pluck('full_name')->toArray();
             return implode(', ', $products);
         }
@@ -39,8 +59,8 @@ class Source extends Model
     {
         $docs = self::when(isset($search['start_date']) && isset($search['end_date']), function ($query) use ($search) {
             $query->whereBetween('updated_at', [
-                Functions::yearMonthDayTime($search['start_date']),
-                Functions::yearMonthDayTime($search['end_date']),
+                Functions::yearMonthDay($search['start_date']).' 00:00',
+                Functions::yearMonthDay($search['end_date']).' 23:59',
             ]);
         })->when(isset($search['searchName']) && $search['searchName'], function ($query) use ($search) {
             return $query->where('name', 'like', '%' . $search['searchName'] . '%');

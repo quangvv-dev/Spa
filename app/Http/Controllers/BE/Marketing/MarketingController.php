@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
@@ -10,12 +11,15 @@ use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\PaymentHistory;
+use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use function JmesPath\search;
 
 class MarketingController extends Controller
 {
@@ -108,25 +112,39 @@ class MarketingController extends Controller
     public function show(Request $request)
     {
         if (!$request->start_date) {
-            Functions::addSearchDate($request);
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
         $input['searchAccept'] = UserConstant::ACTIVE;
-
-        $marketing = User::where('department_id', 3)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
-            $input['marketing'] = $item->id;
+        $source = Source::search($input)->with('user')->get()->map(function ($item) use ($input) {
+            $input['source_fb'] = $item->id;
             $customer = Customer::search($input)->select('id');
-            $item->contact = $customer->count();
             $input['group_user'] = $customer->pluck('id')->toArray();
-            $schedules = Schedule::search($input)->select('id');
-            $item->schedules = $schedules->count();
-            $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            $orders = Order::searchAll($input)->select('gross_revenue');
+            if (count($input['group_user'])) {
+                $schedules = Schedule::search($input)->select('id');
+                $item->schedules = $schedules->count();
+                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            } else {
+                $item->schedules = 0;
+                $item->schedules_den = 0;
+            }
+            $input['source_id'] = $item->id;
 
+            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
+            $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
+                ->select('id', 'gross_revenue');
+            $item->budget = $price->total_budget; //ngân sách
+            $item->customers = $customer->count();
+            $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
-
+            return $item;
         });
+        if ($request->ajax()) {
+            return view('marketing.dashbroad.ajax', compact('source'));
+        }
+
+        return view('marketing.dashbroad.index', compact('source'));
     }
 
     /**
@@ -135,9 +153,39 @@ class MarketingController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function addLinePriceMarketing(Request $request)
     {
-        //
+        $user = Auth::user();
+        if ($request->id && count($request->id)) {
+
+            foreach ($request->id as $key => $item) {
+                PriceMarketing::find($item)->update([
+                    'source_id' => $request->source_id,
+                    'budget' => str_replace(",", "", $request->budget[$key]),
+                    'date' => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
+                    'user_id' => $user->id,
+                    'branch_id' => $request->branch_id,
+                ]);
+            }
+        } else {
+            foreach ($request->budget as $key => $item) {
+                PriceMarketing::create([
+                    'source_id' => $request->source_id,
+                    'user_id' => $user->id,
+                    'branch_id' => $request->branch_id,
+                    'budget' => str_replace(",", "", $item),
+                    'date' => Functions::createYearMonthDay($request->date[$key]),
+                ]);
+            }
+        }
+        return back();
+    }
+
+    public function searchPriceMarketing(Request $request)
+    {
+        $input = $request->all();
+        $price = PriceMarketing::search($input)->with('user')->get();
+        return $price;
     }
 
     /**
@@ -158,9 +206,10 @@ class MarketingController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        PriceMarketing::find($id)->delete();
+        $request->session()->flash('error', 'Xóa thành công bản ghi ngân sách!');
     }
 
     /**

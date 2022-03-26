@@ -127,10 +127,12 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('find-customer-post', 'AjaxController@findCustomerPost')->name('customer_post.find');
         Route::get('find-role/{department_id}', 'AjaxController@getRoleWithDepartment');
 
-
         Route::get('product-depot/{id}', 'Depot\ProductDepotController@getDetail');
-
         Route::post('change-status-thu-chi', 'ThuChi\ThuChiController@changeStatus');
+
+        Route::post('marketing/add-line-price-marketing', 'Marketing\MarketingController@addLinePriceMarketing');
+        Route::get('marketing/search-price-marketing', 'Marketing\MarketingController@searchPriceMarketing');
+        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
 
     });
 
@@ -221,7 +223,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('update-accept-source-landi', 'LandipageController@updateAcceptSource');
 
         Route::get('leader', 'MarketingController@index');
-        Route::get('dashboard', 'MarketingController@show');
+        Route::get('dashboard', 'MarketingController@show')->name('dashboard');
         Route::get('ranking', 'MarketingController@ranking');
 
     });

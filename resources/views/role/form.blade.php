@@ -167,17 +167,24 @@
             </tr>
         @endforeach
         <tr>
-            <td>QL danh mục thu chi</td>
-            <td>
-                <input type="checkbox" id="input9" name="permissions[]"
-                       value="danh-muc-thu-chi.index" {{@$doc && $doc->hasAccess('danh-muc-thu-chi.index') ? 'checked' : ''}}>
-            </td>
-        </tr>
-        <tr>
             <td>Duyệt nguồn</td>
             <td>
                 <input type="checkbox" id="input10" name="permissions[]"
                        value="source.update" {{@$doc && $doc->hasAccess('source.update') ? 'checked' : ''}}>
+            </td>
+        </tr>
+        {{--<tr>--}}
+            {{--<td>Marketing Dashbroad</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input10" name="permissions[]"--}}
+                       {{--value="source.update" {{@$doc && $doc->hasAccess('marketing.dashboard') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+        {{--</tr>--}}
+        <tr>
+            <td>QL danh mục thu chi</td>
+            <td>
+                <input type="checkbox" id="input9" name="permissions[]"
+                       value="danh-muc-thu-chi.index" {{@$doc && $doc->hasAccess('danh-muc-thu-chi.index') ? 'checked' : ''}}>
             </td>
         </tr>
         </tbody>

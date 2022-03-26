@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Constants\SocialConstant;
 use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\Models\Branch;
@@ -81,7 +82,7 @@ class SourceController extends Controller
         }
         $data['branch_id'] = $request->branch_id;
         $data['mkt_id'] = Auth::user()->id;
-//        dd($data);
+        $data['chanel'] = SocialConstant::FACEBOOK_ADS;
         Source::create($data);
         return redirect()->back();
     }

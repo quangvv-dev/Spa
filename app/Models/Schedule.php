@@ -172,8 +172,8 @@ class Schedule extends Model
         })
             ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
                 $q->whereBetween('date', [
-                    Functions::yearMonthDay($request['start_date']),
-                    Functions::yearMonthDay($request['end_date']),
+                    Functions::yearMonthDay($request['start_date']).' 00:00',
+                    Functions::yearMonthDay($request['end_date']).' 23:59',
                 ]);
             });
 

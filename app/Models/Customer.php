@@ -81,6 +81,8 @@ class Customer extends Model
             })
             ->when(isset($conditions['marketing']), function ($query) use ($conditions) {
                 $query->where('mkt_id', $conditions['marketing']);
+            })->when(isset($conditions['source_fb']), function ($query) use ($conditions) {
+                $query->where('source_fb', $conditions['source_fb']);
             })
             ->when(isset($conditions['source']), function ($query) use ($conditions) {
                 $query->where('source_id', $conditions['source']);
