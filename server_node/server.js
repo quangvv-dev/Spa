@@ -90,7 +90,7 @@ app.post('/webhook', function (req, res) {
 
 server.listen(port, "0.0.0.0", function (error) {
     if (error) console.log("Connect error");
-    const created_at = new Date().toLocaleString("en-GB", {timeZone: "Asia/Ho_Chi_Minh"});
+    const created_at = new Date().getTimezoneOffset();
     console.log("Start server port:", port,'DATE CURENT',created_at);
 });
 
