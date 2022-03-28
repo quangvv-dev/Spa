@@ -44,9 +44,9 @@ app.post('/webhook', function (req, res) {
                 if (message.message) {
                     if (message.message.text) {
                         let text = message.message.text;
-                        // text = text.replace(".", "");
+                        text = text.replace(".", "");
                         text = text.replace("O", "0");
-                        text = text.replace("o", "0");
+                        // text = text.replace("o", "0");
                         console.log('Noi dung tin nhan', text); // In tin nhắn người dùng
                         let letr = text.match(/\d+/g);
                         if (!letr){

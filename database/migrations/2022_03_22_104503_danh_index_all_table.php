@@ -14,11 +14,11 @@ class DanhIndexAllTable extends Migration
     public function up()
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->integer('mkt_id')->index()->change();
-            $table->integer('source_id')->index()->change();
+            $table->bigInteger('mkt_id')->index()->change();
+            $table->bigInteger('source_id')->index()->change();
             $table->integer('source_fb')->index()->change();
-            $table->integer('membership')->index()->change();
-            $table->integer('page_id')->index()->change();
+            $table->bigInteger('membership')->index()->change();
+            $table->bigInteger('page_id')->index()->change();
         });
         Schema::table('schedules', function (Blueprint $table) {
             $table->integer('user_id')->index()->change();
