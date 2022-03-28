@@ -9,12 +9,12 @@ var connection=mysql.createPool({
     password:process.env.DB_PASSWORD || 'bITt@wO2uR3*',
     database:process.env.DB_DATABASE || 'crm-spa-all'
 });
-connection.getConnection(function(err, connection) {
-    if(err){
-        console.log(err);
-    }else {
-        console.log('passed')
-    }
-    // ...
-});
+// connection.getConnection(function(err, connection) {
+// //     if(err){
+// //         console.log(err);
+// //     }else {
+// //         console.log('passed')
+// //     }
+// //     // ...
+// // });
 module.exports=connection;
