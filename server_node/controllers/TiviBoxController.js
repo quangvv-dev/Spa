@@ -10,8 +10,6 @@ function userExists(seeding_number, arr) {
 }
 
 
-
-
 /**
  * Nhập liệu khách hàng từ tin nhắn
  *
@@ -42,7 +40,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                 } finally {
                     //create Customer
                     console.log(name, 'Name Customer');
-                    const created_at = new Date(new Date().toLocaleString("en-GB", {timeZone: "Asia/Ho_Chi_Minh"}));
+                    const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
                     console.log(' Time zone Asian',created_at);
                     model.CheckSource(rows[0].source_id, function (err, row2) {
                         if (err) {
