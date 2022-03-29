@@ -56,7 +56,7 @@ class CustomerController extends Controller
      *
      * @param Filesystem $fileUpload
      */
-    public function __construct(CustomerService $customerService,TaskService $taskService)
+    public function __construct(CustomerService $customerService, TaskService $taskService)
     {
         $this->middleware('permission:customers.list', ['only' => ['index']]);
         $this->middleware('permission:customers.edit', ['only' => ['edit']]);
@@ -66,12 +66,12 @@ class CustomerController extends Controller
         $this->taskService = $taskService;
         $this->customerService = $customerService;
 
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->select('name', 'id')->pluck('name', 'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
-        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
+        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->pluck('name', 'id')->toArray();// nguồn KH
         $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
-        $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->pluck('full_name','id')->toArray();
-        $genitives = Genitive::pluck('name', 'id')->toArray();
+        $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
+        $genitives = Genitive::select('id','name')->pluck('name', 'id')->toArray();
         $telesales = [];
         User::get()->map(function ($item) use (&$telesales) {
             if ($item->role == UserConstant::WAITER) {
@@ -676,7 +676,7 @@ class CustomerController extends Controller
                                 ]);
                             }
                         }
- // end cong viec
+                        // end cong viec
 
                     }
                 }

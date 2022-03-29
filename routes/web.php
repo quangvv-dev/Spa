@@ -225,7 +225,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('leader', 'MarketingController@index');
         Route::get('dashboard', 'MarketingController@show')->name('dashboard');
         Route::get('ranking', 'MarketingController@ranking');
-
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');

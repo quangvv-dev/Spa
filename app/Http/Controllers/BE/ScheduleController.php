@@ -8,6 +8,7 @@ use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
 use App\Models\HistorySms;
 use App\Models\Status;
 use App\Services\TaskService;
@@ -60,7 +61,10 @@ class ScheduleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function index(Request $request, $id)
     {
@@ -98,12 +102,13 @@ class ScheduleController extends Controller
     public function store(Request $request, $id)
     {
         $customer = Customer::find($id);
-
+        $category = CustomerGroup::where('customer_id',$customer->id)->first();
         $request->merge([
             'user_id'       => $id,
             'person_action' => Auth::user()->id,
             'creator_id'    => Auth::user()->id,
             'branch_id'     => $customer->branch_id,
+            'category_id'   => isset($category) ? $category->category_id : 0,
         ]);
         if ($request->note) {
             $note = str_replace("\r\n", ' ', $request->note);
@@ -189,7 +194,6 @@ class ScheduleController extends Controller
         }
         $request->merge(['date' => $date]);
         $data = Schedule::with('customer')->find($request->id);
-
         $data->update($request->except('id', 'format_date'));
 
         if ($request->ajax()) {

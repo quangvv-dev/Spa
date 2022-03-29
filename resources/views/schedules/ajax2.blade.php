@@ -72,6 +72,7 @@
                                     category_id: '{{@$item->category_id}}',
                                     date: '{{$item->date_schedule}}',
                                     status: '{{$item->status}}',
+                                    branch_id: '{{$item->branch_id}}',
                                     @switch($item->status)
                                         @case(1)
                                     color: '#63cff9',
@@ -104,7 +105,7 @@
                                 $('#update_time1').val(info.time_from).change();
                                 $('#update_time2').val(info.time_to).change();
                                 $('#update_status').val(info.status).change();
-                                $('#update_category').val(info.category_id).change();
+                                $('#update_branch').val(info.branch_id).change();
                                 $('#update_note').val(info.note).change();
                                 $('#full_name').val(info.full_name).change();
                                 $('#phone').val(info.phone).change();
@@ -177,8 +178,8 @@
                                         {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                                     </div>
                                     <div class="col-md-6">
-                                        {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
-                                        {!! Form::select('category_id',$category, null, array('class' => 'form-control','id'=>'update_category'))!!}
+                                        {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
+                                        {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control','id'=>'update_branch'))!!}
                                     </div>
                                     <div class="col-md-6 col-xs-12">
                                         {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}

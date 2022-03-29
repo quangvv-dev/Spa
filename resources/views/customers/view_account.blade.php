@@ -997,7 +997,6 @@
             $('body').delegate('.update', 'click', function (e) {
                 let id = $(this).attr("data-id");
                 let link = 'schedules/edit/' + id;
-                console.log(123, parent);
                 $.ajax({
                     url: window.location.origin + '/' + link,
                     method: "get",
@@ -1008,6 +1007,7 @@
                     $('#update_time2').val(data['time_to']);
                     $('#update_status').val(data['status']);
                     $('#update_note').val(data['note']);
+                    $('.branch').val(data['branch_id']).change();
                     $('#update_action').val(data['person_action']).change();
 
                 });
