@@ -42,17 +42,6 @@ class  Silver extends Command
      */
     public function handle()
     {
-//        $err = Functions::sendSmsV3('0975091435', 'Test tin he thong');
-//        return $err;
-
-
-
-//        $arr = Customer::select('id')->where('branch_id', 1)->pluck('id')->toArray();
-//        $arr = CustomerGroup::select('customer_id')->where('branch_id', 0)->pluck('customer_id')->toArray();
-//        $customer2 = Customer::find($arr)->pluck('branch_id', 'id')->toArray();
-////        foreach (array_chunk($customer2, 1000) as $key => $item) {
-//        foreach ($customer2 as $key => $item) {
-//        CustomerGroup::where('customer_id', $key)->update(['branch_id' => $item]);
-//        }
+        CustomerGroup::doesnthave('customer')->forceDelete();
     }
 }
