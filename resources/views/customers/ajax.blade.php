@@ -148,6 +148,7 @@
             <th class="text-white text-center">Trạng Thái</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center mota" style="min-width: 121px;">Mô tả</th>
+            <th class="text-white text-center">DV liên quan</th>
             <th class="text-white text-center">C.Nhánh</th>
             <th class="text-white text-center">Lich Hẹn</th>
             <th class="text-white text-center">Ngày sinh</th>
@@ -176,8 +177,7 @@
             @endif
             @foreach($customers as $key => $customer)
                 <tr>
-                    <td class="text-center"
-                        style="background: {{isset($customer->status)?$customer->status->color :''}}">
+                    <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}">
                         <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                     <td class="text-center">{{ $rank ++ }}</td>
                     <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
@@ -207,9 +207,11 @@
                     <td class="text-center" style="position: relative;max-width: 146px">
                         <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
                     </td>
+                    <td class="text-center category-db" data-id="{{$customer->id}}">
+                        <span class="tag label label-primary">{{str_limit($customer->group_text,30)}}</span>
+                    </td>
                     <td class="text-center">{{@$customer->branch->name}}</td>
-                    <td class="text-center"
-                        title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
+                    <td class="text-center" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
                     </td>
                     <td class="text-center customer-birthday"
@@ -223,10 +225,7 @@
                     <td class="text-center">{{ number_format($customer->orders->sum('all_total')) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
                     <td class="text-center">{{ number_format($customer->orders->sum('the_rest')) }}</td>
-                    <td class="text-center">
-                        <a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i
-                                class="fas fa-edit"></i></a>
-                    </td>
+                    <td class="text-center"><a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a></td>
                 </tr>
             @endforeach
         @else
