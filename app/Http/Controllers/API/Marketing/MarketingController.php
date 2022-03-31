@@ -5,21 +5,18 @@ namespace App\Http\Controllers\API\Marketing;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
-use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
-use App\Models\PaymentHistory;
 use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use function JmesPath\search;
 
@@ -49,7 +46,7 @@ class MarketingController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $data = User::where('department_id', 3)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+        $data = User::where('department_id', 3)->select('id', 'full_name','avatar')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $customer = Customer::searchApi($input)->select('id');
             $item->contact = $customer->count();
