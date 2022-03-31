@@ -350,7 +350,7 @@ class RevenueController extends BaseApiController
         } elseif ($request->type_api == 7) {
             $customers = Customer::orderByDesc('id');
             $data = Customer::applySearchConditions($customers, $input)->select('id', 'status_id',
-                \DB::raw('COUNT(ID) AS total'))->groupBy('status_id')->with('status')->orderByDesc('total')->get();
+                \DB::raw('COUNT(ID) AS total'))->groupBy('status_id')->with('status')->get()->sortByDesc('total');
             $data = ChartResource::collection($data);
 
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
