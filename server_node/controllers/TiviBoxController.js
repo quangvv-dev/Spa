@@ -90,7 +90,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                                     let arr_category_id = JSON.parse(row2[0].category_id);
 
                                                                                     for (const val of arr_category_id) {
-                                                                                        console.log(123,val)
                                                                                         model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id);
                                                                                     }
                                                                                     console.log('Them KH thanh cong');

@@ -143,6 +143,20 @@ class Customer extends Model
         return $data;
     }
 
+    public static function searchApi($param)
+    {
+        $data = self::latest()->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+        if (isset($param['branch_id']) && $param['branch_id']) {
+            if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
+                $data = $data->where('branch_id', $param['branch_id']);
+            }
+        }
+        if (count($param)) {
+            static::applySearchConditions($data, $param);
+        }
+        return $data;
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id', 'id');
