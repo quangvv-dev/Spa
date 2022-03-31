@@ -97,6 +97,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('genitives', 'GenitiveController@getList');
         Route::get('/status-schedules', 'ScheduleController@getList');
         Route::get('categories', 'CategoryServiceController@getListApi');
+        Route::get('categories-tips', 'CategoryServiceController@getListTip');
         Route::put('orders/{id}', 'OrderController@updateCountDay')->name('order.update_count_day');
         Route::put('orders_sum/{id}', 'OrderController@sumCountDay')->name('order.sum_count_day');
         Route::get('orders/{id}', 'OrderController@getOrderById');

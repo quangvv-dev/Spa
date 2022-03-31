@@ -569,6 +569,35 @@
                 });
             });
 
+                $(document).on('dblclick', '.category-tip', function (e) {
+                    let target = $(e.target).parent();
+                    $(target).find('.category-tip').empty();
+                let id = $(this).data('id');
+                let html = '';
+
+                $.ajax({
+                    url: "ajax/categories-tips/",
+                    method: "get",
+                    data: {id: id}
+                }).done(function (data) {
+                    html +=
+                        '<select class="tip-result form-control select2-multiple" multiple="multiple" data-id="' + data.customer_id + '" name="group_id[]">';
+                    data.categories.forEach(function (item) {
+                        html +=
+                            '<option value="' + item.id + '" class="tip-op"  ' + ((jQuery.inArray(item.id.toString(), data.category_id) !== -1 ? "selected" : "")) + '>' + item.name + '</option>';
+                    });
+
+                    html += '</select>';
+                    $(target).find(".category-tip").append(html);
+
+                    $('.select2-multiple').select2({ //apply select2 to my element
+                        placeholder: "Chọn nhóm KH",
+                        allowClear: true
+                    });
+
+                });
+            });
+
             $(document).on('dblclick', '.customer-birthday', function (e) {
                 let target = $(e.target).parent();
                 let customerBirthday = $(this);
@@ -731,8 +760,8 @@
                 });
             });
 
-            $('body').not('.category-result').on('change', function (e) {
-                if (!($('.category-result').parent().find('span.select2-container--focus').length) ||
+                $(document.body).on("change",".category-result",function(e){
+                    if (!($('.category-result').parent().find('span.select2-container--focus').length) ||
                     $('.category-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length) {
                     let category_ids = $(e.target).parent().find('.category-result').val();
                     let id = $(e.target).parent().find('.category-result').data('id');
@@ -750,6 +779,25 @@
                         }).join(", ");
 
                         $('.category-result').parent().parent().find('.category-db').html(blkstr);
+                    });
+                }
+            });
+
+                $(document.body).on("change",".tip-result",function(e){
+                if (!($('.tip-result').parent().find('span.select2-container--focus').length) ||
+                    $('.tip-result').parent().find('.select2-container--below .selection  .select2-selection--multiple').length) {
+                    let category_ids = $(e.target).parent().find('.tip-result').val();
+                    let id = $(e.target).parent().find('.tip-result').data('id');
+
+                    $.ajax({
+                        url: "ajax/customers/" + id,
+                        method: "put",
+                        data: {
+                            category_tips: category_ids
+                        }
+                    }).done(function (data) {
+                        let blkstr = `<span class="badge badge-primary"> `+data.tips+`</span>`;
+                        $('.tip-result').parent().parent().find('.category-tip').html(blkstr);
                     });
                 }
             });

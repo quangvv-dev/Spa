@@ -158,4 +158,17 @@ class CategoryServiceController extends Controller
             'category_id' => $categoryId
         ];
     }
+
+    public function getListTip(Request $request)
+    {
+        $customerId = $request->id;
+        $categories = Category::get();
+        $customer = Customer::where('id', $customerId)->first();
+        $categoryId = isset($customer->category_tips) ? array_values(json_decode($customer->category_tips)) : [];
+        return $data = [
+            'customer_id' => $customerId,
+            'categories' => $categories,
+            'category_id' => $categoryId
+        ];
+    }
 }

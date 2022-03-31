@@ -71,7 +71,7 @@ class CustomerController extends Controller
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->pluck('name', 'id')->toArray();// nguồn KH
         $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
         $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
-        $genitives = Genitive::select('id','name')->pluck('name', 'id')->toArray();
+        $genitives = Genitive::select('id', 'name')->pluck('name', 'id')->toArray();
         $telesales = [];
         User::get()->map(function ($item) use (&$telesales) {
             if ($item->role == UserConstant::WAITER) {
@@ -577,7 +577,7 @@ class CustomerController extends Controller
 
     public function ajaxUpdate(Request $request, $id)
     {
-        $input = $request->except('category_ids');
+        $input = $request->except('category_ids', 'category_tips');
         $before = $this->customerService->find($id);
         $data = [];
         if (isset($before) && $before) {
@@ -684,13 +684,18 @@ class CustomerController extends Controller
             if (isset($request->category_ids) && $request->category_ids) {
                 $customer->categories()->sync($request->category_ids);
             }
+            if (isset($request->category_tips) && $request->category_tips) {
+
+                $customer->category_tips = json_encode($request->category_tips);
+                $customer->save();
+            }
+            if (isset($data->birthday)) {
+                $customer->birthday = Functions::dayMonthYear($data->birthday);
+            }
 
             $data = Customer::with('status', 'categories', 'telesale', 'genitive')->where('id', $id)->first();
-            if (isset($data->birthday)) {
-                $data->birthday = Functions::dayMonthYear($data->birthday);
-            }
+            $data->tips = $data->group_tips;
         }
-
         return $data;
     }
 

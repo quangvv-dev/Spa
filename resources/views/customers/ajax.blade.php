@@ -207,8 +207,8 @@
                     <td class="text-center" style="position: relative;max-width: 146px">
                         <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
                     </td>
-                    <td class="text-center category-db" data-id="{{$customer->id}}">
-                        <span class="tag label label-primary">{{str_limit($customer->group_text,30)}}</span>
+                    <td class="text-center category-tip" data-id="{{$customer->id}}">
+                        <span class="badge badge-primary span-tips">{{str_limit($customer->group_tips,30)}}</span>
                     </td>
                     <td class="text-center">{{@$customer->branch->name}}</td>
                     <td class="text-center" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
