@@ -163,8 +163,8 @@
             <td class="text-center bold">{{@number_format($customer_new)}}</td>
             <td class="text-center bold">{{@number_format($comment_new)}}</td>
             <td class="text-center bold">{{@number_format($schedules_new)}}</td>
-            <td class="text-center bold">{{@number_format($order_new)}}</td>
             <td class="text-center bold">{{@number_format($all_schedules_den)}}</td>
+            <td class="text-center bold">{{@number_format($order_new)}}</td>
             <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
             <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($schedules_new)?round($all_schedules_den/$schedules_new*100,1):0}}%</td>
             <td class="text-center bold">{{@number_format($order_percent/count($users))}}%</td>
