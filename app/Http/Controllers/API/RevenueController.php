@@ -241,7 +241,7 @@ class RevenueController extends BaseApiController
 
         $data = [
             'all_total' => $docs->sum('so_tien'),
-            'percent' => !empty($docs->count()) && !empty($docOld) ? round(($docs->count() - $docOld) / $docOld * 100, 1) : 0,
+            'percent' => !empty($docs->count()) && !empty($docOld) ? round(($docs->count() - $docOld) / $docOld * 100, 2) : 0,
             'active' => $docs->where('status', StatusConstant::ACTIVE)->count(),
             'inactive' => $docs2->where('status', StatusConstant::INACTIVE)->count(),
         ];
