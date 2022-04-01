@@ -419,7 +419,7 @@ class CustomerController extends Controller
 
         Excel::create('Khách hàng (' . $now . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
-                $sheet->cell('A1:Q1', function ($row) {
+                $sheet->cell('A1:S1', function ($row) {
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
