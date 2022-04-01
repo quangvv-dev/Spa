@@ -110,7 +110,7 @@ class RevenueController extends BaseApiController
             'end_date' => $request->old_end,
         ];
         $wallet = WalletHistory::search($input, 'order_price');
-        $payment_wallet = PaymentWallet::search($input,'price');
+        $payment_wallet = PaymentWallet::search($input, 'price');
 
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
@@ -240,10 +240,10 @@ class RevenueController extends BaseApiController
         $docs2 = clone $docs;
 
         $data = [
-            'all_total'   => $docs->sum('so_tien'),
-            'percent'     => !empty($docs->count()) && !empty($docOld) ? round(($docs->count()) - $docOld,1) / $docOld * 100 : 0,
-            'active'      => $docs->where('status', StatusConstant::ACTIVE)->count(),
-            'inactive'    => $docs2->where('status', StatusConstant::INACTIVE)->count(),
+            'all_total' => $docs->sum('so_tien'),
+            'percent' => !empty($docs->count()) && !empty($docOld) ? round(($docs->count() - $docOld) / $docOld * 100, 1) : 0,
+            'active' => $docs->where('status', StatusConstant::ACTIVE)->count(),
+            'inactive' => $docs2->where('status', StatusConstant::INACTIVE)->count(),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
