@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
 use App\Helpers\Functions;
 use App\Http\Resources\ChartResource;
 use App\Models\Category;
@@ -17,6 +18,7 @@ use App\Models\PaymentWallet;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\Models\Status;
+use App\Models\ThuChi;
 use App\Models\WalletHistory;
 use Illuminate\Http\Request;
 use App\Constants\ResponseStatusCode;
@@ -217,6 +219,31 @@ class RevenueController extends BaseApiController
             'schedules_buy' => $schedule->where('status', 3)->count(),
             'schedules_notbuy' => $schedule2->where('status', 4)->count(),
             'schedules_cancel' => $schedule3->where('status', 5)->count(),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+    }
+
+    public function tabThuChi(Request $request)
+    {
+        $input = $request->except('old_start', 'old_end');
+        $input_old = [
+            'branch_id' => $request->branch_id,
+            'start_date' => $request->old_start,
+            'end_date' => $request->old_end,
+        ];
+        $docOld = 0;
+        $docs = ThuChi::search($input)->select('so_tien');
+        if (isset($request->old_start) && isset($request->old_end)) {
+            $docOld = ThuChi::search($input_old)->select('id')->sum('so_tien');
+        }
+        $docs2 = clone $docs;
+
+        $data = [
+            'all_total'   => $docs->sum('so_tien'),
+            'percent'     => !empty($docs->count()) && !empty($docOld) ? round(($docs->count()) - $docOld) / $docOld * 100 : 0,
+            'active'      => $docs->where('status', StatusConstant::ACTIVE)->count(),
+            'inactive'    => $docs2->where('status', StatusConstant::INACTIVE)->count(),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 

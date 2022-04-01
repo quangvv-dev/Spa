@@ -8,6 +8,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Resources\ThuChiResource;
 use App\Http\Resources\NotificationResource;
+use App\Models\Branch;
 use App\Models\DanhMucThuChi;
 use App\Models\Notification;
 use App\Models\ThuChi;
@@ -26,6 +27,11 @@ class ThuChiController extends BaseApiController
      */
     public function index(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $search['group_branch']    = $group_branch;
+        }
+
         $user = User::find($request->jwtUser->id);
         if ($user) {
             $admin = $user->department_id == 1 && $user->role == 1 ? true : false;

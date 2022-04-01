@@ -29,6 +29,8 @@ class ThuChi extends Model
             $query->where('id', $param['id']);
         })->when(isset($param['branch_id']) && $param['branch_id'], function ($query) use ($param) {
             $query->where('branch_id', $param['branch_id']);
+        }) ->when(isset($param['group_branch']) && count($param['group_branch']), function ($q) use ($param) {
+            $q->whereIn('branch_id', $param['group_branch']);
         })->when(isset($param['start_date']) && isset($param['end_date']), function ($query) use ($param) {
             $query->whereBetween('created_at', [
                 Functions::yearMonthDay($param['start_date']) . " 00:00:00",
