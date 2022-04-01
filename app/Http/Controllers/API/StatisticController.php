@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Http\Resources\CategoryRevenueResource;
 use App\Http\Resources\SchedulesResource;
 use App\Http\Resources\TasksResource;
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Order;
@@ -114,9 +117,12 @@ class StatisticController extends BaseApiController
      */
     public function group(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
         $input = $request->all();
-        $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item
-        ) use ($input) {
+        $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item) use ($input) {
             $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
             $order_id = OrderDetail::select('order_id')->whereIn('booking_id', $services)
                 ->when(!empty($input['start_date']) && !empty($input['end_date']),
@@ -128,6 +134,8 @@ class StatisticController extends BaseApiController
                     })
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
+                })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                    $q->whereIn('branch_id', $input['group_branch']);
                 })->groupBy('order_id')->pluck('order_id')->toArray();
             $order = Order::select('gross_revenue', 'total', 'member_id')->whereIn('id', $order_id)
                 ->when(!empty($input['start_date']) && !empty($input['end_date']),
@@ -136,11 +144,8 @@ class StatisticController extends BaseApiController
                             Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                             Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                         ]);
-                    })
-                ->when(isset($input['telesale_id']) && $input['telesale_id'], function ($q) use ($input) {
-                    $q->whereHas('customer', function ($qr) use ($input) {
-                        $qr->where('telesales_id', $input['telesale_id']);
-                    });
+                    })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                    $q->whereIn('branch_id', $input['group_branch']);
                 });
 
             $item->orders = $order->count();
@@ -158,24 +163,46 @@ class StatisticController extends BaseApiController
 
     public function groupDetail(Request $request, $id)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
+
         $input = $request->all();
-
         $category = Category::find($id);
-        $arr_customer = CustomerGroup::where('category_id', $category->id)->pluck('customer_id')->toArray();
+        $group = CustomerGroup::select('customer_id')->where('category_id', $category->id);
+        $arr_customer = self::searchDateBranch($group, $input)->pluck('customer_id');
+        $services = Services::select('id')->where('category_id', $category->id)->pluck('id')->toArray();
+        $order_id = OrderDetail::select('order_id')->whereIn('booking_id', $services)
+            ->when(!empty($input['start_date']) && !empty($input['end_date']),
+                function ($q) use ($input) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                    ]);
+                })
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            })->groupBy('order_id')->pluck('order_id')->toArray();
 
-        $customer = Customer::select('id')->whereIn('id', $arr_customer);
-        $data_new = self::searchDateBranch($customer, $input);
+//        $customer = Customer::select('id')->whereIn('id', $arr_customer);
+//        $data_new = self::searchDateBranch($customer, $input);
+//        $ordersAll = Order::returnRawData($input);
 
-        $ordersAll = Order::returnRawData($input);
-        $orders_new = $ordersAll->whereIn('member_id', $data_new)->with('orderDetails');
 
-        $schedules_new = Schedule::select('id')->whereIn('user_id', $data_new->pluck('id')->toArray());
+        $ordersAll = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('id', $order_id);
+        $orders_new = $ordersAll->where('is_upsale', OrderConstant::NON_UPSALE)->with('orderDetails');
+
+        $schedules_new = Schedule::select('id')->whereIn('user_id', $arr_customer->pluck('id')->toArray());
         $schedules_new = self::searchDateBranch($schedules_new, $input);
 
 
         $data = [
-            'phone' => $data_new->count(),
+            'phone' => $arr_customer->count(),
             'schedules_new' => $schedules_new->count(),
+            'schedules_den' => $schedules_new->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count(),
             'order_old' => 0,
             'total_old' => 0,
             'order_new' => $orders_new->count(),
@@ -189,7 +216,10 @@ class StatisticController extends BaseApiController
     {
         $query = $query->when(isset($input->branch_id) && $input->branch_id, function ($q) use ($input) {
             $q->where('branch_id', $input->branch_id);
-        })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input, $loc) {
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('branch_id', $input['group_branch']);
+        })
+        ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input, $loc) {
             $q->whereBetween($loc, [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
