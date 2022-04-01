@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-xs-12">
                         <i style="color: red">Nhóm khách hàng</i><br>
                         <select name="group" class="form-control select2">
-                            <option value="">Nhóm dịch vụ</option>
+                            <option value="">Tất cả nhóm</option>
                             @foreach($categories as $item)
                                 <option value="{{$item->id}}">{{ $item->name}}</option>
                             @endforeach
