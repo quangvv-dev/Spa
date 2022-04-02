@@ -41,7 +41,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     //create Customer
                     console.log(name, 'Name Customer');
                     const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
-                    console.log(' Time zone Asian',created_at);
+                    console.log(' Time zone Asian', created_at);
                     model.CheckSource(rows[0].source_id, function (err, row2) {
                         if (err) {
                             console.log(err);
@@ -81,7 +81,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                         console.log(err);
                                                                     } else {
                                                                         if (vl.length <= 0) {
-                                                                            model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1,branch_id, created_at, function (err,customer) {
+                                                                            model.CreateCustomer(row2[0].id, name, phone, text, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, 1, 1, branch_id, created_at, function (err, customer) {
                                                                                 if (err) {
                                                                                     console.log(err);
                                                                                 } else {
@@ -90,7 +90,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                                     let arr_category_id = JSON.parse(row2[0].category_id);
 
                                                                                     for (const val of arr_category_id) {
-                                                                                        model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id);
+                                                                                        model.CreateCustomerGroup(customer.insertId, val, created_at, branch_id);
                                                                                     }
                                                                                     console.log('Them KH thanh cong');
                                                                                 }
@@ -138,7 +138,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
         } else {
             if (rows.length > 0) {
                 const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
-                console.log(' Time zone Asian',created_at);
+                console.log(' Time zone Asian', created_at);
                 model.CheckSource(rows[0].source_id, function (err, row2) {
                     if (err) {
                         console.log(err);
@@ -158,7 +158,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
 
                             model.CheckPhone(phone, function (err, checkPhone) {
                                     if (err) {
-                                        console.log(err,'CHECK PHONE LOG');
+                                        console.log(err, 'CHECK PHONE LOG');
                                     } else {
                                         if (checkPhone.length <= 0) {
                                             model.UpdateSource(row2[0].id, new_position, function (err) {
@@ -170,8 +170,8 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                             })
 
                                             model.ListSeeding(function (err, list) {
-                                                if(err){
-                                                    console.log('Check seeding number',err);
+                                                if (err) {
+                                                    console.log('Check seeding number', err);
                                                 }
                                                 let exisits = userExists(phone, list);
                                                 if (exisits == false) {
@@ -180,22 +180,18 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                                                 console.log(err,);
                                                             } else {
                                                                 if (vl.length <= 0) {
-                                                                    model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, 0, 0, 1, 1, branch_id, created_at,function (err,customer) {
+                                                                    model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, 0, 0, 1, 1, branch_id, created_at, function (err, customer) {
                                                                         if (err) {
                                                                             console.log(err);
                                                                         } else {
-                                                                            if (err) {
-                                                                                console.log(err);
-                                                                            } else {
-                                                                                customer = JSON.parse(JSON.stringify(customer));
-                                                                                model.UpdateCodeCustomer(customer.insertId);
-                                                                                let arr_category_id = JSON.parse(row2[0].category_id);
+                                                                            customer = JSON.parse(JSON.stringify(customer));
+                                                                            model.UpdateCodeCustomer(customer.insertId);
+                                                                            let arr_category_id = JSON.parse(row2[0].category_id);
 
-                                                                                for (const val of arr_category_id) {
-                                                                                    model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id);
-                                                                                }
-                                                                                console.log('Them KH thanh cong');
+                                                                            for (const val of arr_category_id) {
+                                                                                model.CreateCustomerGroup(customer.insertId, val, created_at, branch_id);
                                                                             }
+                                                                            console.log('Them KH thanh cong');
                                                                         }
                                                                     })
                                                                 }

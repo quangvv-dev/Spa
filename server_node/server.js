@@ -77,6 +77,7 @@ app.post('/webhook', function (req, res) {
                     }
                     letr.every(function (i) {
                         if (i.length === 10) {
+                            console.log(i, 'SĐT COMMENT');
                             controller.SetComment(i, value.value.post_id, value.value.message, value.value.from.name);
                             return false;
                         }
