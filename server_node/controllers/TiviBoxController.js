@@ -180,11 +180,22 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                                                 console.log(err,);
                                                             } else {
                                                                 if (vl.length <= 0) {
-                                                                    model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, 0, 0, 1, 1, branch_id, created_at,function (err) {
+                                                                    model.CreateCustomer(row2[0].id, sender, phone, text, user_id, mkt_id, splitted[1], 0, 0, 0, 1, 1, branch_id, created_at,function (err,customer) {
                                                                         if (err) {
                                                                             console.log(err);
                                                                         } else {
-                                                                            console.log('Them KH thanh cong');
+                                                                            if (err) {
+                                                                                console.log(err);
+                                                                            } else {
+                                                                                customer = JSON.parse(JSON.stringify(customer));
+                                                                                model.UpdateCodeCustomer(customer.insertId);
+                                                                                let arr_category_id = JSON.parse(row2[0].category_id);
+
+                                                                                for (const val of arr_category_id) {
+                                                                                    model.CreateCustomerGroup(customer.insertId,val,created_at,branch_id);
+                                                                                }
+                                                                                console.log('Them KH thanh cong');
+                                                                            }
                                                                         }
                                                                     })
                                                                 }
