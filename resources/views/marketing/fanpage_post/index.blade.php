@@ -31,7 +31,9 @@
             </form>
             <div class="card-content collapse show">
                 <div class="card-body">
-                    @include('marketing.fanpage_post.ajax')
+                    <form>
+                        @include('marketing.fanpage_post.ajax')
+                    </form>
                     @include('marketing.fanpage_post.modal')
                 </div>
             </div>

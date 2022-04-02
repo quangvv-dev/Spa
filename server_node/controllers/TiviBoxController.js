@@ -143,7 +143,6 @@ exports.SetComment = (phone, post_id, text, sender) => {
                     if (err) {
                         console.log(err);
                     } else {
-                        console.log(row2,'tim soủcce');
                         if (row2.length > 0) {
                             console.log('ton tai source');
                             let new_position = 0;
