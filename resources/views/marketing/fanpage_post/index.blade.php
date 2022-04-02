@@ -61,7 +61,11 @@
                 },
                 success: function (req) {
                     hideLoading();
-                    alertify.success('Cập nhật thành công !');
+                    if(req){
+                        alertify.success('Cập nhật thành công !');
+                    } else {
+                        alertify.error('Cập nhật thất bại !');
+                    }
                 }
             })
         })

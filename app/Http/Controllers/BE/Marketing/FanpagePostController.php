@@ -48,7 +48,6 @@ class FanpagePostController extends Controller
             $posts = [];
         }
 
-
         if ($request->ajax()) {
             return view('marketing.fanpage_post.ajax', compact('posts','source'));
         }
@@ -136,7 +135,9 @@ class FanpagePostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $model = FanpagePost::find($id);
+        $model->update($request->except('_token'));
+        return $model;
     }
 
     /**
