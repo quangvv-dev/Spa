@@ -8,6 +8,7 @@ use App\Constants\ScheduleConstant;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
+use App\Http\Resources\MarketingResource;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
@@ -60,7 +61,7 @@ class MarketingController extends BaseApiController
             return $item;
         })->sortByDesc('gross_revenue');
 
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', MarketingResource::collection($data));
 
     }
 
