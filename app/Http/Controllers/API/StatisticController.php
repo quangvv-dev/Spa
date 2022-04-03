@@ -212,7 +212,6 @@ class StatisticController extends BaseApiController
             });
         $schedules_new = $schedules->whereIn('user_id', $arr_customer->pluck('customer_id')->toArray());
 
-
         $data = [
             'phone' => $arr_customer->count(),
             'schedules_new' => $schedules_new->count(),

@@ -102,18 +102,18 @@ class SalesController extends Controller
                     $q->where('branch_id', $request->branch_id);
                 });
             $schedules_den = clone $schedules;
-//            $schedules_new = clone $schedules;
+            $schedules_new = clone $schedules;
 
             //fix lịch hẹn 2 hôm
-            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            $item->schedules_new = $schedules->count();
-//            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
-//                ->whereHas('customer', function ($qr) {
-//                    $qr->where('old_customer', 0);
-//                })->count();
-//            $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
-//                $qr->where('old_customer', 0);
-//            })->count();
+//            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+//            $item->schedules_new = $schedules->count();
+            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+                ->whereHas('customer', function ($qr) {
+                    $qr->where('old_customer', 0);
+                })->count();
+            $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 0);
+            })->count();
             //lich hen
 
             $request->merge(['telesales' => $item->id]);

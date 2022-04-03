@@ -246,6 +246,10 @@ class RevenueController extends BaseApiController
 
     public function tabThuChi(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
         $input = $request->except('old_start', 'old_end');
         $input_old = [
             'branch_id'  => $request->branch_id,
@@ -261,10 +265,9 @@ class RevenueController extends BaseApiController
 
         $data = [
             'all_total' => $docs->sum('so_tien'),
-            'percent'   => !empty($docs->count()) && !empty($docOld) ? round(($docs->count() - $docOld) / $docOld * 100,
-                2) : 0,
-            'active'    => $docs->where('status', StatusConstant::ACTIVE)->count(),
-            'inactive'  => $docs2->where('status', StatusConstant::INACTIVE)->count(),
+            'percent'   => !empty($docs->count()) && !empty($docOld) ? round(($docs->count() - $docOld) / $docOld * 100, 2) : 0,
+            'active'    => $docs->where('status', StatusConstant::ACTIVE)->sum('so_tien'),
+            'inactive'  => $docs2->where('status', StatusConstant::INACTIVE)->sum('so_tien'),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
