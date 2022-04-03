@@ -7,6 +7,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Resources\OrderDetailResource;
 use App\Http\Resources\OrderResource;
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\HistoryUpdateOrder;
@@ -26,6 +27,10 @@ class OrderController extends BaseApiController
      */
     public function index(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
         $input = $request->all();
         $orders = Order::searchAll($input);
         $data['sumTotal'] = $orders->sum('all_total');
