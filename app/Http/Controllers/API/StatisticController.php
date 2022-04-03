@@ -179,7 +179,7 @@ class StatisticController extends BaseApiController
         $input = $request->all();
         $category = Category::find($id);
         $group = CustomerGroup::select('customer_id')->where('category_id', $category->id);
-        $arr_customer = self::searchDateBranch($group, $input)->pluck('customer_id')->toArray();
+        $arr_customer = self::searchDateBranch($group, $input);
 
 
         $services = Services::select('id')->where('category_id', $category->id)->pluck('id')->toArray();
@@ -210,7 +210,7 @@ class StatisticController extends BaseApiController
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
             });
-        $schedules_new = $schedules->whereIn('user_id', $arr_customer);
+        $schedules_new = $schedules->whereIn('user_id', $arr_customer->pluck('customer_id')->toArray());
 
 
         $data = [
