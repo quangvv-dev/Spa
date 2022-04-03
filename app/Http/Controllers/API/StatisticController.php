@@ -179,7 +179,9 @@ class StatisticController extends BaseApiController
         $input = $request->all();
         $category = Category::find($id);
         $group = CustomerGroup::select('customer_id')->where('category_id', $category->id);
-        $arr_customer = self::searchDateBranch($group, $input)->pluck('customer_id');
+        $arr_customer = self::searchDateBranch($group, $input)->pluck('customer_id')->toArray();
+
+
         $services = Services::select('id')->where('category_id', $category->id)->pluck('id')->toArray();
         $order_id = OrderDetail::select('order_id')->whereIn('booking_id', $services)
             ->when(!empty($input['start_date']) && !empty($input['end_date']),
@@ -202,8 +204,13 @@ class StatisticController extends BaseApiController
         $ordersAll = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('id', $order_id);
         $orders_new = $ordersAll->where('is_upsale', OrderConstant::NON_UPSALE)->with('orderDetails');
 
-        $schedules_new = Schedule::select('id')->whereIn('user_id', $arr_customer->pluck('id')->toArray());
-        $schedules_new = self::searchDateBranch($schedules_new, $input);
+        $schedules = Schedule::select('id')->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            });
+        $schedules_new = $schedules->whereIn('user_id', $arr_customer);
 
 
         $data = [
