@@ -121,7 +121,6 @@ class SaleController extends BaseApiController
                 $qr->where('old_customer', 1);
             });
 
-
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
             $detail_total = clone $detail;

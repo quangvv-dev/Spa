@@ -52,16 +52,22 @@ class StatisticController extends BaseApiController
      */
     public function schedules(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
         $input = $request->all();
         $users = User::select('id', 'full_name')
             ->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::CSKH, UserConstant::TP_CSKH])
-            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-                $q->where('branch_id', $input['branch_id']);
-            })->get()->map(function ($item) use ($input) {
+            ->get()->map(function ($item) use ($input) {
                 $schedule = Schedule::select('status')->where('person_action', $item->id)->whereBetween('date', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                ]);
+                ])->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                    $q->whereIn('branch_id', $input['group_branch']);
+                });
                 $schedule2 = clone $schedule;
                 $schedule3 = clone $schedule;
 
@@ -88,14 +94,16 @@ class StatisticController extends BaseApiController
     public function tasks(Request $request)
     {
         $input = $request->all();
-        $users = User::select('id', 'full_name')
-            ->whereIn('role',
-                [UserConstant::TELESALES, UserConstant::CSKH, UserConstant::TP_CSKH])
+        $users = User::select('id', 'full_name')->whereIn('role', [UserConstant::TELESALES, UserConstant::CSKH, UserConstant::TP_CSKH])
             ->get()->map(function ($item) use ($input) {
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                ]);
+                ])->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                    $q->where('branch_id', $input['branch_id']);
+                })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                    $q->whereIn('branch_id', $input['group_branch']);
+                });
                 $task1 = clone $task;
                 $item->all_task = $task->count();
                 $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
@@ -190,7 +198,6 @@ class StatisticController extends BaseApiController
 //        $customer = Customer::select('id')->whereIn('id', $arr_customer);
 //        $data_new = self::searchDateBranch($customer, $input);
 //        $ordersAll = Order::returnRawData($input);
-
 
         $ordersAll = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('id', $order_id);
         $orders_new = $ordersAll->where('is_upsale', OrderConstant::NON_UPSALE)->with('orderDetails');

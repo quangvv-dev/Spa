@@ -46,6 +46,10 @@ class HistoryUpdateOrder extends Model
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($input['end_date']) . " 23:59:59",
                 ]);
+            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
             })
             ->when(isset($input['user_id']), function ($query) use ($input) {
                 $query->where('user_id', $input['user_id']);

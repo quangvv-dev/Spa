@@ -23,6 +23,7 @@ class OrderController extends BaseApiController
      * Danh sách đơn hàng
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -36,7 +37,8 @@ class OrderController extends BaseApiController
         $data['sumTotal'] = $orders->sum('all_total');
         $data['sumRevenue'] = $orders->sum('gross_revenue');
         $data['sumRest'] = $orders->sum('the_rest');
-        $orders = $orders->select('id', 'member_id', 'all_total', 'gross_revenue', 'the_rest')->paginate(StatusCode::PAGINATE_20);
+        $orders = $orders->select('id', 'member_id', 'all_total', 'gross_revenue',
+            'the_rest')->paginate(StatusCode::PAGINATE_20);
         $data['lastPage'] = $orders->lastPage();
         $data['records'] = OrderResource::collection($orders);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -46,6 +48,7 @@ class OrderController extends BaseApiController
      * Chi tiết đơn hàng
      *
      * @param Order $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Order $id)
@@ -62,19 +65,25 @@ class OrderController extends BaseApiController
      * Kỹ thuật viên
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function commission(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
         $category_price = Category::pluck('price', 'id')->toArray();
         $input = $request->all();
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
             })->get();
         if (count($data)) {
-
             foreach ($data as $item) {
                 $price = [];
                 $input['support_id'] = $item->id;
@@ -96,15 +105,15 @@ class OrderController extends BaseApiController
                 }
 
                 $doc = [
-                    'id' => $item->id,
-                    'avatar' => $item->avatar,
-                    'full_name' => $item->full_name,
-//                    'orders' => $order->count(),
-//                    'all_total' => $order->sum('all_total'),
+                    'id'            => $item->id,
+                    'avatar'        => $item->avatar,
+                    'full_name'     => $item->full_name,
+                    //                    'orders' => $order->count(),
+                    //                    'all_total' => $order->sum('all_total'),
                     'gross_revenue' => $order->sum('gross_revenue'),
-                    'days' => $history_orders->count(),
-                    'rose_money' => Commission::search($input, 'earn')->sum('earn'),
-                    'price' => array_sum($price) ? array_sum($price) : 0,
+                    'days'          => $history_orders->count(),
+                    'rose_money'    => Commission::search($input, 'earn')->sum('earn'),
+                    'price'         => array_sum($price) ? array_sum($price) : 0,
                 ];
                 $docs[] = $doc;
             }
@@ -116,6 +125,10 @@ class OrderController extends BaseApiController
 
     public function tuvanvien(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
         $input = $request->all();
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->where('department_id', UserConstant::PHONG_TVV)
@@ -130,12 +143,12 @@ class OrderController extends BaseApiController
                 $input['type'] = 0;
                 $order = Order::getAll($input);
                 $doc = [
-                    'id' => $item->id,
-                    'avatar' => $item->avatar,
-                    'full_name' => $item->full_name,
-                    'orders' => $order->count(),
+                    'id'            => $item->id,
+                    'avatar'        => $item->avatar,
+                    'full_name'     => $item->full_name,
+                    'orders'        => $order->count(),
                     'gross_revenue' => $order->sum('gross_revenue'),
-                    'rose_money' => Commission::search($input)->sum('earn'),
+                    'rose_money'    => Commission::search($input)->sum('earn'),
                 ];
                 $docs[] = $doc;
             }
