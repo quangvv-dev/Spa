@@ -118,6 +118,10 @@ class RevenueController extends BaseApiController
      */
     public function orders(Request $request)
     {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
         $input = $request->except('type_api');
         $input_old = [
             'branch_id'  => $request->branch_id,
