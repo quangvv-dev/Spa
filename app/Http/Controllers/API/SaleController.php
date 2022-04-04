@@ -42,7 +42,7 @@ class SaleController extends BaseApiController
                 })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
                 });
-            $orders = Order::select('id','member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
                 ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
@@ -51,16 +51,20 @@ class SaleController extends BaseApiController
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
-            $orders2 = clone $orders;
+//            $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+//            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
             $detail_total = clone $detail;
             $detail2 = clone $detail;
-            $total_old = $detail_total->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');
-            $total_new = $detail2->whereIn('order_id', $order_new->pluck('id')->toArray())->sum('price');
+            $total_new = $detail_total->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+            })->sum('price');
+            $total_old = $detail2->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+            })->sum('price');
 
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
