@@ -354,6 +354,7 @@ class RevenueController extends BaseApiController
         } elseif ($request->type_api == 4) {
             $orders = Order::returnRawData($input);
             $orders2 = clone $orders;
+            $orders3 = clone $orders;
             $data = [
                 [
                     'name'      => 'Sản phẩm',
@@ -362,6 +363,10 @@ class RevenueController extends BaseApiController
                 [
                     'name'      => 'Dịch vụ',
                     'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+                ],
+                [
+                    'name'      => 'Sản phẩm & D.vụ',
+                    'all_total' => $orders3->where('role_type', StatusCode::COMBOS)->sum('gross_revenue'),
                 ],
             ];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
