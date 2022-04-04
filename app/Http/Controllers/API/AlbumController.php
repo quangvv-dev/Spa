@@ -22,7 +22,7 @@ class AlbumController extends BaseApiController
      */
     public function store(Request $request)
     {
-        $input = $request->all();
+        $input = $request->except('title');
         $images = [];
         $doc = Album::where('customer_id', $input['customer_id'])->first();
 
@@ -32,7 +32,7 @@ class AlbumController extends BaseApiController
                 foreach ($input['images'] as $item) {
                     $images[] = [
                         'fileName'  => $item,
-                        'title'     => $input['title'],
+                        'title'     => isset($request->title)?$request->title:null,
                         'date'      => Carbon::now()->format('d/m/Y'),
                     ];
                 }
@@ -44,12 +44,11 @@ class AlbumController extends BaseApiController
                 foreach ($input['images'] as $item) {
                     $images[] = [
                         'fileName' => $item,
-                        'title'     => $input['title'],
+                        'title'     => isset($request->title)?$request->title:null,
                         'date' => Carbon::now()->format('d/m/Y'),
                     ];
                 }
                 $input['images'] = json_encode($images);
-                unset($input['title']);
                 $doc = Album::create($input);
             }
         }
