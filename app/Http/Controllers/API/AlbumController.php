@@ -31,8 +31,9 @@ class AlbumController extends BaseApiController
                 $images = json_decode($doc->images);
                 foreach ($input['images'] as $item) {
                     $images[] = [
-                        'fileName' => $item,
-                        'date' => Carbon::now()->format('d/m/Y'),
+                        'fileName'  => $item,
+                        'title'     => $input['title'],
+                        'date'      => Carbon::now()->format('d/m/Y'),
                     ];
                 }
                 $doc->images = json_encode($images);
@@ -43,10 +44,12 @@ class AlbumController extends BaseApiController
                 foreach ($input['images'] as $item) {
                     $images[] = [
                         'fileName' => $item,
+                        'title'     => $input['title'],
                         'date' => Carbon::now()->format('d/m/Y'),
                     ];
                 }
                 $input['images'] = json_encode($images);
+                unset($input['title']);
                 $doc = Album::create($input);
             }
         }
