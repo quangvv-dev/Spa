@@ -63,7 +63,7 @@ class SaleController extends BaseApiController
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
             $total_old = $detail2->whereHas('order', function ($qr) {
-                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+                $qr->where('is_upsale', OrderConstant::IS_UPSALE);
             })->sum('price');
 
             $item->phoneNew = $data_new->get()->count();
