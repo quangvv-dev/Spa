@@ -329,9 +329,28 @@ class RevenueController extends BaseApiController
             $data = ChartResource::collection($category);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 3) {
-            $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
+
+            $category_product = Category::select('id', 'name')->where('type', StatusCode::PRODUCT)->get()->map(function ($item) use ($input) {
+                $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
+                $orders = OrderDetail::select('price')->whereIn('booking_id', $services)
+                    ->when(!empty($input['start_date']) && !empty($input['end_date']),
+                        function ($q) use ($input) {
+                            $q->whereBetween('created_at', [
+                                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                            ]);
+                        })
+                    ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                        $q->where('branch_id', $input['branch_id']);
+                    })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                        $q->whereIn('branch_id', $input['group_branch']);
+                    });
+                $item->all_total = $orders->sum('price');//da thu trong ky thu thêm
+                return $item;
+            })->sortByDesc('all_total')->take(5);
             $data = ChartResource::collection($category_product);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
         } elseif ($request->type_api == 4) {
             $orders = Order::returnRawData($input);
             $orders2 = clone $orders;
