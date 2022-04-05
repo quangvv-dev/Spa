@@ -94,7 +94,7 @@ class StatisticController extends BaseApiController
     public function tasks(Request $request)
     {
         $input = $request->all();
-        $users = User::select('id', 'full_name')->whereIn('role', [UserConstant::TELESALES, UserConstant::CSKH, UserConstant::TP_CSKH])
+        $users = User::select('id', 'full_name')->whereIn('role', [UserConstant::TELESALES, UserConstant::CSKH, UserConstant::TP_CSKH,UserConstant::WAITER])
             ->get()->map(function ($item) use ($input) {
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
