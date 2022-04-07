@@ -8,7 +8,12 @@ function userExists(seeding_number, arr) {
         return el.seeding_number === seeding_number;
     });
 }
-
+function localeTime(){
+    let date =  moment.utc().format('YYYY-MM-DD HH:mm:ss');
+    let stillUtc = moment.utc(date).toDate();
+    let local = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+    return local;
+}
 
 /**
  * Nhập liệu khách hàng từ tin nhắn
@@ -40,7 +45,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                 } finally {
                     //create Customer
                     console.log(name, 'Name Customer');
-                    const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
+                    const created_at = localeTime();
                     console.log(' Time zone Asian', created_at);
                     model.CheckSource(rows[0].source_id, function (err, row2) {
                         if (err) {
@@ -137,7 +142,7 @@ exports.SetComment = (phone, post_id, text, sender) => {
             console.log(err, 'err');
         } else {
             if (rows.length > 0) {
-                const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
+                const created_at = localeTime();
                 console.log(' Time zone Asian', created_at);
                 model.CheckSource(rows[0].source_id, function (err, row2) {
                     if (err) {
@@ -228,7 +233,7 @@ exports.UpdateTimeOrderOff = (socket_id, io) => {
                 const lecture_id = rows[0].lecture_id;
                 const user_id = rows[0].user_id;
                 const video_id = rows[0].video_id;
-                const created_at = new Date(new Date().toString("en-US", {timeZone: "Asia/Ho_Chi_Minh"}));
+                const created_at = localeTime();
                 model.UpdateLearn(user_id, lecture_id, video_id, time, created_at);
                 console.log('done disconnect');
             } else {
