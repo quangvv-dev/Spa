@@ -278,8 +278,8 @@
                         <ul>
                             @if($roleGlobal->permission('danh-muc-thu-chi.index'))
                                 <li><a href="{{url('danh-muc-thu-chi')}}">Danh mục duyệt chi</a></li>
+                                <li><a href="{{url('ly-do-thu-chi')}}">Lý do duyệt chi</a></li>
                             @endif
-                            <li><a href="{{url('ly-do-thu-chi')}}">Lý do duyệt chi</a></li>
                             <li><a href="{{url('thu-chi')}}">Danh sách duyệt chi</a></li>
                         </ul>
                     </div>
