@@ -2,6 +2,7 @@ const app = require("./app");
 var controller = require('./controllers/TiviBoxController');
 const https = require("https");
 // const http = require("http");
+// const moment = require("moment");
 const port = process.env.PORT || 2022;
 
 const fs = require('fs');
@@ -98,7 +99,7 @@ function localeTime(){
 
 server.listen(port, "0.0.0.0", function (error) {
     if (error) console.log("Connect error");
-    const created_at = localeTime();
+    // const created_at = localeTime();
     console.log("Start server port:", port,'DATE CURENT',created_at);
 });
 

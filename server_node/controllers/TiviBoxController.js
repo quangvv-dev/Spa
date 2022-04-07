@@ -9,10 +9,10 @@ function userExists(seeding_number, arr) {
     });
 }
 function localeTime(){
-    let date =  moment.utc().format('YYYY-MM-DD HH:mm:ss');
-    let stillUtc = moment.utc(date).toDate();
-    let localeTime = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
-    return localeTime;
+    let date =  moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');
+    // let stillUtc = moment.utc(date).toDate();
+    // let localeTime = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+    return date;
 }
 
 /**
