@@ -100,6 +100,6 @@ function localeTime(){
 server.listen(port, "0.0.0.0", function (error) {
     if (error) console.log("Connect error");
     // const created_at = localeTime();
-    console.log("Start server port:", port,'DATE CURENT',created_at);
+    console.log("Start server port:", port);
 });
 
