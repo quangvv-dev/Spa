@@ -2,6 +2,7 @@ const app = require("./app");
 var controller = require('./controllers/TiviBoxController');
 const https = require("https");
 // const http = require("http");
+const moment = require("moment");
 const port = process.env.PORT || 2022;
 
 const fs = require('fs');
@@ -89,9 +90,16 @@ app.post('/webhook', function (req, res) {
     }
 });
 
+function localeTime(){
+    let date =  moment.utc().format('YYYY-MM-DD HH:mm:ss');
+    let stillUtc = moment.utc(date).toDate();
+    let localeTime = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+    return localeTime;
+}
+
 server.listen(port, "0.0.0.0", function (error) {
     if (error) console.log("Connect error");
-    const created_at = new Date().getTimezoneOffset();
+    const created_at = localeTime();
     console.log("Start server port:", port,'DATE CURENT',created_at);
 });
 
