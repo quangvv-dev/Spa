@@ -91,10 +91,10 @@ app.post('/webhook', function (req, res) {
 });
 
 function localeTime(){
-    let date =  moment.utc().format('YYYY-MM-DD HH:mm:ss');
-    let stillUtc = moment.utc(date).toDate();
-    let localeTime = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
-    return localeTime;
+    let date =  moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');
+    // let stillUtc = moment.utc(date).toDate();
+    // let localeTime = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
+    return date;
 }
 
 server.listen(port, "0.0.0.0", function (error) {
