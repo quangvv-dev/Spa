@@ -268,7 +268,7 @@
             ['Task', 'Hours per Day'],
             ['Sản phẩm', {{$products['gross_revenue']}}],
             ['Dịch vụ', {{$services['gross_revenue']}}],
-            ['Sản phầm & Dịch vụ', {{$combo_gross['gross_revenue']}}],
+            ['Sản phầm & Dịch vụ', {{$services['combo_gross']}}],
         ]);
 
         var options = {
