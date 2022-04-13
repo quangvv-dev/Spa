@@ -63,7 +63,7 @@ class SalesController extends Controller
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])->get()->map(function ($item) use ($request) {
+        $users = User::where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -132,11 +132,7 @@ class SalesController extends Controller
             $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
-        })->sortByDesc('all_payment')->filter(function ($item) {
-            if ($item->all_payment > 0) {
-                return $item;
-            }
-        });
+        })->sortByDesc('all_payment');
         \View::share([
             'allTotal' => $users->sum('revenue_total'),
             'grossRevenue' => $users->sum('payment_revenue'),
