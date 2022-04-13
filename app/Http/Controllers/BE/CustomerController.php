@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
+use App\Constants\DepartmentConstant;
 use App\Constants\NotificationConstant;
 use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
@@ -73,12 +74,12 @@ class CustomerController extends Controller
         $marketingUsers = User::whereIn('role', [UserConstant::MARKETING, UserConstant::TP_MKT])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::select('id', 'name')->pluck('name', 'id')->toArray();
         $telesales = [];
-        User::get()->map(function ($item) use (&$telesales) {
-            if ($item->role == UserConstant::WAITER) {
+        User::select('id','department_id','full_name')->get()->map(function ($item) use (&$telesales) {
+            if ($item->department_id == DepartmentConstant::WAITER) {
                 $telesales['Lễ Tân'][$item->full_name] = $item->id;
-            } elseif ($item->role == UserConstant::TELESALES || $item->role == UserConstant::TP_SALE) {
+            } elseif ($item->department_id == DepartmentConstant::TELESALES) {
                 $telesales['Telesales'][$item->full_name] = $item->id;
-            } elseif ($item->role == UserConstant::CSKH) {
+            } elseif ($item->department_id == UserConstant::TECHNICIANS) {
                 $telesales['Tư vấn viên'][$item->full_name] = $item->id;
             }
             return $item;
