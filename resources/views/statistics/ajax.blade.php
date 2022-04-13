@@ -268,10 +268,11 @@
             ['Task', 'Hours per Day'],
             ['Sản phẩm', {{$products['gross_revenue']}}],
             ['Dịch vụ', {{$services['gross_revenue']}}],
+            ['Sản phầm & Dịch vụ', {{$combo_gross['gross_revenue']}}],
         ]);
 
         var options = {
-            title: 'DOANH THU SẢN PHẨM & DỊCH VỤ',
+            title: 'DOANH THU THEO LOẠI ĐƠN',
             width: 500,
             height: 300,
         };

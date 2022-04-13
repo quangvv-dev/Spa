@@ -158,6 +158,7 @@ class StatisticController extends Controller
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
             'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             'combo_total' => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
+            'combo_gross' => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('gross_revenue'),
             'orders' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
         ];
 
