@@ -194,7 +194,7 @@ class CustomerController extends Controller
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
         }
-        if (Auth::user()->role == UserConstant::WAITER) {
+        if (Auth::user()->department_id == DepartmentConstant::WAITER) {
             $request->merge(['telesales_id' => Auth::user()->id]);
         }
         $customer = $this->customerService->create($input);

@@ -9,6 +9,7 @@ namespace App\Constants;
  */
 class DepartmentConstant
 {
+    const ADMIN = 1;
     const BAN_GIAM_DOC = 1;
     const MARKETING = 3; // ROLE MARKETING
     const TELESALES = 2;//ROLE TELESALE

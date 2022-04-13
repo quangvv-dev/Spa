@@ -14,7 +14,7 @@
                         <li class="dropdown_action" id="convert_customer"><a>Chuyển sang khách hàng</a></li>
                     </ul>
                 </div>
-                @if(\Illuminate\Support\Facades\Auth::user()->role != \App\Constants\UserConstant::TELESALES)
+                @if(\Illuminate\Support\Facades\Auth::user()->department_id != \App\Constants\DepartmentConstant::TELESALES)
                     <div class="col-md-3 col-sm-6">
                         {!! Form::select('telesales', $telesales, null, array('class' => 'form-control sales select-gear','placeholder'=>'Tất cả sales')) !!}
                     </div>
@@ -104,7 +104,7 @@
             location.href = hrefs;
         });
 
-        @if(\Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::ADMIN || \Illuminate\Support\Facades\Auth::user()->role == \App\Constants\UserConstant::MARKETING)
+        @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN || \Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
         $(document).on('dblclick', '.telesale-customer', function (e) {
             let target = $(e.target).parent();
             $(target).find('.telesale-customer').empty();

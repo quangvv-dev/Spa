@@ -63,11 +63,11 @@
                     <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
                         {!! Form::label('', 'Mã máy tổng đài (nếu có)') !!}
                         <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}"
-                        {{\Illuminate\Support\Facades\Auth::user()->role!=\App\Constants\UserConstant::ADMIN ?'disabled':'name=caller_number'}} >
+                        {{\Illuminate\Support\Facades\Auth::user()->department_id!=\App\Constants\UserConstant::ADMIN ?'disabled':'name=caller_number'}} >
                         <span class="help-block">{{ $errors->first('caller_number', ':message') }}</span>
                     </div>
                 </div>
-                @if(\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::ADMIN)
+                @if(\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\UserConstant::ADMIN)
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
                             {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}

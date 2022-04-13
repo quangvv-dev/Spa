@@ -33,7 +33,7 @@
                                 class="fas fa-edit"></i>
                             <span class="tooltiptext">Chỉnh sửa đơn</span>
                         </a>
-                        @if($order->count_day > 0 && Auth::user()->role != \App\Constants\UserConstant::CSKH)
+                        @if($order->count_day > 0 && Auth::user()->department_id != \App\Constants\DepartmentConstant::CSKH)
                             <a class="btn edit-order tooltip-nav" data-order-id="{{ $order->id }}"><i
                                     class="fas fa-check-square"></i>
                                 <span class="tooltiptext">Trừ liệu trình</span>

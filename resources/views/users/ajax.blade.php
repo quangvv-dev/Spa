@@ -26,7 +26,7 @@
                     <td class="text-center">
                         <a title="sửa tài khoản" class="btn" href="{{ route('users.edit', $user->id) }}"><i
                                 class="fas fa-edit"></i></a>
-                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN)
+                        @if (Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
                             <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)"
                                data-url="{{ route('users.destroy', $user->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif

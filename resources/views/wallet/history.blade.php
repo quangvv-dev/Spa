@@ -34,7 +34,7 @@
                         <i class="fas fa-file-invoice-dollar"></i>
                         <span class="tooltiptext">Thanh toán (IN)</span>
                     </a>
-                    @if(\Illuminate\Support\Facades\Auth::user()->role==1)
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::ADMIN)
                         <a class="btn delete" href="javascript:void(0)"
                            data-url="{{ url('wallet/' . $item->id) }}"><i class="fas fa-trash-alt"></i></a>
                     @endif

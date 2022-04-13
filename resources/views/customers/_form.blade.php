@@ -111,14 +111,14 @@
                         <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
                             {!! Form::label('telesales_id', 'Người phụ trách', array('class' => 'control-label required')) !!}
                             <select name="telesales_id" id="telesales_id" class="form-control select2"
-                                    {{\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::TELESALES && isset($customer) ?'disabled':''}}
+                                    {{\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::TELESALES && isset($customer) ?'disabled':''}}
                                     data-placeholder="Chọn nhân viên">
                                 <option value=""></option>
                                 @foreach($telesales as $k => $l)
                                     <optgroup label="{{ $k }}">
                                         @foreach($l as $kl => $vl)
                                             <option
-                                                {{@$customer->telesales_id == $vl||\Illuminate\Support\Facades\Auth::user()->role==\App\Constants\UserConstant::WAITER&&\Illuminate\Support\Facades\Auth::user()->id==$vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+                                                {{@$customer->telesales_id == $vl||\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::WAITER&&\Illuminate\Support\Facades\Auth::user()->id==$vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
                                         @endforeach
                                     </optgroup>
                                 @endforeach

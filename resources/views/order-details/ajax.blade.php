@@ -26,7 +26,7 @@
             @foreach($orders as $order)
                 <tr>
                     <td class="text-center">
-                        @if (Auth::user()->role == \App\Constants\UserConstant::ADMIN||Auth::user()->role == \App\Constants\UserConstant::WAITER||Auth::user()->role == \App\Constants\UserConstant::CSKH)
+                        @if (Auth::user()->department_id == \App\Constants\UserConstant::ADMIN||Auth::user()->department_id == \App\Constants\DepartmentConstant::WAITER||Auth::user()->department_id == \App\Constants\DepartmentConstant::CSKH)
                             <a title="Xóa đơn hàng" class="btn delete" href="javascript:void(0)"
                                data-url="{{ route('order.destroy', $order->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif
