@@ -312,12 +312,19 @@ class SmsController extends Controller
         $data = $request->all();
         $data_replace = str_replace("\r\n", ';', $data['list_phone']);
         $arr_data = explode(';', $data_replace);
+
+        $arr_name = str_replace("\r\n", ';', $data['list_name']);
+        $arr_name = explode(';', $arr_name);
+
+
         $number = 0;
         setting(['content_multiple_sms' => $data['content']])->save();
         if (count($arr_data)) {
-            foreach ($arr_data as $item) {
+            foreach ($arr_data as $key => $item) {
                 if (strlen($item) == 10) {
-                    $body = Functions::vi_to_en($data['content']);
+                    $input['full_name'] = @$arr_name[$key];
+                    $body = Functions::replaceTextForUser($input,$data['content']);
+                    $body = Functions::vi_to_en($body);
                     $err = Functions::sendSmsV3($item, $body);
                     if (isset($err) && $err) {
                         $number++;
