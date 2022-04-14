@@ -326,6 +326,7 @@ class SmsController extends Controller
                     $body = Functions::replaceTextForUser($input,$data['content']);
                     $body = Functions::vi_to_en($body);
                     $err = Functions::sendSmsV3($item, $body);
+                    unset($input['full_name']);
                     if (isset($err) && $err) {
                         $number++;
                         $input['phone'] = $item;
