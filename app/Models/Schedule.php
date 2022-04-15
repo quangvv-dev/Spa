@@ -169,14 +169,12 @@ class Schedule extends Model
         }
         $docs->when(isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
-        })
-            ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
-                $q->whereBetween('date', [
-                    Functions::yearMonthDay($request['start_date']).' 00:00',
-                    Functions::yearMonthDay($request['end_date']).' 23:59',
-                ]);
-            });
-
+        })->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
+            $q->whereBetween('date', [
+                Functions::yearMonthDay($request['start_date']) . ' 00:00',
+                Functions::yearMonthDay($request['end_date']) . ' 23:59',
+            ]);
+        });
         if (!empty($request['search'])) {
             $docs = $docs->whereIn('status', $request['search']);
         }
@@ -192,7 +190,8 @@ class Schedule extends Model
         if (!empty($request['customer'])) {
             $param = $request['customer'];
             $docs->whereHas('customer', function ($q) use ($param) {
-                $q->where('phone', 'like', '%' . $param . '%');
+                $q->where('phone', $param);
+//                $q->where('phone', 'like', '%' . $param . '%');
             });
         }
         if (!empty($request['status'])) {

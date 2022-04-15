@@ -102,13 +102,13 @@ class ScheduleController extends Controller
     public function store(Request $request, $id)
     {
         $customer = Customer::find($id);
-        $category = CustomerGroup::where('customer_id',$customer->id)->first();
+        $category = CustomerGroup::where('customer_id', $customer->id)->first();
         $request->merge([
-            'user_id'       => $id,
+            'user_id' => $id,
             'person_action' => Auth::user()->id,
-            'creator_id'    => Auth::user()->id,
-            'branch_id'     => $customer->branch_id,
-            'category_id'   => isset($category) ? $category->category_id : 0,
+            'creator_id' => Auth::user()->id,
+            'branch_id' => $customer->branch_id,
+            'category_id' => isset($category) ? $category->category_id : 0,
         ]);
         if ($request->note) {
             $note = str_replace("\r\n", ' ', $request->note);
@@ -215,8 +215,16 @@ class ScheduleController extends Controller
 
     public function homePage(Request $request)
     {
-        $status = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();
+        $status = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();
         $now = Carbon::now()->format('Y-m-d');
+        if(!empty(Auth::user()->branch_id)){
+            $request->merge(['branch_id' => Auth::user()->branch_id]);
+        }
+        if (!count($request->all())) {
+            $request->merge(['branch_id' => 1]);
+
+        }
+
         $docs = Schedule::search($request->all())->has('customer')->with('customer');
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');

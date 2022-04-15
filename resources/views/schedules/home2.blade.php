@@ -6,6 +6,7 @@
     .container {
         max-width: 90% !important;
     }
+
     .content-custom {
         max-width: 100% !important;
     }
@@ -28,6 +29,7 @@
             font-size: 12px;
         }
     }
+
     thead > tr th {
         background: #fff !important;
     }
@@ -77,7 +79,7 @@
                     {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
                 </div>
                 <div class="col">
-                    {!! Form::select('branch_id', $branchs,null, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
+                    {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
                 </div>
 
             </div>
@@ -170,7 +172,14 @@
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
-                searchAjax({date: val,branch_id: branch_id, status: status, search: arr, user: user, customer: customer});
+                searchAjax({
+                    date: val,
+                    branch_id: branch_id,
+                    status: status,
+                    search: arr,
+                    user: user,
+                    customer: customer
+                });
             });
             $(document).on('change', '#status', function () {
                 $('.spin').show();
@@ -180,7 +189,14 @@
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
 
-                searchAjax({status: val,branch_id: branch_id, date: date, search: arr, user: user, customer: customer});
+                searchAjax({
+                    status: val,
+                    branch_id: branch_id,
+                    date: date,
+                    search: arr,
+                    user: user,
+                    customer: customer
+                });
             });
             $(document).on('change', '#person_action', function () {
                 var val = $(this).val();
@@ -189,7 +205,14 @@
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
 
-                searchAjax({user: val,branch_id: branch_id, status: status, date: date, search: arr, customer: customer});
+                searchAjax({
+                    user: val,
+                    branch_id: branch_id,
+                    status: status,
+                    date: date,
+                    search: arr,
+                    customer: customer
+                });
 
             });
             $(document).on('change', '#customer_plus', function () {
@@ -198,17 +221,24 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let branch_id = $('#branch_id').val();
-                searchAjax({customer: val,branch_id: branch_id, status: status, user: user, date: date, search: arr});
+                searchAjax({customer: val, branch_id: branch_id, status: status, user: user, date: date, search: arr});
 
             });
 
             $(document).on('change', '#branch_id', function () {
-                var branch_id = $(this).val();
+                let branch_id = $(this).val();
                 let status = $('#status').val();
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({customer: customer,branch_id: branch_id, status: status, user: user, date: date, search: arr});
+                searchAjax({
+                    customer: customer,
+                    branch_id: branch_id,
+                    status: status,
+                    user: user,
+                    date: date,
+                    search: arr
+                });
 
             });
 
