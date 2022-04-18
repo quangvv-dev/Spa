@@ -403,7 +403,7 @@
                                                     {{--@if($roleGlobal->permission('tasks.index'))--}}
                                                         <a class="right btn btn-primary text-white"
                                                            data-toggle="modal"
-                                                           data-target="#modalTask">Tạo mới</a>
+                                                           data-target="#modalTask" id="createTask">Tạo mới</a>
                                                     {{--@endif--}}
                                                 </div>
                                             </div>
@@ -533,12 +533,13 @@
                 method: "get",
                 // data: {member_id: id}
             }).done(function (data) {
-                console.log(data,'dataa');
                 $('#name_update').val(data.name);
                 $('.date_update').val(data.date_from.toLocaleString());
                 $('.time_from').val(data.time_from);
                 $('.time_to').val(data.time_to);
                 $('#description_update').val(data.description);
+                $('.formUpdateTask').attr('action', "/tasks/"+data.id).change();
+
                 // $('#order_customer').html(data);
             });
         });
