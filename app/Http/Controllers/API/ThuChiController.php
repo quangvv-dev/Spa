@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\NotificationConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
@@ -75,8 +76,8 @@ class ThuChiController extends BaseApiController
      */
     public function listUserThuChi()
     {
-        $creator = User::select('id', 'full_name')->where('department_id', 5)->get();//lễ tân
-        $centor = User::select('id', 'full_name')->where('department_id', 1)->get();//ban giám đốc
+        $creator = User::select('id', 'full_name')->where('department_id', DepartmentConstant::WAITER)->get();//lễ tân
+        $centor = User::select('id', 'full_name')->whereIN('department_id', [DepartmentConstant::ADMIN,DepartmentConstant::WAITER])->get();//ban giám đốc
         $data['creator'] = $creator;
         $data['centor'] = $centor;
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);

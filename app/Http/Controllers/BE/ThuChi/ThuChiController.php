@@ -80,9 +80,8 @@ class ThuChiController extends Controller
     public function create()
     {
         $branches = Branch::pluck('name', 'id');
-        $roles = Role::where('department_id', 1)->pluck('id')->toArray();
         $li_do = LyDoThuChi::pluck('name','id')->toArray();
-        $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
+        $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN,DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
 
         $type = collect(['0' => 'Tiền mặt', '1' => 'Chuyển khoản']);
 
@@ -158,8 +157,7 @@ class ThuChiController extends Controller
         $doc = ThuChi::find($id);
 //        $li_do = LyDoThuChi::where('category_id', $doc->danh_muc_thu_chi_id)->pluck('name', 'id')->toArray();
         $li_do = LyDoThuChi::pluck('name','id')->toArray();
-        $roles = Role::where('department_id', 1)->pluck('id')->toArray();
-        $user_duyet = User::whereIn('role', $roles)->pluck('full_name', 'id');
+        $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN,DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
         $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
         return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do','branches'));
