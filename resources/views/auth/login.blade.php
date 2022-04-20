@@ -13,7 +13,7 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <link rel="icon" href="{{asset('assets/images/brand/logo.png')}}" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/brand/logo.png')}}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" />
 
     <!-- Title -->
     <title>{{!empty(setting('title_website'))?setting('title_website'):'Hệ Thống Royal Spa'}}</title>
@@ -57,7 +57,7 @@
                     <form class="card" method="POST" action="{{ url('login') }}">
                         @csrf
                         <div class="card-body p-6">
-                            <img src="assets/images/brand/logo_login.png" class="h-6" alt="">
+                            <img src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" class="h-6" alt="">
 
                             <div class="card-title text-center">Đăng nhập vào hệ thống</div>
                             <div class="form-group {{ $errors->has('phone') ? ' has-error' : '' }}">
