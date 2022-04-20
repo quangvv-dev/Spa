@@ -113,7 +113,7 @@
                 },
                 success: function (data) {
                     if (data && data == 1) {
-                        location.reload();
+                        alertify.success('Cập nhật thành công !');
                     } else {
                         alert('bạn không có quyền !');
                     }
