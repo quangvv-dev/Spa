@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\ThuChi;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
@@ -40,9 +41,9 @@ class ThuChiController extends Controller
         }
         $search = $request->all();
         $user = Auth::user();
-        $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
-        $quan_ly = $user->department_id == 1 && $user->role != 1 ? true : false;
-        $ke_toan = $user->department_id == 8 ? true : false;
+        $admin = $user->department_id == DepartmentConstant::ADMIN && $user->role == 1 ? true : false;
+        $quan_ly = $user->department_id == DepartmentConstant::ADMIN && $user->role != 1 ? true : false;
+        $ke_toan = $user->department_id == DepartmentConstant::KE_TOAN ? true : false;
         $branches = [];
         $users = User::pluck('full_name', 'id')->toArray();
         if (!$admin) {
@@ -207,12 +208,13 @@ class ThuChiController extends Controller
         $user = Auth::user();
         $thu_chi = ThuChi::find($request->id);
 
-        $admin = $user->department_id == 1 && $user->role == 1 ? true : false;
+        $admin = $user->department_id == DepartmentConstant::ADMIN && $user->role == DepartmentConstant::ADMIN ? true : false;
         $quan_ly = $user->id == $thu_chi->duyet_id ? true : false;
+        $ke_toan = $user->department_id == DepartmentConstant::KE_TOAN ? true : false;
 
         $status = $request->status == 'true' ? 1 : 0;
 
-        if ($admin || $quan_ly) {
+        if ($admin || $quan_ly||$ke_toan) {
             $thu_chi->update(['status' => $status]);
             return 1;
         } else {
