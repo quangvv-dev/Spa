@@ -49,13 +49,12 @@ class ThuChiController extends Controller
         if (!$admin) {
             if ($quan_ly) {
                 $search['duyet_id'] = $user->id;
-            }elseif ($ke_toan){
+            } elseif ($ke_toan) {
                 $branches = Branch::pluck('name', 'id');
-            }
-            else {
+            } else {
                 $search['thuc_hien_id'] = $user->id;
             }
-        }else{
+        } else {
             $branches = Branch::pluck('name', 'id');
         }
 
@@ -80,14 +79,14 @@ class ThuChiController extends Controller
     public function create()
     {
         $branches = Branch::pluck('name', 'id');
-        $li_do = LyDoThuChi::pluck('name','id')->toArray();
-        $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN,DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
+        $li_do = LyDoThuChi::pluck('name', 'id')->toArray();
+        $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
 
         $type = collect(['0' => 'Tiền mặt', '1' => 'Chuyển khoản']);
 
         $categories = DanhMucThuChi::pluck('name', 'id');
 
-        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet', 'type','li_do','branches'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet', 'type', 'li_do', 'branches'));
     }
 
     /**
@@ -103,7 +102,7 @@ class ThuChiController extends Controller
         $user = Auth::user();
         $data['so_tien'] = replaceNumberFormat($request->so_tien);
         $data['thuc_hien_id'] = $user->id;
-        $data['branch_id'] = $user->branch_id ? $user->branch_id : 0;
+        $data['branch_id'] = $data['branch_id'] ?: $user->branch_id;
         $data['danh_muc_thu_chi_id'] = LyDoThuChi::find($request->ly_do_id)->category_id;
         $data['created_at'] = Functions::yearMonthDay($request->created_at);
 
@@ -113,7 +112,7 @@ class ThuChiController extends Controller
             $data_noti = json_encode((array)['pay_id' => $thu_chi->id]);
             $title = '💸💸💸 Bạn có yêu cầu duyệt chi';
             $type = NotificationConstant::THU_CHI;
-            if (!empty($centor->devices_token)){
+            if (!empty($centor->devices_token)) {
                 $devices_token = [$centor->devices_token];
                 fcmSendCloudMessage($devices_token, $title, 'Chạm để xem', 'notification', ['pay_id' => $thu_chi->id]);
             }
@@ -156,11 +155,11 @@ class ThuChiController extends Controller
         $branches = Branch::pluck('name', 'id');
         $doc = ThuChi::find($id);
 //        $li_do = LyDoThuChi::where('category_id', $doc->danh_muc_thu_chi_id)->pluck('name', 'id')->toArray();
-        $li_do = LyDoThuChi::pluck('name','id')->toArray();
-        $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN,DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
+        $li_do = LyDoThuChi::pluck('name', 'id')->toArray();
+        $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
         $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
-        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do','branches'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do', 'branches'));
     }
 
     /**
@@ -212,7 +211,7 @@ class ThuChiController extends Controller
 
         $status = $request->status == 'true' ? 1 : 0;
 
-        if ($admin || $quan_ly||$ke_toan) {
+        if ($admin || $quan_ly || $ke_toan) {
             $thu_chi->update(['status' => $status]);
             return 1;
         } else {
