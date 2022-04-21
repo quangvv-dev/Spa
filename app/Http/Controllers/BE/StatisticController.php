@@ -351,9 +351,10 @@ class StatisticController extends Controller
         $payTwice = clone $payCurrent;
         $pay = $payCurrent->where('status', UserConstant::ACTIVE);
         $pay2 = clone $pay;
-        $pay3 = clone $pay;
+//        $pay3 = clone $pay;
         $payAll = clone $pay;
         $payBranch = clone $pay;
+
         $payAll = $payAll->select('so_tien', 'danh_muc_thu_chi_id', \DB::raw('SUM(so_tien) AS sum_price'))
             ->with('danhMucThuChi')->groupBy('danh_muc_thu_chi_id')->get();
         $payStatus = $payTwice->select('so_tien', 'status', \DB::raw('SUM(so_tien) AS sum_price'))
@@ -361,10 +362,11 @@ class StatisticController extends Controller
         $payBranch = $payBranch->select('so_tien', 'branch_id', \DB::raw('SUM(so_tien) AS sum_price'))->with('branch')
             ->groupBy('branch_id')->orderByDesc('sum_price')->get();
         $list_pay = [
-            'money' => $pay2->where('type', 1)->sum('so_tien'),
-            'card' => $pay3->where('type', 2)->sum('so_tien'),
-            'CK' => $pay->where('type', 4)->sum('so_tien'),
+            'money' => $pay2->where('type', 0)->sum('so_tien'),
+//            'card' => $pay3->where('type', 1)->sum('so_tien'),
+            'CK' => $pay->where('type', 1)->sum('so_tien'),
         ];
+
 
         $data = [
             'payment' => $all_payment,

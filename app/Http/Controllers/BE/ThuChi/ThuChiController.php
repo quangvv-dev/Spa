@@ -105,7 +105,6 @@ class ThuChiController extends Controller
         $data['branch_id'] = $data['branch_id'] ?: $user->branch_id;
         $data['danh_muc_thu_chi_id'] = LyDoThuChi::find($request->ly_do_id)->category_id;
         $data['created_at'] = Functions::yearMonthDay($request->created_at);
-
         $thu_chi = ThuChi::create($data);
         $centor = User::select()->where('id', $request->duyet_id)->first();
         if (isset($centor) && $centor) {

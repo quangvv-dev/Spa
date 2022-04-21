@@ -45,7 +45,7 @@
 
     <div class="col-md-4 col-xs-12">
         <div class="card  overflow-hidden bg-gradient-gray text-white">
-            <div class="card-body text-center">
+            <div class="card-body text-center" style="height: 185.14px">
                 <div class="h5">Tổng chi</div>
                 <div class="h3 font-weight-bold mb-4 font-30">
                     {{@number_format($list_pay['money'] + $list_pay['CK'] +$list_pay['card'])}}</div>
@@ -59,8 +59,8 @@
                         <div class="col-7">{{@number_format($list_pay['CK'])}}</div>
                     </div>
                     <div class="col-12 row">
-                        <div class="title col-5">Thẻ:</div>
-                        <div class="col-7">{{@number_format($list_pay['card'])}}</div>
+                        {{--<div class="title col-5">Thẻ:</div>--}}
+                        {{--<div class="col-7">{{@number_format($list_pay['card'])}}</div>--}}
                     </div>
                 </div>
                 <div class="progress progress-sm">
