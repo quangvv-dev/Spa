@@ -15,7 +15,7 @@
 @endsection
 @section('content')
     <div class="row" style="">
-        <div class="col-lg-9 col-lg-offset-1">
+        <div class="col-lg-8 col-lg-offset-1">
             <div class="invoice">
                 <div class="text-center"><strong style="font-size: 20px">ĐƠN HÀNG NẠP THẺ</strong></div>
                 <div class="row">
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 no-padd bor-r" id="right_panel">
+        <div class="col-md-4 no-padd bor-r" id="right_panel">
             <div>
                 <div class="col-md-12 no-padd box-cont">
                     <div id="attachments" class="files padding">

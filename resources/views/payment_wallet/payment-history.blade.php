@@ -4,9 +4,9 @@
     <table class="table table-bordered">
         <thead class="b-gray">
         <tr class="bor-bot">
-            <th class="tl pl10 gray" width="30%" style="text-transform:initial;">Ngày</th>
-            <th class="tc gray" width="30%" style="text-transform:initial;">Số tiền</th>
-            <th class="tc gray" width="60%" style="text-transform:initial;">Ghi chú</th>
+            <th class="tl pl10 gray" width="30%" style="text-transform:uppercase;">Ngày</th>
+            <th class="tc gray" width="30%" style="text-transform:uppercase;">Số tiền</th>
+            <th class="tc gray" width="60%" style="text-transform:uppercase;">Ghi chú</th>
             <th class="tc gray" width="10%"></th>
         </tr>
         </thead>
@@ -15,7 +15,7 @@
             @foreach($payment as $item)
                 <tr>
                     <td class="fz-12">{{ date('d-m-Y', strtotime($item->payment_date)) }}</td>
-                    <td class="fz-12">{{ number_format($item->price) }}</td>
+                    <td class="fz-12"><span style="color: grey;font-size: 10px">({{$item->payment_type==0?'Tiền mặt':'Chuyển khoản'}})</span>  {{ number_format($item->price) }}</td>
                     <td class="fz-12">{{ $item->description }}</td>
                     <td class="fz-12">
                         <a title="Xóa" class="btn delete" href="javascript:void(0)"

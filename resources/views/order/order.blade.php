@@ -9,7 +9,7 @@
 @endsection
 @section('content')
     <div class="row" style="">
-        <div class="col-lg-9 col-lg-offset-1">
+        <div class="col-lg-8 col-lg-offset-1">
             <div class="invoice">
                 <div class="text-center"><strong style="font-size: 20px">ĐƠN HÀNG BÁN</strong></div>
                 <div class="row">
@@ -62,7 +62,7 @@
                             <td class="padding5">STT</td>
                             <td class="padding5">Mã</td>
                             <td class="padding5">Sản phẩm|Dịch vụ</td>
-                            <td class="padding5">Đơn vị tính</td>
+{{--                            <td class="padding5">Đơn vị tính</td>--}}
                             <td class="padding5">Số lượng|Số buổi</td>
                             <td class="padding5">Đơn giá</td>
                             <td class="padding5">VAT (%)</td>
@@ -76,7 +76,7 @@
                                 <td class="tc"></td>
                                 <td class="tl position"><a class="blue" href="#">{{ @$orderDetail->service->name }}</a>
                                 </td>
-                                <td class="tc"></td>
+{{--                                <td class="tc"></td>--}}
                                 {{--<td class="tc">{{$orderDetail->service->type == 2? $orderDetail->quantity : $orderDetail->days }}--}}
                                 <td class="tc">{{@$orderDetail->quantity}}
                                 </td>
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 no-padd bor-r" id="right_panel">
+        <div class="col-md-4 no-padd bor-r" id="right_panel">
             <div>
                 <div class="col-md-12 no-padd box-cont">
                     <div id="attachments" class="files padding">

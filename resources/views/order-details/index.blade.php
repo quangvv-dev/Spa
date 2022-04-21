@@ -386,14 +386,16 @@
                 $('.customer-info').append(html1);
                 $('.list1').append(html);
                 $('.task_footer_box').append(`
-                    <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Sửa đổi</a>
+                    <button class="btn btn-primary ml5"><a class="white link-order" href="" style="color: #ffffff">&nbsp;Lịch sử thanh toán</a>
                     </button>
                 `);
-                if (data.order.role_type != 2) {
-                    $(".link-order").attr("href", "orders-service/" + data.order.id + "/edit");
-                } else {
-                    $(".link-order").attr("href", "orders/" + data.order.id + "/edit");
-                }
+                // if (data.order.role_type != 2) {
+                //     $(".link-order").attr("href", "orders-service/" + data.order.id + "/edit");
+                // } else {
+                //     $(".link-order").attr("href", "orders/" + data.order.id + "/edit");
+                // }
+                $(".link-order").attr("href", "order/" + data.order.id + "/show");
+
                 $('#orderDetailModal').modal("show");
             });
         });
