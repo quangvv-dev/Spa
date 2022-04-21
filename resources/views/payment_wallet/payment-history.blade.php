@@ -15,7 +15,7 @@
             @foreach($payment as $item)
                 <tr>
                     <td class="fz-12">{{ date('d-m-Y', strtotime($item->payment_date)) }}</td>
-                    <td class="fz-12"><span style="color: grey;font-size: 10px">({{$item->payment_type==0?'Tiền mặt':'Chuyển khoản'}})</span>  {{ number_format($item->price) }}</td>
+                    <td class="fz-12"><span style="color: grey;font-size: 10px">({{$item->payment_type==0?'Tiền mặt':'C.Khoản'}})</span>  {{ number_format($item->price) }}</td>
                     <td class="fz-12">{{ $item->description }}</td>
                     <td class="fz-12">
                         <a title="Xóa" class="btn delete" href="javascript:void(0)"
