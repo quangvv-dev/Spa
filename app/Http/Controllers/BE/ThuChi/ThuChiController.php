@@ -10,8 +10,8 @@ use App\Models\Branch;
 use App\Models\DanhMucThuChi;
 use App\Models\LyDoThuChi;
 use App\Models\Notification;
-use App\Models\Role;
 use App\Models\ThuChi;
+use Excel;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -222,5 +222,68 @@ class ThuChiController extends Controller
     {
         $data = LyDoThuChi::where('category_id', $category_id)->get();
         return $data;
+    }
+
+    /**
+     * Xuất excel đơn chi
+     *
+     * @param Request $request
+     */
+    public function exportExcel(Request $request)
+    {
+        $request->merge([
+            'start_date' => Functions::yearMonthDayTimeFormat($request->start_date),
+            'end_date' => Functions::yearMonthDayTimeFormat($request->end_date)
+        ]);
+        $search = $request->all();
+
+        $user = Auth::user();
+        $admin = $user->department_id == DepartmentConstant::ADMIN && $user->role == 1 ? true : false;
+        $quan_ly = $user->department_id == DepartmentConstant::ADMIN && $user->role != 1 ? true : false;
+        $ke_toan = $user->department_id == DepartmentConstant::KE_TOAN ? true : false;
+        if (!$admin) {
+            if ($quan_ly) {
+                $search['duyet_id'] = $user->id;
+            } elseif (!$ke_toan) {
+                $search['thuc_hien_id'] = $user->id;
+            }
+        }
+
+        $docs = ThuChi::search($search)->orderByDesc('id')->get();
+        Excel::create('Thu chi download (' . date("d/m/Y") . ')', function ($excel) use ($docs) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($docs) {
+                $sheet->cell('A1:H1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->freezeFirstRow();
+                $sheet->row(1, [
+                    'STT',
+                    'Ngày đề xuất',
+                    'Người duyệt',
+                    'Lý do',
+                    'Số tiền',
+                    'Loại thanh toán',
+                    'Trạng thái',
+                    'Chi nhánh',
+                ]);
+                $i = 1;
+                if ($docs) {
+                    foreach ($docs as $k => $ex) {
+                        $i++;
+                        $sheet->row($i, [
+                            @$k + 1,
+                            isset($ex->created_at) ? date("d/m/Y", strtotime($ex->created_at)) : '',
+                            @$ex->thucHien->full_name,
+                            @$ex->lyDoThuChi->name,
+                            number_format($ex->so_tien),
+                            $ex->type == 0 ? 'Tiền mặt' : 'Chuyển khoản',
+                            $ex->status == 1 ? 'Đã duyệt' : 'Chưa duyệt',
+                            @$ex->branch->name,
+                        ]);
+                    }
+                }
+            });
+        })->export('xlsx');
     }
 }

@@ -304,6 +304,11 @@ class Functions
         return \Carbon\Carbon::createFromFormat('d/m/Y H:i', $date)->format('Y-m-d H:i');
     }
 
+    public static function yearMonthDayTimeFormat($date, $format = 'Y-m-d')
+    {
+        return \Carbon\Carbon::createFromFormat('d/m/Y H:i', $date)->format($format);
+    }
+
     public static function createYearMonthDay($date)
     {
         return \Carbon\Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');

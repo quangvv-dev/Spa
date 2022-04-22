@@ -45,7 +45,10 @@
                            data-toggle="modal" data-target="#myModalImport">
                             <i class="fas fa-upload"></i></a>
                     @endif
-
+                        <a style="position: absolute;right: 8%" class="btn tooltip-nav col-right" href="#" data-toggle="modal" data-target="#myModalExport">
+                            <i class="fas fa-cloud-download-alt " style=" color: #3ca2e8"></i>
+                            <span class="tooltiptext">Tải thu chi (EXCEL)</span>
+                        </a>
                     <a class="right btn btn-primary btn-flat" href="{{request()->url().'/create' }}"><i
                                 class="fa fa-plus-circle"></i>Thêm mới</a>
                 </div>
@@ -90,6 +93,7 @@
             </div>
             @include('thu_chi.danh_sach_thu_chi.dropdownFilter')
             </form>
+            @include('thu_chi.danh_sach_thu_chi.modal-export')
             <div class="header-search">
                 @include('thu_chi.danh_sach_thu_chi.ajax')
             </div>
@@ -126,5 +130,9 @@
             $('#page').val(pages);
             $('#gridForm').submit();
         });
+        // $(document).on('click', '#btn-export-excel', function (e) {
+        //     e.preventDefault();
+        //     $('#gridForm').submit();
+        // });
     </script>
 @endsection
