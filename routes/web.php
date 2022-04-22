@@ -160,7 +160,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::delete('order/{id}/delete-payment', 'OrderController@deletePayment')->name('order.delete-payment');
     //Customer import & export
     Route::post('customer-export', 'CustomerController@exportCustomer')->name('customer.export');
-    Route::post('customer-import', 'CustomerController@importCustomer');
+    Route::post('customer-import', 'CustomerController@importCustomer')->name('customer.import');
     Route::post('import-orders', 'OrderController@importDataByExcel');
     Route::get('product-export', 'ProductController@exportData')->name('product.export');
     Route::post('product-import', 'ProductController@importData')->name('product.import');

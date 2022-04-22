@@ -101,11 +101,12 @@
                     @endif
                 </div>
                 <div class="col relative">
-                    <a class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
+                    <a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}
+                        class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <span class="tooltiptext">Nhập khách hàng (excel)</span>
                     </a>
-                    <a {{$roleGlobal->permission('leaderSale')||$roleGlobal->permission('leaderMKT')?:"style=display:none"}}
+                    <a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}
                        class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModalExport">
                         <i class="fas fa-cloud-download-alt"></i>
                         <span class="tooltiptext">Tải khách hàng (excel)</span>

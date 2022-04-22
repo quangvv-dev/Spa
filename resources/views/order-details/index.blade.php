@@ -57,10 +57,12 @@
             <div class="card-header">
                 <h3 class="card-title">{{$title}}</h3></br>
                 <div class="col">
-                    <a title="Upload Data" style="position: absolute;right: 0%" href="#" data-toggle="modal"
+                    <a {{$roleGlobal->permission('orders.import')?:"style=display:none"}}
+                       title="Upload Data" style="position: absolute;right: 0%" href="#" data-toggle="modal"
                        data-target="#myModal">
                         <i class="fas fa-cloud-upload-alt"></i></a>
-                    <a title="Tải data" style="position: absolute;right: 3%" class="download" data-value="dowload"
+                    <a {{$roleGlobal->permission('orders.export')?:"style=display:none"}}
+                       title="Tải data" style="position: absolute;right: 3%" class="download" data-value="dowload"
                        href="javascript:void(0)"><i
                             class="fas fa-cloud-download-alt"></i></a>
                 </div>

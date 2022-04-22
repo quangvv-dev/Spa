@@ -45,7 +45,8 @@
                            data-toggle="modal" data-target="#myModalImport">
                             <i class="fas fa-upload"></i></a>
                     @endif
-                        <a style="position: absolute;right: 8%" class="btn tooltip-nav col-right" href="#" data-toggle="modal" data-target="#myModalExport">
+                        <a {{$roleGlobal->permission('thu-chi.export')?:"style=display:none"}}
+                            style="position: absolute;right: 8%" class="btn tooltip-nav col-right" href="#" data-toggle="modal" data-target="#myModalExport">
                             <i class="fas fa-cloud-download-alt " style=" color: #3ca2e8"></i>
                             <span class="tooltiptext">Tải thu chi (EXCEL)</span>
                         </a>
