@@ -10,6 +10,9 @@
     </style>
 @endsection
 @section('content')
+    @php
+        $roleGlobal = auth()->user()?:[];
+    @endphp
     <style>
         .table-responsive{
             overflow: scroll;
