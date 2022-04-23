@@ -72,7 +72,7 @@ class OrderDetailService
                     'order_id'      => $orderId,
                     'user_id'       => $data['user_id'],
                     'booking_id'    => $data['service_id'][$key],
-                    'days'          => $data['days'][$key],
+                    'days'          => isset($data['days'][$key]) ?$data['days'][$key]:0,
                     'quantity'      => isset($data['quantity'][$key]) ? $data['quantity'][$key] : 0,
                     'price'         => replaceNumberFormat($data['price'][$key]),
                     'vat'           => 0,
