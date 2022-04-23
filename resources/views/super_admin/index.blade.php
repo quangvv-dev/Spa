@@ -39,6 +39,13 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="form-group">
+                                                {!! Form::label('expiry', 'Ngày hết hạn sử dụng', array('class' => 'control-label required')) !!}
+                                                {!! Form::text('expiry',setting('expiry'), array('class' => 'form-control','data-toggle' => 'datepicker','id'=>'date')) !!}
+                                                <span class="help-block">{{ $errors->first('title_website', ':message') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
                                             <div class="form-group required {{ $errors->has('logo_website') ? 'has-error' : '' }}">
                                                 {!! Form::label('logo_website', 'Ảnh đại diện') !!}
                                                 <div class="fileupload fileupload-{{!empty(setting('logo_website')) ? 'exists' : 'new' }}"
@@ -173,5 +180,10 @@
             let earn = $(this).val();
             $(this).val(formatNumber(earn));
         })
+        $('[data-toggle="datepicker"]').datepicker({
+            format: 'yyyy-mm-dd',
+            autoHide: true,
+            zIndex: 2048,
+        });
     </script>
 @endsection

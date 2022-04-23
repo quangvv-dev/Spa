@@ -186,6 +186,19 @@
                 <i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i>
             </div>
         </div>
+        @php
+
+        @endphp
+
+        @if(setting('expiry') &&  date('Y-m-d')>setting('expiry'))
+            <div class="notification-pop">
+                <div class="" style="position: absolute; margin: auto;top:50%;left: 20%;right: 20%">
+                    <marquee> <p style="color: #0aa2e1;font-size: 18px;font-weight: bold;opacity: 0.5"
+                        >Hệ thống của bạn hết hạn ngày {{setting('expiry')}}. Quý khách vui lòng gia hạn gói cước để tiếp tục sử dụng dịch vụ. Xin cảm ơn quý khách !!!</p>
+                    </marquee>
+                </div>
+            </div>
+            @endif
     @include('layout.footer')
     <!-- End Footer-->
     </div>
