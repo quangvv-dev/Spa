@@ -92,11 +92,11 @@ class StatisticController extends Controller
         $orders2 = clone $orders;
         $orders3 = clone $orders;
         $orders_combo = clone $orders;
-        $ordersYear = Order::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+        $ordersYear = PaymentHistory::select('price')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('branch_id', $input['group_branch']);
-        })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
+        })->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
         $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
             $services = Services::select('id')->where('trademark', $item->id)->pluck('id')->toArray();
@@ -177,7 +177,7 @@ class StatisticController extends Controller
         $revenue_year = [];
         for ($i = 1; $i <= 12; $i++) {
             $newOrder = clone $ordersYear;
-            $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
+            $newOrder = $newOrder->whereMonth('payment_date', $i)->sum('price');
             $revenue_year[$i] = $newOrder;
         }
         $all_payment = $payment->sum('price');
