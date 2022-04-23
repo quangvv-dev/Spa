@@ -92,7 +92,7 @@ class StatisticController extends Controller
         });
 
         $payment = clone $payment_All;
-        $payment = $payment->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59",])->with('order')->has('order');
+        $payment = $payment->whereBetween('payment_date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59",])->with('order')->has('order');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
         $payment_years = clone $payment_All;
