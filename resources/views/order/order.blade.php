@@ -62,7 +62,7 @@
                             <td class="padding5">STT</td>
                             <td class="padding5">Mã</td>
                             <td class="padding5">Sản phẩm|Dịch vụ</td>
-{{--                            <td class="padding5">Đơn vị tính</td>--}}
+                            {{--                            <td class="padding5">Đơn vị tính</td>--}}
                             <td class="padding5">Số lượng|Số buổi</td>
                             <td class="padding5">Đơn giá</td>
                             <td class="padding5">VAT (%)</td>
@@ -74,12 +74,8 @@
                             <tr><input type="hidden" class="product_id" value="16">
                                 <td class="tc">{{ $key + 1 }}</td>
                                 <td class="tc"></td>
-                                <td class="tl position"><a class="blue" href="#">{{ @$orderDetail->service->name }}</a>
-                                </td>
-{{--                                <td class="tc"></td>--}}
-                                {{--<td class="tc">{{$orderDetail->service->type == 2? $orderDetail->quantity : $orderDetail->days }}--}}
-                                <td class="tc">{{@$orderDetail->quantity}}
-                                </td>
+                                <td class="tl position"><a class="blue" href="#">{{ @$orderDetail->service->name }}</a></td>
+                                <td class="tc">{{@$orderDetail->quantity>0 ? $orderDetail->quantity: $orderDetail->days}}</td>
                                 <td class="tc">{{ number_format(@$orderDetail->price) }}</td>
                                 <td class="tc">{{ $orderDetail->vat }}</td>
                                 <td class="tc">{{ $orderDetail->percent_discount }}</td>
@@ -88,11 +84,11 @@
                             </tr>
                         @endforeach
                         <tr>
-                            <td class="font-bold" colspan="9">Khuyến mại (voucher)</td>
+                            <td class="font-bold" colspan="8">Khuyến mại (voucher)</td>
                             <td class="tr bold">{{ number_format($order->discount) }}</td>
                         </tr>
                         <tr>
-                            <td class="font-bold" colspan="9">Tổng cộng</td>
+                            <td class="font-bold" colspan="8">Tổng cộng</td>
                             <td class="tr bold"> {{ number_format($order->all_total) }}</td>
                         </tr>
                         </tbody>
@@ -114,7 +110,7 @@
                     </div>
                 </div>
                 <div class="box-cont col-md-12 no-padd content-pay"><h3
-                            class="bor-bot uppercase font12 mg0 bold padding5">Thanh toán</h3>
+                        class="bor-bot uppercase font12 mg0 bold padding5">Thanh toán</h3>
                     <div class="padding col-md-12">
                         <table style="width: 100%">
                             <thead>
@@ -133,8 +129,8 @@
                                 <td class="tr mb5" id="gross_revenue">{{ number_format($order->gross_revenue) }}</td>
                             </tr>
                             {{--<tr>--}}
-                                {{--<td class="mb5">Thực tế phải thanh toán:</td>--}}
-                                {{--<td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>--}}
+                            {{--<td class="mb5">Thực tế phải thanh toán:</td>--}}
+                            {{--<td class="tr mb5" id="all_total1">{{ number_format($order->all_total) }}</td>--}}
                             {{--</tr>--}}
                             <tr>
                                 <td class="mb5">Khuyến mại (voucher):</td>
@@ -145,8 +141,8 @@
                                 <td class="tr mb5" id="all_total1">{{ number_format($order->discount_order) }}</td>
                             </tr>
                             {{--<tr>--}}
-                                {{--<td class="mb5">Đã thanh toán:</td>--}}
-                                {{--<td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>--}}
+                            {{--<td class="mb5">Đã thanh toán:</td>--}}
+                            {{--<td class="tr mb5" id="gross_revenue1">{{ number_format($order->gross_revenue) }}</td>--}}
                             {{--</tr>--}}
                             <tr>
                                 <td class="mb5">Còn lại:</td>
@@ -156,93 +152,95 @@
                         </table>
                     </div>
                 </div>
-            <div class="detail-pay-dvh position col-md-12 no-padd">
-                @include('order.payment-history')
+                <div class="detail-pay-dvh position col-md-12 no-padd">
+                    @include('order.payment-history')
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="fixed-bottom">
-        <div class="list_task_footer col-md-12 padding menu-footer">
-            <div class="fl task_footer_box">
-                <button class="btn btn-info ml5 fr paymentOrder" data-toggle="modal" data-target="#paymentModal"><a
+        <div class="fixed-bottom">
+            <div class="list_task_footer col-md-12 padding menu-footer">
+                <div class="fl task_footer_box">
+                    <button class="btn btn-info ml5 fr paymentOrder" data-toggle="modal" data-target="#paymentModal"><a
                             class="white">Thanh toán</a></button>
-            </div>
-            <div class="btn-group dropup fl task_footer_box">
-                <button class="btn btn-success ml5 printOrder" data-number="2"><a class="white" href="/order-pdf/{{$order->id}}"><i
+                </div>
+                <div class="btn-group dropup fl task_footer_box">
+                    <button class="btn btn-success ml5 printOrder" data-number="2"><a class="white"
+                                                                                      href="/order-pdf/{{$order->id}}"><i
                                 class="fa fa-print"></i>&nbsp;In</a>
-                </button>
-            </div>
-            <div class="btn-group dropup fl task_footer_box">
-                <button class="btn btn-warning ml5" data-number="2"><a class="white" href="/commission/{{$order->id}}"><i
+                    </button>
+                </div>
+                <div class="btn-group dropup fl task_footer_box">
+                    <button class="btn btn-warning ml5" data-number="2"><a class="white"
+                                                                           href="/commission/{{$order->id}}"><i
                                 class="fas fa-dollar-sign"></i>&nbsp;Hoa hồng</a>
-                </button>
-            </div>
-            <div class="fl task_footer_box cancel_order">
-                <button class="btn btn-default fr ml5">
-                    <a href="{{route('order.list')}}">Trở lại</a>
-                </button>
+                    </button>
+                </div>
+                <div class="fl task_footer_box cancel_order">
+                    <button class="btn btn-default fr ml5">
+                        <a href="{{route('order.list')}}">Trở lại</a>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    @include('order.modal')
-@endsection
-@section('_script')
-    <script src="{{ asset('js/format-number.js') }}"></script>
-    <script>
-        $(document).ready(function () {
-            $('[data-toggle="datepicker"]').datepicker({
-                format: 'dd-mm-yyyy',
-                autoHide: true,
-                zIndex: 2048,
-            });
-        });
+        @include('order.modal')
+        @endsection
+        @section('_script')
+            <script src="{{ asset('js/format-number.js') }}"></script>
+            <script>
+                $(document).ready(function () {
+                    $('[data-toggle="datepicker"]').datepicker({
+                        format: 'dd-mm-yyyy',
+                        autoHide: true,
+                        zIndex: 2048,
+                    });
+                });
 
-        $(document).on('click', '#finish', function () {
-            $('#wallet-error').hide();
-            let paymentDate = $('.payment-date').val();
-            let paymentType = $('.payment-type').val();
-            let grossRevenue = $('.gross-revenue').val();
-            let description = $('.description').val();
-            let customer_id = '{{@$order->customer->id}}';
-            let maxWallet = $('#maxWallet').val();
-            let check = replaceNumber(grossRevenue);
-            console.log(maxWallet,replaceNumber(grossRevenue));
-            if (paymentType == 3 && (parseInt(check) > parseInt(maxWallet))){
+                $(document).on('click', '#finish', function () {
+                    $('#wallet-error').hide();
+                    let paymentDate = $('.payment-date').val();
+                    let paymentType = $('.payment-type').val();
+                    let grossRevenue = $('.gross-revenue').val();
+                    let description = $('.description').val();
+                    let customer_id = '{{@$order->customer->id}}';
+                    let maxWallet = $('#maxWallet').val();
+                    let check = replaceNumber(grossRevenue);
+                    console.log(maxWallet, replaceNumber(grossRevenue));
+                    if (paymentType == 3 && (parseInt(check) > parseInt(maxWallet))) {
 
-                $('#wallet-error').show();
-                return false;
-            }
+                        $('#wallet-error').show();
+                        return false;
+                    }
 
-            $.ajax({
-                url: "{{ Url('order/'.$order->id. '/show') }}",
-                method: "put",
-                data: {
-                    payment_date: paymentDate,
-                    payment_type: paymentType,
-                    gross_revenue: grossRevenue,
-                    description: description,
-                    customer_id: customer_id,
-                }
-            }).done(function () {
-                window.location.reload();
-            });
-        });
+                    $.ajax({
+                        url: "{{ Url('order/'.$order->id. '/show') }}",
+                        method: "put",
+                        data: {
+                            payment_date: paymentDate,
+                            payment_type: paymentType,
+                            gross_revenue: grossRevenue,
+                            description: description,
+                            customer_id: customer_id,
+                        }
+                    }).done(function () {
+                        window.location.reload();
+                    });
+                });
 
-        $(document).on('focusout', '.gross-revenue', function () {
-            let grossRevenue = $('.gross-revenue').val();
+                $(document).on('focusout', '.gross-revenue', function () {
+                    let grossRevenue = $('.gross-revenue').val();
 
-            $.ajax({
-                url: "{{ Url('ajax/info-order-payment/'.$order->id) }}",
-                method: "get",
-                data: {
-                    gross_revenue: grossRevenue
-                }
-            }).done(function (data) {
-                $(".cash").text(formatNumber(data.cash));
-                $('.remain_cash').text(formatNumber(data.remain_cash));
-                $('.return_cash').text(formatNumber(data.return_cash));
-            });
-        });
-    </script>
+                    $.ajax({
+                        url: "{{ Url('ajax/info-order-payment/'.$order->id) }}",
+                        method: "get",
+                        data: {
+                            gross_revenue: grossRevenue
+                        }
+                    }).done(function (data) {
+                        $(".cash").text(formatNumber(data.cash));
+                        $('.remain_cash').text(formatNumber(data.remain_cash));
+                        $('.return_cash').text(formatNumber(data.return_cash));
+                    });
+                });
+            </script>
 @endsection
