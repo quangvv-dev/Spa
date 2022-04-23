@@ -85,18 +85,22 @@ class StatisticController extends Controller
                     $qr->where('old_customer', 0);
                 })->count(),
         ];
-        $payment = PaymentHistory::search($input, 'price');
+        $payment_All = PaymentHistory::select('price')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+            $q->where('branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('branch_id', $input['group_branch']);
+        });
+
+        $payment = clone $payment_All;
+        $payment = $payment->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59",])->with('order')->has('order');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
+        $payment_years = clone $payment_All;
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
         $orders3 = clone $orders;
         $orders_combo = clone $orders;
-        $ordersYear = PaymentHistory::select('price')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
-        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-            $q->whereIn('branch_id', $input['group_branch']);
-        })->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
+        $ordersYear = $payment_years->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
         $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
             $services = Services::select('id')->where('trademark', $item->id)->pluck('id')->toArray();
