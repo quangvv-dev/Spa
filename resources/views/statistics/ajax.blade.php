@@ -388,7 +388,7 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Ngày', 'Doanh thu'],
+            ['Ngày', 'Thực thu'],
                 @foreach($revenue_year as $k =>$item)
             ['{{'Tháng '.$k}}', {{$item}}],
             @endforeach
