@@ -50,6 +50,7 @@
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
             <th class="text-center">Doanh thu</th>
             <th class="text-center">Thu nợ</th>
+            <th class="text-center">Thực thu</th>
             <th class="text-center">Doanh thu<span class=""><br>TB/đơn</span></th>
             <th class="text-center">Doanh<span class=""><br>số</span></th>
             <th class="text-center">Doanh<span class=""><br>thu</span></th>
@@ -75,7 +76,8 @@
             <th class="text-center">(12)</th>
             <th class="text-center">(13)</th>
             <th class="text-center">(14)</th>
-            <th class="text-center">(avg)</th>
+            <th class="text-center">(15)</th>
+            <th class="text-center">(14)+(15)</th>
             <th class="text-center">(7)+(12)</th>
             <th class="text-center">(8)+(13)</th>
             <th class="text-center"></th>
@@ -148,6 +150,7 @@
                     <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->all_payment - $item->detail_new -$item->payment_old)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->all_payment - $item->detail_new)}}</td>
                     <td class="text-center pdr10">{{!empty($item->payment_old) && !empty($item->order_old) ? number_format($item->payment_old/$item->order_old):0}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
 
@@ -177,6 +180,7 @@
             <td class="text-center bold">{{@number_format($revenue_old)}}</td>
             <td class="text-center bold">{{@number_format($payment_old)}}</td>
             <td class="text-center bold">{{@number_format($all_payment - $all_detail_new - $payment_old)}}</td>
+            <td class="text-center bold">{{@number_format($all_payment - $all_detail_new)}}</td>
             <td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>
             <td class="bold">{{number_format($allTotal)}}</td>
             <td class="bold">{{number_format($payment_new + $payment_old)}}</td>
