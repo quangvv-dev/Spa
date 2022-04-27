@@ -34,8 +34,6 @@ app.post('/webhook', function (req, res) {
     var entries = req.body.entry;
     res.sendStatus(200);
     for (var entry of entries) {
-        console.log(entry, 'DU LIEU FACEBOOK');
-
         var messaging = entry.messaging;
         if (messaging) {
             for (var message of messaging) {
@@ -48,7 +46,6 @@ app.post('/webhook', function (req, res) {
                         text = text.replace(".", "");
                         text = text.replace("O", "0");
                         // text = text.replace("o", "0");
-                        console.log('Noi dung tin nhan', text); // In tin nhắn người dùng
                         let letr = text.match(/\d+/g);
                         if (!letr){
                             return false;
@@ -78,7 +75,6 @@ app.post('/webhook', function (req, res) {
                     }
                     letr.every(function (i) {
                         if (i.length === 10) {
-                            console.log(i, 'SĐT COMMENT');
                             controller.SetComment(i, value.value.post_id, value.value.message, value.value.from.name);
                             return false;
                         }

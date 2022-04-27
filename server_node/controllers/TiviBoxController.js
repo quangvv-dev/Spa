@@ -44,9 +44,7 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                     console.log('Không Hiển Thị Tên')
                 } finally {
                     //create Customer
-                    console.log(name, 'Name Customer');
                     const created_at = localeTime();
-                    console.log(' Time zone Asian', created_at);
                     model.CheckSource(rows[0].source_id, function (err, row2) {
                         if (err) {
                             console.log(err);
@@ -97,7 +95,6 @@ exports.SetCustomers = (phone, recipientId, text, senderId) => {
                                                                                     for (const val of arr_category_id) {
                                                                                         model.CreateCustomerGroup(customer.insertId, val, created_at, branch_id);
                                                                                     }
-                                                                                    console.log('Them KH thanh cong');
                                                                                 }
                                                                             })
                                                                         }
@@ -149,7 +146,6 @@ exports.SetComment = (phone, post_id, text, sender) => {
                         console.log(err);
                     } else {
                         if (row2.length > 0) {
-                            console.log('ton tai source');
                             let new_position = 0;
                             let array = JSON.parse(row2[0].sale_id);
                             let user_id = array[row2[0].position];
@@ -196,7 +192,6 @@ exports.SetComment = (phone, post_id, text, sender) => {
                                                                             for (const val of arr_category_id) {
                                                                                 model.CreateCustomerGroup(customer.insertId, val, created_at, branch_id);
                                                                             }
-                                                                            console.log('Them KH thanh cong');
                                                                         }
                                                                     })
                                                                 }
