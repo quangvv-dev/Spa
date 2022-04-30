@@ -18,7 +18,15 @@ class DepotController extends BaseApiController
 {
     public function productDepot()
     {
-        $product = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->prepend('','Tất cả sản phẩm')->get();
+        $product = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->take(3)->get();
+        $new = (object) [
+            'id'=>0,
+            'name'=>'Tất cả sản phẩm'
+        ];
+        $product->push($new);
+//        $collection->put(0,'Tât cả');
+//        dd($collection);
+
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $product);
 
     }
@@ -42,7 +50,7 @@ class DepotController extends BaseApiController
         ])->get()->pluck('id');
 
         $docs = ProductDepot::select('branch_id', 'product_id', 'quantity')
-            ->when(isset($input['product_id']) && $input['product_id'], function ($q) use ($input, $orders) {
+            ->when(!empty($input['product_id']), function ($q) use ($input, $orders) {
                 $q->where('product_id', $input['product_id']);
             })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
                 $q->where('branch_id', $input['branch_id']);
