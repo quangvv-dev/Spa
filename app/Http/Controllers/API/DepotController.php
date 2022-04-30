@@ -50,9 +50,9 @@ class DepotController extends BaseApiController
         ])->get()->pluck('id');
 
         $docs = ProductDepot::select('branch_id', 'product_id', 'quantity')
-//            ->when(!empty($input['product_id']), function ($q) use ($input, $orders) {
-//                $q->where('product_id', $input['product_id']);
-//            })
+            ->when(isset($input['product_id']) && $input['product_id']>0, function ($q) use ($input, $orders) {
+                $q->where('product_id', $input['product_id']);
+            })
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
                 $q->where('branch_id', $input['branch_id']);
             })->get()->map(function ($item) use ($input, $orders) {
