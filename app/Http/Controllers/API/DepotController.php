@@ -18,7 +18,7 @@ class DepotController extends BaseApiController
 {
     public function productDepot()
     {
-        $product = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->get();
+        $product = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->prepend('','Tất cả sản phẩm')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $product);
 
     }
