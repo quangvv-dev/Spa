@@ -173,20 +173,20 @@ class HistoryDepotController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        $orders = Order::select('id')->whereBetween('created_at', [
-            Functions::yearMonthDayTime($input['start_date']),
-            Functions::yearMonthDayTime($input['end_date']),
-        ])->get()->pluck('id');
+
         $docs = ProductDepot::select('branch_id', 'product_id', 'quantity')
-            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
-            })->when(isset($input['product_id']) && $input['product_id'], function ($q) use ($input, $orders) {
+            })->when(isset($input['product_id']) && $input['product_id'], function ($q) use ($input) {
                 $q->where('product_id', $input['product_id']);
-            })->get()->map(function ($item) use ($input, $orders) {
-                $item->xuat_ban = OrderDetail::select('quantity')->whereIn('order_id', $orders)->where('booking_id', $item->product_id)
-                    ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
+            })->get()->map(function ($item) use ($input) {
+                $item->xuat_ban = OrderDetail::select('quantity')->whereIn('order_id')->where('booking_id', $item->product_id)
+                    ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                         $q->where('branch_id', $input['branch_id']);
-                    })->sum('quantity');
+                    })->whereBetween('created_at', [
+                        Functions::yearMonthDayTime($input['start_date']),
+                        Functions::yearMonthDayTime($input['end_date']),
+                    ])->sum('quantity');
                 $item->tieu_hao = HistoryDepot::select('quantity')->where('product_id', $item->product_id)
                     ->whereIn('status', [OrderConstant::TIEU_HAO, OrderConstant::HONG_VO, OrderConstant::XUAT_KHO])
                     ->whereBetween('created_at', [
