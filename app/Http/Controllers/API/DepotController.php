@@ -63,7 +63,7 @@ class DepotController extends BaseApiController
                         Functions::createYearMonthDay($input['end_date']),
                     ])->sum('quantity');
                 return $item;
-            });
+            })->sortByDesc('xuat_ban');
 
         $docs = ProductDepotResource::collection($docs);
 //        $docs = [[
