@@ -44,22 +44,18 @@ class DepotController extends BaseApiController
             Functions::addSearchDate($request);
         }
         $input = $request->all();
-        $orders = Order::select('id')->whereBetween('created_at', [
-            Functions::createYearMonthDay($input['start_date']) . " 00:00:00",
-            Functions::createYearMonthDay($input['end_date']) . " 23:59",
-        ])->get()->pluck('id');
 
         $docs = ProductDepot::select('branch_id', 'product_id', 'quantity')
-//            ->when(isset($input['product_id']) && $input['product_id']>0, function ($q) use ($input, $orders) {
-//                $q->where('product_id', $input['product_id']);
-//            })
-            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
-            })->get()->map(function ($item) use ($input, $orders) {
-                $item->xuat_ban = OrderDetail::select('quantity')->whereIn('order_id', $orders)->where('booking_id', $item->product_id)
-                    ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input, $orders) {
+            })->get()->map(function ($item) use ($input) {
+                $item->xuat_ban = OrderDetail::select('quantity')->where('booking_id', $item->product_id)
+                    ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                         $q->where('branch_id', $input['branch_id']);
-                    })->sum('quantity');
+                    })->whereBetween('created_at', [
+                        Functions::createYearMonthDay($input['start_date']) . " 00:00:00",
+                        Functions::createYearMonthDay($input['end_date']) . " 23:59",
+                    ])->sum('quantity');
                 $item->tieu_hao = HistoryDepot::select('quantity')->where('product_id', $item->product_id)
                     ->whereIn('status', [OrderConstant::TIEU_HAO, OrderConstant::HONG_VO, OrderConstant::XUAT_KHO])
                     ->whereBetween('created_at', [
