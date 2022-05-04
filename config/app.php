@@ -172,6 +172,7 @@ return [
          */
         Tungltdev\LaravelSettings\SettingsServiceProvider::class,
         Tungltdev\JWT\JwtAuthTokenProvider::class,
+        Brokenice\LaravelMysqlPartition\PartitionServiceProvider::class,
         /*
          * Application Service Providers...
          */

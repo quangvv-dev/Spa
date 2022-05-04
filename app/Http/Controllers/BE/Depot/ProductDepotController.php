@@ -151,6 +151,7 @@ class ProductDepotController extends Controller
                 $input['user_id'] = Auth::user()->id;
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
+
                     $type = $row['nghiep_vu'] == 'NHẬP KHO' ? 1 : ($row['nghiep_vu'] == 'XUẤT KHO' ? 2 : ($row['nghiep_vu'] == 'TIÊU HAO' ? 3 : 4));
 
                     $product = Services::where('name', 'like', '%' . $row['san_pham'] . '%')->first();
