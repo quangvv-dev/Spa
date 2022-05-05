@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
-use App\Http\Resources\AlbumResource;
+use App\Http\Resources\CustomerResource;
 use App\Models\Album;
 use App\Models\Customer;
 use Carbon\Carbon;
@@ -52,7 +52,7 @@ class AlbumController extends BaseApiController
                 $doc = Album::create($input);
             }
         }
-        $data = new AlbumResource($doc);
+        $data = new CustomerResource($doc);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
@@ -77,7 +77,7 @@ class AlbumController extends BaseApiController
                 $doc->images = json_encode(array_values($img_default));
                 $doc->save();
             }
-            $data = new AlbumResource($doc);
+            $data = new CustomerResource($doc);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
         } else {
@@ -134,7 +134,7 @@ class AlbumController extends BaseApiController
             $input['customer_id'] = $id;
             $doc = Album::create($input);
         }
-        $data = new AlbumResource($doc);
+        $data = new CustomerResource($doc);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }

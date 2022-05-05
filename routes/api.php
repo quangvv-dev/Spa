@@ -22,7 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
 
-
 Route::group(['namespace' => 'API'], function () {
     Route::post('Contact/ReceiveData/sc/{id}', 'SourceController@storeCustomerLandipage');
 });
@@ -91,6 +90,8 @@ Route::post('/check-unique-code-orders', 'BE\OrderController@checkUniqueCode');
 //Route::get('/sales-with-branch', 'API\StatisticController@saleWithBranch');
 //Route::get('/campaigns', 'API\StatisticController@campaign');
 //Route::get('/campaign-with-branch', 'API\StatisticController@campaignWithBranch');
+//Route::get('tab-schedules', 'API\RevenueController@tabSchedules');
+
 Route::get('/task-schedules', 'API\StatisticController@TaskScheduleSale');
 //Post customers
 Route::put('posts/{id}', 'API\PostController@update');
@@ -101,5 +102,25 @@ Route::get('voucher/{id}', 'API\PromotionController@checkVoucher');
 
 Route::get('product-depot', 'API\DepotController@productDepot');
 Route::get('depots/statistical', 'API\DepotController@index');
-//Route::get('tab-schedules', 'API\RevenueController@tabSchedules');
+
+/*
+|--------------------------------------------------------------------------
+| APIs APP KHÁCH HÀNG
+|--------------------------------------------------------------------------
+*/
+
+Route::post('login-customer', 'API\AppCustomers\AuthController@login');
+Route::post('forgot-password', 'API\AppCustomers\AuthController@forgotPassword');
+
+Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non token
+    Route::get('services', 'HomePageController@getServices');
+    Route::get('products', 'HomePageController@getProducts');
+
+});
+
+Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustomers'], function () {
+
+    Route::post('change-password', 'AuthController@changePassword');
+
+});
 
