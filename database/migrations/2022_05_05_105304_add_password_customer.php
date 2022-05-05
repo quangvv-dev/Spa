@@ -14,7 +14,7 @@ class AddPasswordCustomer extends Migration
     public function up()
     {
         Schema::table('customers', function (Blueprint $table) {
-            //
+            $table->text('password')->comment('Mật khẩu')->nullable()->after('phone');
         });
     }
 
