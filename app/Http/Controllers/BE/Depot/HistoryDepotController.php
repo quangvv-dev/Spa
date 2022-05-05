@@ -180,7 +180,7 @@ class HistoryDepotController extends Controller
             })->when(isset($input['product_id']) && $input['product_id'], function ($q) use ($input) {
                 $q->where('product_id', $input['product_id']);
             })->get()->map(function ($item) use ($input) {
-                $item->xuat_ban = OrderDetail::select('quantity')->whereIn('order_id')->where('booking_id', $item->product_id)
+                $item->xuat_ban = OrderDetail::select('quantity')->where('booking_id', $item->product_id)
                     ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                         $q->where('branch_id', $input['branch_id']);
                     })->whereBetween('created_at', [
