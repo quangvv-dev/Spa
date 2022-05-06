@@ -54,7 +54,7 @@
                             <div class="mediPlayer">
                                 <audio class="listen" preload="none" data-size="40"
                                        src="{{$doc->recording_url}}"></audio>
-                                <a href="{{$doc->recording_url}}"><i class="fa fa-download"></i></a>
+                                <a href="{{$doc->recording_url}}" style="padding-right: 20px;font-size: 19px"><i class="fa fa-download"></i></a>
                             </div>
                         @endif
                     </td>
