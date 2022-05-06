@@ -46,7 +46,7 @@ class DepotController extends BaseApiController
         $input = $request->all();
 
         $docs = ProductDepot::select('branch_id', 'product_id', 'quantity')
-            ->when(isset($input['product_id']) && $input['branch_id']>0, function ($q) use ($input) {
+            ->when(isset($input['product_id']) && $input['product_id']>0, function ($q) use ($input) {
                 $q->where('product_id', $input['product_id']);
             })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
