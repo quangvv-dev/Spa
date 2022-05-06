@@ -16,8 +16,8 @@ class ProductDepotResource extends JsonResource
     {
 
         return [
-//            'branch'    => @$this->branch->name,
-            'branch'    => @$this->product->name,
+            'branch'    => @$this->branch->name,
+//            'branch'    => @$this->product->name,
             'product'   => @$this->product->name,
             'quantity'  => @(int)$this->quantity,
             'sell'      => @(int)$this->xuat_ban,
