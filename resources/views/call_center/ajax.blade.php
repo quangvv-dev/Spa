@@ -55,6 +55,7 @@
                                 <audio class="listen" preload="none" data-size="40"
                                        src="{{$doc->recording_url}}"></audio>
                             </div>
+                            <a href="{{$doc->recording_url}}"><i class="fa fa-2x fa-download"></i></a>
                         @endif
                     </td>
                 </tr>
