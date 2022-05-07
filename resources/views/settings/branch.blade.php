@@ -13,9 +13,10 @@
                             <tr>
                                 <th class="text-center" style="width: 30px;">STT</th>
                                 <th class="text-center">Tên</th>
-                                <th class="text-center">SĐT liên hệ</th>
+                                <th class="text-center" style="width: 150px">SĐT liên hệ</th>
                                 <th class="text-center">Địa chỉ</th>
                                 <th class="text-center">Khu vực</th>
+                                <th class="text-center" style="width: 300px">Vị trí</th>
                                 <th class="text-center nowrap">
                                     <a id="add_new_status" style="cursor: pointer"><i class="fa fa-plus"></i> Thêm</a>
                                 </th>
@@ -40,6 +41,10 @@
                                         </td>
                                         <td class="text-center">
                                             {!! Form::select('location_id', $location, $item->location_id, array('class' => 'form-control location select-gear', 'placeholder' => 'Chọn cụm')) !!}
+                                        </td>
+                                        <td class="text-center row">
+                                            <input style="max-width: 150px" type="text" class="lat txt-dotted form-control col-6" value="{{$item->lat}}">
+                                            <input style="max-width: 150px" type="text" class="long txt-dotted form-control col-6" value="{{$item->long}}">
                                         </td>
                                         <td class="text-center">
                                             <a class="btn save-status" href="javascript:void(0)"
