@@ -46,4 +46,35 @@ class HomePageController extends BaseApiController
         $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)->paginate(StatusCode::PAGINATE_10);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
     }
+
+    /**
+     * khoảng cách chi nhánh
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getBranchWithDistance(Request $request)
+    {
+        $validate = [
+            'lat' => "required",
+            'long' => "required",
+            'location_id' => "required",
+        ];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $input = $request->all();
+        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long')->where('location_id', $input['location_id'])->get()->map(function ($item) use ($input) {
+            $item->distance = "";
+            if ($item->lat && $item->long) {
+                $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
+                $item->distance = round($adctual, 1, PHP_ROUND_HALF_UP);
+            }
+            unset($item->lat, $item->long);
+            return $item;
+        })->sortBy("distance");
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branch);
+    }
+
 }

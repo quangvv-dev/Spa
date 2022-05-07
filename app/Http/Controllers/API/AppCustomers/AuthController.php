@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\AppCustomers;
 use App\Constants\ResponseStatusCode;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
-use App\Models\Branch;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -17,13 +16,7 @@ class AuthController extends BaseApiController
 
     public function __construct()
     {
-        $branchs = Branch::search()->pluck('name', 'id');
-        $location = Branch::$location;
-        view()->share([
-            'branchs' => $branchs,
-            'location' => $location,
-        ]);
-
+        // coding
     }
 
 

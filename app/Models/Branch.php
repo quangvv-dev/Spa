@@ -11,9 +11,9 @@ class Branch extends Model
     protected $table = 'branchs';
 
     public static $location = [
-        StatusCode::CUM_MIEN_BAC    => 'Cụm Miền Bắc',
+        StatusCode::CUM_MIEN_BAC    => 'Miền Bắc',
 //        StatusCode::CUM_MIEN_TRUNG  => 'Cụm Miền Trung',
-        StatusCode::CUM_MIEN_NAM    => 'Cụm Miền Nam'
+        StatusCode::CUM_MIEN_NAM    => 'Miền Nam'
     ];
 
     public static function search()

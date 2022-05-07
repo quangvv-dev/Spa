@@ -115,6 +115,7 @@ Route::post('forgot-password', 'API\AppCustomers\AuthController@forgotPassword')
 Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non token
     Route::get('services', 'HomePageController@getServices');
     Route::get('products', 'HomePageController@getProducts');
+    Route::get('get-distance-branch', 'HomePageController@getBranchWithDistance');
 
 });
 
