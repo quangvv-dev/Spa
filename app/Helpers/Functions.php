@@ -555,7 +555,6 @@ class Functions
             return [];
         }
 
-
     }
 
 }

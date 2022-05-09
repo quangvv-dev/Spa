@@ -62,12 +62,14 @@ class HomePageController extends BaseApiController
         $paginate = isset($request->records) && $request->records ? $request->records : StatusCode::PAGINATE_10;
         $docs = Landipage::where('active', StatusCode::ON)->orderByDesc('position', 'created_at')->paginate($paginate);
         $docs = $docs->transform(function ($i) {
+            $short = new \Html2Text\Html2Text($i->content);
             return [
-                'id'            => $i->id,
-                'title'         => $i->title,
-                'content'       => $i->content,
-                'thumbnail'     => $i->thumbnail,
-                'created_at'    => \date('d/m/Y',strtotime($i->created_at)),
+                'id'                    => $i->id,
+                'title'                 => $i->title,
+                'short_description'     => str_limit($short->getText(),35),
+                'content'               => $i->content,
+                'thumbnail'             => $i->thumbnail,
+                'created_at'            => \date('d/m/Y',strtotime($i->created_at)),
             ];
         });
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
