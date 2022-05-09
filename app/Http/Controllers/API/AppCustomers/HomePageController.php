@@ -31,8 +31,9 @@ class HomePageController extends BaseApiController
      */
     public function getServices(Request $request)
     {
+        $paginate = isset($request->records) && $request->records ? $request->records : StatusCode::PAGINATE_10;
         $request->merge(['type' => StatusCode::SERVICE]);
-        $docs = Services::where('type', StatusCode::SERVICE)->where('enable', StatusCode::ON)->paginate(StatusCode::PAGINATE_10);
+        $docs = Services::where('type', StatusCode::SERVICE)->where('enable', StatusCode::ON)->paginate($paginate);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
     }
 
@@ -41,9 +42,10 @@ class HomePageController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getProducts()
+    public function getProducts(Request $request)
     {
-        $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)->paginate(StatusCode::PAGINATE_10);
+        $paginate = isset($request->records) && $request->records ? $request->records : StatusCode::PAGINATE_10;
+        $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)->paginate($paginate);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
     }
 

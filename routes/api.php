@@ -109,10 +109,12 @@ Route::get('depots/statistical', 'API\DepotController@index');
 |--------------------------------------------------------------------------
 */
 
-Route::post('login-customer', 'API\AppCustomers\AuthController@login');
-Route::post('forgot-password', 'API\AppCustomers\AuthController@forgotPassword');
 
 Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non token
+
+    Route::post('login-customer', 'AuthController@login');
+    Route::post('forgot-password', 'AuthController@forgotPassword');
+    Route::get('check-phone-exist', 'AuthController@checkPhoneExist');
     Route::get('services', 'HomePageController@getServices');
     Route::get('products', 'HomePageController@getProducts');
     Route::get('get-distance-branch', 'HomePageController@getBranchWithDistance');

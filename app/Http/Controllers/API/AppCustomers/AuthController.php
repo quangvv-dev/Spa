@@ -48,6 +48,27 @@ class AuthController extends BaseApiController
     }
 
     /**
+     * Check số điện thoại tồn tại
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkPhoneExist(Request $request)
+    {
+        $validate = ['phone' => "required"];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $user = Customer::where('phone', $request->input('phone'))->first();
+        if (!$user) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tồn tại tài khoản');
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+    }
+
+
+    /**
      * Quên mật khẩu
      *
      * @param Request $request
@@ -61,7 +82,7 @@ class AuthController extends BaseApiController
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
-            return $this->jsonApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
 
         $user = Customer::where('phone', $request->input('phone'))->first();
@@ -114,7 +135,7 @@ class AuthController extends BaseApiController
 
         if ($user->password == '' || $user->password == null) {
             $save = Customer::find($user->id);
-            if (isset($save) && $save){
+            if (isset($save) && $save) {
                 $save->password = Hash::make(request('new_password'));
                 $save->save();
             }
@@ -123,7 +144,7 @@ class AuthController extends BaseApiController
 
         try {
             if (Hash::check($request->old_password, $user->password)) {
-                if (isset($save) && $save){
+                if (isset($save) && $save) {
                     $save->password = Hash::make(request('new_password'));
                     $save->save();
                 }

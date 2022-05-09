@@ -26,13 +26,13 @@
                         <span class="help-block">{{ $errors->first('title', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('form') ? 'has-error' : '' }}">
-                        {!! Form::label('form', 'Đường dẫn form đăng ký', array('class' => ' required')) !!}
-                        {!! Form::text('form',old('form')?:null, array('class' => 'form-control form', 'required' => true)) !!}
-                        <span class="help-block">{{ $errors->first('form', ':message') }}</span>
-                    </div>
-                </div>
+                {{--<div class="col-xs-12 col-md-6">--}}
+                    {{--<div class="form-group required {{ $errors->has('form') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('form', 'Đường dẫn form đăng ký', array('class' => ' required')) !!}--}}
+                        {{--{!! Form::text('form',old('form')?:null, array('class' => 'form-control form', 'required' => true)) !!}--}}
+                        {{--<span class="help-block">{{ $errors->first('form', ':message') }}</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
                 <div class="col-xs-12 col-md-12">
                     <div class="form-group required {{ $errors->has('title') ? 'has-error' : '' }}">
                         {!! Form::label('content', 'Nội dung', array('class' => ' required')) !!}
