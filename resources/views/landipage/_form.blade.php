@@ -1,4 +1,5 @@
 @extends('landipage.layout')
+<link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -26,13 +27,38 @@
                         <span class="help-block">{{ $errors->first('title', ':message') }}</span>
                     </div>
                 </div>
-                {{--<div class="col-xs-12 col-md-6">--}}
-                    {{--<div class="form-group required {{ $errors->has('form') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('form', 'Đường dẫn form đăng ký', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::text('form',old('form')?:null, array('class' => 'form-control form', 'required' => true)) !!}--}}
-                        {{--<span class="help-block">{{ $errors->first('form', ':message') }}</span>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
+                <div class="col-xs-12 col-md-6">
+                    <div class="col-6">
+                        {!! Form::label('active', 'Kích hoạt', array('class' => ' required')) !!}
+                        <input type="checkbox" name="active" value="1" {{@$doc->active == 1?'checked':''}}>
+                    </div>
+                    <div class="col">
+                        {!! Form::label('position', 'Nổi bật', array('class' => ' required')) !!}
+                        <input type="checkbox" name="position"  value="1" {{@$doc->position == 0?'':'checked'}}>
+                    </div>
+                </div>
+
+
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                        {!! Form::label('avatar', 'Ảnh đại diện') !!}
+                        <div class="fileupload fileupload-{{isset($doc) ? 'exists' : 'new' }}"
+                             data-provides="fileupload">
+                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
+                                @if (isset($doc))
+                                    <img src="{{ $doc->thumbnail }}" alt="image"/>
+                                @endif
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-default btn-file">
+                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
+                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
+                                    <input type="file" name="image" accept="image/*" class="btn-default upload"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-xs-12 col-md-12">
                     <div class="form-group required {{ $errors->has('title') ? 'has-error' : '' }}">
                         {!! Form::label('content', 'Nội dung', array('class' => ' required')) !!}
@@ -44,19 +70,20 @@
             </div>
             <div class="col bot">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('posts.index')}}" class="btn btn-danger">Về danh sách</a>
+                <a href="{{route('landipages.index')}}" class="btn btn-danger">Về danh sách</a>
             </div>
             {{ Form::close() }}
         </div>
     </div>
 @endsection
 @section('_script')
+    <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script src="{{asset('assets/plugins/ckeditor/ckeditor.js')}}"></script>
     <script src="{{asset('/laningpage/frontend/js/speakingurl.min.js')}}"></script>
     <script src="{{asset('/laningpage/frontend/js/jquery.stringtoslug.min.js')}}"></script>
     <script>
         $(document).ready(function () {
-            CKEDITOR.replace('content',{
+            CKEDITOR.replace('content', {
                 // filebrowserBrowseUrl: '/browser/browse.php',
                 // filebrowserUploadUrl: '/uploader/upload.php'
             });

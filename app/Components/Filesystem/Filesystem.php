@@ -60,6 +60,10 @@ class Filesystem
     {
         return $this->saveUploadedFile($input, DirectoryConstant::USER_IMAGE);
     }
+    public function uploadImageCustom($input,$folders)
+    {
+        return $this->saveUploadedFile($input, $folders);
+    }
 
     public function uploadDocumentFile($input)
     {

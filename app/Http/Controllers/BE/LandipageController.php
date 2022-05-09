@@ -4,24 +4,27 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostRequest;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Landipage;
-use App\Models\Post;
+use App\Components\Filesystem\Filesystem;
 use App\User;
 use Illuminate\Http\Request;
 
 class LandipageController extends Controller
 {
 
-    public function __construct()
+    private $fileUpload;
+
+    public function __construct(Filesystem $fileUpload)
     {
         $this->middleware('permission:landipages.list', ['only' => ['index']]);
         $this->middleware('permission:landipages.edit', ['only' => ['edit']]);
         $this->middleware('permission:landipages.add', ['only' => ['create']]);
         $this->middleware('permission:landipages.delete', ['only' => ['destroy']]);
+        $this->fileUpload = $fileUpload;
 
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $category = Category::orderByDesc('id')->pluck('name', 'id')->toArray();
@@ -65,7 +68,11 @@ class LandipageController extends Controller
      */
     public function store(Request $request)
     {
-        Landipage::create($request->all());
+        $input = $request->except('image');
+        if ($request->image) {
+            $input['thumbnail'] = $this->fileUpload->uploadImageCustom($request->image, '/uploads/landipages/');
+        }
+        Landipage::create($input);
         return redirect(route('landipages.index'))->with('Thêm mới thành công');
     }
 
@@ -103,9 +110,16 @@ class LandipageController extends Controller
      */
     public function update(Request $request, Landipage $landipage)
     {
-        $landipage->update($request->all());
+        $input = $request->except('image');
+        if ($request->image) {
+            Functions::unlinkUpload2($landipage->thumbnail);
+            $input['thumbnail'] = $this->fileUpload->uploadImageCustom($request->image, '/uploads/landipages/');
+        }
+
+        $landipage->update($input);
         return redirect(route('landipages.edit', $landipage->id))->with('chỉnh sửa thành công');
     }
+
 
     /**
      * Remove the specified resource from storage.

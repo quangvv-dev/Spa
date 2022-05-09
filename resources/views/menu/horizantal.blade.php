@@ -115,7 +115,7 @@
                                             <li><a href="{{route('promotions.index')}}">Voucher khuyến mãi</a></li>
                                         @endif
                                     @endif
-
+                                        <li><a href="{{route('landipages.index')}}">Landipage</a></li>
                                 </ul>
                             </li>
                             @endif

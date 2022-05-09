@@ -7,10 +7,6 @@
                 <div class="col"><a class="right btn btn-primary btn-flat" href="{{route('landipages.create') }}"><i
                                 class="fa fa-plus-circle"></i> Tạo mới</a></div>
             </div>
-            {{--<div class="card-header">--}}
-                {{--<input class="form-control name col-md-2" name="search" placeholder="Tìm kiếm" tabindex="1"--}}
-                       {{--type="search">--}}
-            {{--</div>--}}
             <div id="registration-form">
                 @include('landipage.ajax')
             </div>

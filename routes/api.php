@@ -117,6 +117,7 @@ Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non tok
     Route::get('check-phone-exist', 'AuthController@checkPhoneExist');
     Route::get('services', 'HomePageController@getServices');
     Route::get('products', 'HomePageController@getProducts');
+    Route::get('news', 'HomePageController@news');
     Route::get('get-distance-branch', 'HomePageController@getBranchWithDistance');
 
 });

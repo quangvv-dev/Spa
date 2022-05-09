@@ -9,6 +9,7 @@ use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Http\Resources\AppCustomers\ServiceResource;
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\Landipage;
 use App\Models\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -47,6 +48,29 @@ class HomePageController extends BaseApiController
         $paginate = isset($request->records) && $request->records ? $request->records : StatusCode::PAGINATE_10;
         $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)->paginate($paginate);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
+    }
+
+
+    /**
+     * Get NEWS
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function news(Request $request)
+    {
+        $paginate = isset($request->records) && $request->records ? $request->records : StatusCode::PAGINATE_10;
+        $docs = Landipage::where('active', StatusCode::ON)->orderByDesc('position', 'created_at')->paginate($paginate);
+        $docs = $docs->transform(function ($i) {
+            return [
+                'id'            => $i->id,
+                'title'         => $i->title,
+                'content'       => $i->content,
+                'thumbnail'     => $i->thumbnail,
+                'created_at'    => \date('d/m/Y',strtotime($i->created_at)),
+            ];
+        });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
     }
 
     /**
