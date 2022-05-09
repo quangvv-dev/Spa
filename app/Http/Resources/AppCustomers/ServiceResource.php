@@ -19,14 +19,16 @@ class ServiceResource extends JsonResource
         if ($request->type == StatusCode::SERVICE){
             return [
                 'id'            => @$this->id,
-                'category_name' => @$this->category->name,
+                'name'          => @$this->name,
                 'price_sell'    => @$this->price_sell,
                 'images'        => @$this->images,
+                'category_name' => @$this->category->name,
                 'description'   => @$this->description,
             ];
         } else {
             return [
                 'id'            => @$this->id,
+                'name'          => @$this->name,
                 'category_name' => @$this->category->name,
                 'price_sell'    => @$this->price_sell,
                 'images'        => @$this->images,
