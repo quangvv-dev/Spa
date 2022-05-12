@@ -119,6 +119,8 @@ Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non tok
     Route::get('products', 'HomePageController@getProducts');
     Route::get('news', 'HomePageController@news');
     Route::get('get-distance-branch', 'HomePageController@getBranchWithDistance');
+    Route::get('get-albums-with-me', 'HomePageController@album');
+
 
 });
 

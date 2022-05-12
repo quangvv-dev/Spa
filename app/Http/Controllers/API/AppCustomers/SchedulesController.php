@@ -21,9 +21,6 @@ use App\Models\Services;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class SchedulesController extends BaseApiController
 {
@@ -42,6 +39,13 @@ class SchedulesController extends BaseApiController
     public function index(Request $request)
     {
         $customer = $request->jwtUser;
+        $validate = [
+            'status' => "required",
+        ];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
         $request->merge(['type' => 'detail_schedules']);
         if ($request->status == 1){
             $schedules = Schedule::where('user_id', $customer->id)->where('status',ScheduleConstant::DAT_LICH)->paginate(StatusCode::PAGINATE_10);

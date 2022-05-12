@@ -7,6 +7,7 @@ use App\Constants\StatusCode;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Http\Resources\AppCustomers\ServiceResource;
+use App\Models\Album;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Landipage;
@@ -64,12 +65,12 @@ class HomePageController extends BaseApiController
         $docs = $docs->transform(function ($i) {
             $short = new \Html2Text\Html2Text($i->content);
             return [
-                'id'                    => $i->id,
-                'title'                 => $i->title,
-                'short_description'     => str_limit($short->getText(),35),
-                'content'               => $i->content,
-                'thumbnail'             => $i->thumbnail,
-                'created_at'            => \date('d/m/Y',strtotime($i->created_at)),
+                'id' => $i->id,
+                'title' => $i->title,
+                'short_description' => str_limit($short->getText(), 35),
+                'content' => $i->content,
+                'thumbnail' => $i->thumbnail,
+                'created_at' => \date('d/m/Y', strtotime($i->created_at)),
             ];
         });
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
@@ -103,6 +104,24 @@ class HomePageController extends BaseApiController
             return $item;
         })->sortBy("distance");
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branch);
+    }
+
+    /**
+     * Ảnh liệu trình của bản thân
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function album(Request $request)
+    {
+        $customer = $request->jwtUser;
+        $album = Album::where('customer_id', $customer->id)->get()->transform(function ($i) {
+            return [
+                'images' => @json_decode($i->images),
+            ];
+        });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $album);
+
     }
 
 }
