@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\AppCustomers;
 
 use App\Constants\DepartmentConstant;
 use App\Constants\ResponseStatusCode;
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
@@ -42,7 +43,11 @@ class SchedulesController extends BaseApiController
     {
         $customer = $request->jwtUser;
         $request->merge(['type' => 'detail_schedules']);
-        $schedules = Schedule::where('user_id', $customer->id)->paginate(StatusCode::PAGINATE_10);
+        if ($request->status == 1){
+            $schedules = Schedule::where('user_id', $customer->id)->where('status',ScheduleConstant::DAT_LICH)->paginate(StatusCode::PAGINATE_10);
+        }else{
+            $schedules = Schedule::where('user_id', $customer->id)->whereIn('status',ScheduleConstant::DAT_LICH)->paginate(StatusCode::PAGINATE_10);
+        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', SchedulesResource::collection($schedules));
     }
 
@@ -73,13 +78,14 @@ class SchedulesController extends BaseApiController
         $service = Services::select('name')->whereIn('id', $request->service_id)->pluck('name')->toArray();
         $input = $request->all();
         $request->merge([
-            'user_id' => $customer->id,
+            'user_id'       => $customer->id,
             'person_action' => isset($user) ? $user->id : 0,
-            'creator_id' => isset($user) ? $user->id : 0,
-            'branch_id' => $request->branch_id,
-            'date' => $request->date,
-            'category_id' => isset($category) ? $category->category_id : 0,
-            'note' => 'Dv quan tâm: ' . implode($service, ','),
+            'creator_id'    => isset($user) ? $user->id : 0,
+            'branch_id'     => $request->branch_id,
+            'date'          => $request->date,
+            'status'        => ScheduleConstant::DAT_LICH,
+            'category_id'   => isset($category) ? $category->category_id : 0,
+            'note'          => 'DV quan tâm: ' . implode($service, ','),
         ]);
 
         $data = Schedule::create($request->except('service_id'));
