@@ -157,4 +157,9 @@ class AuthController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::INTERNAL_SERVER_ERROR, 'Lỗi hệ thống');
         }
     }
+
+    public function register()
+    {
+
+    }
 }

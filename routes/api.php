@@ -125,6 +125,8 @@ Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non tok
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustomers'], function () {
 
     Route::post('change-password', 'AuthController@changePassword');
+    Route::get('schedules', 'SchedulesController@index');
+    Route::post('schedules', 'SchedulesController@store');
 
 });
 
