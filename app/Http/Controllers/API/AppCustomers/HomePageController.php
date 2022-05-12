@@ -9,6 +9,7 @@ use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Http\Resources\AppCustomers\ServiceResource;
 use App\Models\Album;
 use App\Models\Branch;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Landipage;
 use App\Models\Services;
@@ -33,9 +34,13 @@ class HomePageController extends BaseApiController
      */
     public function getServices(Request $request)
     {
+        $input = $request->all();
         $paginate = isset($request->records) && $request->records ? $request->records : StatusCode::PAGINATE_10;
         $request->merge(['type' => StatusCode::SERVICE]);
-        $docs = Services::where('type', StatusCode::SERVICE)->where('enable', StatusCode::ON)->paginate($paginate);
+        $docs = Services::where('type', StatusCode::SERVICE)->where('enable', StatusCode::ON)
+            ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
+                $q->where('category_id', $input['category_id']);
+            })->paginate($paginate);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
     }
 
@@ -46,8 +51,12 @@ class HomePageController extends BaseApiController
      */
     public function getProducts(Request $request)
     {
+        $input = $request->all();
         $paginate = isset($request->records) && $request->records ? $request->records : StatusCode::PAGINATE_10;
-        $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)->paginate($paginate);
+        $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)
+            ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
+                $q->where('category_id', $input['category_id']);
+            })->paginate($paginate);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
     }
 
@@ -121,6 +130,21 @@ class HomePageController extends BaseApiController
             ];
         });
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $album);
+
+    }
+
+    public function category(Request $request)
+    {
+        $validate = [
+            'type' => "required",
+        ];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $category = Category::select('id', 'name', 'image')->where('type', $request->type)->paginate(StatusCode::PAGINATE_10);
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $category);
 
     }
 
