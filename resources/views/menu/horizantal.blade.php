@@ -120,6 +120,7 @@
                             </li>
                             @endif
 
+                            <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpege</a></li>
                         {{--@if($roleGlobal->permission('posts.list'))--}}
                             {{--<li><a href="{{route('posts.index')}}">Optin Form</a></li>--}}
                         {{--@endif--}}

@@ -227,6 +227,16 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('leader', 'MarketingController@index');
         Route::get('dashboard', 'MarketingController@show')->name('dashboard');
         Route::get('ranking', 'MarketingController@ranking');
+
+        //Chat
+        Route::get('chat-messages', 'ChatController@chatFanpage')->name('chat-messages');
+        Route::get('chat-messages/{page_id}', 'ChatController@index');
+        Route::get('chat-multi-page', 'ChatController@chatMultiPage')->name('chat-multi-page');
+        Route::get('get-token-fanpage/{id}', 'ChatController@getFanpageToken');
+        Route::get('get-phone-page', 'ChatController@getPhonePage');
+
+
+
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');

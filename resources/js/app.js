@@ -16,6 +16,15 @@ import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
 import 'vue-select/dist/vue-select.css';
 
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies, { expire: '7d'})
+
+import Popover from 'vue-js-popover';
+Vue.use(Popover)
+
+import VueLazyload from 'vue-lazyload';
+Vue.use(VueLazyload)
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -29,7 +38,8 @@ import 'vue-select/dist/vue-select.css';
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('setting-source-component', require('./components/settingSourceComponent.vue').default);
-
+Vue.component('chat-component', require('./components/chat-messagers/chatComponent.vue').default);
+Vue.component('chat-multi-component', require('./components/chat-messagers/chatMultiPageComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -40,7 +50,7 @@ Vue.component('setting-source-component', require('./components/settingSourceCom
 // const app = new Vue({
 //     el: '#app'
 // });
-
+console.log(234234324);
 if(document.getElementById('vue-component')) {
     const app = new Vue({
         el: '#vue-component',

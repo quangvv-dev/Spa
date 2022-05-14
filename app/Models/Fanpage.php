@@ -17,6 +17,8 @@ class Fanpage extends Model
             return $q->whereIn('user_id', $search['arr_mkt_id']);
         })->when(isset($search['searchPageId']), function ($q) use ($search) {
             return $q->where('page_id', $search['searchPageId']);
+        })->when(isset($search['used']), function ($q) use ($search) {
+            return $q->where('used', $search['used']);
         })->when(isset($search['searchName']), function ($q) use ($search) {
             return $q->where('name', 'like', '%' . $search['searchName'] . '%');
         })->orderByDesc('id');
