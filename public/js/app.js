@@ -2155,10 +2155,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
- // var host = 'https://crm.santa.name.vn:2022/';
 
-var port = 2022;
-var host = 'https://' + location.host + ':' + port;
+var host = 'https://crm.santa.name.vn:2022/';
+var port = 2022; // var host = 'https://' + location.host + ':'+port;
+
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2361,7 +2361,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                           switch (_context.prev = _context.next) {
                             case 0:
                               _context.next = 2;
-                              return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v10.0/me/messages?access_token=".concat(_this4.access_token), {
+                              return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
                                 "messaging_type": "RESPONSE",
                                 "notification_type": "REGULAR",
                                 "recipient": {
@@ -2423,22 +2423,64 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     getListChat: function getListChat() {
       var _this5 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-token-fanpage/' + this.last_segment).then(function (response) {
-        var access_token = response.data.data.access_token;
-        var fields = 'updated_time,name,id,participants,snippet';
-        var url = 'https://graph.facebook.com/v10.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
-        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-          var data1 = response.data.data;
-          _this5.navChat = data1;
-          _this5.navChatDefault = data1;
-          _this5.access_token = access_token;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-token-fanpage/' + _this5.last_segment).then( /*#__PURE__*/function () {
+                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(response) {
+                    var access_token, fields, url, res, data1;
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+                      while (1) {
+                        switch (_context3.prev = _context3.next) {
+                          case 0:
+                            access_token = response.data.data.access_token;
+                            fields = 'updated_time,name,id,participants,snippet';
+                            url = 'https://graph.facebook.com/v13.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
+                            _context3.prev = 3;
+                            _context3.next = 6;
+                            return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url);
 
-          _this5.getPhonePage();
-        });
-      })["catch"](function (error) {
-        console.log(error);
-        alertify.error("Token h\u1EBFt h\u1EA1n: ".concat(this.last_segment), 60000);
-      });
+                          case 6:
+                            res = _context3.sent;
+                            data1 = res.data.data;
+                            _this5.navChat = data1;
+                            _this5.navChatDefault = data1;
+                            _this5.access_token = access_token;
+
+                            _this5.getPhonePage();
+
+                            _context3.next = 17;
+                            break;
+
+                          case 14:
+                            _context3.prev = 14;
+                            _context3.t0 = _context3["catch"](3);
+                            alertify.error("Token hết hạn:" + _this5.last_segment, 10);
+
+                          case 17:
+                          case "end":
+                            return _context3.stop();
+                        }
+                      }
+                    }, _callee3, null, [[3, 14]]);
+                  }));
+
+                  return function (_x2) {
+                    return _ref2.apply(this, arguments);
+                  };
+                }())["catch"](function (error) {
+                  console.log(error);
+                });
+
+              case 1:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     },
     getPhonePage: function getPhonePage() {
       var _this6 = this;
@@ -2473,7 +2515,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var id = item.id;
       var fb_id = item.participants.data[0].id;
       var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
-      var url = "https://graph.facebook.com/v10.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
+      var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
         _this7.detailMessage = response.data.messages.data.reverse();
       });
@@ -2489,43 +2531,85 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.scrollToBottom();
     },
     customerNewMessage: function customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
-      var customer_new = this.navChatDefault.filter(function (f) {
-        return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
-      });
-      var customer_new_mess = {};
+      var _this8 = this;
 
-      if (customer_new.length > 0) {
-        customer_new_mess = customer_new[0];
-        customer_new_mess.unread_count = customer_new[0].unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
-      } else {
-        var fields = 'id,created_time,message,thread_id,attachments,from';
-        var url = "https://graph.facebook.com/v10.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
-        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-          customer_new_mess.id = response.thread_id;
-          customer_new_mess.participants = {
-            data: [{
-              id: sender_id,
-              name: response.from.name
-            }, {
-              id: page_id
-            }]
-          };
-        });
-        customer_new_mess.unread_count = unread_count;
-      }
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var customer_new, customer_new_mess, token, access_token, fields, url, index;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                customer_new = _this8.navChatDefault.filter(function (f) {
+                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                });
+                customer_new_mess = {};
 
-      customer_new_mess.updated_time = created_time;
-      customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
-      customer_new_mess.new_message = true;
-      var new_arr = this.navChatDefault.filter(function (f) {
-        return f.participants.data[0].id != sender_id && f.participants.data[1].id == page_id;
-      });
-      new_arr.unshift(customer_new_mess);
-      this.navChatDefault = new_arr;
-      this.navChat = new_arr;
+                if (!(customer_new.length > 0)) {
+                  _context5.next = 7;
+                  break;
+                }
+
+                customer_new_mess = customer_new[0];
+                customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
+                _context5.next = 15;
+                break;
+
+              case 7:
+                token = _this8.arr_page_id.filter(function (f) {
+                  return f.id == page_id;
+                });
+                access_token = token[0].token;
+                fields = 'id,created_time,message,thread_id,attachments,from';
+                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(access_token);
+                _context5.next = 13;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
+                  var page = _this8.arr_page_id.filter(function (f) {
+                    return f.id == page_id;
+                  });
+
+                  customer_new_mess.id = response.data.thread_id;
+                  customer_new_mess.participants = {
+                    data: [{
+                      id: sender_id,
+                      name: response.data.from.name
+                    }, {
+                      id: page_id,
+                      name: page[0].name
+                    }]
+                  };
+                });
+
+              case 13:
+                customer_new_mess.unread_count = unread_count;
+                customer_new_mess.access_token = access_token;
+
+              case 15:
+                customer_new_mess.updated_time = created_time;
+                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
+                customer_new_mess.new_message = true;
+                index = _this8.navChatDefault.findIndex(function (f) {
+                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                });
+
+                if (index > -1) {
+                  _this8.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+
+                }
+
+                _this8.navChatDefault.unshift(customer_new_mess);
+
+                _this8.navChat = _this8.navChatDefault;
+
+              case 22:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
     },
     selectElement: function selectElement(item) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -2540,17 +2624,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this8.data_images_upload_server.push(data);
+          _this9.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this9 = this;
+      var _this10 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this9.dataQuickReply = response.data.data;
+          _this10.dataQuickReply = response.data.data;
         }
       });
     },
@@ -2558,18 +2642,16 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       // console.log(55555,this.data_images_upload_server,this.data_images_upload_server_default);
       // this.data_images_upload_server = this.data_images_upload_server_default;
       this.data_images_upload_server = fileList;
-      console.log(13234, fileList);
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this10 = this;
+      var _this11 = this;
 
       var r = confirm("remove image");
-      console.log(123123, fileList, fileList.length);
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this10.data_images_upload_server = _this10.data_images_upload_server.filter(function (ft) {
+            _this11.data_images_upload_server = _this11.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -2846,10 +2928,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
- // var host = 'https://crm.santa.name.vn:2022/';
 
-var port = 2022;
-var host = 'https://' + location.host + ':' + port;
+var host = 'https://crm.santa.name.vn:2022/';
+var port = 2022; // var host = 'https://' + location.host + ':'+port;
+
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2915,72 +2997,70 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       });
     }
   },
-  mounted: function mounted() {
-    var _this2 = this;
-
-    console.log(33333, this.arr_page_id);
-    this.arr_page_id.forEach(function (item) {
-      socket.on(item.id, function (server) {
-        var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
-
-        if (server.type) {
-          console.log(121212, server);
-        } else {
-          console.log(232323, server);
-          var html = {
-            message: server.message.text,
-            from: {
-              id: server.sender.id
-            }
-          };
-          console.log(server.sender.id, server.recipient.id, newTime, 1, server.message.text, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
-
-          _this2.customerNewMessage(server.sender.id, server.recipient.id, newTime, 1, server.message.text, server.message.mid);
-
-          if (_this2.classClick == server.sender.id) {
-            if (!server.message.text) {
-              var url = server.message.attachments[0].payload.url;
-
-              if (server.message.attachments[0].type == 'image') {
-                // html.attachments.data[0].image_data.url = url
-                html = {
-                  message: server.message.text,
-                  from: {
-                    id: server.sender.id
-                  },
-                  attachments: {
-                    data: [{
-                      image_data: {
-                        url: url
-                      }
-                    }]
-                  }
-                };
-              } else if (server.message.attachments[0].type == 'video') {
-                html = {
-                  message: server.message.text,
-                  from: {
-                    id: server.sender.id
-                  },
-                  attachments: {
-                    data: [{
-                      video_data: {
-                        url: url
-                      }
-                    }]
-                  }
-                };
-              }
-            }
-
-            _this2.detailMessage.push(html);
-          }
-        } // console.log(server, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
-
-      });
-    });
-  },
   methods: {
+    getSocket: function getSocket() {
+      var _this2 = this;
+
+      if (this.arr_page_id.length > 0) {
+        this.arr_page_id.forEach(function (item) {
+          socket.on(item.id, function (server) {
+            var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
+
+            if (server.type) {} else {
+              var html = {
+                message: server.message.text,
+                from: {
+                  id: server.sender.id
+                }
+              };
+              console.log(server.sender.id, server.recipient.id, newTime, 1, server.message.text, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
+
+              _this2.customerNewMessage(server.sender.id, server.recipient.id, newTime, 1, server.message.text, server.message.mid);
+
+              if (_this2.classClick == server.sender.id) {
+                if (!server.message.text) {
+                  var url = server.message.attachments[0].payload.url;
+
+                  if (server.message.attachments[0].type == 'image') {
+                    // html.attachments.data[0].image_data.url = url
+                    html = {
+                      message: server.message.text,
+                      from: {
+                        id: server.sender.id
+                      },
+                      attachments: {
+                        data: [{
+                          image_data: {
+                            url: url
+                          }
+                        }]
+                      }
+                    };
+                  } else if (server.message.attachments[0].type == 'video') {
+                    html = {
+                      message: server.message.text,
+                      from: {
+                        id: server.sender.id
+                      },
+                      attachments: {
+                        data: [{
+                          video_data: {
+                            url: url
+                          }
+                        }]
+                      }
+                    };
+                  }
+                }
+
+                _this2.detailMessage.push(html);
+              }
+            } // console.log(server, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
+
+          });
+        });
+      }
+    },
     onEnter: function onEnter() {
       this.sendMessage(this.contentMesage);
     },
@@ -3018,7 +3098,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v10.0/me/messages?access_token=".concat(_this4.access_token), {
+                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
                   // "messaging_type": "MESSAGE_TAG",
                   // "tag": "HUMAN_AGENT",
                   "messaging_type": "RESPONSE",
@@ -3055,7 +3135,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                           switch (_context.prev = _context.next) {
                             case 0:
                               _context.next = 2;
-                              return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v10.0/me/messages?access_token=".concat(_this4.access_token), {
+                              return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
                                 "messaging_type": "RESPONSE",
                                 "notification_type": "REGULAR",
                                 "recipient": {
@@ -3124,12 +3204,11 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 arr = [];
 
                 if (!arr_page_id) {
-                  _context4.next = 22;
+                  _context4.next = 23;
                   break;
                 }
 
-                arr_page_id = JSON.parse(arr_page_id); // this.arr_page_id = arr_page_id;
-
+                arr_page_id = JSON.parse(arr_page_id);
                 _iterator = _createForOfIteratorHelper(arr_page_id);
                 _context4.prev = 5;
                 _loop = /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _loop() {
@@ -3166,7 +3245,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                           arr_page_id = arr_page_id.filter(function (f) {
                             return f.id != item.id;
                           });
-                          alertify.error("Token h\u1EBFt h\u1EA1n: ".concat(item.id), 60000);
+                          alertify.error("Token h\u1EBFt h\u1EA1n: ".concat(item.id), 10);
 
                         case 17:
                         case "end":
@@ -3209,9 +3288,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
               case 20:
                 _this5.arr_page_id = arr_page_id;
+
+                _this5.getSocket();
+
                 console.log(5555, _this5.arr_page_id);
 
-              case 22:
+              case 23:
                 arr = arr.filter(function (f) {
                   return f.participants.data[0].id != '3873174272720720';
                 });
@@ -3220,7 +3302,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this5.getPhonePage();
 
-              case 26:
+              case 27:
               case "end":
                 return _context4.stop();
             }
@@ -3266,7 +3348,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var page_id = item.participants.data[1].id;
       this.last_segment = page_id;
       var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
-      var url = "https://graph.facebook.com/v10.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(access_token);
+      var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(access_token);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
         _this7.detailMessage = response.data.messages.data.reverse();
         console.log(_this7.detailMessage);
@@ -3285,60 +3367,112 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.scrollToBottom();
     },
     selectElement: function selectElement(item) {
-      this.contentMesage = item.message;
-    },
-    getListQuickReply: function getListQuickReply() {
       var _this8 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/api/get-quick-reply/".concat(this.last_segment)).then(function (response) {
+      this.data_images_upload_server = this.data_images_upload_server_default = [];
+      this.images = [];
+      this.contentMesage = item.message;
+
+      if (item.images && item.images.length > 0) {
+        item.images.forEach(function (f) {
+          var data = {
+            'default': 1,
+            'highlight': 1,
+            'name': f,
+            'path': ''
+          };
+
+          _this8.data_images_upload_server.push(data);
+        });
+        this.data_images_upload_server_default = this.data_images_upload_server;
+      }
+    },
+    getListQuickReply: function getListQuickReply() {
+      var _this9 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this8.dataQuickReply = response.data.data;
+          _this9.dataQuickReply = response.data.data;
         }
       });
     },
     customerNewMessage: function customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
-      var customer_new = this.navChatDefault.filter(function (f) {
-        return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
-      });
-      var customer_new_mess = {};
+      var _this10 = this;
 
-      if (customer_new.length > 0) {
-        customer_new_mess = customer_new[0];
-        customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
-      } else {
-        var token = this.arr_page_id.filter(function (f) {
-          return f.id == page_id;
-        });
-        var access_token = token.token;
-        var fields = 'id,created_time,message,thread_id,attachments,from';
-        var url = "https://graph.facebook.com/v10.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(access_token);
-        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-          customer_new_mess.id = response.thread_id;
-          customer_new_mess.participants = {
-            data: [{
-              id: sender_id,
-              name: response.from.name
-            }, {
-              id: page_id
-            }]
-          };
-        });
-        customer_new_mess.unread_count = unread_count;
-      }
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var customer_new, customer_new_mess, token, access_token, fields, url, index;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                customer_new = _this10.navChatDefault.filter(function (f) {
+                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                });
+                customer_new_mess = {};
 
-      customer_new_mess.updated_time = created_time;
-      customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
-      customer_new_mess.new_message = true;
-      var index = this.navChatDefault.findIndex(function (f) {
-        return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
-      });
+                if (true) {
+                  _context5.next = 7;
+                  break;
+                }
 
-      if (index > -1) {
-        this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
-      }
+                customer_new_mess = customer_new[0];
+                customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
+                _context5.next = 15;
+                break;
 
-      this.navChatDefault.unshift(customer_new_mess);
-      this.navChat = this.navChatDefault;
+              case 7:
+                token = _this10.arr_page_id.filter(function (f) {
+                  return f.id == page_id;
+                });
+                access_token = token[0].token;
+                fields = 'id,created_time,message,thread_id,attachments,from';
+                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(access_token);
+                _context5.next = 13;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
+                  var page = _this10.arr_page_id.filter(function (f) {
+                    return f.id == page_id;
+                  });
+
+                  customer_new_mess.id = response.data.thread_id;
+                  customer_new_mess.participants = {
+                    data: [{
+                      id: sender_id,
+                      name: response.data.from.name
+                    }, {
+                      id: page_id,
+                      name: page[0].name
+                    }]
+                  };
+                });
+
+              case 13:
+                customer_new_mess.unread_count = unread_count;
+                customer_new_mess.access_token = access_token;
+
+              case 15:
+                customer_new_mess.updated_time = created_time;
+                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
+                customer_new_mess.new_message = true;
+                index = _this10.navChatDefault.findIndex(function (f) {
+                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                });
+
+                if (index > -1) {
+                  _this10.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+
+                }
+
+                _this10.navChatDefault.unshift(customer_new_mess);
+
+                _this10.navChat = _this10.navChatDefault;
+
+              case 22:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     },
     openForm: function openForm() {
       $('#add_new_form').modal({
@@ -3349,9 +3483,19 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
+      var _this11 = this;
+
       var r = confirm("remove image");
 
       if (r == true) {
+        if (fileList.length > 1) {
+          fileList.forEach(function (f) {
+            _this11.data_images_upload_server = _this11.data_images_upload_server.filter(function (ft) {
+              return ft.name != f.name;
+            });
+          });
+        }
+
         done();
       } else {}
     },

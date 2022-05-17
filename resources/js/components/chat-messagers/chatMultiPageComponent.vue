@@ -282,74 +282,73 @@
                 });
             }
         },
-        mounted() {
-            console.log(33333,this.arr_page_id);
-            this.arr_page_id.forEach(item=>{
-                socket.on(item.id, (server) => {
-                    let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
-                    if(server.type){
-                        console.log(121212,server);
-                    } else {
-                        console.log(232323,server);
-                        let html = {
-                            message: server.message.text,
-                            from: {
-                                id: server.sender.id,
-                            }
-                        };
-                        console.log(server.sender.id, server.recipient.id, newTime, 1, server.message.text, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
-
-                        this.customerNewMessage(server.sender.id, server.recipient.id, newTime, 1, server.message.text, server.message.mid);
-                        if (this.classClick == server.sender.id) {
-                            if (!server.message.text) {
-                                let url = server.message.attachments[0].payload.url;
-                                if (server.message.attachments[0].type == 'image') {
-                                    // html.attachments.data[0].image_data.url = url
-                                    html = {
-                                        message: server.message.text,
-                                        from: {
-                                            id: server.sender.id,
-                                        },
-                                        attachments: {
-                                            data: [
-                                                {
-                                                    image_data: {
-                                                        url: url
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    };
-                                } else if (server.message.attachments[0].type == 'video') {
-                                    html = {
-                                        message: server.message.text,
-                                        from: {
-                                            id: server.sender.id,
-                                        },
-                                        attachments: {
-                                            data: [
-                                                {
-                                                    video_data: {
-                                                        url: url
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    };
-                                }
-                            }
-                            this.detailMessage.push(html);
-                        }
-
-                    }
-
-                    // console.log(server, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
-                });
-
-            })
-
-        },
         methods: {
+            getSocket(){
+                if(this.arr_page_id.length>0){
+                    this.arr_page_id.forEach(item=>{
+                        socket.on(item.id, (server) => {
+                            let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
+                            if(server.type){
+
+                            } else {
+                                let html = {
+                                    message: server.message.text,
+                                    from: {
+                                        id: server.sender.id,
+                                    }
+                                };
+                                console.log(server.sender.id, server.recipient.id, newTime, 1, server.message.text, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
+
+                                this.customerNewMessage(server.sender.id, server.recipient.id, newTime, 1, server.message.text, server.message.mid);
+                                if (this.classClick == server.sender.id) {
+                                    if (!server.message.text) {
+                                        let url = server.message.attachments[0].payload.url;
+                                        if (server.message.attachments[0].type == 'image') {
+                                            // html.attachments.data[0].image_data.url = url
+                                            html = {
+                                                message: server.message.text,
+                                                from: {
+                                                    id: server.sender.id,
+                                                },
+                                                attachments: {
+                                                    data: [
+                                                        {
+                                                            image_data: {
+                                                                url: url
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            };
+                                        } else if (server.message.attachments[0].type == 'video') {
+                                            html = {
+                                                message: server.message.text,
+                                                from: {
+                                                    id: server.sender.id,
+                                                },
+                                                attachments: {
+                                                    data: [
+                                                        {
+                                                            video_data: {
+                                                                url: url
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            };
+                                        }
+                                    }
+                                    this.detailMessage.push(html);
+                                }
+
+                            }
+
+                            // console.log(server, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
+                        });
+
+                    })
+                }
+            },
             onEnter: function () {
                 this.sendMessage(this.contentMesage);
             },
@@ -378,7 +377,7 @@
             },
 
             async sendMessage(model) {
-                let rq = axios.post(`https://graph.facebook.com/v10.0/me/messages?access_token=${this.access_token}`, {
+                let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                     // "messaging_type": "MESSAGE_TAG",
                     // "tag": "HUMAN_AGENT",
                     "messaging_type": "RESPONSE",
@@ -405,7 +404,7 @@
                 });
                 if(data_image_response.length > 0){
                     data_image_response.forEach(async f =>{
-                        await axios.post(`https://graph.facebook.com/v10.0/me/messages?access_token=${this.access_token}`, {
+                        await axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                             "messaging_type": "RESPONSE",
                             "notification_type": "REGULAR",
                             "recipient": {
@@ -446,8 +445,6 @@
                 let arr = [];
                 if(arr_page_id){
                     arr_page_id = JSON.parse(arr_page_id);
-                    // this.arr_page_id = arr_page_id;
-
                     for (const item of arr_page_id){
                         let access_token = item.token;
                         let fields = 'updated_time,name,id,participants,snippet';
@@ -463,11 +460,12 @@
                             arr.push(...data);
                         } catch (e) {
                             arr_page_id = arr_page_id.filter(f=>{return f.id != item.id})
-                            alertify.error(`Token hết hạn: ${item.id}`,60000)
+                            alertify.error(`Token hết hạn: ${item.id}`,10)
                         }
 
                     }
                     this.arr_page_id = arr_page_id;
+                    this.getSocket();
                     console.log(5555,this.arr_page_id);
                 }
                  arr = arr.filter(f => {
@@ -507,7 +505,7 @@
                 this.last_segment = page_id;
 
                 let fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
-                let url = `https://graph.facebook.com/v10.0/${id}/?fields=${fields}&access_token=${access_token}`;
+                let url = `https://graph.facebook.com/v13.0/${id}/?fields=${fields}&access_token=${access_token}`;
                 axios.get(url)
                     .then(response => {
                         this.detailMessage = response.data.messages.data.reverse();
@@ -526,52 +524,67 @@
                 this.scrollToBottom();
             },
             selectElement(item){
+                this.data_images_upload_server = this.data_images_upload_server_default = [];
+                this.images = [];
                 this.contentMesage = item.message;
+                if(item.images && item.images.length>0){
+                    item.images.forEach(f=>{
+                        let data = {
+                            'default':1,
+                            'highlight': 1,
+                            'name':f,
+                            'path':''
+                        }
+                        this.data_images_upload_server.push(data);
+                    });
+                    this.data_images_upload_server_default = this.data_images_upload_server;
+                }
             },
             getListQuickReply(){
-                axios.get(`/api/get-quick-reply/${this.last_segment}`).then(response => {
+                axios.get(`/marketing/get-quick-reply/${this.last_segment}`).then(response => {
                     if(response.data){
                         this.dataQuickReply = response.data.data;
                     }
                 })
             },
 
-            customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
+            async customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
                 let customer_new = this.navChatDefault.filter(f => {
                     return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
-
                 let customer_new_mess = {};
                 if (customer_new.length > 0) {
                     customer_new_mess = customer_new[0];
                     customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
-                } else {
+                }
+                else {
                     let token = this.arr_page_id.filter(f=> {return f.id == page_id});
-
-                    let access_token = token.token;
+                    let access_token = token[0].token;
 
                     let fields = 'id,created_time,message,thread_id,attachments,from';
-                    let url = `https://graph.facebook.com/v10.0/${mid}/?fields=${fields}&access_token=${access_token}`;
-                    axios.get(url).then(response => {
-                        customer_new_mess.id = response.thread_id;
+                    let url = `https://graph.facebook.com/v13.0/${mid}/?fields=${fields}&access_token=${access_token}`;
+                    await axios.get(url).then(response => {
+                        let page=this.arr_page_id.filter(f=>{return f.id == page_id});
+                        customer_new_mess.id = response.data.thread_id;
                         customer_new_mess.participants = {
                             data: [
                                 {
                                     id: sender_id,
-                                    name: response.from.name,
+                                    name: response.data.from.name,
                                 },
                                 {
-                                    id: page_id
+                                    id: page_id,
+                                    name: page[0].name,
                                 }
                             ]
                         }
                     })
                     customer_new_mess.unread_count = unread_count;
+                    customer_new_mess.access_token = access_token;
                 }
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name +" đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
-
                 let index = this.navChatDefault.findIndex(f=> {
                     return (f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id);
                 })
@@ -593,6 +606,13 @@
             beforeRemove (index, done, fileList) {
                 var r = confirm("remove image")
                 if (r == true) {
+                    if (fileList.length>1){
+                        fileList.forEach(f=>{
+                            this.data_images_upload_server = this.data_images_upload_server.filter(ft=>{
+                                return ft.name != f.name;
+                            })
+                        })
+                    }
                     done()
                 } else {
                 }
