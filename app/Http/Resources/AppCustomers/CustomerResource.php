@@ -23,7 +23,9 @@ class CustomerResource extends JsonResource
             'wallet'    => @$this->wallet,
             'avatar'    => @$this->avatar,
             'birthday'  => @$this->birthday,
-            'gender'    => @$this->gender==0?"Nữ":'Nam',
+            'gender'    => @$this->gender,
+//            'gender'    => @$this->gender==0?"Nữ":'Nam',
+            'branch_id' => @$this->branch_id,
             'branch'    => @$this->branch->name,
             'status'    => @$this->status->name,
         ];

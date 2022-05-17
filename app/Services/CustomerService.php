@@ -42,9 +42,9 @@ class CustomerService
 
     public function create($input)
     {
-        $userLogin = Auth::user()->id;
 
         if ($input['mkt_id'] === null) {
+            $userLogin = Auth::user()->id;
             $input['mkt_id'] = $userLogin;
         }
 

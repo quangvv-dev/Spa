@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\API\AppCustomers;
 
 use App\Constants\ResponseStatusCode;
+use App\Constants\StatusCode;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
+use App\Models\Category;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
+use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
@@ -14,9 +18,11 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends BaseApiController
 {
 
-    public function __construct()
+    private $customerService;
+
+    public function __construct(CustomerService $customerService)
     {
-        // coding
+        $this->customerService = $customerService;
     }
 
 
@@ -158,8 +164,90 @@ class AuthController extends BaseApiController
         }
     }
 
-    public function register()
+    /**
+     * Get info
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function info(Request $request)
     {
+        $info = $request->jwtUser;
+        $customer = Customer::find($info->id);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new CustomerResource($customer));
 
+    }
+
+    /**
+     * Cập nhật profiles
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProfile(Request $request)
+    {
+        $info = $request->jwtUser;
+        $customer = Customer::find($info->id);
+        if ($customer) {
+            $customer->update($request->all());
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new CustomerResource($customer));
+
+        } else {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tồn tại khách hàng');
+        }
+    }
+
+    /**
+     * Đăng ký tài khoản
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request)
+    {
+        $validate = [
+            'full_name' => "required",
+            'phone' => "required",
+            'category_id' => "required",
+            'branch_id' => "required",
+        ];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $input = $request->except('category_id');
+        $input['mkt_id'] = 0;
+        $input['wallet'] = 0;
+        $input['post_id'] = 0;
+        $input['status_id'] = StatusCode::NEW;
+
+        $customer = $this->customerService->create($input);
+        $this->update_code($customer);
+        foreach ($request->category_id as $item) {
+            self::createCustomerGroup($item, $customer->id, $input['branch_id']);
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new CustomerResource($customer));
+    }
+
+    public function update_code($customer)
+    {
+        $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
+        $code = 'KH' . $customer_id;
+        $customer->update(['account_code' => $code]);
+    }
+
+    protected function createCustomerGroup($group_id, $customer_id, $branch_id)
+    {
+        $category = Category::find($group_id);
+        if (count($category)) {
+            foreach ($category as $item) {
+                CustomerGroup::create([
+                    'customer_id' => $customer_id,
+                    'category_id' => $item->id,
+                    'branch_id' => $branch_id,
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                ]);
+            }
+        }
     }
 }

@@ -133,6 +133,12 @@ class HomePageController extends BaseApiController
 
     }
 
+    /**
+     * Danh mục sản phẩm || dịch vụ
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function category(Request $request)
     {
         $validate = [
