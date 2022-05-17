@@ -403,7 +403,7 @@
 
                 if (data_image_response.length > 0) {
                     data_image_response.forEach(async f => {
-                        await axios.post(`https://graph.facebook.com/v10.0/me/messages?access_token=${this.access_token}`, {
+                        await axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                             "messaging_type": "RESPONSE",
                             "notification_type": "REGULAR",
                             "recipient": {
@@ -443,25 +443,39 @@
                 this.contentMesage = '';
             },
 
-            getListChat() {
+            async getListChat() {
                 axios.get('/marketing/get-token-fanpage/' + this.last_segment)
-                    .then(response => {
+                    .then(async response => {
 
                         let access_token = response.data.data.access_token;
                         let fields = 'updated_time,name,id,participants,snippet';
-                        let url = 'https://graph.facebook.com/v10.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
-                        axios.get(url)
-                            .then(response => {
-                                let data1 = response.data.data;
-                                this.navChat = data1;
-                                this.navChatDefault = data1;
-                                this.access_token = access_token;
-                                this.getPhonePage();
-                            })
+                        let url = 'https://graph.facebook.com/v13.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
+
+                        try {
+                            const res = await axios.get(url);
+                            let data1 = res.data.data;
+                            this.navChat = data1;
+                            this.navChatDefault = data1;
+                            this.access_token = access_token;
+                            this.getPhonePage();
+                        } catch (e) {
+                            alertify.error("Token hết hạn:" + this.last_segment,10)
+                        }
+
+                        // axios.get(url)
+                        //     .then(response => {
+                        //         let data1 = response.data.data;
+                        //         this.navChat = data1;
+                        //         this.navChatDefault = data1;
+                        //         this.access_token = access_token;
+                        //         this.getPhonePage();
+                        //     }).catch(function (error) {
+                        //         console.log(234234454345345,error);
+                        //         alertify.error("Token hết hạn:" + this.last_segment,60000)
+                        //     })
                     })
                     .catch(function (error) {
                         console.log(error);
-                        alertify.error(`Token hết hạn: ${this.last_segment}`,60000)
                     })
             },
             getPhonePage(){
@@ -489,7 +503,7 @@
                 let id = item.id;
                 let fb_id = item.participants.data[0].id;
                 let fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
-                let url = `https://graph.facebook.com/v10.0/${id}/?fields=${fields}&access_token=${this.access_token}`;
+                let url = `https://graph.facebook.com/v13.0/${id}/?fields=${fields}&access_token=${this.access_token}`;
                 axios.get(url)
                     .then(response => {
                         this.detailMessage = response.data.messages.data.reverse();
@@ -507,44 +521,54 @@
                 this.scrollToBottom();
             },
 
-            customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
+            async customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
                 let customer_new = this.navChatDefault.filter(f => {
                     return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
-
                 let customer_new_mess = {};
                 if (customer_new.length > 0) {
                     customer_new_mess = customer_new[0];
-                    customer_new_mess.unread_count = customer_new[0].unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
-                } else {
+                    customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
+                }
+                else {
+                    let token = this.arr_page_id.filter(f=> {return f.id == page_id});
+                    let access_token = token[0].token;
+
                     let fields = 'id,created_time,message,thread_id,attachments,from';
-                    let url = `https://graph.facebook.com/v10.0/${mid}/?fields=${fields}&access_token=${this.access_token}`;
-                    axios.get(url).then(response => {
-                        customer_new_mess.id = response.thread_id;
+                    let url = `https://graph.facebook.com/v13.0/${mid}/?fields=${fields}&access_token=${access_token}`;
+                    await axios.get(url).then(response => {
+                        let page=this.arr_page_id.filter(f=>{return f.id == page_id});
+                        customer_new_mess.id = response.data.thread_id;
                         customer_new_mess.participants = {
                             data: [
                                 {
                                     id: sender_id,
-                                    name: response.from.name,
+                                    name: response.data.from.name,
                                 },
                                 {
-                                    id: page_id
+                                    id: page_id,
+                                    name: page[0].name
                                 }
                             ]
                         }
                     })
                     customer_new_mess.unread_count = unread_count;
+                    customer_new_mess.access_token = access_token;
                 }
                 customer_new_mess.updated_time = created_time;
-                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
+                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name +" đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
 
-                let new_arr = this.navChatDefault.filter(f => {
-                    return (f.participants.data[0].id != sender_id && f.participants.data[1].id == page_id);
-                });
-                new_arr.unshift(customer_new_mess);
-                this.navChatDefault = new_arr;
-                this.navChat = new_arr;
+                let index = this.navChatDefault.findIndex(f=> {
+                    return (f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id);
+                })
+
+                if (index > -1) {
+                    this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                }
+
+                this.navChatDefault.unshift(customer_new_mess);
+                this.navChat = this.navChatDefault;
             },
 
             selectElement(item) {
@@ -576,11 +600,9 @@
                 // console.log(55555,this.data_images_upload_server,this.data_images_upload_server_default);
                 // this.data_images_upload_server = this.data_images_upload_server_default;
                 this.data_images_upload_server = fileList;
-                console.log(13234,fileList);
             },
             beforeRemove(index, done, fileList) {
                 var r = confirm("remove image")
-                console.log(123123,fileList,fileList.length);
                 if (r == true) {
                     if (fileList.length>1){
                         fileList.forEach(f=>{

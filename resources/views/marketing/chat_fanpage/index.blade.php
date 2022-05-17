@@ -117,12 +117,11 @@
                 let page_name = $(this).data('name');
                 if(checked){
                     if(arr_page.length > 0){
-                        console.log(789);
                         const index = arr_page.findIndex(f => f.id === page_id);
                         if(index > -1){
-                            let checked = $('#' + page_id).is(":checked");
+                            let checked = $('.' + page_id).is(":checked");
                             if(!checked){
-                                $('#' + page_id).prop('checked', true);
+                                $('.' + page_id).prop('checked', true);
                             }
                         } else {
                             let data = {
@@ -153,9 +152,10 @@
                     arr_page.forEach(f=>{
                         html+=`
                         <div class="col-6 item">
-                             <label> <input type="checkbox" id="`+f.id+`" checked getDataItem value="`+f.id+`" data-name="`+f.name+`" data-token="`+f.token+`"> &nbsp;`+f.name+`</label>
+                             <label> <input type="checkbox" class="`+f.id+`" checked getDataItem value="`+f.id+`" data-name="`+f.name+`" data-token="`+f.token+`"> &nbsp;`+f.name+`</label>
                         </div>
                     `
+                        $('.' + f.id).prop('checked', true);
                     })
                 }
                 $(".listFanpageCheck").html(html);
