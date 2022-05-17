@@ -24,7 +24,7 @@
     <div class="card">
         <form action="{{url()->current()}}" method="get" id="gridForm">
             <div class="card-header fix-header bottom-card add-paginate">
-                <div class="row" style="align-items: baseline">
+                <div class="row" style="width: 100%">
                     <h4 class="col-lg-2">2.10 Chat Fanpage</h4>
                     <div class="col-lg-2 col-md-6">
                         <select name="mkt_id" id="" class="select2"
@@ -49,7 +49,7 @@
                                    placeholder="Tên fanpage">
                         </div>
                     </div>
-                    <button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm
+                    <button class="btn btn-primary searchData" style="height: 38px;"><i class="fa fa-search"></i> Tìm kiếm
                     </button>
                 </div>
                 <div class="heading-elements">
