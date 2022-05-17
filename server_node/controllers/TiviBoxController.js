@@ -238,3 +238,8 @@ exports.UpdateTimeOrderOff = (socket_id, io) => {
     })
 
 };
+
+exports.sendSocketMessages = (message, io) => {
+    //     socket.removeAllListeners();
+    io.emit(message.recipient.id, message);
+};

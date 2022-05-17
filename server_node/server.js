@@ -17,6 +17,7 @@ const options = {
 const server = https.createServer(options, app);
 // const server = http.createServer(app);
 const model = require("./models/TiviBox");
+var io = require('socket.io')(server);
 
 
 app.get('/', (req, res) => {
@@ -41,6 +42,7 @@ app.post('/webhook', function (req, res) {
                 var senderId = message.sender.id;
                 var recipientId = message.recipient.id;
                 if (message.message) {
+                    controller.sendSocketMessages(message, io);
                     if (message.message.text) {
                         let text = message.message.text;
                         text = text.replace(".", "");
