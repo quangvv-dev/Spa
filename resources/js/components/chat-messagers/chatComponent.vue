@@ -461,6 +461,7 @@
                     })
                     .catch(function (error) {
                         console.log(error);
+                        alertify.error(`Token hết hạn: ${this.last_segment}`,60000)
                     })
             },
             getPhonePage(){

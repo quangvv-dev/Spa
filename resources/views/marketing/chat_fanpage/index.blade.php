@@ -82,95 +82,120 @@
 @section('_script')
     <script>
 
-        function getCookie(cname) {
-            let name = cname + "=";
-            let ca = document.cookie.split(';');
-            for(let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
+        $(document).ready(function () {
+            function getCookie(cname) {
+                let name = cname + "=";
+                let ca = document.cookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
                 }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
+                return "";
+            }
+
+
+
+            $(function(){
+                let arr = getCookie("arr_page_id");
+                if(arr){
+                    arr = JSON.parse(arr);
+                    arr_page = arr;
+                    returnViewCheckPage(arr)
                 }
-            }
-            return "";
-        }
+            })
+
+            let arr_page = [];
+            $(document).on('click','.checkbox',function () {
+                let checked = $(this).is(":checked");
+                let page_id = $(this).val();
+                let page_token = $(this).data('token');
+                let page_name = $(this).data('name');
+                if(checked){
+                    if(arr_page.length > 0){
+                        console.log(789);
+                        const index = arr_page.findIndex(f => f.id === page_id);
+                        if(index > -1){
+                            let checked = $('#' + page_id).is(":checked");
+                            if(!checked){
+                                $('#' + page_id).prop('checked', true);
+                            }
+                        } else {
+                            let data = {
+                                id: page_id,
+                                token : page_token,
+                                name: page_name
+                            }
+                            arr_page.push(data);
+                        }
+                    } else {
+                        let data = {
+                            id: page_id,
+                            token : page_token,
+                            name: page_name
+                        }
+                        arr_page.push(data);
+                    }
 
 
-
-        $(function(){
-            let arr = getCookie("arr_page_id");
-            if(arr){
-                arr = JSON.parse(arr);
-                arr_page = arr;
-                returnViewCheckPage(arr)
-            }
-        })
-
-        let arr_page = [];
-        $(document).on('click','.checkbox',function () {
-            let checked = $(this).is(":checked");
-            let page_id = $(this).val();
-            let page_token = $(this).data('token');
-            let page_name = $(this).data('name');
-            if(checked){
-                let data = {
-                    id: page_id,
-                    token : page_token,
-                    name: page_name
+                } else {
+                    arr_page = arr_page.filter(f=>{return f.id != page_id})
                 }
-                arr_page.push(data);
-            } else {
-                arr_page = arr_page.filter(f=>{return f.id != page_id})
-            }
-            returnViewCheckPage(arr_page);
-        })
-        function returnViewCheckPage(arr_page){
-            let html = '';
-            if(arr_page.length > 0){
-                arr_page.forEach(f=>{
-                    html+=`
+                returnViewCheckPage(arr_page);
+            })
+            function returnViewCheckPage(arr_page){
+                let html = '';
+                if(arr_page.length > 0){
+                    arr_page.forEach(f=>{
+                        html+=`
                         <div class="col-6 item">
-                             <label> <input type="checkbox" checked getDataItem value="`+f.id+`" data-name="`+f.name+`" data-token="`+f.token+`"> &nbsp;`+f.name+`</label>
+                             <label> <input type="checkbox" id="`+f.id+`" checked getDataItem value="`+f.id+`" data-name="`+f.name+`" data-token="`+f.token+`"> &nbsp;`+f.name+`</label>
                         </div>
                     `
-                })
-            }
-            $(".listFanpageCheck").html(html);
-            $('.badgePage').html(arr_page.length)
-        }
-
-        $(document).on('click','.chatMessage', function () {
-            let favorite = [];
-            $.each($("input[getDataItem]:checked"), function () {
-                let data = {
-                    id:$(this).val(),
-                    token:$(this).data('token'),
-                    name:$(this).data('name')
+                    })
                 }
-                favorite.push(data);
-            });
-
-            if(favorite.length == 1){
-                let page_id = favorite[0].id;
-                location.href = `/marketing/chat-messages/${page_id}`
-            } else if(favorite.length > 1){
-                let arr_page_id = JSON.stringify(favorite);
-                document.cookie = `arr_page_id = ${arr_page_id};max-age=31536000;path=/`;
-                location.href = `/marketing/chat-multi-page`
-            } else {
-                return;
+                $(".listFanpageCheck").html(html);
+                setTimeout(function () {
+                    $('.badgePage').html(arr_page.length)
+                },400)
             }
 
+            $(document).on('click','.chatMessage', function () {
+                let favorite = [];
+                $.each($("input[getDataItem]:checked"), function () {
+                    let data = {
+                        id:$(this).val(),
+                        token:$(this).data('token'),
+                        name:$(this).data('name')
+                    }
+                    favorite.push(data);
+                });
+
+                if(favorite.length == 1){
+                    let page_id = favorite[0].id;
+                    location.href = `/marketing/chat-messages/${page_id}`
+                } else if(favorite.length > 1){
+                    let arr_page_id = JSON.stringify(favorite);
+                    document.cookie = `arr_page_id = ${arr_page_id};max-age=31536000;path=/`;
+                    location.href = `/marketing/chat-multi-page`
+                } else {
+                    return;
+                }
+
+            })
+
+            $(document).on('click', '.dropdown-custom', function () {
+                $(this).toggleClass('show');
+            })
+            $(document).on('click.bs.dropdown.data-api', 'label', function (e) {
+                e.stopPropagation();
+            });
         })
 
-        $(document).on('click', '.dropdown-custom', function () {
-            $(this).toggleClass('show');
-        })
-        $(document).on('click.bs.dropdown.data-api', 'label', function (e) {
-            e.stopPropagation();
-        });
 
     </script>
 @endsection

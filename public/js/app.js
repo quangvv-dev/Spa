@@ -2437,6 +2437,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         });
       })["catch"](function (error) {
         console.log(error);
+        alertify.error("Token h\u1EBFt h\u1EA1n: ".concat(this.last_segment), 60000);
       });
     },
     getPhonePage: function getPhonePage() {
