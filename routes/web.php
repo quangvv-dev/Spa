@@ -227,6 +227,24 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('leader', 'MarketingController@index');
         Route::get('dashboard', 'MarketingController@show')->name('dashboard');
         Route::get('ranking', 'MarketingController@ranking');
+
+        //Chat
+        Route::get('chat-messages', 'ChatController@chatFanpage')->name('chat-messages');
+        Route::get('chat-messages/{page_id}', 'ChatController@index');
+        Route::get('chat-multi-page', 'ChatController@chatMultiPage')->name('chat-multi-page');
+        Route::get('get-token-fanpage/{id}', 'ChatController@getFanpageToken');
+        Route::get('get-phone-page', 'ChatController@getPhonePage');
+
+        Route::resource('setting-quick-reply','SettingChatController');
+        Route::get('setting-quick-reply/{page_id}/create', 'SettingChatController@create');
+        Route::post('setting-quick-reply/{page_id}/create', 'SettingChatController@insertSettingChat');
+        Route::post('setting-quick-reply/sync/{page_id}', 'SettingChatController@syncQuick');
+        Route::put('setting-quick-reply/{page_id}/setting/{id}', 'SettingChatController@updateSettingChat');
+        Route::post('setting-quick-reply/test','SettingChatController@test');
+        Route::post('setting-quick-reply/delete-image','SettingChatController@deleteImage');
+        Route::post('setting-quick-reply/import/{page_id}','SettingChatController@importExcel');
+        Route::get('get-quick-reply/{page_id}', 'SettingChatController@getQuickReply');
+
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');
