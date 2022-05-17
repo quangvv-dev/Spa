@@ -289,6 +289,61 @@ class Functions
         }
     }
 
+    public static function checkUploadImage1($request, $doc, $path)
+    {
+        $khac = [];
+        @$khop = array_intersect($doc->images, !empty($request->image) ? $request->image : []);
+        $khop = empty($khop) ? [] : $khop;
+        if (!empty($doc->images)) {
+            foreach ($doc->images as $k => $v) {
+                if (!in_array($v, $khop)) {
+                    $khac[] = $v;
+                }
+            }
+        }
+//        dd($khac,$khop);
+
+        //trường hợp xóa ảnh và upload thêm ảnh mới
+        if (!$khac == [] && $request->hasFile('input24')) {
+            $imgs = [];
+            foreach ($khac as $k => $v) {
+                self::unlinkUpload2('uploads/'.$path.'/'.$v);
+            }
+
+            if (count($request->input24)) {
+                foreach (@$request->input24 as $k => $v) {
+                    $img = self::uploadImage($v, $path);
+                    $imgs[] = $img;
+                }
+            }
+            @$imgs = array_merge($khop, $imgs);
+            $imgs2 = [];
+            foreach ($imgs as $k1 => $v) {
+                $imgs2[] = $v;
+            }
+            return $request->merge(['images' => @json_encode($imgs2)]);
+        } elseif (!$khac == [] && !$request->hasFile('input24')) { //trường hợp chỉ xóa ảnh
+            foreach ($khac as $k => $v) {
+                self::unlinkUpload2('uploads/'.$path.'/'.$v);
+            }
+            $imgs = [];
+            foreach (@$khop as $k => $v) {
+                $imgs[] = $v;
+            }
+            return $request->merge(['images' => json_encode($imgs)]);
+        } elseif ($khac == [] && $request->hasFile('input24')) { //trường hợp chỉ upload thêm ảnh
+            $imgs = [];
+            if (count($request->input24)) {
+                foreach (@$request->input24 as $k => $v) {
+                    $img = self::uploadImage($v, $path);
+                    $imgs[] = $img;
+                }
+            }
+            $imgs = array_merge($khop, $imgs);
+            $request->merge(['images' => json_encode($imgs)]);
+        }
+    }
+
     public static function dayMonthYear($date)
     {
         return \Carbon\Carbon::parse($date)->format('d-m-Y');

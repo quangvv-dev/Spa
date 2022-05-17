@@ -2147,13 +2147,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
+ // var host = 'https://crm.santa.name.vn:2022/';
 
-var host = 'https://thuongmai.adamtech.vn:2022/';
-var port = 2022; // var host = 'https://' + location.host + ':'+port;
-
+var port = 2022;
+var host = 'https://' + location.host + ':' + port;
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2174,6 +2179,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       chat_current_name: '',
       dataQuickReply: [],
       images: [],
+      data_images_upload_server_default: [],
       data_images_upload_server: []
     };
   },
@@ -2313,12 +2319,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var rq, html, data_image_response;
+        var rq, html, data_image_response, data_delete;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v10.0/me/messages?access_token=".concat(_this4.access_token), {
+                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
                   // "messaging_type": "MESSAGE_TAG",
                   // "tag": "HUMAN_AGENT",
                   "messaging_type": "RESPONSE",
@@ -2366,7 +2372,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                                     "type": "image",
                                     "payload": {
                                       "is_reusable": true,
-                                      "url": location.origin + '/' + f
+                                      "url": location.origin + '/' + f.name
                                     }
                                   }
                                 }
@@ -2377,7 +2383,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                                   from: {
                                     id: _this4.last_segment
                                   },
-                                  url: location.origin + '/' + f
+                                  url: location.origin + '/' + f.name
                                 };
 
                                 _this4.detailMessage.push(html);
@@ -2394,8 +2400,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                     return function (_x) {
                       return _ref.apply(this, arguments);
                     };
-                  }());
-                  axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/delete-image', data_image_response).then(function (response) {
+                  }()); //xoá ảnh sau khi sendMessage
+
+                  data_delete = data_image_response.filter(function (f) {
+                    return f.delete_image_server == 1;
+                  });
+                  axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/delete-image', data_delete).then(function (response) {
                     _this4.images = [];
                   });
                 }
@@ -2514,24 +2524,56 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.navChat = new_arr;
     },
     selectElement: function selectElement(item) {
-      this.contentMesage = item.message;
-    },
-    getListQuickReply: function getListQuickReply() {
       var _this8 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/api/get-quick-reply/".concat(this.last_segment)).then(function (response) {
+      this.data_images_upload_server = this.data_images_upload_server_default = [];
+      this.images = [];
+      this.contentMesage = item.message;
+
+      if (item.images && item.images.length > 0) {
+        item.images.forEach(function (f) {
+          var data = {
+            'default': 1,
+            'highlight': 1,
+            'name': f,
+            'path': ''
+          };
+
+          _this8.data_images_upload_server.push(data);
+        });
+        this.data_images_upload_server_default = this.data_images_upload_server;
+      }
+    },
+    getListQuickReply: function getListQuickReply() {
+      var _this9 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this8.dataQuickReply = response.data.data;
+          _this9.dataQuickReply = response.data.data;
         }
       });
     },
     uploadImageSuccess: function uploadImageSuccess(formData, index, fileList) {
+      // console.log(55555,this.data_images_upload_server,this.data_images_upload_server_default);
+      // this.data_images_upload_server = this.data_images_upload_server_default;
       this.data_images_upload_server = fileList;
+      console.log(13234, fileList);
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
+      var _this10 = this;
+
       var r = confirm("remove image");
+      console.log(123123, fileList, fileList.length);
 
       if (r == true) {
+        if (fileList.length > 1) {
+          fileList.forEach(function (f) {
+            _this10.data_images_upload_server = _this10.data_images_upload_server.filter(function (ft) {
+              return ft.name != f.name;
+            });
+          });
+        }
+
         done();
       } else {}
     },
@@ -2541,6 +2583,10 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       $('#add_new_form').modal({
         show: true
       });
+    },
+    clearImage: function clearImage() {
+      this.data_images_upload_server = [];
+      this.images = [];
     }
   }
 });
@@ -2789,13 +2835,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
+ // var host = 'https://crm.santa.name.vn:2022/';
 
-var host = 'https://thuongmai.adamtech.vn:2022/';
-var port = 2022; // var host = 'https://' + location.host + ':'+port;
-
+var port = 2022;
+var host = 'https://' + location.host + ':' + port;
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2817,6 +2870,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       dataQuickReply: [],
       images: [],
       data_images_upload_server: [],
+      data_images_upload_server_default: [],
       chat_current_name: '',
       chat_current_page: ''
     };
@@ -2863,6 +2917,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
   mounted: function mounted() {
     var _this2 = this;
 
+    console.log(33333, this.arr_page_id);
     this.arr_page_id.forEach(function (item) {
       socket.on(item.id, function (server) {
         var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
@@ -3068,7 +3123,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 arr = [];
 
                 if (!arr_page_id) {
-                  _context4.next = 21;
+                  _context4.next = 22;
                   break;
                 }
 
@@ -3086,7 +3141,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                           item = _step.value;
                           access_token = item.token;
                           fields = 'updated_time,name,id,participants,snippet';
-                          url = 'https://graph.facebook.com/v10.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
+                          url = 'https://graph.facebook.com/v13.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
                           _context3.prev = 4;
                           _context3.next = 7;
                           return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url);
@@ -3153,8 +3208,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
               case 20:
                 _this5.arr_page_id = arr_page_id;
+                console.log(5555, _this5.arr_page_id);
 
-              case 21:
+              case 22:
                 arr = arr.filter(function (f) {
                   return f.participants.data[0].id != '3873174272720720';
                 });
@@ -3163,7 +3219,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this5.getPhonePage();
 
-              case 25:
+              case 26:
               case "end":
                 return _context4.stop();
             }
@@ -3177,7 +3233,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var arr_page = this.arr_page_id.map(function (m) {
         return m.id;
       });
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/get-phone-page', {
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-phone-page', {
         params: {
           arr_page: arr_page
         }
@@ -3299,7 +3355,11 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       } else {}
     },
     editImage: function editImage(formData, index, fileList) {},
-    dataChange: function dataChange() {}
+    dataChange: function dataChange() {},
+    clearImage: function clearImage() {
+      this.data_images_upload_server = [];
+      this.images = [];
+    }
   }
 });
 
@@ -10201,7 +10261,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.chat-application .avatar img[data-v-44c61114] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-44c61114] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-44c61114] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-44c61114] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-44c61114] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-44c61114] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-44c61114] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-44c61114] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-44c61114] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-44c61114]{\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-44c61114]{\n    height:calc(100% - 139px);\n}\n.ant-popover-inner-content[data-v-44c61114]{\n    overflow-y:scroll ;\n}\nbody[data-v-44c61114]{\n    overflow: hidden !important;\n}\n\n", ""]);
+exports.push([module.i, "\n.chat-application .avatar img[data-v-44c61114] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-44c61114] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-44c61114] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-44c61114] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-44c61114] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-44c61114] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-44c61114] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-44c61114] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-44c61114] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-44c61114]{\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-44c61114]{\n    height:calc(100% - 139px);\n}\n.ant-popover-inner-content[data-v-44c61114]{\n    overflow-y:scroll ;\n}\nbody[data-v-44c61114]{\n    overflow: hidden !important;\n}\n.openForm[data-v-44c61114]{\n    position: relative;\n    font-size:20px;\n    margin-right: 10px;\n}\n.openPopover[data-v-44c61114]{\n    font-size:20px;\n}\n.openForm .badge[data-v-44c61114]{\n    position: absolute;\n    font-size: 10px;\n    top: -7px;\n    right: -7px;\n}\n.openForm .badge:hover .ngonngay[data-v-44c61114] {\n    display: none;\n}\n.openForm .badge:hover .ngonngay1[data-v-44c61114] {\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay[data-v-44c61114]{\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay1[data-v-44c61114]{\n    display: none !important;\n}\n.openForm .badge span[data-v-44c61114] {\n    position: relative;\n    bottom: 2px;\n    padding: 0 2px;\n}\n\n", ""]);
 
 // exports
 
@@ -10220,7 +10280,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.chat-application .avatar img[data-v-05cea16e] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-05cea16e] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-05cea16e] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-05cea16e] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-05cea16e] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-05cea16e] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-05cea16e] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-05cea16e] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-05cea16e] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-05cea16e]{\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-05cea16e]{\n    height:calc(100% - 139px);\n}\n.ant-popover-inner-content[data-v-05cea16e]{\n    overflow-y:scroll ;\n}\nhtml body[data-v-05cea16e]{\n    overflow: hidden;\n}\n\n", ""]);
+exports.push([module.i, "\n.chat-application .avatar img[data-v-05cea16e] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-05cea16e] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-05cea16e] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-05cea16e] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-05cea16e] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-05cea16e] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-05cea16e] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-05cea16e] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-05cea16e] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-05cea16e]{\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-05cea16e]{\n    height:calc(100% - 139px);\n}\n.ant-popover-inner-content[data-v-05cea16e]{\n    overflow-y:scroll ;\n}\nbody[data-v-05cea16e]{\n    overflow: hidden !important;\n}\n.openForm[data-v-05cea16e]{\n    position: relative;\n    font-size:20px;\n    margin-right: 10px;\n}\n.openPopover[data-v-05cea16e]{\n    font-size:20px;\n}\n.openForm .badge[data-v-05cea16e]{\n    position: absolute;\n    font-size: 10px;\n    top: -7px;\n    right: -7px;\n}\n.openForm .badge:hover .ngonngay[data-v-05cea16e] {\n    display: none;\n}\n.openForm .badge:hover .ngonngay1[data-v-05cea16e] {\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay[data-v-05cea16e]{\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay1[data-v-05cea16e]{\n    display: none !important;\n}\n.openForm .badge span[data-v-05cea16e] {\n    position: relative;\n    bottom: 2px;\n    padding: 0 2px;\n}\n\n", ""]);
 
 // exports
 
@@ -81417,11 +81477,7 @@ var render = function() {
                                       width: "86px"
                                     }
                                   },
-                                  [
-                                    _vm._v(
-                                      "Ký tự\n                                                tắt\n                                            "
-                                    )
-                                  ]
+                                  [_vm._v("Ký tự tắt")]
                                 ),
                                 _vm._v(" "),
                                 _c("div", {
@@ -81514,6 +81570,7 @@ var render = function() {
                     "div",
                     {
                       staticClass: "modal-dialog modal-lg",
+                      staticStyle: { "max-width": "90%" },
                       attrs: { role: "document" }
                     },
                     [
@@ -81536,6 +81593,7 @@ var render = function() {
                                   dataImages: _vm.images,
                                   idUpload: "myIdUpload",
                                   editUpload: "myIdEdit",
+                                  showEdit: false,
                                   multiple: true
                                 },
                                 on: {
@@ -81617,14 +81675,36 @@ var render = function() {
                         "form-control-position control-position-right"
                     },
                     [
-                      _c("i", {
-                        staticClass: "fa fa-file-image",
-                        on: {
-                          click: function($event) {
-                            return _vm.openForm()
+                      _c("span", { staticClass: "openForm" }, [
+                        _c("i", {
+                          staticClass: "fa fa-file-image",
+                          on: {
+                            click: function($event) {
+                              return _vm.openForm()
+                            }
                           }
-                        }
-                      }),
+                        }),
+                        _vm._v(" "),
+                        _vm.data_images_upload_server.length > 0
+                          ? _c("span", { staticClass: "badge badge-success" }, [
+                              _c("span", { staticClass: "ngonngay" }, [
+                                _vm._v(
+                                  _vm._s(_vm.data_images_upload_server.length)
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "span",
+                                {
+                                  staticClass: "ngonngay1",
+                                  staticStyle: { display: "none" },
+                                  on: { click: _vm.clearImage }
+                                },
+                                [_vm._v("x")]
+                              )
+                            ])
+                          : _vm._e()
+                      ]),
                       _vm._v(" "),
                       _c("i", {
                         directives: [
@@ -81636,7 +81716,7 @@ var render = function() {
                             modifiers: { top: true }
                           }
                         ],
-                        staticClass: "fa fa-mail-bulk"
+                        staticClass: "fa fa-mail-bulk openPopover"
                       })
                     ]
                   )
@@ -82266,6 +82346,7 @@ var render = function() {
                     "div",
                     {
                       staticClass: "modal-dialog modal-xl",
+                      staticStyle: { "max-width": "90%" },
                       attrs: { role: "document" }
                     },
                     [
@@ -82288,6 +82369,7 @@ var render = function() {
                                   dataImages: _vm.images,
                                   idUpload: "myIdUpload",
                                   editUpload: "myIdEdit",
+                                  showEdit: false,
                                   multiple: true
                                 },
                                 on: {
@@ -82370,14 +82452,42 @@ var render = function() {
                             "form-control-position control-position-right"
                         },
                         [
-                          _c("i", {
-                            staticClass: "ft-image",
-                            on: {
-                              click: function($event) {
-                                return _vm.openForm()
+                          _c("span", { staticClass: "openForm" }, [
+                            _c("i", {
+                              staticClass: "fa fa-file-image",
+                              on: {
+                                click: function($event) {
+                                  return _vm.openForm()
+                                }
                               }
-                            }
-                          }),
+                            }),
+                            _vm._v(" "),
+                            _vm.data_images_upload_server.length > 0
+                              ? _c(
+                                  "span",
+                                  { staticClass: "badge badge-success" },
+                                  [
+                                    _c("span", { staticClass: "ngonngay" }, [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.data_images_upload_server.length
+                                        )
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass: "ngonngay1",
+                                        staticStyle: { display: "none" },
+                                        on: { click: _vm.clearImage }
+                                      },
+                                      [_vm._v("x")]
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]),
                           _vm._v(" "),
                           _c("i", {
                             directives: [
@@ -82389,7 +82499,7 @@ var render = function() {
                                 modifiers: { top: true }
                               }
                             ],
-                            staticClass: "ft ft-mail"
+                            staticClass: "fa fa-mail-bulk openPopover"
                           })
                         ]
                       )

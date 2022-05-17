@@ -1,9 +1,14 @@
 @extends('layout.app')
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/app.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/chat-application.css')}}">
+<style>
+    body{
+        overflow: hidden !important;
+    }
+</style>
 @section('content')
-    <div class="" id="vue-component">
+    <div  id="vue-component" class="chat-application">
         <chat-multi-component></chat-multi-component>
-    </div>
     </div>
 @endsection
 @section('vuejs')

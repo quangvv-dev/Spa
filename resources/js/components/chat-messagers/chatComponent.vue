@@ -129,9 +129,7 @@
                                         <ul class="list-group">
                                             <li class="list-group-item d-flex align-items-center list-group-item-dark">
                                                 <div class="tbl-space" style="width: 38px;"></div>
-                                                <div class="tbl-qr-desc" style="display: block; width: 86px;">Ký tự
-                                                    tắt
-                                                </div>
+                                                <div class="tbl-qr-desc" style="display: block; width: 86px;">Ký tự tắt</div>
                                                 <div class="tbl-space" style="width: 62px;"></div>
                                                 <div class="tbl-qr-desc">Tin nhắn</div>
                                                 <div class=""></div>
@@ -156,7 +154,7 @@
                         <div class="modal fade text-left" id="add_new_form" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel35"
                              style="display: none;" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-dialog modal-lg" role="document" style="max-width: 90%">
                                 <div class="modal-content" style="min-height: 550px;">
                                     <div class="upload-multiple-image" style="margin: 0 auto;">
                                         <vue-upload-multiple-image
@@ -167,6 +165,7 @@
                                             :dataImages="images"
                                             idUpload="myIdUpload"
                                             editUpload="myIdEdit"
+                                            :showEdit=false
                                             :multiple=true
                                         ></vue-upload-multiple-image>
                                     </div>
@@ -185,8 +184,14 @@
                                        v-model="contentMesage">
                                 <div class="form-control-position control-position-right">
                                     <!--<i class="ft-image" v-popover.top="{ name: 'images'}"></i>-->
-                                    <i class="fa fa-file-image" @click="openForm()"></i>
-                                    <i class="fa fa-mail-bulk" v-popover.top="{ name: 'foo'}"></i>
+                                    <span class="openForm">
+                                        <i class="fa fa-file-image" @click="openForm()"></i>
+                                        <span class="badge badge-success" v-if="data_images_upload_server.length >0">
+                                            <span class="ngonngay">{{data_images_upload_server.length}}</span>
+                                            <span class="ngonngay1" @click="clearImage" style="display: none">x</span>
+                                        </span>
+                                    </span>
+                                    <i class="fa fa-mail-bulk openPopover" v-popover.top="{ name: 'foo'}"></i>
                                 </div>
 
 
@@ -213,9 +218,9 @@
     import io from 'socket.io-client';
     import moment from 'moment';
 
-    var host = 'https://thuongmai.adamtech.vn:2022/';
+    // var host = 'https://crm.santa.name.vn:2022/';
     var port = 2022;
-    // var host = 'https://' + location.host + ':'+port;
+    var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -236,6 +241,7 @@
                 chat_current_name: '',
                 dataQuickReply: [],
                 images: [],
+                data_images_upload_server_default: [],
                 data_images_upload_server: []
             }
         },
@@ -367,7 +373,7 @@
             },
 
             async sendMessage(model) {
-                let rq = axios.post(`https://graph.facebook.com/v10.0/me/messages?access_token=${this.access_token}`, {
+                let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                     // "messaging_type": "MESSAGE_TAG",
                     // "tag": "HUMAN_AGENT",
                     "messaging_type": "RESPONSE",
@@ -394,6 +400,7 @@
                     // this.detailMessage = response.data.messages.data.reverse();
                     data_image_response = response.data;
                 });
+
                 if (data_image_response.length > 0) {
                     data_image_response.forEach(async f => {
                         await axios.post(`https://graph.facebook.com/v10.0/me/messages?access_token=${this.access_token}`, {
@@ -407,7 +414,7 @@
                                     "type": "image",
                                     "payload": {
                                         "is_reusable": true,
-                                        "url": location.origin + '/' + f
+                                        "url": location.origin + '/' + f.name
                                     }
                                 }
                             }
@@ -418,14 +425,18 @@
                                 from: {
                                     id: this.last_segment,
                                 },
-                                url: location.origin + '/' + f
+                                url: location.origin + '/' + f.name
                             }
                             this.detailMessage.push(html);
                         })
 
                     })
 
-                    axios.post('/marketing/setting-quick-reply/delete-image', data_image_response).then(response => {
+                    //xoá ảnh sau khi sendMessage
+                    let data_delete = data_image_response.filter(f=>{
+                        return f.delete_image_server == 1;
+                    });
+                    axios.post('/marketing/setting-quick-reply/delete-image', data_delete).then(response => {
                         this.images = [];
                     })
                 }
@@ -536,10 +547,24 @@
             },
 
             selectElement(item) {
+                this.data_images_upload_server = this.data_images_upload_server_default = [];
+                this.images = [];
                 this.contentMesage = item.message;
+                if(item.images && item.images.length>0){
+                    item.images.forEach(f=>{
+                       let data = {
+                           'default':1,
+                           'highlight': 1,
+                           'name':f,
+                           'path':''
+                       }
+                       this.data_images_upload_server.push(data);
+                    });
+                    this.data_images_upload_server_default = this.data_images_upload_server;
+                }
             },
             getListQuickReply() {
-                axios.get(`/api/get-quick-reply/${this.last_segment}`).then(response => {
+                axios.get(`/marketing/get-quick-reply/${this.last_segment}`).then(response => {
                     if (response.data) {
                         this.dataQuickReply = response.data.data;
                     }
@@ -547,23 +572,36 @@
             },
 
             uploadImageSuccess(formData, index, fileList) {
+                // console.log(55555,this.data_images_upload_server,this.data_images_upload_server_default);
+                // this.data_images_upload_server = this.data_images_upload_server_default;
                 this.data_images_upload_server = fileList;
+                console.log(13234,fileList);
             },
             beforeRemove(index, done, fileList) {
                 var r = confirm("remove image")
+                console.log(123123,fileList,fileList.length);
                 if (r == true) {
+                    if (fileList.length>1){
+                        fileList.forEach(f=>{
+                            this.data_images_upload_server = this.data_images_upload_server.filter(ft=>{
+                                return ft.name != f.name;
+                            })
+                        })
+                    }
                     done()
                 } else {
                 }
             },
             editImage(formData, index, fileList) {
-
             },
             dataChange() {
-
             },
             openForm() {
                 $('#add_new_form').modal({show: true})
+            },
+            clearImage(){
+                this.data_images_upload_server = [];
+                this.images = [];
             }
         }
     }
@@ -645,6 +683,40 @@
     }
     body{
         overflow: hidden !important;
+    }
+
+    .openForm{
+        position: relative;
+        font-size:20px;
+        margin-right: 10px;
+    }
+    .openPopover{
+        font-size:20px;
+    }
+    .openForm .badge{
+        position: absolute;
+        font-size: 10px;
+        top: -7px;
+        right: -7px;
+    }
+    .openForm .badge:hover .ngonngay {
+        display: none;
+    }
+    .openForm .badge:hover .ngonngay1 {
+        display: block !important;
+    }
+
+    .openForm .badge:not(:hover) .ngonngay{
+        display: block !important;
+    }
+    .openForm .badge:not(:hover) .ngonngay1{
+        display: none !important;
+    }
+
+    .openForm .badge span {
+        position: relative;
+        bottom: 2px;
+        padding: 0 2px;
     }
 
 </style>

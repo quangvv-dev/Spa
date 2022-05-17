@@ -140,6 +140,7 @@
     right: 18px;
     top: 2px;
     cursor: pointer;
+    width: 77px;
 }
 
 .horizontal-layout.chat-application .app-content {

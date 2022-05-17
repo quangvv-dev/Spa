@@ -155,7 +155,7 @@
                         </popover>
                         <div class="modal fade text-left" id="add_new_form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel35"
                              style="display: none;" aria-hidden="true">
-                            <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-dialog modal-xl" role="document" style="max-width: 90%">
                                 <div class="modal-content" style="min-height: 550px;">
                                     <div class="upload-multiple-image" style="margin: 0 auto;">
                                         <vue-upload-multiple-image
@@ -166,6 +166,7 @@
                                                 :dataImages="images"
                                                 idUpload="myIdUpload"
                                                 editUpload="myIdEdit"
+                                                :showEdit=false
                                                 :multiple=true
                                         ></vue-upload-multiple-image>
                                     </div>
@@ -186,8 +187,14 @@
                                        v-model="contentMesage">
                                 <div class="form-control-position control-position-right" v-if="this.last_segment">
                                     <!--<i class="ft-image" v-popover.top="{ name: 'images'}"></i>-->
-                                    <i class="ft-image" @click="openForm()"></i>
-                                    <i class="ft ft-mail" v-popover.top="{ name: 'foo'}"></i>
+                                    <span class="openForm">
+                                        <i class="fa fa-file-image" @click="openForm()"></i>
+                                        <span class="badge badge-success" v-if="data_images_upload_server.length >0">
+                                            <span class="ngonngay">{{data_images_upload_server.length}}</span>
+                                            <span class="ngonngay1" @click="clearImage" style="display: none">x</span>
+                                        </span>
+                                    </span>
+                                    <i class="fa fa-mail-bulk openPopover" v-popover.top="{ name: 'foo'}"></i>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group position-relative has-icon-left col-2 m-0">
@@ -209,9 +216,9 @@
     import io from 'socket.io-client';
     import moment from 'moment';
 
-    var host = 'https://thuongmai.adamtech.vn:2022/';
+    // var host = 'https://crm.santa.name.vn:2022/';
     var port = 2022;
-    // var host = 'https://' + location.host + ':'+port;
+    var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -234,6 +241,7 @@
                 dataQuickReply: [],
                 images:[],
                 data_images_upload_server:[],
+                data_images_upload_server_default:[],
                 chat_current_name : '',
                 chat_current_page : ''
             }
@@ -275,6 +283,7 @@
             }
         },
         mounted() {
+            console.log(33333,this.arr_page_id);
             this.arr_page_id.forEach(item=>{
                 socket.on(item.id, (server) => {
                     let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
@@ -442,7 +451,7 @@
                     for (const item of arr_page_id){
                         let access_token = item.token;
                         let fields = 'updated_time,name,id,participants,snippet';
-                        let url = 'https://graph.facebook.com/v10.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
+                        let url = 'https://graph.facebook.com/v13.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
 
                         try {
                             const res = await axios.get(url);
@@ -459,6 +468,7 @@
 
                     }
                     this.arr_page_id = arr_page_id;
+                    console.log(5555,this.arr_page_id);
                 }
                  arr = arr.filter(f => {
                      return f.participants.data[0].id != '3873174272720720';
@@ -470,7 +480,7 @@
 
             getPhonePage(){
                 let arr_page = this.arr_page_id.map(m=> m.id);
-                axios.get('/api/get-phone-page',{
+                axios.get('/marketing/get-phone-page',{
                     params:{
                         arr_page: arr_page
                     }
@@ -593,12 +603,17 @@
             dataChange (){
 
             },
+            clearImage(){
+                this.data_images_upload_server = [];
+                this.images = [];
+            }
 
         }
 
     }
 </script>
 <style scoped>
+
     .chat-application .avatar img {
         max-height: 50px !important;
     }
@@ -672,8 +687,42 @@
     .ant-popover-inner-content{
         overflow-y:scroll ;
     }
-    html body{
-        overflow: hidden;
+    body{
+        overflow: hidden !important;
+    }
+
+    .openForm{
+        position: relative;
+        font-size:20px;
+        margin-right: 10px;
+    }
+    .openPopover{
+        font-size:20px;
+    }
+    .openForm .badge{
+        position: absolute;
+        font-size: 10px;
+        top: -7px;
+        right: -7px;
+    }
+    .openForm .badge:hover .ngonngay {
+        display: none;
+    }
+    .openForm .badge:hover .ngonngay1 {
+        display: block !important;
+    }
+
+    .openForm .badge:not(:hover) .ngonngay{
+        display: block !important;
+    }
+    .openForm .badge:not(:hover) .ngonngay1{
+        display: none !important;
+    }
+
+    .openForm .badge span {
+        position: relative;
+        bottom: 2px;
+        padding: 0 2px;
     }
 
 </style>
