@@ -1,13 +1,10 @@
 @extends('layout.app')
 <script src="{{url('/go.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/micromodal/dist/micromodal.min.js"></script>
-<script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="{{asset('assets/js/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/js/daterangepicker.min.js')}}"></script>
 
 <style type="text/css">
     /* CSS for the traditional context menu */
