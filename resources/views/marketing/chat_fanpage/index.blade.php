@@ -39,6 +39,11 @@
             padding: 1px 8px;
             color: #1890ff;
         }
+        .body-multi{
+            overflow-x: hidden;
+            overflow-y: scroll;
+            height: 85vh;
+        }
     </style>
     <div class="card">
         <form action="{{url()->current()}}" method="get" id="gridForm">
@@ -84,7 +89,7 @@
             </div>
         </form>
         <div class="card-content collapse show">
-            <div class="card-body">
+            <div class="card-body body-multi">
                 <div class="row">
                     @include('marketing.chat_fanpage.ajax')
                     @include('marketing.chat_fanpage.modal_multi_page')
