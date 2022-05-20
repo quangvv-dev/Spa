@@ -20,6 +20,25 @@
             bottom: 0;
             left: 0;
         }
+        .delete-group{
+            position: absolute;
+            right: 6px;
+            font-size: 14px;
+        }
+        body{
+            overflow: hidden;
+        }
+        .multipage-selectedCount {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 12px;
+            background: #E6F7FF;
+            border: #E6F7FF;
+            border-radius: 4px;
+            padding: 1px 8px;
+            color: #1890ff;
+        }
     </style>
     <div class="card">
         <form action="{{url()->current()}}" method="get" id="gridForm">
@@ -56,13 +75,8 @@
                     <ul class="list-inline mb-0">
                         <li class="dropdown dropdown-custom nav-item">
                             <i style="font-size: 20px;cursor: pointer"
-                               class="dropdown-toggle nav-link fa fa-filter pointer"
+                               class="dropdown-toggle nav-link fa fa-filter pointer openModal"
                                aria-expanded="true"></i>
-                            <span class="badge badge-pill badge-default badge-danger badge-default badge-up badgePage">0</span>
-                            <div class="dropdown-menu-custom dropdown-menu dropdown-menu-right show"
-                                 style="padding: 10px">
-                                <div class="row listFanpageCheck"></div>
-                            </div>
                         </li>
                         <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
                     </ul>
@@ -72,64 +86,159 @@
         <div class="card-content collapse show">
             <div class="card-body">
                 <div class="row">
-                    <button class="btn btn-info chatMessage" style="margin: 10px">Chat ngay</button>
                     @include('marketing.chat_fanpage.ajax')
+                    @include('marketing.chat_fanpage.modal_multi_page')
                 </div>
             </div>
         </div>
     </div>
+    <input type="hidden" class="groupMulti" value="{{$group_multi}}">
+    <input type="hidden" class="arrPage" value="{{$fanpages}}">
 @endsection
 @section('_script')
     <script>
-
-        $(document).ready(function () {
-            function getCookie(cname) {
-                let name = cname + "=";
-                let ca = document.cookie.split(';');
-                for(let i = 0; i < ca.length; i++) {
-                    let c = ca[i];
-                    while (c.charAt(0) == ' ') {
-                        c = c.substring(1);
-                    }
-                    if (c.indexOf(name) == 0) {
-                        return c.substring(name.length, c.length);
+        let group_id = 0;
+        let arr_page = [];
+        let arr_curent_group = [];
+        $(function () {
+            let data = $('.groupMulti').val();
+            if(data){
+                data = JSON.parse(data);
+                if(data.length>0){
+                    let pages = data[0].page_ids;
+                    group_id = data[0].id;
+                    if(pages){
+                        pages = JSON.parse(pages);
+                        arr_curent_group = pages;
+                        if(pages.length>0){
+                            pages.forEach(f=>{
+                                $('.' + f).prop('checked', true)
+                            })
+                        }
+                        $('.multipage-selectedCount').html(pages.length);
                     }
                 }
-                return "";
             }
+        })
 
+        $(document).on('click','.openModal',function () {
 
+            $('#modalMultiPage').modal('show');
+        })
 
-            $(function(){
-                let arr = getCookie("arr_page_id");
-                if(arr){
-                    arr = JSON.parse(arr);
-                    arr_page = arr;
-                    returnViewCheckPage(arr)
+        $(document).on('click','.addTab',function () {
+            $.ajax({
+                url:'/marketing/add-group',
+                method:'post',
+                success:function (data) {
+                    if(data){
+                        let html = `
+                                <a class="nav-item nav-link group-name" data-name="Group new" data-id="`+ data.id +`" data-toggle="tab" role="tab" aria-selected="true">
+                                    Group new
+                                    <span class="delete-group" data-id="`+ data.id +`">x</span>
+                                </a>
+                               `
+                        $('.listTab').append(html);
+                    }
                 }
             })
 
-            let arr_page = [];
-            $(document).on('click','.checkbox',function () {
-                let checked = $(this).is(":checked");
-                let page_id = $(this).val();
-                let page_token = $(this).data('token');
-                let page_name = $(this).data('name');
-                if(checked){
-                    if(arr_page.length > 0){
-                        const index = arr_page.findIndex(f => f.id === page_id);
-                        if(index > -1){
-                            let checked = $('.' + page_id).is(":checked");
-                            if(!checked){
-                                $('.' + page_id).prop('checked', true);
-                            }
-                        } else {
-                            let data = {
-                                id: page_id,
-                                token : page_token,
-                                name: page_name
-                            }
-                            arr_page.push(data);
+        })
+
+        $(document).on('click', '.group-name', function (e) {
+            $('.checkPage').prop('checked', false);
+            group_id = $(this).data('id');
+            let data = $('.groupMulti').val();
+            if(data){
+                data = JSON.parse(data);
+                if(data.length>0){
+                    let pages = data.filter(f=>f.id == group_id);
+                    if(pages){
+                        pages = JSON.parse(pages[0].page_ids);
+                        arr_curent_group = pages;
+                        if(pages.length>0){
+                            pages.forEach(f=>{
+                                $('.' + f).prop('checked', true)
+                            })
+                        }
+                        $('.multipage-selectedCount').html(pages.length);
+                    }
+                }
+            }
+        });
+
+        $(document).on('dblclick', '.group-name', function (e) {
+            $(this).empty();
+            let name = $(this).data('name');
+            let id = $(this).data('id');
+            let html = '';
+            html += `<input data-id=` + id + ` class="group-name-result form-control" value="` + name + `" \> `;
+            $(this).html(html);
+        });
+
+        $(document).on('focusout', '.group-name-result', function (e) {
+            let name = $(this).val();
+            let id = $(this).data('id');
+            let el = $(this);
+            $(this).closest('a').data('name',name);
+            $.ajax({
+                url: "/marketing/update-group",
+                method: "put",
+                data: {
+                    id: id,
+                    name: name,
+                },
+                success: function (data) {
+                    console.log(234324,data);
+                    let html = `
+                            `+name+`
+                            <span class="delete-group" style="display: none" data-id="`+ id +`">x</span>
+                        `
+                    el.closest('a').html(html).attr('data-name',name).change();
+                }
+            })
+        });
+        $(document).on('click','.delete-group',function () {
+            let el = $(this);
+            swal({
+                title: 'Bạn có muốn xóa ?',
+                text: "Nếu bạn xóa tất cả các thông tin sẽ không thể khôi phục!",
+                type: "error",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    url: "/marketing/delete-group/"+el.data('id'),
+                    method: "delete",
+                    success: function (data) {
+                        el.closest('a').remove();
+                    }
+                })
+            })
+        })
+
+        $(".group-name").mouseover(function () {
+            $(this).find('.delete-group').show();
+        });
+        $(".group-name").mouseout(function () {
+            $(this).find('.delete-group').hide();
+        });
+
+
+        $(document).on('click','.checkPage',function () {
+            let checked = $(this).is(":checked");
+            let page_id = $(this).val();
+            let page_token = $(this).data('token');
+            let page_name = $(this).data('name');
+            if(checked){
+                if(arr_page.length > 0){
+                    const index = arr_page.findIndex(f => f.id === page_id);
+                    if(index > -1){
+                        let checked = $('.' + page_id).is(":checked");
+                        if(!checked){
+                            $('.' + page_id).prop('checked', true);
                         }
                     } else {
                         let data = {
@@ -139,63 +248,97 @@
                         }
                         arr_page.push(data);
                     }
-
-
                 } else {
-                    arr_page = arr_page.filter(f=>{return f.id != page_id})
+                    let data = {
+                        id: page_id,
+                        token : page_token,
+                        name: page_name
+                    }
+                    arr_page.push(data);
                 }
-                returnViewCheckPage(arr_page);
-            })
-            function returnViewCheckPage(arr_page){
-                let html = '';
-                if(arr_page.length > 0){
-                    arr_page.forEach(f=>{
-                        html+=`
-                        <div class="col-6 item">
-                             <label> <input type="checkbox" class="`+f.id+`" checked getDataItem value="`+f.id+`" data-name="`+f.name+`" data-token="`+f.token+`"> &nbsp;`+f.name+`</label>
-                        </div>
-                    `
-                        $('.' + f.id).prop('checked', true);
-                    })
-                }
-                $(".listFanpageCheck").html(html);
-                setTimeout(function () {
-                    $('.badgePage').html(arr_page.length)
-                },400)
+            } else {
+                arr_page = arr_page.filter(f=>{return f.id != page_id})
             }
 
-            $(document).on('click','.chatMessage', function () {
-                let favorite = [];
-                $.each($("input[getDataItem]:checked"), function () {
-                    let data = {
-                        id:$(this).val(),
-                        token:$(this).data('token'),
-                        name:$(this).data('name')
-                    }
-                    favorite.push(data);
-                });
-
-                if(favorite.length == 1){
-                    let page_id = favorite[0].id;
-                    location.href = `/marketing/chat-messages/${page_id}`
-                } else if(favorite.length > 1){
-                    let arr_page_id = JSON.stringify(favorite);
-                    document.cookie = `arr_page_id = ${arr_page_id};max-age=31536000;path=/`;
-                    location.href = `/marketing/chat-multi-page`
-                } else {
-                    return;
+            let data_arr_page = arr_page.map(m=>{return m.id})
+            $.ajax({
+                url: "/marketing/update-group",
+                method: "put",
+                data: {
+                    id: group_id,
+                    arr_page: data_arr_page,
                 }
-
             })
 
-            $(document).on('click', '.dropdown-custom', function () {
-                $(this).toggleClass('show');
-            })
-            $(document).on('click.bs.dropdown.data-api', 'label', function (e) {
-                e.stopPropagation();
+            console.log(1111,arr_page);
+            setTimeout(function () {
+                $('.countPage').html(arr_page.length)
+            },400)
+        })
+
+        $(document).on('click','.submitMultiPage',function () {
+            let favorite = [];
+            $.each($("input.checkPage:checked"), function () {
+                let data = {
+                    'id': $(this).val(),
+                    'token': $(this).data('token'),
+                    'name': $(this).data('name')
+                }
+                favorite.push(data);
             });
+            if(favorite.length>1){
+                let arr_page_id = JSON.stringify(favorite);
+                document.cookie = `arr_page_id = ${arr_page_id};max-age=31536000;path=/`;
+                location.href = `/marketing/chat-multi-page`
+            }else {
+                alertify.warning('vui lòng chọn nhiều hơn 1 page !');
+            }
         })
 
 
+        $( ".quickSearchPage" ).keyup(function() {
+            let value = $(this).val();
+            let arr_page = $('.arrPage').val();
+            arr_page = JSON.parse(arr_page);
+            doSearch(value,arr_page);
+        });
+
+        let delayTimer;
+        function doSearch(text,arr_page) {
+            clearTimeout(delayTimer);
+
+            delayTimer = setTimeout(function() {
+                html = '';
+                if(arr_page.length>0){
+                    arr_page.forEach(f=>{
+                        let re = new RegExp(`${text}`, 'gi');
+                        if (f.name.match(re) ||f.page_id.match(re) ) {
+                            let avatar = f.avatar ? f.avatar  :'';
+                            let checked = arr_curent_group.findIndex(fi=>fi == f.page_id) > -1? 'checked' : '';
+                            html += `
+                                <div class="col-4">
+                                    <div class="card border-info box-shadow-0 bg-transparent">
+                                        <div class="card-content">
+                                            <img src="`+avatar+`" alt="element 04" width="90" class="float-left img-fluid">
+                                            <div class="card-body pt-3 f-page">
+                                                <p class="pointer">`+f.name+`</p>
+                                                <p class="small-tip">`+f.user.full_name+` (`+f.page_id+`)</p>
+                                            </div>
+                                            <input type="checkbox" class="checkbox checkPage `+f.page_id+`" `+checked+`
+                                                   value="`+f.page_id+`" data-token="`+f.access_token+`"
+                                                   data-name="`+f.name+`">
+                                        </div>
+                                    </div>
+                                </div>
+                            `
+                        }else{
+                            // console.log('ngon ngay1');
+                        }
+                    })
+                    $('.forEach').html(html)
+                }
+            }, 500); // Will do the ajax stuff after 1000 ms, or 1 s
+        }
     </script>
+
 @endsection

@@ -208,6 +208,69 @@
                 </div>
             </div>
         </div>
+        <div class="right" style="width: 15%; margin-top: 6%;">
+            <div class="row">
+                <div class="col-12 mb-1"><input v-model="chat_current_name" type="text" class="form-control"
+                                                placeholder="Tên KH"></div>
+                <div class="col-12 mb-1"><input v-model="phone" type="text" class="form-control"
+                                                placeholder="Số điện thoại"></div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="gender" :options="option_gender" label="value" class="square"
+                              placeholder="Giới tính">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="telesales_id" :options="data_telesale" label="value" class="square"
+                              placeholder="Người phụ trách">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="value_group_customer" :options="data_group_customer" multiple label="value"
+                              class="square" placeholder="Nhóm khách hàng">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="value_source_customer" :options="data_source_customer" label="value"
+                              class="square" placeholder="Nguồn khách hàng">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="value_chi_nhanh" :options="data_chi_nhanh" label="value" class="square"
+                              placeholder="Chi nhánh">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1"><input v-model="description" type="text" class="form-control"
+                                                placeholder="Mô tả"></div>
+                <div class="col-12">
+                    <button class="btn btn-primary" @click="insertCustomer">Thêm KH</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -243,7 +306,26 @@
                 data_images_upload_server:[],
                 data_images_upload_server_default:[],
                 chat_current_name : '',
-                chat_current_page : ''
+                chat_current_page : '',
+
+                //data form thêm khách hàng
+                description: '',
+                phone: '',
+                gender: null,
+                telesales_id: null,
+                value_telesale: [],
+                value_group_customer: [],
+                value_source_customer: [],
+                value_chi_nhanh: [],
+
+                data_telesale: [],
+                data_group_customer: [],
+                data_source_customer: [],
+                data_chi_nhanh: [],
+                option_gender: [
+                    {id: 0, value: "Nữ"},
+                    {id: 1, value: "Nam"}
+                ]
             }
         },
         components: {
@@ -252,6 +334,7 @@
 
         created() {
             this.getListChat();
+            this.getDataFormCustomer();
         },
         computed: {
             emotions() {
@@ -466,7 +549,6 @@
                     }
                     this.arr_page_id = arr_page_id;
                     this.getSocket();
-                    console.log(5555,this.arr_page_id);
                 }
                  arr = arr.filter(f => {
                      return f.participants.data[0].id != '3873174272720720';
@@ -509,7 +591,6 @@
                 axios.get(url)
                     .then(response => {
                         this.detailMessage = response.data.messages.data.reverse();
-                        console.log(this.detailMessage);
                     })
                 this.classClick = fb_id;
                 this.fb_me = fb_id;
@@ -626,6 +707,90 @@
             clearImage(){
                 this.data_images_upload_server = [];
                 this.images = [];
+            },
+            getDataFormCustomer() {
+                axios.get(`/marketing/get-data-form-customer`).then(response => {
+                    if (response.data) {
+                        let data_group_customer = response.data.data['group'].map(m => {
+                            m['value'] = m.name;
+                            return m;
+                        });
+                        let data_telesale = response.data.data['telesale'].map(m => {
+                            m['value'] = m.full_name;
+                            return m;
+                        });
+                        let data_source_customer = response.data.data['source'].map(m => {
+                            m['value'] = m.name;
+                            return m;
+                        });
+                        let data_chi_nhanh = response.data.data['branch'].map(m => {
+                            m['value'] = m.name;
+                            return m;
+                        });
+
+                        this.data_group_customer = data_group_customer;
+                        this.data_telesale = data_telesale;
+                        this.data_source_customer = data_source_customer;
+                        this.data_chi_nhanh = data_chi_nhanh;
+                    }
+                })
+            },
+            insertCustomer() {
+                if (!this.chat_current_name) {
+                    alertify.warning('Vui lòng nhập tên !');
+                    return;
+                } else if (!this.phone) {
+                    alertify.warning('Vui lòng nhập sđt !');
+                    return;
+                } else if (!this.gender) {
+                    alertify.warning('Vui lòng chọn giới tính !');
+                    return;
+                } else if (!this.telesales_id) {
+                    alertify.warning('Vui lòng chọn người phụ trách !');
+                    return;
+                } else if (this.value_group_customer.length < 1) {
+                    alertify.warning('Vui lòng chọn nhóm khách hàng !');
+                    return;
+                } else if (this.value_source_customer.length < 1) {
+                    alertify.warning('Vui lòng chọn nguồn khách hàng !');
+                    return;
+                } else if (this.value_chi_nhanh.length < 1) {
+                    alertify.warning('Vui lòng chọn chi nhánh !');
+                    return;
+                }
+                let data = {
+                    page_id: this.last_segment,
+                    full_name: this.chat_current_name,
+                    phone: this.phone,
+                    gender: this.gender.id,
+                    telesales_id: this.telesales_id.id,
+                    group_id: this.value_group_customer.map(m => m.id),
+                    source_id: this.value_source_customer.id,
+                    branch_id: this.value_chi_nhanh.id,
+                    description: this.description,
+                };
+                axios.post('/marketing/create-customer',
+                    data)
+                    .then(res => {
+                        if (res.data.success) {
+                            alertify.success('Thêm KH thành công !');
+                            this.resetValue();
+                        } else {
+                            alertify.error('Thất bại !');
+                        }
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    })
+            },
+            resetValue(){
+                this.phone = '';
+                this.gender = null;
+                this.telesales_id = null;
+                this.value_group_customer = [];
+                this.value_source_customer = null;
+                this.value_chi_nhanh.id = null;
+                this.description = ''
             }
 
         }
@@ -745,4 +910,19 @@
         padding: 0 2px;
     }
 
+    @media (min-width: 992px) {
+        body .content-right {
+            position: absolute;
+            left: 355px;
+            width: calc(100% - 600px);
+        }
+    }
+
+    @media (min-width: 1400px) {
+        body .content-right {
+            position: absolute;
+            left: 355px;
+            width: calc(100% - 700px);
+        }
+    }
 </style>

@@ -16,35 +16,12 @@
                             <p class="small-tip">{{@$item->user->full_name}}</p>
                             {{--<span ></span>--}}
                         </div>
-                        <input type="checkbox" class="checkbox {{$item->page_id}}" value="{{$item->page_id}}" data-token="{{$item->access_token}}" data-name="{{$item->name}}">
+                        {{--<input type="checkbox" class="checkbox {{$item->page_id}}" value="{{$item->page_id}}" data-token="{{$item->access_token}}" data-name="{{$item->name}}">--}}
                     </div>
                 </div>
             </div>
         @empty
             <p>Không có kết quả nào</p>
         @endforelse
-    </div>
-    <div class="float-right">
-
-        <select id="customPage" style="height: 33px !important;">
-            <option value="20" {{isset($paginate) && $paginate == 20 ? 'selected' : ''}}>20</option>
-            <option value="50" {{isset($paginate) && $paginate == 50 ? 'selected' : ''}}>50</option>
-            <option value="100" {{isset($paginate) && $paginate == 100 ? 'selected' : ''}}>100</option>
-            <option value="200" {{isset($paginate) && $paginate == 200 ? 'selected' : ''}}>200</option>
-            <option value="300" {{isset($paginate) && $paginate == 300 ? 'selected' : ''}}>300</option>
-            <option value="500" {{isset($paginate) && $paginate == 500 ? 'selected' : ''}}>500</option>
-        </select>
-        @if($fanpages->currentPage() == $fanpages->lastPage())
-            <span>({{$fanpages->total()}}/{{$fanpages->total()}})</span>
-        @else
-            <span>({{$fanpages->currentPage()*$fanpages->perPage()}}/ {{$fanpages->total()}})</span>
-        @endif
-        {{$fanpages->links()}}
-
-
-
-        {{--@if(count($fanpages))--}}
-            {{--{{$fanpages->links()}}--}}
-        {{--@endif--}}
     </div>
 </div>

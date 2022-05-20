@@ -2152,6 +2152,71 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2180,7 +2245,27 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       dataQuickReply: [],
       images: [],
       data_images_upload_server_default: [],
-      data_images_upload_server: []
+      data_images_upload_server: [],
+      //data form thêm khách hàng
+      description: '',
+      phone: '',
+      gender: null,
+      telesales_id: null,
+      value_telesale: [],
+      value_group_customer: [],
+      value_source_customer: [],
+      value_chi_nhanh: [],
+      data_telesale: [],
+      data_group_customer: [],
+      data_source_customer: [],
+      data_chi_nhanh: [],
+      option_gender: [{
+        id: 0,
+        value: "Nữ"
+      }, {
+        id: 1,
+        value: "Nam"
+      }]
     };
   },
   components: {
@@ -2189,6 +2274,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
   created: function created() {
     console.log(342342342);
     this.getListChat();
+    this.getDataFormCustomer();
   },
   computed: {
     emotions: function emotions() {
@@ -2670,6 +2756,94 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     clearImage: function clearImage() {
       this.data_images_upload_server = [];
       this.images = [];
+    },
+    getDataFormCustomer: function getDataFormCustomer() {
+      var _this12 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
+        if (response.data) {
+          var data_group_customer = response.data.data['group'].map(function (m) {
+            m['value'] = m.name;
+            return m;
+          });
+          var data_telesale = response.data.data['telesale'].map(function (m) {
+            m['value'] = m.full_name;
+            return m;
+          });
+          var data_source_customer = response.data.data['source'].map(function (m) {
+            m['value'] = m.name;
+            return m;
+          });
+          var data_chi_nhanh = response.data.data['branch'].map(function (m) {
+            m['value'] = m.name;
+            return m;
+          });
+          _this12.data_group_customer = data_group_customer;
+          _this12.data_telesale = data_telesale;
+          _this12.data_source_customer = data_source_customer;
+          _this12.data_chi_nhanh = data_chi_nhanh;
+        }
+      });
+    },
+    insertCustomer: function insertCustomer() {
+      var _this13 = this;
+
+      if (!this.chat_current_name) {
+        alertify.warning('Vui lòng nhập tên !');
+        return;
+      } else if (!this.phone) {
+        alertify.warning('Vui lòng nhập sđt !');
+        return;
+      } else if (!this.gender) {
+        alertify.warning('Vui lòng chọn giới tính !');
+        return;
+      } else if (!this.telesales_id) {
+        alertify.warning('Vui lòng chọn người phụ trách !');
+        return;
+      } else if (this.value_group_customer.length < 1) {
+        alertify.warning('Vui lòng chọn nhóm khách hàng !');
+        return;
+      } else if (this.value_source_customer.length < 1) {
+        alertify.warning('Vui lòng chọn nguồn khách hàng !');
+        return;
+      } else if (this.value_chi_nhanh.length < 1) {
+        alertify.warning('Vui lòng chọn chi nhánh !');
+        return;
+      }
+
+      var data = {
+        page_id: this.last_segment,
+        full_name: this.chat_current_name,
+        phone: this.phone,
+        gender: this.gender.id,
+        telesales_id: this.telesales_id.id,
+        group_id: this.value_group_customer.map(function (m) {
+          return m.id;
+        }),
+        source_id: this.value_source_customer.id,
+        branch_id: this.value_chi_nhanh.id,
+        description: this.description
+      };
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/create-customer', data).then(function (res) {
+        if (res.data.success) {
+          alertify.success('Thêm KH thành công !');
+
+          _this13.resetValue();
+        } else {
+          alertify.error('Thất bại !');
+        }
+      })["catch"](function (err) {
+        console.log('error', err);
+      });
+    },
+    resetValue: function resetValue() {
+      this.phone = '';
+      this.gender = null;
+      this.telesales_id = null;
+      this.value_group_customer = [];
+      this.value_source_customer = null;
+      this.value_chi_nhanh.id = null;
+      this.description = '';
     }
   }
 });
@@ -2925,13 +3099,76 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
+ // var host = 'https://crm.santa.name.vn:2022/';
 
-var host = 'https://crm.santa.name.vn:2022/';
-var port = 2022; // var host = 'https://' + location.host + ':'+port;
-
+var port = 2022;
+var host = 'https://' + location.host + ':' + port;
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2955,7 +3192,27 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       data_images_upload_server: [],
       data_images_upload_server_default: [],
       chat_current_name: '',
-      chat_current_page: ''
+      chat_current_page: '',
+      //data form thêm khách hàng
+      description: '',
+      phone: '',
+      gender: null,
+      telesales_id: null,
+      value_telesale: [],
+      value_group_customer: [],
+      value_source_customer: [],
+      value_chi_nhanh: [],
+      data_telesale: [],
+      data_group_customer: [],
+      data_source_customer: [],
+      data_chi_nhanh: [],
+      option_gender: [{
+        id: 0,
+        value: "Nữ"
+      }, {
+        id: 1,
+        value: "Nam"
+      }]
     };
   },
   components: {
@@ -2963,6 +3220,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
   },
   created: function created() {
     this.getListChat();
+    this.getDataFormCustomer();
   },
   computed: {
     emotions: function emotions() {
@@ -3410,7 +3668,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 });
                 customer_new_mess = {};
 
-                if (true) {
+                if (!(customer_new.length > 0)) {
                   _context5.next = 7;
                   break;
                 }
@@ -3504,6 +3762,94 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     clearImage: function clearImage() {
       this.data_images_upload_server = [];
       this.images = [];
+    },
+    getDataFormCustomer: function getDataFormCustomer() {
+      var _this12 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
+        if (response.data) {
+          var data_group_customer = response.data.data['group'].map(function (m) {
+            m['value'] = m.name;
+            return m;
+          });
+          var data_telesale = response.data.data['telesale'].map(function (m) {
+            m['value'] = m.full_name;
+            return m;
+          });
+          var data_source_customer = response.data.data['source'].map(function (m) {
+            m['value'] = m.name;
+            return m;
+          });
+          var data_chi_nhanh = response.data.data['branch'].map(function (m) {
+            m['value'] = m.name;
+            return m;
+          });
+          _this12.data_group_customer = data_group_customer;
+          _this12.data_telesale = data_telesale;
+          _this12.data_source_customer = data_source_customer;
+          _this12.data_chi_nhanh = data_chi_nhanh;
+        }
+      });
+    },
+    insertCustomer: function insertCustomer() {
+      var _this13 = this;
+
+      if (!this.chat_current_name) {
+        alertify.warning('Vui lòng nhập tên !');
+        return;
+      } else if (!this.phone) {
+        alertify.warning('Vui lòng nhập sđt !');
+        return;
+      } else if (!this.gender) {
+        alertify.warning('Vui lòng chọn giới tính !');
+        return;
+      } else if (!this.telesales_id) {
+        alertify.warning('Vui lòng chọn người phụ trách !');
+        return;
+      } else if (this.value_group_customer.length < 1) {
+        alertify.warning('Vui lòng chọn nhóm khách hàng !');
+        return;
+      } else if (this.value_source_customer.length < 1) {
+        alertify.warning('Vui lòng chọn nguồn khách hàng !');
+        return;
+      } else if (this.value_chi_nhanh.length < 1) {
+        alertify.warning('Vui lòng chọn chi nhánh !');
+        return;
+      }
+
+      var data = {
+        page_id: this.last_segment,
+        full_name: this.chat_current_name,
+        phone: this.phone,
+        gender: this.gender.id,
+        telesales_id: this.telesales_id.id,
+        group_id: this.value_group_customer.map(function (m) {
+          return m.id;
+        }),
+        source_id: this.value_source_customer.id,
+        branch_id: this.value_chi_nhanh.id,
+        description: this.description
+      };
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/create-customer', data).then(function (res) {
+        if (res.data.success) {
+          alertify.success('Thêm KH thành công !');
+
+          _this13.resetValue();
+        } else {
+          alertify.error('Thất bại !');
+        }
+      })["catch"](function (err) {
+        console.log('error', err);
+      });
+    },
+    resetValue: function resetValue() {
+      this.phone = '';
+      this.gender = null;
+      this.telesales_id = null;
+      this.value_group_customer = [];
+      this.value_source_customer = null;
+      this.value_chi_nhanh.id = null;
+      this.description = '';
     }
   }
 });
@@ -10406,7 +10752,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.chat-application .avatar img[data-v-44c61114] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-44c61114] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-44c61114] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-44c61114] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-44c61114] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-44c61114] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-44c61114] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-44c61114] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-44c61114] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-44c61114]{\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-44c61114]{\n    height:calc(100% - 139px);\n}\n.ant-popover-inner-content[data-v-44c61114]{\n    overflow-y:scroll ;\n}\nbody[data-v-44c61114]{\n    overflow: hidden !important;\n}\n.openForm[data-v-44c61114]{\n    position: relative;\n    font-size:20px;\n    margin-right: 10px;\n}\n.openPopover[data-v-44c61114]{\n    font-size:20px;\n}\n.openForm .badge[data-v-44c61114]{\n    position: absolute;\n    font-size: 10px;\n    top: -7px;\n    right: -7px;\n}\n.openForm .badge:hover .ngonngay[data-v-44c61114] {\n    display: none;\n}\n.openForm .badge:hover .ngonngay1[data-v-44c61114] {\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay[data-v-44c61114]{\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay1[data-v-44c61114]{\n    display: none !important;\n}\n.openForm .badge span[data-v-44c61114] {\n    position: relative;\n    bottom: 2px;\n    padding: 0 2px;\n}\n\n", ""]);
+exports.push([module.i, "\n.chat-application .avatar img[data-v-44c61114] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-44c61114] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-44c61114] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-44c61114] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-44c61114] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-44c61114] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-44c61114] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-44c61114] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-44c61114] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-44c61114] {\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-44c61114] {\n    height: calc(100% - 180px);\n}\n.ant-popover-inner-content[data-v-44c61114] {\n    overflow-y: scroll;\n}\nbody[data-v-44c61114] {\n    overflow: hidden !important;\n}\n.openForm[data-v-44c61114] {\n    position: relative;\n    font-size: 20px;\n    margin-right: 10px;\n}\n.openPopover[data-v-44c61114] {\n    font-size: 20px;\n}\n.openForm .badge[data-v-44c61114] {\n    position: absolute;\n    font-size: 10px;\n    top: -7px;\n    right: -7px;\n}\n.openForm .badge:hover .ngonngay[data-v-44c61114] {\n    display: none;\n}\n.openForm .badge:hover .ngonngay1[data-v-44c61114] {\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay[data-v-44c61114] {\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay1[data-v-44c61114] {\n    display: none !important;\n}\n.openForm .badge span[data-v-44c61114] {\n    position: relative;\n    bottom: 2px;\n    padding: 0 2px;\n}\n@media (min-width: 992px) {\nbody .content-right[data-v-44c61114] {\n        position: absolute;\n        left: 355px;\n        width: calc(100% - 600px);\n}\n}\n@media (min-width: 1400px) {\nbody .content-right[data-v-44c61114] {\n        position: absolute;\n        left: 355px;\n        width: calc(100% - 700px);\n}\n}\n\n", ""]);
 
 // exports
 
@@ -10425,7 +10771,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.chat-application .avatar img[data-v-05cea16e] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-05cea16e] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-05cea16e] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-05cea16e] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-05cea16e] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-05cea16e] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-05cea16e] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-05cea16e] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-05cea16e] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-05cea16e]{\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-05cea16e]{\n    height:calc(100% - 139px);\n}\n.ant-popover-inner-content[data-v-05cea16e]{\n    overflow-y:scroll ;\n}\nbody[data-v-05cea16e]{\n    overflow: hidden !important;\n}\n.openForm[data-v-05cea16e]{\n    position: relative;\n    font-size:20px;\n    margin-right: 10px;\n}\n.openPopover[data-v-05cea16e]{\n    font-size:20px;\n}\n.openForm .badge[data-v-05cea16e]{\n    position: absolute;\n    font-size: 10px;\n    top: -7px;\n    right: -7px;\n}\n.openForm .badge:hover .ngonngay[data-v-05cea16e] {\n    display: none;\n}\n.openForm .badge:hover .ngonngay1[data-v-05cea16e] {\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay[data-v-05cea16e]{\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay1[data-v-05cea16e]{\n    display: none !important;\n}\n.openForm .badge span[data-v-05cea16e] {\n    position: relative;\n    bottom: 2px;\n    padding: 0 2px;\n}\n\n", ""]);
+exports.push([module.i, "\n.chat-application .avatar img[data-v-05cea16e] {\n    max-height: 50px !important;\n}\n.text-chat-q[data-v-05cea16e] {\n    color: #97a2b7\n}\n.ant-popover-inner[data-v-05cea16e] {\n    background-color: #fff;\n    background-clip: padding-box;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);\n}\n.ant-popover-inner .ant-popover-title[data-v-05cea16e] {\n    min-width: 177px;\n    min-height: 32px;\n    margin: 0;\n    color: rgba(0, 0, 0, .85);\n    font-weight: 500;\n\n    padding: 5px 12px;\n    height: 32px;\n    display: flex;\n    align-items: center;\n    justify-content: flex-end;\n    border-bottom: 1px solid #D9D9D9;\n}\n.set_font_family[data-v-05cea16e] {\n    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;\n}\n.ant-popover-inner .ant-popover-title .pop-qr-title[data-v-05cea16e] {\n    display: flex;\n    justify-content: flex-end;\n    font-weight: bold;\n    font-size: 14px;\n    line-height: 22px;\n    color: rgba(38, 60, 143, 0.93);\n}\n.ngon-ngay .icon-svg[data-v-05cea16e] {\n    position: absolute;\n    right: 10px;\n}\n.ngon-ngay .list-group-item[data-v-05cea16e] {\n    padding: 5px 5px !important;\n}\n.ngon-ngay[data-v-05cea16e] {\n    right: 0;\n    min-width: 544px;\n    min-height: 450px;\n    left: auto !important;\n    top: auto !important;\n    bottom: 14%;\n}\n.info-customer[data-v-05cea16e]{\n    padding: 10px 22px;\n}\n.chat-application .chat-app-window[data-v-05cea16e]{\n    height:calc(100% - 139px);\n}\n.ant-popover-inner-content[data-v-05cea16e]{\n    overflow-y:scroll ;\n}\nbody[data-v-05cea16e]{\n    overflow: hidden !important;\n}\n.openForm[data-v-05cea16e]{\n    position: relative;\n    font-size:20px;\n    margin-right: 10px;\n}\n.openPopover[data-v-05cea16e]{\n    font-size:20px;\n}\n.openForm .badge[data-v-05cea16e]{\n    position: absolute;\n    font-size: 10px;\n    top: -7px;\n    right: -7px;\n}\n.openForm .badge:hover .ngonngay[data-v-05cea16e] {\n    display: none;\n}\n.openForm .badge:hover .ngonngay1[data-v-05cea16e] {\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay[data-v-05cea16e]{\n    display: block !important;\n}\n.openForm .badge:not(:hover) .ngonngay1[data-v-05cea16e]{\n    display: none !important;\n}\n.openForm .badge span[data-v-05cea16e] {\n    position: relative;\n    bottom: 2px;\n    padding: 0 2px;\n}\n@media (min-width: 992px) {\nbody .content-right[data-v-05cea16e] {\n        position: absolute;\n        left: 355px;\n        width: calc(100% - 600px);\n}\n}\n@media (min-width: 1400px) {\nbody .content-right[data-v-05cea16e] {\n        position: absolute;\n        left: 355px;\n        width: calc(100% - 700px);\n}\n}\n", ""]);
 
 // exports
 
@@ -81622,7 +81968,11 @@ var render = function() {
                                       width: "86px"
                                     }
                                   },
-                                  [_vm._v("Ký tự tắt")]
+                                  [
+                                    _vm._v(
+                                      "Ký tự\n                                                tắt\n                                            "
+                                    )
+                                  ]
                                 ),
                                 _vm._v(" "),
                                 _c("div", {
@@ -81900,7 +82250,317 @@ var render = function() {
           ])
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "right",
+        staticStyle: { width: "15%", "margin-top": "6%" }
+      },
+      [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12 mb-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.chat_current_name,
+                  expression: "chat_current_name"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Tên KH" },
+              domProps: { value: _vm.chat_current_name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.chat_current_name = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12 mb-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.phone,
+                  expression: "phone"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Số điện thoại" },
+              domProps: { value: _vm.phone },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.phone = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.option_gender,
+                  label: "value",
+                  placeholder: "Giới tính"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.gender,
+                  callback: function($$v) {
+                    _vm.gender = $$v
+                  },
+                  expression: "gender"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_telesale,
+                  label: "value",
+                  placeholder: "Người phụ trách"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.telesales_id,
+                  callback: function($$v) {
+                    _vm.telesales_id = $$v
+                  },
+                  expression: "telesales_id"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_group_customer,
+                  multiple: "",
+                  label: "value",
+                  placeholder: "Nhóm khách hàng"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.value_group_customer,
+                  callback: function($$v) {
+                    _vm.value_group_customer = $$v
+                  },
+                  expression: "value_group_customer"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_source_customer,
+                  label: "value",
+                  placeholder: "Nguồn khách hàng"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.value_source_customer,
+                  callback: function($$v) {
+                    _vm.value_source_customer = $$v
+                  },
+                  expression: "value_source_customer"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_chi_nhanh,
+                  label: "value",
+                  placeholder: "Chi nhánh"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.value_chi_nhanh,
+                  callback: function($$v) {
+                    _vm.value_chi_nhanh = $$v
+                  },
+                  expression: "value_chi_nhanh"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12 mb-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.description,
+                  expression: "description"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Mô tả" },
+              domProps: { value: _vm.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.description = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                on: { click: _vm.insertCustomer }
+              },
+              [_vm._v("Thêm KH")]
+            )
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -82684,7 +83344,317 @@ var render = function() {
           ])
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "right",
+        staticStyle: { width: "15%", "margin-top": "6%" }
+      },
+      [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12 mb-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.chat_current_name,
+                  expression: "chat_current_name"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Tên KH" },
+              domProps: { value: _vm.chat_current_name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.chat_current_name = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12 mb-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.phone,
+                  expression: "phone"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Số điện thoại" },
+              domProps: { value: _vm.phone },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.phone = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.option_gender,
+                  label: "value",
+                  placeholder: "Giới tính"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.gender,
+                  callback: function($$v) {
+                    _vm.gender = $$v
+                  },
+                  expression: "gender"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_telesale,
+                  label: "value",
+                  placeholder: "Người phụ trách"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.telesales_id,
+                  callback: function($$v) {
+                    _vm.telesales_id = $$v
+                  },
+                  expression: "telesales_id"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_group_customer,
+                  multiple: "",
+                  label: "value",
+                  placeholder: "Nhóm khách hàng"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.value_group_customer,
+                  callback: function($$v) {
+                    _vm.value_group_customer = $$v
+                  },
+                  expression: "value_group_customer"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_source_customer,
+                  label: "value",
+                  placeholder: "Nguồn khách hàng"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.value_source_customer,
+                  callback: function($$v) {
+                    _vm.value_source_customer = $$v
+                  },
+                  expression: "value_source_customer"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-12 mb-1" },
+            [
+              _c("v-select", {
+                staticClass: "square",
+                attrs: {
+                  options: _vm.data_chi_nhanh,
+                  label: "value",
+                  placeholder: "Chi nhánh"
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "selected-option",
+                    fn: function(ref) {
+                      var value = ref.value
+                      return [
+                        _c(
+                          "div",
+                          {
+                            staticStyle: {
+                              display: "flex",
+                              "align-items": "baseline"
+                            }
+                          },
+                          [_c("strong", [_vm._v(_vm._s(value))])]
+                        )
+                      ]
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.value_chi_nhanh,
+                  callback: function($$v) {
+                    _vm.value_chi_nhanh = $$v
+                  },
+                  expression: "value_chi_nhanh"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12 mb-1" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.description,
+                  expression: "description"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Mô tả" },
+              domProps: { value: _vm.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.description = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                on: { click: _vm.insertCustomer }
+              },
+              [_vm._v("Thêm KH")]
+            )
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [

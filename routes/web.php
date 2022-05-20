@@ -234,6 +234,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('chat-multi-page', 'ChatController@chatMultiPage')->name('chat-multi-page');
         Route::get('get-token-fanpage/{id}', 'ChatController@getFanpageToken');
         Route::get('get-phone-page', 'ChatController@getPhonePage');
+        Route::get('get-data-form-customer', 'ChatController@getDataFormCustomer');
+        Route::post('create-customer', 'ChatController@createCustomer');
 
         Route::resource('setting-quick-reply','SettingChatController');
         Route::get('setting-quick-reply/{page_id}/create', 'SettingChatController@create');
@@ -244,6 +246,11 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('setting-quick-reply/delete-image','SettingChatController@deleteImage');
         Route::post('setting-quick-reply/import/{page_id}','SettingChatController@importExcel');
         Route::get('get-quick-reply/{page_id}', 'SettingChatController@getQuickReply');
+
+        //Chat multi_page
+        Route::post('add-group','ChatController@addGroup');
+        Route::put('update-group','ChatController@updateGroup');
+        Route::delete('delete-group/{id}','ChatController@deleteGroup');
 
     });
 

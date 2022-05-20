@@ -31,7 +31,7 @@
                                         {{item.participants.data[0].name}}
 
                                         <span
-                                            class="font-small-3 float-right primary">{{date(item.updated_time)}}</span>
+                                                class="font-small-3 float-right primary">{{date(item.updated_time)}}</span>
                                     </h6>
                                     <p class="list-group-item-text text-chat-q mb-0" :class="{bold:item.new_message}">
                                         <i class="ft-check primary font-small-2"></i> {{item.snippet.length>27 &
@@ -129,7 +129,9 @@
                                         <ul class="list-group">
                                             <li class="list-group-item d-flex align-items-center list-group-item-dark">
                                                 <div class="tbl-space" style="width: 38px;"></div>
-                                                <div class="tbl-qr-desc" style="display: block; width: 86px;">Ký tự tắt</div>
+                                                <div class="tbl-qr-desc" style="display: block; width: 86px;">Ký tự
+                                                    tắt
+                                                </div>
                                                 <div class="tbl-space" style="width: 62px;"></div>
                                                 <div class="tbl-qr-desc">Tin nhắn</div>
                                                 <div class=""></div>
@@ -158,15 +160,15 @@
                                 <div class="modal-content" style="min-height: 550px;">
                                     <div class="upload-multiple-image" style="margin: 0 auto;">
                                         <vue-upload-multiple-image
-                                            @upload-success="uploadImageSuccess"
-                                            @before-remove="beforeRemove"
-                                            @edit-image="editImage"
-                                            @data-change="dataChange"
-                                            :dataImages="images"
-                                            idUpload="myIdUpload"
-                                            editUpload="myIdEdit"
-                                            :showEdit=false
-                                            :multiple=true
+                                                @upload-success="uploadImageSuccess"
+                                                @before-remove="beforeRemove"
+                                                @edit-image="editImage"
+                                                @data-change="dataChange"
+                                                :dataImages="images"
+                                                idUpload="myIdUpload"
+                                                editUpload="myIdEdit"
+                                                :showEdit=false
+                                                :multiple=true
                                         ></vue-upload-multiple-image>
                                     </div>
                                 </div>
@@ -199,12 +201,75 @@
                             <fieldset class="form-group position-relative has-icon-left col-2 m-0">
                                 <button type="button" class="btn btn-primary btn-send-messages"
                                         @click="sendMessage(contentMesage)"><i
-                                    class="fa fa-paper-plane-o d-lg-none"></i>
+                                        class="fa fa-paper-plane-o d-lg-none"></i>
                                     <span class="d-none d-lg-block">Send</span>
                                 </button>
                             </fieldset>
                         </div>
                     </section>
+                </div>
+            </div>
+        </div>
+        <div class="right" style="width: 15%; margin-top: 6%;">
+            <div class="row">
+                <div class="col-12 mb-1"><input v-model="chat_current_name" type="text" class="form-control"
+                                                placeholder="Tên KH"></div>
+                <div class="col-12 mb-1"><input v-model="phone" type="text" class="form-control"
+                                                placeholder="Số điện thoại"></div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="gender" :options="option_gender" label="value" class="square"
+                              placeholder="Giới tính">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="telesales_id" :options="data_telesale" label="value" class="square"
+                              placeholder="Người phụ trách">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="value_group_customer" :options="data_group_customer" multiple label="value"
+                              class="square" placeholder="Nhóm khách hàng">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="value_source_customer" :options="data_source_customer" label="value"
+                              class="square" placeholder="Nguồn khách hàng">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1">
+                    <v-select v-model="value_chi_nhanh" :options="data_chi_nhanh" label="value" class="square"
+                              placeholder="Chi nhánh">
+                        <template #selected-option="{value}">
+                            <div style="display: flex; align-items: baseline;">
+                                <strong>{{ value }}</strong>
+                            </div>
+                        </template>
+                    </v-select>
+                </div>
+                <div class="col-12 mb-1"><input v-model="description" type="text" class="form-control"
+                                                placeholder="Mô tả"></div>
+                <div class="col-12">
+                    <button class="btn btn-primary" @click="insertCustomer">Thêm KH</button>
                 </div>
             </div>
         </div>
@@ -242,15 +307,34 @@
                 dataQuickReply: [],
                 images: [],
                 data_images_upload_server_default: [],
-                data_images_upload_server: []
+                data_images_upload_server: [],
+
+                //data form thêm khách hàng
+                description: '',
+                phone: '',
+                gender: null,
+                telesales_id: null,
+                value_telesale: [],
+                value_group_customer: [],
+                value_source_customer: [],
+                value_chi_nhanh: [],
+
+                data_telesale: [],
+                data_group_customer: [],
+                data_source_customer: [],
+                data_chi_nhanh: [],
+                option_gender: [
+                    {id: 0, value: "Nữ"},
+                    {id: 1, value: "Nam"}
+                ]
             }
         },
         components: {
             VueUploadMultipleImage
         },
         created() {
-            console.log(342342342);
             this.getListChat();
+            this.getDataFormCustomer();
         },
         computed: {
             emotions() {
@@ -284,11 +368,8 @@
         mounted() {
             socket.on(this.last_segment, (server) => {
                 let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
-                if(server.type){
-                    console.log(121212,server);
+                if (server.type) {
                 } else {
-                    console.log(232323,server);
-
                     let html = {
                         message: server.message.text,
                         from: {
@@ -433,7 +514,7 @@
                     })
 
                     //xoá ảnh sau khi sendMessage
-                    let data_delete = data_image_response.filter(f=>{
+                    let data_delete = data_image_response.filter(f => {
                         return f.delete_image_server == 1;
                     });
                     axios.post('/marketing/setting-quick-reply/delete-image', data_delete).then(response => {
@@ -459,7 +540,7 @@
                             this.access_token = access_token;
                             this.getPhonePage();
                         } catch (e) {
-                            alertify.error("Token hết hạn:" + this.last_segment,10)
+                            alertify.error("Token hết hạn:" + this.last_segment, 10)
                         }
 
                         // axios.get(url)
@@ -478,16 +559,18 @@
                         console.log(error);
                     })
             },
-            getPhonePage(){
+            getPhonePage() {
                 let arr_page = [this.last_segment];
-                axios.get('/marketing/get-phone-page',{
-                    params:{
+                axios.get('/marketing/get-phone-page', {
+                    params: {
                         arr_page: arr_page
                     }
                 }).then(response => {
-                    let abc = this.navChat.map(m=>{
-                        let bcd = response.data.filter(f=>{return(f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)})
-                        if(bcd.length > 0){
+                    let abc = this.navChat.map(m => {
+                        let bcd = response.data.filter(f => {
+                            return (f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)
+                        })
+                        if (bcd.length > 0) {
                             m.check_phone = 1;
                         } else {
                             m.check_phone = 0;
@@ -529,15 +612,18 @@
                 if (customer_new.length > 0) {
                     customer_new_mess = customer_new[0];
                     customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
-                }
-                else {
-                    let token = this.arr_page_id.filter(f=> {return f.id == page_id});
+                } else {
+                    let token = this.arr_page_id.filter(f => {
+                        return f.id == page_id
+                    });
                     let access_token = token[0].token;
 
                     let fields = 'id,created_time,message,thread_id,attachments,from';
                     let url = `https://graph.facebook.com/v13.0/${mid}/?fields=${fields}&access_token=${access_token}`;
                     await axios.get(url).then(response => {
-                        let page=this.arr_page_id.filter(f=>{return f.id == page_id});
+                        let page = this.arr_page_id.filter(f => {
+                            return f.id == page_id
+                        });
                         customer_new_mess.id = response.data.thread_id;
                         customer_new_mess.participants = {
                             data: [
@@ -556,10 +642,10 @@
                     customer_new_mess.access_token = access_token;
                 }
                 customer_new_mess.updated_time = created_time;
-                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name +" đã gửi đa phương tiện...";
+                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
 
-                let index = this.navChatDefault.findIndex(f=> {
+                let index = this.navChatDefault.findIndex(f => {
                     return (f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id);
                 })
 
@@ -575,15 +661,15 @@
                 this.data_images_upload_server = this.data_images_upload_server_default = [];
                 this.images = [];
                 this.contentMesage = item.message;
-                if(item.images && item.images.length>0){
-                    item.images.forEach(f=>{
-                       let data = {
-                           'default':1,
-                           'highlight': 1,
-                           'name':f,
-                           'path':''
-                       }
-                       this.data_images_upload_server.push(data);
+                if (item.images && item.images.length > 0) {
+                    item.images.forEach(f => {
+                        let data = {
+                            'default': 1,
+                            'highlight': 1,
+                            'name': f,
+                            'path': ''
+                        }
+                        this.data_images_upload_server.push(data);
                     });
                     this.data_images_upload_server_default = this.data_images_upload_server;
                 }
@@ -604,9 +690,9 @@
             beforeRemove(index, done, fileList) {
                 var r = confirm("remove image")
                 if (r == true) {
-                    if (fileList.length>1){
-                        fileList.forEach(f=>{
-                            this.data_images_upload_server = this.data_images_upload_server.filter(ft=>{
+                    if (fileList.length > 1) {
+                        fileList.forEach(f => {
+                            this.data_images_upload_server = this.data_images_upload_server.filter(ft => {
                                 return ft.name != f.name;
                             })
                         })
@@ -622,9 +708,93 @@
             openForm() {
                 $('#add_new_form').modal({show: true})
             },
-            clearImage(){
+            clearImage() {
                 this.data_images_upload_server = [];
                 this.images = [];
+            },
+            getDataFormCustomer() {
+                axios.get(`/marketing/get-data-form-customer`).then(response => {
+                    if (response.data) {
+                        let data_group_customer = response.data.data['group'].map(m => {
+                            m['value'] = m.name;
+                            return m;
+                        });
+                        let data_telesale = response.data.data['telesale'].map(m => {
+                            m['value'] = m.full_name;
+                            return m;
+                        });
+                        let data_source_customer = response.data.data['source'].map(m => {
+                            m['value'] = m.name;
+                            return m;
+                        });
+                        let data_chi_nhanh = response.data.data['branch'].map(m => {
+                            m['value'] = m.name;
+                            return m;
+                        });
+
+                        this.data_group_customer = data_group_customer;
+                        this.data_telesale = data_telesale;
+                        this.data_source_customer = data_source_customer;
+                        this.data_chi_nhanh = data_chi_nhanh;
+                    }
+                })
+            },
+            insertCustomer() {
+                if (!this.chat_current_name) {
+                    alertify.warning('Vui lòng nhập tên !');
+                    return;
+                } else if (!this.phone) {
+                    alertify.warning('Vui lòng nhập sđt !');
+                    return;
+                } else if (!this.gender) {
+                    alertify.warning('Vui lòng chọn giới tính !');
+                    return;
+                } else if (!this.telesales_id) {
+                    alertify.warning('Vui lòng chọn người phụ trách !');
+                    return;
+                } else if (this.value_group_customer.length < 1) {
+                    alertify.warning('Vui lòng chọn nhóm khách hàng !');
+                    return;
+                } else if (this.value_source_customer.length < 1) {
+                    alertify.warning('Vui lòng chọn nguồn khách hàng !');
+                    return;
+                } else if (this.value_chi_nhanh.length < 1) {
+                    alertify.warning('Vui lòng chọn chi nhánh !');
+                    return;
+                }
+                let data = {
+                    page_id: this.last_segment,
+                    full_name: this.chat_current_name,
+                    phone: this.phone,
+                    gender: this.gender.id,
+                    telesales_id: this.telesales_id.id,
+                    group_id: this.value_group_customer.map(m => m.id),
+                    source_id: this.value_source_customer.id,
+                    branch_id: this.value_chi_nhanh.id,
+                    description: this.description,
+                };
+                axios.post('/marketing/create-customer',
+                    data)
+                    .then(res => {
+                        if (res.data.success) {
+                            alertify.success('Thêm KH thành công !');
+                            this.resetValue();
+                        } else {
+                            alertify.error('Thất bại !');
+                        }
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    })
+            },
+            resetValue(){
+                    this.phone = '';
+                    this.gender = null;
+                    this.telesales_id = null;
+                    this.value_group_customer = [];
+                    this.value_source_customer = null;
+                    this.value_chi_nhanh.id = null;
+                    this.description = ''
             }
         }
     }
@@ -695,44 +865,52 @@
         bottom: 14%;
     }
 
-    .info-customer{
+    .info-customer {
         padding: 10px 22px;
     }
-    .chat-application .chat-app-window{
-        height:calc(100% - 139px);
+
+    .chat-application .chat-app-window {
+        height: calc(100% - 180px);
     }
-    .ant-popover-inner-content{
-        overflow-y:scroll ;
+
+    .ant-popover-inner-content {
+        overflow-y: scroll;
     }
-    body{
+
+    body {
         overflow: hidden !important;
     }
 
-    .openForm{
+    .openForm {
         position: relative;
-        font-size:20px;
+        font-size: 20px;
         margin-right: 10px;
     }
-    .openPopover{
-        font-size:20px;
+
+    .openPopover {
+        font-size: 20px;
     }
-    .openForm .badge{
+
+    .openForm .badge {
         position: absolute;
         font-size: 10px;
         top: -7px;
         right: -7px;
     }
+
     .openForm .badge:hover .ngonngay {
         display: none;
     }
+
     .openForm .badge:hover .ngonngay1 {
         display: block !important;
     }
 
-    .openForm .badge:not(:hover) .ngonngay{
+    .openForm .badge:not(:hover) .ngonngay {
         display: block !important;
     }
-    .openForm .badge:not(:hover) .ngonngay1{
+
+    .openForm .badge:not(:hover) .ngonngay1 {
         display: none !important;
     }
 
@@ -740,6 +918,22 @@
         position: relative;
         bottom: 2px;
         padding: 0 2px;
+    }
+
+    @media (min-width: 992px) {
+        body .content-right {
+            position: absolute;
+            left: 355px;
+            width: calc(100% - 600px);
+        }
+    }
+
+    @media (min-width: 1400px) {
+        body .content-right {
+            position: absolute;
+            left: 355px;
+            width: calc(100% - 700px);
+        }
     }
 
 </style>
