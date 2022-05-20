@@ -69,6 +69,8 @@ class ChatController extends Controller
         }
         if($request->arr_page){
             $data['page_ids'] = json_encode($request->arr_page);
+        } else {
+            $data['page_ids'] = "[]";
         }
         MultiplePageGroup::find($request->id)->update($data);
         return 1;

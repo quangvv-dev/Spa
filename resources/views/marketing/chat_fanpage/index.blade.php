@@ -119,6 +119,27 @@
                     }
                 }
             }
+
+            let data_arr_page = $('.arrPage').val();
+            if(data_arr_page){
+                data_arr_page = JSON.parse(data_arr_page);
+                if(arr_curent_group.length>0){
+                    arr_curent_group.forEach(f=>{
+                        console.log(2323,f,data_arr_page);
+                        let check = data_arr_page.findIndex(find=>{
+                           return  find.page_id == f;
+                        })
+                        if(check > -1){
+                            let data_push = {
+                                "id":data_arr_page[check].page_id,
+                                "token":data_arr_page[check].access_token,
+                                "name":data_arr_page[check].name,
+                            }
+                            arr_page.push(data_push);
+                        }
+                    })
+                }
+            }
         })
 
         $(document).on('click','.openModal',function () {
@@ -259,6 +280,8 @@
             } else {
                 arr_page = arr_page.filter(f=>{return f.id != page_id})
             }
+            $('.multipage-selectedCount').html(arr_page.length);
+            // console.log(12313,arr_page);return;
 
             let data_arr_page = arr_page.map(m=>{return m.id})
             $.ajax({
@@ -298,19 +321,19 @@
 
         $( ".quickSearchPage" ).keyup(function() {
             let value = $(this).val();
-            let arr_page = $('.arrPage').val();
-            arr_page = JSON.parse(arr_page);
-            doSearch(value,arr_page);
+            let arr_page1 = $('.arrPage').val();
+            arr_page1 = JSON.parse(arr_page1);
+            doSearch(value,arr_page1);
         });
 
         let delayTimer;
-        function doSearch(text,arr_page) {
+        function doSearch(text,arr_page1) {
             clearTimeout(delayTimer);
 
             delayTimer = setTimeout(function() {
                 html = '';
-                if(arr_page.length>0){
-                    arr_page.forEach(f=>{
+                if(arr_page1.length>0){
+                    arr_page1.forEach(f=>{
                         let re = new RegExp(`${text}`, 'gi');
                         if (f.name.match(re) ||f.page_id.match(re) ) {
                             let avatar = f.avatar ? f.avatar  :'';
