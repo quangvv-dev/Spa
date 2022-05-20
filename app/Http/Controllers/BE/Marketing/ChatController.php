@@ -97,6 +97,10 @@ class ChatController extends Controller
     public function createCustomer(Request $request){
         $data = $request->except('group_id');
         $data['mkt_id'] = Auth::user()->id;
+        $status = Status::where('code','moi')->first();
+        if($status){
+            $data['status_id'] = $status->id;
+        }
         $customer = Customer::create($data);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
         return response()->json([
