@@ -280,8 +280,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
+    var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    var host = 'https://' + location.host + ':'+port;
+    // var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -552,6 +553,9 @@
                 }
                  arr = arr.filter(f => {
                      return f.participants.data[0].id != '3873174272720720';
+                 });
+                 arr.sort(function (a, b) {
+                     return b.updated_time.localeCompare(a.updated_time);
                  });
                  this.navChat = arr;
                  this.navChatDefault = arr;

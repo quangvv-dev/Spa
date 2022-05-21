@@ -2220,8 +2220,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+ // var host = 'https://crm.santa.name.vn:2022/';
 
-var host = 'https://crm.santa.name.vn:2022/';
+var host = 'https://thammyroyal.adamtech.vn:2022/';
 var port = 2022; // var host = 'https://' + location.host + ':'+port;
 
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
@@ -2272,7 +2273,6 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     VueUploadMultipleImage: vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   created: function created() {
-    console.log(342342342);
     this.getListChat();
     this.getDataFormCustomer();
   },
@@ -2315,10 +2315,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     socket.on(this.last_segment, function (server) {
       var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
-      if (server.type) {
-        console.log(121212, server);
-      } else {
-        console.log(232323, server);
+      if (server.type) {} else {
         var html = {
           message: server.message.text,
           from: {
@@ -2534,23 +2531,24 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                             _this5.navChat = data1;
                             _this5.navChatDefault = data1;
                             _this5.access_token = access_token;
+                            console.log(23424, data1);
 
                             _this5.getPhonePage();
 
-                            _context3.next = 17;
+                            _context3.next = 18;
                             break;
 
-                          case 14:
-                            _context3.prev = 14;
+                          case 15:
+                            _context3.prev = 15;
                             _context3.t0 = _context3["catch"](3);
                             alertify.error("Token hết hạn:" + _this5.last_segment, 10);
 
-                          case 17:
+                          case 18:
                           case "end":
                             return _context3.stop();
                         }
                       }
-                    }, _callee3, null, [[3, 14]]);
+                    }, _callee3, null, [[3, 15]]);
                   }));
 
                   return function (_x2) {
@@ -3167,8 +3165,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
  // var host = 'https://crm.santa.name.vn:2022/';
 
-var port = 2022;
-var host = 'https://' + location.host + ':' + port;
+var host = 'https://thammyroyal.adamtech.vn:2022/';
+var port = 2022; // var host = 'https://' + location.host + ':'+port;
+
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -3462,7 +3461,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 arr = [];
 
                 if (!arr_page_id) {
-                  _context4.next = 23;
+                  _context4.next = 22;
                   break;
                 }
 
@@ -3549,11 +3548,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this5.getSocket();
 
-                console.log(5555, _this5.arr_page_id);
-
-              case 23:
+              case 22:
                 arr = arr.filter(function (f) {
                   return f.participants.data[0].id != '3873174272720720';
+                });
+                arr.sort(function (a, b) {
+                  return b.updated_time.localeCompare(a.updated_time);
                 });
                 _this5.navChat = arr;
                 _this5.navChatDefault = arr;
@@ -3609,7 +3609,6 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(access_token);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
         _this7.detailMessage = response.data.messages.data.reverse();
-        console.log(_this7.detailMessage);
       });
       this.classClick = fb_id;
       this.fb_me = fb_id;
