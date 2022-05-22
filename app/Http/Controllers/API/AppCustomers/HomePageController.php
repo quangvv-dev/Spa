@@ -96,7 +96,7 @@ class HomePageController extends BaseApiController
         $validate = [
             'lat' => "required",
             'long' => "required",
-            'location_id' => "required",
+//            'location_id' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
