@@ -103,15 +103,18 @@ class HomePageController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $input = $request->all();
-        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long')->where('location_id', $input['location_id'])->get()->map(function ($item) use ($input) {
-            $item->distance = "";
-            if ($item->lat && $item->long) {
-                $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
-                $item->distance = round($adctual, 1, PHP_ROUND_HALF_UP);
-            }
-            unset($item->lat, $item->long);
-            return $item;
-        })->sortBy("distance");
+        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long')
+            ->when(isset($input['location_id']) && $input['location_id'], function ($q) use ($input) {
+                $q->where('location_id', $input['location_id']);
+            })->get()->map(function ($item) use ($input) {
+                $item->distance = "";
+                if ($item->lat && $item->long) {
+                    $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
+                    $item->distance = round($adctual, 1, PHP_ROUND_HALF_UP);
+                }
+                unset($item->lat, $item->long);
+                return $item;
+            })->sortBy("distance");
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branch);
     }
 
