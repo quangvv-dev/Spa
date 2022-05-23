@@ -70,8 +70,6 @@ app.post('/webhook', function (req, res) {
             console.log(comments, 'COMMENT');
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
-
-                    value.recipient.id = rows[0].page_id;
                     value.type = 'comment';
                     controller.sendSocketMessages(value, io);
 
