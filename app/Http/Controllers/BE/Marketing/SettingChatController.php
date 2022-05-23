@@ -176,9 +176,8 @@ class SettingChatController extends Controller
                 $data['page_id'] = $request->page_id;
                 $data['shortcut'] = $item->shortcut;
                 $data['message'] = $item->message;
-                $data['images'] = $item->images;
+                $data['images'] = json_encode($item->images);
                 $data['user_id'] = $user->id;
-
                 QuickReply::create($data);
             }
         }

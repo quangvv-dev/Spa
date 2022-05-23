@@ -266,8 +266,9 @@
                         </template>
                     </v-select>
                 </div>
-                <div class="col-12 mb-1"><input v-model="description" type="text" class="form-control"
-                                                placeholder="Mô tả"></div>
+                <div class="col-12 mb-1">
+                    <textarea rows="4" class="form-control" v-model="description" placeholder="Mô tả"></textarea>
+                </div>
                 <div class="col-12">
                     <button class="btn btn-primary" @click="insertCustomer">Thêm KH</button>
                 </div>
@@ -284,9 +285,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    var host = 'https://thammyroyal.adamtech.vn:2022/';
+    // var host = 'https://thuongmai.adamtech.vn:2022/';
     var port = 2022;
-    // var host = 'https://' + location.host + ':'+port;
+    var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -371,6 +372,7 @@
                 let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
                 if (server.type) {
                 } else {
+                    console.log(234525,server);
                     let html = {
                         message: server.message.text,
                         from: {
@@ -536,6 +538,8 @@
                         try {
                             const res = await axios.get(url);
                             let data1 = res.data.data;
+                            //5293627404034299
+                            data1 = data1.filter(f=>f.participants.data[0].id != '5293627404034299');
                             this.navChat = data1;
                             this.navChatDefault = data1;
                             this.access_token = access_token;
@@ -544,18 +548,6 @@
                         } catch (e) {
                             alertify.error("Token hết hạn:" + this.last_segment, 10)
                         }
-
-                        // axios.get(url)
-                        //     .then(response => {
-                        //         let data1 = response.data.data;
-                        //         this.navChat = data1;
-                        //         this.navChatDefault = data1;
-                        //         this.access_token = access_token;
-                        //         this.getPhonePage();
-                        //     }).catch(function (error) {
-                        //         console.log(234234454345345,error);
-                        //         alertify.error("Token hết hạn:" + this.last_segment,60000)
-                        //     })
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -572,9 +564,11 @@
                         let bcd = response.data.filter(f => {
                             return (f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)
                         })
-                        if (bcd.length > 0) {
+                        if(bcd.length > 0){
+                            m.phone = bcd[0].phone;
                             m.check_phone = 1;
                         } else {
+                            m.phone = '';
                             m.check_phone = 0;
                         }
                         return m;
@@ -591,6 +585,7 @@
                 let url = `https://graph.facebook.com/v13.0/${id}/?fields=${fields}&access_token=${this.access_token}`;
                 axios.get(url)
                     .then(response => {
+                        console.log(444444,response);
                         this.detailMessage = response.data.messages.data.reverse();
                     })
                 this.classClick = fb_id;
@@ -615,17 +610,9 @@
                     customer_new_mess = customer_new[0];
                     customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
                 } else {
-                    let token = this.arr_page_id.filter(f => {
-                        return f.id == page_id
-                    });
-                    let access_token = token[0].token;
-
                     let fields = 'id,created_time,message,thread_id,attachments,from';
-                    let url = `https://graph.facebook.com/v13.0/${mid}/?fields=${fields}&access_token=${access_token}`;
+                    let url = `https://graph.facebook.com/v13.0/${mid}/?fields=${fields}&access_token=${this.access_token}`;
                     await axios.get(url).then(response => {
-                        let page = this.arr_page_id.filter(f => {
-                            return f.id == page_id
-                        });
                         customer_new_mess.id = response.data.thread_id;
                         customer_new_mess.participants = {
                             data: [
@@ -635,13 +622,11 @@
                                 },
                                 {
                                     id: page_id,
-                                    name: page[0].name
                                 }
                             ]
                         }
                     })
                     customer_new_mess.unread_count = unread_count;
-                    customer_new_mess.access_token = access_token;
                 }
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
@@ -766,6 +751,7 @@
                 }
                 let data = {
                     page_id: this.last_segment,
+                    FB_ID: this.fb_me,
                     full_name: this.chat_current_name,
                     phone: this.phone,
                     gender: this.gender.id,

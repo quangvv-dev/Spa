@@ -208,7 +208,7 @@
                 </div>
             </div>
         </div>
-        <div class="right" style="width: 15%; margin-top: 6%;">
+        <div class="right" style="width: 15%; margin-top: 6%;" v-if="last_segment">
             <div class="row">
                 <div class="col-12 mb-1"><input v-model="chat_current_name" type="text" class="form-control"
                                                 placeholder="Tên KH"></div>
@@ -264,8 +264,11 @@
                         </template>
                     </v-select>
                 </div>
-                <div class="col-12 mb-1"><input v-model="description" type="text" class="form-control"
-                                                placeholder="Mô tả"></div>
+                <div class="col-12 mb-1">
+                    <textarea rows="4" class="form-control" v-model="description" placeholder="Mô tả"></textarea>
+                    <!--<input v-model="description" type="text" class="form-control"-->
+                                                <!--placeholder="Mô tả">-->
+                </div>
                 <div class="col-12">
                     <button class="btn btn-primary" @click="insertCustomer">Thêm KH</button>
                 </div>
@@ -280,9 +283,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    var host = 'https://thammyroyal.adamtech.vn:2022/';
+    // var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    // var host = 'https://' + location.host + ':'+port;
+    var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -455,7 +458,11 @@
                 this.timer = setTimeout(() => {
                     this.navChat = this.navChatDefault.filter(item => {
                         let re = new RegExp(`${this.textSearch}`, 'gi');
-                        return item.participants.data[0].name.match(re);
+                        if(item.participants.data[0].name.match(re)){
+                            return item.participants.data[0].name.match(re);
+                        } else if(item.participants.data[0].phone.match(re)){
+                            return item.participants.data[0].phone.match(re);
+                        }
                     });
                 }, 800);
             },
@@ -572,12 +579,15 @@
                     let abc = this.navChat.map(m=>{
                         let bcd = response.data.filter(f=>{return(f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)})
                         if(bcd.length > 0){
+                            m.phone = bcd[0].phone;
                             m.check_phone = 1;
                         } else {
+                            m.phone = '';
                             m.check_phone = 0;
                         }
                         return m;
                     })
+                    console.log(123123,abc);
                     this.navChat = abc;
                     this.navChatDefault = abc;
                 })
@@ -595,6 +605,8 @@
                 axios.get(url)
                     .then(response => {
                         this.detailMessage = response.data.messages.data.reverse();
+                        console.log(444444,response);
+
                     })
                 this.classClick = fb_id;
                 this.fb_me = fb_id;
@@ -764,6 +776,7 @@
                 }
                 let data = {
                     page_id: this.last_segment,
+                    FB_ID: this.fb_me,
                     full_name: this.chat_current_name,
                     phone: this.phone,
                     gender: this.gender.id,

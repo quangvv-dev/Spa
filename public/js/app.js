@@ -2217,14 +2217,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
  // var host = 'https://crm.santa.name.vn:2022/';
+// var host = 'https://thuongmai.adamtech.vn:2022/';
 
-var host = 'https://thammyroyal.adamtech.vn:2022/';
-var port = 2022; // var host = 'https://' + location.host + ':'+port;
-
+var port = 2022;
+var host = 'https://' + location.host + ':' + port;
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2316,6 +2317,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
       if (server.type) {} else {
+        console.log(234525, server);
         var html = {
           message: server.message.text,
           from: {
@@ -2527,7 +2529,11 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                           case 6:
                             res = _context3.sent;
-                            data1 = res.data.data;
+                            data1 = res.data.data; //5293627404034299
+
+                            data1 = data1.filter(function (f) {
+                              return f.participants.data[0].id != '5293627404034299';
+                            });
                             _this5.navChat = data1;
                             _this5.navChatDefault = data1;
                             _this5.access_token = access_token;
@@ -2535,20 +2541,20 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                             _this5.getPhonePage();
 
-                            _context3.next = 18;
+                            _context3.next = 19;
                             break;
 
-                          case 15:
-                            _context3.prev = 15;
+                          case 16:
+                            _context3.prev = 16;
                             _context3.t0 = _context3["catch"](3);
                             alertify.error("Token hết hạn:" + _this5.last_segment, 10);
 
-                          case 18:
+                          case 19:
                           case "end":
                             return _context3.stop();
                         }
                       }
-                    }, _callee3, null, [[3, 15]]);
+                    }, _callee3, null, [[3, 16]]);
                   }));
 
                   return function (_x2) {
@@ -2581,8 +2587,10 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           });
 
           if (bcd.length > 0) {
+            m.phone = bcd[0].phone;
             m.check_phone = 1;
           } else {
+            m.phone = '';
             m.check_phone = 0;
           }
 
@@ -2601,6 +2609,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
       var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
+        console.log(444444, response);
         _this7.detailMessage = response.data.messages.data.reverse();
       });
       this.classClick = fb_id;
@@ -2618,7 +2627,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var customer_new, customer_new_mess, token, access_token, fields, url, index;
+        var customer_new, customer_new_mess, fields, url, index;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -2635,39 +2644,29 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 customer_new_mess = customer_new[0];
                 customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
-                _context5.next = 15;
+                _context5.next = 12;
                 break;
 
               case 7:
-                token = _this8.arr_page_id.filter(function (f) {
-                  return f.id == page_id;
-                });
-                access_token = token[0].token;
                 fields = 'id,created_time,message,thread_id,attachments,from';
-                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(access_token);
-                _context5.next = 13;
+                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(_this8.access_token);
+                _context5.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-                  var page = _this8.arr_page_id.filter(function (f) {
-                    return f.id == page_id;
-                  });
-
                   customer_new_mess.id = response.data.thread_id;
                   customer_new_mess.participants = {
                     data: [{
                       id: sender_id,
                       name: response.data.from.name
                     }, {
-                      id: page_id,
-                      name: page[0].name
+                      id: page_id
                     }]
                   };
                 });
 
-              case 13:
+              case 11:
                 customer_new_mess.unread_count = unread_count;
-                customer_new_mess.access_token = access_token;
 
-              case 15:
+              case 12:
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
@@ -2684,7 +2683,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this8.navChat = _this8.navChatDefault;
 
-              case 22:
+              case 19:
               case "end":
                 return _context5.stop();
             }
@@ -2811,6 +2810,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
       var data = {
         page_id: this.last_segment,
+        FB_ID: this.fb_me,
         full_name: this.chat_current_name,
         phone: this.phone,
         gender: this.gender.id,
@@ -3160,14 +3160,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
  // var host = 'https://crm.santa.name.vn:2022/';
+// var host = 'https://thammyroyal.adamtech.vn:2022/';
 
-var host = 'https://thammyroyal.adamtech.vn:2022/';
-var port = 2022; // var host = 'https://' + location.host + ':'+port;
-
+var port = 2022;
+var host = 'https://' + location.host + ':' + port;
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -3342,7 +3345,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.timer = setTimeout(function () {
         _this3.navChat = _this3.navChatDefault.filter(function (item) {
           var re = new RegExp("".concat(_this3.textSearch), 'gi');
-          return item.participants.data[0].name.match(re);
+
+          if (item.participants.data[0].name.match(re)) {
+            return item.participants.data[0].name.match(re);
+          } else if (item.participants.data[0].phone.match(re)) {
+            return item.participants.data[0].phone.match(re);
+          }
         });
       }, 800);
     },
@@ -3585,14 +3593,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           });
 
           if (bcd.length > 0) {
+            m.phone = bcd[0].phone;
             m.check_phone = 1;
           } else {
+            m.phone = '';
             m.check_phone = 0;
           }
 
           return m;
         });
 
+        console.log(123123, abc);
         _this6.navChat = abc;
         _this6.navChatDefault = abc;
       });
@@ -3609,6 +3620,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(access_token);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
         _this7.detailMessage = response.data.messages.data.reverse();
+        console.log(444444, response);
       });
       this.classClick = fb_id;
       this.fb_me = fb_id;
@@ -3818,6 +3830,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
       var data = {
         page_id: this.last_segment,
+        FB_ID: this.fb_me,
         full_name: this.chat_current_name,
         phone: this.phone,
         gender: this.gender.id,
@@ -82524,7 +82537,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 mb-1" }, [
-            _c("input", {
+            _c("textarea", {
               directives: [
                 {
                   name: "model",
@@ -82534,7 +82547,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Mô tả" },
+              attrs: { rows: "4", placeholder: "Mô tả" },
               domProps: { value: _vm.description },
               on: {
                 input: function($event) {
@@ -83345,315 +83358,342 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "right",
-        staticStyle: { width: "15%", "margin-top": "6%" }
-      },
-      [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-12 mb-1" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.chat_current_name,
-                  expression: "chat_current_name"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Tên KH" },
-              domProps: { value: _vm.chat_current_name },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.chat_current_name = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12 mb-1" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.phone,
-                  expression: "phone"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Số điện thoại" },
-              domProps: { value: _vm.phone },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.phone = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.option_gender,
-                  label: "value",
-                  placeholder: "Giới tính"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
+    _vm.last_segment
+      ? _c(
+          "div",
+          {
+            staticClass: "right",
+            staticStyle: { width: "15%", "margin-top": "6%" }
+          },
+          [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-12 mb-1" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.chat_current_name,
+                      expression: "chat_current_name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Tên KH" },
+                  domProps: { value: _vm.chat_current_name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.chat_current_name = $event.target.value
                     }
                   }
-                ]),
-                model: {
-                  value: _vm.gender,
-                  callback: function($$v) {
-                    _vm.gender = $$v
-                  },
-                  expression: "gender"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_telesale,
-                  label: "value",
-                  placeholder: "Người phụ trách"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12 mb-1" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.phone,
+                      expression: "phone"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Số điện thoại" },
+                  domProps: { value: _vm.phone },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.phone = $event.target.value
                     }
                   }
-                ]),
-                model: {
-                  value: _vm.telesales_id,
-                  callback: function($$v) {
-                    _vm.telesales_id = $$v
-                  },
-                  expression: "telesales_id"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_group_customer,
-                  multiple: "",
-                  label: "value",
-                  placeholder: "Nhóm khách hàng"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.option_gender,
+                      label: "value",
+                      placeholder: "Giới tính"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.gender,
+                      callback: function($$v) {
+                        _vm.gender = $$v
+                      },
+                      expression: "gender"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_telesale,
+                      label: "value",
+                      placeholder: "Người phụ trách"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.telesales_id,
+                      callback: function($$v) {
+                        _vm.telesales_id = $$v
+                      },
+                      expression: "telesales_id"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_group_customer,
+                      multiple: "",
+                      label: "value",
+                      placeholder: "Nhóm khách hàng"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.value_group_customer,
+                      callback: function($$v) {
+                        _vm.value_group_customer = $$v
+                      },
+                      expression: "value_group_customer"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_source_customer,
+                      label: "value",
+                      placeholder: "Nguồn khách hàng"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.value_source_customer,
+                      callback: function($$v) {
+                        _vm.value_source_customer = $$v
+                      },
+                      expression: "value_source_customer"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_chi_nhanh,
+                      label: "value",
+                      placeholder: "Chi nhánh"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.value_chi_nhanh,
+                      callback: function($$v) {
+                        _vm.value_chi_nhanh = $$v
+                      },
+                      expression: "value_chi_nhanh"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12 mb-1" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.description,
+                      expression: "description"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "4", placeholder: "Mô tả" },
+                  domProps: { value: _vm.description },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.description = $event.target.value
                     }
                   }
-                ]),
-                model: {
-                  value: _vm.value_group_customer,
-                  callback: function($$v) {
-                    _vm.value_group_customer = $$v
-                  },
-                  expression: "value_group_customer"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_source_customer,
-                  label: "value",
-                  placeholder: "Nguồn khách hàng"
-                },
-                scopedSlots: _vm._u([
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12" }, [
+                _c(
+                  "button",
                   {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
-                    }
-                  }
-                ]),
-                model: {
-                  value: _vm.value_source_customer,
-                  callback: function($$v) {
-                    _vm.value_source_customer = $$v
+                    staticClass: "btn btn-primary",
+                    on: { click: _vm.insertCustomer }
                   },
-                  expression: "value_source_customer"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_chi_nhanh,
-                  label: "value",
-                  placeholder: "Chi nhánh"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
-                    }
-                  }
-                ]),
-                model: {
-                  value: _vm.value_chi_nhanh,
-                  callback: function($$v) {
-                    _vm.value_chi_nhanh = $$v
-                  },
-                  expression: "value_chi_nhanh"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12 mb-1" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.description,
-                  expression: "description"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Mô tả" },
-              domProps: { value: _vm.description },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.description = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                on: { click: _vm.insertCustomer }
-              },
-              [_vm._v("Thêm KH")]
-            )
-          ])
-        ])
-      ]
-    )
+                  [_vm._v("Thêm KH")]
+                )
+              ])
+            ])
+          ]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
