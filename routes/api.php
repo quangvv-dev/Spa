@@ -120,6 +120,7 @@ Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non tok
     Route::get('news', 'HomePageController@news');
     Route::get('get-category', 'HomePageController@category');
     Route::get('get-distance-branch', 'HomePageController@getBranchWithDistance');
+    Route::post('register-customer', 'AuthController@register');
 
 });
 
@@ -131,7 +132,5 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('get-albums-with-me', 'HomePageController@album');
     Route::get('info', 'AuthController@info');
     Route::post('update-info', 'AuthController@updateProfile');
-    Route::post('register-customer', 'AuthController@register');
-
 });
 
