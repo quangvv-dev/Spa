@@ -46,7 +46,7 @@ class SettingChatController extends Controller
     {
         $docs = QuickReply::when(isset($request->message) ,function ($q) use ($request){
             $q->where('message','like','%'.$request->message.'%');
-        })->where('page_id',$page_id)->paginate(StatusCode::PAGINATE_20);
+        })->paginate(StatusCode::PAGINATE_20);
         $fanpage = Fanpage::where('page_id',$page_id)->first();
         $list_fanpage = Fanpage::where('page_id','<>',$page_id)->where('used',1)->get();
         $list_quick_reply = QuickReply::where('page_id',$page_id)->get();
@@ -186,7 +186,7 @@ class SettingChatController extends Controller
 
     public function getQuickReply($page_id)
     {
-        $quickReply = QuickReply::where('page_id',$page_id)->get();
+        $quickReply = QuickReply::get();
         return response()->json([
             'statusCode' => 200,
             'data' => $quickReply,
