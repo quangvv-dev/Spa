@@ -460,8 +460,8 @@
                         let re = new RegExp(`${this.textSearch}`, 'gi');
                         if(item.participants.data[0].name.match(re)){
                             return item.participants.data[0].name.match(re);
-                        } else if(item.participants.data[0].phone.match(re)){
-                            return item.participants.data[0].phone.match(re);
+                        } else if(item.phone.match(re)){
+                            return item.phone.match(re);
                         }
                     });
                 }, 800);

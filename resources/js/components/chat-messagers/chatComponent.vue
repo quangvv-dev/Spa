@@ -1,5 +1,8 @@
 <template>
     <div class="chat-application">
+        <div class="d-flex">
+            <button class="btn btn-primary"><i class=""></i></button>
+        </div>
         <div class="sidebar-left sidebar-fixed">
             <div class="sidebar">
                 <div class="sidebar-content card d-none d-lg-block">
@@ -451,7 +454,11 @@
                 this.timer = setTimeout(() => {
                     this.navChat = this.navChatDefault.filter(item => {
                         let re = new RegExp(`${this.textSearch}`, 'gi');
-                        return item.participants.data[0].name.match(re);
+                        if(item.participants.data[0].name.match(re)){
+                            return item.participants.data[0].name.match(re);
+                        } else if(item.phone.match(re)){
+                            return item.phone.match(re);
+                        }
                     });
                 }, 800);
             },
@@ -539,7 +546,7 @@
                             const res = await axios.get(url);
                             let data1 = res.data.data;
                             //5293627404034299
-                            data1 = data1.filter(f=>f.participants.data[0].id != '5293627404034299');
+                            // data1 = data1.filter(f=>f.participants.data[0].id != '5293627404034299');
                             this.navChat = data1;
                             this.navChatDefault = data1;
                             this.access_token = access_token;

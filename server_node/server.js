@@ -39,27 +39,28 @@ app.post('/webhook', function (req, res) {
         if (messaging) {
             for (var message of messaging) {
                 console.log(message, 'Message');
-                var senderId = message.sender.id;
-                var recipientId = message.recipient.id;
-                if (message.message) {
-                    controller.sendSocketMessages(message, io);
-                    if (message.message.text) {
-                        let text = message.message.text;
-                        text = text.replace(".", "");
-                        text = text.replace("O", "0");
-                        // text = text.replace("o", "0");
-                        let letr = text.match(/\d+/g);
-                        if (!letr){
-                            return false;
-                        }
-                        letr.every(function (i) {
-                            if (i.length === 10) {
-                                controller.SetCustomers(i, recipientId, message.message.text, senderId);
-                                return false;
-                            }
-                        })
-                    }
-                }
+                controller.sendSocketMessages(message, io);
+                // var senderId = message.sender.id;
+                // var recipientId = message.recipient.id;
+                // if (message.message) {
+                //     controller.sendSocketMessages(message, io);
+                //     if (message.message.text) {
+                //         let text = message.message.text;
+                //         text = text.replace(".", "");
+                //         text = text.replace("O", "0");
+                //         // text = text.replace("o", "0");
+                //         let letr = text.match(/\d+/g);
+                //         if (!letr){
+                //             return false;
+                //         }
+                //         letr.every(function (i) {
+                //             if (i.length === 10) {
+                //                 controller.SetCustomers(i, recipientId, message.message.text, senderId);
+                //                 return false;
+                //             }
+                //         })
+                //     }
+                // }
             }
         } else {
 
@@ -67,20 +68,26 @@ app.post('/webhook', function (req, res) {
             console.log(comments, 'COMMENT');
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
-                    let text2 = value.value.message;
-                    text2 = text2.replace(".", "");
-                    text2 = text2.replace("O", "0");
-                    // text2 = text2.replace("o", "0");
-                    let letr = text2.match(/\d+/g);
-                    if (!letr){
-                        return false;
-                    }
-                    letr.every(function (i) {
-                        if (i.length === 10) {
-                            controller.SetComment(i, value.value.post_id, value.value.message, value.value.from.name);
-                            return false;
-                        }
-                    })
+
+                    value.recipient.id = rows[0].page_id;
+                    value.type = 'comment';
+                    controller.sendSocketMessages(value, io);
+
+
+                    // let text2 = value.value.message;
+                    // text2 = text2.replace(".", "");
+                    // text2 = text2.replace("O", "0");
+                    // // text2 = text2.replace("o", "0");
+                    // let letr = text2.match(/\d+/g);
+                    // if (!letr){
+                    //     return false;
+                    // }
+                    // letr.every(function (i) {
+                    //     if (i.length === 10) {
+                    //         controller.SetComment(i, value.value.post_id, value.value.message, value.value.from.name);
+                    //         return false;
+                    //     }
+                    // })
                 }
                 return false;
             }

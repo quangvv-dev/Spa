@@ -2218,6 +2218,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2396,7 +2399,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.timer = setTimeout(function () {
         _this3.navChat = _this3.navChatDefault.filter(function (item) {
           var re = new RegExp("".concat(_this3.textSearch), 'gi');
-          return item.participants.data[0].name.match(re);
+
+          if (item.participants.data[0].name.match(re)) {
+            return item.participants.data[0].name.match(re);
+          } else if (item.phone.match(re)) {
+            return item.phone.match(re);
+          }
         });
       }, 800);
     },
@@ -2530,10 +2538,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                           case 6:
                             res = _context3.sent;
                             data1 = res.data.data; //5293627404034299
+                            // data1 = data1.filter(f=>f.participants.data[0].id != '5293627404034299');
 
-                            data1 = data1.filter(function (f) {
-                              return f.participants.data[0].id != '5293627404034299';
-                            });
                             _this5.navChat = data1;
                             _this5.navChatDefault = data1;
                             _this5.access_token = access_token;
@@ -2541,20 +2547,20 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                             _this5.getPhonePage();
 
-                            _context3.next = 19;
+                            _context3.next = 18;
                             break;
 
-                          case 16:
-                            _context3.prev = 16;
+                          case 15:
+                            _context3.prev = 15;
                             _context3.t0 = _context3["catch"](3);
                             alertify.error("Token hết hạn:" + _this5.last_segment, 10);
 
-                          case 19:
+                          case 18:
                           case "end":
                             return _context3.stop();
                         }
                       }
-                    }, _callee3, null, [[3, 16]]);
+                    }, _callee3, null, [[3, 15]]);
                   }));
 
                   return function (_x2) {
@@ -3166,11 +3172,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
- // var host = 'https://crm.santa.name.vn:2022/';
-// var host = 'https://thammyroyal.adamtech.vn:2022/';
 
-var port = 2022;
-var host = 'https://' + location.host + ':' + port;
+var host = 'https://crm.santa.name.vn:2022/'; // var host = 'https://thammyroyal.adamtech.vn:2022/';
+
+var port = 2022; // var host = 'https://' + location.host + ':'+port;
+
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -3348,8 +3354,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
           if (item.participants.data[0].name.match(re)) {
             return item.participants.data[0].name.match(re);
-          } else if (item.participants.data[0].phone.match(re)) {
-            return item.participants.data[0].phone.match(re);
+          } else if (item.phone.match(re)) {
+            return item.phone.match(re);
           }
         });
       }, 800);
@@ -81531,6 +81537,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "chat-application" }, [
+    _vm._m(0),
+    _vm._v(" "),
     _c("div", { staticClass: "sidebar-left sidebar-fixed" }, [
       _c("div", { staticClass: "sidebar" }, [
         _c("div", { staticClass: "sidebar-content card d-none d-lg-block" }, [
@@ -81568,7 +81576,7 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _vm._m(0)
+                _vm._m(1)
               ]
             )
           ]),
@@ -82132,7 +82140,7 @@ var render = function() {
                     "form-group position-relative has-icon-left col-10 m-0"
                 },
                 [
-                  _vm._m(1),
+                  _vm._m(2),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -82576,6 +82584,14 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "d-flex" }, [
+      _c("button", { staticClass: "btn btn-primary" }, [_c("i", {})])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

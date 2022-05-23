@@ -103,6 +103,10 @@ class ChatController extends Controller
         if($status){
             $data['status_id'] = $status->id;
         }
+        $fanpage = Fanpage::where('page_id',$request->page_id)->with('source')->first();
+        if($fanpage->source){
+            $data['source_fb'] = $fanpage->source->id;
+        }
         $customer = Customer::create($data);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
         return response()->json([

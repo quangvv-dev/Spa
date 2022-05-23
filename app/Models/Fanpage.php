@@ -29,4 +29,8 @@ class Fanpage extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function source()
+    {
+        return $this->belongsTo(Source::class, 'source_id');
+    }
 }
