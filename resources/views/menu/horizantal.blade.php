@@ -116,7 +116,7 @@
                                         @endif
                                     @endif
                                         <li><a href="{{route('landipages.index')}}">Landipage</a></li>
-                                        <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpege</a></li>
+                                        <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpage</a></li>
 
                                 </ul>
                             </li>
