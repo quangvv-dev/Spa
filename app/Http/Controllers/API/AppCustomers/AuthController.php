@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\AppCustomers;
 
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Models\Category;
@@ -228,7 +229,8 @@ class AuthController extends BaseApiController
         $input['mkt_id'] = 0;
         $input['wallet'] = 0;
         $input['post_id'] = 0;
-        $input['status_id'] = StatusCode::NEW;
+        $input['status_id'] = Functions::getStatusWithCode('moi');
+        ;
         $input['password'] = Hash::make($input['password']);
 
         $customer = $this->customerService->create($input);
