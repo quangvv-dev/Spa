@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class AuthController extends BaseApiController
 {
@@ -228,14 +229,22 @@ class AuthController extends BaseApiController
         $input['wallet'] = 0;
         $input['post_id'] = 0;
         $input['status_id'] = StatusCode::NEW;
-        $input['password'] =  Hash::make($input['password']);
+        $input['password'] = Hash::make($input['password']);
 
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
-        foreach ($request->category_id as $item) {
-            self::createCustomerGroup($item, $customer->id, $input['branch_id']);
+        if (count($request->category_id)) {
+            $category = Category::whereIn('id', $request->category_id)->get();
+            self::createCustomerGroup($category, 1, $input['branch_id']);
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new CustomerResource($customer));
+        $payload = $customer->toArray();
+        $payload['time'] = strtotime(Date::now());
+//                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
+        $data = [
+            'token' => jwtencode($payload),
+            'info'  => new CustomerResource($customer),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
     public function update_code($customer)
@@ -245,9 +254,8 @@ class AuthController extends BaseApiController
         $customer->update(['account_code' => $code]);
     }
 
-    protected function createCustomerGroup($group_id, $customer_id, $branch_id)
+    protected function createCustomerGroup($category, $customer_id, $branch_id)
     {
-        $category = Category::find($group_id);
         if (count($category)) {
             foreach ($category as $item) {
                 CustomerGroup::create([
