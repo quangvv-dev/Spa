@@ -39,7 +39,9 @@ app.post('/webhook', function (req, res) {
         if (messaging) {
             for (var message of messaging) {
                 console.log(message, 'Message');
-                controller.sendSocketMessages(message, io);
+                if (message.message) {
+                    controller.sendSocketMessages(message, io);
+                }
                 // var senderId = message.sender.id;
                 // var recipientId = message.recipient.id;
                 // if (message.message) {
