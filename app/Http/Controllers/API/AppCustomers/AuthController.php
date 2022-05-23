@@ -30,6 +30,7 @@ class AuthController extends BaseApiController
      * Login APP
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
@@ -46,7 +47,7 @@ class AuthController extends BaseApiController
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
                 $data = [
                     'token' => jwtencode($payload),
-                    'info' => new CustomerResource($info),
+                    'info'  => new CustomerResource($info),
                 ];
                 return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
             }
@@ -57,6 +58,7 @@ class AuthController extends BaseApiController
      * Check số điện thoại tồn tại
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function checkPhoneExist(Request $request)
@@ -78,12 +80,13 @@ class AuthController extends BaseApiController
      * Quên mật khẩu
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function forgotPassword(Request $request)
     {
         $validate = [
-            'phone' => "required",
+            'phone'    => "required",
             'password' => "required",
         ];
         $this->validator($request, $validate);
@@ -109,6 +112,7 @@ class AuthController extends BaseApiController
      * Đổi mật khẩu
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function changePassword(Request $request)
@@ -118,7 +122,7 @@ class AuthController extends BaseApiController
         $messages = [
             'old_password.required' => 'Vui lòng nhập mật khẩu cũ',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới',
-            'new_password.min' => 'Mật khẩu phải lớn hơn 6 ký tự!',
+            'new_password.min'      => 'Mật khẩu phải lớn hơn 6 ký tự!',
         ];
 
         if ($user->password != '' || $user->password != null) {
@@ -134,7 +138,7 @@ class AuthController extends BaseApiController
 
         if ($validator->fails()) {
             return response()->json([
-                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->all(),
             ]);
         }
@@ -168,6 +172,7 @@ class AuthController extends BaseApiController
      * Get info
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function info(Request $request)
@@ -182,6 +187,7 @@ class AuthController extends BaseApiController
      * Cập nhật profiles
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateProfile(Request $request)
@@ -201,15 +207,17 @@ class AuthController extends BaseApiController
      * Đăng ký tài khoản
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request)
     {
         $validate = [
-            'full_name' => "required",
-            'phone' => "required",
+            'full_name'   => "required",
+            'phone'       => "required",
             'category_id' => "required",
-            'branch_id' => "required",
+            'branch_id'   => "required",
+            'password'    => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -220,6 +228,7 @@ class AuthController extends BaseApiController
         $input['wallet'] = 0;
         $input['post_id'] = 0;
         $input['status_id'] = StatusCode::NEW;
+        $input['password'] =  Hash::make($input['password']);
 
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
@@ -244,8 +253,8 @@ class AuthController extends BaseApiController
                 CustomerGroup::create([
                     'customer_id' => $customer_id,
                     'category_id' => $item->id,
-                    'branch_id' => $branch_id,
-                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                    'branch_id'   => $branch_id,
+                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                 ]);
             }
         }
