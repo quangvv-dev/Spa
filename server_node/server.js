@@ -73,8 +73,7 @@ app.post('/webhook', function (req, res) {
 
                     let splitted = value.post_id.split("_", 2);
                     value.type = 'comment';
-                    value.recipient.id = splitted[0];
-                    controller.sendSocketMessages(value, io);
+                    controller.sendSocketComment(splitted[0],value, io);
 
 
                     // let text2 = value.value.message;

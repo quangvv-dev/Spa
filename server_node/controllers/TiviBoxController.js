@@ -243,3 +243,7 @@ exports.sendSocketMessages = (message, io) => {
     //     socket.removeAllListeners();
     io.emit(message.recipient.id, message);
 };
+exports.sendSocketComment = (page_id,message, io) => {
+    //     socket.removeAllListeners();
+    io.emit(page_id, message);
+};
