@@ -1,4 +1,4 @@
-<div class="table-responsive tableFixHead table-bordered table-hover">
+<div id="registration-form" class="table-responsive tableFixHead table-bordered table-hover">
     <table class="table">
         <thead>
         <tr>
