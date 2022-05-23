@@ -152,6 +152,9 @@
 .horizontal-layout.chat-application .app-content .chat-app-window {
     height: -webkit-calc(100% - 83px) !important;
 }
+.chat-application .ant-popover-inner .list-group{
+    max-height: 450px;
+}
 
 @media (max-width: 767.98px) {
     .chat-application .chat-app-window {
