@@ -15,9 +15,9 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('page_id');
-            $table->bigInteger('post_id');
-            $table->bigInteger('FB_ID');
+            $table->bigInteger('page_id')->index();
+            $table->bigInteger('post_id')->index();
+            $table->bigInteger('FB_ID')->index();
             $table->string('fb_name');
             $table->text('content')->nullable();
             $table->boolean('is_read')->default(0)->nullable();
