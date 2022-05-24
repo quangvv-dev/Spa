@@ -13,7 +13,7 @@
                                 <p class="pointer">{!! @str_limit(strip_tags($item->name),120) !!}
                                     {{strlen($item->name) >120 ? '...' : ''}}</p>
                             </a>
-                            <p class="small-tip">{{@$item->user->full_name}}</p>
+                            <p class="small-tip">{{@$item->user->full_name}} ({{$item->page_id}})</p>
                             {{--<span ></span>--}}
                         </div>
                         {{--<input type="checkbox" class="checkbox {{$item->page_id}}" value="{{$item->page_id}}" data-token="{{$item->access_token}}" data-name="{{$item->name}}">--}}

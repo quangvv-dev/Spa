@@ -73,16 +73,16 @@
                             <div class="chat" v-if="item.from.id ==last_segment">
                                 <div class="chat-body">
                                     <div class="chat-content" v-if="item.display==1">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" alt="">
+                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
-                                        <p v-else v-html="item.message"></p>
+                                        <p v-else v-html="item.message" :title="date(item.created_time)"></p>
                                     </div>
                                     <div class="chat-content" v-else style="margin-bottom: 0">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" alt="">
+                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
-                                        <p v-else v-html="item.message"></p>
+                                        <p v-else v-html="item.message" :title="date(item.created_time)"></p>
                                     </div>
                                 </div>
 
@@ -97,19 +97,18 @@
                                 </div>
                                 <div class="chat-body">
                                     <div class="chat-content" v-if="item.display==1">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" alt="">
+                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
-                                        <p v-else v-html="item.message"></p>
+                                        <p v-else v-html="item.message" :title="date(item.created_time)"></p>
                                     </div>
                                     <div class="chat-content" v-else style="margin-bottom: 0">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" alt="">
+                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
-                                        <p v-else v-html="item.message"></p>
+                                        <p v-else v-html="item.message" :title="date(item.created_time)"></p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <!--<p class="time">1 hours ago</p>-->
@@ -288,9 +287,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    // var host = 'https://thuongmai.adamtech.vn:2022/';
+    var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    var host = 'https://' + location.host + ':'+port;
+    // var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -373,7 +372,11 @@
         mounted() {
             socket.on(this.last_segment, (server) => {
                 let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
+                console.log(44444,server);
+
                 if (server.type) {
+                    console.log(33333,server);
+                    this.customerNewComment(server);
                 } else {
                     console.log(234525,server);
                     let html = {
@@ -519,6 +522,11 @@
                                 url: location.origin + '/' + f.name
                             }
                             this.detailMessage.push(html);
+                            this.changeNavChat('images')
+                        }).catch(error =>{
+                            if(error){
+                                alertify.error('đã có lỗi xảy ra !');
+                            }
                         })
 
                     })
@@ -530,8 +538,24 @@
                     axios.post('/marketing/setting-quick-reply/delete-image', data_delete).then(response => {
                         this.images = [];
                     })
+                } else {
+                    this.changeNavChat('message');
                 }
                 this.contentMesage = '';
+            },
+            changeNavChat(type){
+                let index = this.navChatDefault.findIndex(f => {
+                    return (f.participants.data[0].id == this.fb_me && f.participants.data[1].id == this.last_segment);
+                });
+
+                if(type == 'images'){
+                    this.navChatDefault[index].snippet = 'Bạn đã gửi 1 ảnh';
+                }else if(type == 'message') {
+                    this.navChatDefault[index].snippet = this.contentMesage;
+                } else if(type = 'phone') {
+                    this.navChatDefault[index].phone = this.phone;
+                    this.navChatDefault[index].check_phone = 1;
+                }
             },
 
             async getListChat() {
@@ -649,6 +673,10 @@
 
                 this.navChatDefault.unshift(customer_new_mess);
                 this.navChat = this.navChatDefault;
+            },
+
+            customerNewComment(data){
+
             },
 
             selectElement(item) {
@@ -773,6 +801,7 @@
                     .then(res => {
                         if (res.data.success) {
                             alertify.success('Thêm KH thành công !');
+                            this.changeNavChat('phone');
                             this.resetValue();
                         } else {
                             alertify.error('Thất bại !');

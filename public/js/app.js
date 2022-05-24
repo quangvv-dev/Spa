@@ -2220,15 +2220,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
  // var host = 'https://crm.santa.name.vn:2022/';
-// var host = 'https://thuongmai.adamtech.vn:2022/';
 
-var port = 2022;
-var host = 'https://' + location.host + ':' + port;
+var host = 'https://thammyroyal.adamtech.vn:2022/';
+var port = 2022; // var host = 'https://' + location.host + ':'+port;
+
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2318,8 +2317,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
     socket.on(this.last_segment, function (server) {
       var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
+      console.log(44444, server);
 
-      if (server.type) {} else {
+      if (server.type) {
+        console.log(33333, server);
+
+        _this2.customerNewComment(server);
+      } else {
         console.log(234525, server);
         var html = {
           message: server.message.text,
@@ -2480,6 +2484,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                                 };
 
                                 _this4.detailMessage.push(html);
+
+                                _this4.changeNavChat('images');
+                              })["catch"](function (error) {
+                                if (error) {
+                                  alertify.error('đã có lỗi xảy ra !');
+                                }
                               });
 
                             case 2:
@@ -2501,6 +2511,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/delete-image', data_delete).then(function (response) {
                     _this4.images = [];
                   });
+                } else {
+                  _this4.changeNavChat('message');
                 }
 
                 _this4.contentMesage = '';
@@ -2513,15 +2525,31 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }, _callee2);
       }))();
     },
-    getListChat: function getListChat() {
+    changeNavChat: function changeNavChat(type) {
       var _this5 = this;
+
+      var index = this.navChatDefault.findIndex(function (f) {
+        return f.participants.data[0].id == _this5.fb_me && f.participants.data[1].id == _this5.last_segment;
+      });
+
+      if (type == 'images') {
+        this.navChatDefault[index].snippet = 'Bạn đã gửi 1 ảnh';
+      } else if (type == 'message') {
+        this.navChatDefault[index].snippet = this.contentMesage;
+      } else if (type = 'phone') {
+        this.navChatDefault[index].phone = this.phone;
+        this.navChatDefault[index].check_phone = 1;
+      }
+    },
+    getListChat: function getListChat() {
+      var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-token-fanpage/' + _this5.last_segment).then( /*#__PURE__*/function () {
+                axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-token-fanpage/' + _this6.last_segment).then( /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(response) {
                     var access_token, fields, url, res, data1;
                     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
@@ -2540,12 +2568,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                             data1 = res.data.data; //5293627404034299
                             // data1 = data1.filter(f=>f.participants.data[0].id != '5293627404034299');
 
-                            _this5.navChat = data1;
-                            _this5.navChatDefault = data1;
-                            _this5.access_token = access_token;
+                            _this6.navChat = data1;
+                            _this6.navChatDefault = data1;
+                            _this6.access_token = access_token;
                             console.log(23424, data1);
 
-                            _this5.getPhonePage();
+                            _this6.getPhonePage();
 
                             _context3.next = 18;
                             break;
@@ -2553,7 +2581,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                           case 15:
                             _context3.prev = 15;
                             _context3.t0 = _context3["catch"](3);
-                            alertify.error("Token hết hạn:" + _this5.last_segment, 10);
+                            alertify.error("Token hết hạn:" + _this6.last_segment, 10);
 
                           case 18:
                           case "end":
@@ -2579,7 +2607,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }))();
     },
     getPhonePage: function getPhonePage() {
-      var _this6 = this;
+      var _this7 = this;
 
       var arr_page = [this.last_segment];
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-phone-page', {
@@ -2587,7 +2615,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           arr_page: arr_page
         }
       }).then(function (response) {
-        var abc = _this6.navChat.map(function (m) {
+        var abc = _this7.navChat.map(function (m) {
           var bcd = response.data.filter(function (f) {
             return f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id;
           });
@@ -2603,12 +2631,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           return m;
         });
 
-        _this6.navChat = abc;
-        _this6.navChatDefault = abc;
+        _this7.navChat = abc;
+        _this7.navChatDefault = abc;
       });
     },
     selectMessage: function selectMessage(item) {
-      var _this7 = this;
+      var _this8 = this;
 
       var id = item.id;
       var fb_id = item.participants.data[0].id;
@@ -2616,7 +2644,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
         console.log(444444, response);
-        _this7.detailMessage = response.data.messages.data.reverse();
+        _this8.detailMessage = response.data.messages.data.reverse();
       });
       this.classClick = fb_id;
       this.fb_me = fb_id;
@@ -2630,7 +2658,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.scrollToBottom();
     },
     customerNewMessage: function customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
-      var _this8 = this;
+      var _this9 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
         var customer_new, customer_new_mess, fields, url, index;
@@ -2638,7 +2666,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                customer_new = _this8.navChatDefault.filter(function (f) {
+                customer_new = _this9.navChatDefault.filter(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
                 customer_new_mess = {};
@@ -2655,7 +2683,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
               case 7:
                 fields = 'id,created_time,message,thread_id,attachments,from';
-                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(_this8.access_token);
+                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(_this9.access_token);
                 _context5.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
                   customer_new_mess.id = response.data.thread_id;
@@ -2676,18 +2704,18 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
-                index = _this8.navChatDefault.findIndex(function (f) {
+                index = _this9.navChatDefault.findIndex(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
 
                 if (index > -1) {
-                  _this8.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                  _this9.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
 
                 }
 
-                _this8.navChatDefault.unshift(customer_new_mess);
+                _this9.navChatDefault.unshift(customer_new_mess);
 
-                _this8.navChat = _this8.navChatDefault;
+                _this9.navChat = _this9.navChatDefault;
 
               case 19:
               case "end":
@@ -2697,8 +2725,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }, _callee5);
       }))();
     },
+    customerNewComment: function customerNewComment(data) {},
     selectElement: function selectElement(item) {
-      var _this9 = this;
+      var _this10 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -2713,17 +2742,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this9.data_images_upload_server.push(data);
+          _this10.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this10 = this;
+      var _this11 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this10.dataQuickReply = response.data.data;
+          _this11.dataQuickReply = response.data.data;
         }
       });
     },
@@ -2733,14 +2762,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this11 = this;
+      var _this12 = this;
 
       var r = confirm("remove image");
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this11.data_images_upload_server = _this11.data_images_upload_server.filter(function (ft) {
+            _this12.data_images_upload_server = _this12.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -2761,7 +2790,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.images = [];
     },
     getDataFormCustomer: function getDataFormCustomer() {
-      var _this12 = this;
+      var _this13 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
         if (response.data) {
@@ -2781,15 +2810,15 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             m['value'] = m.name;
             return m;
           });
-          _this12.data_group_customer = data_group_customer;
-          _this12.data_telesale = data_telesale;
-          _this12.data_source_customer = data_source_customer;
-          _this12.data_chi_nhanh = data_chi_nhanh;
+          _this13.data_group_customer = data_group_customer;
+          _this13.data_telesale = data_telesale;
+          _this13.data_source_customer = data_source_customer;
+          _this13.data_chi_nhanh = data_chi_nhanh;
         }
       });
     },
     insertCustomer: function insertCustomer() {
-      var _this13 = this;
+      var _this14 = this;
 
       if (!this.chat_current_name) {
         alertify.warning('Vui lòng nhập tên !');
@@ -2832,7 +2861,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           alertify.success('Thêm KH thành công !');
 
-          _this13.resetValue();
+          _this14.changeNavChat('phone');
+
+          _this14.resetValue();
         } else {
           alertify.error('Thất bại !');
         }
@@ -3172,9 +3203,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+ // var host = 'https://crm.santa.name.vn:2022/';
 
-var host = 'https://crm.santa.name.vn:2022/'; // var host = 'https://thammyroyal.adamtech.vn:2022/';
-
+var host = 'https://thammyroyal.adamtech.vn:2022/';
 var port = 2022; // var host = 'https://' + location.host + ':'+port;
 
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
@@ -3432,6 +3463,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                                 };
 
                                 _this4.detailMessage.push(html);
+
+                                _this4.changeNavChat('images');
+                              })["catch"](function (error) {
+                                if (error) {
+                                  alertify.error('đã có lỗi xảy ra !');
+                                }
                               });
 
                             case 2:
@@ -3449,6 +3486,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/delete-image', data_image_response).then(function (response) {
                     _this4.images = [];
                   });
+                } else {
+                  _this4.changeNavChat('message');
                 }
 
                 _this4.contentMesage = '';
@@ -3461,8 +3500,24 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }, _callee2);
       }))();
     },
-    getListChat: function getListChat() {
+    changeNavChat: function changeNavChat(type) {
       var _this5 = this;
+
+      var index = this.navChatDefault.findIndex(function (f) {
+        return f.participants.data[0].id == _this5.fb_me && f.participants.data[1].id == _this5.last_segment;
+      });
+
+      if (type == 'images') {
+        this.navChatDefault[index].snippet = 'Bạn đã gửi 1 ảnh';
+      } else if (type == 'message') {
+        this.navChatDefault[index].snippet = this.contentMesage;
+      } else if (type = 'phone') {
+        this.navChatDefault[index].phone = this.phone;
+        this.navChatDefault[index].check_phone = 1;
+      }
+    },
+    getListChat: function getListChat() {
+      var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var arr_page_id, arr, _iterator, _step, _loop;
@@ -3471,7 +3526,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                arr_page_id = _this5.$cookies.get('arr_page_id');
+                arr_page_id = _this6.$cookies.get('arr_page_id');
                 arr = [];
 
                 if (!arr_page_id) {
@@ -3558,9 +3613,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 return _context4.finish(17);
 
               case 20:
-                _this5.arr_page_id = arr_page_id;
+                _this6.arr_page_id = arr_page_id;
 
-                _this5.getSocket();
+                _this6.getSocket();
 
               case 22:
                 arr = arr.filter(function (f) {
@@ -3569,10 +3624,10 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 arr.sort(function (a, b) {
                   return b.updated_time.localeCompare(a.updated_time);
                 });
-                _this5.navChat = arr;
-                _this5.navChatDefault = arr;
+                _this6.navChat = arr;
+                _this6.navChatDefault = arr;
 
-                _this5.getPhonePage();
+                _this6.getPhonePage();
 
               case 27:
               case "end":
@@ -3583,7 +3638,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }))();
     },
     getPhonePage: function getPhonePage() {
-      var _this6 = this;
+      var _this7 = this;
 
       var arr_page = this.arr_page_id.map(function (m) {
         return m.id;
@@ -3593,7 +3648,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           arr_page: arr_page
         }
       }).then(function (response) {
-        var abc = _this6.navChat.map(function (m) {
+        var abc = _this7.navChat.map(function (m) {
           var bcd = response.data.filter(function (f) {
             return f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id;
           });
@@ -3610,12 +3665,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         });
 
         console.log(123123, abc);
-        _this6.navChat = abc;
-        _this6.navChatDefault = abc;
+        _this7.navChat = abc;
+        _this7.navChatDefault = abc;
       });
     },
     selectMessage: function selectMessage(item) {
-      var _this7 = this;
+      var _this8 = this;
 
       var id = item.id;
       var fb_id = item.participants.data[0].id;
@@ -3625,7 +3680,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
       var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(access_token);
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-        _this7.detailMessage = response.data.messages.data.reverse();
+        _this8.detailMessage = response.data.messages.data.reverse();
         console.log(444444, response);
       });
       this.classClick = fb_id;
@@ -3642,7 +3697,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.scrollToBottom();
     },
     selectElement: function selectElement(item) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -3657,22 +3712,22 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this8.data_images_upload_server.push(data);
+          _this9.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this9 = this;
+      var _this10 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this9.dataQuickReply = response.data.data;
+          _this10.dataQuickReply = response.data.data;
         }
       });
     },
     customerNewMessage: function customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
-      var _this10 = this;
+      var _this11 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var customer_new, customer_new_mess, token, access_token, fields, url, index;
@@ -3680,7 +3735,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                customer_new = _this10.navChatDefault.filter(function (f) {
+                customer_new = _this11.navChatDefault.filter(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
                 customer_new_mess = {};
@@ -3696,7 +3751,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 break;
 
               case 7:
-                token = _this10.arr_page_id.filter(function (f) {
+                token = _this11.arr_page_id.filter(function (f) {
                   return f.id == page_id;
                 });
                 access_token = token[0].token;
@@ -3704,7 +3759,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(access_token);
                 _context5.next = 13;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-                  var page = _this10.arr_page_id.filter(function (f) {
+                  var page = _this11.arr_page_id.filter(function (f) {
                     return f.id == page_id;
                   });
 
@@ -3728,18 +3783,18 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
-                index = _this10.navChatDefault.findIndex(function (f) {
+                index = _this11.navChatDefault.findIndex(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
 
                 if (index > -1) {
-                  _this10.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                  _this11.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
 
                 }
 
-                _this10.navChatDefault.unshift(customer_new_mess);
+                _this11.navChatDefault.unshift(customer_new_mess);
 
-                _this10.navChat = _this10.navChatDefault;
+                _this11.navChat = _this11.navChatDefault;
 
               case 22:
               case "end":
@@ -3758,14 +3813,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this11 = this;
+      var _this12 = this;
 
       var r = confirm("remove image");
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this11.data_images_upload_server = _this11.data_images_upload_server.filter(function (ft) {
+            _this12.data_images_upload_server = _this12.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -3781,7 +3836,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.images = [];
     },
     getDataFormCustomer: function getDataFormCustomer() {
-      var _this12 = this;
+      var _this13 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
         if (response.data) {
@@ -3801,15 +3856,15 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             m['value'] = m.name;
             return m;
           });
-          _this12.data_group_customer = data_group_customer;
-          _this12.data_telesale = data_telesale;
-          _this12.data_source_customer = data_source_customer;
-          _this12.data_chi_nhanh = data_chi_nhanh;
+          _this13.data_group_customer = data_group_customer;
+          _this13.data_telesale = data_telesale;
+          _this13.data_source_customer = data_source_customer;
+          _this13.data_chi_nhanh = data_chi_nhanh;
         }
       });
     },
     insertCustomer: function insertCustomer() {
-      var _this13 = this;
+      var _this14 = this;
 
       if (!this.chat_current_name) {
         alertify.warning('Vui lòng nhập tên !');
@@ -3852,7 +3907,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           alertify.success('Thêm KH thành công !');
 
-          _this13.resetValue();
+          _this14.changeNavChat('phone');
+
+          _this14.resetValue();
         } else {
           alertify.error('Thất bại !');
         }
@@ -81766,6 +81823,7 @@ var render = function() {
                                       width: "320",
                                       height: "180",
                                       src: item.url,
+                                      title: _vm.date(item.created_time),
                                       alt: ""
                                     }
                                   })
@@ -81779,6 +81837,9 @@ var render = function() {
                                     }
                                   })
                                 : _c("p", {
+                                    attrs: {
+                                      title: _vm.date(item.created_time)
+                                    },
                                     domProps: {
                                       innerHTML: _vm._s(item.message)
                                     }
@@ -81797,6 +81858,7 @@ var render = function() {
                                         width: "320",
                                         height: "180",
                                         src: item.url,
+                                        title: _vm.date(item.created_time),
                                         alt: ""
                                       }
                                     })
@@ -81810,6 +81872,9 @@ var render = function() {
                                       }
                                     })
                                   : _c("p", {
+                                      attrs: {
+                                        title: _vm.date(item.created_time)
+                                      },
                                       domProps: {
                                         innerHTML: _vm._s(item.message)
                                       }
@@ -81858,6 +81923,7 @@ var render = function() {
                                       width: "320",
                                       height: "180",
                                       src: item.url,
+                                      title: _vm.date(item.created_time),
                                       alt: ""
                                     }
                                   })
@@ -81871,6 +81937,9 @@ var render = function() {
                                     }
                                   })
                                 : _c("p", {
+                                    attrs: {
+                                      title: _vm.date(item.created_time)
+                                    },
                                     domProps: {
                                       innerHTML: _vm._s(item.message)
                                     }
@@ -81889,6 +81958,7 @@ var render = function() {
                                         width: "320",
                                         height: "180",
                                         src: item.url,
+                                        title: _vm.date(item.created_time),
                                         alt: ""
                                       }
                                     })
@@ -81902,6 +81972,9 @@ var render = function() {
                                       }
                                     })
                                   : _c("p", {
+                                      attrs: {
+                                        title: _vm.date(item.created_time)
+                                      },
                                       domProps: {
                                         innerHTML: _vm._s(item.message)
                                       }
@@ -82860,6 +82933,7 @@ var render = function() {
                                       width: "320",
                                       height: "180",
                                       src: item.url,
+                                      title: _vm.date(item.created_time),
                                       alt: ""
                                     }
                                   })
@@ -82873,6 +82947,9 @@ var render = function() {
                                     }
                                   })
                                 : _c("p", {
+                                    attrs: {
+                                      title: _vm.date(item.created_time)
+                                    },
                                     domProps: {
                                       innerHTML: _vm._s(item.message)
                                     }
@@ -82891,6 +82968,7 @@ var render = function() {
                                         width: "320",
                                         height: "180",
                                         src: item.url,
+                                        title: _vm.date(item.created_time),
                                         alt: ""
                                       }
                                     })
@@ -82904,6 +82982,9 @@ var render = function() {
                                       }
                                     })
                                   : _c("p", {
+                                      attrs: {
+                                        title: _vm.date(item.created_time)
+                                      },
                                       domProps: {
                                         innerHTML: _vm._s(item.message)
                                       }
@@ -82952,6 +83033,7 @@ var render = function() {
                                       width: "320",
                                       height: "180",
                                       src: item.url,
+                                      title: _vm.date(item.created_time),
                                       alt: ""
                                     }
                                   })
@@ -82965,6 +83047,9 @@ var render = function() {
                                     }
                                   })
                                 : _c("p", {
+                                    attrs: {
+                                      title: _vm.date(item.created_time)
+                                    },
                                     domProps: {
                                       innerHTML: _vm._s(item.message)
                                     }
@@ -82983,6 +83068,7 @@ var render = function() {
                                         width: "320",
                                         height: "180",
                                         src: item.url,
+                                        title: _vm.date(item.created_time),
                                         alt: ""
                                       }
                                     })
@@ -82996,6 +83082,9 @@ var render = function() {
                                       }
                                     })
                                   : _c("p", {
+                                      attrs: {
+                                        title: _vm.date(item.created_time)
+                                      },
                                       domProps: {
                                         innerHTML: _vm._s(item.message)
                                       }
@@ -98321,8 +98410,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\PHP\xampp\htdocs\Spa\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\PHP\xampp\htdocs\Spa\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! E:\PHP\Spa\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! E:\PHP\Spa\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
