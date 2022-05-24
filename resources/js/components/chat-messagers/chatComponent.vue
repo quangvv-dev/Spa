@@ -288,9 +288,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    // var host = 'https://thuongmai.adamtech.vn:2022/';
+    var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    var host = 'https://' + location.host + ':'+port;
+    // var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -373,7 +373,11 @@
         mounted() {
             socket.on(this.last_segment, (server) => {
                 let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
+                console.log(44444,server);
+
                 if (server.type) {
+                    console.log(33333,server);
+                    this.customerNewComment(server);
                 } else {
                     console.log(234525,server);
                     let html = {
@@ -649,6 +653,10 @@
 
                 this.navChatDefault.unshift(customer_new_mess);
                 this.navChat = this.navChatDefault;
+            },
+
+            customerNewComment(data){
+
             },
 
             selectElement(item) {

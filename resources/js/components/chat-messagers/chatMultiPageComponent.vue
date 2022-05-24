@@ -283,9 +283,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    // var host = 'https://thammyroyal.adamtech.vn:2022/';
+    var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    var host = 'https://' + location.host + ':'+port;
+    // var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 

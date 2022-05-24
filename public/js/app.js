@@ -2225,10 +2225,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
  // var host = 'https://crm.santa.name.vn:2022/';
-// var host = 'https://thuongmai.adamtech.vn:2022/';
 
-var port = 2022;
-var host = 'https://' + location.host + ':' + port;
+var host = 'https://thammyroyal.adamtech.vn:2022/';
+var port = 2022; // var host = 'https://' + location.host + ':'+port;
+
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2318,8 +2318,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
     socket.on(this.last_segment, function (server) {
       var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
+      console.log(44444, server);
 
-      if (server.type) {} else {
+      if (server.type) {
+        console.log(33333, server);
+
+        _this2.customerNewComment(server);
+      } else {
         console.log(234525, server);
         var html = {
           message: server.message.text,
@@ -2697,6 +2702,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }, _callee5);
       }))();
     },
+    customerNewComment: function customerNewComment(data) {},
     selectElement: function selectElement(item) {
       var _this9 = this;
 
@@ -3172,9 +3178,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+ // var host = 'https://crm.santa.name.vn:2022/';
 
-var host = 'https://crm.santa.name.vn:2022/'; // var host = 'https://thammyroyal.adamtech.vn:2022/';
-
+var host = 'https://thammyroyal.adamtech.vn:2022/';
 var port = 2022; // var host = 'https://' + location.host + ':'+port;
 
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
