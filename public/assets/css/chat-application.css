@@ -168,12 +168,12 @@
 }
 @media (min-width: 1280px){
     .container {
-        max-width: 92%;
+        max-width: 92% !important;
     }
 }
 @media (min-width: 1367px){
     .container {
-        max-width: 95%;
+        max-width: 95% !important;
     }
 }
 
