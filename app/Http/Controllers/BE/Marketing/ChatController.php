@@ -7,6 +7,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Branch;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Fanpage;
@@ -127,5 +128,30 @@ class ChatController extends Controller
                 ]);
             }
         }
+    }
+
+    public function createCommentCustomer(Request $request){
+        $comment = Comment::where('page_id',$request->page_id)->where('post_id',$request->post_id)
+            ->where('FB_ID',$request->FB_ID)->first();
+
+        $data_content= array([
+            'created_time'=>date('Y-m-d H:i:s'),
+            'message' =>$request->snippet
+        ]);
+        if($comment){
+            $data_push = json_decode($comment->content);
+            array_push($data_push,$data_content[0]);
+            $comment->update(['snippet'=>$request->snippet,'content'=>json_encode($data_push)]);
+            $code = 201;
+        } else {
+            $data = $request->all();
+            $data['content'] = json_encode($data_content);
+            Comment::create($data);
+            $code = 200;
+        }
+        return response()->json([
+            'code' => $code,
+            'success' => true
+        ]);
     }
 }

@@ -1,5 +1,10 @@
 <template>
     <div class="chat-application">
+        <div class="d-flex">
+            <button class="btn btn-primary" @click="filterPhone"><i class="fa fa-phone"></i></button>
+            <button class="btn btn-warning" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
+            <!--<button class="btn btn-primary" @click="filterComment"><i class="fa fa-book"></i></button>-->
+        </div>
         <div class="sidebar-left sidebar-fixed">
             <div class="sidebar">
                 <div class="sidebar-content card d-none d-lg-block">
@@ -831,6 +836,58 @@
                 this.value_source_customer = null;
                 this.value_chi_nhanh.id = null;
                 this.description = ''
+            },
+            filterPhone(){
+                if(this.filter_phone != 1){
+                    this.filter_phone = 1;
+                } else {
+                    this.filter_phone = null;
+                }
+                this.filterList();
+            },
+            filterNotPhone(){
+                if(this.filter_phone != 0){
+                    this.filter_phone = 0;
+                } else {
+                    this.filter_phone = null;
+                }
+                this.filterList();
+            },
+            filterComment(){
+                if(this.filter_comment == 0){
+                    this.filter_comment = 1;
+                } else {
+                    this.filter_comment = 0;
+                }
+                this.abc();
+                this.filterList();
+            },
+            filterList(){
+                this.navChat = this.navChatDefault;
+                if(this.filter_phone != null){
+                    this.navChat = this.navChat.filter(item => {
+                        return item.check_phone == this.filter_phone;
+                    });
+                }
+                if(this.filter_comment == 1){
+                    this.navChat = this.navChat.filter(item => {
+                        // return item.check_comment == 1;
+                    });
+                }
+
+
+
+                // if(this.filter_phone == 1 && this.filter_comment == 1){
+                //
+                // } else if(this.filter_phone == 1 && this.filter_comment == 0){
+                //     this.navChat = this.navChatDefault.filter(item => {
+                //         return item.check_phone == 1;
+                //     });
+                // } else if(this.filter_phone == 0 && this.filter_comment == 1){
+                //
+                // } else {
+                //     this.navChat = this.navChatDefault;
+                // }
             }
 
         }

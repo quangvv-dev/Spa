@@ -2220,6 +2220,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -2269,7 +2271,10 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }, {
         id: 1,
         value: "Nam"
-      }]
+      }],
+      //filter
+      filter_phone: null,
+      filter_comment: null
     };
   },
   components: {
@@ -2320,9 +2325,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       console.log(44444, server);
 
       if (server.type) {
-        console.log(33333, server);
-
-        _this2.customerNewComment(server);
+        console.log(33333, server); // this.customerNewComment(server);
       } else {
         console.log(234525, server);
         var html = {
@@ -2725,9 +2728,71 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }, _callee5);
       }))();
     },
-    customerNewComment: function customerNewComment(data) {},
-    selectElement: function selectElement(item) {
+    abc: function abc() {
+      var data = {
+        value: {
+          "from": {
+            "id": "5293627404034299",
+            "name": "Nguyễn Minh Tiến"
+          },
+          "message": "test 4",
+          "post_id": "608819389192663_4724845554256672",
+          "comment_id": "4724845554256672_570071017813431",
+          "created_time": 1653473585,
+          "item": "comment",
+          "parent_id": "608819389192663_4724845554256672",
+          "verb": "add"
+        }
+      };
+      this.customerNewComment(data);
+    },
+    customerNewComment: function customerNewComment(data) {
       var _this10 = this;
+
+      var splitted = data.value.post_id.split("_", 2);
+      var data_create = {
+        page_id: splitted[0],
+        post_id: splitted[1],
+        FB_ID: data.value.from.id,
+        fb_name: data.value.from.name,
+        snippet: data.value.message,
+        is_read: 0,
+        content: {
+          created_time: new Date(),
+          message: data.value.message
+        }
+      };
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/create-comment-customer', data_create).then(function (res) {
+        if (res.data.success) {
+          if (res.data.code == 200) {
+            //trường hợp thêm mới
+            var customer_new_comment = {};
+            customer_new_comment.participants = {
+              data: [{
+                id: data.value.from.id,
+                name: data.value.from.name
+              }, {
+                id: splitted[0]
+              }]
+            };
+            customer_new_comment.unread_count = 1;
+            customer_new_comment.updated_time = new Date().toISOString();
+            customer_new_comment.snippet = data.value.message;
+            customer_new_comment.new_message = true;
+            customer_new_comment.type = 'comment';
+
+            _this10.navChatDefault.unshift(customer_new_comment);
+
+            _this10.navChat = _this10.navChatDefault;
+          } else {//trường hợp đã có
+          }
+        }
+      })["catch"](function (err) {
+        console.log('error', err);
+      });
+    },
+    selectElement: function selectElement(item) {
+      var _this11 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -2742,17 +2807,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this10.data_images_upload_server.push(data);
+          _this11.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this11 = this;
+      var _this12 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this11.dataQuickReply = response.data.data;
+          _this12.dataQuickReply = response.data.data;
         }
       });
     },
@@ -2762,14 +2827,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this12 = this;
+      var _this13 = this;
 
       var r = confirm("remove image");
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this12.data_images_upload_server = _this12.data_images_upload_server.filter(function (ft) {
+            _this13.data_images_upload_server = _this13.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -2790,7 +2855,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.images = [];
     },
     getDataFormCustomer: function getDataFormCustomer() {
-      var _this13 = this;
+      var _this14 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
         if (response.data) {
@@ -2810,15 +2875,15 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             m['value'] = m.name;
             return m;
           });
-          _this13.data_group_customer = data_group_customer;
-          _this13.data_telesale = data_telesale;
-          _this13.data_source_customer = data_source_customer;
-          _this13.data_chi_nhanh = data_chi_nhanh;
+          _this14.data_group_customer = data_group_customer;
+          _this14.data_telesale = data_telesale;
+          _this14.data_source_customer = data_source_customer;
+          _this14.data_chi_nhanh = data_chi_nhanh;
         }
       });
     },
     insertCustomer: function insertCustomer() {
-      var _this14 = this;
+      var _this15 = this;
 
       if (!this.chat_current_name) {
         alertify.warning('Vui lòng nhập tên !');
@@ -2861,9 +2926,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           alertify.success('Thêm KH thành công !');
 
-          _this14.changeNavChat('phone');
+          _this15.changeNavChat('phone');
 
-          _this14.resetValue();
+          _this15.resetValue();
         } else {
           alertify.error('Thất bại !');
         }
@@ -2879,6 +2944,61 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.value_source_customer = null;
       this.value_chi_nhanh.id = null;
       this.description = '';
+    },
+    filterPhone: function filterPhone() {
+      if (this.filter_phone != 1) {
+        this.filter_phone = 1;
+      } else {
+        this.filter_phone = null;
+      }
+
+      this.filterList();
+    },
+    filterNotPhone: function filterNotPhone() {
+      if (this.filter_phone != 0) {
+        this.filter_phone = 0;
+      } else {
+        this.filter_phone = null;
+      }
+
+      this.filterList();
+    },
+    filterComment: function filterComment() {
+      if (this.filter_comment == 0) {
+        this.filter_comment = 1;
+      } else {
+        this.filter_comment = 0;
+      }
+
+      this.abc();
+      this.filterList();
+    },
+    filterList: function filterList() {
+      var _this16 = this;
+
+      this.navChat = this.navChatDefault;
+
+      if (this.filter_phone != null) {
+        this.navChat = this.navChat.filter(function (item) {
+          return item.check_phone == _this16.filter_phone;
+        });
+      }
+
+      if (this.filter_comment == 1) {
+        this.navChat = this.navChat.filter(function (item) {// return item.check_comment == 1;
+        });
+      } // if(this.filter_phone == 1 && this.filter_comment == 1){
+      //
+      // } else if(this.filter_phone == 1 && this.filter_comment == 0){
+      //     this.navChat = this.navChatDefault.filter(item => {
+      //         return item.check_phone == 1;
+      //     });
+      // } else if(this.filter_phone == 0 && this.filter_comment == 1){
+      //
+      // } else {
+      //     this.navChat = this.navChatDefault;
+      // }
+
     }
   }
 });
@@ -2922,6 +3042,11 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3925,6 +4050,61 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.value_source_customer = null;
       this.value_chi_nhanh.id = null;
       this.description = '';
+    },
+    filterPhone: function filterPhone() {
+      if (this.filter_phone != 1) {
+        this.filter_phone = 1;
+      } else {
+        this.filter_phone = null;
+      }
+
+      this.filterList();
+    },
+    filterNotPhone: function filterNotPhone() {
+      if (this.filter_phone != 0) {
+        this.filter_phone = 0;
+      } else {
+        this.filter_phone = null;
+      }
+
+      this.filterList();
+    },
+    filterComment: function filterComment() {
+      if (this.filter_comment == 0) {
+        this.filter_comment = 1;
+      } else {
+        this.filter_comment = 0;
+      }
+
+      this.abc();
+      this.filterList();
+    },
+    filterList: function filterList() {
+      var _this15 = this;
+
+      this.navChat = this.navChatDefault;
+
+      if (this.filter_phone != null) {
+        this.navChat = this.navChat.filter(function (item) {
+          return item.check_phone == _this15.filter_phone;
+        });
+      }
+
+      if (this.filter_comment == 1) {
+        this.navChat = this.navChat.filter(function (item) {// return item.check_comment == 1;
+        });
+      } // if(this.filter_phone == 1 && this.filter_comment == 1){
+      //
+      // } else if(this.filter_phone == 1 && this.filter_comment == 0){
+      //     this.navChat = this.navChatDefault.filter(item => {
+      //         return item.check_phone == 1;
+      //     });
+      // } else if(this.filter_phone == 0 && this.filter_comment == 1){
+      //
+      // } else {
+      //     this.navChat = this.navChatDefault;
+      // }
+
     }
   }
 });
@@ -81594,7 +81774,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "chat-application" }, [
-    _vm._m(0),
+    _c("div", { staticClass: "d-flex" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", on: { click: _vm.filterPhone } },
+        [_c("i", { staticClass: "fa fa-phone" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-warning", on: { click: _vm.filterNotPhone } },
+        [_c("i", { staticClass: "fa fa-phone-slash" })]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "sidebar-left sidebar-fixed" }, [
       _c("div", { staticClass: "sidebar" }, [
@@ -81633,7 +81825,7 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _vm._m(1)
+                _vm._m(0)
               ]
             )
           ]),
@@ -82213,7 +82405,7 @@ var render = function() {
                     "form-group position-relative has-icon-left col-10 m-0"
                 },
                 [
-                  _vm._m(2),
+                  _vm._m(1),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -82661,14 +82853,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "d-flex" }, [
-      _c("button", { staticClass: "btn btn-primary" }, [_c("i", {})])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-control-position" }, [
       _c("i", { staticClass: "ft-search" })
     ])
@@ -82704,6 +82888,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "chat-application" }, [
+    _c("div", { staticClass: "d-flex" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", on: { click: _vm.filterPhone } },
+        [_c("i", { staticClass: "fa fa-phone" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-warning", on: { click: _vm.filterNotPhone } },
+        [_c("i", { staticClass: "fa fa-phone-slash" })]
+      )
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "sidebar-left sidebar-fixed" }, [
       _c("div", { staticClass: "sidebar" }, [
         _c("div", { staticClass: "sidebar-content card d-none d-lg-block" }, [

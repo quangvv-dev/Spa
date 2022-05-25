@@ -252,6 +252,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('update-group','ChatController@updateGroup');
         Route::delete('delete-group/{id}','ChatController@deleteGroup');
 
+        Route::post('create-comment-customer','ChatController@createCommentCustomer');
+
+
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');

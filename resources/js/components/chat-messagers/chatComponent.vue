@@ -1,7 +1,9 @@
 <template>
     <div class="chat-application">
         <div class="d-flex">
-            <button class="btn btn-primary"><i class=""></i></button>
+            <button class="btn btn-primary" @click="filterPhone"><i class="fa fa-phone"></i></button>
+            <button class="btn btn-warning" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
+            <!--<button class="btn btn-primary" @click="filterComment"><i class="fa fa-book"></i></button>-->
         </div>
         <div class="sidebar-left sidebar-fixed">
             <div class="sidebar">
@@ -330,7 +332,11 @@
                 option_gender: [
                     {id: 0, value: "Nữ"},
                     {id: 1, value: "Nam"}
-                ]
+                ],
+
+                //filter
+                filter_phone : null,
+                filter_comment : null,
             }
         },
         components: {
@@ -376,7 +382,7 @@
 
                 if (server.type) {
                     console.log(33333,server);
-                    this.customerNewComment(server);
+                    // this.customerNewComment(server);
                 } else {
                     console.log(234525,server);
                     let html = {
@@ -674,8 +680,73 @@
                 this.navChatDefault.unshift(customer_new_mess);
                 this.navChat = this.navChatDefault;
             },
+            abc(){
+              let data = {
+                  value:{
+                      "from": {
+                          "id": "5293627404034299",
+                          "name": "Nguyễn Minh Tiến"
+                      },
+                      "message": "test 4",
+                      "post_id": "608819389192663_4724845554256672",
+                      "comment_id": "4724845554256672_570071017813431",
+                      "created_time": 1653473585,
+                      "item": "comment",
+                      "parent_id": "608819389192663_4724845554256672",
+                      "verb": "add"
+                  }
+              }
 
+                this.customerNewComment(data);
+            },
             customerNewComment(data){
+                let splitted = data.value.post_id.split("_", 2);
+                let data_create = {
+                    page_id: splitted[0],
+                    post_id: splitted[1],
+                    FB_ID:data.value.from.id,
+                    fb_name:data.value.from.name,
+                    snippet:data.value.message,
+                    is_read: 0,
+                    content:{
+                        created_time :new Date(),
+                        message:data.value.message
+                    }
+                }
+
+                axios.post('/marketing/create-comment-customer',
+                    data_create)
+                    .then(res => {
+                        if (res.data.success) {
+                            if (res.data.code == 200){ //trường hợp thêm mới
+                                let customer_new_comment = {};
+
+                                customer_new_comment.participants = {
+                                    data: [
+                                        {
+                                            id: data.value.from.id,
+                                            name: data.value.from.name,
+                                        },
+                                        {
+                                            id: splitted[0],
+                                        }
+                                    ]
+                                }
+                                customer_new_comment.unread_count = 1;
+                                customer_new_comment.updated_time = new Date().toISOString();
+                                customer_new_comment.snippet = data.value.message;
+                                customer_new_comment.new_message = true;
+                                customer_new_comment.type = 'comment';
+                                this.navChatDefault.unshift(customer_new_comment);
+                                this.navChat = this.navChatDefault;
+                            } else { //trường hợp đã có
+
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    })
 
             },
 
@@ -819,6 +890,58 @@
                     this.value_source_customer = null;
                     this.value_chi_nhanh.id = null;
                     this.description = ''
+            },
+            filterPhone(){
+                if(this.filter_phone != 1){
+                    this.filter_phone = 1;
+                } else {
+                    this.filter_phone = null;
+                }
+                this.filterList();
+            },
+            filterNotPhone(){
+                if(this.filter_phone != 0){
+                    this.filter_phone = 0;
+                } else {
+                    this.filter_phone = null;
+                }
+                this.filterList();
+            },
+            filterComment(){
+                if(this.filter_comment == 0){
+                    this.filter_comment = 1;
+                } else {
+                    this.filter_comment = 0;
+                }
+                this.abc();
+                this.filterList();
+            },
+            filterList(){
+                this.navChat = this.navChatDefault;
+                if(this.filter_phone != null){
+                    this.navChat = this.navChat.filter(item => {
+                        return item.check_phone == this.filter_phone;
+                    });
+                }
+                if(this.filter_comment == 1){
+                    this.navChat = this.navChat.filter(item => {
+                        // return item.check_comment == 1;
+                    });
+                }
+
+
+
+                // if(this.filter_phone == 1 && this.filter_comment == 1){
+                //
+                // } else if(this.filter_phone == 1 && this.filter_comment == 0){
+                //     this.navChat = this.navChatDefault.filter(item => {
+                //         return item.check_phone == 1;
+                //     });
+                // } else if(this.filter_phone == 0 && this.filter_comment == 1){
+                //
+                // } else {
+                //     this.navChat = this.navChatDefault;
+                // }
             }
         }
     }
