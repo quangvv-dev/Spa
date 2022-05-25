@@ -166,5 +166,15 @@
         height: calc(100% - 132px);
     }
 }
+@media (min-width: 1280px){
+    .container {
+        max-width: 92%;
+    }
+}
+@media (min-width: 1367px){
+    .container {
+        max-width: 95%;
+    }
+}
 
 
