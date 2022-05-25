@@ -616,6 +616,7 @@ class OrderController extends Controller
             'service_id' => $request->service_id,
             'type' => $request->type_delete,
             'description' => $request->description,
+            'branch_id'=> !empty(Auth::user()->branch_id)?Auth::user()->branch_id:$order->branch_id,
         ]);
 
         if ($request->type_delete == StatusCode::TYPE_ORDER_PROCESS) {
