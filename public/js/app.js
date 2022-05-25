@@ -81774,7 +81774,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "chat-application" }, [
-    _c("div", { staticClass: "d-flex" }, [
+    _c("div", { staticClass: "d-flex filterChat" }, [
       _c(
         "button",
         { staticClass: "btn btn-primary", on: { click: _vm.filterPhone } },
@@ -82888,7 +82888,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "chat-application" }, [
-    _c("div", { staticClass: "d-flex" }, [
+    _c("div", { staticClass: "d-flex filterChat" }, [
       _c(
         "button",
         { staticClass: "btn btn-primary", on: { click: _vm.filterPhone } },

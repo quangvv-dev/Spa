@@ -1,6 +1,6 @@
 <template>
     <div class="chat-application">
-        <div class="d-flex">
+        <div class="d-flex filterChat">
             <button class="btn btn-primary" @click="filterPhone"><i class="fa fa-phone"></i></button>
             <button class="btn btn-warning" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
             <!--<button class="btn btn-primary" @click="filterComment"><i class="fa fa-book"></i></button>-->
