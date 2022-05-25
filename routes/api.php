@@ -132,7 +132,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('get-albums-with-me', 'HomePageController@album');
     Route::get('info', 'AuthController@info');
     Route::post('update-info', 'AuthController@updateProfile');
-    Route::post('vourchers', 'AuthController@updateProfile');
+    Route::post('vourchers', 'AuthController@vouchers');
     Route::post('process', 'HomePageController@process');//Lịch sử liệu trình
 });
 
