@@ -11,7 +11,9 @@ use App\Models\Album;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\HistoryUpdateOrder;
 use App\Models\Landipage;
+use App\Models\Order;
 use App\Models\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -30,6 +32,7 @@ class HomePageController extends BaseApiController
      * Danh sách dịch vụ
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getServices(Request $request)
@@ -65,6 +68,7 @@ class HomePageController extends BaseApiController
      * Get NEWS
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function news(Request $request)
@@ -74,12 +78,12 @@ class HomePageController extends BaseApiController
         $docs = $docs->transform(function ($i) {
             $short = new \Html2Text\Html2Text($i->content);
             return [
-                'id' => $i->id,
-                'title' => $i->title,
+                'id'                => $i->id,
+                'title'             => $i->title,
                 'short_description' => str_limit($short->getText(), 35),
-                'content' => $i->content,
-                'thumbnail' => $i->thumbnail,
-                'created_at' => \date('d/m/Y', strtotime($i->created_at)),
+                'content'           => $i->content,
+                'thumbnail'         => $i->thumbnail,
+                'created_at'        => \date('d/m/Y', strtotime($i->created_at)),
             ];
         });
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
@@ -89,14 +93,15 @@ class HomePageController extends BaseApiController
      * khoảng cách chi nhánh
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getBranchWithDistance(Request $request)
     {
         $validate = [
-            'lat' => "required",
+            'lat'  => "required",
             'long' => "required",
-//            'location_id' => "required",
+            //            'location_id' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -122,6 +127,7 @@ class HomePageController extends BaseApiController
      * Ảnh liệu trình của bản thân
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function album(Request $request)
@@ -140,6 +146,7 @@ class HomePageController extends BaseApiController
      * Danh mục sản phẩm || dịch vụ
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function category(Request $request)
@@ -151,10 +158,38 @@ class HomePageController extends BaseApiController
         if (!empty($this->error)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
-        $category = Category::select('id', 'name', 'image')->where('type', $request->type)->paginate(StatusCode::PAGINATE_10);
+        $category = Category::select('id', 'name', 'image')->where('type',
+            $request->type)->paginate(StatusCode::PAGINATE_10);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $category);
 
     }
 
+    /**
+     * Lịch sử trừ liệu trình
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function process(Request $request)
+    {
+        $customer = $request->jwtUser;
+        $order = Order::select('id')->where('member_id', $customer->id)->pluck('id')->toArray();
+        $process = [];
+        if (count($order)) {
+            $process = HistoryUpdateOrder::whereIn('order_id', $order)->where('type',
+                0)->orderByDesc('created_at')->get()
+                ->transform(function ($i) {
+                    return [
+                        'employee'    => isset($i->user) ? $i->user->full_name : '',
+                        'date'        => @\date('d-m-Y', strtotime($i->created_at)),
+                        'time'        => @\date('H:i', strtotime($i->created_at)),
+                        'branch_name' => isset($i->branch) ? $i->branch->name . ': ' . $i->branch->address : '',
+                        'service'     => isset($i->service) ? $i->service->name : '',
+                    ];
+                });
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $process);
+    }
 }

@@ -133,6 +133,11 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('info', 'AuthController@info');
     Route::post('update-info', 'AuthController@updateProfile');
     Route::post('vourchers', 'AuthController@updateProfile');
-    Route::post('process', 'AuthController@updateProfile');//Lịch sử liệu trình
+    Route::post('process', 'HomePageController@process');//Lịch sử liệu trình
 });
 
+/*
+|--------------------------------------------------------------------------
+| END APP KHÁCH HÀNG
+|--------------------------------------------------------------------------
+*/

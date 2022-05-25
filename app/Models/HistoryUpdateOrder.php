@@ -17,6 +17,11 @@ class HistoryUpdateOrder extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+
     public function service()
     {
         return $this->belongsTo(Services::class, 'service_id', 'id');
