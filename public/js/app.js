@@ -2222,6 +2222,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2245,6 +2282,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       access_token: '',
       detailMessage: [],
       last_segment: window.location.pathname.split('/').pop(),
+      post_id: '',
+      comment_id: '',
       avatar_page: '/default/logo.png',
       classClick: '',
       chat_current_name: '',
@@ -2325,7 +2364,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       console.log(44444, server);
 
       if (server.type) {
-        console.log(33333, server); // this.customerNewComment(server);
+        console.log(33333, server);
+
+        _this2.customerNewComment(server);
       } else {
         console.log(234525, server);
         var html = {
@@ -2578,20 +2619,22 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                             _this6.getPhonePage();
 
-                            _context3.next = 18;
+                            _this6.getCommentPage();
+
+                            _context3.next = 19;
                             break;
 
-                          case 15:
-                            _context3.prev = 15;
+                          case 16:
+                            _context3.prev = 16;
                             _context3.t0 = _context3["catch"](3);
                             alertify.error("Token hết hạn:" + _this6.last_segment, 10);
 
-                          case 18:
+                          case 19:
                           case "end":
                             return _context3.stop();
                         }
                       }
-                    }, _callee3, null, [[3, 15]]);
+                    }, _callee3, null, [[3, 16]]);
                   }));
 
                   return function (_x2) {
@@ -2638,30 +2681,102 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         _this7.navChatDefault = abc;
       });
     },
-    selectMessage: function selectMessage(item) {
+    getCommentPage: function getCommentPage() {
       var _this8 = this;
 
-      var id = item.id;
-      var fb_id = item.participants.data[0].id;
-      var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
-      var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-        console.log(444444, response);
-        _this8.detailMessage = response.data.messages.data.reverse();
+      var arr_page = [this.last_segment];
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-comment-page', {
+        params: {
+          arr_page: arr_page
+        }
+      }).then(function (response) {
+        if (response.data && response.data.length > 0) {
+          response.data.forEach(function (f) {
+            var customer_new_comment = {};
+            customer_new_comment.participants = {
+              data: [{
+                id: f.FB_ID,
+                name: f.fb_name
+              }, {
+                id: f.page_id
+              }]
+            };
+            customer_new_comment.unread_count = f.is_read == 0 ? 1 : 0;
+            customer_new_comment.updated_time = new Date(f.updated_at).toISOString();
+            ;
+            customer_new_comment.snippet = f.snippet;
+            customer_new_comment.new_message = f.is_read == 0 ? true : false;
+            customer_new_comment.post_id = f.post_id;
+            customer_new_comment.type = 'comment';
+
+            _this8.navChatDefault.unshift(customer_new_comment);
+
+            _this8.navChatDefault.sort(function (a, b) {
+              return b.updated_time.localeCompare(a.updated_time);
+            });
+
+            _this8.navChat = _this8.navChatDefault;
+          });
+        } // this.navChat = abc;
+        // this.navChatDefault = abc;
+
       });
-      this.classClick = fb_id;
-      this.fb_me = fb_id;
-      var index = this.navChatDefault.findIndex(function (f) {
-        return f.id === id;
-      });
-      this.navChatDefault[index].unread_count = 0;
-      this.navChatDefault[index].new_message = false;
+    },
+    selectMessage: function selectMessage(item) {
+      var _this9 = this;
+
+      if (item.type && item.type == 'comment') {
+        var url = '/marketing/get-detail-comment';
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url, {
+          params: {
+            page_id: this.last_segment,
+            post_id: item.post_id,
+            FB_ID: item.participants.data[0].id
+          }
+        }).then(function (response) {
+          var data = JSON.parse(response.data.content);
+          console.log(44444, response.data.content);
+
+          if (data.length > 0) {
+            data = data.map(function (m) {
+              m['from'] = {
+                id: response.data.FB_ID,
+                name: response.data.fb_name
+              };
+              return m;
+            });
+          }
+
+          console.log(44444, data);
+          _this9.detailMessage = data;
+          _this9.post_id = _this9.last_segment + '_' + response.data.post_id;
+        });
+      } else {
+        var id = item.id;
+        this.post_id = '';
+        var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
+
+        var _url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
+
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_url).then(function (response) {
+          console.log(444444, response);
+          _this9.detailMessage = response.data.messages.data.reverse();
+        });
+        var index = this.navChatDefault.findIndex(function (f) {
+          return f.id === id;
+        });
+        this.navChatDefault[index].unread_count = 0;
+        this.navChatDefault[index].new_message = false;
+      }
+
+      this.classClick = item.participants.data[0].id;
+      this.fb_me = item.participants.data[0].id;
       this.chat_current_name = item.participants.data[0].name;
       this.getListQuickReply();
       this.scrollToBottom();
     },
     customerNewMessage: function customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
-      var _this9 = this;
+      var _this10 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
         var customer_new, customer_new_mess, fields, url, index;
@@ -2669,7 +2784,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                customer_new = _this9.navChatDefault.filter(function (f) {
+                customer_new = _this10.navChatDefault.filter(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
                 customer_new_mess = {};
@@ -2686,7 +2801,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
               case 7:
                 fields = 'id,created_time,message,thread_id,attachments,from';
-                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(_this9.access_token);
+                url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(_this10.access_token);
                 _context5.next = 11;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
                   customer_new_mess.id = response.data.thread_id;
@@ -2707,18 +2822,18 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
-                index = _this9.navChatDefault.findIndex(function (f) {
+                index = _this10.navChatDefault.findIndex(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
 
                 if (index > -1) {
-                  _this9.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                  _this10.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
 
                 }
 
-                _this9.navChatDefault.unshift(customer_new_mess);
+                _this10.navChatDefault.unshift(customer_new_mess);
 
-                _this9.navChat = _this9.navChatDefault;
+                _this10.navChat = _this10.navChatDefault;
 
               case 19:
               case "end":
@@ -2728,28 +2843,16 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }, _callee5);
       }))();
     },
-    abc: function abc() {
-      var data = {
-        value: {
-          "from": {
-            "id": "5293627404034299",
-            "name": "Nguyễn Minh Tiến"
-          },
-          "message": "test 4",
-          "post_id": "608819389192663_4724845554256672",
-          "comment_id": "4724845554256672_570071017813431",
-          "created_time": 1653473585,
-          "item": "comment",
-          "parent_id": "608819389192663_4724845554256672",
-          "verb": "add"
-        }
-      };
-      this.customerNewComment(data);
-    },
     customerNewComment: function customerNewComment(data) {
-      var _this10 = this;
+      var _this11 = this;
 
       var splitted = data.value.post_id.split("_", 2);
+
+      if (data.value.from.id == this.last_segment) {
+        //trường hợp fanpage trả lời comment
+        return;
+      }
+
       var data_create = {
         page_id: splitted[0],
         post_id: splitted[1],
@@ -2757,9 +2860,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         fb_name: data.value.from.name,
         snippet: data.value.message,
         is_read: 0,
+        comment_id: data.value.comment_id,
+        parent_id: data.value.parent_id,
         content: {
           created_time: new Date(),
-          message: data.value.message
+          message: data.value.message,
+          comment_id: data.value.comment_id,
+          parent_id: data.value.parent_id
         }
       };
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/create-comment-customer', data_create).then(function (res) {
@@ -2779,12 +2886,32 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             customer_new_comment.updated_time = new Date().toISOString();
             customer_new_comment.snippet = data.value.message;
             customer_new_comment.new_message = true;
+            customer_new_comment.post_id = splitted[1];
             customer_new_comment.type = 'comment';
 
-            _this10.navChatDefault.unshift(customer_new_comment);
+            _this11.navChatDefault.unshift(customer_new_comment);
 
-            _this10.navChat = _this10.navChatDefault;
-          } else {//trường hợp đã có
+            _this11.navChat = _this11.navChatDefault;
+          } else {
+            //trường hợp tồn tại
+            var index = _this11.navChatDefault.findIndex(function (f) {
+              return f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type == 'comment';
+            });
+
+            var _customer_new_comment = _this11.navChatDefault[index];
+            _customer_new_comment.unread_count = 1;
+            _customer_new_comment.updated_time = new Date().toISOString();
+            _customer_new_comment.snippet = data.value.message;
+            _customer_new_comment.new_message = true;
+
+            if (index > -1) {
+              _this11.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+
+            }
+
+            _this11.navChatDefault.unshift(_customer_new_comment);
+
+            _this11.navChat = _this11.navChatDefault;
           }
         }
       })["catch"](function (err) {
@@ -2792,7 +2919,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       });
     },
     selectElement: function selectElement(item) {
-      var _this11 = this;
+      var _this12 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -2807,17 +2934,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this11.data_images_upload_server.push(data);
+          _this12.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this12 = this;
+      var _this13 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this12.dataQuickReply = response.data.data;
+          _this13.dataQuickReply = response.data.data;
         }
       });
     },
@@ -2827,14 +2954,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this13 = this;
+      var _this14 = this;
 
       var r = confirm("remove image");
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this13.data_images_upload_server = _this13.data_images_upload_server.filter(function (ft) {
+            _this14.data_images_upload_server = _this14.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -2855,7 +2982,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.images = [];
     },
     getDataFormCustomer: function getDataFormCustomer() {
-      var _this14 = this;
+      var _this15 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
         if (response.data) {
@@ -2875,15 +3002,15 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             m['value'] = m.name;
             return m;
           });
-          _this14.data_group_customer = data_group_customer;
-          _this14.data_telesale = data_telesale;
-          _this14.data_source_customer = data_source_customer;
-          _this14.data_chi_nhanh = data_chi_nhanh;
+          _this15.data_group_customer = data_group_customer;
+          _this15.data_telesale = data_telesale;
+          _this15.data_source_customer = data_source_customer;
+          _this15.data_chi_nhanh = data_chi_nhanh;
         }
       });
     },
     insertCustomer: function insertCustomer() {
-      var _this15 = this;
+      var _this16 = this;
 
       if (!this.chat_current_name) {
         alertify.warning('Vui lòng nhập tên !');
@@ -2926,9 +3053,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           alertify.success('Thêm KH thành công !');
 
-          _this15.changeNavChat('phone');
+          _this16.changeNavChat('phone');
 
-          _this15.resetValue();
+          _this16.resetValue();
         } else {
           alertify.error('Thất bại !');
         }
@@ -2970,35 +3097,47 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         this.filter_comment = 0;
       }
 
-      this.abc();
       this.filterList();
     },
     filterList: function filterList() {
-      var _this16 = this;
+      var _this17 = this;
 
       this.navChat = this.navChatDefault;
 
       if (this.filter_phone != null) {
         this.navChat = this.navChat.filter(function (item) {
-          return item.check_phone == _this16.filter_phone;
+          return item.check_phone == _this17.filter_phone;
         });
       }
 
       if (this.filter_comment == 1) {
-        this.navChat = this.navChat.filter(function (item) {// return item.check_comment == 1;
+        this.navChat = this.navChat.filter(function (item) {
+          return item.type == 'comment';
         });
-      } // if(this.filter_phone == 1 && this.filter_comment == 1){
-      //
-      // } else if(this.filter_phone == 1 && this.filter_comment == 0){
-      //     this.navChat = this.navChatDefault.filter(item => {
-      //         return item.check_phone == 1;
-      //     });
-      // } else if(this.filter_phone == 0 && this.filter_comment == 1){
-      //
-      // } else {
-      //     this.navChat = this.navChatDefault;
-      // }
-
+      }
+    },
+    showModalReply: function showModalReply(item) {
+      this.comment_id = item.comment_id;
+      $('#reply_comment').modal({
+        show: true
+      });
+    },
+    sendReplyComment: function sendReplyComment() {
+      console.log(11111, this.contentMesage);
+      var rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
+        // "messaging_type": "MESSAGE_TAG",
+        // "tag": "HUMAN_AGENT",
+        "messaging_type": "UPDATE",
+        "recipient": {
+          "comment_id": this.comment_id
+        },
+        "message": {
+          "text": this.contentMesage
+        }
+      }).then(function (res) {
+        console.log(12313, res);
+      });
+      console.log(2234234, rq);
     }
   }
 });
@@ -3325,6 +3464,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3348,6 +3522,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       access_token: '',
       detailMessage: [],
       last_segment: '',
+      post_id: '',
+      comment_id: '',
       avatar_page: '/default/logo.png',
       classClick: '',
       arr_page_id: [],
@@ -3428,7 +3604,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           socket.on(item.id, function (server) {
             var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
-            if (server.type) {} else {
+            if (server.type) {
+              _this2.customerNewComment(server);
+            } else {
               var html = {
                 message: server.message.text,
                 from: {
@@ -3754,7 +3932,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this6.getPhonePage();
 
-              case 27:
+                _this6.getCommentPage();
+
+              case 28:
               case "end":
                 return _context4.stop();
             }
@@ -3794,35 +3974,181 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         _this7.navChatDefault = abc;
       });
     },
-    selectMessage: function selectMessage(item) {
+    getCommentPage: function getCommentPage() {
       var _this8 = this;
 
-      var id = item.id;
-      var fb_id = item.participants.data[0].id;
-      var access_token = item.access_token;
-      var page_id = item.participants.data[1].id;
-      this.last_segment = page_id;
-      var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
-      var url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(access_token);
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-        _this8.detailMessage = response.data.messages.data.reverse();
-        console.log(444444, response);
+      var arr_page = this.arr_page_id.map(function (m) {
+        return m.id;
       });
-      this.classClick = fb_id;
-      this.fb_me = fb_id;
-      this.access_token = access_token;
-      var index = this.navChatDefault.findIndex(function (f) {
-        return f.id === id;
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/marketing/get-comment-page', {
+        params: {
+          arr_page: arr_page
+        }
+      }).then(function (response) {
+        if (response.data && response.data.length > 0) {
+          response.data.forEach(function (f) {
+            var customer_new_comment = {};
+            customer_new_comment.participants = {
+              data: [{
+                id: f.FB_ID,
+                name: f.fb_name
+              }, {
+                id: f.page_id
+              }]
+            };
+            customer_new_comment.unread_count = f.is_read == 0 ? 1 : 0;
+            customer_new_comment.updated_time = new Date(f.updated_at).toISOString();
+            ;
+            customer_new_comment.snippet = f.snippet;
+            customer_new_comment.new_message = f.is_read == 0 ? true : false;
+            customer_new_comment.post_id = f.post_id;
+            customer_new_comment.type = 'comment';
+
+            _this8.navChatDefault.unshift(customer_new_comment);
+
+            _this8.navChatDefault.sort(function (a, b) {
+              return b.updated_time.localeCompare(a.updated_time);
+            });
+
+            _this8.navChat = _this8.navChatDefault;
+          });
+        } // this.navChat = abc;
+        // this.navChatDefault = abc;
+
       });
-      this.navChatDefault[index].unread_count = 0;
-      this.navChatDefault[index].new_message = false;
+    },
+    selectMessage: function selectMessage(item) {
+      var _this9 = this;
+
+      if (item.type && item.type == 'comment') {
+        var url = '/marketing/get-detail-comment';
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url, {
+          params: {
+            page_id: this.last_segment,
+            post_id: item.post_id,
+            FB_ID: item.participants.data[0].id
+          }
+        }).then(function (response) {
+          var data = JSON.parse(response.data.content);
+          console.log(44444, response.data.content);
+
+          if (data.length > 0) {
+            data = data.map(function (m) {
+              m['from'] = {
+                id: response.data.FB_ID,
+                name: response.data.fb_name
+              };
+              return m;
+            });
+          }
+
+          _this9.detailMessage = data;
+          _this9.post_id = _this9.last_segment + '_' + response.data.post_id;
+        });
+      } else {
+        var id = item.id;
+        var access_token = item.access_token;
+        var fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
+
+        var _url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(access_token);
+
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_url).then(function (response) {
+          _this9.detailMessage = response.data.messages.data.reverse();
+          console.log(444444, response);
+        });
+        var index = this.navChatDefault.findIndex(function (f) {
+          return f.id === id;
+        });
+        this.navChatDefault[index].unread_count = 0;
+        this.navChatDefault[index].new_message = false;
+      }
+
+      this.last_segment = item.participants.data[1].id;
+      this.classClick = item.participants.data[0].id;
+      this.fb_me = item.participants.data[0].id;
+      this.access_token = item.access_token;
       this.chat_current_name = item.participants.data[0].name;
       this.chat_current_page = item.participants.data[1].name;
       this.getListQuickReply();
       this.scrollToBottom();
     },
+    customerNewComment: function customerNewComment(data) {
+      var _this10 = this;
+
+      var splitted = data.value.post_id.split("_", 2);
+
+      if (data.value.from.id == this.last_segment) {
+        //trường hợp fanpage trả lời comment
+        return;
+      }
+
+      var data_create = {
+        page_id: splitted[0],
+        post_id: splitted[1],
+        FB_ID: data.value.from.id,
+        fb_name: data.value.from.name,
+        snippet: data.value.message,
+        is_read: 0,
+        comment_id: data.value.comment_id,
+        parent_id: data.value.parent_id,
+        content: {
+          created_time: new Date(),
+          message: data.value.message,
+          comment_id: data.value.comment_id,
+          parent_id: data.value.parent_id
+        }
+      };
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/create-comment-customer', data_create).then(function (res) {
+        if (res.data.success) {
+          if (res.data.code == 200) {
+            //trường hợp thêm mới
+            var customer_new_comment = {};
+            customer_new_comment.participants = {
+              data: [{
+                id: data.value.from.id,
+                name: data.value.from.name
+              }, {
+                id: splitted[0]
+              }]
+            };
+            customer_new_comment.unread_count = 1;
+            customer_new_comment.updated_time = new Date().toISOString();
+            customer_new_comment.snippet = data.value.message;
+            customer_new_comment.new_message = true;
+            customer_new_comment.post_id = splitted[1];
+            customer_new_comment.type = 'comment';
+
+            _this10.navChatDefault.unshift(customer_new_comment);
+
+            _this10.navChat = _this10.navChatDefault;
+          } else {
+            //trường hợp tồn tại
+            var index = _this10.navChatDefault.findIndex(function (f) {
+              return f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type == 'comment';
+            });
+
+            var _customer_new_comment = _this10.navChatDefault[index];
+            _customer_new_comment.unread_count = 1;
+            _customer_new_comment.updated_time = new Date().toISOString();
+            _customer_new_comment.snippet = data.value.message;
+            _customer_new_comment.new_message = true;
+
+            if (index > -1) {
+              _this10.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+
+            }
+
+            _this10.navChatDefault.unshift(_customer_new_comment);
+
+            _this10.navChat = _this10.navChatDefault;
+          }
+        }
+      })["catch"](function (err) {
+        console.log('error', err);
+      });
+    },
     selectElement: function selectElement(item) {
-      var _this9 = this;
+      var _this11 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -3837,22 +4163,22 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this9.data_images_upload_server.push(data);
+          _this11.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this10 = this;
+      var _this12 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this10.dataQuickReply = response.data.data;
+          _this12.dataQuickReply = response.data.data;
         }
       });
     },
     customerNewMessage: function customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
-      var _this11 = this;
+      var _this13 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var customer_new, customer_new_mess, token, access_token, fields, url, index;
@@ -3860,7 +4186,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                customer_new = _this11.navChatDefault.filter(function (f) {
+                customer_new = _this13.navChatDefault.filter(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
                 customer_new_mess = {};
@@ -3876,7 +4202,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 break;
 
               case 7:
-                token = _this11.arr_page_id.filter(function (f) {
+                token = _this13.arr_page_id.filter(function (f) {
                   return f.id == page_id;
                 });
                 access_token = token[0].token;
@@ -3884,7 +4210,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(access_token);
                 _context5.next = 13;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-                  var page = _this11.arr_page_id.filter(function (f) {
+                  var page = _this13.arr_page_id.filter(function (f) {
                     return f.id == page_id;
                   });
 
@@ -3908,18 +4234,18 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
-                index = _this11.navChatDefault.findIndex(function (f) {
+                index = _this13.navChatDefault.findIndex(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
 
                 if (index > -1) {
-                  _this11.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                  _this13.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
 
                 }
 
-                _this11.navChatDefault.unshift(customer_new_mess);
+                _this13.navChatDefault.unshift(customer_new_mess);
 
-                _this11.navChat = _this11.navChatDefault;
+                _this13.navChat = _this13.navChatDefault;
 
               case 22:
               case "end":
@@ -3938,14 +4264,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this12 = this;
+      var _this14 = this;
 
       var r = confirm("remove image");
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this12.data_images_upload_server = _this12.data_images_upload_server.filter(function (ft) {
+            _this14.data_images_upload_server = _this14.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -3961,7 +4287,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.images = [];
     },
     getDataFormCustomer: function getDataFormCustomer() {
-      var _this13 = this;
+      var _this15 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
         if (response.data) {
@@ -3981,15 +4307,15 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             m['value'] = m.name;
             return m;
           });
-          _this13.data_group_customer = data_group_customer;
-          _this13.data_telesale = data_telesale;
-          _this13.data_source_customer = data_source_customer;
-          _this13.data_chi_nhanh = data_chi_nhanh;
+          _this15.data_group_customer = data_group_customer;
+          _this15.data_telesale = data_telesale;
+          _this15.data_source_customer = data_source_customer;
+          _this15.data_chi_nhanh = data_chi_nhanh;
         }
       });
     },
     insertCustomer: function insertCustomer() {
-      var _this14 = this;
+      var _this16 = this;
 
       if (!this.chat_current_name) {
         alertify.warning('Vui lòng nhập tên !');
@@ -4032,9 +4358,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           alertify.success('Thêm KH thành công !');
 
-          _this14.changeNavChat('phone');
+          _this16.changeNavChat('phone');
 
-          _this14.resetValue();
+          _this16.resetValue();
         } else {
           alertify.error('Thất bại !');
         }
@@ -4076,35 +4402,47 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         this.filter_comment = 0;
       }
 
-      this.abc();
       this.filterList();
     },
     filterList: function filterList() {
-      var _this15 = this;
+      var _this17 = this;
 
       this.navChat = this.navChatDefault;
 
       if (this.filter_phone != null) {
         this.navChat = this.navChat.filter(function (item) {
-          return item.check_phone == _this15.filter_phone;
+          return item.check_phone == _this17.filter_phone;
         });
       }
 
       if (this.filter_comment == 1) {
-        this.navChat = this.navChat.filter(function (item) {// return item.check_comment == 1;
+        this.navChat = this.navChat.filter(function (item) {
+          return item.type == 'comment';
         });
-      } // if(this.filter_phone == 1 && this.filter_comment == 1){
-      //
-      // } else if(this.filter_phone == 1 && this.filter_comment == 0){
-      //     this.navChat = this.navChatDefault.filter(item => {
-      //         return item.check_phone == 1;
-      //     });
-      // } else if(this.filter_phone == 0 && this.filter_comment == 1){
-      //
-      // } else {
-      //     this.navChat = this.navChatDefault;
-      // }
-
+      }
+    },
+    showModalReply: function showModalReply(item) {
+      this.comment_id = item.comment_id;
+      $('#reply_comment').modal({
+        show: true
+      });
+    },
+    sendReplyComment: function sendReplyComment() {
+      console.log(11111, this.contentMesage);
+      var rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
+        // "messaging_type": "MESSAGE_TAG",
+        // "tag": "HUMAN_AGENT",
+        "messaging_type": "UPDATE",
+        "recipient": {
+          "comment_id": this.comment_id
+        },
+        "message": {
+          "text": this.contentMesage
+        }
+      }).then(function (res) {
+        console.log(12313, res);
+      });
+      console.log(2234234, rq);
     }
   }
 });
@@ -81785,6 +82123,12 @@ var render = function() {
         "button",
         { staticClass: "btn btn-warning", on: { click: _vm.filterNotPhone } },
         [_c("i", { staticClass: "fa fa-phone-slash" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", on: { click: _vm.filterComment } },
+        [_c("i", { staticClass: "fa fa-book" })]
       )
     ]),
     _vm._v(" "),
@@ -81989,7 +82333,13 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("span", { staticClass: "name bold" }, [
-                      _vm._v(_vm._s(_vm.chat_current_name))
+                      _vm._v(
+                        _vm._s(_vm.chat_current_name) +
+                          " " +
+                          _vm._s(
+                            _vm.post_id ? "(post_id:" + _vm.post_id + ")" : ""
+                          )
+                      )
                     ])
                   ]
                 )
@@ -82128,14 +82478,42 @@ var render = function() {
                                       src: item.url
                                     }
                                   })
-                                : _c("p", {
-                                    attrs: {
-                                      title: _vm.date(item.created_time)
+                                : _c(
+                                    "p",
+                                    {
+                                      attrs: {
+                                        title: _vm.date(item.created_time)
+                                      }
                                     },
-                                    domProps: {
-                                      innerHTML: _vm._s(item.message)
-                                    }
-                                  })
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(item.message) +
+                                          "\n                                        "
+                                      ),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _vm.post_id
+                                        ? _c(
+                                            "span",
+                                            {
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.showModalReply(
+                                                    item
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fa fa-comment"
+                                              })
+                                            ]
+                                          )
+                                        : _vm._e()
+                                    ]
+                                  )
                             ])
                           : _c(
                               "div",
@@ -82163,14 +82541,42 @@ var render = function() {
                                         src: item.url
                                       }
                                     })
-                                  : _c("p", {
-                                      attrs: {
-                                        title: _vm.date(item.created_time)
+                                  : _c(
+                                      "p",
+                                      {
+                                        attrs: {
+                                          title: _vm.date(item.created_time)
+                                        }
                                       },
-                                      domProps: {
-                                        innerHTML: _vm._s(item.message)
-                                      }
-                                    })
+                                      [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(item.message) +
+                                            "\n                                        "
+                                        ),
+                                        _c("br"),
+                                        _vm._v(" "),
+                                        _vm.post_id
+                                          ? _c(
+                                              "span",
+                                              {
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.showModalReply(
+                                                      item
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fa fa-comment"
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    )
                               ]
                             )
                       ])
@@ -82391,6 +82797,97 @@ var render = function() {
                     ]
                   )
                 ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "modal fade",
+                  attrs: {
+                    id: "reply_comment",
+                    tabindex: "-1",
+                    role: "dialog",
+                    "aria-labelledby": "exampleModalLabel",
+                    "aria-hidden": "true"
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal-dialog",
+                      attrs: { role: "document" }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-content" }, [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "modal-body" }, [
+                          _c("div", { staticClass: "row" }, [
+                            _c("div", { staticClass: "col-12" }, [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(_vm.chat_current_name) +
+                                  "\n                                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-12" }, [
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.contentMesage,
+                                    expression: "contentMesage"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { cols: "30", rows: "4" },
+                                domProps: { value: _vm.contentMesage },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.contentMesage = $event.target.value
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "modal-footer" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-secondary",
+                              attrs: { type: "button", "data-dismiss": "modal" }
+                            },
+                            [_vm._v("Close")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.sendReplyComment()
+                                }
+                              }
+                            },
+                            [_vm._v("Gửi")]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ]
               )
             ],
             1
@@ -82405,7 +82902,7 @@ var render = function() {
                     "form-group position-relative has-icon-left col-10 m-0"
                 },
                 [
-                  _vm._m(1),
+                  _vm._m(2),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -82861,6 +83358,31 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Tin nhắn mới")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-control-position" }, [
       _c("i", { staticClass: "icon-emoticon-smile" })
     ])
@@ -82899,6 +83421,12 @@ var render = function() {
         "button",
         { staticClass: "btn btn-warning", on: { click: _vm.filterNotPhone } },
         [_c("i", { staticClass: "fa fa-phone-slash" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", on: { click: _vm.filterComment } },
+        [_c("i", { staticClass: "fa fa-book" })]
       )
     ]),
     _vm._v(" "),
@@ -83107,7 +83635,10 @@ var render = function() {
                         _vm._s(_vm.chat_current_name) +
                           " (" +
                           _vm._s(_vm.chat_current_page) +
-                          ")"
+                          ") " +
+                          _vm._s(
+                            _vm.post_id ? "(post_id:" + _vm.post_id + ")" : ""
+                          )
                       )
                     ])
                   ]
@@ -83244,14 +83775,42 @@ var render = function() {
                                       src: item.url
                                     }
                                   })
-                                : _c("p", {
-                                    attrs: {
-                                      title: _vm.date(item.created_time)
+                                : _c(
+                                    "p",
+                                    {
+                                      attrs: {
+                                        title: _vm.date(item.created_time)
+                                      }
                                     },
-                                    domProps: {
-                                      innerHTML: _vm._s(item.message)
-                                    }
-                                  })
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(item.message) +
+                                          "\n                                        "
+                                      ),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _vm.post_id
+                                        ? _c(
+                                            "span",
+                                            {
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.showModalReply(
+                                                    item
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fa fa-comment"
+                                              })
+                                            ]
+                                          )
+                                        : _vm._e()
+                                    ]
+                                  )
                             ])
                           : _c(
                               "div",
@@ -83279,14 +83838,42 @@ var render = function() {
                                         src: item.url
                                       }
                                     })
-                                  : _c("p", {
-                                      attrs: {
-                                        title: _vm.date(item.created_time)
+                                  : _c(
+                                      "p",
+                                      {
+                                        attrs: {
+                                          title: _vm.date(item.created_time)
+                                        }
                                       },
-                                      domProps: {
-                                        innerHTML: _vm._s(item.message)
-                                      }
-                                    })
+                                      [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(item.message) +
+                                            "\n                                        "
+                                        ),
+                                        _c("br"),
+                                        _vm._v(" "),
+                                        _vm.post_id
+                                          ? _c(
+                                              "span",
+                                              {
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.showModalReply(
+                                                      item
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fa fa-comment"
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    )
                               ]
                             )
                       ])
@@ -83507,6 +84094,97 @@ var render = function() {
                     ]
                   )
                 ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "modal fade",
+                  attrs: {
+                    id: "reply_comment",
+                    tabindex: "-1",
+                    role: "dialog",
+                    "aria-labelledby": "exampleModalLabel",
+                    "aria-hidden": "true"
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal-dialog",
+                      attrs: { role: "document" }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-content" }, [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "modal-body" }, [
+                          _c("div", { staticClass: "row" }, [
+                            _c("div", { staticClass: "col-12" }, [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(_vm.chat_current_name) +
+                                  "\n                                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-12" }, [
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.contentMesage,
+                                    expression: "contentMesage"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { cols: "30", rows: "4" },
+                                domProps: { value: _vm.contentMesage },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.contentMesage = $event.target.value
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "modal-footer" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-secondary",
+                              attrs: { type: "button", "data-dismiss": "modal" }
+                            },
+                            [_vm._v("Close")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.sendReplyComment()
+                                }
+                              }
+                            },
+                            [_vm._v("Gửi")]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ]
               )
             ],
             1
@@ -83521,7 +84199,7 @@ var render = function() {
                     "form-group position-relative has-icon-left col-10 m-0"
                 },
                 [
-                  _vm._m(1),
+                  _vm._m(2),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -84006,6 +84684,31 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-control-position" }, [
       _c("i", { staticClass: "ft-search" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Tin nhắn mới")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   },
   function() {

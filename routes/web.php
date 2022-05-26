@@ -234,6 +234,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('chat-multi-page', 'ChatController@chatMultiPage')->name('chat-multi-page');
         Route::get('get-token-fanpage/{id}', 'ChatController@getFanpageToken');
         Route::get('get-phone-page', 'ChatController@getPhonePage');
+        Route::get('get-comment-page', 'ChatController@getCommentPage');
+        Route::get('get-detail-comment', 'ChatController@getDetailComment');
         Route::get('get-data-form-customer', 'ChatController@getDataFormCustomer');
         Route::post('create-customer', 'ChatController@createCustomer');
 

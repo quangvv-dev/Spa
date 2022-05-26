@@ -58,6 +58,14 @@ class ChatController extends Controller
     public function getPhonePage(Request $request){
         return Customer::select('phone','page_id','FB_ID')->whereIn('page_id',$request->arr_page)->get();
     }
+    public function getCommentPage(Request $request){
+        $data = Comment::whereIn('page_id',$request->arr_page)->get();
+        return $data;
+    }
+    public function getDetailComment(Request $request){
+        $data = Comment::where('page_id',$request->page_id)->where('post_id',$request->post_id)->where('FB_ID',$request->FB_ID)->first();
+        return $data;
+    }
 
     public function addGroup(Request $request){
         $user = Auth::user();
@@ -136,7 +144,9 @@ class ChatController extends Controller
 
         $data_content= array([
             'created_time'=>date('Y-m-d H:i:s'),
-            'message' =>$request->snippet
+            'message' =>$request->snippet,
+            'comment_id' => $request->comment_id,
+            'parent_id' => $request->parent_id
         ]);
         if($comment){
             $data_push = json_decode($comment->content);
@@ -144,8 +154,8 @@ class ChatController extends Controller
             $comment->update(['snippet'=>$request->snippet,'content'=>json_encode($data_push)]);
             $code = 201;
         } else {
-            $data = $request->all();
-            $data['content'] = json_encode($data_content);
+            $data = $request->except(['comment_id','parent_id']);
+            $data['content'] = json_encode([$data['content']]);
             Comment::create($data);
             $code = 200;
         }
