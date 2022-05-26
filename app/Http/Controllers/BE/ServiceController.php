@@ -42,7 +42,7 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $docs = Service::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')
+        $docs = Service::where('type', StatusCode::SERVICE)->orderBy('id', 'desc')->orderByDesc('images')
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $q->where('category_id', $input['category_id']);
             })->when(isset($input['search']) && $input['search'], function ($q) use ($input) {
