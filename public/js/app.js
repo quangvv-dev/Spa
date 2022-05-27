@@ -3622,7 +3622,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
             if (server.type) {
-              _this2.customerNewComment(server);
+              setTimeout(function () {
+                _this2.customerNewComment(server);
+              }, 1000);
             } else {
               var html = {
                 message: server.message.text,
@@ -4141,7 +4143,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           if (res.data.code == 200) {
             //trường hợp thêm mới
-            var customer_new_comment = {};
+            var customer_new_comment = {
+              'unread_count': 0
+            };
             customer_new_comment.participants = {
               data: [{
                 id: data.value.from.id,

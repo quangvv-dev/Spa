@@ -424,7 +424,9 @@
                         socket.on(item.id, (server) => {
                             let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
                             if(server.type){
-                                this.customerNewComment(server);
+                                setTimeout(()=>{
+                                    this.customerNewComment(server);
+                                },1000)
                             } else {
                                 let html = {
                                     message: server.message.text,
@@ -799,7 +801,9 @@
                     .then(res => {
                         if (res.data.success) {
                             if (res.data.code == 200){ //trường hợp thêm mới
-                                let customer_new_comment = {};
+                                let customer_new_comment = {
+                                    'unread_count' : 0
+                                };
 
                                 customer_new_comment.participants = {
                                     data: [
