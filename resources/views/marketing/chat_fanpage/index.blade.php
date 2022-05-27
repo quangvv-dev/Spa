@@ -51,7 +51,7 @@
                 <div class="row" style="width: 100%">
                     <h4 class="col-lg-2">2.10 Chat Fanpage</h4>
                     <div class="col-lg-2 col-md-6">
-                        <select name="arr_mkt_id[]" id="" class="select2"
+                        <select name="mkt_id" id="" class="select2"
                                 data-placeholder="-- Chọn MKT --">
                             <option></option>
                             @forelse($mkts as $item)

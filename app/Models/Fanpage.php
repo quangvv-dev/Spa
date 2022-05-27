@@ -15,11 +15,13 @@ class Fanpage extends Model
             return $q->where('user_id', $search['searchUser']);
         })->when(isset($search['arr_mkt_id']) && count($search['arr_mkt_id']), function ($q) use ($search) {
             return $q->whereIn('user_id', $search['arr_mkt_id']);
+        })->when(isset($search['mkt_id']), function ($q) use ($search) {
+            return $q->whereIn('user_id', $search['mkt_id']);
         })->when(isset($search['searchPageId']), function ($q) use ($search) {
             return $q->where('page_id', $search['searchPageId']);
         })->when(isset($search['used']), function ($q) use ($search) {
             return $q->where('used', $search['used']);
-        })->when(isset($search['searchName']) && $search['searchName'], function ($q) use ($search) {
+        })->when(!empty($search['searchName']), function ($q) use ($search) {
             return $q->where('name', 'like', '%' . $search['searchName'] . '%');
         })->orderByDesc('id');
         return $docs;
