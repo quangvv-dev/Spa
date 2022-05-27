@@ -160,6 +160,15 @@
     left: 0;
     flex-direction: column;
 }
+.chat-application .filterChat .btn-filter{
+    background: #52647a !important;
+}
+.chat-application .filterChat .active{
+    background: #c29d0b !important;
+}
+.pointer{
+    cursor: pointer;
+}
 
 @media (max-width: 767.98px) {
     .chat-application .chat-app-window {

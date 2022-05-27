@@ -2259,6 +2259,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -2313,7 +2315,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }],
       //filter
       filter_phone: null,
-      filter_comment: null
+      filter_comment: 0,
+      select_active: null
     };
   },
   components: {
@@ -2361,14 +2364,10 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
     socket.on(this.last_segment, function (server) {
       var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
-      console.log(44444, server);
 
       if (server.type) {
-        console.log(33333, server);
-
         _this2.customerNewComment(server);
       } else {
-        console.log(234525, server);
         var html = {
           message: server.message.text,
           from: {
@@ -2609,32 +2608,29 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                           case 6:
                             res = _context3.sent;
-                            data1 = res.data.data; //5293627404034299
-                            // data1 = data1.filter(f=>f.participants.data[0].id != '5293627404034299');
-
+                            data1 = res.data.data;
                             _this6.navChat = data1;
                             _this6.navChatDefault = data1;
                             _this6.access_token = access_token;
-                            console.log(23424, data1);
 
                             _this6.getPhonePage();
 
                             _this6.getCommentPage();
 
-                            _context3.next = 19;
+                            _context3.next = 18;
                             break;
 
-                          case 16:
-                            _context3.prev = 16;
+                          case 15:
+                            _context3.prev = 15;
                             _context3.t0 = _context3["catch"](3);
                             alertify.error("Token hết hạn:" + _this6.last_segment, 10);
 
-                          case 19:
+                          case 18:
                           case "end":
                             return _context3.stop();
                         }
                       }
-                    }, _callee3, null, [[3, 16]]);
+                    }, _callee3, null, [[3, 15]]);
                   }));
 
                   return function (_x2) {
@@ -2692,6 +2688,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }).then(function (response) {
         if (response.data && response.data.length > 0) {
           response.data.forEach(function (f) {
+            var data_content = JSON.parse(f.content);
             var customer_new_comment = {};
             customer_new_comment.participants = {
               data: [{
@@ -2702,8 +2699,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
               }]
             };
             customer_new_comment.unread_count = f.is_read == 0 ? 1 : 0;
-            customer_new_comment.updated_time = new Date(f.updated_at).toISOString();
-            ;
+            customer_new_comment.updated_time = data_content[data_content.length - 1].created_time;
             customer_new_comment.snippet = f.snippet;
             customer_new_comment.new_message = f.is_read == 0 ? true : false;
             customer_new_comment.post_id = f.post_id;
@@ -2722,20 +2718,27 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
       });
     },
-    selectMessage: function selectMessage(item) {
+    selectMessage: function selectMessage(item, index) {
       var _this9 = this;
 
       if (item.type && item.type == 'comment') {
         var url = '/marketing/get-detail-comment';
+        var params = {
+          page_id: this.last_segment,
+          post_id: item.post_id,
+          FB_ID: item.participants.data[0].id
+        };
+
+        var _index = this.navChatDefault.findIndex(function (fd) {
+          return fd.participants.data[1].id == _this9.last_segment && fd.participants.data[0].id == item.participants.data[0].id && item.type == 'comment';
+        });
+
+        this.navChatDefault[_index].unread_count = 0;
+        this.navChatDefault[_index].new_message = false;
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url, {
-          params: {
-            page_id: this.last_segment,
-            post_id: item.post_id,
-            FB_ID: item.participants.data[0].id
-          }
+          params: params
         }).then(function (response) {
           var data = JSON.parse(response.data.content);
-          console.log(44444, response.data.content);
 
           if (data.length > 0) {
             data = data.map(function (m) {
@@ -2747,10 +2750,11 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             });
           }
 
-          console.log(44444, data);
           _this9.detailMessage = data;
           _this9.post_id = _this9.last_segment + '_' + response.data.post_id;
-        });
+        }); //update is_read comment
+
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/update-is-read-comment', params);
       } else {
         var id = item.id;
         this.post_id = '';
@@ -2759,16 +2763,18 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         var _url = "https://graph.facebook.com/v13.0/".concat(id, "/?fields=").concat(fields, "&access_token=").concat(this.access_token);
 
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_url).then(function (response) {
-          console.log(444444, response);
           _this9.detailMessage = response.data.messages.data.reverse();
         });
-        var index = this.navChatDefault.findIndex(function (f) {
+
+        var _index2 = this.navChatDefault.findIndex(function (f) {
           return f.id === id;
         });
-        this.navChatDefault[index].unread_count = 0;
-        this.navChatDefault[index].new_message = false;
+
+        this.navChatDefault[_index2].unread_count = 0;
+        this.navChatDefault[_index2].new_message = false;
       }
 
+      this.select_active = index;
       this.classClick = item.participants.data[0].id;
       this.fb_me = item.participants.data[0].id;
       this.chat_current_name = item.participants.data[0].name;
@@ -2949,8 +2955,6 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       });
     },
     uploadImageSuccess: function uploadImageSuccess(formData, index, fileList) {
-      // console.log(55555,this.data_images_upload_server,this.data_images_upload_server_default);
-      // this.data_images_upload_server = this.data_images_upload_server_default;
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
@@ -3123,7 +3127,6 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       });
     },
     sendReplyComment: function sendReplyComment() {
-      console.log(11111, this.contentMesage);
       var rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
         // "messaging_type": "MESSAGE_TAG",
         // "tag": "HUMAN_AGENT",
@@ -3135,9 +3138,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           "text": this.contentMesage
         }
       }).then(function (res) {
-        console.log(12313, res);
+        if (res) {
+          alertify.success('Trả lời thành công!', 5);
+          $('#reply_comment').modal('hide');
+        }
+      })["catch"](function (error) {
+        if (error) {
+          alertify.warning('Bạn đã trả lời bình luận này rồi!', 5);
+          $('#reply_comment').modal('hide');
+        }
       });
-      console.log(2234234, rq);
+      this.contentMesage = '';
     }
   }
 });
@@ -3181,6 +3192,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -3552,7 +3565,11 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }, {
         id: 1,
         value: "Nam"
-      }]
+      }],
+      //filter
+      filter_phone: null,
+      filter_comment: 0,
+      select_active: null
     };
   },
   components: {
@@ -3987,18 +4004,25 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }).then(function (response) {
         if (response.data && response.data.length > 0) {
           response.data.forEach(function (f) {
+            var data_content = JSON.parse(f.content);
             var customer_new_comment = {};
+
+            var page = _this8.arr_page_id.filter(function (ft) {
+              return ft.id == f.page_id;
+            });
+
             customer_new_comment.participants = {
               data: [{
                 id: f.FB_ID,
                 name: f.fb_name
               }, {
-                id: f.page_id
+                id: f.page_id,
+                name: page[0].name
               }]
             };
+            customer_new_comment.access_token = page[0].token;
             customer_new_comment.unread_count = f.is_read == 0 ? 1 : 0;
-            customer_new_comment.updated_time = new Date(f.updated_at).toISOString();
-            ;
+            customer_new_comment.updated_time = data_content[data_content.length - 1].created_time;
             customer_new_comment.snippet = f.snippet;
             customer_new_comment.new_message = f.is_read == 0 ? true : false;
             customer_new_comment.post_id = f.post_id;
@@ -4017,20 +4041,31 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
       });
     },
-    selectMessage: function selectMessage(item) {
+    selectMessage: function selectMessage(item, index) {
       var _this9 = this;
+
+      console.log(12313, item);
 
       if (item.type && item.type == 'comment') {
         var url = '/marketing/get-detail-comment';
+        var fb_id = item.participants.data[0].id;
+        var page_id = item.participants.data[1].id;
+        var params = {
+          page_id: page_id,
+          post_id: item.post_id,
+          FB_ID: fb_id
+        };
+
+        var _index = this.navChatDefault.findIndex(function (fd) {
+          return fd.participants.data[1].id == page_id && fd.participants.data[0].id == fb_id && item.type == 'comment';
+        });
+
+        this.navChatDefault[_index].unread_count = 0;
+        this.navChatDefault[_index].new_message = false;
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url, {
-          params: {
-            page_id: this.last_segment,
-            post_id: item.post_id,
-            FB_ID: item.participants.data[0].id
-          }
+          params: params
         }).then(function (response) {
           var data = JSON.parse(response.data.content);
-          console.log(44444, response.data.content);
 
           if (data.length > 0) {
             data = data.map(function (m) {
@@ -4044,7 +4079,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
           _this9.detailMessage = data;
           _this9.post_id = _this9.last_segment + '_' + response.data.post_id;
-        });
+        }); //update is_read comment
+
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/update-is-read-comment', params);
       } else {
         var id = item.id;
         var access_token = item.access_token;
@@ -4054,15 +4091,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_url).then(function (response) {
           _this9.detailMessage = response.data.messages.data.reverse();
-          console.log(444444, response);
         });
-        var index = this.navChatDefault.findIndex(function (f) {
+
+        var _index2 = this.navChatDefault.findIndex(function (f) {
           return f.id === id;
         });
-        this.navChatDefault[index].unread_count = 0;
-        this.navChatDefault[index].new_message = false;
+
+        this.navChatDefault[_index2].unread_count = 0;
+        this.navChatDefault[_index2].new_message = false;
       }
 
+      this.select_active = index;
       this.last_segment = item.participants.data[1].id;
       this.classClick = item.participants.data[0].id;
       this.fb_me = item.participants.data[0].id;
@@ -4428,7 +4467,6 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       });
     },
     sendReplyComment: function sendReplyComment() {
-      console.log(11111, this.contentMesage);
       var rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
         // "messaging_type": "MESSAGE_TAG",
         // "tag": "HUMAN_AGENT",
@@ -4440,9 +4478,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           "text": this.contentMesage
         }
       }).then(function (res) {
-        console.log(12313, res);
+        if (res) {
+          alertify.success('Trả lời thành công!', 5);
+          $('#reply_comment').modal('hide');
+        }
+      })["catch"](function (error) {
+        if (error) {
+          alertify.warning('Bạn đã trả lời bình luận này rồi!', 5);
+          $('#reply_comment').modal('hide');
+        }
       });
-      console.log(2234234, rq);
+      this.contentMesage = '';
     }
   }
 });
@@ -82115,19 +82161,31 @@ var render = function() {
     _c("div", { staticClass: "d-flex filterChat" }, [
       _c(
         "button",
-        { staticClass: "btn btn-primary", on: { click: _vm.filterPhone } },
+        {
+          staticClass: "btn btn-filter",
+          class: { active: _vm.filter_phone == 1 },
+          on: { click: _vm.filterPhone }
+        },
         [_c("i", { staticClass: "fa fa-phone" })]
       ),
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-warning", on: { click: _vm.filterNotPhone } },
+        {
+          staticClass: "btn btn-filter",
+          class: { active: _vm.filter_phone == 0 },
+          on: { click: _vm.filterNotPhone }
+        },
         [_c("i", { staticClass: "fa fa-phone-slash" })]
       ),
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-primary", on: { click: _vm.filterComment } },
+        {
+          staticClass: "btn btn-filter",
+          class: { active: _vm.filter_comment == 1 },
+          on: { click: _vm.filterComment }
+        },
         [_c("i", { staticClass: "fa fa-book" })]
       )
     ]),
@@ -82191,12 +82249,11 @@ var render = function() {
                       key: index,
                       staticClass: "media border-0",
                       class: {
-                        "bg-blue-grey bg-lighten-5":
-                          _vm.classClick == item.participants.data[0].id
+                        "bg-blue-grey bg-lighten-5": _vm.select_active == index
                       },
                       on: {
                         click: function($event) {
-                          return _vm.selectMessage(item)
+                          return _vm.selectMessage(item, index)
                         }
                       }
                     },
@@ -82290,7 +82347,11 @@ var render = function() {
                                     )
                                   )
                                 ]
-                              )
+                              ),
+                              _vm._v(" "),
+                              item.type && item.type == "comment"
+                                ? _c("i", { staticClass: "fa fa-comment" })
+                                : _c("i", { staticClass: "fa fa-envelope" })
                             ])
                           ]
                         )
@@ -82507,7 +82568,8 @@ var render = function() {
                                             },
                                             [
                                               _c("i", {
-                                                staticClass: "fa fa-comment"
+                                                staticClass:
+                                                  "fa fa-comment pointer"
                                               })
                                             ]
                                           )
@@ -82570,7 +82632,8 @@ var render = function() {
                                               },
                                               [
                                                 _c("i", {
-                                                  staticClass: "fa fa-comment"
+                                                  staticClass:
+                                                    "fa fa-comment pointer"
                                                 })
                                               ]
                                             )
@@ -83413,19 +83476,31 @@ var render = function() {
     _c("div", { staticClass: "d-flex filterChat" }, [
       _c(
         "button",
-        { staticClass: "btn btn-primary", on: { click: _vm.filterPhone } },
+        {
+          staticClass: "btn btn-filter",
+          class: { active: _vm.filter_phone == 1 },
+          on: { click: _vm.filterPhone }
+        },
         [_c("i", { staticClass: "fa fa-phone" })]
       ),
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-warning", on: { click: _vm.filterNotPhone } },
+        {
+          staticClass: "btn btn-filter",
+          class: { active: _vm.filter_phone == 0 },
+          on: { click: _vm.filterNotPhone }
+        },
         [_c("i", { staticClass: "fa fa-phone-slash" })]
       ),
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-primary", on: { click: _vm.filterComment } },
+        {
+          staticClass: "btn btn-filter",
+          class: { active: _vm.filter_comment == 1 },
+          on: { click: _vm.filterComment }
+        },
         [_c("i", { staticClass: "fa fa-book" })]
       )
     ]),
@@ -83489,12 +83564,11 @@ var render = function() {
                       key: index,
                       staticClass: "media border-0",
                       class: {
-                        "bg-blue-grey bg-lighten-5":
-                          _vm.classClick == item.participants.data[0].id
+                        "bg-blue-grey bg-lighten-5": _vm.select_active == index
                       },
                       on: {
                         click: function($event) {
-                          return _vm.selectMessage(item)
+                          return _vm.selectMessage(item, index)
                         }
                       }
                     },
@@ -83588,7 +83662,11 @@ var render = function() {
                                     )
                                   )
                                 ]
-                              )
+                              ),
+                              _vm._v(" "),
+                              item.type && item.type == "comment"
+                                ? _c("i", { staticClass: "fa fa-comment" })
+                                : _c("i", { staticClass: "fa fa-envelope" })
                             ])
                           ]
                         )
@@ -83804,7 +83882,8 @@ var render = function() {
                                             },
                                             [
                                               _c("i", {
-                                                staticClass: "fa fa-comment"
+                                                staticClass:
+                                                  "fa fa-comment pointer"
                                               })
                                             ]
                                           )
@@ -83867,7 +83946,8 @@ var render = function() {
                                               },
                                               [
                                                 _c("i", {
-                                                  staticClass: "fa fa-comment"
+                                                  staticClass:
+                                                    "fa fa-comment pointer"
                                                 })
                                               ]
                                             )

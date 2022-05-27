@@ -1,9 +1,9 @@
 <template>
     <div class="chat-application">
         <div class="d-flex filterChat">
-            <button class="btn btn-primary" @click="filterPhone"><i class="fa fa-phone"></i></button>
-            <button class="btn btn-warning" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
-            <button class="btn btn-primary" @click="filterComment"><i class="fa fa-book"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_phone == 1}" @click="filterPhone"><i class="fa fa-phone"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_phone == 0}" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_comment == 1}" @click="filterComment"><i class="fa fa-book"></i></button>
         </div>
         <div class="sidebar-left sidebar-fixed">
             <div class="sidebar">
@@ -20,9 +20,9 @@
                     <div id="users-list" class="list-group position-relative">
                         <div class="users-list-padding media-list">
                             <a class="media border-0"
-                               :class="{'bg-blue-grey bg-lighten-5':classClick == item.participants.data[0].id}"
+                               :class="{'bg-blue-grey bg-lighten-5':select_active == index}"
                                v-for="(item,index) in navChat"
-                               @click="selectMessage(item)"
+                               @click="selectMessage(item,index)"
                                :key="index">
                                 <div class="media-left pr-1">
                                       <span class="avatar avatar-md avatar-online">
@@ -47,6 +47,8 @@
                                             <i class="fas fa-phone text-danger" v-if="item.check_phone"></i>
                                             <i class="font-medium-1 icon-volume-off blue-grey lighten-3 mr-1"></i>
                                           <span class="badge badge-pill badge-warning">{{item.unread_count?item.unread_count:''}}</span>
+                                            <i v-if="item.type && item.type=='comment'" class="fa fa-comment"></i>
+                                            <i v-else class="fa fa-envelope"></i>
                                         </span>
                                     </p>
                                 </div>
@@ -106,7 +108,7 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
                                         </p>
 
                                     </div>
@@ -117,7 +119,7 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
                                         </p>
                                     </div>
                                 </div>
@@ -375,7 +377,8 @@
 
                 //filter
                 filter_phone : null,
-                filter_comment : null,
+                filter_comment : 0,
+                select_active:null
             }
         },
         components: {
@@ -417,13 +420,9 @@
         mounted() {
             socket.on(this.last_segment, (server) => {
                 let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
-                console.log(44444,server);
-
                 if (server.type) {
-                    console.log(33333,server);
                     this.customerNewComment(server);
                 } else {
-                    console.log(234525,server);
                     let html = {
                         message: server.message.text,
                         from: {
@@ -614,12 +613,9 @@
                         try {
                             const res = await axios.get(url);
                             let data1 = res.data.data;
-                            //5293627404034299
-                            // data1 = data1.filter(f=>f.participants.data[0].id != '5293627404034299');
                             this.navChat = data1;
                             this.navChatDefault = data1;
                             this.access_token = access_token;
-                            console.log(23424,data1);
                             this.getPhonePage();
                             this.getCommentPage();
                         } catch (e) {
@@ -663,6 +659,7 @@
                 }).then(response => {
                     if(response.data && response.data.length > 0){
                         response.data.forEach(f=>{
+                            let data_content = JSON.parse(f.content);
                             let customer_new_comment = {};
 
                             customer_new_comment.participants = {
@@ -677,7 +674,7 @@
                                 ]
                             }
                             customer_new_comment.unread_count = f.is_read == 0 ? 1 : 0;
-                            customer_new_comment.updated_time = new Date(f.updated_at).toISOString();;
+                            customer_new_comment.updated_time = data_content[data_content.length-1].created_time;
                             customer_new_comment.snippet = f.snippet;
                             customer_new_comment.new_message = f.is_read == 0 ? true : false;
                             customer_new_comment.post_id = f.post_id;
@@ -696,20 +693,24 @@
                 })
             },
 
-            selectMessage(item) {
+            selectMessage(item,index) {
                 if(item.type && item.type == 'comment'){
-                    let url = '/marketing/get-detail-comment'
-                    axios.get(url,{
-                        params: {
-                            page_id: this.last_segment,
-                            post_id: item.post_id,
-                            FB_ID: item.participants.data[0].id
-                        }
-                    })
-                        .then(response => {
-                            let data = JSON.parse(response.data.content);
-                            console.log(44444,response.data.content);
+                    let url = '/marketing/get-detail-comment';
+                    let params = {
+                        page_id: this.last_segment,
+                        post_id: item.post_id,
+                        FB_ID: item.participants.data[0].id
+                    }
 
+                    let index = this.navChatDefault.findIndex(fd=>{
+                        return fd.participants.data[1].id == this.last_segment && fd.participants.data[0].id == item.participants.data[0].id && item.type == 'comment';
+                    })
+                    this.navChatDefault[index].unread_count = 0;
+                    this.navChatDefault[index].new_message = false;
+                    axios.get(url,{
+                        params: params
+                    }).then(response => {
+                            let data = JSON.parse(response.data.content);
                             if(data.length > 0){
                                  data = data.map(m=>{
                                     m['from'] = {
@@ -719,10 +720,13 @@
                                     return m;
                                 })
                             }
-                            console.log(44444,data);
                             this.detailMessage = data;
                             this.post_id = this.last_segment + '_' + response.data.post_id;
                         })
+
+                    //update is_read comment
+                    axios.post('/marketing/update-is-read-comment',params)
+
                 }else {
                     let id = item.id;
                     this.post_id = '';
@@ -730,7 +734,6 @@
                     let url = `https://graph.facebook.com/v13.0/${id}/?fields=${fields}&access_token=${this.access_token}`;
                     axios.get(url)
                         .then(response => {
-                            console.log(444444,response);
                             this.detailMessage = response.data.messages.data.reverse();
                         })
                     const index = this.navChatDefault.findIndex(f => f.id === id);
@@ -738,6 +741,7 @@
                     this.navChatDefault[index].new_message = false;
 
                 }
+                this.select_active = index;
                 this.classClick = item.participants.data[0].id;
                 this.fb_me = item.participants.data[0].id;
                 this.chat_current_name = item.participants.data[0].name
@@ -888,8 +892,6 @@
             },
 
             uploadImageSuccess(formData, index, fileList) {
-                // console.log(55555,this.data_images_upload_server,this.data_images_upload_server_default);
-                // this.data_images_upload_server = this.data_images_upload_server_default;
                 this.data_images_upload_server = fileList;
             },
             beforeRemove(index, done, fileList) {
@@ -1045,7 +1047,6 @@
                 $('#reply_comment').modal({show: true})
             },
             sendReplyComment(){
-                console.log(11111,this.contentMesage);
                     let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                         // "messaging_type": "MESSAGE_TAG",
                         // "tag": "HUMAN_AGENT",
@@ -1057,9 +1058,17 @@
                             "text": this.contentMesage
                         }
                     }).then(res=>{
-                        console.log(12313,res);
+                        if(res){
+                            alertify.success('Trả lời thành công!',5);
+                            $('#reply_comment').modal('hide');
+                        }
+                    }).catch(error=>{
+                        if(error){
+                            alertify.warning('Bạn đã trả lời bình luận này rồi!',5);
+                            $('#reply_comment').modal('hide');
+                        }
                     })
-                console.log(2234234,rq);
+                this.contentMesage = '';
             }
         }
     }

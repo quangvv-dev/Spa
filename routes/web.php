@@ -236,6 +236,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('get-phone-page', 'ChatController@getPhonePage');
         Route::get('get-comment-page', 'ChatController@getCommentPage');
         Route::get('get-detail-comment', 'ChatController@getDetailComment');
+        Route::post('update-is-read-comment', 'ChatController@updateReadComment');
         Route::get('get-data-form-customer', 'ChatController@getDataFormCustomer');
         Route::post('create-customer', 'ChatController@createCustomer');
 
