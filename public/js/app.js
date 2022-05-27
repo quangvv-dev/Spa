@@ -4150,7 +4150,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 id: splitted[0]
               }]
             };
+
+            var page = _this10.arr_page_id.filter(function (ft) {
+              return ft.id == splitted[0];
+            });
+
             customer_new_comment.unread_count = 1;
+            customer_new_comment.access_token = page[0].token;
             customer_new_comment.updated_time = new Date().toISOString();
             customer_new_comment.snippet = data.value.message;
             customer_new_comment.new_message = true;

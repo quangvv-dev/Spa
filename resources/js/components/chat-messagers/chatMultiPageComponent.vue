@@ -812,7 +812,10 @@
                                         }
                                     ]
                                 }
+
+                                let page = this.arr_page_id.filter(ft=> ft.id == splitted[0]);
                                 customer_new_comment.unread_count = 1;
+                                customer_new_comment.access_token = page[0].token;
                                 customer_new_comment.updated_time = new Date().toISOString();
                                 customer_new_comment.snippet = data.value.message;
                                 customer_new_comment.new_message = true;
@@ -821,7 +824,6 @@
                                 this.navChatDefault.unshift(customer_new_comment);
                                 this.navChat = this.navChatDefault;
                             } else { //trường hợp tồn tại
-
                                 let index = this.navChatDefault.findIndex(f => {
                                     return (f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type =='comment');
                                 })
@@ -844,6 +846,7 @@
                     })
 
             },
+
             selectElement(item){
                 this.data_images_upload_server = this.data_images_upload_server_default = [];
                 this.images = [];

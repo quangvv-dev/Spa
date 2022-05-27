@@ -865,7 +865,6 @@
                     })
 
             },
-
             selectElement(item) {
                 this.data_images_upload_server = this.data_images_upload_server_default = [];
                 this.images = [];
