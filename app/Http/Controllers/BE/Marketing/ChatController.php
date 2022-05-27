@@ -28,7 +28,7 @@ class ChatController extends Controller
 
     public function chatFanpage(Request $request){
         $data = $request->all();
-        $data['used'] = 1;
+        $data['used'] = 1 ;
         $user = Auth::user();
         if($user->department_id == DepartmentConstant::MARKETING)
         {
