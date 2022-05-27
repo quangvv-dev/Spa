@@ -90,10 +90,10 @@
         </form>
         <div class="card-content collapse show">
             <div class="card-body body-multi">
-                <div class="row">
+                <div class="row" id="#registration-form">
                     @include('marketing.chat_fanpage.ajax')
-                    @include('marketing.chat_fanpage.modal_multi_page')
                 </div>
+                @include('marketing.chat_fanpage.modal_multi_page')
             </div>
         </div>
     </div>
