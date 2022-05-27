@@ -51,7 +51,7 @@
                 <div class="row" style="width: 100%">
                     <h4 class="col-lg-2">2.10 Chat Fanpage</h4>
                     <div class="col-lg-2 col-md-6">
-                        <select name="mkt_id" id="" class="select2"
+                        <select name="arr_mkt_id[]" id="" class="select2"
                                 data-placeholder="-- Chọn MKT --">
                             <option></option>
                             @forelse($mkts as $item)
@@ -63,13 +63,13 @@
                     </div>
                     <div class="col-lg-2 col-md-6">
                         <div class="form-group">
-                            <input type="text" name="page_id" class="form-control square"
+                            <input type="text" name="searchPageId" class="form-control square"
                                    placeholder="ID fanpage">
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control square"
+                            <input type="text" name="searchName" class="form-control square"
                                    placeholder="Tên fanpage">
                         </div>
                     </div>
