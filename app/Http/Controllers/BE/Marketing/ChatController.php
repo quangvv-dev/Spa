@@ -28,7 +28,7 @@ class ChatController extends Controller
 
     public function chatFanpage(Request $request){
         $data = $request->all();
-        $data['used'] = 1 ;
+        $data['used'] = 1;
         $user = Auth::user();
         if($user->department_id == DepartmentConstant::MARKETING)
         {
@@ -36,7 +36,12 @@ class ChatController extends Controller
         }
         $fanpages = Fanpage::search($data)->get();
         $mkts = User::where('department_id',DepartmentConstant::MARKETING)->get();
-        $group_multi = MultiplePageGroup::where('user_id',$user->id)->get();
+        if (Auth::user()->department_id == DepartmentConstant::MARKETING){
+            $group_multi = MultiplePageGroup::where('user_id',$user->id)->get();
+        }else{
+            $group_multi = MultiplePageGroup::get();
+        }
+
         if($request->ajax()){
             return view('marketing.chat_fanpage.ajax',compact('fanpages','mkts'));
         }
