@@ -1,9 +1,9 @@
 <template>
     <div class="chat-application">
         <div class="d-flex filterChat">
-            <button class="btn btn-primary" @click="filterPhone"><i class="fa fa-phone"></i></button>
-            <button class="btn btn-warning" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
-            <button class="btn btn-primary" @click="filterComment"><i class="fa fa-book"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_phone == 1}" @click="filterPhone"><i class="fa fa-phone"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_phone == 0}" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_comment == 1}" @click="filterComment"><i class="fa fa-book"></i></button>
         </div>
         <div class="sidebar-left sidebar-fixed">
             <div class="sidebar">
@@ -20,9 +20,9 @@
                     <div id="users-list" class="list-group position-relative">
                         <div class="users-list-padding media-list">
                             <a class="media border-0"
-                               :class="{'bg-blue-grey bg-lighten-5':classClick == item.participants.data[0].id}"
+                               :class="{'bg-blue-grey bg-lighten-5':select_active == index}"
                                v-for="(item,index) in navChat"
-                               @click="selectMessage(item)"
+                               @click="selectMessage(item,index)"
                                :key="index">
                                 <div class="media-left pr-1">
                                       <span class="avatar avatar-md avatar-online">
@@ -47,6 +47,8 @@
 
                                             <i class="font-medium-1 icon-volume-off blue-grey lighten-3 mr-1"></i>
                                           <span class="badge badge-pill badge-warning">{{item.unread_count?item.unread_count:''}}</span>
+                                            <i v-if="item.type && item.type=='comment'" class="fa fa-comment"></i>
+                                            <i v-else class="fa fa-envelope"></i>
                                         </span>
                                     </p>
                                 </div>
@@ -105,7 +107,7 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
                                         </p>
                                     </div>
                                     <div class="chat-content" v-else style="margin-bottom: 0">
@@ -115,7 +117,7 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
                                         </p>
                                     </div>
                                 </div>
@@ -371,7 +373,11 @@
                 option_gender: [
                     {id: 0, value: "Nữ"},
                     {id: 1, value: "Nam"}
-                ]
+                ],
+                //filter
+                filter_phone : null,
+                filter_comment : 0,
+                select_active:null
             }
         },
         components: {
@@ -418,7 +424,9 @@
                         socket.on(item.id, (server) => {
                             let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
                             if(server.type){
-                                this.customerNewComment(server);
+                                setTimeout(()=>{
+                                    this.customerNewComment(server);
+                                },1000)
                             } else {
                                 let html = {
                                     message: server.message.text,
@@ -666,8 +674,9 @@
                 }).then(response => {
                     if(response.data && response.data.length > 0){
                         response.data.forEach(f=>{
+                            let data_content = JSON.parse(f.content);
                             let customer_new_comment = {};
-
+                            let page = this.arr_page_id.filter(ft=> ft.id == f.page_id);
                             customer_new_comment.participants = {
                                 data: [
                                     {
@@ -676,11 +685,13 @@
                                     },
                                     {
                                         id: f.page_id,
+                                        name: page[0].name
                                     }
                                 ]
                             }
+                            customer_new_comment.access_token = page[0].token;
                             customer_new_comment.unread_count = f.is_read == 0 ? 1 : 0;
-                            customer_new_comment.updated_time = new Date(f.updated_at).toISOString();;
+                            customer_new_comment.updated_time = data_content[data_content.length-1].created_time;
                             customer_new_comment.snippet = f.snippet;
                             customer_new_comment.new_message = f.is_read == 0 ? true : false;
                             customer_new_comment.post_id = f.post_id;
@@ -698,19 +709,29 @@
                     // this.navChatDefault = abc;
                 })
             },
-            selectMessage(item) {
+            selectMessage(item,index) {
+                console.log(12313,item)
                 if(item.type && item.type == 'comment'){
-                    let url = '/marketing/get-detail-comment'
+                    let url = '/marketing/get-detail-comment';
+                    let fb_id = item.participants.data[0].id;
+                    let page_id = item.participants.data[1].id;
+                    let params = {
+                        page_id: page_id,
+                        post_id: item.post_id,
+                        FB_ID: fb_id
+                    }
+
+                    let index = this.navChatDefault.findIndex(fd=>{
+                        return fd.participants.data[1].id == page_id && fd.participants.data[0].id == fb_id && item.type == 'comment';
+                    })
+                    this.navChatDefault[index].unread_count = 0;
+                    this.navChatDefault[index].new_message = false;
+
                     axios.get(url,{
-                        params: {
-                            page_id: this.last_segment,
-                            post_id: item.post_id,
-                            FB_ID: item.participants.data[0].id
-                        }
+                        params: params
                     })
                         .then(response => {
                             let data = JSON.parse(response.data.content);
-                            console.log(44444,response.data.content);
 
                             if(data.length > 0){
                                 data = data.map(m=>{
@@ -724,6 +745,8 @@
                             this.detailMessage = data;
                             this.post_id = this.last_segment + '_' + response.data.post_id;
                         })
+                    //update is_read comment
+                    axios.post('/marketing/update-is-read-comment',params)
                 }else {
                     let id = item.id;
                     let access_token = item.access_token;
@@ -733,8 +756,6 @@
                     axios.get(url)
                         .then(response => {
                             this.detailMessage = response.data.messages.data.reverse();
-                            console.log(444444,response);
-
                         })
 
 
@@ -743,6 +764,7 @@
                     this.navChatDefault[index].new_message = false;
                 }
 
+                this.select_active = index;
                 this.last_segment = item.participants.data[1].id;
                 this.classClick = item.participants.data[0].id;
                 this.fb_me = item.participants.data[0].id;
@@ -779,7 +801,9 @@
                     .then(res => {
                         if (res.data.success) {
                             if (res.data.code == 200){ //trường hợp thêm mới
-                                let customer_new_comment = {};
+                                let customer_new_comment = {
+                                    'unread_count' : 0
+                                };
 
                                 customer_new_comment.participants = {
                                     data: [
@@ -792,7 +816,10 @@
                                         }
                                     ]
                                 }
+
+                                let page = this.arr_page_id.filter(ft=> ft.id == splitted[0]);
                                 customer_new_comment.unread_count = 1;
+                                customer_new_comment.access_token = page[0].token;
                                 customer_new_comment.updated_time = new Date().toISOString();
                                 customer_new_comment.snippet = data.value.message;
                                 customer_new_comment.new_message = true;
@@ -801,7 +828,6 @@
                                 this.navChatDefault.unshift(customer_new_comment);
                                 this.navChat = this.navChatDefault;
                             } else { //trường hợp tồn tại
-
                                 let index = this.navChatDefault.findIndex(f => {
                                     return (f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type =='comment');
                                 })
@@ -824,6 +850,7 @@
                     })
 
             },
+
             selectElement(item){
                 this.data_images_upload_server = this.data_images_upload_server_default = [];
                 this.images = [];
@@ -1057,7 +1084,6 @@
                 $('#reply_comment').modal({show: true})
             },
             sendReplyComment(){
-                console.log(11111,this.contentMesage);
                 let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                     // "messaging_type": "MESSAGE_TAG",
                     // "tag": "HUMAN_AGENT",
@@ -1069,9 +1095,17 @@
                         "text": this.contentMesage
                     }
                 }).then(res=>{
-                    console.log(12313,res);
+                    if(res){
+                        alertify.success('Trả lời thành công!',5);
+                        $('#reply_comment').modal('hide');
+                    }
+                }).catch(error=>{
+                    if(error){
+                        alertify.warning('Bạn đã trả lời bình luận này rồi!',5);
+                        $('#reply_comment').modal('hide');
+                    }
                 })
-                console.log(2234234,rq);
+                this.contentMesage = '';
             }
 
         }

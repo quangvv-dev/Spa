@@ -71,6 +71,11 @@ class ChatController extends Controller
         $data = Comment::where('page_id',$request->page_id)->where('post_id',$request->post_id)->where('FB_ID',$request->FB_ID)->first();
         return $data;
     }
+    public function updateReadComment(Request $request){
+        $data = Comment::where('page_id',$request->page_id)->where('post_id',$request->post_id)->where('FB_ID',$request->FB_ID)->first();
+        $data->update(['is_read'=>1]);
+        return 1;
+    }
 
     public function addGroup(Request $request){
         $user = Auth::user();
@@ -155,8 +160,10 @@ class ChatController extends Controller
         ]);
         if($comment){
             $data_push = json_decode($comment->content);
-            array_push($data_push,$data_content[0]);
-            $comment->update(['snippet'=>$request->snippet,'content'=>json_encode($data_push)]);
+            if($request->snippet != $comment->snippet){
+                array_push($data_push,$data_content[0]);
+                $comment->update(['snippet'=>$request->snippet,'content'=>json_encode($data_push)]);
+            }
             $code = 201;
         } else {
             $data = $request->except(['comment_id','parent_id']);
