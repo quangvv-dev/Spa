@@ -38,7 +38,7 @@ class ChatController extends Controller
         $mkts = User::where('department_id',DepartmentConstant::MARKETING)->get();
         if (Auth::user()->department_id == DepartmentConstant::MARKETING){
             $group_multi = MultiplePageGroup::where('user_id',$user->id)->get();
-        }else{
+        }elseif(Auth::user()->department_id == DepartmentConstant::CARE_PAGE ||Auth::user()->department_id == DepartmentConstant::ADMIN){
             $group_multi = MultiplePageGroup::get();
         }
 
