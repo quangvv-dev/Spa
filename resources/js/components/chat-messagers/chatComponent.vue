@@ -328,9 +328,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    var host = 'https://thammyroyal.adamtech.vn:2022/';
+    // var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    // var host = 'https://' + location.host + ':'+port;
+    var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -703,7 +703,7 @@
                     }
 
                     let index = this.navChatDefault.findIndex(fd=>{
-                        return fd.participants.data[1].id == this.last_segment && fd.participants.data[0].id == item.participants.data[0].id && item.type == 'comment';
+                        return fd.participants.data[1].id == this.last_segment && fd.participants.data[0].id == item.participants.data[0].id && fd.type == 'comment';
                     })
                     this.navChatDefault[index].unread_count = 0;
                     this.navChatDefault[index].new_message = false;
@@ -752,7 +752,7 @@
 
             async customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
                 let customer_new = this.navChatDefault.filter(f => {
-                    return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                    return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id && f.type == undefined;
                 });
                 let customer_new_mess = {};
                 if (customer_new.length > 0) {
@@ -785,84 +785,52 @@
                 let index = this.navChatDefault.findIndex(f => {
                     return (f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id);
                 })
-
                 if (index > -1) {
                     this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
                 }
-
                 this.navChatDefault.unshift(customer_new_mess);
                 this.navChat = this.navChatDefault;
             },
             customerNewComment(data){
                 let splitted = data.value.post_id.split("_", 2);
-                if(data.value.from.id == this.last_segment){ //trường hợp fanpage trả lời comment
-                    return;
-                }
-                let data_create = {
-                    page_id: splitted[0],
-                    post_id: splitted[1],
-                    FB_ID:data.value.from.id,
-                    fb_name:data.value.from.name,
-                    snippet:data.value.message,
-                    is_read: 0,
-                    comment_id: data.value.comment_id,
-                    parent_id: data.value.parent_id,
-                    content:{
-                        created_time :new Date(),
-                        message:data.value.message,
-                        comment_id: data.value.comment_id,
-                        parent_id: data.value.parent_id
-                    }
-                }
-
-                axios.post('/marketing/create-comment-customer',
-                    data_create)
-                    .then(res => {
-                        if (res.data.success) {
-                            if (res.data.code == 200){ //trường hợp thêm mới
-                                let customer_new_comment = {};
-
-                                customer_new_comment.participants = {
-                                    data: [
-                                        {
-                                            id: data.value.from.id,
-                                            name: data.value.from.name,
-                                        },
-                                        {
-                                            id: splitted[0],
-                                        }
-                                    ]
-                                }
-                                customer_new_comment.unread_count = 1;
-                                customer_new_comment.updated_time = new Date().toISOString();
-                                customer_new_comment.snippet = data.value.message;
-                                customer_new_comment.new_message = true;
-                                customer_new_comment.post_id = splitted[1];
-                                customer_new_comment.type = 'comment';
-                                this.navChatDefault.unshift(customer_new_comment);
-                                this.navChat = this.navChatDefault;
-                            } else { //trường hợp tồn tại
-
-                                let index = this.navChatDefault.findIndex(f => {
-                                    return (f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type =='comment');
-                                })
-                                let customer_new_comment = this.navChatDefault[index];
-                                customer_new_comment.unread_count = 1;
-                                customer_new_comment.updated_time = new Date().toISOString();
-                                customer_new_comment.snippet = data.value.message;
-                                customer_new_comment.new_message = true;
-
-                                if (index > -1) {
-                                    this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
-                                }
-                                this.navChatDefault.unshift(customer_new_comment);
-                                this.navChat = this.navChatDefault;
+                if (data.value.check_create == 1){ //trường hợp thêm mới
+                    let customer_new_comment = {};
+                    customer_new_comment.participants = {
+                        data: [
+                            {
+                                id: data.value.from.id,
+                                name: data.value.from.name,
+                            },
+                            {
+                                id: splitted[0],
                             }
-                        }
+                        ]
+                    }
+                    customer_new_comment.unread_count = 1;
+                    customer_new_comment.updated_time = new Date().toISOString();
+                    customer_new_comment.snippet = data.value.message;
+                    customer_new_comment.new_message = true;
+                    customer_new_comment.post_id = splitted[1];
+                    customer_new_comment.type = 'comment';
+                    this.navChatDefault.unshift(customer_new_comment);
+                    this.navChat = this.navChatDefault;
+                }
+                else { //trường hợp tồn tại
+                    let index = this.navChatDefault.findIndex(f => {
+                        return (f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type =='comment');
                     })
-                    .catch(err => {
-                        console.log('error', err)
-                    })
+                    let customer_new_comment = this.navChatDefault[index];
+                    customer_new_comment.unread_count = 1;
+                    customer_new_comment.updated_time = new Date().toISOString();
+                    customer_new_comment.snippet = data.value.message;
+                    customer_new_comment.new_message = true;
+
+                    if (index > -1) {
+                        this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                    }
+                    this.navChatDefault.unshift(customer_new_comment);
+                    this.navChat = this.navChatDefault;
+                }
 
             },
             selectElement(item) {

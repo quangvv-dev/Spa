@@ -44,11 +44,16 @@ var TiviBox = {
         return db.query("UPDATE customers SET account_code = ? WHERE id = ?", [ code, customer_id]);
     },
 
+    CheckExistsComment: function (page_id,post_id,FB_ID, callback) {
+        return db.query("SELECT * FROM comments WHERE page_id = ? AND post_id = ? AND FB_ID = ?", [page_id,post_id,FB_ID], callback);
+    },
 
-
-
-
-
+    CreateComment: function(page_id,post_id,FB_ID,fb_name,snippet,content,created_at,callback){
+        return db.query("INSERT INTO comments (page_id,post_id,FB_ID,fb_name,snippet,content,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)", [page_id, post_id, FB_ID, fb_name,snippet,content,created_at,created_at],callback);
+    },
+    UpdateComment: function(id,snippet,content){
+        return db.query("UPDATE comments SET snippet = ?, content = ? WHERE id = ?", [ snippet, content,id]);
+    },
 
 
     UpdateSource: function (source_id, position, callback) {
