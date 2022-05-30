@@ -250,7 +250,7 @@ exports.sendSocketComment = (page_id,message, io) => {
 exports.ChatComment = (value) =>{
     let check = 0;
     model.CheckFanpage(value.value.from.id, function (err, fanpage) {
-        if(fanpage.length >= 1){
+        if(fanpage.length < 1){
             let splitted = value.value.post_id.split("_", 2);
             const page_id = splitted[0], post_id = splitted[1];
             const FB_ID = value.value.from.id;

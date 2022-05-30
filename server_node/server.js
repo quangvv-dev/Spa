@@ -70,8 +70,9 @@ app.post('/webhook', function (req, res) {
             console.log(comments, 'COMMENT');
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
-
                     let comment = controller.ChatComment(value);
+                    console.log('ket quả check',comment);
+
                     let splitted = value.value.post_id.split("_", 2);
                     value.type = 'comment';
                     if(comment == 0){
