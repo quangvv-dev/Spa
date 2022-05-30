@@ -250,7 +250,7 @@ exports.sendSocketComment = (page_id,message, io) => {
 exports.ChatComment = (value) =>{
     let check = 0;
     model.CheckFanpage(value.value.from.id, function (err, fanpage) {
-        if(fanpage.length < 1){
+        if(fanpage.length >= 1){
             let splitted = value.value.post_id.split("_", 2);
             const page_id = splitted[0], post_id = splitted[1];
             const FB_ID = value.value.from.id;
@@ -271,7 +271,6 @@ exports.ChatComment = (value) =>{
                         // model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at).then(data=>{
                         check = 1;
                     })
-
                 } else { //trường hợp đã tồn tại
                     let data = comment[0];
                     let content_old = JSON.parse(data.content);
