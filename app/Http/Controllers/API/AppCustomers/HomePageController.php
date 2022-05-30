@@ -6,6 +6,7 @@ use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
+use App\Http\Resources\AppCustomers\KhacResource;
 use App\Http\Resources\AppCustomers\ServiceResource;
 use App\Models\Album;
 use App\Models\Branch;
@@ -121,17 +122,9 @@ class HomePageController extends BaseApiController
                 }
                 unset($item->lat, $item->long);
                 return $item;
-            })->transform(function ($i) {
-                return [
-                    'id'          => $i->id,
-                    'name'        => $i->name,
-                    'address'     => $i->address,
-                    'location_id' => $i->location_id,
-                    'distance'    => $i->distance,
-                ];
             })->sortBy("distance");
-
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values((array)$branch));
+        $request->merge(['type_resource' => 'branchs']);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', KhacResource::collection($branch));
     }
 
     /**
