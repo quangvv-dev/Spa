@@ -81,7 +81,10 @@ app.post('/webhook', function (req, res) {
                     } else {
                         value.check_create = 2; //update
                     }
+                    console.log('Chuẩn bị bắn socket');
                     controller.sendSocketComment(splitted[0],value, io);
+                    console.log('Đã bắn socket');
+
 
 
                     // let text2 = value.value.message;
