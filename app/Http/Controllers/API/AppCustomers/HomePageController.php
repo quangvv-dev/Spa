@@ -122,7 +122,7 @@ class HomePageController extends BaseApiController
                 unset($item->lat, $item->long);
                 return $item;
             })->sortBy("distance");
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branch);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($branch));
     }
 
     /**
