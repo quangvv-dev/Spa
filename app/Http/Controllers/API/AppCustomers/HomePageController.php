@@ -43,6 +43,8 @@ class HomePageController extends BaseApiController
         $docs = Services::where('type', StatusCode::SERVICE)->where('enable', StatusCode::ON)
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $q->where('category_id', $input['category_id']);
+            })->when(isset($input['name']) && $input['name'], function ($q) use ($input) {
+                $q->where('name', 'like', '%' . $input['name'] . '%');
             })->whereNotNull('images')->orderByDesc('id')->paginate($paginate);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
     }
