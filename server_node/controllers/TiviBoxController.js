@@ -271,8 +271,9 @@ exports.ChatComment = (value) => {
                     model.CreateComment(page_id, post_id, FB_ID, fb_name, value.value.message, content, created_at, function (err, comment) {
                         // model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at).then(data=>{
                         check = 1;
+                        console.log('create comment');
+                        return 1;
                     })
-                    console.log('create comment');
                 } else { //trường hợp đã tồn tại
                     let data = comment[0];
                     let content_old = JSON.parse(data.content);
@@ -284,9 +285,10 @@ exports.ChatComment = (value) => {
             });
         } else {
             check = 0;
+            console.log('update');
+            return 2;
         }
-        return check;
-    })
+    });
 }
 
 // function  replace(number) {
