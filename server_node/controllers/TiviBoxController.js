@@ -249,14 +249,15 @@ exports.sendSocketComment = (page_id,message, io) => {
 
 exports.ChatComment = (value) =>{
     let check = 0;
-    model.CheckFanpage(value.value.from.id).then(fanpage =>{ //check người trả lời là fanpage
+    model.CheckFanpage(value.value.from.id, function (err, fanpage) {
         if(fanpage.length < 1){
             let splitted = value.value.post_id.split("_", 2);
             const page_id = splitted[0], post_id = splitted[1];
             const FB_ID = value.value.from.id;
             const fb_name = value.value.from.name;
             const created_at = localeTime();
-            model.CheckExistsComment(page_id,post_id,value.value.from.id).then(comment=>{
+            model.CheckExistsComment(page_id,post_id,value.value.from.id, function (err, comment) {
+                // model.CheckExistsComment(page_id,post_id,value.value.from.id).then(comment=>{
                 let data_content = [{
                     // created_time: new Date(value.value.created_time).toISOString(),
                     created_time: new Date().toISOString(),
@@ -266,7 +267,8 @@ exports.ChatComment = (value) =>{
                 }]
                 if(comment.length < 1){ //trường hợp thêm mới
                     let content = JSON.stringify(data_content);
-                    model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at).then(data=>{
+                    model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at, function (err, comment) {
+                        // model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at).then(data=>{
                         check = 1;
                     })
 
