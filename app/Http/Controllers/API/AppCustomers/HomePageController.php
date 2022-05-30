@@ -121,7 +121,15 @@ class HomePageController extends BaseApiController
                 }
                 unset($item->lat, $item->long);
                 return $item;
-            })->sortBy("distance");
+            })->sortBy("distance")->transform(function ($i) {
+                return [
+                    'id'          => $i->id,
+                    'name'        => $i->name,
+                    'address'     => $i->address,
+                    'location_id' => $i->location_id,
+                    'distance'    => $i->distance,
+                ];
+            });
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$branch);
     }
 
