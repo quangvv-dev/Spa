@@ -424,9 +424,7 @@
                         socket.on(item.id, (server) => {
                             let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
                             if(server.type){
-                                setTimeout(()=>{
-                                    this.customerNewComment(server);
-                                },1000)
+                                this.customerNewComment(server);
                             } else {
                                 let html = {
                                     message: server.message.text,
@@ -604,9 +602,10 @@
 
              async getListChat() {
                 let arr_page_id = this.$cookies.get('arr_page_id');
-                let arr = [];
+                 let length_list_page = 0;
                 if(arr_page_id){
                     arr_page_id = JSON.parse(arr_page_id);
+                    length_list_page = arr_page_id.length;
                     for (const item of arr_page_id){
                         let access_token = item.token;
                         let fields = 'updated_time,name,id,participants,snippet';
@@ -619,24 +618,16 @@
                                 m.access_token = item.token;
                                 return m;
                             })
-                            arr.push(...data);
+                            this.navChatDefault.push(...data);
+                            this.navChat = this.navChatDefault;
                         } catch (e) {
                             arr_page_id = arr_page_id.filter(f=>{return f.id != item.id})
                             alertify.error(`Token hết hạn: ${item.id}`,10)
                         }
-
                     }
-                    this.arr_page_id = arr_page_id;
+                    this.arr_page_id = arr_page_id; //tác dụng để get socket
                     this.getSocket();
                 }
-                 arr = arr.filter(f => {
-                     return f.participants.data[0].id != '3873174272720720';
-                 });
-                 arr.sort(function (a, b) {
-                     return b.updated_time.localeCompare(a.updated_time);
-                 });
-                 this.navChat = arr;
-                 this.navChatDefault = arr;
                  this.getPhonePage();
                  this.getCommentPage();
             },

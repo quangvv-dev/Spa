@@ -3588,9 +3588,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
             if (server.type) {
-              setTimeout(function () {
-                _this2.customerNewComment(server);
-              }, 1000);
+              _this2.customerNewComment(server);
             } else {
               var html = {
                 message: server.message.text,
@@ -3808,25 +3806,26 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var arr_page_id, arr, _iterator, _step, _loop;
+        var arr_page_id, length_list_page, _iterator, _step, _loop;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
                 arr_page_id = _this6.$cookies.get('arr_page_id');
-                arr = [];
+                length_list_page = 0;
 
                 if (!arr_page_id) {
-                  _context4.next = 22;
+                  _context4.next = 23;
                   break;
                 }
 
                 arr_page_id = JSON.parse(arr_page_id);
+                length_list_page = arr_page_id.length;
                 _iterator = _createForOfIteratorHelper(arr_page_id);
-                _context4.prev = 5;
+                _context4.prev = 6;
                 _loop = /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _loop() {
-                  var item, access_token, fields, url, _arr, res, data;
+                  var item, access_token, fields, url, _this6$navChatDefault, res, data;
 
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _loop$(_context3) {
                     while (1) {
@@ -3848,83 +3847,75 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                             return m;
                           });
 
-                          (_arr = arr).push.apply(_arr, _toConsumableArray(data));
+                          (_this6$navChatDefault = _this6.navChatDefault).push.apply(_this6$navChatDefault, _toConsumableArray(data));
 
-                          _context3.next = 17;
+                          _this6.navChat = _this6.navChatDefault;
+                          _context3.next = 18;
                           break;
 
-                        case 13:
-                          _context3.prev = 13;
+                        case 14:
+                          _context3.prev = 14;
                           _context3.t0 = _context3["catch"](4);
                           arr_page_id = arr_page_id.filter(function (f) {
                             return f.id != item.id;
                           });
                           alertify.error("Token h\u1EBFt h\u1EA1n: ".concat(item.id), 10);
 
-                        case 17:
+                        case 18:
                         case "end":
                           return _context3.stop();
                       }
                     }
-                  }, _loop, null, [[4, 13]]);
+                  }, _loop, null, [[4, 14]]);
                 });
 
                 _iterator.s();
 
-              case 8:
+              case 9:
                 if ((_step = _iterator.n()).done) {
-                  _context4.next = 12;
+                  _context4.next = 13;
                   break;
                 }
 
-                return _context4.delegateYield(_loop(), "t0", 10);
+                return _context4.delegateYield(_loop(), "t0", 11);
 
-              case 10:
-                _context4.next = 8;
+              case 11:
+                _context4.next = 9;
                 break;
 
-              case 12:
-                _context4.next = 17;
+              case 13:
+                _context4.next = 18;
                 break;
 
-              case 14:
-                _context4.prev = 14;
-                _context4.t1 = _context4["catch"](5);
+              case 15:
+                _context4.prev = 15;
+                _context4.t1 = _context4["catch"](6);
 
                 _iterator.e(_context4.t1);
 
-              case 17:
-                _context4.prev = 17;
+              case 18:
+                _context4.prev = 18;
 
                 _iterator.f();
 
-                return _context4.finish(17);
+                return _context4.finish(18);
 
-              case 20:
-                _this6.arr_page_id = arr_page_id;
+              case 21:
+                _this6.arr_page_id = arr_page_id; //tác dụng để get socket
 
                 _this6.getSocket();
 
-              case 22:
-                arr = arr.filter(function (f) {
-                  return f.participants.data[0].id != '3873174272720720';
-                });
-                arr.sort(function (a, b) {
-                  return b.updated_time.localeCompare(a.updated_time);
-                });
-                _this6.navChat = arr;
-                _this6.navChatDefault = arr;
-
+              case 23:
                 _this6.getPhonePage();
 
                 _this6.getCommentPage();
 
-              case 28:
+              case 25:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee3, null, [[5, 14, 17, 20]]);
+        }, _callee3, null, [[6, 15, 18, 21]]);
       }))();
     },
     getPhonePage: function getPhonePage() {
