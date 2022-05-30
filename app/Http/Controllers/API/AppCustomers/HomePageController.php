@@ -121,7 +121,7 @@ class HomePageController extends BaseApiController
                 }
                 unset($item->lat, $item->long);
                 return $item;
-            })->sortBy("distance")->transform(function ($i) {
+            })->transform(function ($i) {
                 return [
                     'id'          => $i->id,
                     'name'        => $i->name,
@@ -129,7 +129,7 @@ class HomePageController extends BaseApiController
                     'location_id' => $i->location_id,
                     'distance'    => $i->distance,
                 ];
-            });
+            })->sortBy("distance");
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branch);
     }
