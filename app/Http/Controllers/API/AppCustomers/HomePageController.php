@@ -113,7 +113,7 @@ class HomePageController extends BaseApiController
         $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long')
             ->when(isset($input['location_id']) && $input['location_id'], function ($q) use ($input) {
                 $q->where('location_id', $input['location_id']);
-            })->get()->map(function ($item) use ($input) {
+            })->whereNotNull('lat')->get()->map(function ($item) use ($input) {
                 $item->distance = "";
                 if ($item->lat && $item->long) {
                     $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
