@@ -8,8 +8,9 @@ function userExists(seeding_number, arr) {
         return el.seeding_number === seeding_number;
     });
 }
-function localeTime(){
-    let date =  moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+function localeTime() {
+    let date = moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');
     // let stillUtc = moment.utc(date).toDate();
     // let localeTime = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
     return date;
@@ -242,22 +243,21 @@ exports.sendSocketMessages = (message, io) => {
     //     socket.removeAllListeners();
     io.emit(message.recipient.id, message);
 };
-exports.sendSocketComment = (page_id,message, io) => {
+exports.sendSocketComment = (page_id, message, io) => {
     //     socket.removeAllListeners();
     io.emit(page_id, message);
 };
 
-exports.ChatComment = (value) =>{
-    let check = 0;
+exports.ChatComment = (value) => {
     model.CheckFanpage(value.value.from.id, function (err, fanpage) {
-        if(fanpage.length < 1){
+        let check = 0;
+        if (fanpage.length < 1) {
             let splitted = value.value.post_id.split("_", 2);
             const page_id = splitted[0], post_id = splitted[1];
             const FB_ID = value.value.from.id;
             const fb_name = value.value.from.name;
             const created_at = localeTime();
-            console.log('fanpage');
-            model.CheckExistsComment(page_id,post_id,value.value.from.id, function (err, comment) {
+            model.CheckExistsComment(page_id, post_id, value.value.from.id, function (err, comment) {
                 // model.CheckExistsComment(page_id,post_id,value.value.from.id).then(comment=>{
                 let data_content = [{
                     // created_time: new Date(value.value.created_time).toISOString(),
@@ -266,11 +266,9 @@ exports.ChatComment = (value) =>{
                     comment_id: value.value.comment_id,
                     parent_id: value.value.parent_id,
                 }]
-                console.log(err);
-
-                if(comment.length < 1){ //trường hợp thêm mới
+                if (comment.length < 1) { //trường hợp thêm mới
                     let content = JSON.stringify(data_content);
-                    model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at, function (err, comment) {
+                    model.CreateComment(page_id, post_id, FB_ID, fb_name, value.value.message, content, created_at, function (err, comment) {
                         // model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at).then(data=>{
                         check = 1;
                     })
@@ -280,14 +278,15 @@ exports.ChatComment = (value) =>{
                     let content_old = JSON.parse(data.content);
                     content_old.push(data_content[0]);
                     let content = JSON.stringify(content_old);
-                    model.UpdateComment(data.id,value.value.message,content);
+                    model.UpdateComment(data.id, value.value.message, content);
                     check = 2;
-                    console.log('update');
                 }
             });
+        } else {
+            check = 0;
         }
+        return check;
     })
-    return check;
 }
 
 // function  replace(number) {
