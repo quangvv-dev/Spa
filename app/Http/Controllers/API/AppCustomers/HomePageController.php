@@ -130,7 +130,8 @@ class HomePageController extends BaseApiController
                     'distance'    => $i->distance,
                 ];
             });
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$branch);
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branch);
     }
 
     /**
