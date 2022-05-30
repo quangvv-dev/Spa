@@ -2265,10 +2265,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
  // var host = 'https://crm.santa.name.vn:2022/';
+// var host = 'https://thammyroyal.adamtech.vn:2022/';
 
-var host = 'https://thammyroyal.adamtech.vn:2022/';
-var port = 2022; // var host = 'https://' + location.host + ':'+port;
-
+var port = 2022;
+var host = 'https://' + location.host + ':' + port;
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -2730,7 +2730,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         };
 
         var _index = this.navChatDefault.findIndex(function (fd) {
-          return fd.participants.data[1].id == _this9.last_segment && fd.participants.data[0].id == item.participants.data[0].id && item.type == 'comment';
+          return fd.participants.data[1].id == _this9.last_segment && fd.participants.data[0].id == item.participants.data[0].id && fd.type == 'comment';
         });
 
         this.navChatDefault[_index].unread_count = 0;
@@ -2791,7 +2791,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             switch (_context5.prev = _context5.next) {
               case 0:
                 customer_new = _this10.navChatDefault.filter(function (f) {
-                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id && f.type == undefined;
                 });
                 customer_new_mess = {};
 
@@ -2850,82 +2850,48 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }))();
     },
     customerNewComment: function customerNewComment(data) {
-      var _this11 = this;
-
       var splitted = data.value.post_id.split("_", 2);
 
-      if (data.value.from.id == this.last_segment) {
-        //trường hợp fanpage trả lời comment
-        return;
+      if (data.value.check_create == 1) {
+        //trường hợp thêm mới
+        var customer_new_comment = {};
+        customer_new_comment.participants = {
+          data: [{
+            id: data.value.from.id,
+            name: data.value.from.name
+          }, {
+            id: splitted[0]
+          }]
+        };
+        customer_new_comment.unread_count = 1;
+        customer_new_comment.updated_time = new Date().toISOString();
+        customer_new_comment.snippet = data.value.message;
+        customer_new_comment.new_message = true;
+        customer_new_comment.post_id = splitted[1];
+        customer_new_comment.type = 'comment';
+        this.navChatDefault.unshift(customer_new_comment);
+        this.navChat = this.navChatDefault;
+      } else {
+        //trường hợp tồn tại
+        var index = this.navChatDefault.findIndex(function (f) {
+          return f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type == 'comment';
+        });
+        var _customer_new_comment = this.navChatDefault[index];
+        _customer_new_comment.unread_count = 1;
+        _customer_new_comment.updated_time = new Date().toISOString();
+        _customer_new_comment.snippet = data.value.message;
+        _customer_new_comment.new_message = true;
+
+        if (index > -1) {
+          this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+        }
+
+        this.navChatDefault.unshift(_customer_new_comment);
+        this.navChat = this.navChatDefault;
       }
-
-      var data_create = {
-        page_id: splitted[0],
-        post_id: splitted[1],
-        FB_ID: data.value.from.id,
-        fb_name: data.value.from.name,
-        snippet: data.value.message,
-        is_read: 0,
-        comment_id: data.value.comment_id,
-        parent_id: data.value.parent_id,
-        content: {
-          created_time: new Date(),
-          message: data.value.message,
-          comment_id: data.value.comment_id,
-          parent_id: data.value.parent_id
-        }
-      };
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/create-comment-customer', data_create).then(function (res) {
-        if (res.data.success) {
-          if (res.data.code == 200) {
-            //trường hợp thêm mới
-            var customer_new_comment = {};
-            customer_new_comment.participants = {
-              data: [{
-                id: data.value.from.id,
-                name: data.value.from.name
-              }, {
-                id: splitted[0]
-              }]
-            };
-            customer_new_comment.unread_count = 1;
-            customer_new_comment.updated_time = new Date().toISOString();
-            customer_new_comment.snippet = data.value.message;
-            customer_new_comment.new_message = true;
-            customer_new_comment.post_id = splitted[1];
-            customer_new_comment.type = 'comment';
-
-            _this11.navChatDefault.unshift(customer_new_comment);
-
-            _this11.navChat = _this11.navChatDefault;
-          } else {
-            //trường hợp tồn tại
-            var index = _this11.navChatDefault.findIndex(function (f) {
-              return f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type == 'comment';
-            });
-
-            var _customer_new_comment = _this11.navChatDefault[index];
-            _customer_new_comment.unread_count = 1;
-            _customer_new_comment.updated_time = new Date().toISOString();
-            _customer_new_comment.snippet = data.value.message;
-            _customer_new_comment.new_message = true;
-
-            if (index > -1) {
-              _this11.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
-
-            }
-
-            _this11.navChatDefault.unshift(_customer_new_comment);
-
-            _this11.navChat = _this11.navChatDefault;
-          }
-        }
-      })["catch"](function (err) {
-        console.log('error', err);
-      });
     },
     selectElement: function selectElement(item) {
-      var _this12 = this;
+      var _this11 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -2940,17 +2906,17 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this12.data_images_upload_server.push(data);
+          _this11.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this13 = this;
+      var _this12 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this13.dataQuickReply = response.data.data;
+          _this12.dataQuickReply = response.data.data;
         }
       });
     },
@@ -2958,14 +2924,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this14 = this;
+      var _this13 = this;
 
       var r = confirm("remove image");
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this14.data_images_upload_server = _this14.data_images_upload_server.filter(function (ft) {
+            _this13.data_images_upload_server = _this13.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -2986,7 +2952,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.images = [];
     },
     getDataFormCustomer: function getDataFormCustomer() {
-      var _this15 = this;
+      var _this14 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
         if (response.data) {
@@ -3006,15 +2972,15 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             m['value'] = m.name;
             return m;
           });
-          _this15.data_group_customer = data_group_customer;
-          _this15.data_telesale = data_telesale;
-          _this15.data_source_customer = data_source_customer;
-          _this15.data_chi_nhanh = data_chi_nhanh;
+          _this14.data_group_customer = data_group_customer;
+          _this14.data_telesale = data_telesale;
+          _this14.data_source_customer = data_source_customer;
+          _this14.data_chi_nhanh = data_chi_nhanh;
         }
       });
     },
     insertCustomer: function insertCustomer() {
-      var _this16 = this;
+      var _this15 = this;
 
       if (!this.chat_current_name) {
         alertify.warning('Vui lòng nhập tên !');
@@ -3057,9 +3023,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           alertify.success('Thêm KH thành công !');
 
-          _this16.changeNavChat('phone');
+          _this15.changeNavChat('phone');
 
-          _this16.resetValue();
+          _this15.resetValue();
         } else {
           alertify.error('Thất bại !');
         }
@@ -3104,13 +3070,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.filterList();
     },
     filterList: function filterList() {
-      var _this17 = this;
+      var _this16 = this;
 
       this.navChat = this.navChatDefault;
 
       if (this.filter_phone != null) {
         this.navChat = this.navChat.filter(function (item) {
-          return item.check_phone == _this17.filter_phone;
+          return item.check_phone == _this16.filter_phone;
         });
       }
 
@@ -3516,10 +3482,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
  // var host = 'https://crm.santa.name.vn:2022/';
+// var host = 'https://thammyroyal.adamtech.vn:2022/';
 
-var host = 'https://thammyroyal.adamtech.vn:2022/';
-var port = 2022; // var host = 'https://' + location.host + ':'+port;
-
+var port = 2022;
+var host = 'https://' + location.host + ':' + port;
 var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
@@ -3622,9 +3588,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             var newTime = moment__WEBPACK_IMPORTED_MODULE_4___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
             if (server.type) {
-              setTimeout(function () {
-                _this2.customerNewComment(server);
-              }, 1000);
+              _this2.customerNewComment(server);
             } else {
               var html = {
                 message: server.message.text,
@@ -3842,25 +3806,26 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var arr_page_id, arr, _iterator, _step, _loop;
+        var arr_page_id, length_list_page, _iterator, _step, _loop;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
                 arr_page_id = _this6.$cookies.get('arr_page_id');
-                arr = [];
+                length_list_page = 0;
 
                 if (!arr_page_id) {
-                  _context4.next = 22;
+                  _context4.next = 23;
                   break;
                 }
 
                 arr_page_id = JSON.parse(arr_page_id);
+                length_list_page = arr_page_id.length;
                 _iterator = _createForOfIteratorHelper(arr_page_id);
-                _context4.prev = 5;
+                _context4.prev = 6;
                 _loop = /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _loop() {
-                  var item, access_token, fields, url, _arr, res, data;
+                  var item, access_token, fields, url, _this6$navChatDefault, res, data;
 
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _loop$(_context3) {
                     while (1) {
@@ -3882,83 +3847,75 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                             return m;
                           });
 
-                          (_arr = arr).push.apply(_arr, _toConsumableArray(data));
+                          (_this6$navChatDefault = _this6.navChatDefault).push.apply(_this6$navChatDefault, _toConsumableArray(data));
 
-                          _context3.next = 17;
+                          _this6.navChat = _this6.navChatDefault;
+                          _context3.next = 18;
                           break;
 
-                        case 13:
-                          _context3.prev = 13;
+                        case 14:
+                          _context3.prev = 14;
                           _context3.t0 = _context3["catch"](4);
                           arr_page_id = arr_page_id.filter(function (f) {
                             return f.id != item.id;
                           });
                           alertify.error("Token h\u1EBFt h\u1EA1n: ".concat(item.id), 10);
 
-                        case 17:
+                        case 18:
                         case "end":
                           return _context3.stop();
                       }
                     }
-                  }, _loop, null, [[4, 13]]);
+                  }, _loop, null, [[4, 14]]);
                 });
 
                 _iterator.s();
 
-              case 8:
+              case 9:
                 if ((_step = _iterator.n()).done) {
-                  _context4.next = 12;
+                  _context4.next = 13;
                   break;
                 }
 
-                return _context4.delegateYield(_loop(), "t0", 10);
+                return _context4.delegateYield(_loop(), "t0", 11);
 
-              case 10:
-                _context4.next = 8;
+              case 11:
+                _context4.next = 9;
                 break;
 
-              case 12:
-                _context4.next = 17;
+              case 13:
+                _context4.next = 18;
                 break;
 
-              case 14:
-                _context4.prev = 14;
-                _context4.t1 = _context4["catch"](5);
+              case 15:
+                _context4.prev = 15;
+                _context4.t1 = _context4["catch"](6);
 
                 _iterator.e(_context4.t1);
 
-              case 17:
-                _context4.prev = 17;
+              case 18:
+                _context4.prev = 18;
 
                 _iterator.f();
 
-                return _context4.finish(17);
+                return _context4.finish(18);
 
-              case 20:
-                _this6.arr_page_id = arr_page_id;
+              case 21:
+                _this6.arr_page_id = arr_page_id; //tác dụng để get socket
 
                 _this6.getSocket();
 
-              case 22:
-                arr = arr.filter(function (f) {
-                  return f.participants.data[0].id != '3873174272720720';
-                });
-                arr.sort(function (a, b) {
-                  return b.updated_time.localeCompare(a.updated_time);
-                });
-                _this6.navChat = arr;
-                _this6.navChatDefault = arr;
-
+              case 23:
                 _this6.getPhonePage();
 
                 _this6.getCommentPage();
 
-              case 28:
+              case 25:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee3, null, [[5, 14, 17, 20]]);
+        }, _callee3, null, [[6, 15, 18, 21]]);
       }))();
     },
     getPhonePage: function getPhonePage() {
@@ -4059,7 +4016,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         };
 
         var _index = this.navChatDefault.findIndex(function (fd) {
-          return fd.participants.data[1].id == page_id && fd.participants.data[0].id == fb_id && item.type == 'comment';
+          return fd.participants.data[1].id == page_id && fd.participants.data[0].id == fb_id && fd.type == 'comment';
         });
 
         this.navChatDefault[_index].unread_count = 0;
@@ -4114,90 +4071,54 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.scrollToBottom();
     },
     customerNewComment: function customerNewComment(data) {
-      var _this10 = this;
-
       var splitted = data.value.post_id.split("_", 2);
 
-      if (data.value.from.id == this.last_segment) {
-        //trường hợp fanpage trả lời comment
-        return;
+      if (data.value.check_create == 1) {
+        //trường hợp thêm mới
+        var customer_new_comment = {
+          'unread_count': 0
+        };
+        customer_new_comment.participants = {
+          data: [{
+            id: data.value.from.id,
+            name: data.value.from.name
+          }, {
+            id: splitted[0]
+          }]
+        };
+        var page = this.arr_page_id.filter(function (ft) {
+          return ft.id == splitted[0];
+        });
+        customer_new_comment.unread_count = 1;
+        customer_new_comment.access_token = page[0].token;
+        customer_new_comment.updated_time = new Date().toISOString();
+        customer_new_comment.snippet = data.value.message;
+        customer_new_comment.new_message = true;
+        customer_new_comment.post_id = splitted[1];
+        customer_new_comment.type = 'comment';
+        this.navChatDefault.unshift(customer_new_comment);
+        this.navChat = this.navChatDefault;
+      } else {
+        //trường hợp tồn tại
+        var index = this.navChatDefault.findIndex(function (f) {
+          return f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type == 'comment';
+        });
+        var _customer_new_comment = this.navChatDefault[index];
+        _customer_new_comment.unread_count = 1;
+        _customer_new_comment.updated_time = new Date().toISOString();
+        _customer_new_comment.snippet = data.value.message;
+        _customer_new_comment.new_message = true;
+
+        if (index > -1) {
+          this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+        }
+
+        this.navChatDefault.unshift(_customer_new_comment);
+        this.navChat = this.navChatDefault;
       }
-
-      var data_create = {
-        page_id: splitted[0],
-        post_id: splitted[1],
-        FB_ID: data.value.from.id,
-        fb_name: data.value.from.name,
-        snippet: data.value.message,
-        is_read: 0,
-        comment_id: data.value.comment_id,
-        parent_id: data.value.parent_id,
-        content: {
-          created_time: new Date(),
-          message: data.value.message,
-          comment_id: data.value.comment_id,
-          parent_id: data.value.parent_id
-        }
-      };
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/create-comment-customer', data_create).then(function (res) {
-        if (res.data.success) {
-          if (res.data.code == 200) {
-            //trường hợp thêm mới
-            var customer_new_comment = {
-              'unread_count': 0
-            };
-            customer_new_comment.participants = {
-              data: [{
-                id: data.value.from.id,
-                name: data.value.from.name
-              }, {
-                id: splitted[0]
-              }]
-            };
-
-            var page = _this10.arr_page_id.filter(function (ft) {
-              return ft.id == splitted[0];
-            });
-
-            customer_new_comment.unread_count = 1;
-            customer_new_comment.access_token = page[0].token;
-            customer_new_comment.updated_time = new Date().toISOString();
-            customer_new_comment.snippet = data.value.message;
-            customer_new_comment.new_message = true;
-            customer_new_comment.post_id = splitted[1];
-            customer_new_comment.type = 'comment';
-
-            _this10.navChatDefault.unshift(customer_new_comment);
-
-            _this10.navChat = _this10.navChatDefault;
-          } else {
-            //trường hợp tồn tại
-            var index = _this10.navChatDefault.findIndex(function (f) {
-              return f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type == 'comment';
-            });
-
-            var _customer_new_comment = _this10.navChatDefault[index];
-            _customer_new_comment.unread_count = 1;
-            _customer_new_comment.updated_time = new Date().toISOString();
-            _customer_new_comment.snippet = data.value.message;
-            _customer_new_comment.new_message = true;
-
-            if (index > -1) {
-              _this10.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
-
-            }
-
-            _this10.navChatDefault.unshift(_customer_new_comment);
-
-            _this10.navChat = _this10.navChatDefault;
-          }
-        }
-      })["catch"](function (err) {
-        console.log('error', err);
-      });
     },
     selectElement: function selectElement(item) {
-      var _this11 = this;
+      var _this10 = this;
 
       this.data_images_upload_server = this.data_images_upload_server_default = [];
       this.images = [];
@@ -4212,22 +4133,22 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             'path': ''
           };
 
-          _this11.data_images_upload_server.push(data);
+          _this10.data_images_upload_server.push(data);
         });
         this.data_images_upload_server_default = this.data_images_upload_server;
       }
     },
     getListQuickReply: function getListQuickReply() {
-      var _this12 = this;
+      var _this11 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-quick-reply/".concat(this.last_segment)).then(function (response) {
         if (response.data) {
-          _this12.dataQuickReply = response.data.data;
+          _this11.dataQuickReply = response.data.data;
         }
       });
     },
     customerNewMessage: function customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
-      var _this13 = this;
+      var _this12 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var customer_new, customer_new_mess, token, access_token, fields, url, index;
@@ -4235,8 +4156,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                customer_new = _this13.navChatDefault.filter(function (f) {
-                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                customer_new = _this12.navChatDefault.filter(function (f) {
+                  return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id && f.type == undefined;
                 });
                 customer_new_mess = {};
 
@@ -4251,7 +4172,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 break;
 
               case 7:
-                token = _this13.arr_page_id.filter(function (f) {
+                token = _this12.arr_page_id.filter(function (f) {
                   return f.id == page_id;
                 });
                 access_token = token[0].token;
@@ -4259,7 +4180,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 url = "https://graph.facebook.com/v13.0/".concat(mid, "/?fields=").concat(fields, "&access_token=").concat(access_token);
                 _context5.next = 13;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
-                  var page = _this13.arr_page_id.filter(function (f) {
+                  var page = _this12.arr_page_id.filter(function (f) {
                     return f.id == page_id;
                   });
 
@@ -4283,18 +4204,18 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 customer_new_mess.updated_time = created_time;
                 customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
-                index = _this13.navChatDefault.findIndex(function (f) {
+                index = _this12.navChatDefault.findIndex(function (f) {
                   return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
                 });
 
                 if (index > -1) {
-                  _this13.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                  _this12.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
 
                 }
 
-                _this13.navChatDefault.unshift(customer_new_mess);
+                _this12.navChatDefault.unshift(customer_new_mess);
 
-                _this13.navChat = _this13.navChatDefault;
+                _this12.navChat = _this12.navChatDefault;
 
               case 22:
               case "end":
@@ -4313,14 +4234,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.data_images_upload_server = fileList;
     },
     beforeRemove: function beforeRemove(index, done, fileList) {
-      var _this14 = this;
+      var _this13 = this;
 
       var r = confirm("remove image");
 
       if (r == true) {
         if (fileList.length > 1) {
           fileList.forEach(function (f) {
-            _this14.data_images_upload_server = _this14.data_images_upload_server.filter(function (ft) {
+            _this13.data_images_upload_server = _this13.data_images_upload_server.filter(function (ft) {
               return ft.name != f.name;
             });
           });
@@ -4336,7 +4257,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.images = [];
     },
     getDataFormCustomer: function getDataFormCustomer() {
-      var _this15 = this;
+      var _this14 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/marketing/get-data-form-customer").then(function (response) {
         if (response.data) {
@@ -4356,15 +4277,15 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             m['value'] = m.name;
             return m;
           });
-          _this15.data_group_customer = data_group_customer;
-          _this15.data_telesale = data_telesale;
-          _this15.data_source_customer = data_source_customer;
-          _this15.data_chi_nhanh = data_chi_nhanh;
+          _this14.data_group_customer = data_group_customer;
+          _this14.data_telesale = data_telesale;
+          _this14.data_source_customer = data_source_customer;
+          _this14.data_chi_nhanh = data_chi_nhanh;
         }
       });
     },
     insertCustomer: function insertCustomer() {
-      var _this16 = this;
+      var _this15 = this;
 
       if (!this.chat_current_name) {
         alertify.warning('Vui lòng nhập tên !');
@@ -4407,9 +4328,9 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res.data.success) {
           alertify.success('Thêm KH thành công !');
 
-          _this16.changeNavChat('phone');
+          _this15.changeNavChat('phone');
 
-          _this16.resetValue();
+          _this15.resetValue();
         } else {
           alertify.error('Thất bại !');
         }
@@ -4454,13 +4375,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.filterList();
     },
     filterList: function filterList() {
-      var _this17 = this;
+      var _this16 = this;
 
       this.navChat = this.navChatDefault;
 
       if (this.filter_phone != null) {
         this.navChat = this.navChat.filter(function (item) {
-          return item.check_phone == _this17.filter_phone;
+          return item.check_phone == _this16.filter_phone;
         });
       }
 
@@ -67371,7 +67292,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _socket_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./socket.js */ "./node_modules/socket.io-client/build/esm/socket.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Socket", function() { return _socket_js__WEBPACK_IMPORTED_MODULE_2__["Socket"]; });
 
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "protocol", function() { return socket_io_parser__WEBPACK_IMPORTED_MODULE_3__["protocol"]; });
 
 
@@ -67447,7 +67368,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Manager", function() { return Manager; });
 /* harmony import */ var engine_io_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! engine.io-client */ "./node_modules/engine.io-client/build/esm/index.js");
 /* harmony import */ var _socket_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./socket.js */ "./node_modules/socket.io-client/build/esm/socket.js");
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
 /* harmony import */ var _on_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./on.js */ "./node_modules/socket.io-client/build/esm/on.js");
 /* harmony import */ var _contrib_backo2_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contrib/backo2.js */ "./node_modules/socket.io-client/build/esm/contrib/backo2.js");
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
@@ -67835,7 +67756,7 @@ function on(obj, ev, fn) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Socket", function() { return Socket; });
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
 /* harmony import */ var _on_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./on.js */ "./node_modules/socket.io-client/build/esm/on.js");
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
 
@@ -68509,10 +68430,10 @@ function url(uri, path = "", loc) {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-parser/build/esm/binary.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/socket.io-parser/build/esm/binary.js ***!
-  \***********************************************************/
+/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js ***!
+  \*****************************************************************************************/
 /*! exports provided: deconstructPacket, reconstructPacket */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -68520,7 +68441,7 @@ function url(uri, path = "", loc) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deconstructPacket", function() { return deconstructPacket; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reconstructPacket", function() { return reconstructPacket; });
-/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-parser/build/esm/is-binary.js");
+/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js");
 
 /**
  * Replaces every Buffer | ArrayBuffer | Blob | File in packet with a numbered placeholder.
@@ -68600,10 +68521,10 @@ function _reconstructPacket(data, buffers) {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-parser/build/esm/index.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/socket.io-parser/build/esm/index.js ***!
-  \**********************************************************/
+/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js ***!
+  \****************************************************************************************/
 /*! exports provided: protocol, PacketType, Encoder, Decoder */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -68614,8 +68535,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Encoder", function() { return Encoder; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Decoder", function() { return Decoder; });
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
-/* harmony import */ var _binary_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./binary.js */ "./node_modules/socket.io-parser/build/esm/binary.js");
-/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-parser/build/esm/is-binary.js");
+/* harmony import */ var _binary_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js");
+/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js");
 
 
 
@@ -68905,10 +68826,10 @@ class BinaryReconstructor {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-parser/build/esm/is-binary.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/socket.io-parser/build/esm/is-binary.js ***!
-  \**************************************************************/
+/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js":
+/*!********************************************************************************************!*\
+  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js ***!
+  \********************************************************************************************/
 /*! exports provided: isBinary, hasBinary */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

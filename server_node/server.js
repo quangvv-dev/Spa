@@ -70,10 +70,17 @@ app.post('/webhook', function (req, res) {
             console.log(comments, 'COMMENT');
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
-                    console.log(12313,value);
-                    console.log(33333,value.value);
+
+                    let comment = controller.ChatComment(value);
                     let splitted = value.value.post_id.split("_", 2);
                     value.type = 'comment';
+                    if(comment == 0){
+                        return;
+                    } else if (comment == 1) {
+                        value.check_create = 1; //thêm mới
+                    } else {
+                        value.check_create = 2; //update
+                    }
                     controller.sendSocketComment(splitted[0],value, io);
 
 
@@ -97,6 +104,7 @@ app.post('/webhook', function (req, res) {
         }
     }
 });
+
 
 function localeTime(){
     let date =  moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');

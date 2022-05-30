@@ -325,9 +325,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    var host = 'https://thammyroyal.adamtech.vn:2022/';
+    // var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    // var host = 'https://' + location.host + ':'+port;
+    var host = 'https://' + location.host + ':'+port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -424,9 +424,7 @@
                         socket.on(item.id, (server) => {
                             let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
                             if(server.type){
-                                setTimeout(()=>{
-                                    this.customerNewComment(server);
-                                },1000)
+                                this.customerNewComment(server);
                             } else {
                                 let html = {
                                     message: server.message.text,
@@ -604,9 +602,10 @@
 
              async getListChat() {
                 let arr_page_id = this.$cookies.get('arr_page_id');
-                let arr = [];
+                 let length_list_page = 0;
                 if(arr_page_id){
                     arr_page_id = JSON.parse(arr_page_id);
+                    length_list_page = arr_page_id.length;
                     for (const item of arr_page_id){
                         let access_token = item.token;
                         let fields = 'updated_time,name,id,participants,snippet';
@@ -619,24 +618,16 @@
                                 m.access_token = item.token;
                                 return m;
                             })
-                            arr.push(...data);
+                            this.navChatDefault.push(...data);
+                            this.navChat = this.navChatDefault;
                         } catch (e) {
                             arr_page_id = arr_page_id.filter(f=>{return f.id != item.id})
                             alertify.error(`Token hết hạn: ${item.id}`,10)
                         }
-
                     }
-                    this.arr_page_id = arr_page_id;
+                    this.arr_page_id = arr_page_id; //tác dụng để get socket
                     this.getSocket();
                 }
-                 arr = arr.filter(f => {
-                     return f.participants.data[0].id != '3873174272720720';
-                 });
-                 arr.sort(function (a, b) {
-                     return b.updated_time.localeCompare(a.updated_time);
-                 });
-                 this.navChat = arr;
-                 this.navChatDefault = arr;
                  this.getPhonePage();
                  this.getCommentPage();
             },
@@ -722,8 +713,9 @@
                     }
 
                     let index = this.navChatDefault.findIndex(fd=>{
-                        return fd.participants.data[1].id == page_id && fd.participants.data[0].id == fb_id && item.type == 'comment';
+                        return fd.participants.data[1].id == page_id && fd.participants.data[0].id == fb_id && fd.type == 'comment';
                     })
+
                     this.navChatDefault[index].unread_count = 0;
                     this.navChatDefault[index].new_message = false;
 
@@ -776,79 +768,50 @@
             },
             customerNewComment(data){
                 let splitted = data.value.post_id.split("_", 2);
-                if(data.value.from.id == this.last_segment){ //trường hợp fanpage trả lời comment
-                    return;
-                }
-                let data_create = {
-                    page_id: splitted[0],
-                    post_id: splitted[1],
-                    FB_ID:data.value.from.id,
-                    fb_name:data.value.from.name,
-                    snippet:data.value.message,
-                    is_read: 0,
-                    comment_id: data.value.comment_id,
-                    parent_id: data.value.parent_id,
-                    content:{
-                        created_time :new Date(),
-                        message:data.value.message,
-                        comment_id: data.value.comment_id,
-                        parent_id: data.value.parent_id
-                    }
-                }
+                if (data.value.check_create == 1){ //trường hợp thêm mới
+                    let customer_new_comment = {
+                        'unread_count' : 0
+                    };
 
-                axios.post('/marketing/create-comment-customer',
-                    data_create)
-                    .then(res => {
-                        if (res.data.success) {
-                            if (res.data.code == 200){ //trường hợp thêm mới
-                                let customer_new_comment = {
-                                    'unread_count' : 0
-                                };
-
-                                customer_new_comment.participants = {
-                                    data: [
-                                        {
-                                            id: data.value.from.id,
-                                            name: data.value.from.name,
-                                        },
-                                        {
-                                            id: splitted[0],
-                                        }
-                                    ]
-                                }
-
-                                let page = this.arr_page_id.filter(ft=> ft.id == splitted[0]);
-                                customer_new_comment.unread_count = 1;
-                                customer_new_comment.access_token = page[0].token;
-                                customer_new_comment.updated_time = new Date().toISOString();
-                                customer_new_comment.snippet = data.value.message;
-                                customer_new_comment.new_message = true;
-                                customer_new_comment.post_id = splitted[1];
-                                customer_new_comment.type = 'comment';
-                                this.navChatDefault.unshift(customer_new_comment);
-                                this.navChat = this.navChatDefault;
-                            } else { //trường hợp tồn tại
-                                let index = this.navChatDefault.findIndex(f => {
-                                    return (f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type =='comment');
-                                })
-                                let customer_new_comment = this.navChatDefault[index];
-                                customer_new_comment.unread_count = 1;
-                                customer_new_comment.updated_time = new Date().toISOString();
-                                customer_new_comment.snippet = data.value.message;
-                                customer_new_comment.new_message = true;
-
-                                if (index > -1) {
-                                    this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
-                                }
-                                this.navChatDefault.unshift(customer_new_comment);
-                                this.navChat = this.navChatDefault;
+                    customer_new_comment.participants = {
+                        data: [
+                            {
+                                id: data.value.from.id,
+                                name: data.value.from.name,
+                            },
+                            {
+                                id: splitted[0],
                             }
-                        }
-                    })
-                    .catch(err => {
-                        console.log('error', err)
-                    })
+                        ]
+                    }
 
+                    let page = this.arr_page_id.filter(ft=> ft.id == splitted[0]);
+                    customer_new_comment.unread_count = 1;
+                    customer_new_comment.access_token = page[0].token;
+                    customer_new_comment.updated_time = new Date().toISOString();
+                    customer_new_comment.snippet = data.value.message;
+                    customer_new_comment.new_message = true;
+                    customer_new_comment.post_id = splitted[1];
+                    customer_new_comment.type = 'comment';
+                    this.navChatDefault.unshift(customer_new_comment);
+                    this.navChat = this.navChatDefault;
+                }
+                else { //trường hợp tồn tại
+                    let index = this.navChatDefault.findIndex(f => {
+                        return (f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type =='comment');
+                    })
+                    let customer_new_comment = this.navChatDefault[index];
+                    customer_new_comment.unread_count = 1;
+                    customer_new_comment.updated_time = new Date().toISOString();
+                    customer_new_comment.snippet = data.value.message;
+                    customer_new_comment.new_message = true;
+
+                    if (index > -1) {
+                        this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                    }
+                    this.navChatDefault.unshift(customer_new_comment);
+                    this.navChat = this.navChatDefault;
+                }
             },
 
             selectElement(item){
@@ -878,7 +841,7 @@
 
             async customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
                 let customer_new = this.navChatDefault.filter(f => {
-                    return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id;
+                    return f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id && f.type == undefined;
                 });
                 let customer_new_mess = {};
                 if (customer_new.length > 0) {
