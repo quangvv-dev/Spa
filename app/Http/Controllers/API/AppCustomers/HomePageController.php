@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\AppCustomers;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Http\Controllers\API\BaseApiController;
+use App\Http\Resources\AlbumResource;
 use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Http\Resources\AppCustomers\KhacResource;
 use App\Http\Resources\AppCustomers\ServiceResource;
@@ -137,12 +138,9 @@ class HomePageController extends BaseApiController
     public function album(Request $request)
     {
         $customer = $request->jwtUser;
-        $album = Album::where('customer_id', $customer->id)->get()->transform(function ($i) {
-            return [
-                'images' => @json_decode($i->images),
-            ];
-        });
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $album);
+        $album = Album::where('customer_id', $customer->id)->get();
+        $data = new AlbumResource($album);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
     }
 
