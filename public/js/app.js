@@ -2449,7 +2449,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
           if (item.participants.data[0].name.match(re)) {
             return item.participants.data[0].name.match(re);
-          } else if (item.phone.match(re)) {
+          } else if (item.phone && item.phone.match(re)) {
             return item.phone.match(re);
           }
         });
@@ -3671,7 +3671,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
           if (item.participants.data[0].name.match(re)) {
             return item.participants.data[0].name.match(re);
-          } else if (item.phone.match(re)) {
+          } else if (item.phone && item.phone.match(re)) {
             return item.phone.match(re);
           }
         });
