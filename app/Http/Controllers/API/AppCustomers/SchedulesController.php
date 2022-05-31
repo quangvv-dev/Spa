@@ -34,6 +34,7 @@ class SchedulesController extends BaseApiController
      * Danh sách lịch hẹn
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -47,10 +48,12 @@ class SchedulesController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $request->merge(['type' => 'detail_schedules']);
-        if ($request->status == 1){
-            $schedules = Schedule::where('user_id', $customer->id)->where('status',ScheduleConstant::DAT_LICH)->paginate(StatusCode::PAGINATE_10);
-        }else{
-            $schedules = Schedule::where('user_id', $customer->id)->whereIn('status',ScheduleConstant::DAT_LICH)->paginate(StatusCode::PAGINATE_10);
+        if ($request->status == 1) {
+            $schedules = Schedule::where('user_id', $customer->id)->where('status',
+                ScheduleConstant::DAT_LICH)->paginate(StatusCode::PAGINATE_10);
+        } else {
+            $schedules = Schedule::where('user_id', $customer->id)->whereIn('status',
+                ScheduleConstant::DAT_LICH)->paginate(StatusCode::PAGINATE_10);
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', SchedulesResource::collection($schedules));
     }
@@ -59,17 +62,17 @@ class SchedulesController extends BaseApiController
      *Tạo lịch hẹn
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-
         $validate = [
             'service_id' => "required",
-            'date' => "required",
-            'time_from' => "required",
-            'time_to' => "required",
-            'branch_id' => "required",
+            'date'       => "required",
+            'time_from'  => "required",
+            'time_to'    => "required",
+            'branch_id'  => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -77,10 +80,10 @@ class SchedulesController extends BaseApiController
         }
 
         $customer = $request->jwtUser;
-        $category = CustomerGroup::where('customer_id', $request->customer_id)->first();
+        $category = CustomerGroup::where('customer_id', $request->customer_id)->where('branch_id',$customer->branch_id)->first();
         $user = User::where('department_id', DepartmentConstant::WAITER)->first();
         $service = Services::select('name')->whereIn('id', $request->service_id)->pluck('name')->toArray();
-        $input = $request->all();
+//        $input = $request->all();
         $request->merge([
             'user_id'       => $customer->id,
             'person_action' => isset($user) ? $user->id : 0,
@@ -108,11 +111,11 @@ class SchedulesController extends BaseApiController
             $err = Functions::sendSmsV3($data->customer->phone, @$text);
             if (isset($err) && $err) {
                 HistorySms::insert([
-                    'phone' => @$data->customer->phone,
+                    'phone'       => @$data->customer->phone,
                     'campaign_id' => 0,
-                    'message' => $text,
-                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                    'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                    'message'     => $text,
+                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                    'updated_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                 ]);
             }
         }
