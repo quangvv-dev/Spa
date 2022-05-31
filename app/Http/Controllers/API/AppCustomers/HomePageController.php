@@ -111,7 +111,7 @@ class HomePageController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $input = $request->all();
-        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long')
+        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long','phone')
             ->when(isset($input['location_id']) && $input['location_id'], function ($q) use ($input) {
                 $q->where('location_id', $input['location_id']);
             })->whereNotNull('lat')->get()->map(function ($item) use ($input) {
