@@ -295,6 +295,9 @@
                 data: {
                     id: group_id,
                     arr_page: data_arr_page,
+                },
+                success: function (data) {
+                    $('.groupMulti').val(JSON.stringify(data));
                 }
             })
 
