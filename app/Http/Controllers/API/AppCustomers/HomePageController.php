@@ -138,7 +138,7 @@ class HomePageController extends BaseApiController
     public function album(Request $request)
     {
         $customer = $request->jwtUser;
-        $album = Album::where('customer_id', $customer->id)->get();
+        $album = Album::where('customer_id', $customer->id)->first();
         $data = new AlbumResource($album);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
