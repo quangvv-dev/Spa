@@ -115,9 +115,10 @@
                                             <li><a href="{{route('promotions.index')}}">Voucher khuyến mãi</a></li>
                                         @endif
                                     @endif
-                                        <li><a href="{{route('landipages.index')}}">Landipage</a></li>
-                                        <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpage</a></li>
-
+                                        @if($roleGlobal->permission('marketing.fanpage'))
+                                            <li><a href="{{route('landipages.index')}}">Landipage</a></li>
+                                            <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpage</a></li>
+                                        @endif
                                 </ul>
                             </li>
                             @endif
