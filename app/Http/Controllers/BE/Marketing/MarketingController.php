@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
@@ -52,7 +53,7 @@ class MarketingController extends Controller
         }
 //        $input['marketing'] = 0;
 
-        $marketing = User::where('department_id', 3)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $customer = Customer::search($input)->select('id');
             $item->contact = $customer->count();
@@ -72,8 +73,8 @@ class MarketingController extends Controller
 
             unset($input['marketing']);
             $input['user_id'] = $item->id;
-            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
-            $item->budget = $price->total_budget; //ngân sách
+//            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
+            $item->budget = 0; //ngân sách
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');

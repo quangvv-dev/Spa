@@ -161,14 +161,17 @@ class Order extends Model
                 $query->whereIn('member_id', $customer);
             })
                 ->when(isset($input['telesales']), function ($query) use ($input) {
-                    $query->whereHas('customer', function ($q) use ($input) {
-                        $q->where('telesales_id', $input['telesales']);
-                    });
+                    $query->where('telesale_id', $input['telesales']);
+
+//                    $query->whereHas('customer', function ($q) use ($input) {
+//                        $q->where('telesales_id', $input['telesales']);
+//                    });
                 })
                 ->when(isset($input['marketing']), function ($query) use ($input) {
-                    $query->whereHas('customer', function ($q) use ($input) {
-                        $q->where('mkt_id', $input['marketing']);
-                    });
+                    $query->where('mkt_id', $input['marketing']);
+//                    $query->whereHas('customer', function ($q) use ($input) {
+//                        $q->where('mkt_id', $input['marketing']);
+//                    });
                 })
                 ->when(isset($input['service']), function ($query) use ($input) {
                     $query->whereHas('orderDetails', function ($q) use ($input) {
