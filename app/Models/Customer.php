@@ -45,7 +45,8 @@ class Customer extends Model
         'source_fb',
         'category_tips',
         'FB_ID',
-        'page_id'
+        'page_id',
+        'carepage_id',
     ];
 
 

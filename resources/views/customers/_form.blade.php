@@ -127,6 +127,7 @@
                             <span class="help-block">{{ $errors->first('telesales_id', ':message') }}</span>
                         </div>
                     </div>
+
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('status_id') ? 'has-error' : '' }}">
                             {!! Form::label('status_id', 'Trạng thái', array('class' => 'control-label')) !!}
