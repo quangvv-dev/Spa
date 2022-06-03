@@ -52,6 +52,8 @@ class OrderService
             'all_total' => $theRest,
             'owner_id' => Auth::user()->id ? Auth::user()->id : 1,
             'carepage_id' => Auth::user()->id ? Auth::user()->id : 1,
+            'mkt_id' => $data['mkt_id'] ?: 0,
+            'telesale_id' => $data['telesale_id'] ?: 0,
             'discount' => $data['discount'] ?: 0,
             'voucher_id' => $data['voucher_id'] ?: 0,
             'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : 0,

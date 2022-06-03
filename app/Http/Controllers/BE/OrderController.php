@@ -147,7 +147,7 @@ class OrderController extends Controller
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
         $param['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
         $param['mkt_id'] = $customer->mkt_id ?: 0;
-        $param['telesale_id'] = $customer->telesale_id ?: 0;
+        $param['telesale_id'] = $customer->telesales_id ?: 0;
         DB::beginTransaction();
         try {
 
