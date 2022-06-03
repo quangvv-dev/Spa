@@ -102,7 +102,7 @@ class CustomerController extends Controller
         ]);
     }
 
-    /**
+    /**.
      * Display a listing of the resource.
      *
      * @param Request $request
