@@ -85,6 +85,8 @@ class Customer extends Model
             })
             ->when(isset($conditions['marketing']), function ($query) use ($conditions) {
                 $query->where('mkt_id', $conditions['marketing']);
+            })->when(isset($conditions['carepage_id']), function ($query) use ($conditions) {
+                $query->where('carepage_id', $conditions['carepage_id']);
             })->when(isset($conditions['source_fb']), function ($query) use ($conditions) {
                 $query->where('source_fb', $conditions['source_fb']);
             })
@@ -173,6 +175,10 @@ class Customer extends Model
     public function genitive()
     {
         return $this->belongsTo(Genitive::class, 'genitive_id', 'id');
+    }
+    public function carepage()
+    {
+        return $this->belongsTo(User::class, 'carepage_id', 'id');
     }
 
     public function categories()

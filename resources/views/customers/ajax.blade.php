@@ -150,9 +150,10 @@
             <th class="text-white text-center mota" style="min-width: 121px;">Mô tả</th>
             <th class="text-white text-center">DV liên quan</th>
             <th class="text-white text-center">C.Nhánh</th>
+            <th class="text-white text-center">Người tạo</th>
             <th class="text-white text-center">Lich Hẹn</th>
             <th class="text-white text-center">Ngày sinh</th>
-            <th class="text-white text-center">Người tạo KH</th>
+            <th class="text-white text-center">MKT phụ trách</th>
             <th class="text-white text-center">Nguồn KH</th>
             <th class="text-white text-center">Link FB</th>
             <th class="text-white text-center">Giới tính</th>
@@ -211,6 +212,7 @@
                         <span class="badge badge-primary span-tips">{{str_limit($customer->group_tips,30)}}</span>
                     </td>
                     <td class="text-center">{{@$customer->branch->name}}</td>
+                    <td class="text-center">{{@$customer->carepage->full_name}}</td>
                     <td class="text-center" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
                     </td>
