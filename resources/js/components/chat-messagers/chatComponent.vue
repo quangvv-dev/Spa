@@ -73,6 +73,14 @@
                         </div>
                     </div>
                     <section class="chat-app-window" style=" overflow-y: scroll">
+                        <div class="" v-if="next_page">
+                            <span ><button class="btn btn-primary" @click="getNextPage()">Xem thêm</button></span>
+                        </div>
+                        <div class="" v-if="post_created_time">
+                            <p v-html="post_message"></p>
+                            <img :src="post_full_picture" alt="">
+                            <p>{{post_created_time.substring(0, 10)}}</p>
+                        </div>
                         <div class="chats" v-for="(item,index) in emotions">
                             <div class="chat" v-if="item.from.id ==last_segment">
                                 <div class="chat-body">
@@ -355,6 +363,7 @@
                 images: [],
                 data_images_upload_server_default: [],
                 data_images_upload_server: [],
+                next_page : null,
 
                 //data form thêm khách hàng
                 description: '',
@@ -378,7 +387,13 @@
                 //filter
                 filter_phone : null,
                 filter_comment : 0,
-                select_active:null
+                select_active:null,
+
+                //comment
+                click_comment: false,
+                post_created_time: '',
+                post_full_picture: '',
+                post_message : ''
             }
         },
         components: {
@@ -694,6 +709,10 @@
             },
 
             selectMessage(item,index) {
+                this.post_created_time = '';
+                this.post_full_picture = '';
+                this.post_message = '';
+                this.next_page = null;
                 if(item.type && item.type == 'comment'){
                     let url = '/marketing/get-detail-comment';
                     let params = {
@@ -711,6 +730,7 @@
                         params: params
                     }).then(response => {
                             let data = JSON.parse(response.data.content);
+                            console.log(7777,data);
                             if(data.length > 0){
                                  data = data.map(m=>{
                                     m['from'] = {
@@ -722,12 +742,21 @@
                             }
                             this.detailMessage = data;
                             this.post_id = this.last_segment + '_' + response.data.post_id;
+
+                            let url_detail_post = `https://graph.facebook.com/v13.0/${this.post_id}?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=${this.access_token}`
+                            axios.get(url_detail_post).then(res=>{
+                                this.post_created_time = res.data.created_time;
+                                this.post_full_picture = res.data.full_picture;
+                                this.post_message = res.data.message.replaceAll('\n\n','<br>');
+                                console.log(999,this.post_message);
+                            })
                         })
 
                     //update is_read comment
                     axios.post('/marketing/update-is-read-comment',params)
 
-                }else {
+                }
+                else {
                     let id = item.id;
                     this.post_id = '';
                     let fields = 'messages{created_time,message,attachments{image_data,video_data},from}';
@@ -735,6 +764,7 @@
                     axios.get(url)
                         .then(response => {
                             this.detailMessage = response.data.messages.data.reverse();
+                            this.next_page = response.data.messages.paging.next;
                         })
                     const index = this.navChatDefault.findIndex(f => f.id === id);
                     this.navChatDefault[index].unread_count = 0;
@@ -1036,6 +1066,17 @@
                         }
                     })
                 this.contentMesage = '';
+            },
+            async getNextPage(){
+                let data = await axios.get(this.next_page);
+                if(data.data.paging.next){
+                    this.next_page = data.data.paging.next;
+                } else {
+                    this.next_page = null;
+                }
+                let data_1 = data.data.data.reverse();
+                data_1.push(...this.detailMessage);
+                this.detailMessage = data_1;
             }
         }
     }
