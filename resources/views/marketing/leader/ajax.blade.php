@@ -51,15 +51,15 @@
                 <td class="text-center bold">{{$marketing->sum('budget')}}</td>
                 <td class="text-center bold">{{$marketing->sum('contact')}}</td>
                 <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?$marketing->sum('budget')/$marketing->sum('contact'):0}}</td>
-                <td class="text-center bold">{{$marketing->sum('schedules')}}</td>
-                <td class="text-center bold">{{$marketing->sum('schedules_den')}}</td>
-                <td class="text-center bold">{{$marketing->sum('orders')}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('schedules'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('schedules_den'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('orders'))}}</td>
                 <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('budget')) ?number_format($marketing->sum('budget')/$marketing->sum('schedules_den')):0 }}</td>
                 <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('contact')) ?round($marketing->sum('schedules_den')/$marketing->sum('contact')*100,1):0 }}%</td>
-                <td class="text-center bold">{{$marketing->sum('all_total')}}</td>
-                <td class="text-center bold">{{$marketing->sum('gross_revenue')}}</td>
-                <td class="text-center bold">{{number_format(($marketing->sum('payment') > $marketing->sum('gross_revenue'))?$marketing->sum('payment') - $marketing->sum('gross_revenue'):0)}}</td>
-                <td class="text-center bold">{{$marketing->sum('payment')}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('all_total'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('gross_revenue'))}}</td>
+                <td class="text-center bold">{{number_format(($marketing->sum('payment') > $marketing->sum('gross_revenue'))?number_format($marketing->sum('payment') - $marketing->sum('gross_revenue')):0)}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('payment'))}}</td>
             </tr>
             @foreach($marketing as $i => $item)
                 <tr class="">
