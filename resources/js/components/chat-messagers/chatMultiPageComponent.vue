@@ -76,7 +76,7 @@
                         <div class="" v-if="next_page">
                             <span ><button class="btn btn-primary" @click="getNextPage()">Xem thêm</button></span>
                         </div>
-                        <div class="" v-if="post_created_time">
+                        <div class="" v-if="post_created_time" style="width: 50%">
                             <p v-html="post_message"></p>
                             <img :src="post_full_picture" alt="">
                             <p>{{post_created_time.substring(0, 10)}}</p>
@@ -758,7 +758,7 @@
                             let url_detail_post = `https://graph.facebook.com/v13.0/${this.post_id}?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=${this.access_token}`
                             axios.get(url_detail_post).then(res=>{
                                 this.post_created_time = res.data.created_time;
-                                this.post_full_picture = res.data.full_picture;
+                                this.post_full_picture = res.data.attachments.data[0].media.image.src;
                                 this.post_message = res.data.message.replaceAll('\n\n','<br>');
                                 console.log(999,this.post_message);
                             })

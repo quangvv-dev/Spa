@@ -2787,7 +2787,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           var url_detail_post = "https://graph.facebook.com/v13.0/".concat(_this9.post_id, "?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=").concat(_this9.access_token);
           axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url_detail_post).then(function (res) {
             _this9.post_created_time = res.data.created_time;
-            _this9.post_full_picture = res.data.full_picture;
+            _this9.post_full_picture = res.data.attachments.data[0].media.image.src;
             _this9.post_message = res.data.message.replaceAll('\n\n', '<br>');
             console.log(999, _this9.post_message);
           });
@@ -4132,7 +4132,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           var url_detail_post = "https://graph.facebook.com/v13.0/".concat(_this9.post_id, "?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=").concat(_this9.access_token);
           axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url_detail_post).then(function (res) {
             _this9.post_created_time = res.data.created_time;
-            _this9.post_full_picture = res.data.full_picture;
+            _this9.post_full_picture = res.data.attachments.data[0].media.image.src;
             _this9.post_message = res.data.message.replaceAll('\n\n', '<br>');
             console.log(999, _this9.post_message);
           });
@@ -82497,7 +82497,7 @@ var render = function() {
                 : _vm._e(),
               _vm._v(" "),
               _vm.post_created_time
-                ? _c("div", {}, [
+                ? _c("div", { staticStyle: { width: "50%" } }, [
                     _c("p", {
                       domProps: { innerHTML: _vm._s(_vm.post_message) }
                     }),
@@ -83848,7 +83848,7 @@ var render = function() {
                 : _vm._e(),
               _vm._v(" "),
               _vm.post_created_time
-                ? _c("div", {}, [
+                ? _c("div", { staticStyle: { width: "50%" } }, [
                     _c("p", {
                       domProps: { innerHTML: _vm._s(_vm.post_message) }
                     }),
