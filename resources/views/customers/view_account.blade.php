@@ -866,7 +866,7 @@
                                 alert("Cập nhật liệu trình thành công");
                             else if (res == "Failed")
                                 alert("Số liệu trình đã hết");
-                            window.location.reload();
+                            // window.location.reload();
                         }
                     })
                 })
