@@ -617,11 +617,8 @@ class OrderController extends Controller
         ]);
 
         if ($request->type_delete == StatusCode::TYPE_ORDER_PROCESS) {
-            var_dump($order,'Trước khi update');
             $order->count_day = $order->count_day - 1;
             $order->save();
-            dd($order,'Sau khi update');
-
             $order_detail = OrderDetail::where('order_id', $order->id)->where('booking_id',
                 $request->service_id)->first();
             $order_detail->days = $order_detail->days - 1 > 0 ? $order_detail->days - 1 : 0;
