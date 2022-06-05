@@ -17,8 +17,8 @@ class DBController extends Controller
     {
         $order = Order::select('id', 'created_at')
             ->whereBetween('created_at', [
-                '2022-06-02 00:01',
-                '2022-06-05 23:01',
+                '2022-05-01 00:01',
+                '2022-06-01 23:59',
             ])->get();
         foreach ($order as $item) {
             $payment = PaymentHistory::where('order_id',$item->id)->first();
