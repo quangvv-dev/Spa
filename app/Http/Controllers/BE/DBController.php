@@ -16,7 +16,7 @@ class DBController extends Controller
     public function index(Request $request)
     {
         $order = Order::select('id', 'created_at')
-            ->whereBetween('date', [
+            ->whereBetween('created_at', [
                 '2022-06-02 00:01',
                 '2022-06-05 23:01',
             ])->get();
