@@ -1028,7 +1028,7 @@
                 this.telesales_id = null;
                 this.value_group_customer = [];
                 this.value_source_customer = null;
-                this.value_chi_nhanh.id = null;
+                this.value_chi_nhanh = null;
                 this.description = ''
             },
             filterPhone(){
