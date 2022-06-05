@@ -140,10 +140,6 @@ class OrderController extends Controller
         $param = $request->all();
 
         $param['count_day'] = isset($param['days']) && count($param['days']) ? array_sum($param['days']) : 0;
-        if ($param['role_type'] == StatusCode::COMBOS) {
-            $combo = Services::find($param['service_id'][0]);
-            $param['hsd'] = Carbon::now('Asia/Ho_Chi_Minh')->addMonth($combo->hsd)->format('Y-m-d');
-        }
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
         $param['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
         $param['mkt_id'] = $customer->mkt_id ?: 0;
@@ -608,7 +604,6 @@ class OrderController extends Controller
     public function updateCountDay(Request $request, $id)
     {
         $order = $this->orderService->find($id);
-
         if ($order->type === Order::TYPE_ORDER_ADVANCE && $order->count_day === 0) {
             return "Failed";
         }
@@ -747,13 +742,13 @@ class OrderController extends Controller
     {
         $input = $request->all();
         $input['count_day'] = isset($input['days']) && count($input['days']) ? array_sum($input['days']) : 0;
-        if ($input['role_type'] == StatusCode::COMBOS) {
-            $check = $this->orderService->find($id);
-            $combo = Services::find($input['service_id'][0]);
-            $date = strtotime('+' . $combo->hsd . ' months', strtotime($check->created_at));
-            $date = date("Y-m-d", $date);
-            $input['hsd'] = $date;
-        }
+//        if ($input['role_type'] == StatusCode::COMBOS) {
+//            $check = $this->orderService->find($id);
+//            $combo = Services::find($input['service_id'][0]);
+//            $date = strtotime('+' . $combo->hsd . ' months', strtotime($check->created_at));
+//            $date = date("Y-m-d", $date);
+//            $input['hsd'] = $date;
+//        }
         $customer = Customer::find($request->user_id);
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 
