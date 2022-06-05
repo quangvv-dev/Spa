@@ -28,6 +28,7 @@ class DBController extends Controller
                 $item->save();
             }
         }
+        return "da xong";
 
 //     $role =  Role::with('users')->get();
 //     foreach ($role as $item){
