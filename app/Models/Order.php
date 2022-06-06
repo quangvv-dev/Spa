@@ -166,6 +166,8 @@ class Order extends Model
 //                    $query->whereHas('customer', function ($q) use ($input) {
 //                        $q->where('telesales_id', $input['telesales']);
 //                    });
+                })->when(isset($input['carepage_id']), function ($query) use ($input) {
+                    $query->where('carepage_id', $input['carepage_id']);
                 })
                 ->when(isset($input['marketing']), function ($query) use ($input) {
                     $query->where('mkt_id', $input['marketing']);

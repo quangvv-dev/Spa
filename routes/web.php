@@ -228,6 +228,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('dashboard', 'MarketingController@show')->name('dashboard');
         Route::get('ranking', 'MarketingController@ranking');
 
+        Route::get('carepage', 'CarepageController@index');
+        Route::get('carepage-ranking', 'CarepageController@ranking');
+
         //Chat
         Route::get('chat-messages', 'ChatController@chatFanpage')->name('chat-messages');
         Route::get('chat-messages/{page_id}', 'ChatController@index');
