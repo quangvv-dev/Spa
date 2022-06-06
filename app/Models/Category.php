@@ -42,7 +42,7 @@ class Category extends Model
                 });
         }
 
-        return $data->paginate(20);
+        return $data->orderByDesc('image')->orderByDesc('id')->paginate(20);
 
     }
 
