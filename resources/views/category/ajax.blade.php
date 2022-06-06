@@ -16,7 +16,7 @@
                 <tr>
                     <th scope="row">{{$k}}</th>
                     <td class="text-center">
-                        <img src="{{@$s->image}}" class="rounded-circle" height="60" width="60" />
+                        <img src="{{$s->image?:'/assets/images/brand/logoNew.png'}}" class="rounded-circle" height="60" width="60" />
                     </td>
                     <td class="text-center">{{$s->name}}</td>
                     <td class="text-center">{{$s->code}}</td>
