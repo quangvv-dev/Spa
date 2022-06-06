@@ -42,6 +42,15 @@
                             <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                         </div>
                     </div>
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::KE_TOAN)
+                        <div class="col-md-6">
+                            <div class="form-group required {{ $errors->has('thuc_hien_id') ? 'has-error' : '' }}">
+                                {!! Form::label('thuc_hien_id', 'Người đề xuất', array('class' => ' required')) !!}
+                                {!! Form::select('thuc_hien_id',$user_dexuat,@$doc->thuc_hien_id, array('class' => 'form-control select2', 'required' => true,'placeholder'=> 'Chọn người đề xuất')) !!}
+                                <span class="help-block">{{ $errors->first('thuc_hien_id', ':message') }}</span>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-md-6">
                         <div class="form-group required {{ $errors->has('duyet_id') ? 'has-error' : '' }}">
                             {!! Form::label('duyet_id', 'Người duyệt', array('class' => ' required')) !!}

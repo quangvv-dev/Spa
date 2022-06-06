@@ -29,7 +29,7 @@ class LyDoController extends Controller
     {
         $docs = LyDoThuChi::when(isset($request->category_id) && $request->category_id, function ($query) use ($request) {
             $query->where('category_id', $request->category_id);
-        })->paginate(StatusCode::PAGINATE_20);
+        })->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
 
         $categories = DanhMucThuChi::pluck('name','id')->toArray();
         if ($request->ajax()) {

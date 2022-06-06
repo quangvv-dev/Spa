@@ -27,7 +27,7 @@ class DanhMucController extends Controller
     {
         $docs = DanhMucThuChi::when(isset($request->name) && $request->name, function ($query) use ($request) {
             $query->where('name', $request->name);
-        })->get();
+        })->orderByDesc('id')->get();
 
         if ($request->ajax()) {
             return Response::json(view('thu_chi.category.ajax', compact('docs'))->render());
