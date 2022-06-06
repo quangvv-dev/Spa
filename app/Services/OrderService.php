@@ -51,7 +51,7 @@ class OrderService
             'type' => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total' => $theRest,
             'owner_id' => Auth::user()->id ? Auth::user()->id : 1,
-            'carepage_id' => Auth::user()->id ? Auth::user()->id : 1,
+            'carepage_id' => $data['carepage_id'] ?: 0,
             'mkt_id' => $data['mkt_id'] ?: 0,
             'telesale_id' => $data['telesale_id'] ?: 0,
             'discount' => $data['discount'] ?: 0,
