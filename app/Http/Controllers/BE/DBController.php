@@ -17,13 +17,12 @@ class DBController extends Controller
     {
         $order = Order::whereBetween('created_at', [
                 '2022-05-01 00:01',
-                '2022-06-02 23:59',
+                '2022-06-06 23:59',
             ])->where('telesale_id',0)->with('customer')->get();
 
         foreach ($order as $item) {
             if ($item->customer){
-                $item->mkt_id = $item->customer->mkt_id;
-                $item->telesale_id = $item->customer->telesales_id;
+                $item->carepage_id = !empty($item->customer->carepage_id)?$item->customer->carepage_id:0;
                 $item->save();
             }
         }
