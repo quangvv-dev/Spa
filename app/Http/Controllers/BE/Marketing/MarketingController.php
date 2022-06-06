@@ -73,8 +73,8 @@ class MarketingController extends Controller
 
             unset($input['marketing']);
             $input['user_id'] = $item->id;
-//            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
-            $item->budget = 0; //ngân sách
+            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
+            $item->budget = $price->total_budget; //ngân sách
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
