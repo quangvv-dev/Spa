@@ -56,11 +56,11 @@
                     <td class="text-center pdr10">{{$item->chanel_text}}</td>
                     <td class="text-center pdr10">{{number_format($item->budget)}}</td>
                     <td class="text-center pdr10">{{$item->customers}}</td>
-                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->customers)?$item->budget/$item->customers:0}}</td>
+                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->customers)?number_format($item->budget/$item->customers):0}}</td>
                     <td class="text-center pdr10">{{$item->schedules}}</td>
                     <td class="text-center pdr10">{{$item->schedules_den}}</td>
                     <td class="text-center pdr10">{{$item->orders}}</td>
-                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->schedules_den)?$item->budget/$item->schedules_den:0}}</td>
+                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->schedules_den)?number_format($item->budget/$item->schedules_den):0}}</td>
 
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customers) ?round(($item->schedules_den/$item->customers)*100,1):0}}%
                     </td>
