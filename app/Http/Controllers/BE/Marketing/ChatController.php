@@ -124,7 +124,7 @@ class ChatController extends Controller
 
     public function getDataFormCustomer()
     {
-        $group = Category::select('id', 'name')->get();
+        $group = Category::select('id', 'name')->where('type',StatusCode::SERVICE)->get();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->get();// nguồn KH
         $branchs = Branch::select('name', 'id')->get();// chi nhánh
         $telesales = User::select('id', 'department_id', 'full_name')->whereIn('department_id', [DepartmentConstant::WAITER, DepartmentConstant::TELESALES, UserConstant::TECHNICIANS])->get();
