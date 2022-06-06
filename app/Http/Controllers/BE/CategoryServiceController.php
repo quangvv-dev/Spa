@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Components\Filesystem\Filesystem;
+use App\Constants\DirectoryConstant;
 use App\Constants\StatusCode;
 use App\Models\Category;
 use App\Models\Customer;
@@ -15,9 +17,11 @@ class CategoryServiceController extends Controller
 {
 
     var $list;
+    private $fileUpload;
 
-    public function __construct()
+    public function __construct(Filesystem $fileUpload)
     {
+        $this->fileUpload = $fileUpload;
         $this->middleware('permission:category.list', ['only' => ['index']]);
         $this->middleware('permission:category.edit', ['only' => ['edit']]);
         $this->middleware('permission:category.add', ['only' => ['create']]);
@@ -72,13 +76,14 @@ class CategoryServiceController extends Controller
     public function store(Request $request)
     {
         $text = Functions::vi_to_en(@$request->name);
-
         $request->merge([
             'code' => str_replace(' ', '_', strtolower($text)),
             'type' => StatusCode::SERVICE,
             'price' => $request->price ? str_replace(',', '', $request->price) : 0
         ]);
-        Category::create($request->all());
+        $input = $request->all();
+        $input['image'] = $this->fileUpload->uploadImageCustom($input['image'],DirectoryConstant::CATEGORY_IMAGE);
+        Category::create($input);
         return redirect(route('category.create'))->with('status', 'Tạo danh mục thành công');
     }
 
@@ -123,7 +128,12 @@ class CategoryServiceController extends Controller
             'code' => str_replace(' ', '_', strtolower($text)),
             'price' => $request->price ? str_replace(',', '', $request->price) : 0
         ]);
-        $category->update($request->all());
+        $input = $request->all();
+        $input['image'] = $this->fileUpload->uploadImageCustom($input['image'],DirectoryConstant::CATEGORY_IMAGE);
+        if (!empty($category->image)){
+            Functions::unlinkUpload2($category->image);
+        }
+        $category->update($input);
         return redirect(route('category.index'))->with('status', 'Cập nhật danh mục thành công');
     }
 
