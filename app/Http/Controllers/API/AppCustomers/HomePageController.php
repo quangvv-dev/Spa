@@ -161,7 +161,7 @@ class HomePageController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $category = Category::select('id', 'name', 'image')->where('type',
-            $request->type)->paginate(StatusCode::PAGINATE_10);
+            $request->type)->orderByDesc('image')->get();
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $category);
 
