@@ -72,7 +72,7 @@
 
                 </div>
                 <div class="col-md-12 col-lg-12">
-                    @include('marketing.leader.ajax')
+                    @include('marketing.carepage.ajax')
                 </div>
             </div>
         </div>

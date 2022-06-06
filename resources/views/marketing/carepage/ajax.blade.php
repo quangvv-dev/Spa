@@ -2,17 +2,17 @@
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-center" colspan="5">THÔNG TIN NGUỒN</th>
-            <th class="text-center" colspan="9">THÔNG TIN HIỆU QUẢ MARKETING</th>
+            <th class="text-center" colspan="3">THÔNG TIN NGUỒN</th>
+            <th class="text-center" colspan="9">THÔNG TIN HIỆU QUẢ CAREPAGE</th>
         </tr>
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center">STT</th>
-            <th class="text-center">Marketing</th>
+            <th class="text-center">Carepage</th>
             <th class="text-center">Số contact</th>
             <th class="text-center">Lịch hẹn</th>
             <th class="text-center">Lịch hẹn đến</th>
             <th class="text-center">Đơn chốt</th>
-            <th class="text-center">Số $/KH đến</th>
+{{--            <th class="text-center">Số $/KH đến</th>--}}
             <th class="text-center no-wrap">Tỷ lệ đến/SĐT</th>
             <th class="text-center no-wrap">Doanh số</th>
             <th class="text-center no-wrap">Doanh thu</th>
@@ -27,17 +27,12 @@
             <th class="text-center">(4)</th>
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
-            <th class="text-center">(6.1)</th>
+{{--            <th class="text-center">(6.1)</th>--}}
             <th class="text-center">(5)/(3)</th>
-            <th class="text-center">(6)/(5)</th>
-            <th class="text-center">(6.1)/(6)</th>
             <th class="text-center">(7)</th>
             <th class="text-center">(8)</th>
             <th class="text-center">(9)</th>
             <th class="text-center">(10)</th>
-            {{--<th class="text-center">(11)</th>--}}
-            {{--<th class="text-center">(12)</th>--}}
-            {{--<th class="text-center">(13)</th>--}}
         </tr>
         </thead>
 
@@ -46,13 +41,11 @@
         @if(count($marketing))
             <tr>
                 <td class="text-center bold" colspan="2">Tổng</td>
-                <td class="text-center bold">{{$marketing->sum('budget')}}</td>
                 <td class="text-center bold">{{$marketing->sum('contact')}}</td>
-                <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?$marketing->sum('budget')/$marketing->sum('contact'):0}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('schedules'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('schedules_den'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('orders'))}}</td>
-                <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('budget')) ?number_format($marketing->sum('budget')/$marketing->sum('schedules_den')):0 }}</td>
+{{--                <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('budget')) ?number_format($marketing->sum('budget')/$marketing->sum('schedules_den')):0 }}</td>--}}
                 <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('contact')) ?round($marketing->sum('schedules_den')/$marketing->sum('contact')*100,1):0 }}%</td>
                 <td class="text-center bold">{{number_format($marketing->sum('all_total'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('gross_revenue'))}}</td>
@@ -63,13 +56,11 @@
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->full_name}}
-                    <td class="text-center pdr10">{{number_format($item->budget)}}</td> {{--ngân sách--}}
                     <td class="text-center pdr10">{{number_format($item->contact)}}</td>
-                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->contact)?$item->budget/$item->contact:0}}</td>{{--giá contact--}}
                     <td class="text-center pdr10">{{number_format($item->schedules)}}</td>
                     <td class="text-center pdr10">{{number_format($item->schedules_den)}}</td>
                     <td class="text-center pdr10">{{number_format($item->orders)}}</td>
-                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->budget) ?number_format($item->budget/$item->schedules_den):0 }}</td>
+{{--                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->budget) ?number_format($item->budget/$item->schedules_den):0 }}</td>--}}
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->contact) ?round(($item->schedules_den/$item->contact)*100,1):0}}%</td>
 
                     <td class="text-center pdr10">{{number_format($item->all_total)}}</td>

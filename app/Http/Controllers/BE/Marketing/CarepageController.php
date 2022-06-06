@@ -51,7 +51,6 @@ class CarepageController extends Controller
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-//        $input['marketing'] = 0;
 
         $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['carepage_id'] = $item->id;
