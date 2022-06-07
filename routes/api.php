@@ -135,6 +135,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('vourchers', 'AuthController@vouchers');
     Route::get('process', 'HomePageController@process');//Lịch sử liệu trình
     Route::get('promotions', 'VouchersController@index');//Danh sách voucher
+    Route::get('promotions-used', 'VouchersController@used');//Danh sách voucher
 });
 
 /*
