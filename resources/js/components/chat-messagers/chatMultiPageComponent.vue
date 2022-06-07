@@ -258,7 +258,7 @@
                 </div>
             </div>
         </div>
-        <div class="right" style="width: 15%; margin-top: 6%;" v-if="last_segment">
+        <div class="right" style="width: 15%; margin-top: 6%;" v-if="last_segment && fb_me">
             <div class="row">
                 <div class="col-12 mb-1"><input v-model="chat_current_name" type="text" class="form-control"
                                                 placeholder="Tên KH"></div>

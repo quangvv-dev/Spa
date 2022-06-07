@@ -280,11 +280,11 @@ exports.ChatComment = (value) => {
                     let content = JSON.stringify(content_old);
                     model.UpdateComment(data.id, value.value.message, content);
                     check = 2;
+                    return 2;
                 }
             });
         } else {
             check = 0;
-            return 2;
         }
     });
 }
