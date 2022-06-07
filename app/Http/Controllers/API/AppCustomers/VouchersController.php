@@ -26,7 +26,7 @@ class VouchersController extends BaseApiController
     public function index(Request $request)
     {
         $customer = $request->jwtUser;
-        $promotions = Promotion::where('group','like','"'.$customer->status.'"')->get();
+        $promotions = Promotion::where('group','like','"'.$customer->status_id.'"')->get();
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', PromotionResource::collection($promotions));
     }
