@@ -633,23 +633,21 @@ class Functions
         ksort($inputData);
         $query = "";
         $i = 0;
-        $hashData = "";
+        $hashdata = "";
         foreach ($inputData as $key => $value) {
             if ($i == 1) {
-                $hashData .= '&' . $key . "=" . $value;
+                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
             } else {
-                $hashData .= $key . "=" . $value;
+                $hashdata .= urlencode($key) . "=" . urlencode($value);
                 $i = 1;
             }
-
             $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
 
         $vnp_Url = $vnp_Url . "?" . $query;
-
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash = hash('sha256', $vnp_HashSecret . $hashData);
-            $vnp_Url .= 'vnp_SecureHashType=SHA256&vnp_SecureHash=' . $vnpSecureHash;
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
+            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
 
         return $vnp_Url;

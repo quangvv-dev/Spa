@@ -62,7 +62,8 @@ class OrdersController extends BaseApiController
         $value['bank_code'] = null;
         $value['language'] = 'vn';
         $url = self::pushVNPAY($value);
-        return \redirect($url);
+        return $url;
+//        return \redirect($url);
     }
 
     /**
@@ -79,7 +80,7 @@ class OrdersController extends BaseApiController
 //        $vnp_Url = config('app.VNP_URL');
 //        $vnp_ReturnUrl = config('app.VNP_RETURN_URL');
         $vnp_TmnCode = '55AG666V'; //Mã website tại VNPAY LOCAL
-        $vnp_HashSecret = 'SCDYTYKYBGRJORBGOUGFINIMMGPBRBMU'; //Chuỗi bí mật LOCAL
+        $vnp_HashSecret = "SCDYTYKYBGRJORBGOUGFINIMMGPBRBMU"; //Chuỗi bí mật LOCAL
         $vnp_Url = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
         $vnp_ReturnUrl = 'https://thammyroyal.adamtech.vn/vnpay';
 
