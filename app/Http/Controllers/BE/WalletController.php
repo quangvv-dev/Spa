@@ -150,7 +150,8 @@ class WalletController extends Controller
         $inputData = $request->all();
         try {
             if (count($inputData)) {
-                $vnp_HashSecret = config('app.VNP_HASH_SECRET'); //Chuỗi bí mật
+//                $vnp_HashSecret = config('app.VNP_HASH_SECRET'); //Chuỗi bí mật
+                $vnp_HashSecret = 'SCDYTYKYBGRJORBGOUGFINIMMGPBRBMU'; //Chuỗi bí mật
 
                 $value['vnp_SecureHash'] = $inputData['vnp_SecureHash'];
                 unset($inputData['vnp_SecureHashType']);

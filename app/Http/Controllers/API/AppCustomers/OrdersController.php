@@ -74,10 +74,14 @@ class OrdersController extends BaseApiController
      */
     public function pushVNPAY($data)
     {
-        $vnp_TmnCode = config('app.VNP_TMN_CODE'); //Mã website tại VNPAY LOCAL
-        $vnp_HashSecret = config('app.VNP_HASH_SECRET'); //Chuỗi bí mật LOCAL
-        $vnp_Url = config('app.VNP_URL');
-        $vnp_ReturnUrl = config('app.VNP_RETURN_URL');
+//        $vnp_TmnCode = config('app.VNP_TMN_CODE'); //Mã website tại VNPAY LOCAL
+//        $vnp_HashSecret = config('app.VNP_HASH_SECRET'); //Chuỗi bí mật LOCAL
+//        $vnp_Url = config('app.VNP_URL');
+//        $vnp_ReturnUrl = config('app.VNP_RETURN_URL');
+        $vnp_TmnCode = '55AG666V'; //Mã website tại VNPAY LOCAL
+        $vnp_HashSecret = 'SCDYTYKYBGRJORBGOUGFINIMMGPBRBMU'; //Chuỗi bí mật LOCAL
+        $vnp_Url = 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
+        $vnp_ReturnUrl = 'https://thammyroyal.adamtech.vn/vnpay';
 
         $vnp_TxnRef = $data['order_id']; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = $data['order_desc'];
