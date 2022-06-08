@@ -38,6 +38,7 @@ class Functions
      * check action trang thai khach hang in rules
      *
      * @param $config
+     *
      * @return array
      */
     public static function checkRuleStatusCustomer($config)
@@ -51,6 +52,7 @@ class Functions
      * check action sendsms in array Rules
      *
      * @param $config
+     *
      * @return array
      */
     public static function checkRuleSms($config)
@@ -65,6 +67,7 @@ class Functions
      *
      * @param $input
      * @param $text
+     *
      * @return mixed
      */
     public static function replaceTextForUser($input, $text)
@@ -82,6 +85,7 @@ class Functions
      * check action create job in array Rules
      *
      * @param $config
+     *
      * @return array
      */
     public static function checkRuleJob($config)
@@ -95,6 +99,7 @@ class Functions
      * get time action in rules
      *
      * @param $sms
+     *
      * @return string
      */
     public static function getExactlyTime($sms)
@@ -160,7 +165,7 @@ class Functions
      *
      * @param UploadedFile $file
      * @param              $path
-     * @param string $namevalidate
+     * @param string       $namevalidate
      *
      * @return null
      */
@@ -307,7 +312,7 @@ class Functions
         if (!$khac == [] && $request->hasFile('input24')) {
             $imgs = [];
             foreach ($khac as $k => $v) {
-                self::unlinkUpload2('uploads/'.$path.'/'.$v);
+                self::unlinkUpload2('uploads/' . $path . '/' . $v);
             }
 
             if (count($request->input24)) {
@@ -324,7 +329,7 @@ class Functions
             return $request->merge(['images' => @json_encode($imgs2)]);
         } elseif (!$khac == [] && !$request->hasFile('input24')) { //trường hợp chỉ xóa ảnh
             foreach ($khac as $k => $v) {
-                self::unlinkUpload2('uploads/'.$path.'/'.$v);
+                self::unlinkUpload2('uploads/' . $path . '/' . $v);
             }
             $imgs = [];
             foreach (@$khop as $k => $v) {
@@ -387,10 +392,10 @@ class Functions
         }
         $result = $client->call('BulkSendSms',
             [
-                'msisdn' => $phone,
-                'alias' => 'VMGtest',
-                'message' => $sms_text,
-                'sendTime' => $send_after,
+                'msisdn'           => $phone,
+                'alias'            => 'VMGtest',
+                'message'          => $sms_text,
+                'sendTime'         => $send_after,
                 //                'sendTime'         => '15/08/2019 15:32',
                 'authenticateUser' => 'vmgtest1',
                 'authenticatePass' => 'vmG@123b',
@@ -406,33 +411,33 @@ class Functions
     public static function sendSmsV3($phone, $sms_text, $send_after = '')
     {
         $data = [
-            'to' => $phone,
-            'from' => "ROYAL SPA",
-            'message' => $sms_text,
-            'scheduled' => $send_after,//15-01-2019 16:05
-            'requestId' => "",
+            'to'         => $phone,
+            'from'       => "ROYAL SPA",
+            'message'    => $sms_text,
+            'scheduled'  => $send_after,//15-01-2019 16:05
+            'requestId'  => "",
             'useUnicode' => 0,//sử dụng có dấu hay k dấu
-            'type' => 1 // CSKH hay QC
+            'type'       => 1 // CSKH hay QC
         ];
         $data = json_encode((object)$data);
         $base_url = 'http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c24iOiJyb3lhbHNwYSIsInNpZCI6ImFmZTIxOWQ4LTdhM2UtNDA5MS05NjBmLThmZjViNGI4NzRhMiIsIm9idCI6IiIsIm9iaiI6IiIsIm5iZiI6MTU4OTM1NDE4MCwiZXhwIjoxNTg5MzU3NzgwLCJpYXQiOjE1ODkzNTQxODB9.Hx8r30IR1nqAkOClihx0n9upfvgOg1f-E3MwNEwWT-0';
         $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $base_url,
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => $base_url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
+            CURLOPT_ENCODING       => "",
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => $data,
+            CURLOPT_HTTPHEADER     => [
                 "Content-Type: application/json",
-                "token: $token"
-            ),
-        ));
+                "token: $token",
+            ],
+        ]);
         $response = curl_exec($curl);
         curl_close($curl);
 
@@ -459,16 +464,16 @@ class Functions
         }
         $result = $client->call('wsCpMt',
             [
-                'User' => 'smsbrand_royal_spa',
-                'Password' => '123456a@',
-                'CPCode' => 'ROYAL_SPA',
-                'UserID' => $phone,
-                'RequestID' => '1',
-                'ReceiverID' => $phone,
-                'ServiceID' => 'ROYAL-SPA',
+                'User'        => 'smsbrand_royal_spa',
+                'Password'    => '123456a@',
+                'CPCode'      => 'ROYAL_SPA',
+                'UserID'      => $phone,
+                'RequestID'   => '1',
+                'ReceiverID'  => $phone,
+                'ServiceID'   => 'ROYAL-SPA',
                 'CommandCode' => 'bulksms',
                 'ContentType' => '0',
-                'Content' => $sms_text,
+                'Content'     => $sms_text,
             ], '', '', ''
         );
 
@@ -483,6 +488,7 @@ class Functions
      * tong tien KH da thanh toan
      *
      * @param $id
+     *
      * @return int
      */
     public static function sumOrder($id)
@@ -492,7 +498,7 @@ class Functions
 //        $wallet = WalletHistory::where('customer_id', $id)->sum('order_price');
 //        $total = (int)$payment + (int)$wallet;
         $money = [
-            'total' => $total->count(),
+            'total'   => $total->count(),
             'payment' => $total->sum('gross_revenue'),
         ];
         return $money;
@@ -508,6 +514,7 @@ class Functions
      * Update hang khach hang
      *
      * @param $customer_id
+     *
      * @return int
      */
     public static function updateRank($customer_id)
@@ -542,8 +549,8 @@ class Functions
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
      * @return LengthAwarePaginator
+     * @var array
      */
     public static function customPaginate($items, $page = null, $perPage = StatusCode::PAGINATE_20, $options = [])
     {
@@ -592,7 +599,7 @@ class Functions
         $params = [
             'query' => [
                 'access_token' => $token,
-                'fields' => $field,
+                'fields'       => $field,
             ],
         ];
 
@@ -611,5 +618,71 @@ class Functions
         }
 
     }
+
+    /**
+     * xử lý mã hóa VNPAY
+     *
+     * @param $inputData
+     * @param $vnp_Url
+     * @param $vnp_HashSecret
+     *
+     * @return mixed
+     */
+    public static function hasReturnUrlVNPAY($inputData, $vnp_Url, $vnp_HashSecret)
+    {
+        ksort($inputData);
+        $query = "";
+        $i = 0;
+        $hashData = "";
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashData .= '&' . $key . "=" . $value;
+            } else {
+                $hashData .= $key . "=" . $value;
+                $i = 1;
+            }
+
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
+
+        $vnp_Url = $vnp_Url . "?" . $query;
+
+        if (isset($vnp_HashSecret)) {
+            $vnpSecureHash = hash('sha256', $vnp_HashSecret . $hashData);
+            $vnp_Url .= 'vnp_SecureHashType=SHA256&vnp_SecureHash=' . $vnpSecureHash;
+        }
+
+        return $vnp_Url;
+    }
+
+    public static function returnMessage($code){
+
+        switch ($code) {
+            case '00':
+                $data['RspCode'] = '00';
+                $data['Message'] = 'Confirm Success';
+                break;
+            case '01':
+                $data['RspCode'] = '01';
+                $data['Message'] = 'Order not found';
+                break;
+            case '02':
+                $data['RspCode'] = '02';
+                $data['Message'] = 'Order already confirmed';
+                break;
+            case '97':
+                $data['RspCode'] = '97';
+                $data['Message'] = 'Chữ ký không hợp lệ';
+                break;
+            case '99':
+                $data['RspCode'] = '99';
+                $data['Message'] = 'Unknown error';
+                break;
+            default:
+                $data = [];
+        }
+        return $data;
+    }
+
 
 }

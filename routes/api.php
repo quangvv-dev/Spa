@@ -136,6 +136,10 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('process', 'HomePageController@process');//Lịch sử liệu trình
     Route::get('promotions', 'VouchersController@index');//Danh sách voucher
     Route::get('promotions-used', 'VouchersController@used');//Danh sách voucher
+
+    Route::get('packages', 'OrdersController@getPackage');//Danh sách gói nạp
+    Route::post('orders-wallet', 'OrdersController@storeWallet');// Tạo đơn nạp ví
+    Route::get('orders-wallet-vnpay', 'OrdersController@createOrderVNPay');// Tạo đơn nạp ví
 });
 
 /*

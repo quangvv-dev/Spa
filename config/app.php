@@ -73,6 +73,19 @@ return [
     'timezone' => 'Asia/Ho_Chi_Minh',
 
     /*
+	|--------------------------------------------------------------------------
+	| VNPAY
+	|--------------------------------------------------------------------------
+	|
+    |
+	|
+	*/
+    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','SCDYTYKYBGRJORBGOUGFINIMMGPBRBMU'),
+    'VNP_TMN_CODE' => env('VNP_TMN_CODE','55AG666V'),
+    'VNP_URL' => env('VNP_URL','http://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
+    'VNP_RETURN_URL' => env('VNP_RETURN_URL','https://thammyroyal.adamtech.vn/vnpay'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
