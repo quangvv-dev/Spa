@@ -8,6 +8,8 @@ Route::get('post/{slug}', 'BE\AjaxController@indexPost');
 Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
 Route::get('optin-form/{id}', 'BE\PostsController@showOptinForm');
 Route::get('call-content/{id}', 'BE\CallController@getStreamLink');
+Route::get('vnpay', 'BE\WalletController@indexVNPAY')->name('vnpay.index');// hiển thị VNPAY
+
 Route::get('403', function () {
     return view('errors.403');
 });
@@ -266,4 +268,5 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');
     Route::get('login/facebook/callback', 'Marketing\FanpageController@callbackFB');
     Route::get('remove-account-facebook', 'Marketing\FanpageController@removeAccount')->name('facebook.removeAccount');
+
 });
