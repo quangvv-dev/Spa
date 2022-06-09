@@ -259,9 +259,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('add-group','ChatController@addGroup');
         Route::put('update-group','ChatController@updateGroup');
         Route::delete('delete-group/{id}','ChatController@deleteGroup');
-
         Route::post('create-comment-customer','ChatController@createCommentCustomer');
-
 
     });
 

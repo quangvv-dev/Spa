@@ -80,10 +80,17 @@ return [
     |
 	|
 	*/
-    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','SCDYTYKYBGRJORBGOUGFINIMMGPBRBMU'),
-    'VNP_TMN_CODE' => env('VNP_TMN_CODE','55AG666V'),
+    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','XQCALQXEAECFMLOGVOJWYMIVHQJIRPUK'),
+    'VNP_TMN_CODE' => env('VNP_TMN_CODE','RNQ6Y222'),
     'VNP_URL' => env('VNP_URL','http://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
     'VNP_RETURN_URL' => env('VNP_RETURN_URL','https://thammyroyal.adamtech.vn/vnpay'),
+
+//    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','EYNZLCMUOZSLXLELATOJMFADBNHWCOSF'),
+//    'VNP_TMN_CODE' => env('VNP_TMN_CODE','7GAY9V0X'),
+//    //    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','LUPRRUNBMGQGSMFGSTLEBQYHIUFLZRLU'),
+//    //    'VNP_TMN_CODE' => env('VNP_TMN_CODE','BFZRN5IK'),
+//    'VNP_URL' => env('VNP_URL','http://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
+//    'VNP_RETURN_URL' => env('VNP_RETURN_URL','https://training.adamtech.vn/vnpay'),
 
     /*
     |--------------------------------------------------------------------------
