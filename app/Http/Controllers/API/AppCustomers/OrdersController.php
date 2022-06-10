@@ -56,8 +56,8 @@ class OrdersController extends BaseApiController
         $value['order_id'] = $order->id;
         $value['amount'] = $order->order_price;
         $url = self::pushZALOPay($value);
-        return $url;
-//        return \redirect($url);
+        return redirect($url);
+
     }
 
 
@@ -104,21 +104,64 @@ class OrdersController extends BaseApiController
             'form_params'  => $postInput,
         ]);
         $response = \GuzzleHttp\json_decode($request->getBody()->read(1024));
-        return redirect($response->order_url);
-
+        return $response->order_url;
     }
 
     public function callbackZALOPay(Request $request)
     {
-        dd($request->all());
         $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
-        $params = json_decode($request->data);
-        $reqmac = self::redirect($params,$key2);
-        if ($reqmac == $params['mac']) {
-            // callback hợp lệ
-        } else {
-            // callback không hợp lệ
+        $params = (array)json_decode($request->data);
+        $pay_id = explode('_', $params['app_trans_id'])[1];
+
+        $result = [];
+
+        try {
+            $postdata = file_get_contents('php://input');
+            $postdatajson = json_decode($postdata, true);
+            $mac = hash_hmac("sha256", $postdatajson["data"], $key2);
+
+            $requestmac = $postdatajson["mac"];
+
+            // kiểm tra callback hợp lệ (đến từ ZaloPay server)
+            if (strcmp($mac, $requestmac) != 0) {
+                // callback không hợp lệ
+                $result["returncode"] = -1;
+                $result["returnmessage"] = "mac not equal";
+            } else {
+                // thanh toán thành công
+                // merchant cập nhật trạng thái cho đơn hàng
+                $datajson = json_decode($postdatajson["data"], true);
+                // echo "update order's status = success where apptransid = ". $dataJson["apptransid"];
+
+                $result["returncode"] = 1;
+                $result["returnmessage"] = "success";
+            }
+        } catch (Exception $e) {
+            $result["returncode"] = 0; // ZaloPay server sẽ callback lại (tối đa 3 lần)
+            $result["returnmessage"] = $e->getMessage();
         }
+        return response()->json([
+            'returncode' => $result["returncode"],
+            'messages' => $result["returnmessage"],
+        ]);
+
+
+
+//        $reqmac = self::redirectCallBack($params, $key2);
+//        dd($params, $reqmac, $request->mac);
+////        $reqmac = self::compute($params, $key2);
+//
+//        if ($reqmac == $request->mac) {
+//            $order = WalletHistory::find($pay_id);// đơn nạp ví
+//            dd($params);
+//            if (!empty($order)) {
+//                $order->gross_revenue = $order->gross_revenue + $params->amount;
+//            }
+//
+//            // callback hợp lệ
+//        } else {
+//            // callback không hợp lệ
+//        }
     }
 
     static function newCreateOrderData(Array $params)
@@ -161,10 +204,17 @@ class OrdersController extends BaseApiController
         return self::compute(self::createOrderMacData($order));
     }
 
-    static function redirect(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
+    static function redirectCallBack(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
     {
-        return self::compute($params['appid'] . "|" . $params['apptransid'] . "|" . $params['pmcid'] . "|" . $params['bankcode']
-            . "|" . $params['amount'] . "|" . $params['discountamount'] . "|" . $params["status"], $key2);
+        return self::compute($params['app_id'] . "|" . $params['app_trans_id']
+            . "|" . $params['amount'] . "|" . $params['discount_amount'], $key2);
+    }
+
+    static function redirectCallBackV2(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
+    {
+        return self::compute($params['app_id'] . "|" . $params['app_trans_id'] . "|" . $params['app_time'] . "|" . $params['app_user']
+            . "|" . $params['amount'] . "|" . $params['embed_data'] . "|" . $params["item"] . "|" . $params["zp_trans_id"] . "|" . $params["server_time"] . "|" . $params["channel"] . "|" . $params["merchant_user_id"] . "|" . $params["zp_user_id"] . "|" . $params["user_fee_amount"] . "|" . $params["discount_amount"],
+            $key2);
     }
 
 
