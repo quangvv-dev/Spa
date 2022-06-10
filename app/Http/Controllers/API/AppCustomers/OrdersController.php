@@ -71,7 +71,7 @@ class OrdersController extends BaseApiController
             'amount'       => $value['amount'],
             'app_id'       => $app_id,
             'app_time'     => floor(microtime(true) * 1000),
-            'app_trans_id' => date("ymd") . "_" . $value['order_id'] . "_" . getTimestamp(),
+            'app_trans_id' => date("ymd") . "_" . $value['order_id'] . "_" . time(),
             'app_user'     => 'demo',
             'bankcode'     => "*",
             'currency'     => '',
@@ -210,7 +210,7 @@ class OrdersController extends BaseApiController
     static function genTransID()
     {
         $app_id = '2554';
-        return date("ymd") . "_" . $app_id . "_" . getTimestamp();
+//        return date("ymd") . "_" . $app_id . "_" . getTimestamp();
     }
 
     /**
