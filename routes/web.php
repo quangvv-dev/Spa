@@ -8,7 +8,7 @@ Route::get('post/{slug}', 'BE\AjaxController@indexPost');
 Route::post('customer-post', 'BE\AjaxController@storeCustomerPost');
 Route::get('optin-form/{id}', 'BE\PostsController@showOptinForm');
 Route::get('call-content/{id}', 'BE\CallController@getStreamLink');
-Route::get('vnpay', 'BE\WalletController@indexVNPAY')->name('vnpay.index');// hiển thị VNPAY
+Route::get('zalopay', 'BE\WalletController@indexVNPAY')->name('vnpay.index');// hiển thị VNPAY
 
 Route::get('403', function () {
     return view('errors.403');
