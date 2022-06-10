@@ -111,41 +111,20 @@ class OrdersController extends BaseApiController
     {
         $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
         $params = (array)json_decode($request->data);
-        $pay_id = explode('_', $params['app_trans_id'])[1];
+        $result = self::verifyCallback($params,$key2);
 
-        $result = [];
-
-        try {
-            $postdata = file_get_contents('php://input');
-            $postdatajson = json_decode($postdata, true);
-            $mac = hash_hmac("sha256", $postdatajson["data"], $key2);
-
-            $requestmac = $postdatajson["mac"];
-
-            // kiểm tra callback hợp lệ (đến từ ZaloPay server)
-            if (strcmp($mac, $requestmac) != 0) {
-                // callback không hợp lệ
-                $result["returncode"] = -1;
-                $result["returnmessage"] = "mac not equal";
-            } else {
-                // thanh toán thành công
-                // merchant cập nhật trạng thái cho đơn hàng
-                $datajson = json_decode($postdatajson["data"], true);
-                // echo "update order's status = success where apptransid = ". $dataJson["apptransid"];
-
-                $result["returncode"] = 1;
-                $result["returnmessage"] = "success";
-            }
-        } catch (Exception $e) {
-            $result["returncode"] = 0; // ZaloPay server sẽ callback lại (tối đa 3 lần)
-            $result["returnmessage"] = $e->getMessage();
+        if ($result['returncode'] === 1) {
+            # Giao dịch thành công, tiền hành xử lý đơn hàng
+            return response()->json([
+                'returncode' => $result["returncode"],
+                'messages'   => $result["returnmessage"],
+            ]);
+        }else{
+            return response()->json([
+                "returncode" => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
+                "returnmessage" => "exception"
+            ]);
         }
-        return response()->json([
-            'returncode' => $result["returncode"],
-            'messages' => $result["returnmessage"],
-        ]);
-
-
 
 //        $reqmac = self::redirectCallBack($params, $key2);
 //        dd($params, $reqmac, $request->mac);
@@ -206,8 +185,8 @@ class OrdersController extends BaseApiController
 
     static function redirectCallBack(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
     {
-        return self::compute($params['app_id'] . "|" . $params['app_trans_id']
-            . "|" . $params['amount'] . "|" . $params['discount_amount'], $key2);
+        return self::compute($params['appid'] . "|" . $params['apptransid'] . "|" . $params['pmcid'] . "|" . $params['bankcode']
+            . "|" . $params['amount'] . "|" . $params['discountamount'] . "|" . $params["status"], $key2);
     }
 
     static function redirectCallBackV2(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
@@ -273,5 +252,30 @@ class OrdersController extends BaseApiController
         }
         $vnp_Url = Functions::hasReturnUrlVNPAY($inputData, $vnp_Url, $vnp_HashSecret);
         return $vnp_Url;
+    }
+
+    /**
+     * Kiểm callback có hợp lệ hay không
+     *
+     * @param Array $params ["data" => string, "mac" => string]
+     *
+     * @return Array ["returncode" => int, "returnmessage" => string]
+     */
+    static function verifyCallback(Array $params, $key2)
+    {
+        $data = $params["data"];
+        $requestMac = $params["mac"];
+
+        $result = [];
+        $mac = self::compute($data, $key2);
+
+        if ($mac != $requestMac) {
+            $result['returncode'] = -1;
+            $result['returnmessage'] = 'mac not equal';
+        } else {
+            $result['returncode'] = 1;
+            $result['returnmessage'] = 'success';
+        }
+        return $result;
     }
 }
