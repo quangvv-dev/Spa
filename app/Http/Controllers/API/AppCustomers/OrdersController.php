@@ -9,6 +9,7 @@ use App\Models\PackageWallet;
 use App\Models\WalletHistory;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
+use League\Flysystem\Exception;
 
 class OrdersController extends BaseApiController
 {
@@ -75,7 +76,8 @@ class OrdersController extends BaseApiController
             'bankcode'     => "*",
             'currency'     => '',
             'description'  => 'Demo - Thanh toán đơn hàng', #220609_13626996
-            'callback_url' => 'http://spa.yez.vn/vnpay',
+            'callback_url' => 'http://spa.yez.vn/api/callback-zalo-pay',
+            'redirect_url' => 'http://spa.yez.vn/vnpay',
             'embed_data'   => \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']),
             'item'         => \GuzzleHttp\json_encode([]),
             'key1'         => $key1,
@@ -109,20 +111,28 @@ class OrdersController extends BaseApiController
 
     public function callbackZALOPay(Request $request)
     {
+        $data = $request->all();
         $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
-        $params = (array)json_decode($request->data);
-        $result = self::verifyCallback($params,$key2);
+        try{
+//            $params = (array)json_decode($data['data']);
+            $result = self::verifyCallback($data,$key2);
 
-        if ($result['returncode'] === 1) {
-            # Giao dịch thành công, tiền hành xử lý đơn hàng
-            return response()->json([
-                'returncode' => $result["returncode"],
-                'messages'   => $result["returnmessage"],
-            ]);
-        }else{
+            if ($result['returncode'] === 1) {
+                # Giao dịch thành công, tiền hành xử lý đơn hàng
+                return response()->json([
+                    'returncode' => $result["returncode"],
+                    'messages'   => $result["returnmessage"],
+                ]);
+            }else{
+                return response()->json([
+                    "returncode" => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
+                    "returnmessage" => "exception"
+                ]);
+            }
+        }catch (Exception $exception){
             return response()->json([
                 "returncode" => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
-                "returnmessage" => "exception"
+                "returnmessage" => $exception
             ]);
         }
 
