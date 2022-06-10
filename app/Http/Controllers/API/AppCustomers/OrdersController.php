@@ -85,7 +85,7 @@ class OrdersController extends BaseApiController
             'currency'     => '',
             'description'  => 'Demo - Thanh toán đơn hàng', #220609_13626996
             'callback_url' => request()->getSchemeAndHttpHost() . '/api/callback-zalo-pay',
-            'redirect_url' => 'http://spa.yez.vn/vnpay',
+            'redirect_url' => request()->getSchemeAndHttpHost().'/vnpay',
             'embed_data'   => \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']),
             'item'         => \GuzzleHttp\json_encode([]),
             'key1'         => $key1,
