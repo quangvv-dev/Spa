@@ -156,11 +156,11 @@ class WalletController extends Controller
         if ($isValidRedirect) {
             $apptransid = $inputData["apptransid"];
             # Kiểm tra xem đã nhận được callback chưa
-            $order = WalletHistory::where('app_trans_id',$apptransid)->first();// đơn nạp ví
-            if (empty($order)){
+            $order = WalletHistory::where('app_trans_id', $apptransid)->first();// đơn nạp ví
+            if (empty($order)) {
                 # Nếu chưa nhận được callback thì gọi API truy vấn trạng thái đơn hàng
                 $dataRaw = $inputData['appid'] . "|" . $inputData['apptransid'] . "|" . $key1;
-                $mac1 = self::compute($dataRaw,$key1);
+                $mac1 = self::compute($dataRaw, $key1);
                 $params = [
                     "appid"      => $app_id,
                     "apptransid" => $apptransid,
@@ -176,34 +176,34 @@ class WalletController extends Controller
                     'form_params'  => $params,
                 ]);
                 $response = \GuzzleHttp\json_decode($request->getBody()->read(1024));
-                if ($response->returncode ===1){
-                    $pay_id = explode('_',$apptransid)[1];
+                if ($response->returncode === 1) {
+                    $pay_id = explode('_', $apptransid)[1];
                     # Giao dịch thành công, tiền hành xử lý đơn hàng
                     $order = WalletHistory::find($pay_id);// đơn nạp ví
-                    $order->gross_revenue = $response->amount;
+                    $order->gross_revenue = (int)$order->gross_revenue+(int)$response->amount;
                     $order->app_trans_id = $apptransid;
                     $order->save();
                     $input = [
                         'order_wallet_id' => $order->id,
                         'price'           => $order->gross_revenue,
-                        'description'     => 'TT:ZaloPay -- app_trans_id:'.$apptransid.' -- NG.HANG '.$response->bankcode,
+                        'description'     => 'TT:ZaloPay -- app_trans_id:' . $apptransid . ' -- NG.HANG ' . $response->bankcode,
                         'payment_type'    => 5,//thanh toán zaloPay
                         'payment_date'    => Carbon::now()->format('Y-m-d'),
                         'branch_id'       => $order->branch_id,
                     ];
                     PaymentWallet::create($input);
                     $customer = Customer::find($order->customer_id);
-                    $customer->wallet = $customer->wallet + $params['amount'];
+                    $customer->wallet = $customer->wallet + $response->amount;
                     $customer->save();
                     $currentWallet = $customer->wallet;
                 }
-            }else{
+            } else {
                 $customer = Customer::find($order->customer_id);
                 $currentWallet = $customer->wallet;
             }
         }
 
-        return view('walet.payment', compact('order','currentWallet'));
+        return view('walet.payment', compact('order', 'currentWallet'));
     }
 
     /**
