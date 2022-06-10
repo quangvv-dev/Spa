@@ -6,8 +6,10 @@ use App\Constants\ResponseStatusCode;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Models\PackageWallet;
+use App\Models\PaymentWallet;
 use App\Models\WalletHistory;
 use App\Services\WalletService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 
@@ -76,7 +78,7 @@ class OrdersController extends BaseApiController
             'bankcode'     => "*",
             'currency'     => '',
             'description'  => 'Demo - Thanh toán đơn hàng', #220609_13626996
-            'callback_url' => request()->getSchemeAndHttpHost().'/api/callback-zalo-pay',
+            'callback_url' => request()->getSchemeAndHttpHost() . '/api/callback-zalo-pay',
             'redirect_url' => 'http://spa.yez.vn/vnpay',
             'embed_data'   => \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']),
             'item'         => \GuzzleHttp\json_encode([]),
@@ -113,26 +115,40 @@ class OrdersController extends BaseApiController
     {
         $data = $request->all();
         $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
-        try{
-//            $params = (array)json_decode($data['data']);
-            $result = self::verifyCallback($data,$key2);
+        try {
+            $params = (array)json_decode($data['data']);
+            dd($params,$type = PaymentWallet::$typePayment[39]);
+            $result = self::verifyCallback($data, $key2);
 
             if ($result['returncode'] === 1) {
                 # Giao dịch thành công, tiền hành xử lý đơn hàng
+                $order = WalletHistory::find($request->pay_id);// đơn nạp ví
+                $order->gross_revenue = $params['amount'];
+                $order->save();
+                $type = PaymentWallet::$typePayment[$params['channel']]?:'';
+                $input = [
+                    'order_wallet_id' => $order->id,
+                    'price'           => $order->gross_revenue,
+                    'description'     => 'TT:ZaloPay -- app_trans_id:'.$params['app_trans_id'].' --'.$type,
+                    'payment_type'    => 5,//thanh toán zaloPay
+                    'payment_date'    => Carbon::now()->format('Y-m-d'),
+                    'branch_id'       => $order->branch_id,
+                ];
+                PaymentWallet::create($input);
                 return response()->json([
                     'returncode' => $result["returncode"],
                     'messages'   => $result["returnmessage"],
                 ]);
-            }else{
+            } else {
                 return response()->json([
-                    "returncode" => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
-                    "returnmessage" => "exception"
+                    "returncode"    => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
+                    "returnmessage" => "exception",
                 ]);
             }
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             return response()->json([
-                "returncode" => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
-                "returnmessage" => $exception
+                "returncode"    => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
+                "returnmessage" => $exception,
             ]);
         }
 
