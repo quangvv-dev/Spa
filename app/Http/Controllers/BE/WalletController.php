@@ -181,6 +181,7 @@ class WalletController extends Controller
                     # Giao dịch thành công, tiền hành xử lý đơn hàng
                     $order = WalletHistory::find($pay_id);// đơn nạp ví
                     $order->gross_revenue = $response->amount;
+                    $order->app_trans_id = $apptransid;
                     $order->save();
                     $input = [
                         'order_wallet_id' => $order->id,
