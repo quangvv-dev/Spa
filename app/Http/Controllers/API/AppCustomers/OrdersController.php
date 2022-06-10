@@ -55,7 +55,12 @@ class OrdersController extends BaseApiController
     public function createOrderVNPay(Request $request)
     {
         $order = WalletHistory::find($request->pay_id);// đơn nạp ví
-
+        if (empty($order)){
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy đơn nạp ví');
+        }
+        if ($order->order_price<=$order->gross_revenue){
+            return $this->responseApi(ResponseStatusCode::OK, 'Đơn nạp ví đã được thanh toán trước đó');
+        }
         $value['order_id'] = $order->id;
         $value['amount'] = $order->order_price;
         $url = self::pushZALOPay($value);
@@ -117,7 +122,7 @@ class OrdersController extends BaseApiController
         $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
         try {
             $params = (array)json_decode($data['data']);
-            dd($params,$type = PaymentWallet::$typePayment[39]);
+//            dd($params,$type = PaymentWallet::$typePayment[39]);
             $result = self::verifyCallback($data, $key2);
 
             if ($result['returncode'] === 1) {
