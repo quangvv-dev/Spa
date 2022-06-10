@@ -190,20 +190,22 @@ class WalletController extends Controller
                         'payment_type'    => 5,//thanh toán zaloPay
                         'payment_date'    => Carbon::now()->format('Y-m-d'),
                         'branch_id'       => $order->branch_id,
+                        'app_trans_id'    => $apptransid,
                     ];
-                    PaymentWallet::create($input);
+                    $payment = PaymentWallet::create($input);
                     $customer = Customer::find($order->customer_id);
                     $customer->wallet = $customer->wallet + $response->amount;
                     $customer->save();
                     $currentWallet = $customer->wallet;
                 }
             } else {
+                $payment = PaymentWallet::where('app_trans_id',$apptransid)->first();
                 $customer = Customer::find($order->customer_id);
                 $currentWallet = $customer->wallet;
             }
         }
 
-        return view('walet.payment', compact('order', 'currentWallet'));
+        return view('wallet.payment', compact('order', 'currentWallet','payment'));
     }
 
     /**

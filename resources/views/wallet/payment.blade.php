@@ -1,170 +1,102 @@
-@extends('layout.app')
-    @section('content')
-{{--        <script src="{{asset('js/bootstrap.min.js')}}" type="text/javascript"></script>--}}
-        <main id="maincontent" class="page-main wrapper payment">
-            <div class="row row-cards">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="page-title-box">
-                            <h4 class="page-title float-left"></h4>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                </div>
-                <div class="row" style="">
-                    <div class="col-sm-12 col-lg-9 ">
-                        <div class="invoice">
-                            <div class="text-center"><strong style="font-size: 20px">ĐƠN HÀNG BÁN</strong></div>
-                            <div class="row">
-                                <table class="table table-bordered">
-                                    <tbody>
-                                    <tr class="trfirst">
-                                        <td style="width:50%">
-                                            <b>Tên khách hàng:</b>&nbsp; <a class="blue" href="">{{session('info-temp')->full_name}}</a>
-                                        </td>
-                                        <td style="width:50%">
-                                            <b>Người xử lý:</b>&nbsp;
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width:50%">
-                                            <b>Địa chỉ email:</b>&nbsp; {{@session('info-temp')->email}}
-                                        </td>
-                                        <td style="width:50%">
-                                            <b>Ngày xử lý:</b>&nbsp;
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width:50%">
-                                            <b>Điện thoại:</b>&nbsp;{{@session('info-temp')->phone}}
-                                        </td>
-                                        <td style="width:50%">
-                                            <b>Phương thức thanh toán:</b>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width:50%">
-                                            <b>Ngày thanh toán:</b> {{$historyOrder->payment_date}}
-                                        </td>
-                                        <td style="width:50%">
-                                            <b></b>&nbsp;
-
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <table class="table table-bordered mt10">
-                                    <tbody>
-                                    <tr class="bold b-gray">
-                                        <td class="padding5">STT</td>
-                                        <td class="padding5">Mã khóa học</td>
-                                        <td class="padding5">Tên khóa học</td>
-                                        <td class="padding5">Đơn giá</td>
-                                        <td class="padding5">VAT (%)</td>
-                                        <td class="padding5">CK (%)</td>
-                                        <td class="padding5">CK (đ)</td>
-                                        <td class="padding5">Thành tiền</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-bold" colspan="7">Tổng</td>
-                                        <td class="tr bold">{{number_format($order->gross_revenue)}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-bold" colspan="7">Chiết khấu trước thuế %</td>
-                                        <td class="tr">0</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-bold" colspan="7">Thuế VAT %</td>
-                                        <td class="tr"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-bold" colspan="7">Tổng cộng</td>
-{{--                                        <td class="tr bold">{{number_format(\App\Helpers\Functions::totalPrice($arrLectureCart))}}</td>--}}
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-{{--                    <div class="col-sm-12 col-md-3 no-padd bor-r" id="right_panel">--}}
-{{--                        <div>--}}
-{{--                            <div class="col-md-12 no-padd box-cont">--}}
-{{--                                <div id="attachments" class="files padding">--}}
-{{--                                    <div>--}}
-{{--                                        <div id="progress" class="progress" style="display:none">--}}
-{{--                                            <div class="progress-bar progress-bar-success" role="progressbar"></div>--}}
-{{--                                        </div>--}}
-{{--                                        <div id="files" class="files"></div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="box-cont col-md-12 no-padd content-pay">--}}
-{{--                                <h3 class="bor-bot uppercase font12 mg0 bold padding5">Thanh toán--}}
-{{--                                    <span class="status {{$order->status == \App\Constants\OrderConstant::DA_THANH_TOAN ? 'da-thanh-toan' : 'cho-xu-ly'}}">--}}
-{{--                                        ({{$order->status == \App\Constants\OrderConstant::DA_THANH_TOAN ? 'Đã thanh toán' : 'Đang chờ xử lý'}})--}}
-{{--                                    </span></h3>--}}
-
-{{--                                <div class="padding col-md-12">--}}
-{{--                                    <table>--}}
-{{--                                        <thead>--}}
-{{--                                        <tr>--}}
-{{--                                            <th width="56%"></th>--}}
-{{--                                            <th width="44%"></th>--}}
-{{--                                        </tr>--}}
-{{--                                        </thead>--}}
-{{--                                        <tbody>--}}
-{{--                                        <tr>--}}
-{{--                                            <td class="mb5">Đã thanh toán:</td>--}}
-{{--                                            <td class="tr mb5" id="gross_revenue1">{{$order->status == \App\Constants\OrderConstant::DA_THANH_TOAN ? number_format($order->total_price) : ''}}</td>--}}
-{{--                                        </tr><tr>--}}
-{{--                                            <td class="mb5">Còn lại:</td>--}}
-{{--                                            <td class="tr mb5" id="the_rest">0</td>--}}
-{{--                                        </tr>--}}
-{{--                                        </tbody>--}}
-{{--                                    </table>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="detail-pay-dvh position col-md-12 no-padd">--}}
-{{--                                <h3 class="bor-bot uppercase font12 mg0 bold padding5">Lịch sử thanh toán</h3></div>--}}
-{{--                            <div class="col-md-12 no-padd">--}}
-{{--                                <table class="table table-bordered">--}}
-{{--                                    <thead class="b-gray">--}}
-{{--                                    <tr class="bor-bot">--}}
-{{--                                        <th class="tl pl10 gray" width="30%" style="text-transform:initial;">Ngày</th>--}}
-{{--                                        <th class="tc gray" width="30%" style="text-transform:initial;">Số tiền</th>--}}
-{{--                                        <th class="tc gray" width="60%" style="text-transform:initial;">Ghi chú</th>--}}
-{{--                                    </tr>--}}
-{{--                                    </thead>--}}
-{{--                                    <tbody id="payment-history">--}}
-{{--                                        @foreach($historyOrder as $item)--}}
-{{--                                            <tr data-payment-id="628">--}}
-{{--                                                <td class="tc pl10">{{date('d-m-Y', strtotime($item->payment_date))}}</td>--}}
-{{--                                                <td class="tc">{{number_format($item->price)}}</td>--}}
-{{--                                                <td>{{$item->description}}</td>--}}
-{{--                                            </tr>--}}
-{{--                                        @endforeach--}}
-{{--                                    </tbody>--}}
-{{--                                </table>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-                </div>
-
-                <div class="row">
-                    <div class="list_task_footer col-md-12 padding">
-                        <div class="fl task_footer_box cancel_order">
-                            <button class="btn btn-default fr ml5">
-                                <a href="/home">Trở lại</a>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Công Ty Cổ Phần Tập Đoàn Adam Group</title>
+    <link rel="apple-touch-icon" href="{{asset('backend/app-assets/images/ico/apple-icon-120.png')}}">
+    <link rel="shortcut icon" type="image/x-icon"
+          href="{{asset('default/logo.png')}}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<style>
+    .container{
+        background:  linear-gradient(270deg, #CA6B5E 1%, #FCC8A5 37%, #FCC2A1 48%, #FCB498 60%, #F8AE93 69%, #ED9E86 79%, #DA8271 92%, #CA6B5E 100%);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .block-container{
+        background-image:url("{{asset('default/background-wallet.png')}}");
+        height: 71vh;
+        /*background-size: 70vh 500px;*/
+        background-repeat: no-repeat;
+        background-size: contain;
+        /*margin: 0px 6px;*/
+        width: 96%;
+    }
+    .logo{
+        text-align: center;
+        padding-top: 30px;
+    }
+    .notification-title{
+        text-align: center;
+    }
+    .bold{
+        font-weight: bold;
+        font-size: 24px;
+    }
+    .logo2{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .wallet{
+        background: #F2F3F4;
+    }
+    body{
+        font-style: normal;
+    }
+    .price{
+        padding-top: 35px;
+        padding-bottom: 10px;
+    }
+    .time{
+        padding-bottom: 25px;
+    }
+    p span{
+        font-size: 28px;
+    }
+</style>
+<body>
+<div class="container">
+<div class="block-container">
+    <div class="logo">
+        <img width="100" height="100" src="{{asset('default/done-wallet.png')}}" alt="">
+    </div>
+    <h4 class="notification-title">Nạp tiền vào ví thành công</h4>
+    <div class="small-title text-center">
+        <p>Số tiền nạp</p>
+        <p class="bold">{{number_format($order->gross_revenue)}}</p>
+    </div>
+    <div class="price">
+        <span style="color: #868E96">Số tiền nhận được</span>
+        <span class="bold">{{number_format($order->price)}}</span>
+    </div>
+    <div class="time">
+        <span style="color: #868E96">Thời gian: </span>
+        <span style="color: #868E96">
+            {{\Carbon\Carbon::parse($payment->created_at)->format('d-m-Y H:s')}}
+        </span>
+    </div>
+    <div class="wallet">
+        <div class="row">
+            <div class="col-3 logo2">
+                <img width="55" height="55" src="{{asset('default/done-wallet.png')}}" alt="">
             </div>
-        </main>
-@endsection
+            <div class="col-9" style="text-align: left">
+                <div class="col"><h3>Ví Royal</h3></div>
+                <div class="col"><p>Số dư: {{number_format($currentWallet)}}</p></div>
 
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

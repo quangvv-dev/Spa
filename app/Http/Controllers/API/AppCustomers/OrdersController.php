@@ -131,6 +131,7 @@ class OrdersController extends BaseApiController
                     'payment_type'    => 5,//thanh toán zaloPay
                     'payment_date'    => Carbon::now()->format('Y-m-d'),
                     'branch_id'       => $order->branch_id,
+                    'app_trans_id'    => $params['app_trans_id'],
                 ];
                 PaymentWallet::create($input);
                 $customer = Customer::find($order->customer_id);
