@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\AppCustomers;
 use App\Constants\ResponseStatusCode;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
+use App\Models\Customer;
 use App\Models\PackageWallet;
 use App\Models\PaymentWallet;
 use App\Models\WalletHistory;
@@ -94,14 +95,6 @@ class OrdersController extends BaseApiController
         $dataHash = self::createOrderMacData($postInput);
         $mac = self::compute($dataHash, $key1);
         $postInput['mac'] = $mac;
-        $params = "";
-        foreach ($postInput as $k => $item) {
-            if (!empty($params)) {
-                $params = $params . '&' . $k . '=' . $item;
-            } else {
-                $params = $k . '=' . $item;
-            }
-        }
         $apiURL = 'https://sb-openapi.zalopay.vn/v2/create';
         $client = new \GuzzleHttp\Client();
         $request = $client->post($apiURL, [
@@ -122,24 +115,27 @@ class OrdersController extends BaseApiController
         $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
         try {
             $params = (array)json_decode($data['data']);
-//            dd($params,$type = PaymentWallet::$typePayment[39]);
             $result = self::verifyCallback($data, $key2);
-
+            $pay_id = explode('_',$params['app_trans_id'])[1];
             if ($result['returncode'] === 1) {
                 # Giao dịch thành công, tiền hành xử lý đơn hàng
-                $order = WalletHistory::find($request->pay_id);// đơn nạp ví
-                $order->gross_revenue = $params['amount'];
+                $order = WalletHistory::find($pay_id);// đơn nạp ví
+                $order->gross_revenue = $order->gross_revenue +$params['amount'];
+                $order->app_trans_id = $params['app_trans_id'];
                 $order->save();
                 $type = PaymentWallet::$typePayment[$params['channel']]?:'';
                 $input = [
                     'order_wallet_id' => $order->id,
-                    'price'           => $order->gross_revenue,
+                    'price'           => $params['amount'],
                     'description'     => 'TT:ZaloPay -- app_trans_id:'.$params['app_trans_id'].' --'.$type,
                     'payment_type'    => 5,//thanh toán zaloPay
                     'payment_date'    => Carbon::now()->format('Y-m-d'),
                     'branch_id'       => $order->branch_id,
                 ];
                 PaymentWallet::create($input);
+                $customer = Customer::find($order->customer_id);
+                $customer->wallet = $customer->wallet + $params['amount'];
+                $customer->save();
                 return response()->json([
                     'returncode' => $result["returncode"],
                     'messages'   => $result["returnmessage"],
@@ -156,22 +152,6 @@ class OrdersController extends BaseApiController
                 "returnmessage" => $exception,
             ]);
         }
-
-//        $reqmac = self::redirectCallBack($params, $key2);
-//        dd($params, $reqmac, $request->mac);
-////        $reqmac = self::compute($params, $key2);
-//
-//        if ($reqmac == $request->mac) {
-//            $order = WalletHistory::find($pay_id);// đơn nạp ví
-//            dd($params);
-//            if (!empty($order)) {
-//                $order->gross_revenue = $order->gross_revenue + $params->amount;
-//            }
-//
-//            // callback hợp lệ
-//        } else {
-//            // callback không hợp lệ
-//        }
     }
 
     static function newCreateOrderData(Array $params)

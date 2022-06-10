@@ -148,49 +148,89 @@ class WalletController extends Controller
     public function indexVNPAY(Request $request)
     {
         $inputData = $request->all();
-        try {
-            if (count($inputData)) {
-//                $vnp_HashSecret = config('app.VNP_HASH_SECRET'); //Chuỗi bí mật
-                $vnp_HashSecret = 'SCDYTYKYBGRJORBGOUGFINIMMGPBRBMU'; //Chuỗi bí mật
+        $app_id = 2554;
+        $key1 = 'sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn';
+        $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
 
-                $value['vnp_SecureHash'] = $inputData['vnp_SecureHash'];
-                unset($inputData['vnp_SecureHashType']);
-                unset($inputData['vnp_SecureHash']);
-                ksort($inputData);
-                $i = 0;
-                $hashData = "";
-                foreach ($inputData as $key => $item) {
-                    if ($i == 1) {
-                        $hashData = $hashData . '&' . $key . "=" . $item;
-                    } else {
-                        $hashData = $hashData . $key . "=" . $item;
-                        $i = 1;
-                    }
+        $isValidRedirect = self::verifyRedirect($inputData, $key2);
+        if ($isValidRedirect) {
+            $apptransid = $inputData["apptransid"];
+            # Kiểm tra xem đã nhận được callback chưa
+            $order = WalletHistory::where('app_trans_id',$apptransid)->first();// đơn nạp ví
+            if (empty($order)){
+                # Nếu chưa nhận được callback thì gọi API truy vấn trạng thái đơn hàng
+                $dataRaw = $inputData['appid'] . "|" . $inputData['apptransid'] . "|" . $key1;
+                $mac1 = self::compute($dataRaw,$key1);
+                $params = [
+                    "appid"      => $app_id,
+                    "apptransid" => $apptransid,
+                    "mac"        => $mac1,
+                ];
+                $client = new \GuzzleHttp\Client();
+                $request = $client->post('https://sandbox.zalopay.com.vn/v001/tpe/getstatusbyapptransid', [
+                    'Content-Type' => [
+                        'application/x-www-form-urlencoded',
+                        'application/json',
+                        'application/xml',
+                    ],
+                    'form_params'  => $params,
+                ]);
+                $response = \GuzzleHttp\json_decode($request->getBody()->read(1024));
+                if ($response->returncode ===1){
+                    $pay_id = explode('_',$apptransid)[1];
+                    # Giao dịch thành công, tiền hành xử lý đơn hàng
+                    $order = WalletHistory::find($pay_id);// đơn nạp ví
+                    $order->gross_revenue = $response->amount;
+                    $order->save();
+                    $input = [
+                        'order_wallet_id' => $order->id,
+                        'price'           => $order->gross_revenue,
+                        'description'     => 'TT:ZaloPay -- app_trans_id:'.$apptransid.' -- NG.HANG '.$response->bankcode,
+                        'payment_type'    => 5,//thanh toán zaloPay
+                        'payment_date'    => Carbon::now()->format('Y-m-d'),
+                        'branch_id'       => $order->branch_id,
+                    ];
+                    PaymentWallet::create($input);
+                    $customer = Customer::find($order->customer_id);
+                    $customer->wallet = $customer->wallet + $params['amount'];
+                    $customer->save();
+                    $currentWallet = $customer->wallet;
                 }
-                $value['vnpTranId'] = $inputData['vnp_TransactionNo']; //Mã giao dịch tại VNPAY
-                $value['vnp_BankCode'] = $inputData['vnp_BankCode']; //Ngân hàng thanh toán
-                $value['secureHash'] = hash('sha256', $vnp_HashSecret . $hashData);
-                $orderId = $inputData['vnp_TxnRef'];
-                $order = WalletHistory::find($orderId);
-                if ($order->gross_revenue < $order->order_price) {
-                    $returnData = self::checkSumDataAndUpdateOrder($value, $inputData, $order);
-                    if ($returnData['RspCode'] != '00') {
-                    }
-                }
+            }else{
+                $customer = Customer::find($order->customer_id);
+                $currentWallet = $customer->wallet;
             }
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage());
         }
 
-        if (isset($order)) {
-            $historyOrder = PaymentWallet::where('order_wallet_id', $order->id)->latest()->first();
-            $customer = Customer::find($order->customer_id);
-            session(['info-temp' => $customer]);
-        } else {
-            $customer = null;
-        }
+        return view('walet.payment', compact('order','currentWallet'));
+    }
 
-        return view('walet.payment', compact( 'order', 'historyOrder'));
+    /**
+     * Kiểm callback có hợp lệ hay không
+     *
+     * @param Array $data - là query string mà zalopay truyền vào redirect link ($_GET)
+     *
+     * @return bool
+     *  - true: hợp lệ
+     *  - false: không hợp lệ
+     */
+    public function verifyRedirect(Array $data, $key2)
+    {
+        $reqChecksum = $data["checksum"];
+        $checksum = self::redirectCallBack($data, $key2);
+
+        return $reqChecksum === $checksum;
+    }
+
+    public function redirectCallBack(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
+    {
+        return self::compute($params['appid'] . "|" . $params['apptransid'] . "|" . $params['pmcid'] . "|" . $params['bankcode']
+            . "|" . $params['amount'] . "|" . $params['discountamount'] . "|" . $params["status"], $key2);
+    }
+
+    public function compute(string $params, string $key1 = "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q")
+    {
+        return hash_hmac("sha256", $params, $key1);
     }
 
     /**

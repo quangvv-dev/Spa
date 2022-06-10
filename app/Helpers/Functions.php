@@ -684,5 +684,4 @@ class Functions
         return $data;
     }
 
-
 }
