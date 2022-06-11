@@ -78,7 +78,7 @@ class OrdersController extends BaseApiController
         $datas = [
             'data'        => $value,
             'currentPage' => $page,
-            'lastPage'    => (int)round(count($value) / StatusCode::PAGINATE_10),
+            'lastPage'    => (int)round(count($data) / StatusCode::PAGINATE_10),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
     }
