@@ -23,12 +23,24 @@
     }
     .block-container{
         background-image:url("{{asset('default/background-wallet.png')}}");
-        height: 71vh;
+        height: 75%;
         /*background-size: 70vh 500px;*/
         background-repeat: no-repeat;
         background-size: contain;
         /*margin: 0px 6px;*/
         width: 96%;
+    }
+    @media screen and ( max-height: 800px )
+    {
+        .block-container{
+            height: 88%;
+        }
+    }
+    @media screen and ( min-height: 801px ) and ( max-height: 866px )
+    {
+        .block-container{
+            height: 88%;
+        }
     }
     .logo{
         text-align: center;
@@ -69,7 +81,7 @@
     <div class="logo">
         <img width="100" height="100" src="{{asset('default/done-wallet.png')}}" alt="">
     </div>
-    <h4 class="notification-title">Nạp tiền vào ví thành công</h4>
+    <h4 class="notification-title">{{$title}}</h4>
     <div class="small-title text-center">
         <p>Số tiền nạp</p>
         <p class="bold">{{number_format($order->gross_revenue)}}</p>
@@ -81,7 +93,7 @@
     <div class="time">
         <span style="color: #868E96">Thời gian: </span>
         <span style="color: #868E96">
-            {{\Carbon\Carbon::parse($payment->created_at)->format('d-m-Y H:s')}}
+            {{@\Carbon\Carbon::parse($payment->created_at)->format('d-m-Y H:s')}}
         </span>
     </div>
     <div class="wallet">

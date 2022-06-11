@@ -176,10 +176,10 @@ class WalletController extends Controller
                     'form_params'  => $params,
                 ]);
                 $response = \GuzzleHttp\json_decode($request->getBody()->read(1024));
+                $pay_id = explode('_', $apptransid)[1];
+                # Giao dịch thành công, tiền hành xử lý đơn hàng
+                $order = WalletHistory::find($pay_id);// đơn nạp ví
                 if ($response->returncode === 1) {
-                    $pay_id = explode('_', $apptransid)[1];
-                    # Giao dịch thành công, tiền hành xử lý đơn hàng
-                    $order = WalletHistory::find($pay_id);// đơn nạp ví
                     $order->gross_revenue = (int)$order->gross_revenue+(int)$response->amount;
                     $order->app_trans_id = $apptransid;
                     $order->save();
@@ -197,15 +197,22 @@ class WalletController extends Controller
                     $customer->wallet = $customer->wallet + $response->amount;
                     $customer->save();
                     $currentWallet = $customer->wallet;
+                    $title = 'Nạp tiền vào ví thành công';
+                }else{
+                    $order->delete();
+                    $title = 'Thanh toán thất bại';
                 }
             } else {
                 $payment = PaymentWallet::where('app_trans_id',$apptransid)->first();
                 $customer = Customer::find($order->customer_id);
                 $currentWallet = $customer->wallet;
+                $title = 'Nạp tiền vào ví thành công';
             }
+        }else{
+            $title = 'Thanh toán thất bại';
         }
 
-        return view('wallet.payment', compact('order', 'currentWallet','payment'));
+        return view('wallet.payment', compact('order', 'currentWallet','payment','title'));
     }
 
     /**
