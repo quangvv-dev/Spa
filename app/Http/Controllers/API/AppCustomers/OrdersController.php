@@ -116,8 +116,8 @@ class OrdersController extends BaseApiController
         $value['order_id'] = $order->id;
         $value['amount'] = $order->order_price;
         if (!empty($request->payment_type)) {
-            $value['bankcode'] = 'CC';
-            $value['embed_data'] = \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123']);
+            $value['bankcode'] = "*";
+            $value['embed_data'] = \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'CC']);
         } else {
             $value['bankcode'] = "*";
             $value['embed_data'] = \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']);
