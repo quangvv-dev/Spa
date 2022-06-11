@@ -26,7 +26,7 @@ class OrdersController extends BaseApiController
 
     public function getPackage()
     {
-        $packages = PackageWallet::select('id', 'order_price', 'price')->get();
+        $packages = PackageWallet::select('id', 'order_price', 'price')->orderByDesc('order_price')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $packages);
     }
 
