@@ -559,13 +559,13 @@ class Functions
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
-    public static function paginationArray($page, $temp)
+    public static function paginationArray($page, $temp, $paginate = StatusCode::PAGINATE_10)
     {
 //        krsort($temp);
         if ($page && $page > 1) {
-            $temp = array_slice($temp, StatusCode::PAGINATE_10 * ($page - 1) + 1, StatusCode::PAGINATE_10);
+            $temp = array_slice($temp, $paginate * ($page - 1) + 1, $paginate);
         } else {
-            $temp = array_slice($temp, 0, StatusCode::PAGINATE_10);
+            $temp = array_slice($temp, 0, $paginate);
         }
         return $temp;
     }
