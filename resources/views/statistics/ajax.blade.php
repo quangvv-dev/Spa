@@ -344,11 +344,10 @@
             ['Task', 'Hours per Day'],
             ['Khách hàng mới', {{$revenue['revenueNew']}}],
             ['Khách hàng cũ', {{$revenue['revenueOld']}}],
-            ['Thu còn nợ', {{$revenue['revenueRest']}}],
         ]);
 
         var options = {
-            title: 'DOANH THU THEO LOẠI KHÁCH HÀNG',
+            title: 'THỰC THU THEO LOẠI KHÁCH HÀNG',
             width: 500,
             height: 300,
         };
