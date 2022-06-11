@@ -67,13 +67,20 @@ class OrdersController extends BaseApiController
         })->toArray();
 
         $orders = Order::select('id')->where('member_id', $customer->id)->pluck('id')->toArray();
-        $payment = PaymentHistory::select('price', 'payment_date')->whereIn('order_id', $orders)->where('payment_type', 3)->get()->map(function ($qr) {
-                $qr->type = 2;
-                return $qr;
-            })->toArray();
-        $data = array_merge($wallets,$payment);
-        $page = !empty($request->page) ? $request->page: 1;
-        $datas = Functions::paginationArray($page,$data,1);
+        $payment = PaymentHistory::select('price', 'payment_date')->whereIn('order_id', $orders)->where('payment_type', 3)
+            ->get()->map(function ($qr) {
+            $qr->type = 2;
+            return $qr;
+        })->toArray();
+        $data = array_merge($wallets, $payment);
+        $page = !empty($request->page) ? $request->page : 1;
+        $datas = Functions::paginationArray($page, $data, 1);
+        $datas = [
+            'data'        => $datas,
+            'currentPage' => $page,
+            'lastPage'    => (int)round(count($datas) / 1),
+        ];
+        $datas['data'] = $datas;
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
     }
 
