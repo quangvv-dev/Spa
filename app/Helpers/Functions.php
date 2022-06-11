@@ -521,7 +521,7 @@ class Functions
     {
         $total = Functions::sumOrder($customer_id);
         $customer = Customer::find($customer_id);
-        $statusVip = Functions::getStatusWithCode('khach_hang_vip');
+        $statusVip = Functions::getStatusWithCode('khach_vip');
 
         $silver = setting('silver') ?: 0;
         $gold = setting('gold') ?: 0;

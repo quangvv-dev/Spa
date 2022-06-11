@@ -53,13 +53,27 @@ class OrdersController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $wallet);
     }
 
+    public function rankingWallet(Request $request)
+    {
+        $customer = $request->jwtUser;
+        $total = Functions::sumOrder($customer->id);
+        $platinum = setting('platinum') ?: 0;
+        if ($total < $platinum) {
+            $gross = $platinum - $total;
+            $param['title'] = 'Chi tiêu' . number_format($gross) . 'đ nữa để thăng hạng';
+        } else {
+            $param['title'] = 'Khách hàng đã đạt hạng cao nhất';
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $param);
+    }
+
     public function createOrderVNPay(Request $request)
     {
         $order = WalletHistory::find($request->pay_id);// đơn nạp ví
-        if (empty($order)){
+        if (empty($order)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy đơn nạp ví');
         }
-        if ($order->order_price<=$order->gross_revenue){
+        if ($order->order_price <= $order->gross_revenue) {
             return $this->responseApi(ResponseStatusCode::OK, 'Đơn nạp ví đã được thanh toán trước đó');
         }
         $value['order_id'] = $order->id;
@@ -85,7 +99,7 @@ class OrdersController extends BaseApiController
             'currency'     => '',
             'description'  => 'Demo - Thanh toán đơn hàng', #220609_13626996
             'callback_url' => request()->getSchemeAndHttpHost() . '/api/callback-zalo-pay',
-            'redirect_url' => request()->getSchemeAndHttpHost().'/vnpay',
+            'redirect_url' => request()->getSchemeAndHttpHost() . '/vnpay',
             'embed_data'   => \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']),
             'item'         => \GuzzleHttp\json_encode([]),
             'key1'         => $key1,
@@ -116,18 +130,18 @@ class OrdersController extends BaseApiController
         try {
             $params = (array)json_decode($data['data']);
             $result = self::verifyCallback($data, $key2);
-            $pay_id = explode('_',$params['app_trans_id'])[1];
+            $pay_id = explode('_', $params['app_trans_id'])[1];
             if ($result['returncode'] === 1) {
                 # Giao dịch thành công, tiền hành xử lý đơn hàng
                 $order = WalletHistory::find($pay_id);// đơn nạp ví
-                $order->gross_revenue = $order->gross_revenue +$params['amount'];
+                $order->gross_revenue = $order->gross_revenue + $params['amount'];
                 $order->app_trans_id = $params['app_trans_id'];
                 $order->save();
-                $type = PaymentWallet::$typePayment[$params['channel']]?:'';
+                $type = PaymentWallet::$typePayment[$params['channel']] ?: '';
                 $input = [
                     'order_wallet_id' => $order->id,
                     'price'           => $params['amount'],
-                    'description'     => 'TT:ZaloPay -- app_trans_id:'.$params['app_trans_id'].' --'.$type,
+                    'description'     => 'TT:ZaloPay -- app_trans_id:' . $params['app_trans_id'] . ' --' . $type,
                     'payment_type'    => 5,//thanh toán zaloPay
                     'payment_date'    => Carbon::now()->format('Y-m-d'),
                     'branch_id'       => $order->branch_id,

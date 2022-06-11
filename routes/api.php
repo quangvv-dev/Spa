@@ -139,6 +139,8 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
 
     Route::get('packages', 'OrdersController@getPackage');//Danh sách gói nạp
     Route::post('orders-wallet', 'OrdersController@storeWallet');// Tạo đơn nạp ví
+
+    Route::get('ranking-wallet', 'OrdersController@rankingWallet');// Tạo đơn nạp ví
 });
 Route::get('orders-wallet-zalopay', 'API\AppCustomers\OrdersController@createOrderVNPay');// Tạo thanh toán vnpay
 Route::get('push-zalo-pay','API\AppCustomers\OrdersController@pushZALOPay');
