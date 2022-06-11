@@ -72,9 +72,9 @@ class OrdersController extends BaseApiController
 
     public function pushZALOPay($value)
     {
-        $app_id = 2554;
-        $key1 = 'sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn';
-        $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
+        $app_id = config('app.ZALOPAY_APP_ID');
+        $key1 = config('app.ZALOPAY_KEY1');
+        $key2 = config('app.ZALOPAY_KEY2');
         $postInput = [
             'amount'       => $value['amount'],
             'app_id'       => $app_id,
@@ -112,7 +112,7 @@ class OrdersController extends BaseApiController
     public function callbackZALOPay(Request $request)
     {
         $data = $request->all();
-        $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
+        $key2 = config('app.ZALOPAY_KEY2');
         try {
             $params = (array)json_decode($data['data']);
             $result = self::verifyCallback($data, $key2);

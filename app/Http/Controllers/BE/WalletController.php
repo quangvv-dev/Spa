@@ -148,9 +148,9 @@ class WalletController extends Controller
     public function indexVNPAY(Request $request)
     {
         $inputData = $request->all();
-        $app_id = 2554;
-        $key1 = 'sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn';
-        $key2 = 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf';
+        $app_id = config('app.ZALOPAY_APP_ID');
+        $key1 = config('app.ZALOPAY_KEY1');
+        $key2 = config('app.ZALOPAY_KEY2');
 
         $isValidRedirect = self::verifyRedirect($inputData, $key2);
         if ($isValidRedirect) {
@@ -225,11 +225,20 @@ class WalletController extends Controller
         return $reqChecksum === $checksum;
     }
 
+    /**
+     * toàn vẹn dữ liệu return
+     *
+     * @param array  $params
+     * @param string $key2
+     *
+     * @return string
+     */
     public function redirectCallBack(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
     {
         return self::compute($params['appid'] . "|" . $params['apptransid'] . "|" . $params['pmcid'] . "|" . $params['bankcode']
             . "|" . $params['amount'] . "|" . $params['discountamount'] . "|" . $params["status"], $key2);
     }
+
 
     public function compute(string $params, string $key1 = "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q")
     {
