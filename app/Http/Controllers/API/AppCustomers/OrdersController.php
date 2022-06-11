@@ -112,10 +112,10 @@ class OrdersController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroyWallet(Request $request)
+    public function destroyWallet(Request $request,$id)
     {
         $customer = $request->jwtUser;
-        $order = WalletHistory::find($request->pay_id);// đơn nạp ví
+        $order = WalletHistory::find($id);// đơn nạp ví
         if (!empty($order)) {
             if ($order->customer_id == $customer->id) {
                 $paymentWallet = PaymentWallet::where('order_wallet_id', $order->id)->first();
