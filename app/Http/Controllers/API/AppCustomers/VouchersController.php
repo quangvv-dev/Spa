@@ -50,4 +50,5 @@ class VouchersController extends BaseApiController
         $promotions = Promotion::whereIn('id', $vouchers)->withTrashed()->paginate($records);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', PromotionResource::collection($promotions));
     }
+
 }

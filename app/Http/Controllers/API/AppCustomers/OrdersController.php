@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\API\AppCustomers;
 
 use App\Constants\ResponseStatusCode;
+use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\PackageWallet;
+use App\Models\PaymentHistory;
 use App\Models\PaymentWallet;
 use App\Models\WalletHistory;
 use App\Services\WalletService;
@@ -53,6 +56,39 @@ class OrdersController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $wallet);
     }
 
+    public function historyChangeWallet(Request $request)
+    {
+        $customer = $request->jwtUser;
+        $validate = ['type' => "required"];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+
+        $arrWallets = WalletHistory::select('id')->where('customer_id', $customer->id)->pluck('id')->toArray();
+        $wallets = PaymentWallet::select('price', 'payment_date')->whereIn('order_wallet_id',
+            $arrWallets)->get()->map(function ($qr) {
+            $qr->type = 1;
+            return $qr;
+        });
+
+        $orders = Order::select('id')->where('customer_id', $customer->id)->pluck('id')->toArray();
+        $payment = PaymentHistory::select('price', 'payment_date')->whereIn('order_id', $orders)->where('payment_type', 3)->get()->map(function ($qr) {
+                $qr->type = 2;
+                return $qr;
+            });
+        $data = array_merge($wallets,$payment);
+        $datas = Functions::customPaginate($data,null,1);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
+    }
+
+    /**
+     * Bao nhiêu để thăng hạng
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function rankingWallet(Request $request)
     {
         $customer = $request->jwtUser;
@@ -67,6 +103,13 @@ class OrdersController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $param);
     }
 
+    /**
+     * Tạo đơn bắn lên ZALOPAY
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function createOrderVNPay(Request $request)
     {
         $order = WalletHistory::find($request->pay_id);// đơn nạp ví
@@ -78,11 +121,11 @@ class OrdersController extends BaseApiController
         }
         $value['order_id'] = $order->id;
         $value['amount'] = $order->order_price;
-        if (!empty($request->payment_type)){
-            $value['bankcode']='CC';
+        if (!empty($request->payment_type)) {
+            $value['bankcode'] = 'CC';
             $value['embed_data'] = \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123']);
-        }else{
-            $value['bankcode']="*";
+        } else {
+            $value['bankcode'] = "*";
             $value['embed_data'] = \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']);
         }
         $url = self::pushZALOPay($value);
@@ -90,7 +133,13 @@ class OrdersController extends BaseApiController
 
     }
 
-
+    /**
+     * Push value lên ZALOPAY
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
     public function pushZALOPay($value)
     {
         $app_id = config('app.ZALOPAY_APP_ID');
