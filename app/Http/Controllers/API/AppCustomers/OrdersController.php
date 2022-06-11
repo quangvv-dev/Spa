@@ -59,12 +59,6 @@ class OrdersController extends BaseApiController
     public function historyChangeWallet(Request $request)
     {
         $customer = $request->jwtUser;
-        $validate = ['type' => "required"];
-        $this->validator($request, $validate);
-        if (!empty($this->error)) {
-            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
-        }
-
         $arrWallets = WalletHistory::select('id')->where('customer_id', $customer->id)->pluck('id')->toArray();
         $wallets = PaymentWallet::select('price', 'payment_date')->whereIn('order_wallet_id',
             $arrWallets)->get()->map(function ($qr) {
