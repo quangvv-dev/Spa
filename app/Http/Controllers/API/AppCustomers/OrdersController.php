@@ -96,8 +96,8 @@ class OrdersController extends BaseApiController
         $customer = $request->jwtUser;
         $total = Functions::sumOrder($customer->id);
         $platinum = setting('platinum') ?: 0;
-        if ($total < $platinum) {
-            $gross = $platinum - $total;
+        if ((int)$platinum > (int)$total) {
+            $gross = (int)$platinum - (int)$total;
             $param['title'] = 'Chi tiêu' . number_format($gross) . 'đ nữa để thăng hạng';
         } else {
             $param['title'] = 'Khách hàng đã đạt hạng cao nhất';
@@ -112,7 +112,7 @@ class OrdersController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroyWallet(Request $request,$id)
+    public function destroyWallet(Request $request, $id)
     {
         $customer = $request->jwtUser;
         $order = WalletHistory::find($id);// đơn nạp ví
