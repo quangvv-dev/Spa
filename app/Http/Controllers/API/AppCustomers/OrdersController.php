@@ -64,13 +64,13 @@ class OrdersController extends BaseApiController
             $arrWallets)->get()->map(function ($qr) {
             $qr->type = 1;
             return $qr;
-        });
+        })->toArray();
 
         $orders = Order::select('id')->where('member_id', $customer->id)->pluck('id')->toArray();
         $payment = PaymentHistory::select('price', 'payment_date')->whereIn('order_id', $orders)->where('payment_type', 3)->get()->map(function ($qr) {
                 $qr->type = 2;
                 return $qr;
-            });
+            })->toArray();
         $data = array_merge($wallets,$payment);
         $datas = Functions::customPaginate($data,null,1);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
