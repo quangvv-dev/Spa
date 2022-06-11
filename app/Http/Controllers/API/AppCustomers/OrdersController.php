@@ -78,6 +78,13 @@ class OrdersController extends BaseApiController
         }
         $value['order_id'] = $order->id;
         $value['amount'] = $order->order_price;
+        if (!empty($request->payment_type)){
+            $value['bankcode']='CC';
+            $value['embed_data'] = \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123']);
+        }else{
+            $value['bankcode']="*";
+            $value['embed_data'] = \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']);
+        }
         $url = self::pushZALOPay($value);
         return redirect($url);
 
@@ -95,12 +102,12 @@ class OrdersController extends BaseApiController
             'app_time'     => floor(microtime(true) * 1000),
             'app_trans_id' => date("ymd") . "_" . $value['order_id'] . "_" . time(),
             'app_user'     => 'demo',
-            'bankcode'     => "*",
+            'bankcode'     => $value['bankcode'],
             'currency'     => '',
             'description'  => 'Demo - Thanh toán đơn hàng', #220609_13626996
             'callback_url' => request()->getSchemeAndHttpHost() . '/api/callback-zalo-pay',
             'redirect_url' => request()->getSchemeAndHttpHost() . '/vnpay',
-            'embed_data'   => \GuzzleHttp\json_encode(['merchantinfo' => 'embeddata123', 'bankgroup' => 'ATM']),
+            'embed_data'   => $value['embed_data'],
             'item'         => \GuzzleHttp\json_encode([]),
             'key1'         => $key1,
             'key2'         => $key2,
