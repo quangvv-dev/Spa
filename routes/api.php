@@ -139,6 +139,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
 
     Route::get('packages', 'OrdersController@getPackage');//Danh sách gói nạp
     Route::post('orders-wallet', 'OrdersController@storeWallet');// Tạo đơn nạp ví
+    Route::delete('destroy-wallet', 'OrdersController@destroyWallet');// Xóa đơn nạp ví
     Route::get('ranking-wallet', 'OrdersController@rankingWallet');
 
     Route::get('history-change-wallet', 'OrdersController@historyChangeWallet');

@@ -67,18 +67,19 @@ class OrdersController extends BaseApiController
         })->toArray();
 
         $orders = Order::select('id')->where('member_id', $customer->id)->pluck('id')->toArray();
-        $payment = PaymentHistory::select('price', 'payment_date')->whereIn('order_id', $orders)->where('payment_type', 3)
+        $payment = PaymentHistory::select('price', 'payment_date')->whereIn('order_id', $orders)->where('payment_type',
+            3)
             ->get()->map(function ($qr) {
-            $qr->type = 2;
-            return $qr;
-        })->toArray();
+                $qr->type = 2;
+                return $qr;
+            })->toArray();
         $data = array_merge($wallets, $payment);
         $page = !empty($request->page) ? $request->page : 1;
         $value = Functions::paginationArray($page, $data, StatusCode::PAGINATE_10);
         $datas = [
             'data'        => $value,
             'currentPage' => $page,
-            'lastPage'    => (int)round(count($data) / StatusCode::PAGINATE_10)>0?round(count($data) / StatusCode::PAGINATE_10):1,
+            'lastPage'    => (int)round(count($data) / StatusCode::PAGINATE_10) > 0 ? round(count($data) / StatusCode::PAGINATE_10) : 1,
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
     }
@@ -102,6 +103,34 @@ class OrdersController extends BaseApiController
             $param['title'] = 'Khách hàng đã đạt hạng cao nhất';
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $param);
+    }
+
+    /**
+     * Delete đơn nạp ví
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroyWallet(Request $request)
+    {
+        $customer = $request->jwtUser;
+        $order = WalletHistory::find($request->pay_id);// đơn nạp ví
+        if (!empty($order)) {
+            if ($order->customer_id == $customer->id) {
+                $paymentWallet = PaymentWallet::where('order_wallet_id', $order->id)->first();
+                if (!empty($paymentWallet)) {
+                    return $this->responseApi(ResponseStatusCode::OK, 'Đơn đã thanh toán - không thể xóa');
+                }
+                $order->delete();
+            } else {
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không hack case này được nhé :))');
+            }
+        } else {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy đơn nạp');
+        }
+
+
     }
 
     /**
