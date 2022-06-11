@@ -98,7 +98,7 @@ class OrdersController extends BaseApiController
         $platinum = setting('platinum') ?: 0;
         if ((int)$platinum > (int)$total) {
             $gross = (int)$platinum - (int)$total;
-            $param['title'] = 'Chi tiêu' . number_format($gross) . 'đ nữa để thăng hạng';
+            $param['title'] = 'Chi tiêu ' . number_format($gross) . 'đ nữa để thăng hạng';
         } else {
             $param['title'] = 'Khách hàng đã đạt hạng cao nhất';
         }
