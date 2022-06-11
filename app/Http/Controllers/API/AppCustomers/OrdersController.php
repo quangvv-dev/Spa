@@ -73,7 +73,7 @@ class OrdersController extends BaseApiController
             })->toArray();
         $data = array_merge($wallets,$payment);
         $datas = Functions::customPaginate($data,null,1);
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', (array)$datas);
     }
 
     /**
