@@ -21,6 +21,7 @@ class PromotionResource extends JsonResource
             return [
                 'id'               => @$this->id,
                 'title'            => @$this->title,
+                'code'             => @$this->code,
                 'promotion'        => @$this->money_promotion,
                 'type'             => @$this->type,
                 'min_price'        => @$this->min_price,
@@ -31,6 +32,7 @@ class PromotionResource extends JsonResource
             return [
                 'id'               => @$this->id,
                 'title'            => @$this->title,
+                'code'             => @$this->code,
                 'promotion'        => @$this->percent_promotion,
                 'type'             => @$this->type,
                 'min_price'        => @$this->min_price,
