@@ -559,6 +559,17 @@ class Functions
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
+    public static function paginationArray($page, $temp)
+    {
+//        krsort($temp);
+        if ($page && $page > 1) {
+            $temp = array_slice($temp, StatusCode::PAGINATE_10 * ($page - 1) + 1, StatusCode::PAGINATE_10);
+        } else {
+            $temp = array_slice($temp, 0, StatusCode::PAGINATE_10);
+        }
+        return $temp;
+    }
+
     public static function addSearchDateTime($request)
     {
         $date_check = Carbon::now()->subDays(7)->format('d/m/Y');
@@ -655,7 +666,8 @@ class Functions
         return $vnp_Url;
     }
 
-    public static function returnMessage($code){
+    public static function returnMessage($code)
+    {
 
         switch ($code) {
             case '00':
