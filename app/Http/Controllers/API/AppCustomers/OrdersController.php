@@ -120,17 +120,16 @@ class OrdersController extends BaseApiController
             if ($order->customer_id == $customer->id) {
                 $paymentWallet = PaymentWallet::where('order_wallet_id', $order->id)->first();
                 if (!empty($paymentWallet)) {
-                    return $this->responseApi(ResponseStatusCode::OK, 'Đơn đã thanh toán - không thể xóa');
+                    return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Đơn đã thanh toán - không thể xóa');
                 }
                 $order->delete();
+                return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
             } else {
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không hack case này được nhé :))');
             }
         } else {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy đơn nạp');
         }
-
-
     }
 
     /**
