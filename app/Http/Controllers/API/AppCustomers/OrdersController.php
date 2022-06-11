@@ -66,7 +66,7 @@ class OrdersController extends BaseApiController
             return $qr;
         });
 
-        $orders = Order::select('id')->where('customer_id', $customer->id)->pluck('id')->toArray();
+        $orders = Order::select('id')->where('member_id', $customer->id)->pluck('id')->toArray();
         $payment = PaymentHistory::select('price', 'payment_date')->whereIn('order_id', $orders)->where('payment_type', 3)->get()->map(function ($qr) {
                 $qr->type = 2;
                 return $qr;
