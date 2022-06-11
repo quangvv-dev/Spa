@@ -74,11 +74,11 @@ class OrdersController extends BaseApiController
         })->toArray();
         $data = array_merge($wallets, $payment);
         $page = !empty($request->page) ? $request->page : 1;
-        $value = Functions::paginationArray($page, $data, 1);
+        $value = Functions::paginationArray($page, $data, StatusCode::PAGINATE_10);
         $datas = [
             'data'        => $value,
             'currentPage' => $page,
-            'lastPage'    => (int)round(count($value) / 1),
+            'lastPage'    => (int)round(count($value) / StatusCode::PAGINATE_10),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
     }
