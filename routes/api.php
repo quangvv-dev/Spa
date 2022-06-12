@@ -141,12 +141,14 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::post('orders-wallet', 'OrdersController@storeWallet');// Tạo đơn nạp ví
     Route::delete('destroy-wallet/{id}', 'OrdersController@destroyWallet');// Xóa đơn nạp ví
     Route::get('ranking-wallet', 'OrdersController@rankingWallet');
+    Route::get('history-change-wallet', 'OrdersController@historyChangeWallet');// lịch sử thanh đổi ví
 
-    Route::get('history-change-wallet', 'OrdersController@historyChangeWallet');
+    Route::get('orders-with-me', 'OrderController@index');
+    Route::post('rate-orders/{id}', 'OrderController@rate');
 });
 Route::get('orders-wallet-zalopay', 'API\AppCustomers\OrdersController@createOrderVNPay');// Tạo thanh toán vnpay
-Route::get('push-zalo-pay','API\AppCustomers\OrdersController@pushZALOPay');
-Route::post('callback-zalo-pay','API\AppCustomers\OrdersController@callbackZALOPay');
+Route::get('push-zalo-pay', 'API\AppCustomers\OrdersController@pushZALOPay');
+Route::post('callback-zalo-pay', 'API\AppCustomers\OrdersController@callbackZALOPay');
 
 /*
 |--------------------------------------------------------------------------

@@ -6,6 +6,7 @@ use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
+use App\Http\Resources\OrderResource;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\PackageWallet;
@@ -34,7 +35,63 @@ class OrdersController extends BaseApiController
     }
 
     /**
-     * Danh sách lịch hẹn
+     * danh sách đơn
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $customer = $request->jwtUser;
+        $request->merge(['type' => 'app-customer']);
+        $orders = Order::select('id', 'all_total', 'gross_revenue', 'created_at')->where('member_id', $customer->id)
+            ->orderByDesc('id')->with()->paginate(StatusCode::PAGINATE_10);
+
+        $datas = [
+            'data'        => OrderResource::collection($orders),
+            'currentPage' => !empty($request->page) ? $request->page : 1,
+            'lastPage'    => $orders->lastPage(),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
+    }
+
+    /**
+     * Đánh giá đơn
+     *
+     * @param Request $request
+     * @param         $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function rate(Request $request, $id)
+    {
+        $customer = $request->jwtUser;
+        $validate = [
+            'rate'         => "required,integer",
+            'comment_rate' => "comment_rate",
+        ];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $order = Order::find($id);// đơn nạp ví
+        if (!empty($order)) {
+            if ($order->member_id == $customer->id) {
+                $order->rate = $request->rate;
+                $order->comment_rate = $request->comment_rate;
+                $order->save();
+                return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+            } else {
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không hack case này được nhé :))');
+            }
+        } else {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy đơn');
+        }
+    }
+
+    /**
+     * Tạo đơn nạp ví
      *
      * @param Request $request
      *
