@@ -187,7 +187,7 @@ class HomePageController extends BaseApiController
                         'employee'    => isset($i->user) ? $i->user->full_name : '',
                         'date'        => @\date('d-m-Y', strtotime($i->created_at)),
                         'time'        => @\date('H:i', strtotime($i->created_at)),
-                        'branch_name' => isset($i->branch) ? $i->branch->name: '',
+                        'branch_name' => isset($i->branch) ? $i->branch->address: '',
                         'phone'       => isset($i->branch) ? $i->branch->phone : '',
                         'service'     => isset($i->service) ? $i->service->name : '',
                         'image'       => isset($i->service) && !empty($i->service->images) ? $i->service->images : '',
