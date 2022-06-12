@@ -112,7 +112,7 @@ class HomePageController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $input = $request->all();
-        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long','phone')
+        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long', 'phone')
             ->when(isset($input['location_id']) && $input['location_id'], function ($q) use ($input) {
                 $q->where('location_id', $input['location_id']);
             })->whereNotNull('lat')->get()->map(function ($item) use ($input) {
@@ -188,6 +188,7 @@ class HomePageController extends BaseApiController
                         'date'        => @\date('d-m-Y', strtotime($i->created_at)),
                         'time'        => @\date('H:i', strtotime($i->created_at)),
                         'branch_name' => isset($i->branch) ? $i->branch->name . ': ' . $i->branch->address : '',
+                        'phone'       => isset($i->branch) ? $i->branch->phone . ': ' . $i->branch->phone : '',
                         'service'     => isset($i->service) ? $i->service->name : '',
                     ];
                 });
