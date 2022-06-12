@@ -45,7 +45,7 @@ class OrdersController extends BaseApiController
     {
         $customer = $request->jwtUser;
         $request->merge(['type' => 'app-customer']);
-        $orders = Order::select('id', 'all_total', 'gross_revenue', 'role_type', 'the_rest', 'created_at')
+        $orders = Order::select('id', 'all_total', 'gross_revenue', 'role_type', 'the_rest','rate','comment_rate', 'created_at')
             ->where('member_id',$customer->id)->orderByDesc('id')->with('orderDetails')->paginate(StatusCode::PAGINATE_10);
 
         $datas = [
