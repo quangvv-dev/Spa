@@ -20,11 +20,12 @@ class OrderResource extends JsonResource
                 'id'             => @$this->id,
                 'service_text'   => @$this->service_text,
                 'all_total'      => @$this->all_total,
-                'gross_revenue'  => @$this->gross_revenue,
-                'type'           => @$this->type,
-                'count_service'  => isset($this->orderDetails) ? count($this->orderDetails) : 1,
-                'created_at'     => $this->created_at,
-                'branch_address' => $this->branch->address,
+                'gross_revenue'  => (int)$this->gross_revenue,
+                'the_rest'       => (int)$this->the_rest,
+                'role_type'      => @$this->role_type,
+                'quantity'       => isset($this->orderDetails) ? count($this->orderDetails) : 1,
+                'created_at'     => date('d-m-Y H:i', strtotime($this->created_at)),
+                'branch_address' => isset($this->branch) ? $this->branch->address : 'Tất cả chi nhánh',
             ];
         } else {
             return [

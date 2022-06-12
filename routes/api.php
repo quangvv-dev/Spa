@@ -150,6 +150,9 @@ Route::get('orders-wallet-zalopay', 'API\AppCustomers\OrdersController@createOrd
 Route::get('push-zalo-pay', 'API\AppCustomers\OrdersController@pushZALOPay');
 Route::post('callback-zalo-pay', 'API\AppCustomers\OrdersController@callbackZALOPay');
 
+Route::get('orders-with-me', 'API\AppCustomers\OrdersController@index');
+
+
 /*
 |--------------------------------------------------------------------------
 | END APP KHÁCH HÀNG
