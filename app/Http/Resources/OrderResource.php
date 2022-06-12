@@ -23,6 +23,8 @@ class OrderResource extends JsonResource
                 'gross_revenue'  => (int)$this->gross_revenue,
                 'the_rest'       => (int)$this->the_rest,
                 'role_type'      => @$this->role_type,
+                'rate'           => @$this->rate,
+                'comment_rate'   => @$this->comment_rate,
                 'quantity'       => isset($this->orderDetails) ? count($this->orderDetails) : 1,
                 'created_at'     => date('d-m-Y H:i', strtotime($this->created_at)),
                 'branch_address' => isset($this->branch) ? $this->branch->address : 'Tất cả chi nhánh',

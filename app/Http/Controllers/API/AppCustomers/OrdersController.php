@@ -68,8 +68,7 @@ class OrdersController extends BaseApiController
     {
         $customer = $request->jwtUser;
         $validate = [
-            'rate'         => "required,integer",
-            'comment_rate' => "comment_rate",
+            'rate' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -79,9 +78,14 @@ class OrdersController extends BaseApiController
         if (!empty($order)) {
             if ($order->member_id == $customer->id) {
                 $order->rate = $request->rate;
-                $order->comment_rate = $request->comment_rate;
+                $order->comment_rate = !empty($request->comment_rate) ? $request->comment_rate : '';
                 $order->save();
-                return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+                $data = [
+                    'id'           => $order->id,
+                    'rate'         => (int)$order->rate,
+                    'comment_rate' => $order->comment_rate,
+                ];
+                return $this->responseApi(ResponseStatusCode::OK, 'Đánh giá đơn hàng thành công', $data);
             } else {
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không hack case này được nhé :))');
             }
