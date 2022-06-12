@@ -43,10 +43,10 @@ class OrdersController extends BaseApiController
      */
     public function index(Request $request)
     {
-//        $customer = $request->jwtUser;
+        $customer = $request->jwtUser;
         $request->merge(['type' => 'app-customer']);
         $orders = Order::select('id', 'all_total', 'gross_revenue', 'role_type', 'the_rest', 'created_at')
-            ->orderByDesc('id')->with('orderDetails')->paginate(StatusCode::PAGINATE_10);
+            ->where('member_id',$customer->id)->orderByDesc('id')->with('orderDetails')->paginate(StatusCode::PAGINATE_10);
 
         $datas = [
             'data'        => OrderResource::collection($orders),
