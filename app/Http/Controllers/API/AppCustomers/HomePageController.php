@@ -190,7 +190,7 @@ class HomePageController extends BaseApiController
                         'branch_name' => isset($i->branch) ? $i->branch->name . ': ' . $i->branch->address : '',
                         'phone'       => isset($i->branch) ? $i->branch->phone . ': ' . $i->branch->phone : '',
                         'service'     => isset($i->service) ? $i->service->name : '',
-                        'image'       => isset($i->service) ? \GuzzleHttp\json_decode($i->service->images) : '',
+                        'image'       => isset($i->service) && !empty($i->service->images) ? \GuzzleHttp\json_decode($i->service->images) : '',
                     ];
                 });
         }
