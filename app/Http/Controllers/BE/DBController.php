@@ -17,7 +17,7 @@ class DBController extends Controller
     {
         $order = Order::whereBetween('created_at', [
             '2022-06-01 00:01',
-            '2022-06-06 23:59',
+            '2022-06-13 23:59',
         ])->where('telesale_id', 0)->with('customer')->get();
 
         foreach ($order as $item) {
