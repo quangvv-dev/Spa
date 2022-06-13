@@ -80,7 +80,9 @@ class SalesController extends Controller
                     $q->whereIn('branch_id', $request->group_branch);
                 })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                     $q->where('branch_id', $request->branch_id);
-                })->with('orderDetails')->where('telesale_id', $item->id);
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('telesales_id', $item->id);
+                });
             $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
             $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
