@@ -21,8 +21,8 @@ class FanpageService
             $datas = Functions::getDataFaceBook($token, $method, $uri, $field);
         }
 
-        $fanpages = Fanpage::search($request->all());
-        $fanpages1 = clone $fanpages;
+        $fanpages = Fanpage::get();
+        $fanpages1 = Fanpage::search($request->all());
         if (isset($datas) && count($datas) && empty($request->searchPageId) && empty($request->searchName)) {
             $fanpages_arr = $fanpages->pluck('page_id')->toArray();
             foreach ($datas as $item) {
