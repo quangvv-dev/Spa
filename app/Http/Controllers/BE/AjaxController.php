@@ -296,7 +296,7 @@ class AjaxController extends Controller
     public function getServiceWithOrder($id)
     {
         $array = OrderDetail::select('booking_id')->where('order_id', $id)->pluck('booking_id')->toArray();
-        return Services::whereIn('id', $array)->withTrashes()->get();
+        return Services::whereIn('id', $array)->withTrashed()->get();
     }
 
     /**
