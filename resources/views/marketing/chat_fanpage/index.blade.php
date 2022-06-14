@@ -346,6 +346,7 @@
                         if (f.name.match(re) ||f.page_id.match(re) ) {
                             let avatar = f.avatar ? f.avatar  :'';
                             let checked = arr_curent_group.findIndex(fi=>fi == f.page_id) > -1? 'checked' : '';
+                            let full_name = f.user && f.user.full_name ? f.user.full_name : '';
                             html += `
                                 <div class="col-4">
                                     <div class="card border-info box-shadow-0 bg-transparent">
@@ -353,7 +354,7 @@
                                             <img src="`+avatar+`" alt="element 04" width="90" class="float-left img-fluid">
                                             <div class="card-body pt-3 f-page">
                                                 <p class="pointer">`+f.name+`</p>
-                                                <p class="small-tip">`+f.user.full_name+` (`+f.page_id+`)</p>
+                                                <p class="small-tip">`+full_name+` (`+f.page_id+`)</p>
                                             </div>
                                             <input type="checkbox" class="checkbox checkPage `+f.page_id+`" `+checked+`
                                                    value="`+f.page_id+`" data-token="`+f.access_token+`"

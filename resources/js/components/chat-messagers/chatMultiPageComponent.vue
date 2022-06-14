@@ -666,7 +666,6 @@
                         }
                         return m;
                     })
-                    console.log(123123,abc);
                     this.navChat = abc;
                     this.navChatDefault = abc;
                 })
@@ -760,7 +759,6 @@
                                 this.post_created_time = res.data.created_time;
                                 this.post_full_picture = res.data.attachments.data[0].media.image.src;
                                 this.post_message = res.data.message.replaceAll('\n\n','<br>');
-                                console.log(999,this.post_message);
                             })
                         })
                     //update is_read comment
@@ -1088,6 +1086,7 @@
                     if(res){
                         alertify.success('Trả lời thành công!',5);
                         $('#reply_comment').modal('hide');
+                        this.newElement(res.data.message_id);
                     }
                 }).catch(error=>{
                     if(error){
@@ -1096,6 +1095,40 @@
                     }
                 })
                 this.contentMesage = '';
+            },
+            async newElement(message_id){
+                let access_token = this.access_token;
+                let fields = 'from,message,to,created_time,thread_id';
+                let url = `https://graph.facebook.com/v13.0/${message_id}?fields=${fields}&access_token=${access_token}`;
+                const res = await axios.get(url);
+                let index = this.navChatDefault.findIndex(fd=>{
+                    return fd.participants.data[1].id == res.data.from.id && fd.participants.data[0].id == res.data.to.data[0].id && fd.type != 'comment';
+                })
+                if (index > -1){
+                    this.navChatDefault[index].snippet = res.data.message;
+                    this.navChatDefault[index].updated_time = res.data.created_time;
+                }
+                else {
+                    let html = {
+                        check_phone : 0,
+                        id : res.data.thread_id,
+                        participants : {
+                            data:[
+                                {
+                                    id:res.data.to.data[0].id,
+                                    name:res.data.to.data[0].name
+                                },
+                                {
+                                    id:res.data.from.id,
+                                    name:res.data.from.name
+                                }
+                            ]},
+                        phone:"",
+                        snippet:res.data.message,
+                        updated_time:res.data.created_time
+                    }
+                    this.navChatDefault.unshift(html);
+                }
             },
             async getNextPage(){
                 let data = await axios.get(this.next_page);
