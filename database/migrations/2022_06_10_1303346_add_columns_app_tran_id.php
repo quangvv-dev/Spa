@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnsAppTranId extends Migration
+class AddColumnsAppTranIdNew extends Migration
 {
     /**
      * Run the migrations.
      *
-     * @return void
+     * @return voids
      */
     public function up()
     {
