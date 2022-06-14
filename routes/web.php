@@ -18,7 +18,7 @@ Route::get('privacy-policy', function () {
 
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
-        return view('dashboard.index');
+        return redirect(url('/customers'));
     });
     Route::get('kanban-board', function () {
         return view('kanban_board.index');
