@@ -22,6 +22,7 @@ class CustomerResource extends JsonResource
             'phone'      => @$this->phone,
             'membership' => @$this->membership,
             'wallet'     => @$this->wallet,
+            'wallet_ctv' => @$this->wallet_ctv,
             'avatar'     => @$this->avatar,
             'birthday'   => @$this->birthday,
             'gender'     => @$this->gender,
