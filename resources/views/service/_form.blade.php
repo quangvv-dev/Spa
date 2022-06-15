@@ -80,7 +80,8 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('enable') ? 'has-error' : '' }}">
                         {!! Form::label('description', 'Mô tả') !!}
-                        {!! Form::textArea('description', null, array('class' => 'form-control')) !!}
+
+                        {!! Form::textarea('description',old('description')?:null, array('class' => 'form-control','row'=>8)) !!}
                         <span class="help-block">{{ $errors->first('enable', ':message') }}</span>
                     </div>
                 </div>
@@ -103,8 +104,13 @@
 
     <script src="{{asset('assets/js/fileinput.min.js')}}"></script>
     <script src="{{asset('js/format-number.js')}}"></script>
+    <script src="{{asset('assets/plugins/ckeditor/ckeditor.js')}}"></script>
 
     <script>
+        CKEDITOR.replace('description', {
+            // filebrowserBrowseUrl: '/browser/browse.php',
+            // filebrowserUploadUrl: '/uploader/upload.php'
+        });
         $(document).ready(function () {
             $('body').on('keyup', '.price', function (e) {
                 let target = $(e.target).parent().parent();
