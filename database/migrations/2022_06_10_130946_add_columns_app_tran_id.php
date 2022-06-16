@@ -14,7 +14,7 @@ class AddColumnsAppTranId extends Migration
     public function up()
     {
         Schema::table('wallet_histories', function (Blueprint $table) {
-            $table->text('app_trans_id')->after('price')->comment('Mã giao dịch ZALOPAY')->nullable();
+//            $table->text('app_trans_id')->after('price')->comment('Mã giao dịch ZALOPAY')->nullable();
         });
     }
 
