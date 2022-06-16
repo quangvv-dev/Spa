@@ -20,4 +20,8 @@ class OrderConstant
     const IS_UPSALE = 1;//đơn upsale
     const NON_UPSALE = 0;//đơn mới
 
+    const WALLET_TYPE_ROSE = 1; // ví nhận hoa hồng
+    const WALLET_TYPE_RECEIVE = 2; // chuyển tiền sang ví
+    const WALLET_TYPE_MONEY = 3;// Rút tiền từ ví ctv
+
 }

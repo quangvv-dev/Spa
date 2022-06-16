@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\AppCustomers;
 
+use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Models\Customer;
 use App\Models\HistoryWalletCtv;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class WalletsController extends BaseApiController
@@ -34,11 +36,11 @@ class WalletsController extends BaseApiController
         $data = [
             'data' => $history->transform(function ($item) {
                 return [
-                    'id' => $item->id,
-                    'customer_id' => $item->customer_id,
-                    'price' => $item->price,
-                    'type' => $item->type,
-                    'created_at' => date('d-m-Y H:s', strtotime($item->created_at)),
+                    'id'            => $item->id,
+                    'customer_id'   => $item->customer_id,
+                    'price'         => $item->price,
+                    'type'          => $item->type,
+                    'created_at'    => date('d-m-Y H:s', strtotime($item->created_at)),
                 ];
             })->toArray(),
             'currentPage' => $history->currentPage(),
@@ -73,6 +75,14 @@ class WalletsController extends BaseApiController
                 $customers->wallet = (int)$customers->wallet + (int)$request->price;
                 $customers->wallet_ctv = (int)$customers->wallet_ctv - (int)$request->price;
                 $customers->save();
+                HistoryWalletCtv::create(
+                    [
+                        'customer_id'   => $customers->id,
+                        'price'         => $request->price,
+                        'type'          => OrderConstant::WALLET_TYPE_RECEIVE,
+                        'created_at'    => Carbon::now(),
+                    ]
+                );
                 return $this->responseApi(ResponseStatusCode::OK, 'Chuyển tiền thành công', new CustomerResource($customers));
             }
         } else {
