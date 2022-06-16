@@ -15,7 +15,7 @@ class DanhIndexAllTable extends Migration
     {
         Schema::table('customers', function (Blueprint $table) {
             $table->integer('mkt_id')->index()->change();
-            $table->integer('source_id')->index()->change();
+//            $table->integer('source_id')->index()->change();
             $table->bigInteger('source_fb')->index()->change();
             $table->bigInteger('membership')->index()->change();
             $table->bigInteger('page_id')->index()->change();
