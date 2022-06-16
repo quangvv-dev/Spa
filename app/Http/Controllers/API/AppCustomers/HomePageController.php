@@ -63,7 +63,7 @@ class HomePageController extends BaseApiController
         $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $q->where('category_id', $input['category_id']);
-            })->paginate($paginate);
+            })->orderByDesc('images')->orderByDesc('id')->paginate($paginate);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', ServiceResource::collection($docs));
     }
 
@@ -112,7 +112,7 @@ class HomePageController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $input = $request->all();
-        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long','phone')
+        $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long', 'phone')
             ->when(isset($input['location_id']) && $input['location_id'], function ($q) use ($input) {
                 $q->where('location_id', $input['location_id']);
             })->whereNotNull('lat')->get()->map(function ($item) use ($input) {
@@ -161,7 +161,7 @@ class HomePageController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $category = Category::select('id', 'name', 'image')->where('type',
-            $request->type)->paginate(StatusCode::PAGINATE_10);
+            $request->type)->orderByDesc('image')->get();
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $category);
 
@@ -187,8 +187,10 @@ class HomePageController extends BaseApiController
                         'employee'    => isset($i->user) ? $i->user->full_name : '',
                         'date'        => @\date('d-m-Y', strtotime($i->created_at)),
                         'time'        => @\date('H:i', strtotime($i->created_at)),
-                        'branch_name' => isset($i->branch) ? $i->branch->name . ': ' . $i->branch->address : '',
+                        'branch_name' => isset($i->branch) ? $i->branch->address: '',
+                        'phone'       => isset($i->branch) ? $i->branch->phone : '',
                         'service'     => isset($i->service) ? $i->service->name : '',
+                        'image'       => isset($i->service) && !empty($i->service->images) ? $i->service->images : '',
                     ];
                 });
         }

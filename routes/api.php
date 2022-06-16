@@ -134,7 +134,23 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::post('update-info', 'AuthController@updateProfile');
     Route::get('vourchers', 'AuthController@vouchers');
     Route::get('process', 'HomePageController@process');//Lịch sử liệu trình
+    Route::get('promotions', 'VouchersController@index');//Danh sách voucher
+    Route::get('promotions-used', 'VouchersController@used');//Danh sách voucher
+
+    Route::get('packages', 'OrdersController@getPackage');//Danh sách gói nạp
+    Route::post('orders-wallet', 'OrdersController@storeWallet');// Tạo đơn nạp ví
+    Route::delete('destroy-wallet/{id}', 'OrdersController@destroyWallet');// Xóa đơn nạp ví
+    Route::get('ranking-wallet', 'OrdersController@rankingWallet');
+    Route::get('history-change-wallet', 'OrdersController@historyChangeWallet');// lịch sử thanh đổi ví
+    Route::get('history-change-wallet-ctv', 'WalletsController@index');// lịch sử thanh đổi ví CTV
+    Route::post('receive-money', 'WalletsController@receiveMoney');// Chuyển từ ví ctv sang ví thường
+
+    Route::get('orders-with-me', 'OrdersController@index');
+    Route::post('rate-orders/{id}', 'OrdersController@rate');
 });
+Route::get('orders-wallet-zalopay', 'API\AppCustomers\OrdersController@createOrderVNPay');// Tạo thanh toán vnpay
+Route::get('push-zalo-pay', 'API\AppCustomers\OrdersController@pushZALOPay');
+Route::post('callback-zalo-pay', 'API\AppCustomers\OrdersController@callbackZALOPay');
 
 /*
 |--------------------------------------------------------------------------

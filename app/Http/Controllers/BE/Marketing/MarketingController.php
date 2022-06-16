@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\Marketing;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
@@ -52,7 +53,7 @@ class MarketingController extends Controller
         }
 //        $input['marketing'] = 0;
 
-        $marketing = User::where('department_id', 3)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $customer = Customer::search($input)->select('id');
             $item->contact = $customer->count();
@@ -121,7 +122,7 @@ class MarketingController extends Controller
         }
         $input = $request->all();
         $input['searchAccept'] = UserConstant::ACTIVE;
-        $source = Source::search($input)->with('user')->get()->map(function ($item) use ($input) {
+        $source = Source::with('user')->get()->map(function ($item) use ($input) {
             $input['source_fb'] = $item->id;
             $customer = Customer::search($input)->select('id');
             $input['group_user'] = $customer->pluck('id')->toArray();
@@ -138,7 +139,7 @@ class MarketingController extends Controller
             $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
                 ->select('id', 'gross_revenue','all_total');
             unset($input['marketing']);
-            $input['user_id'] = $item->id;
+            $input['source_id'] = $item->id;
             $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
             $item->budget = $price->total_budget; //ngân sách
             $item->customers = $customer->count();

@@ -71,7 +71,7 @@ class CustomerController extends Controller
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->pluck('name', 'id')->toArray();// nguồn KH
         $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
-        $marketingUsers = User::whereIn('department_id', [DepartmentConstant::MARKETING, DepartmentConstant::CARE_PAGE])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::whereIn('department_id', [DepartmentConstant::MARKETING])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::select('id', 'name')->pluck('name', 'id')->toArray();
         $telesales = [];
         User::select('id','department_id','full_name')->get()->map(function ($item) use (&$telesales) {
@@ -126,6 +126,7 @@ class CustomerController extends Controller
         if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
             unset($input['branch_id']);
         }
+        $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
         $customers = Customer::search($input);
@@ -144,7 +145,7 @@ class CustomerController extends Controller
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories','carePageUsers'));
     }
 
     /**

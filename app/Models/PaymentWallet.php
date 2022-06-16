@@ -11,6 +11,14 @@ class PaymentWallet extends Model
 {
     protected $guarded = ['id'];
 
+    public static $typePayment = [
+        36 => 'Visa/Master/JCB',
+        37 => 'Bank Account',
+        38 => 'ZaloPay QR',
+        39 => 'ATM',
+        41 => 'Visa/Master Debit',
+    ];
+
 //    use SoftDeletes;
 
     public function order_wallet()
@@ -36,25 +44,26 @@ class PaymentWallet extends Model
 
     public static function search($input, $select = '*')
     {
-        $detail = self::select($select)->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-            $q->whereBetween('payment_date', [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ]);
-        })
+        $detail = self::select($select)->when(isset($input['start_date']) && isset($input['end_date']),
+            function ($q) use ($input) {
+                $q->whereBetween('payment_date', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            })
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
-        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
             })
             ->when(isset($input['payment_type']) && $input['payment_type'], function ($q) use ($input) {
-            $q->where('payment_type', $input['payment_type']);
-        })
+                $q->where('payment_type', $input['payment_type']);
+            })
             ->when(isset($input['user_id']) && $input['user_id'], function ($q) use ($input) {
-            $q->whereHas('order_wallet', function ($qr) use ($input) {
-                $qr->where('user_id', $input['user_id']);
-            });
-        })->with('order_wallet')->has('order_wallet');
+                $q->whereHas('order_wallet', function ($qr) use ($input) {
+                    $qr->where('user_id', $input['user_id']);
+                });
+            })->with('order_wallet')->has('order_wallet');
 
         return $detail;
     }

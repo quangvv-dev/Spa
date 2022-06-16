@@ -91,17 +91,20 @@
                                 <a href="#">Dữ liệu</a>
                                 <ul>
                                     @if($roleGlobal->permission('source.list'))
-                                    <li><a href="{!! route('marketing.source-fb.index') !!}">Kết nối FaceBook</a></li>
-                                    <li><a href="{!! route('marketing.source-landipage.index') !!}">Kết nối Landipage</a></li>
+                                        <li><a href="{!! route('marketing.source-fb.index') !!}">Kết nối FaceBook</a>
+                                        </li>
+                                        <li><a href="{!! route('marketing.source-landipage.index') !!}">Kết nối
+                                                Landipage</a></li>
                                     @endif
 
                                     @if($roleGlobal->permission('marketing.seeding_number'))
-                                        <li><a href="{{route('marketing.seeding-number.index')}}">Kho số seeding</a></li>
+                                        <li><a href="{{route('marketing.seeding-number.index')}}">Kho số seeding</a>
+                                        </li>
                                     @endif
                                 </ul>
                             </li>
                         @endif
-                            @if(empty($permissions) || !in_array('rules.index',$permissions)|| !in_array('promotions.index',$permissions))
+                        @if(empty($permissions) || !in_array('rules.index',$permissions)|| !in_array('promotions.index',$permissions))
                             <li class="sub-with-sub">
                                 <a href="#">Nâng cao</a>
                                 <ul>
@@ -115,22 +118,22 @@
                                             <li><a href="{{route('promotions.index')}}">Voucher khuyến mãi</a></li>
                                         @endif
                                     @endif
-                                        @if($roleGlobal->permission('marketing.fanpage'))
-                                            <li><a href="{{route('landipages.index')}}">Landipage</a></li>
-                                            <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpage</a></li>
-                                        @endif
+                                    @if($roleGlobal->permission('marketing.fanpage'))
+                                        <li><a href="{{route('landipages.index')}}">Landipage</a></li>
+                                        <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpage</a></li>
+                                    @endif
                                 </ul>
                             </li>
-                            @endif
+                        @endif
 
                         {{--@if($roleGlobal->permission('posts.list'))--}}
-                            {{--<li><a href="{{route('posts.index')}}">Optin Form</a></li>--}}
+                        {{--<li><a href="{{route('posts.index')}}">Optin Form</a></li>--}}
                         {{--@endif--}}
 
                         {{--@if(empty($permissions) || !in_array('customer-post.index',$permissions))--}}
-                            {{--@if($roleGlobal->permission('post.customer'))--}}
-                                {{--<li><a href="{{route('post.customer')}}">Khách hàng từ form</a></li>--}}
-                            {{--@endif--}}
+                        {{--@if($roleGlobal->permission('post.customer'))--}}
+                        {{--<li><a href="{{route('post.customer')}}">Khách hàng từ form</a></li>--}}
+                        {{--@endif--}}
                         {{--@endif--}}
                     </ul>
                 </div>
@@ -236,6 +239,27 @@
                                 <li><a href="{{url('marketing/leader')}}">Báo cáo doanh thu</a></li>
                             </ul>
                         </li>
+                        <li class="sub-with-sub">
+                            <a href="#">CarePage</a>
+                            <ul>
+                                <li><a href="{{url('marketing/carepage-ranking')}}">Bảng xếp hạng</a></li>
+                                <li><a href="{{url('marketing/carepage')}}">Báo cáo doanh thu</a></li>
+                            </ul>
+                        </li>
+
+                        @if($roleGlobal->permission('report.sale') || $roleGlobal->permission('statistics.taskSchedules'))
+                            <li class="sub-with-sub">
+                                <a href="#">Telesales</a>
+                                <ul>
+                                    @if($roleGlobal->permission('report.sale'))
+                                        <li><a href="{{url('report/sales')}}">Xếp hạng Telasales</a></li>
+                                    @endif
+                                    @if($roleGlobal->permission('statistics.taskSchedules'))
+                                        <li><a href="{{url('statistics-task')}}">BĐ C.việc & lịch hẹn</a></li>
+                                    @endif
+                                </ul>
+                            </li>
+                        @endif
 
                         @if($roleGlobal->permission('sms.history'))
                             <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
@@ -245,12 +269,6 @@
                         @endif
                         @if($roleGlobal->permission('report.commission'))
                             <li><a href="{{url('report/commission')}}">Hoa hồng KTV</a></li>
-                        @endif
-                        @if($roleGlobal->permission('report.sale'))
-                            <li><a href="{{url('report/sales')}}">Xếp hạng Telasales</a></li>
-                        @endif
-                        @if($roleGlobal->permission('statistics.taskSchedules'))
-                            <li><a href="{{url('statistics-task')}}">BĐ C.việc & lịch hẹn</a></li>
                         @endif
                         @if($roleGlobal->permission('call-center'))
                             <li><a href="{{route('call-center.index')}}">Quản lý tổng đài</a></li>

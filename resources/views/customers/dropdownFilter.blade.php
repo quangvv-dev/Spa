@@ -8,6 +8,14 @@
         </select>
     </div>
     <div class="col-md-2 col-xs-12">
+        <select name="group_product" class="form-control group-product">
+            <option value="">MKT phụ trách</option>
+            @foreach($marketingUsers as $k=> $item)
+                <option value="{{$k}}">{{ $item}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-2 col-xs-12">
         <select name="gender" class="form-control gender">
             <option value="">Giới tính</option>
             <option value="0">Nữ</option>

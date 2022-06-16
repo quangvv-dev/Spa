@@ -36,7 +36,7 @@
                 </div>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" role="tabpanel">
-                        <div class="row forEach">
+                        <div class="row forEach" style="height: 60vh;overflow-y: scroll">
                             @forelse($fanpages as $item)
                                 <div class="col-4">
                                     <div class="card border-info box-shadow-0 bg-transparent">

@@ -107,10 +107,7 @@
     <script src="{{asset('assets/plugins/ckeditor/ckeditor.js')}}"></script>
 
     <script>
-        CKEDITOR.replace('description', {
-            // filebrowserBrowseUrl: '/browser/browse.php',
-            // filebrowserUploadUrl: '/uploader/upload.php'
-        });
+        CKEDITOR.replace('description', {});
         $(document).ready(function () {
             $('body').on('keyup', '.price', function (e) {
                 let target = $(e.target).parent().parent();

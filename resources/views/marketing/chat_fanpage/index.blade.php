@@ -130,7 +130,6 @@
                 data_arr_page = JSON.parse(data_arr_page);
                 if(arr_curent_group.length>0){
                     arr_curent_group.forEach(f=>{
-                        console.log(2323,f,data_arr_page);
                         let check = data_arr_page.findIndex(find=>{
                            return  find.page_id == f;
                         })
@@ -158,6 +157,7 @@
                 method:'post',
                 success:function (data) {
                     if(data){
+                        pushData(data);
                         let html = `
                                 <a class="nav-item nav-link group-name" data-name="Group new" data-id="`+ data.id +`" data-toggle="tab" role="tab" aria-selected="true">
                                     Group new
@@ -171,10 +171,24 @@
 
         })
 
+        function pushData(item){
+            let data_old = $('.groupMulti').val();
+            if(data_old){
+                data_old = JSON.parse(data_old);
+            } else {
+                data_old = [];
+            }
+            data_old.push(item);
+
+            let data_new = JSON.stringify(data_old);
+            $('.groupMulti').val(data_new);
+        }
+
         $(document).on('click', '.group-name', function (e) {
             $('.checkPage').prop('checked', false);
             group_id = $(this).data('id');
             let data = $('.groupMulti').val();
+
             if(data){
                 data = JSON.parse(data);
                 if(data.length>0){
@@ -186,6 +200,8 @@
                             pages.forEach(f=>{
                                 $('.' + f).prop('checked', true)
                             })
+                        }else {
+                            arr_page = [];
                         }
                         $('.multipage-selectedCount').html(pages.length);
                     }
@@ -215,7 +231,6 @@
                     name: name,
                 },
                 success: function (data) {
-                    console.log(234324,data);
                     let html = `
                             `+name+`
                             <span class="delete-group" style="display: none" data-id="`+ id +`">x</span>
@@ -286,7 +301,6 @@
                 arr_page = arr_page.filter(f=>{return f.id != page_id})
             }
             $('.multipage-selectedCount').html(arr_page.length);
-            // console.log(12313,arr_page);return;
 
             let data_arr_page = arr_page.map(m=>{return m.id})
             $.ajax({
@@ -301,7 +315,6 @@
                 }
             })
 
-            console.log(1111,arr_page);
             setTimeout(function () {
                 $('.countPage').html(arr_page.length)
             },400)
@@ -346,6 +359,7 @@
                         if (f.name.match(re) ||f.page_id.match(re) ) {
                             let avatar = f.avatar ? f.avatar  :'';
                             let checked = arr_curent_group.findIndex(fi=>fi == f.page_id) > -1? 'checked' : '';
+                            let full_name = f.user && f.user.full_name ? f.user.full_name : '';
                             html += `
                                 <div class="col-4">
                                     <div class="card border-info box-shadow-0 bg-transparent">
@@ -353,7 +367,7 @@
                                             <img src="`+avatar+`" alt="element 04" width="90" class="float-left img-fluid">
                                             <div class="card-body pt-3 f-page">
                                                 <p class="pointer">`+f.name+`</p>
-                                                <p class="small-tip">`+f.user.full_name+` (`+f.page_id+`)</p>
+                                                <p class="small-tip">`+full_name+` (`+f.page_id+`)</p>
                                             </div>
                                             <input type="checkbox" class="checkbox checkPage `+f.page_id+`" `+checked+`
                                                    value="`+f.page_id+`" data-token="`+f.access_token+`"

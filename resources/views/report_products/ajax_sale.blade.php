@@ -92,7 +92,6 @@
             $comment_new = 0;
             $order_new = 0;
             $schedules_percent = 0;
-            $order_percent = 0;
             $revenue_new = 0;
             $payment_new = 0;
             $schedules_old = 0;
@@ -113,7 +112,6 @@
                 $comment_new += $item->comment_new;
                 $order_new += $item->order_new;
                 $schedules_percent += $item->schedules_den >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100,1):0;
-                $order_percent += $item->order_new>0&&$item->schedules_den >0 ?round(($item->order_new/$item->schedules_den)*100,1):0;
                 $revenue_new += $item->revenue_new;
                 $payment_new += $item->payment_new;
                 $schedules_new += $item->schedules_new;
@@ -168,9 +166,9 @@
             <td class="text-center bold">{{@number_format($schedules_new)}}</td>
             <td class="text-center bold">{{@number_format($all_schedules_den)}}</td>
             <td class="text-center bold">{{@number_format($order_new)}}</td>
-            <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
+            <td class="text-center bold">{{!empty($schedules_new)&& !empty($customer_new)?round($schedules_new/$customer_new*100,1):0}}%</td>
             <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($schedules_new)?round($all_schedules_den/$schedules_new*100,1):0}}%</td>
-            <td class="text-center bold">{{@number_format($order_percent/count($users))}}%</td>
+            <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($order_new)?round($order_new/$all_schedules_den*100,1):0}}%</td>
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>
             <td class="text-center bold">{{@number_format($payment_new)}}</td>
             <td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>

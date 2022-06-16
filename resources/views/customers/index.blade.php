@@ -83,9 +83,9 @@
                     </select>
                 </div>
                 <div class="col-md-2 col-xs-12">
-                    <select name="group_product" class="form-control group-product">
+                    <select name="carepage_id" class="form-control carepage">
                         <option value="">Người tạo</option>
-                        @foreach($marketingUsers as $k=> $item)
+                        @foreach($carePageUsers as $k=> $item)
                             <option value="{{$k}}">{{ $item}}</option>
                         @endforeach
                     </select>
@@ -373,6 +373,7 @@
             }
 
             $(document).on('click', '.status', function () {
+                let carepage_id = $('.carepage').val();
                 let status = $(this).data('name');
                 let location = $('.location').val();
                 let data_time = $('#btn_choose_time').val();
@@ -385,6 +386,7 @@
                 $('#status').val(status);
                 $('#birthday_tab').val('');
                 let data = {
+                    carepage_id: carepage_id,
                     status: status,
                     data_time: data_time,
                     group: group,
@@ -423,6 +425,7 @@
                 $('#birthday_tab').val('');
                 $('#btn_choose_time').val(data_time);
                 let search = $('#search_value').val();
+                let carepage_id = $('.carepage').val();
                 let group = $('#group').val();
                 let telesales = $('#telesales').val();
                 let status = $('#status').val();
@@ -434,6 +437,7 @@
 
                 let data = {
                     data_time: data_time,
+                    carepage_id: carepage_id,
                     group: group,
                     telesales: telesales,
                     search: search,
@@ -460,8 +464,9 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location', delay(function () {
+            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location,.carepage', delay(function () {
                 let marketing = $('.group-product').val();
+                let carepage_id = $('.carepage').val();
                 let gender = $('.gender').val();
                 let location = $('.location').val();
                 let branch_id = $('.branch_id').val();
@@ -480,6 +485,7 @@
 
                 let data = {
                     marketing: marketing,
+                    carepage_id: carepage_id,
                     gender: gender,
                     location_id: location,
                     group: group,
@@ -496,6 +502,7 @@
 
             $(document).on('keyup', '#search', delay(function () {
                 let search = $('#search').val();
+                let carepage_id = $('.carepage').val();
                 $('#search_value').val(search);
                 $('#birthday_tab').val('');
                 let data_time = $('#btn_choose_time').val();
@@ -509,6 +516,7 @@
                 let location = $('.location').val();
 
                 let data = {
+                    carepage_id: carepage_id,
                     search: search,
                     gender: gender,
                     data_time: data_time,
@@ -860,6 +868,7 @@
                 e.preventDefault();
                 let pages = $(this).attr('href').split('page=')[1] ? $(this).attr('href').split('page=')[1] : 1;
                 let group = $('.group').val();
+                let carepage_id = $('.carepage').val();
                 let telesales = $('.telesales').val();
                 let search = $('#search_value').val();
                 let marketing = $('#group_product').val();
@@ -877,6 +886,7 @@
                     method: "get",
                     data: {
                         location_id: location,
+                        carepage_id: carepage_id,
                         gender: gender,
                         marketing: marketing,
                         source: source,

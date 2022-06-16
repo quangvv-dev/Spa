@@ -1935,10 +1935,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2293,6 +2313,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       images: [],
       data_images_upload_server_default: [],
       data_images_upload_server: [],
+      next_page: null,
       //data form thêm khách hàng
       description: '',
       phone: '',
@@ -2316,7 +2337,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       //filter
       filter_phone: null,
       filter_comment: 0,
-      select_active: null
+      select_active: null,
+      //comment
+      click_comment: false,
+      post_created_time: '',
+      post_full_picture: '',
+      post_message: ''
     };
   },
   components: {
@@ -2713,13 +2739,16 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
             _this8.navChat = _this8.navChatDefault;
           });
-        } // this.navChat = abc;
-        // this.navChatDefault = abc;
-
+        }
       });
     },
     selectMessage: function selectMessage(item, index) {
       var _this9 = this;
+
+      this.post_created_time = '';
+      this.post_full_picture = '';
+      this.post_message = '';
+      this.next_page = null;
 
       if (item.type && item.type == 'comment') {
         var url = '/marketing/get-detail-comment';
@@ -2752,6 +2781,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
           _this9.detailMessage = data;
           _this9.post_id = _this9.last_segment + '_' + response.data.post_id;
+          var url_detail_post = "https://graph.facebook.com/v13.0/".concat(_this9.post_id, "?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=").concat(_this9.access_token);
+          axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url_detail_post).then(function (res) {
+            _this9.post_created_time = res.data.created_time;
+            _this9.post_full_picture = res.data.attachments.data[0].media.image.src;
+            _this9.post_message = res.data.message.replaceAll('\n\n', '<br>');
+          });
         }); //update is_read comment
 
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/update-is-read-comment', params);
@@ -2764,6 +2799,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_url).then(function (response) {
           _this9.detailMessage = response.data.messages.data.reverse();
+          _this9.next_page = response.data.messages.paging.next;
         });
 
         var _index2 = this.navChatDefault.findIndex(function (f) {
@@ -3039,7 +3075,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.telesales_id = null;
       this.value_group_customer = [];
       this.value_source_customer = null;
-      this.value_chi_nhanh.id = null;
+      this.value_chi_nhanh = null;
       this.description = '';
     },
     filterPhone: function filterPhone() {
@@ -3093,6 +3129,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       });
     },
     sendReplyComment: function sendReplyComment() {
+      var _this17 = this;
+
       var rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
         // "messaging_type": "MESSAGE_TAG",
         // "tag": "HUMAN_AGENT",
@@ -3107,6 +3145,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res) {
           alertify.success('Trả lời thành công!', 5);
           $('#reply_comment').modal('hide');
+
+          _this17.newElement(res.data.message_id);
         }
       })["catch"](function (error) {
         if (error) {
@@ -3115,6 +3155,92 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }
       });
       this.contentMesage = '';
+    },
+    newElement: function newElement(message_id) {
+      var _this18 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var access_token, fields, url, res, index, html;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                access_token = _this18.access_token;
+                fields = 'from,message,to,created_time,thread_id';
+                url = "https://graph.facebook.com/v13.0/".concat(message_id, "?fields=").concat(fields, "&access_token=").concat(access_token);
+                _context6.next = 5;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url);
+
+              case 5:
+                res = _context6.sent;
+                index = _this18.navChatDefault.findIndex(function (fd) {
+                  return fd.participants.data[1].id == res.data.from.id && fd.participants.data[0].id == res.data.to.data[0].id && fd.type != 'comment';
+                });
+
+                if (index > -1) {
+                  _this18.navChatDefault[index].snippet = res.data.message;
+                  _this18.navChatDefault[index].updated_time = res.data.created_time;
+                } else {
+                  html = {
+                    check_phone: 0,
+                    id: res.data.thread_id,
+                    participants: {
+                      data: [{
+                        id: res.data.to.data[0].id,
+                        name: res.data.to.data[0].name
+                      }, {
+                        id: res.data.from.id,
+                        name: res.data.from.name
+                      }]
+                    },
+                    phone: "",
+                    snippet: res.data.message,
+                    updated_time: res.data.created_time
+                  };
+
+                  _this18.navChatDefault.unshift(html);
+                }
+
+              case 8:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    getNextPage: function getNextPage() {
+      var _this19 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+        var data, data_1;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_this19.next_page);
+
+              case 2:
+                data = _context7.sent;
+
+                if (data.data.paging.next) {
+                  _this19.next_page = data.data.paging.next;
+                } else {
+                  _this19.next_page = null;
+                }
+
+                data_1 = data.data.data.reverse();
+                data_1.push.apply(data_1, _toConsumableArray(_this19.detailMessage));
+                _this19.detailMessage = data_1;
+
+              case 7:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7);
+      }))();
     }
   }
 });
@@ -3478,6 +3604,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3512,6 +3646,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       data_images_upload_server_default: [],
       chat_current_name: '',
       chat_current_page: '',
+      next_page: null,
       //data form thêm khách hàng
       description: '',
       phone: '',
@@ -3535,7 +3670,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       //filter
       filter_phone: null,
       filter_comment: 0,
-      select_active: null
+      select_active: null,
+      //comment
+      click_comment: false,
+      post_created_time: '',
+      post_full_picture: '',
+      post_message: ''
     };
   },
   components: {
@@ -3945,7 +4085,6 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           return m;
         });
 
-        console.log(123123, abc);
         _this7.navChat = abc;
         _this7.navChatDefault = abc;
       });
@@ -4003,7 +4142,11 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     selectMessage: function selectMessage(item, index) {
       var _this9 = this;
 
-      console.log(12313, item);
+      this.post_created_time = '';
+      this.post_full_picture = '';
+      this.post_message = '';
+      this.next_page = null;
+      this.post_id = '';
 
       if (item.type && item.type == 'comment') {
         var url = '/marketing/get-detail-comment';
@@ -4038,6 +4181,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
           _this9.detailMessage = data;
           _this9.post_id = _this9.last_segment + '_' + response.data.post_id;
+          var url_detail_post = "https://graph.facebook.com/v13.0/".concat(_this9.post_id, "?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=").concat(_this9.access_token);
+          axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url_detail_post).then(function (res) {
+            _this9.post_created_time = res.data.created_time;
+            _this9.post_full_picture = res.data.attachments.data[0].media.image.src;
+            _this9.post_message = res.data.message.replaceAll('\n\n', '<br>');
+          });
         }); //update is_read comment
 
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/update-is-read-comment', params);
@@ -4050,6 +4199,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_url).then(function (response) {
           _this9.detailMessage = response.data.messages.data.reverse();
+          _this9.next_page = response.data.messages.paging.next;
         });
 
         var _index2 = this.navChatDefault.findIndex(function (f) {
@@ -4344,7 +4494,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.telesales_id = null;
       this.value_group_customer = [];
       this.value_source_customer = null;
-      this.value_chi_nhanh.id = null;
+      this.value_chi_nhanh = null;
       this.description = '';
     },
     filterPhone: function filterPhone() {
@@ -4398,6 +4548,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       });
     },
     sendReplyComment: function sendReplyComment() {
+      var _this17 = this;
+
       var rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
         // "messaging_type": "MESSAGE_TAG",
         // "tag": "HUMAN_AGENT",
@@ -4412,6 +4564,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         if (res) {
           alertify.success('Trả lời thành công!', 5);
           $('#reply_comment').modal('hide');
+
+          _this17.newElement(res.data.message_id);
         }
       })["catch"](function (error) {
         if (error) {
@@ -4420,6 +4574,92 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         }
       });
       this.contentMesage = '';
+    },
+    newElement: function newElement(message_id) {
+      var _this18 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var access_token, fields, url, res, index, html;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                access_token = _this18.access_token;
+                fields = 'from,message,to,created_time,thread_id';
+                url = "https://graph.facebook.com/v13.0/".concat(message_id, "?fields=").concat(fields, "&access_token=").concat(access_token);
+                _context6.next = 5;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url);
+
+              case 5:
+                res = _context6.sent;
+                index = _this18.navChatDefault.findIndex(function (fd) {
+                  return fd.participants.data[1].id == res.data.from.id && fd.participants.data[0].id == res.data.to.data[0].id && fd.type != 'comment';
+                });
+
+                if (index > -1) {
+                  _this18.navChatDefault[index].snippet = res.data.message;
+                  _this18.navChatDefault[index].updated_time = res.data.created_time;
+                } else {
+                  html = {
+                    check_phone: 0,
+                    id: res.data.thread_id,
+                    participants: {
+                      data: [{
+                        id: res.data.to.data[0].id,
+                        name: res.data.to.data[0].name
+                      }, {
+                        id: res.data.from.id,
+                        name: res.data.from.name
+                      }]
+                    },
+                    phone: "",
+                    snippet: res.data.message,
+                    updated_time: res.data.created_time
+                  };
+
+                  _this18.navChatDefault.unshift(html);
+                }
+
+              case 8:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    getNextPage: function getNextPage() {
+      var _this19 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var data, data_1;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(_this19.next_page);
+
+              case 2:
+                data = _context7.sent;
+
+                if (data.data.paging.next) {
+                  _this19.next_page = data.data.paging.next;
+                } else {
+                  _this19.next_page = null;
+                }
+
+                data_1 = data.data.data.reverse();
+                data_1.push.apply(data_1, _toConsumableArray(_this19.detailMessage));
+                _this19.detailMessage = data_1;
+
+              case 7:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee6);
+      }))();
     }
   }
 });
@@ -67292,7 +67532,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _socket_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./socket.js */ "./node_modules/socket.io-client/build/esm/socket.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Socket", function() { return _socket_js__WEBPACK_IMPORTED_MODULE_2__["Socket"]; });
 
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "protocol", function() { return socket_io_parser__WEBPACK_IMPORTED_MODULE_3__["protocol"]; });
 
 
@@ -67368,7 +67608,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Manager", function() { return Manager; });
 /* harmony import */ var engine_io_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! engine.io-client */ "./node_modules/engine.io-client/build/esm/index.js");
 /* harmony import */ var _socket_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./socket.js */ "./node_modules/socket.io-client/build/esm/socket.js");
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
 /* harmony import */ var _on_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./on.js */ "./node_modules/socket.io-client/build/esm/on.js");
 /* harmony import */ var _contrib_backo2_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contrib/backo2.js */ "./node_modules/socket.io-client/build/esm/contrib/backo2.js");
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
@@ -67756,7 +67996,7 @@ function on(obj, ev, fn) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Socket", function() { return Socket; });
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
 /* harmony import */ var _on_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./on.js */ "./node_modules/socket.io-client/build/esm/on.js");
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
 
@@ -68430,10 +68670,10 @@ function url(uri, path = "", loc) {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js":
-/*!*****************************************************************************************!*\
-  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js ***!
-  \*****************************************************************************************/
+/***/ "./node_modules/socket.io-parser/build/esm/binary.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/socket.io-parser/build/esm/binary.js ***!
+  \***********************************************************/
 /*! exports provided: deconstructPacket, reconstructPacket */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -68441,7 +68681,7 @@ function url(uri, path = "", loc) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deconstructPacket", function() { return deconstructPacket; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reconstructPacket", function() { return reconstructPacket; });
-/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js");
+/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-parser/build/esm/is-binary.js");
 
 /**
  * Replaces every Buffer | ArrayBuffer | Blob | File in packet with a numbered placeholder.
@@ -68521,10 +68761,10 @@ function _reconstructPacket(data, buffers) {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js":
-/*!****************************************************************************************!*\
-  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js ***!
-  \****************************************************************************************/
+/***/ "./node_modules/socket.io-parser/build/esm/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/socket.io-parser/build/esm/index.js ***!
+  \**********************************************************/
 /*! exports provided: protocol, PacketType, Encoder, Decoder */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -68535,8 +68775,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Encoder", function() { return Encoder; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Decoder", function() { return Decoder; });
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
-/* harmony import */ var _binary_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js");
-/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js");
+/* harmony import */ var _binary_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./binary.js */ "./node_modules/socket.io-parser/build/esm/binary.js");
+/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-parser/build/esm/is-binary.js");
 
 
 
@@ -68826,10 +69066,10 @@ class BinaryReconstructor {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js":
-/*!********************************************************************************************!*\
-  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js ***!
-  \********************************************************************************************/
+/***/ "./node_modules/socket.io-parser/build/esm/is-binary.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/socket.io-parser/build/esm/is-binary.js ***!
+  \**************************************************************/
 /*! exports provided: isBinary, hasBinary */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -82344,48 +82584,49 @@ var render = function() {
               staticClass: "chat-app-window",
               staticStyle: { "overflow-y": "scroll" }
             },
-            _vm._l(_vm.emotions, function(item, index) {
-              return _c("div", { staticClass: "chats" }, [
-                item.from.id == _vm.last_segment
-                  ? _c("div", { staticClass: "chat" }, [
-                      _c("div", { staticClass: "chat-body" }, [
-                        item.display == 1
-                          ? _c("div", { staticClass: "chat-content" }, [
-                              item.file == "image"
-                                ? _c("img", {
-                                    attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      src: item.url,
-                                      title: _vm.date(item.created_time),
-                                      alt: ""
-                                    }
-                                  })
-                                : item.file == "video"
-                                ? _c("video", {
-                                    attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      controls: "",
-                                      src: item.url
-                                    }
-                                  })
-                                : _c("p", {
-                                    attrs: {
-                                      title: _vm.date(item.created_time)
-                                    },
-                                    domProps: {
-                                      innerHTML: _vm._s(item.message)
-                                    }
-                                  })
-                            ])
-                          : _c(
-                              "div",
-                              {
-                                staticClass: "chat-content",
-                                staticStyle: { "margin-bottom": "0" }
-                              },
-                              [
+            [
+              _vm.next_page
+                ? _c("div", {}, [
+                    _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.getNextPage()
+                            }
+                          }
+                        },
+                        [_vm._v("Xem thêm")]
+                      )
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.post_created_time
+                ? _c("div", { staticStyle: { width: "50%" } }, [
+                    _c("p", {
+                      domProps: { innerHTML: _vm._s(_vm.post_message) }
+                    }),
+                    _vm._v(" "),
+                    _c("img", {
+                      attrs: { src: _vm.post_full_picture, alt: "" }
+                    }),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(_vm._s(_vm.post_created_time.substring(0, 10)))
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.emotions, function(item, index) {
+                return _c("div", { staticClass: "chats" }, [
+                  item.from.id == _vm.last_segment
+                    ? _c("div", { staticClass: "chat" }, [
+                        _c("div", { staticClass: "chat-body" }, [
+                          item.display == 1
+                            ? _c("div", { staticClass: "chat-content" }, [
                                 item.file == "image"
                                   ? _c("img", {
                                       attrs: {
@@ -82413,108 +82654,79 @@ var render = function() {
                                         innerHTML: _vm._s(item.message)
                                       }
                                     })
-                              ]
-                            )
+                              ])
+                            : _c(
+                                "div",
+                                {
+                                  staticClass: "chat-content",
+                                  staticStyle: { "margin-bottom": "0" }
+                                },
+                                [
+                                  item.file == "image"
+                                    ? _c("img", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          src: item.url,
+                                          title: _vm.date(item.created_time),
+                                          alt: ""
+                                        }
+                                      })
+                                    : item.file == "video"
+                                    ? _c("video", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          controls: "",
+                                          src: item.url
+                                        }
+                                      })
+                                    : _c("p", {
+                                        attrs: {
+                                          title: _vm.date(item.created_time)
+                                        },
+                                        domProps: {
+                                          innerHTML: _vm._s(item.message)
+                                        }
+                                      })
+                                ]
+                              )
+                        ])
                       ])
-                    ])
-                  : _c("div", { staticClass: "chat chat-left" }, [
-                      item.display == 1
-                        ? _c("div", { staticClass: "chat-avatar" }, [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "avatar",
-                                attrs: {
-                                  "data-toggle": "tooltip",
-                                  href: "#",
-                                  "data-placement": "left",
-                                  title: "",
-                                  "data-original-title": ""
-                                }
-                              },
-                              [
-                                _c("img", {
-                                  attrs: {
-                                    alt: "avatar",
-                                    src:
-                                      "https://graph.facebook.com/" +
-                                      item.from.id +
-                                      "/picture?type=normal&access_token=" +
-                                      _vm.access_token
-                                  }
-                                })
-                              ]
-                            )
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "chat-body" }, [
+                    : _c("div", { staticClass: "chat chat-left" }, [
                         item.display == 1
-                          ? _c("div", { staticClass: "chat-content" }, [
-                              item.file == "image"
-                                ? _c("img", {
+                          ? _c("div", { staticClass: "chat-avatar" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "avatar",
+                                  attrs: {
+                                    "data-toggle": "tooltip",
+                                    href: "#",
+                                    "data-placement": "left",
+                                    title: "",
+                                    "data-original-title": ""
+                                  }
+                                },
+                                [
+                                  _c("img", {
                                     attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      src: item.url,
-                                      title: _vm.date(item.created_time),
-                                      alt: ""
+                                      alt: "avatar",
+                                      src:
+                                        "https://graph.facebook.com/" +
+                                        item.from.id +
+                                        "/picture?type=normal&access_token=" +
+                                        _vm.access_token
                                     }
                                   })
-                                : item.file == "video"
-                                ? _c("video", {
-                                    attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      controls: "",
-                                      src: item.url
-                                    }
-                                  })
-                                : _c(
-                                    "p",
-                                    {
-                                      attrs: {
-                                        title: _vm.date(item.created_time)
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(item.message) +
-                                          "\n                                        "
-                                      ),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _vm.post_id
-                                        ? _c(
-                                            "span",
-                                            {
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.showModalReply(
-                                                    item
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _c("i", {
-                                                staticClass:
-                                                  "fa fa-comment pointer"
-                                              })
-                                            ]
-                                          )
-                                        : _vm._e()
-                                    ]
-                                  )
+                                ]
+                              )
                             ])
-                          : _c(
-                              "div",
-                              {
-                                staticClass: "chat-content",
-                                staticStyle: { "margin-bottom": "0" }
-                              },
-                              [
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "chat-body" }, [
+                          item.display == 1
+                            ? _c("div", { staticClass: "chat-content" }, [
                                 item.file == "image"
                                   ? _c("img", {
                                       attrs: {
@@ -82571,13 +82783,78 @@ var render = function() {
                                           : _vm._e()
                                       ]
                                     )
-                              ]
-                            )
+                              ])
+                            : _c(
+                                "div",
+                                {
+                                  staticClass: "chat-content",
+                                  staticStyle: { "margin-bottom": "0" }
+                                },
+                                [
+                                  item.file == "image"
+                                    ? _c("img", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          src: item.url,
+                                          title: _vm.date(item.created_time),
+                                          alt: ""
+                                        }
+                                      })
+                                    : item.file == "video"
+                                    ? _c("video", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          controls: "",
+                                          src: item.url
+                                        }
+                                      })
+                                    : _c(
+                                        "p",
+                                        {
+                                          attrs: {
+                                            title: _vm.date(item.created_time)
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(item.message) +
+                                              "\n                                        "
+                                          ),
+                                          _c("br"),
+                                          _vm._v(" "),
+                                          _vm.post_id
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.showModalReply(
+                                                        item
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass:
+                                                      "fa fa-comment pointer"
+                                                  })
+                                                ]
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      )
+                                ]
+                              )
+                        ])
                       ])
-                    ])
-              ])
-            }),
-            0
+                ])
+              })
+            ],
+            2
           ),
           _vm._v(" "),
           _c(
@@ -83028,315 +83305,342 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "right",
-        staticStyle: { width: "15%", "margin-top": "6%" }
-      },
-      [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-12 mb-1" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.chat_current_name,
-                  expression: "chat_current_name"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Tên KH" },
-              domProps: { value: _vm.chat_current_name },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.chat_current_name = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12 mb-1" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.phone,
-                  expression: "phone"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Số điện thoại" },
-              domProps: { value: _vm.phone },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.phone = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.option_gender,
-                  label: "value",
-                  placeholder: "Giới tính"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
+    _vm.last_segment && _vm.fb_me
+      ? _c(
+          "div",
+          {
+            staticClass: "right",
+            staticStyle: { width: "15%", "margin-top": "6%" }
+          },
+          [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-12 mb-1" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.chat_current_name,
+                      expression: "chat_current_name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Tên KH" },
+                  domProps: { value: _vm.chat_current_name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.chat_current_name = $event.target.value
                     }
                   }
-                ]),
-                model: {
-                  value: _vm.gender,
-                  callback: function($$v) {
-                    _vm.gender = $$v
-                  },
-                  expression: "gender"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_telesale,
-                  label: "value",
-                  placeholder: "Người phụ trách"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12 mb-1" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.phone,
+                      expression: "phone"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Số điện thoại" },
+                  domProps: { value: _vm.phone },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.phone = $event.target.value
                     }
                   }
-                ]),
-                model: {
-                  value: _vm.telesales_id,
-                  callback: function($$v) {
-                    _vm.telesales_id = $$v
-                  },
-                  expression: "telesales_id"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_group_customer,
-                  multiple: "",
-                  label: "value",
-                  placeholder: "Nhóm khách hàng"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.option_gender,
+                      label: "value",
+                      placeholder: "Giới tính"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.gender,
+                      callback: function($$v) {
+                        _vm.gender = $$v
+                      },
+                      expression: "gender"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_telesale,
+                      label: "value",
+                      placeholder: "Người phụ trách"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.telesales_id,
+                      callback: function($$v) {
+                        _vm.telesales_id = $$v
+                      },
+                      expression: "telesales_id"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_group_customer,
+                      multiple: "",
+                      label: "value",
+                      placeholder: "Nhóm khách hàng"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.value_group_customer,
+                      callback: function($$v) {
+                        _vm.value_group_customer = $$v
+                      },
+                      expression: "value_group_customer"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_source_customer,
+                      label: "value",
+                      placeholder: "Nguồn khách hàng"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.value_source_customer,
+                      callback: function($$v) {
+                        _vm.value_source_customer = $$v
+                      },
+                      expression: "value_source_customer"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-12 mb-1" },
+                [
+                  _c("v-select", {
+                    staticClass: "square",
+                    attrs: {
+                      options: _vm.data_chi_nhanh,
+                      label: "value",
+                      placeholder: "Chi nhánh"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "selected-option",
+                          fn: function(ref) {
+                            var value = ref.value
+                            return [
+                              _c(
+                                "div",
+                                {
+                                  staticStyle: {
+                                    display: "flex",
+                                    "align-items": "baseline"
+                                  }
+                                },
+                                [_c("strong", [_vm._v(_vm._s(value))])]
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      864202992
+                    ),
+                    model: {
+                      value: _vm.value_chi_nhanh,
+                      callback: function($$v) {
+                        _vm.value_chi_nhanh = $$v
+                      },
+                      expression: "value_chi_nhanh"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12 mb-1" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.description,
+                      expression: "description"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "4", placeholder: "Mô tả" },
+                  domProps: { value: _vm.description },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.description = $event.target.value
                     }
                   }
-                ]),
-                model: {
-                  value: _vm.value_group_customer,
-                  callback: function($$v) {
-                    _vm.value_group_customer = $$v
-                  },
-                  expression: "value_group_customer"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_source_customer,
-                  label: "value",
-                  placeholder: "Nguồn khách hàng"
-                },
-                scopedSlots: _vm._u([
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12" }, [
+                _c(
+                  "button",
                   {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
-                    }
-                  }
-                ]),
-                model: {
-                  value: _vm.value_source_customer,
-                  callback: function($$v) {
-                    _vm.value_source_customer = $$v
+                    staticClass: "btn btn-primary",
+                    on: { click: _vm.insertCustomer }
                   },
-                  expression: "value_source_customer"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-12 mb-1" },
-            [
-              _c("v-select", {
-                staticClass: "square",
-                attrs: {
-                  options: _vm.data_chi_nhanh,
-                  label: "value",
-                  placeholder: "Chi nhánh"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selected-option",
-                    fn: function(ref) {
-                      var value = ref.value
-                      return [
-                        _c(
-                          "div",
-                          {
-                            staticStyle: {
-                              display: "flex",
-                              "align-items": "baseline"
-                            }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(value))])]
-                        )
-                      ]
-                    }
-                  }
-                ]),
-                model: {
-                  value: _vm.value_chi_nhanh,
-                  callback: function($$v) {
-                    _vm.value_chi_nhanh = $$v
-                  },
-                  expression: "value_chi_nhanh"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12 mb-1" }, [
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.description,
-                  expression: "description"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { rows: "4", placeholder: "Mô tả" },
-              domProps: { value: _vm.description },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.description = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                on: { click: _vm.insertCustomer }
-              },
-              [_vm._v("Thêm KH")]
-            )
-          ])
-        ])
-      ]
-    )
+                  [_vm._v("Thêm KH")]
+                )
+              ])
+            ])
+          ]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -83658,48 +83962,49 @@ var render = function() {
           _c(
             "section",
             { staticClass: "chat-app-window" },
-            _vm._l(_vm.emotions, function(item, index) {
-              return _c("div", { staticClass: "chats" }, [
-                item.from.id != _vm.fb_me
-                  ? _c("div", { staticClass: "chat" }, [
-                      _c("div", { staticClass: "chat-body" }, [
-                        item.display == 1
-                          ? _c("div", { staticClass: "chat-content" }, [
-                              item.file == "image"
-                                ? _c("img", {
-                                    attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      src: item.url,
-                                      title: _vm.date(item.created_time),
-                                      alt: ""
-                                    }
-                                  })
-                                : item.file == "video"
-                                ? _c("video", {
-                                    attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      controls: "",
-                                      src: item.url
-                                    }
-                                  })
-                                : _c("p", {
-                                    attrs: {
-                                      title: _vm.date(item.created_time)
-                                    },
-                                    domProps: {
-                                      innerHTML: _vm._s(item.message)
-                                    }
-                                  })
-                            ])
-                          : _c(
-                              "div",
-                              {
-                                staticClass: "chat-content",
-                                staticStyle: { "margin-bottom": "0" }
-                              },
-                              [
+            [
+              _vm.next_page
+                ? _c("div", {}, [
+                    _c("span", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.getNextPage()
+                            }
+                          }
+                        },
+                        [_vm._v("Xem thêm")]
+                      )
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.post_created_time
+                ? _c("div", { staticStyle: { width: "50%" } }, [
+                    _c("p", {
+                      domProps: { innerHTML: _vm._s(_vm.post_message) }
+                    }),
+                    _vm._v(" "),
+                    _c("img", {
+                      attrs: { src: _vm.post_full_picture, alt: "" }
+                    }),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(_vm._s(_vm.post_created_time.substring(0, 10)))
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.emotions, function(item, index) {
+                return _c("div", { staticClass: "chats" }, [
+                  item.from.id != _vm.fb_me
+                    ? _c("div", { staticClass: "chat" }, [
+                        _c("div", { staticClass: "chat-body" }, [
+                          item.display == 1
+                            ? _c("div", { staticClass: "chat-content" }, [
                                 item.file == "image"
                                   ? _c("img", {
                                       attrs: {
@@ -83727,108 +84032,79 @@ var render = function() {
                                         innerHTML: _vm._s(item.message)
                                       }
                                     })
-                              ]
-                            )
+                              ])
+                            : _c(
+                                "div",
+                                {
+                                  staticClass: "chat-content",
+                                  staticStyle: { "margin-bottom": "0" }
+                                },
+                                [
+                                  item.file == "image"
+                                    ? _c("img", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          src: item.url,
+                                          title: _vm.date(item.created_time),
+                                          alt: ""
+                                        }
+                                      })
+                                    : item.file == "video"
+                                    ? _c("video", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          controls: "",
+                                          src: item.url
+                                        }
+                                      })
+                                    : _c("p", {
+                                        attrs: {
+                                          title: _vm.date(item.created_time)
+                                        },
+                                        domProps: {
+                                          innerHTML: _vm._s(item.message)
+                                        }
+                                      })
+                                ]
+                              )
+                        ])
                       ])
-                    ])
-                  : _c("div", { staticClass: "chat chat-left" }, [
-                      item.display == 1
-                        ? _c("div", { staticClass: "chat-avatar" }, [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "avatar",
-                                attrs: {
-                                  "data-toggle": "tooltip",
-                                  href: "#",
-                                  "data-placement": "left",
-                                  title: "",
-                                  "data-original-title": ""
-                                }
-                              },
-                              [
-                                _c("img", {
-                                  attrs: {
-                                    alt: "avatar",
-                                    src:
-                                      "https://graph.facebook.com/" +
-                                      item.from.id +
-                                      "/picture?type=normal&access_token=" +
-                                      _vm.access_token
-                                  }
-                                })
-                              ]
-                            )
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "chat-body" }, [
+                    : _c("div", { staticClass: "chat chat-left" }, [
                         item.display == 1
-                          ? _c("div", { staticClass: "chat-content" }, [
-                              item.file == "image"
-                                ? _c("img", {
+                          ? _c("div", { staticClass: "chat-avatar" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "avatar",
+                                  attrs: {
+                                    "data-toggle": "tooltip",
+                                    href: "#",
+                                    "data-placement": "left",
+                                    title: "",
+                                    "data-original-title": ""
+                                  }
+                                },
+                                [
+                                  _c("img", {
                                     attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      src: item.url,
-                                      title: _vm.date(item.created_time),
-                                      alt: ""
+                                      alt: "avatar",
+                                      src:
+                                        "https://graph.facebook.com/" +
+                                        item.from.id +
+                                        "/picture?type=normal&access_token=" +
+                                        _vm.access_token
                                     }
                                   })
-                                : item.file == "video"
-                                ? _c("video", {
-                                    attrs: {
-                                      width: "320",
-                                      height: "180",
-                                      controls: "",
-                                      src: item.url
-                                    }
-                                  })
-                                : _c(
-                                    "p",
-                                    {
-                                      attrs: {
-                                        title: _vm.date(item.created_time)
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(item.message) +
-                                          "\n                                        "
-                                      ),
-                                      _c("br"),
-                                      _vm._v(" "),
-                                      _vm.post_id
-                                        ? _c(
-                                            "span",
-                                            {
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.showModalReply(
-                                                    item
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _c("i", {
-                                                staticClass:
-                                                  "fa fa-comment pointer"
-                                              })
-                                            ]
-                                          )
-                                        : _vm._e()
-                                    ]
-                                  )
+                                ]
+                              )
                             ])
-                          : _c(
-                              "div",
-                              {
-                                staticClass: "chat-content",
-                                staticStyle: { "margin-bottom": "0" }
-                              },
-                              [
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "chat-body" }, [
+                          item.display == 1
+                            ? _c("div", { staticClass: "chat-content" }, [
                                 item.file == "image"
                                   ? _c("img", {
                                       attrs: {
@@ -83885,13 +84161,78 @@ var render = function() {
                                           : _vm._e()
                                       ]
                                     )
-                              ]
-                            )
+                              ])
+                            : _c(
+                                "div",
+                                {
+                                  staticClass: "chat-content",
+                                  staticStyle: { "margin-bottom": "0" }
+                                },
+                                [
+                                  item.file == "image"
+                                    ? _c("img", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          src: item.url,
+                                          title: _vm.date(item.created_time),
+                                          alt: ""
+                                        }
+                                      })
+                                    : item.file == "video"
+                                    ? _c("video", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          controls: "",
+                                          src: item.url
+                                        }
+                                      })
+                                    : _c(
+                                        "p",
+                                        {
+                                          attrs: {
+                                            title: _vm.date(item.created_time)
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(item.message) +
+                                              "\n                                        "
+                                          ),
+                                          _c("br"),
+                                          _vm._v(" "),
+                                          _vm.post_id
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.showModalReply(
+                                                        item
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass:
+                                                      "fa fa-comment pointer"
+                                                  })
+                                                ]
+                                              )
+                                            : _vm._e()
+                                        ]
+                                      )
+                                ]
+                              )
+                        ])
                       ])
-                    ])
-              ])
-            }),
-            0
+                ])
+              })
+            ],
+            2
           ),
           _vm._v(" "),
           _c(
@@ -84350,7 +84691,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm.last_segment
+    _vm.last_segment && _vm.fb_me
       ? _c(
           "div",
           {
@@ -99322,8 +99663,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! E:\PHP\Spa\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! E:\PHP\Spa\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\PHP\xampp\htdocs\Spa\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\PHP\xampp\htdocs\Spa\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

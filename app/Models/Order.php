@@ -161,14 +161,12 @@ class Order extends Model
                 $query->whereIn('member_id', $customer);
             })
                 ->when(isset($input['telesales']), function ($query) use ($input) {
-                    $query->whereHas('customer', function ($q) use ($input) {
-                        $q->where('telesales_id', $input['telesales']);
-                    });
+                    $query->where('telesale_id', $input['telesales']);
+                })->when(isset($input['carepage_id']), function ($query) use ($input) {
+                    $query->where('carepage_id', $input['carepage_id']);
                 })
                 ->when(isset($input['marketing']), function ($query) use ($input) {
-                    $query->whereHas('customer', function ($q) use ($input) {
-                        $q->where('mkt_id', $input['marketing']);
-                    });
+                    $query->where('mkt_id', $input['marketing']);
                 })
                 ->when(isset($input['service']), function ($query) use ($input) {
                     $query->whereHas('orderDetails', function ($q) use ($input) {
@@ -351,9 +349,11 @@ class Order extends Model
             })->when(isset($input['role_type']), function ($query) use ($input) {
                 $query->where('role_type', $input['role_type']);
             })->when(isset($input['member_arr']), function ($query) use ($input) {
-                $query->whereIn('member_arr', $input['member_arr']);
+                $query->whereIn('member_id', $input['member_arr']);
             })->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
+            })->when(isset($input['member_id']), function ($query) use ($input) {
+                $query->where('member_id', $input['member_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
             });

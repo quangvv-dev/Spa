@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Models\Branch;
@@ -43,8 +44,8 @@ class StatisticController extends Controller
         $this->customer = $customer;
         $location = Branch::$location;
         view()->share([
-            'user' => $user,
-            'branchs' => $branchs,
+            'user'     => $user,
+            'branchs'  => $branchs,
             'location' => $location,
         ]);
     }
@@ -54,6 +55,7 @@ class StatisticController extends Controller
      *
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      * @throws \Throwable
      */
@@ -71,28 +73,36 @@ class StatisticController extends Controller
         if (count($input) == 2) {
             $input['branch_id'] = 1;
         }
-        $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
-        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+        $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
+            function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('branch_id', $input['group_branch']);
-        })->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        })->whereBetween('created_at', [
+            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+        ]);
 
         $schedule = Schedule::getBooks2($input, 'id');
         $schedules = [
             'all_schedules' => $schedule->count(),
-            'become' => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+            'become'        => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
                 ->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count(),
         ];
-        $payment_All = PaymentHistory::select('price')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
-        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+        $payment_All = PaymentHistory::select('price')->when(isset($input['branch_id']) && $input['branch_id'],
+            function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('branch_id', $input['group_branch']);
         });
 
         $payment = clone $payment_All;
-        $payment = $payment->whereBetween('payment_date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59",])->with('order')->has('order');
+        $payment = $payment->whereBetween('payment_date', [
+            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+        ])->with('order')->has('order');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
         $payment_years = clone $payment_All;
@@ -125,7 +135,7 @@ class StatisticController extends Controller
             if ((int)$price->sum('total_price') > 0) {
                 $statusRevenues[] = [
                     'revenue' => (int)$price->sum('total_price'),
-                    'name' => $source->name,
+                    'name'    => $source->name,
                 ];
             }
         }
@@ -134,36 +144,40 @@ class StatisticController extends Controller
 
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
-        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'), \DB::raw('SUM(gross_revenue) AS revenue'))
+        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'),
+            \DB::raw('SUM(gross_revenue) AS revenue'))
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
             })
-            ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            ->whereBetween('created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
             ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
 
         $data = [
-            'all_total' => $orders->sum('all_total'),
-            'gross_revenue' => $orders->sum('gross_revenue'),
-            'payment' => $payment->sum('price'),
-            'orders' => $orders->count(),
-            'customers' => $customers->count(),
-//            'category_service' => $category_service,
+            'all_total'        => $orders->sum('all_total'),
+            'gross_revenue'    => $orders->sum('gross_revenue'),
+            'payment'          => $payment->sum('price'),
+            'orders'           => $orders->count(),
+            'customers'        => $customers->count(),
+            //            'category_service' => $category_service,
             'category_product' => $category_product,
-            'revenue_month' => $revenue_month,
+            'revenue_month'    => $revenue_month,
         ];
         $products = [
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
-            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+            'all_total'     => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+            'orders'        => $orders->where('role_type', StatusCode::PRODUCT)->count(),
         ];
         $services = [
             'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
-            'all_total' => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
-            'combo_total' => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
-            'combo_gross' => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('gross_revenue'),
-            'orders' => $orders2->where('role_type', StatusCode::SERVICE)->count(),
+            'all_total'     => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
+            'combo_total'   => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
+            'combo_gross'   => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('gross_revenue'),
+            'orders'        => $orders2->where('role_type', StatusCode::SERVICE)->count(),
         ];
 
         $revenue = self::getRevenueCustomer($input, $payment);
@@ -187,26 +201,31 @@ class StatisticController extends Controller
         $all_payment = $payment->sum('price');
         $list_payment = [
             'money' => $payment2->where('payment_type', 1)->sum('price'),
-            'card' => $payment3->where('payment_type', 2)->sum('price'),
-            'CK' => $payment->where('payment_type', 4)->sum('price'),
+            'card'  => $payment3->where('payment_type', 2)->sum('price'),
+            'CK'    => $payment->where('payment_type', 4)->sum('price'),
         ];
         $wallets = [
             'payment' => $payment_wallet->sum('price'),
-            'orders' => $wallet->count(),
+            'orders'  => $wallet->count(),
             'revenue' => $wallet->sum('order_price'),
-            'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
+            'used'    => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
         ];
 
         if ($request->ajax()) {
-            return view('statistics.ajax', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
+            return view('statistics.ajax',
+                compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
+                    'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
         }
-        return view('statistics.index', compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets', 'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
+        return view('statistics.index',
+            compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
+                'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
     }
 
     /**
      * Chi tiết thống kê
      *
      * @param $id
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
@@ -223,41 +242,22 @@ class StatisticController extends Controller
      *
      * @param $request
      * @param $payment
+     *
      * @return array
      */
     public function getRevenueCustomer($request, $payment)
     {
-        $data_new = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
-            $q->where('branch_id', $request['branch_id']);
-        })
-            ->when(isset($request['group_branch']) && count($request['group_branch']), function ($q) use ($request) {
-                $q->whereIn('branch_id', $request['group_branch']);
-            })
-            ->whereBetween('created_at', [Functions::yearMonthDay($request['start_date']) . " 00:00:00", Functions::yearMonthDay($request['end_date']) . " 23:59:59"]);
-        $data_old = Customer::select('id')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
-            $q->where('branch_id', $request['branch_id']);
-        })->when(isset($request['group_branch']) && count($request['group_branch']), function ($q) use ($request) {
-            $q->whereIn('branch_id', $request['group_branch']);
-        })
-            ->where('old_customer', 1);
-
-        $order_new = Order::select('gross_revenue')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
-            $q->where('branch_id', $request['branch_id']);
-        })
-            ->when(isset($request['group_branch']) && count($request['group_branch']), function ($q) use ($request) {
-                $q->whereIn('branch_id', $request['group_branch']);
-            })->whereIn('member_id', $data_new->pluck('id')->toArray())->whereBetween('created_at', [Functions::yearMonthDay($request['start_date']) . " 00:00:00", Functions::yearMonthDay($request['end_date']) . " 23:59:59"])->with('orderDetails');//doanh so
-        $order_old = Order::select('gross_revenue')->when(isset($request['branch_id']) && isset($request['branch_id']), function ($q) use ($request) {
-            $q->where('branch_id', $request['branch_id']);
-        })
-            ->when(isset($request['group_branch']) && count($request['group_branch']), function ($q) use ($request) {
-                $q->whereIn('branch_id', $request['group_branch']);
-            })
-            ->whereBetween('created_at', [Functions::yearMonthDay($request['start_date']) . " 00:00:00", Functions::yearMonthDay($request['end_date']) . " 23:59:59"])->whereIn('member_id', $data_old->pluck('id')->toArray())->with('orderDetails');
+        $paymentNew = clone $payment;
+        $paymentOld = clone $payment;
+        $paymentNew = $paymentNew->whereHas('order', function ($qr) {
+            $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+        });
+        $paymentOld = $paymentOld->whereHas('order', function ($qr) {
+            $qr->where('is_upsale', OrderConstant::IS_UPSALE);
+        });
         return [
-            'revenueNew' => $order_new->sum('gross_revenue'),
-            'revenueOld' => $order_old->sum('gross_revenue'),
-            'revenueRest' => ($payment->sum('price') - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue')) > 0 ? $payment->sum('price') - $order_new->sum('gross_revenue') - $order_old->sum('gross_revenue') : 0,
+            'revenueNew' => $paymentNew->sum('price'),
+            'revenueOld' => $paymentOld->sum('price'),
         ];
     }
 
@@ -265,6 +265,7 @@ class StatisticController extends Controller
      * Thống kê lịch hẹn
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      * @throws \Throwable
      */
@@ -279,15 +280,22 @@ class StatisticController extends Controller
             $input['group_branch'] = $group_branch;
         }
 
-        $users = User::select('id', 'full_name', 'phone')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
+        $users = User::select('id', 'full_name', 'phone')->whereIn('role',
+            [UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
 
-            $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            $schedule = Schedule::select('id')->where('person_action', $item->id)->whereBetween('date', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
                 ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
                 });
             $schedule2 = clone $schedule;
             $schedule3 = clone $schedule;
-            $task = Task::select('id')->where('user_id', $item->id)->whereBetween('date_from', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            $task = Task::select('id')->where('user_id', $item->id)->whereBetween('date_from', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
                 ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
                 });
@@ -316,6 +324,7 @@ class StatisticController extends Controller
      * BĐ duyệt chi
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function chartPay(Request $request)
@@ -337,9 +346,12 @@ class StatisticController extends Controller
         $all_payment = $payment->sum('price');
 
         $list_payment = [
-            'money' => $payment2->where('payment_type', 1)->sum('price') + $payment_wallet->where('payment_type', 1)->sum('price'),
-            'card' => $payment3->where('payment_type', 2)->sum('price') + $payment_wallet2->where('payment_type', 2)->sum('price'),
-            'CK' => $payment->where('payment_type', 4)->sum('price') + $payment_wallet3->where('payment_type', 4)->sum('price'),
+            'money' => $payment2->where('payment_type', 1)->sum('price') + $payment_wallet->where('payment_type',
+                    1)->sum('price'),
+            'card'  => $payment3->where('payment_type', 2)->sum('price') + $payment_wallet2->where('payment_type',
+                    2)->sum('price'),
+            'CK'    => $payment->where('payment_type', 4)->sum('price') + $payment_wallet3->where('payment_type',
+                    4)->sum('price'),
         ];
         $payCurrent = ThuChi::when(isset($input['branch_id']) && $input['branch_id'], function ($query) use ($input) {
             $query->where('branch_id', $input['branch_id']);
@@ -367,20 +379,22 @@ class StatisticController extends Controller
             ->groupBy('branch_id')->orderByDesc('sum_price')->get();
         $list_pay = [
             'money' => $pay2->where('type', 0)->sum('so_tien'),
-//            'card' => $pay3->where('type', 1)->sum('so_tien'),
-            'CK' => $pay->where('type', 1)->sum('so_tien'),
+            //            'card' => $pay3->where('type', 1)->sum('so_tien'),
+            'CK'    => $pay->where('type', 1)->sum('so_tien'),
         ];
 
 
         $data = [
-            'payment' => $all_payment,
+            'payment'        => $all_payment,
             'wallet_payment' => $payment_wallet->sum('price'),
         ];
 
         if ($request->ajax()) {
-            return view('thu_chi.statistics.ajax', compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'payBranch'));
+            return view('thu_chi.statistics.ajax',
+                compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'payBranch'));
         }
 
-        return view('thu_chi.statistics.index', compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'payBranch'));
+        return view('thu_chi.statistics.index',
+            compact('list_payment', 'data', 'list_pay', 'payAll', 'payStatus', 'payBranch'));
     }
 }

@@ -266,9 +266,12 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit)
 
     if ($unit == "K") {
         return ($miles * 1.609344);
-    } else if ($unit == "N") {
-        return ($miles * 0.8684);
     } else {
-        return $miles;
+        if ($unit == "N") {
+            return ($miles * 0.8684);
+        } else {
+            return $miles;
+        }
     }
+
 }

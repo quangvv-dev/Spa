@@ -73,6 +73,14 @@
                     </div>
                     <section class="chat-app-window">
                         <!--<div class="badge badge-default mb-1">Chat History</div>-->
+                        <div class="" v-if="next_page">
+                            <span ><button class="btn btn-primary" @click="getNextPage()">Xem thêm</button></span>
+                        </div>
+                        <div class="" v-if="post_created_time" style="width: 50%">
+                            <p v-html="post_message"></p>
+                            <img :src="post_full_picture" alt="">
+                            <p>{{post_created_time.substring(0, 10)}}</p>
+                        </div>
                         <div class="chats" v-for="(item,index) in emotions">
                             <div class="chat" v-if="item.from.id != fb_me">
                                 <div class="chat-body">
@@ -250,7 +258,7 @@
                 </div>
             </div>
         </div>
-        <div class="right" style="width: 15%; margin-top: 6%;" v-if="last_segment">
+        <div class="right" style="width: 15%; margin-top: 6%;" v-if="last_segment && fb_me">
             <div class="row">
                 <div class="col-12 mb-1"><input v-model="chat_current_name" type="text" class="form-control"
                                                 placeholder="Tên KH"></div>
@@ -355,6 +363,7 @@
                 data_images_upload_server_default:[],
                 chat_current_name : '',
                 chat_current_page : '',
+                next_page : null,
 
                 //data form thêm khách hàng
                 description: '',
@@ -377,7 +386,13 @@
                 //filter
                 filter_phone : null,
                 filter_comment : 0,
-                select_active:null
+                select_active:null,
+
+                //comment
+                click_comment: false,
+                post_created_time: '',
+                post_full_picture: '',
+                post_message : ''
             }
         },
         components: {
@@ -651,7 +666,6 @@
                         }
                         return m;
                     })
-                    console.log(123123,abc);
                     this.navChat = abc;
                     this.navChatDefault = abc;
                 })
@@ -701,7 +715,11 @@
                 })
             },
             selectMessage(item,index) {
-                console.log(12313,item)
+                this.post_created_time = '';
+                this.post_full_picture = '';
+                this.post_message = '';
+                this.next_page = null;
+                this.post_id = '';
                 if(item.type && item.type == 'comment'){
                     let url = '/marketing/get-detail-comment';
                     let fb_id = item.participants.data[0].id;
@@ -736,6 +754,12 @@
                             }
                             this.detailMessage = data;
                             this.post_id = this.last_segment + '_' + response.data.post_id;
+                            let url_detail_post = `https://graph.facebook.com/v13.0/${this.post_id}?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=${this.access_token}`
+                            axios.get(url_detail_post).then(res=>{
+                                this.post_created_time = res.data.created_time;
+                                this.post_full_picture = res.data.attachments.data[0].media.image.src;
+                                this.post_message = res.data.message.replaceAll('\n\n','<br>');
+                            })
                         })
                     //update is_read comment
                     axios.post('/marketing/update-is-read-comment',params)
@@ -748,6 +772,7 @@
                     axios.get(url)
                         .then(response => {
                             this.detailMessage = response.data.messages.data.reverse();
+                            this.next_page = response.data.messages.paging.next;
                         })
 
 
@@ -1001,7 +1026,7 @@
                 this.telesales_id = null;
                 this.value_group_customer = [];
                 this.value_source_customer = null;
-                this.value_chi_nhanh.id = null;
+                this.value_chi_nhanh = null;
                 this.description = ''
             },
             filterPhone(){
@@ -1061,6 +1086,7 @@
                     if(res){
                         alertify.success('Trả lời thành công!',5);
                         $('#reply_comment').modal('hide');
+                        this.newElement(res.data.message_id);
                     }
                 }).catch(error=>{
                     if(error){
@@ -1069,6 +1095,51 @@
                     }
                 })
                 this.contentMesage = '';
+            },
+            async newElement(message_id){
+                let access_token = this.access_token;
+                let fields = 'from,message,to,created_time,thread_id';
+                let url = `https://graph.facebook.com/v13.0/${message_id}?fields=${fields}&access_token=${access_token}`;
+                const res = await axios.get(url);
+                let index = this.navChatDefault.findIndex(fd=>{
+                    return fd.participants.data[1].id == res.data.from.id && fd.participants.data[0].id == res.data.to.data[0].id && fd.type != 'comment';
+                })
+                if (index > -1){
+                    this.navChatDefault[index].snippet = res.data.message;
+                    this.navChatDefault[index].updated_time = res.data.created_time;
+                }
+                else {
+                    let html = {
+                        check_phone : 0,
+                        id : res.data.thread_id,
+                        participants : {
+                            data:[
+                                {
+                                    id:res.data.to.data[0].id,
+                                    name:res.data.to.data[0].name
+                                },
+                                {
+                                    id:res.data.from.id,
+                                    name:res.data.from.name
+                                }
+                            ]},
+                        phone:"",
+                        snippet:res.data.message,
+                        updated_time:res.data.created_time
+                    }
+                    this.navChatDefault.unshift(html);
+                }
+            },
+            async getNextPage(){
+                let data = await axios.get(this.next_page);
+                if(data.data.paging.next){
+                    this.next_page = data.data.paging.next;
+                } else {
+                    this.next_page = null;
+                }
+                let data_1 = data.data.data.reverse();
+                data_1.push(...this.detailMessage);
+                this.detailMessage = data_1;
             }
 
         }

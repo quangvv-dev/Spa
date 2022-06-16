@@ -58,7 +58,7 @@ class ProductController extends Controller
                     ->orwhere('trademark', 'like', '%' . $input['search'] . '%')
                     ->orwhere('enable', 'like', '%' . $input['search'] . '%');
             });
-        $docs = $docs->paginate(StatusCode::PAGINATE_10);
+        $docs = $docs->orderByDesc('images')->orderByDesc('id')->paginate(StatusCode::PAGINATE_10);
 
         $title = 'Quản lý sản phẩm';
         if ($request->ajax()) {

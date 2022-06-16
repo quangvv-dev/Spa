@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
@@ -392,36 +393,22 @@ class RevenueController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 6) {
             $payment = PaymentHistory::search($input, 'price');
-            $orders = Order::returnRawData($input);
-            $orders2 = clone $orders;
-            $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
-                function ($q) use ($input) {
-                    $q->where('branch_id', $input['branch_id']);
-                })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [
-                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                ]);
-            })->pluck('id')->toArray();
-            $orders_new = $orders2->whereIn('member_id', $customers);
-
-            $orders_old = $orders->whereHas('customer', function ($q) {
-                $q->where('old_customer', 1);
+            $paymentNew = clone $payment;
+            $paymentNew = $paymentNew->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+            });
+            $paymentOld = $payment->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::IS_UPSALE);
             });
             $data = [
                 [
                     'name'      => 'Khách hàng mới',
-                    'all_total' => $orders_new->sum('gross_revenue'),
+                    'all_total' => $paymentNew->sum('price'),
 
                 ],
                 [
                     'name'      => 'Khách hàng cũ',
-                    'all_total' => $orders_old->sum('gross_revenue'),
-
-                ],
-                [
-                    'name'      => 'Thu còn nợ',
-                    'all_total' => $payment->sum('price') - $orders_new->sum('gross_revenue') - $orders_old->sum('gross_revenue'),
+                    'all_total' => $paymentOld->sum('price'),
 
                 ],
             ];

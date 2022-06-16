@@ -47,6 +47,7 @@ class CustomerService
             $userLogin = Auth::user()->id;
             $input['mkt_id'] = $userLogin;
         }
+        $input['carepage_id'] = Auth::user()->id;
 
         $data = $this->data($input);
 
@@ -73,7 +74,6 @@ class CustomerService
         $data = $this->data($input);
         $customer = $this->find($id);
         $customer->update($data);
-//        dd($customer);
         return $customer;
 
     }

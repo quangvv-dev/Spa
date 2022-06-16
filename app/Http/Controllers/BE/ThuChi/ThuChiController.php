@@ -81,12 +81,13 @@ class ThuChiController extends Controller
         $branches = Branch::pluck('name', 'id');
         $li_do = LyDoThuChi::pluck('name', 'id')->toArray();
         $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
+        $user_dexuat = User::whereIn('department_id', [DepartmentConstant::ADMIN, DepartmentConstant::WAITER])->pluck('full_name', 'id');
 
         $type = collect(['0' => 'Tiền mặt', '1' => 'Chuyển khoản']);
 
         $categories = DanhMucThuChi::pluck('name', 'id');
 
-        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet', 'type', 'li_do', 'branches'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('categories', 'user_duyet','user_dexuat', 'type', 'li_do', 'branches'));
     }
 
     /**
@@ -101,7 +102,7 @@ class ThuChiController extends Controller
         $data = $request->all();
         $user = Auth::user();
         $data['so_tien'] = replaceNumberFormat($request->so_tien);
-        $data['thuc_hien_id'] = $user->id;
+        $data['thuc_hien_id'] = isset($data['thuc_hien_id'])&& $data['thuc_hien_id']?$data['thuc_hien_id']:$user->id;
         $data['branch_id'] = $data['branch_id'] ?: $user->branch_id;
         $data['danh_muc_thu_chi_id'] = LyDoThuChi::find($request->ly_do_id)->category_id;
         $data['created_at'] = Functions::yearMonthDay($request->created_at);
@@ -153,12 +154,13 @@ class ThuChiController extends Controller
     {
         $branches = Branch::pluck('name', 'id');
         $doc = ThuChi::find($id);
+        $user_dexuat = User::whereIn('department_id', [DepartmentConstant::ADMIN, DepartmentConstant::WAITER])->pluck('full_name', 'id');
 //        $li_do = LyDoThuChi::where('category_id', $doc->danh_muc_thu_chi_id)->pluck('name', 'id')->toArray();
         $li_do = LyDoThuChi::pluck('name', 'id')->toArray();
         $user_duyet = User::whereIn('department_id', [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])->pluck('full_name', 'id');
         $type = collect(['0' => 'Tiền Mặt', '1' => 'Chuyển Khoản']);
         $categories = DanhMucThuChi::pluck('name', 'id');
-        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories', 'user_duyet', 'type', 'li_do', 'branches'));
+        return view('thu_chi.danh_sach_thu_chi._form', compact('doc', 'categories','user_dexuat', 'user_duyet', 'type', 'li_do', 'branches'));
     }
 
     /**
