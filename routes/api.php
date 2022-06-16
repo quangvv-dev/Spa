@@ -143,6 +143,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('ranking-wallet', 'OrdersController@rankingWallet');
     Route::get('history-change-wallet', 'OrdersController@historyChangeWallet');// lịch sử thanh đổi ví
     Route::get('history-change-wallet-ctv', 'WalletsController@index');// lịch sử thanh đổi ví CTV
+    Route::post('receive-money', 'WalletsController@receiveMoney');// Chuyển từ ví ctv sang ví thường
 
     Route::get('orders-with-me', 'OrdersController@index');
     Route::post('rate-orders/{id}', 'OrdersController@rate');
