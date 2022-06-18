@@ -110,6 +110,7 @@
                                     <input type="text" class="txt-dotted form-control budget" name="budget[]">
                                 </td>
                                 <td><input type='text' name="date[]" id="datepicker" data-toggle="datepicker" class="form-control"/></td>
+                                <td></td>
                                 <td class="text-center">
                                     <a href="javascript:void(0)" class="delete-item" data-url="` + chanel + `"><i class="fa fa-trash fa-2x"></i></a>
                                 </td>
@@ -154,7 +155,7 @@
                                     <td>` + el.date + `</td>
                                     <td>` + el.user.full_name + `</td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0)" class="delete" data-url="` + window.location.href +'/'+ el.id + `"><i class="fa fa-trash fa-2x"></i></a>
+                                        <a href="javascript:void(0)" class="delete-item" data-url="` + window.location.href +'/'+ el.id + `"><i class="fa fa-trash fa-2x"></i></a>
                                     </td>
                                 </tr>
                             `
@@ -167,6 +168,31 @@
             })
         })
 
+        $(document).on('click', '.delete-item', function (e) {
+            let target = $(e.target).closest('tr');
+            var url = $(this).data('url');
+            swal({
+                title: 'Bạn có muốn xóa ?',
+                text: "Nếu bạn xóa tất cả các thông tin sẽ không thể khôi phục!",
+                type: "error",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        _method: 'delete',
+                    },
+                    success: function () {
+                        let target = $(e.target).parent();
+                        $(target).remove();
+                    }
+                })
+            })
+        });
 
     </script>
 @endsection
