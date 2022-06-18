@@ -154,7 +154,7 @@
                                     <td>` + el.date + `</td>
                                     <td>` + el.user.full_name + `</td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0)" class="delete-item" data-id="` + el.id + `"><i class="fa fa-trash fa-2x"></i></a>
+                                        <a href="javascript:void(0)" class="delete" data-id="` + window.location.href +'/'+ el.id + `"><i class="fa fa-trash fa-2x"></i></a>
                                     </td>
                                 </tr>
                             `

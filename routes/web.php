@@ -228,6 +228,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
         Route::get('leader', 'MarketingController@index');
         Route::get('dashboard', 'MarketingController@show')->name('dashboard');
+        Route::delete('dashboard', 'MarketingController@destroy')->name('dashboard');
         Route::get('ranking', 'MarketingController@ranking');
 
         Route::get('carepage', 'CarepageController@index');

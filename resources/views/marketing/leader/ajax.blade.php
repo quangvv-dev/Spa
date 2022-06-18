@@ -48,9 +48,9 @@
         @if(count($marketing))
             <tr>
                 <td class="text-center bold" colspan="2">Tổng</td>
-                <td class="text-center bold">{{$marketing->sum('budget')}}</td>
-                <td class="text-center bold">{{$marketing->sum('contact')}}</td>
-                <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?$marketing->sum('budget')/$marketing->sum('contact'):0}}</td>
+                <td class="text-center bold">{{numfmt_format($marketing->sum('budget'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('contact'))}}</td>
+                <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?number_format(round($marketing->sum('budget')/$marketing->sum('contact'))):0}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('schedules'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('schedules_den'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('orders'))}}</td>
