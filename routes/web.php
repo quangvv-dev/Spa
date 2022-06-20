@@ -135,7 +135,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
         Route::post('marketing/add-line-price-marketing', 'Marketing\MarketingController@addLinePriceMarketing');
         Route::get('marketing/search-price-marketing', 'Marketing\MarketingController@searchPriceMarketing');
-        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
+//        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
 
     });
 
@@ -228,6 +228,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
         Route::get('leader', 'MarketingController@index');
         Route::get('dashboard', 'MarketingController@show')->name('dashboard');
+        Route::delete('dashboard/{id}', 'MarketingController@destroy');
         Route::get('ranking', 'MarketingController@ranking');
 
         Route::get('carepage', 'CarepageController@index');

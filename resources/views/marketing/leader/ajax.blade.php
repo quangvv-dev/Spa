@@ -48,9 +48,9 @@
         @if(count($marketing))
             <tr>
                 <td class="text-center bold" colspan="2">Tổng</td>
-                <td class="text-center bold">{{$marketing->sum('budget')}}</td>
-                <td class="text-center bold">{{$marketing->sum('contact')}}</td>
-                <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?$marketing->sum('budget')/$marketing->sum('contact'):0}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('budget'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('contact'))}}</td>
+                <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?number_format(round($marketing->sum('budget')/$marketing->sum('contact'))):0}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('schedules'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('schedules_den'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('orders'))}}</td>
@@ -67,7 +67,7 @@
                     <td class="text-center pdr10">{{$item->full_name}}
                     <td class="text-center pdr10">{{number_format($item->budget)}}</td> {{--ngân sách--}}
                     <td class="text-center pdr10">{{number_format($item->contact)}}</td>
-                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->contact)?$item->budget/$item->contact:0}}</td>{{--giá contact--}}
+                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->contact)?number_format(round($item->budget/$item->contact)):0}}</td>{{--giá contact--}}
                     <td class="text-center pdr10">{{number_format($item->schedules)}}</td>
                     <td class="text-center pdr10">{{number_format($item->schedules_den)}}</td>
                     <td class="text-center pdr10">{{number_format($item->orders)}}</td>
