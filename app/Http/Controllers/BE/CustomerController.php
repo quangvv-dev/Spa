@@ -516,7 +516,7 @@ class CustomerController extends Controller
                                     'telesales_id' => isset($telesale) ? $telesale->id : 1,
                                     'status_id' => isset($status) ? $status->id : 1,
                                     'source_id' => isset($source) ? $source->id : 18,
-                                    'phone' => $row['so_dien_thoai'],
+                                    'phone' => '0'.$row['so_dien_thoai'],
                                     'birthday' => isset($row['sinh_nhat'])?$row['sinh_nhat']:'',
                                     'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
                                     'address' => $row['dia_chi'] ?: '',
