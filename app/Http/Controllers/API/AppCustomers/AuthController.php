@@ -171,6 +171,36 @@ class AuthController extends BaseApiController
     }
 
     /**
+     * Update device token firebase
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateDevicesTokenCustomer(Request $request)
+    {
+        $info = $request->jwtUser;
+        $validator = Validator::make($request->all(), [
+            'devices_token' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'message' => $validator->errors()->first(),
+            ]);
+        }
+
+        $customer = Customer::where('id', $info->id)->first();
+        if (isset($user) && $user) {
+            $customer->devices_token = $request->devices_token;
+            $customer->save();
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+        } else {
+            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND USER');
+        }
+
+    }
+
+    /**
      * Get info
      *
      * @param Request $request
@@ -230,7 +260,6 @@ class AuthController extends BaseApiController
         $input['wallet'] = 0;
         $input['post_id'] = 0;
         $input['status_id'] = Functions::getStatusWithCode('moi');
-        ;
         $input['password'] = Hash::make($input['password']);
 
         $customer = $this->customerService->create($input);
