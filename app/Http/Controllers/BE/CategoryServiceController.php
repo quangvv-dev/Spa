@@ -131,9 +131,11 @@ class CategoryServiceController extends Controller
             'price' => $request->price ? str_replace(',', '', $request->price) : 0
         ]);
         $input = $request->all();
-        $input['image'] = $this->fileUpload->uploadImageCustom($input['image'],DirectoryConstant::CATEGORY_IMAGE);
-        if (!empty($category->image)){
-            Functions::unlinkUpload2($category->image);
+        if ($request->hasFile('image')) {
+            $input['image'] = $this->fileUpload->uploadImageCustom($input['image'],DirectoryConstant::CATEGORY_IMAGE);
+            if (!empty($category->image)){
+                Functions::unlinkUpload2($category->image);
+            }
         }
         $category->update($input);
         return redirect(route('category.index'))->with('status', 'Cập nhật danh mục thành công');
