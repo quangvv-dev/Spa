@@ -521,7 +521,7 @@ class CustomerController extends Controller
                                     'address' => $row['dia_chi'] ?: '',
                                     'facebook' => $row['link_facebook'] ?: '',
                                     'description' => $row['mo_ta'],
-                                    'wallet' => $row['so_du_vi'],
+                                    'wallet' => !empty($row['so_du_vi'])?$row['so_du_vi']:0,
                                     'branch_id' => isset($branch) && $branch ? $branch->id : '',
                                     'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                     'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
