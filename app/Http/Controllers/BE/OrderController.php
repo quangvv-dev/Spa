@@ -775,7 +775,7 @@ class OrderController extends Controller
 
     public function importDataByExcel(Request $request)
     {
-        if ($request->hasFile('file')) {
+        if (``) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {

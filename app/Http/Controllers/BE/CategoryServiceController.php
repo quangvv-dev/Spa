@@ -82,7 +82,7 @@ class CategoryServiceController extends Controller
             'price' => $request->price ? str_replace(',', '', $request->price) : 0
         ]);
         $input = $request->all();
-        if (isset($input['image']) && $input['image']){
+        if ($request->hasFile('image')){
             $input['image'] = $this->fileUpload->uploadImageCustom($input['image'],DirectoryConstant::CATEGORY_IMAGE);
         }
         Category::create($input);
