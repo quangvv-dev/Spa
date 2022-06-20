@@ -498,7 +498,8 @@ class CustomerController extends Controller
                 foreach ($result as $k => $row) {
 
                     if (!empty($row['so_dien_thoai'])) {
-                        $date = Carbon::createFromFormat('d/m/Y', trim($row['ngay_tao_kh']))->format('Y-m-d');
+//                        $date = Carbon::createFromFormat('d/m/Y', trim($row['ngay_tao_kh']))->format('Y-m-d');
+                        $date = Carbon::parse(trim($row['ngay_tao_kh'])->format('Y-m-d');
                         $status = Status::where('name', $row['moi_quan_he'])->first();
                         $telesale = User::where('full_name', 'like', '%' . $row['nguoi_phu_trach'] . '%')->first();
                         $source = Status::where('code', 'like', '%' . str_slug($row['nguon_kh']) . '%')->first();
@@ -516,7 +517,7 @@ class CustomerController extends Controller
                                     'status_id' => isset($status) ? $status->id : 1,
                                     'source_id' => isset($source) ? $source->id : 18,
                                     'phone' => $row['so_dien_thoai'],
-                                    'birthday' => $row['sinh_nhat'],
+                                    'birthday' => isset($row['sinh_nhat'])?$row['sinh_nhat']:'',
                                     'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
                                     'address' => $row['dia_chi'] ?: '',
                                     'facebook' => $row['link_facebook'] ?: '',
