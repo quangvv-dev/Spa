@@ -74,7 +74,7 @@ class CustomerController extends Controller
         $marketingUsers = User::whereIn('department_id', [DepartmentConstant::MARKETING])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::select('id', 'name')->pluck('name', 'id')->toArray();
         $telesales = [];
-        User::select('id','department_id','full_name')->get()->map(function ($item) use (&$telesales) {
+        User::select('id', 'department_id', 'full_name')->get()->map(function ($item) use (&$telesales) {
             if ($item->department_id == DepartmentConstant::WAITER) {
                 $telesales['Lễ Tân'][$item->full_name] = $item->id;
             } elseif ($item->department_id == DepartmentConstant::TELESALES) {
@@ -145,7 +145,7 @@ class CustomerController extends Controller
             return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories','carePageUsers'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers'));
     }
 
     /**
@@ -511,18 +511,18 @@ class CustomerController extends Controller
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
                                     'full_name' => $row['ten_khach_hang'],
-                                    'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : "KH".($k+1),
+                                    'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : "KH" . ($k + 1),
                                     'mkt_id' => @Auth::user()->id,
                                     'telesales_id' => isset($telesale) ? $telesale->id : 1,
                                     'status_id' => isset($status) ? $status->id : 1,
                                     'source_id' => isset($source) ? $source->id : 18,
-                                    'phone' => '0'.$row['so_dien_thoai'],
-                                    'birthday' => isset($row['sinh_nhat'])?$row['sinh_nhat']:'',
+                                    'phone' => strlen($row['so_dien_thoai']) > 9 ? $row['so_dien_thoai'] : '0' . $row['so_dien_thoai'],
+                                    'birthday' => isset($row['sinh_nhat']) ? $row['sinh_nhat'] : '',
                                     'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
                                     'address' => $row['dia_chi'] ?: '',
                                     'facebook' => $row['link_facebook'] ?: '',
                                     'description' => $row['mo_ta'],
-                                    'wallet' => !empty($row['so_du_vi'])?$row['so_du_vi']:0,
+                                    'wallet' => !empty($row['so_du_vi']) ? $row['so_du_vi'] : 0,
                                     'branch_id' => isset($branch) && $branch ? $branch->id : '',
                                     'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                     'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
