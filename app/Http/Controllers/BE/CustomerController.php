@@ -511,7 +511,7 @@ class CustomerController extends Controller
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
                                     'full_name' => $row['ten_khach_hang'],
-                                    'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : '',
+                                    'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : "KH".($k+1),
                                     'mkt_id' => @Auth::user()->id,
                                     'telesales_id' => isset($telesale) ? $telesale->id : 1,
                                     'status_id' => isset($status) ? $status->id : 1,
