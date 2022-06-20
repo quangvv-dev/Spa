@@ -82,7 +82,9 @@ class CategoryServiceController extends Controller
             'price' => $request->price ? str_replace(',', '', $request->price) : 0
         ]);
         $input = $request->all();
-        $input['image'] = $this->fileUpload->uploadImageCustom($input['image'],DirectoryConstant::CATEGORY_IMAGE);
+        if (isset($input['image']) && $input['image']){
+            $input['image'] = $this->fileUpload->uploadImageCustom($input['image'],DirectoryConstant::CATEGORY_IMAGE);
+        }
         Category::create($input);
         return redirect(route('category.create'))->with('status', 'Tạo danh mục thành công');
     }
