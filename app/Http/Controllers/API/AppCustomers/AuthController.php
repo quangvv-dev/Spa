@@ -188,11 +188,18 @@ class AuthController extends BaseApiController
         }
         $customer = Customer::where('id', $info->id)->first();
         if (isset($customer) && $customer) {
-            if ($customer->phone == $request->phone){
+            if ($customer->phone == $request->phone) {
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Vui lòng không nhập SĐT của bạn');
             }
+            if ($customer->is_gioithieu) {
+                $data = [
+                    'full_name' => $customer->gioithieu->full_name,
+                    'phone'     => $customer->gioithieu->phone,
+                ];
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Khách hàng đã nhập người giới thiệu',$data);
+            }
             $agency = Customer::where('phone', $request->phone)->first();
-            if (empty($agency)){
+            if (empty($agency)) {
                 return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'Không tìm thấy người giới thiệu');
             }
             $customer->is_gioithieu = $agency->id;
