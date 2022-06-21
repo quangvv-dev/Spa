@@ -190,7 +190,7 @@ class AuthController extends BaseApiController
         }
 
         $customer = Customer::where('id', $info->id)->first();
-        if (isset($user) && $user) {
+        if (isset($customer) && $customer) {
             $customer->devices_token = $request->devices_token;
             $customer->save();
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
