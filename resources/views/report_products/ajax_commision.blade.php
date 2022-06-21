@@ -27,7 +27,8 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white text-center">Nhân viên</th>
-            <th class="text-white text-center">Số công liệu trình</th>
+            <th class="text-white text-center">Số công chính</th>
+            <th class="text-white text-center">Số công phụ</th>
             <th class="text-white text-center">Tiền công liệu trình</th>
             <th class="text-white text-center">Tổng số đơn hàng (upsale)</th>
             <th class="text-white text-center">Doanh số</th>
@@ -44,6 +45,7 @@
                             {{@$s['full_name']}}</a>
                     </td>
                     <td class="text-center">{{@number_format($s['days'])}}</td>
+                    <td class="text-center">{{@number_format($s['days_phu'])}}</td>
                     <td class="text-center">{{@number_format($s['price'])}}</td>
                     <td class="text-center">{{@number_format($s['orders'])}}</td>
                     <td class="text-center">{{@number_format($s['all_total'])}}</td>

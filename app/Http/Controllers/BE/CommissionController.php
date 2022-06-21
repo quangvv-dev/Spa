@@ -80,13 +80,13 @@ class CommissionController extends Controller
      */
     public function statistical(Request $request)
     {
+
         $docs = [];
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        $category_price = Category::select('price', 'id')->pluck('price', 'id')->toArray();
         $input = $request->all();
-        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS, UserConstant::CSKH])
+        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
             ->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
             })->get();
@@ -98,16 +98,21 @@ class CommissionController extends Controller
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
                 $order = Order::getAll($input);
-                $history_orders = HistoryUpdateOrder::search($input, 'id')->with('service');
+                unset($input['support_id'], $input['user_id']);
+                $history_orders = HistoryUpdateOrder::search($input, 'id')
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->with('service');
                 $history = $history_orders->get();
-
+                $cong_chinh = 0;
+                $cong_phu = 0;
                 if (count($history)) {
                     foreach ($history as $item2) {
                         if (isset($item2->service)) {
-                            $category_id = $item2->service->category_id ?: 0;
-                            if (!empty($category_price[$category_id])) {
-                                $price[] = (int)$category_price[$category_id];
-                            }
+                            $price [] = (int)$item2->service->price_buy ?: 0;
+                        }
+                        if ($item->id == $item2->user_id) {
+                            $cong_chinh += $cong_chinh + 1;
+                        } elseif ($item->id == $item2->support_id) {
+                            $cong_phu += $cong_phu + 1;
                         }
                     }
                 }
@@ -119,24 +124,26 @@ class CommissionController extends Controller
                     'orders' => $order->count(),
                     'all_total' => $order->sum('all_total'),
                     'gross_revenue' => $order->sum('gross_revenue'),
-                    'days' => $history_orders->count(),
+                    'days' => $cong_chinh,
+                    'days_phu' => $cong_phu,
                     'earn' => Commission::search($input, 'earn')->sum('earn'),
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
-                $docs[] = $doc;
+//                if ($doc['days'] > 0 || $doc['price'] > 0) {
+                    $docs[] = $doc;
+//                }
             }
         }
         $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
         if ($request->ajax()) {
-//            return Response::json(view('report_products.ajax_commision', compact('data'))->render());
             return view('report_products.ajax_commision', compact('data'));
-
         }
         return view('report_products.index_commision', compact('data'));
     }
 
     public function getCommissionWithUser(Request $request)
     {
+
         $data = Commission::where('user_id', $request->user_id)->whereBetween('created_at', getTime($request->data_time))
             ->has('orders')->with('orders')->paginate(StatusCode::PAGINATE_10);
         return response()->json($data);

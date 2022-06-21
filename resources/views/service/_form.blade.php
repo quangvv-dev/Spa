@@ -34,7 +34,7 @@
                 @endif
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('price_buy') ? 'has-error' : '' }}">
-                        {!! Form::label('price_buy', 'Giá nhập') !!}
+                        {!! Form::label('price_buy', 'Giá công KTV') !!}
                         {!! Form::text('price_buy',@number_format($doc->price_buy), array('class' => 'form-control price')) !!}
                         <span class="help-block">{{ $errors->first('price_buy', ':message') }}</span>
                     </div>
