@@ -100,7 +100,7 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input, 'id')
-                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->with('service');
+                    ->where('user_id', $item->id)->with('service');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
