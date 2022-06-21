@@ -17,20 +17,21 @@ class CustomerResource extends JsonResource
     {
 
         return [
-            'id'         => @$this->id,
-            'full_name'  => @$this->full_name,
-            'phone'      => @$this->phone,
-            'membership' => @$this->membership,
-            'wallet'     => @$this->wallet,
-            'wallet_ctv' => @$this->wallet_ctv,
-            'avatar'     => @$this->avatar,
-            'birthday'   => @$this->birthday,
-            'gender'     => @$this->gender,
+            'id'           => @$this->id,
+            'full_name'    => @$this->full_name,
+            'phone'        => @$this->phone,
+            'membership'   => @$this->membership,
+            'wallet'       => @$this->wallet,
+            'wallet_ctv'   => @$this->wallet_ctv,
+            'avatar'       => @$this->avatar,
+            'birthday'     => @$this->birthday,
+            'gender'       => @$this->gender,
             //            'gender'    => @$this->gender==0?"Nữ":'Nam',
-            'branch_id'  => @$this->branch_id,
-            'branch'     => @$this->branch->name,
-            'status'     => @$this->status->name,
-            'status_id'  => @$this->status_id,
+            'branch_id'    => @$this->branch_id,
+            'branch'       => @$this->branch->name,
+            'status'       => @$this->status->name,
+            'status_id'    => @$this->status_id,
+            'is_gioithieu' => @$this->is_gioithieu,
         ];
     }
 }
