@@ -134,7 +134,7 @@ class CommissionController extends Controller
 //                }
             }
         }
-        $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
+        $data = collect($docs)->sortByDesc('gross_revenue')->sortByDesc('days')->reverse()->toArray();
         if ($request->ajax()) {
             return view('report_products.ajax_commision', compact('data'));
         }
