@@ -80,11 +80,11 @@ class CommissionController extends Controller
      */
     public function statistical(Request $request)
     {
-
         $docs = [];
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+//        $category_price = Category::select('price', 'id')->pluck('price', 'id')->toArray();
         $input = $request->all();
         $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
             ->when(isset($input['branch_id']), function ($query) use ($input) {
@@ -99,8 +99,8 @@ class CommissionController extends Controller
                 $input['type'] = 0;
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
-                $history_orders = HistoryUpdateOrder::search($input, 'id')
-                    ->where('user_id', $item->id)->with('service');
+                $history_orders = HistoryUpdateOrder::search($input)
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id','user_id','support_id')->with('service');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
@@ -110,9 +110,9 @@ class CommissionController extends Controller
                             $price [] = (int)$item2->service->price_buy ?: 0;
                         }
                         if ($item->id == $item2->user_id) {
-                            $cong_chinh += 1;
-                        } elseif ($item->id == $item2->support_id) {
-                            $cong_phu += 1;
+                            $cong_chinh +=  1;
+                        } elseif ($item->id == @$item2->support_id) {
+                            $cong_phu +=  1;
                         }
                     }
                 }
@@ -130,7 +130,7 @@ class CommissionController extends Controller
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
 //                if ($doc['days'] > 0 || $doc['price'] > 0) {
-                $docs[] = $doc;
+                    $docs[] = $doc;
 //                }
             }
         }
