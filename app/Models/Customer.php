@@ -47,7 +47,8 @@ class Customer extends Model
         'FB_ID',
         'page_id',
         'carepage_id',
-        'devices_token'
+        'devices_token',
+        'is_gioithieu'
     ];
 
 

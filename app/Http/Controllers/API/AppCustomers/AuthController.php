@@ -171,9 +171,41 @@ class AuthController extends BaseApiController
     }
 
     /**
+     * Cập nhật người giới thiệu
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateAgency(Request $request)
+    {
+        $info = $request->jwtUser;
+        $validator = Validator::make($request->all(), [
+            'phone' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            return $this->responseApi(ResponseStatusCode::UNPROCESSABLE_ENTITY, $validator->errors()->first());
+        }
+        $customer = Customer::where('id', $info->id)->first();
+        if (isset($customer) && $customer) {
+            $agency = Customer::where('phone', $request->phone)->first();
+            if (empty($agency)){
+                return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'Không tìm thấy người giới thiệu');
+            }
+            $customer->is_gioithieu = $agency->id;
+            $customer->save();
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+        } else {
+            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'Token không hợp lệ');
+        }
+
+    }
+
+    /**
      * Update device token firebase
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateDevicesTokenCustomer(Request $request)
@@ -184,7 +216,7 @@ class AuthController extends BaseApiController
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->first(),
             ]);
         }
