@@ -110,9 +110,9 @@ class CommissionController extends Controller
                             $price [] = (int)$item2->service->price_buy ?: 0;
                         }
                         if ($item->id == $item2->user_id) {
-                            $cong_chinh = $cong_chinh + 1;
+                            $cong_chinh += 1;
                         } elseif ($item->id == $item2->support_id) {
-                            $cong_phu = $cong_phu + 1;
+                            $cong_phu += 1;
                         }
                     }
                 }
@@ -130,7 +130,7 @@ class CommissionController extends Controller
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
 //                if ($doc['days'] > 0 || $doc['price'] > 0) {
-                    $docs[] = $doc;
+                $docs[] = $doc;
 //                }
             }
         }
