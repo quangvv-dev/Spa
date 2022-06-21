@@ -32,7 +32,8 @@ class WalletsController extends BaseApiController
         $customer = $request->jwtUser;
         $records = isset($request->records) ? $request->records : StatusCode::PAGINATE_10;
         $history = HistoryWalletCtv::select('id', 'customer_id', 'price', 'type', 'created_at')
-            ->where('customer_id', $customer->id)->orderByDesc('id')->paginate($records);
+            ->orderByDesc('id')->paginate($records);
+//        ->where('customer_id', $customer->id)
         $data = [
             'data' => $history->transform(function ($item) {
                 return [
