@@ -12,9 +12,14 @@
                     <div class="col row">
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('user_id') ? 'has-error' : '' }}">
-                                {!! Form::label('user_id', 'Kỹ thuật viên', array('class' => ' required')) !!}
+                                {!! Form::label('user_id', 'Kỹ thuật viên chính', array('class' => ' required')) !!}
                                 {!! Form::select('user_id', $waiters, null, array('class' => 'form-control select2')) !!}
                                 <span class="help-block">{{ $errors->first('user_id', ':message') }}</span>
+                            </div>
+                            <div class="form-group required {{ $errors->has('support_id') ? 'has-error' : '' }}">
+                                {!! Form::label('support_id', 'Người hỗ trợ (nếu có)') !!}
+                                {!! Form::select('support_id', $waiters, null, array('class' => 'form-control','placeholder'=>'Chon KTV (nếu có)')) !!}
+                                <span class="help-block">{{ $errors->first('support_id', ':message') }}</span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-12">

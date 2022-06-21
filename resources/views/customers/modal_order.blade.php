@@ -23,7 +23,8 @@
                         <tr>
                             <th class="text-white text-center">STT</th>
                             <th class="text-white text-center">Ngày thực hiện</th>
-                            <th class="text-white text-center">Người thực hiện</th>
+                            <th class="text-white text-center">Người thực hiện chính</th>
+                            <th class="text-white text-center">Người hỗ trợ</th>
                             <th class="text-white text-center">Dịch vụ</th>
                             <th class="text-white text-center">Mô tả</th>
                             <th class="text-white text-center">Loại</th>

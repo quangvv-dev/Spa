@@ -752,7 +752,9 @@
                 let html = '';
                 historys = data.history_update_orders;
                 order_details = data.order_details;
-                data.history_update_orders.forEach(function (item, index) {
+                // console.log(data.history_update_orders.reverse());
+
+                data.history_update_orders.reverse().forEach(function (item, index) {
                     let name = item.service != null ? item.service.name : '';
                     var name_type = '';
                     if (item.type == 0) {
@@ -764,9 +766,11 @@
                     if (item.type == 2) {
                         name_type = 'Đang bảo lưu';
                     }
+                    let name_support = item.support && item.support.full_name ?item.support.full_name:'';
                     html += '<tr >' + '<td class="text-center">' + index + '</td>' +
                         '<td class="text-center">' + item.created_at + '</td>' +
                         '<td class="text-center">' + item.user.full_name + '</td>' +
+                        '<td class="text-center">' + name_support + '</td>' +
                         '<td class="text-center">' + name + '</td>' +
                         '<td class="text-center">' + (item.description ? item.description : '') + '</td>' +
                         '<td class="text-center">' + (name_type ? name_type : '') + '</td>' +

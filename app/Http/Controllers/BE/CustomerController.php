@@ -235,7 +235,11 @@ class CustomerController extends Controller
     {
         $title = 'Trao đổi';
         $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer')->findOrFail($id);
-        $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+        if (isset($customer) && $customer) {
+            $waiters = User::where('role', UserConstant::TECHNICIANS)->where('branch_id', $customer->branch_id)->pluck('full_name', 'id');
+        } else {
+            $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+        }
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
