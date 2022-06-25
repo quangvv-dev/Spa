@@ -84,19 +84,18 @@ class NotificationController extends BaseApiController
         if (isset($docs) && $docs) {
             $docs->status = NotificationConstant::READ;
             $docs->save();
-        }
-        $docs = $docs->transform(function ($item) {
-            return [
-                'id' => $item->id,
-                'customer_id' => $item->customer_id,
-                'title' => $item->title,
-                'type' => $item->type,
-                'data' => $item->data,
-                'status' => $item->status,
-                'created_at' => date('d-m-Y H:s', strtotime($item->created_at)),
+            $data = [
+                'id' => $docs->id,
+                'customer_id' => $docs->customer_id,
+                'title' => $docs->title,
+                'type' => $docs->type,
+                'data' => $docs->data,
+                'status' => $docs->status,
+                'created_at' => date('d-m-Y H:s', strtotime($docs->created_at)),
             ];
-        });
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+        }
     }
 
 }
