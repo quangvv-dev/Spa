@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\AppCustomers;
 
 use App\Constants\DepartmentConstant;
+use App\Constants\NotificationConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
@@ -16,6 +17,7 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\HistorySms;
 use App\Models\Landipage;
+use App\Models\NotificationCustomer;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\User;
@@ -96,6 +98,15 @@ class SchedulesController extends BaseApiController
         ]);
 
         $data = Schedule::create($request->except('service_id'));
+
+        NotificationCustomer::create([
+                'customer_id'   => $customer->id,
+                'title'     => '🗓 Bạn có lịch hẹn lúc '.$data->time_from.' hôm nay !!!',
+                'data'      => ['schedule_id' => $data->id],
+                'type'      => NotificationConstant::LICH_HEN,
+                'status'    => 0,
+                'created_at' => Carbon::now(),
+            ]);
 
         if (!empty(setting('sms_schedules'))) {
             $date = Functions::dayMonthYear($data->date);

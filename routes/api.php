@@ -149,6 +149,10 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
 
     Route::get('orders-with-me', 'OrdersController@index');
     Route::post('rate-orders/{id}', 'OrdersController@rate');
+
+    Route::get('notification-customers', 'NotificationController@index');//thông báo khách hàng
+    Route::get('count-notification-customers', 'NotificationController@countNotification');//Đếm số thông báo
+    Route::get('read-notification-customers', 'NotificationController@readNotification');//Đọc thông báo
 });
 Route::get('orders-wallet-zalopay', 'API\AppCustomers\OrdersController@createOrderVNPay');// Tạo thanh toán vnpay
 Route::get('push-zalo-pay', 'API\AppCustomers\OrdersController@pushZALOPay');

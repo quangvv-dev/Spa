@@ -15,11 +15,11 @@ class CreateNotificationsCustomersTable extends Migration
     {
         Schema::create('notifications_customers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('customer_id')->comment('Khách hàng');
+            $table->integer('customer_id')->index()->comment('Khách hàng');
             $table->string('title')->comment('Tiêu đề thông báo');
             $table->longText('data')->comment('Data');
             $table->integer('type')->comment('Loại thông báo');
-            $table->integer('status')->default(0)->comment('Trạng thái 0: Ẩn; 1:chưa đọc; 2: đã đọc');
+            $table->integer('status')->index()->default(0)->comment('Trạng thái 0: Ẩn; 1:chưa đọc; 2: đã đọc');
             $table->timestamps();
         });
     }

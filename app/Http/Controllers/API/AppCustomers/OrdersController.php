@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\AppCustomers;
 
+use App\Constants\NotificationConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\OrderResource;
 use App\Models\Customer;
+use App\Models\NotificationCustomer;
 use App\Models\Order;
 use App\Models\PackageWallet;
 use App\Models\PaymentHistory;
@@ -297,6 +299,18 @@ class OrdersController extends BaseApiController
                 $customer = Customer::find($order->customer_id);
                 $customer->wallet = $customer->wallet + $params['amount'];
                 $customer->save();
+                if (!empty($customer->devices_token)) {
+                    $devices_token = [$customer->devices_token];
+                    fcmSendCloudMessage($devices_token, '💰💰💰 Nạp tiền vào ví thành công', 'Chạm để xem', 'notification', ['type' => NotificationConstant::NAP_VI]);
+                }
+                NotificationCustomer::create([
+                    'customer_id'   => $customer->id,
+                    'title'     => '💰💰💰 Nạp tiền vào ví thành công ',
+                    'data'      => [],
+                    'type'      => NotificationConstant::NAP_VI,
+                    'status'    => 1,
+                ]);
+
                 return response()->json([
                     'returncode' => $result["returncode"],
                     'messages'   => $result["returnmessage"],

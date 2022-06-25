@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\NotificationConstant;
 use App\Helpers\Functions;
 use App\Models\Customer;
+use App\Models\NotificationCustomer;
 use App\Models\PackageWallet;
 use App\Models\PaymentWallet;
 use App\Models\WalletHistory;
@@ -197,6 +199,19 @@ class WalletController extends Controller
                     $customer->wallet = $customer->wallet + $response->amount;
                     $customer->save();
                     $currentWallet = $customer->wallet;
+                    if (!empty($customer->devices_token)) {
+                        $devices_token = [$customer->devices_token];
+                        fcmSendCloudMessage($devices_token, '💰💰💰 Nạp tiền vào ví thành công', 'Chạm để xem', 'notification', ['type' => NotificationConstant::NAP_VI]);
+                    }
+
+                    NotificationCustomer::create([
+                        'customer_id'   => $customer->id,
+                        'title'     => '💰💰💰 Nạp tiền vào ví thành công',
+                        'data'      => [],
+                        'type'      => NotificationConstant::NAP_VI,
+                        'status'    => 1,
+//                        'created_at' => Carbon::now(),
+                    ]);
                     $title = 'Nạp tiền vào ví thành công';
                 }else{
                     $order->delete();

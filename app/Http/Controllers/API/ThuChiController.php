@@ -152,6 +152,7 @@ class ThuChiController extends BaseApiController
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function readNotification($id)
     {
         $docs = Notification::find($id);
@@ -162,7 +163,6 @@ class ThuChiController extends BaseApiController
         $docs = new NotificationResource($docs);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
     }
-
     /**
      * Update device token firebase
      *
@@ -209,7 +209,7 @@ class ThuChiController extends BaseApiController
                 'message' => $validator->errors()->first(),
             ]);
         }
-        $result = fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification', ['pay_id' => $request->pay_id]);
+        $result = fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification', ['type' => $request->type]);
         return $this->responseApi(ResponseStatusCode::OK, $result);
 
     }
