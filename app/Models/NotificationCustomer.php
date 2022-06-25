@@ -11,12 +11,12 @@ class NotificationCustomer extends Model
     
     public function getDataAttribute($data)
     {
-        return @json_decode($data, true);
+        return @json_decode((array)$data, true);
     }
 
     public function setDataAttribute($data)
     {
-        return @json_encode($data, true);
+        return @json_encode((array)$data, true);
     }
 
 }
