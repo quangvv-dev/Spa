@@ -89,7 +89,7 @@ class NotificationController extends BaseApiController
                 'customer_id' => $docs->customer_id,
                 'title' => $docs->title,
                 'type' => $docs->type,
-                'data' => $docs->data,
+                'data' => json_decode($docs->data),
                 'status' => $docs->status,
                 'created_at' => date('d-m-Y H:s', strtotime($docs->created_at)),
             ];

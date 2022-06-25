@@ -8,10 +8,5 @@ class NotificationCustomer extends Model
 {
     protected $guarded = ['id'];
     protected $table = 'notifications_customers';
-    
-    public function getDataAttribute($data)
-    {
-        return @json_decode((array)$data, true);
-    }
 
 }
