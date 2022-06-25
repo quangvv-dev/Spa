@@ -15,6 +15,7 @@ class CreateReceiveMoneyTable extends Migration
     {
         Schema::create('receive_money', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('customer_id')->comment("người yêu cầu rút tiền");
             $table->timestamps();
         });
     }
