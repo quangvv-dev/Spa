@@ -45,6 +45,7 @@ class WalletsController extends BaseApiController
                     'customer_id' => $item->customer_id,
                     'price'       => $item->price,
                     'type'        => $item->type,
+                    'status'      => $item->status,
                     'created_at'  => date('d-m-Y H:s', strtotime($item->created_at)),
                 ];
             })->toArray(),
@@ -112,7 +113,7 @@ class WalletsController extends BaseApiController
         $this->validator($request, $validate);
         if (!empty($this->error)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
-        }elseif ($request->price < 100000){
+        } elseif ($request->price < 100000) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, "Số tiền rút tối thiểu 100,000 VNĐ");
         }
         $customer = Customer::find($request->jwtUser->id);
@@ -144,7 +145,9 @@ class WalletsController extends BaseApiController
         NotificationCustomer::create([
             'customer_id' => $customer->id,
             'title'       => '💰💰💰 Yêu cầu rút tiền thành công',
-            'data'        => \GuzzleHttp\json_encode(['type' => NotificationConstant::RUT_TIEN, 'history_id' => $history->id]),
+            'data'        => \GuzzleHttp\json_encode(['type'       => NotificationConstant::RUT_TIEN,
+                                                      'history_id' => $history->id,
+            ]),
             'type'        => NotificationConstant::RUT_TIEN,
             'status'      => 1,
         ]);
