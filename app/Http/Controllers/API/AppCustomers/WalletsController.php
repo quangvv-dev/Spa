@@ -32,9 +32,10 @@ class WalletsController extends BaseApiController
         $customer = $request->jwtUser;
         $records = isset($request->records) ? $request->records : StatusCode::PAGINATE_10;
         $history = HistoryWalletCtv::select('id', 'customer_id', 'price', 'type', 'created_at')
-            ->where('customer_id', $customer->id)->when(isset($request->status) && $request->status, function ($qr) use ($request) {
-                $qr->where('status',$request->status);
-            })->orderByDesc('id')->paginate($records);
+            ->where('customer_id', $customer->id)->when(isset($request->status) && $request->status,
+                function ($qr) use ($request) {
+                    $qr->where('status', $request->status);
+                })->orderByDesc('id')->paginate($records);
         $data = [
             'data'        => $history->transform(function ($item) {
                 return [
@@ -93,5 +94,42 @@ class WalletsController extends BaseApiController
         }
     }
 
+    /**
+     * Action rút tiền
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function withdraw(Request $request)
+    {
+        $validate = [
+            'price'       => "required",
+            'description' => "required",
+        ];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $customer = $request->jwtUser;
 
+        $history = HistoryWalletCtv::create(
+            [
+                'customer_id' => $customer->id,
+                'price'       => $request->price,
+                'type'        => OrderConstant::WALLET_TYPE_MONEY,
+                'created_at'  => Carbon::now(),
+                'description' => $request->description,
+            ]
+        );
+        $data = [
+            'id'          => $history->id,
+            'customer_id' => $history->customer_id,
+            'price'       => $history->price,
+            'type'        => $history->type,
+            'description' => $history->description,
+            'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, "Yêu cầu rút tiền thành công", $data);
+    }
 }

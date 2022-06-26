@@ -18,6 +18,7 @@ class AddColumnsStatusHistoryWalletCtvTables extends Migration
                 ->default(1)->nullable();
             $table->integer('customer_id')->default(0)->nullable()->comment('Id khách hàng')->index()
                 ->change();
+            $table->longText('description')->comment('Nội dung ghi chú nếu có')->nullable();
         });
     }
 
