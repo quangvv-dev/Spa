@@ -33,7 +33,7 @@ class WalletsController extends BaseApiController
     {
         $customer = $request->jwtUser;
         $records = isset($request->records) ? $request->records : StatusCode::PAGINATE_10;
-        $history = HistoryWalletCtv::select('id', 'customer_id', 'price', 'type', 'created_at')
+        $history = HistoryWalletCtv::select('id', 'customer_id', 'price', 'type','status','description','created_at')
             ->where('customer_id', $customer->id)->when(isset($request->status) && $request->status,
                 function ($qr) use ($request) {
                     $qr->where('status', $request->status);
