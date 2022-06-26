@@ -115,8 +115,10 @@ class WalletsController extends BaseApiController
         }elseif ($request->price < 100000){
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, "Số tiền rút tối thiểu 100,000 VNĐ");
         }
-        $customer = $request->jwtUser;
+        $customer = Customer::find($request->jwtUser->id);
 
+        $customer->wallet_ctv = (int)$customer->wallet_ctv - (int)$request->price;
+        $customer->save();
         $history = HistoryWalletCtv::create(
             [
                 'customer_id' => $customer->id,
