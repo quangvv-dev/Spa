@@ -185,6 +185,6 @@ class WalletsController extends BaseApiController
             'description' => $history->description,
             'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
         ];
-        return $this->responseApi(ResponseStatusCode::OK, "Yêu cầu rút tiền thành công", $data);
+        return $this->responseApi(ResponseStatusCode::OK, "SUCCESS", $data);
     }
 }
