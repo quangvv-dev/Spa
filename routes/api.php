@@ -129,6 +129,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('schedules', 'SchedulesController@index');
     Route::post('schedules', 'SchedulesController@store');
+    Route::get('schedules/{id}', 'SchedulesController@show');
     Route::get('get-albums-with-me', 'HomePageController@album');
     Route::get('info', 'AuthController@info');
     Route::post('update-agency', 'AuthController@info');

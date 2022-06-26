@@ -21,7 +21,7 @@ class WalletsController extends BaseApiController
     }
 
     /**
-     * Danh sách lịch hẹn
+     * Danh sách lịch sử ví CTV
      *
      * @param Request $request
      *
@@ -32,20 +32,21 @@ class WalletsController extends BaseApiController
         $customer = $request->jwtUser;
         $records = isset($request->records) ? $request->records : StatusCode::PAGINATE_10;
         $history = HistoryWalletCtv::select('id', 'customer_id', 'price', 'type', 'created_at')
-            ->orderByDesc('id')->paginate($records);
-//        ->where('customer_id', $customer->id)
+            ->where('customer_id', $customer->id)->when(isset($request->status) && $request->status, function ($qr) use ($request) {
+                $qr->where('status',$request->status);
+            })->orderByDesc('id')->paginate($records);
         $data = [
-            'data' => $history->transform(function ($item) {
+            'data'        => $history->transform(function ($item) {
                 return [
-                    'id'            => $item->id,
-                    'customer_id'   => $item->customer_id,
-                    'price'         => $item->price,
-                    'type'          => $item->type,
-                    'created_at'    => date('d-m-Y H:s', strtotime($item->created_at)),
+                    'id'          => $item->id,
+                    'customer_id' => $item->customer_id,
+                    'price'       => $item->price,
+                    'type'        => $item->type,
+                    'created_at'  => date('d-m-Y H:s', strtotime($item->created_at)),
                 ];
             })->toArray(),
             'currentPage' => $history->currentPage(),
-            'lastPage' => $history->lastPage(),
+            'lastPage'    => $history->lastPage(),
         ];
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -78,17 +79,19 @@ class WalletsController extends BaseApiController
                 $customers->save();
                 HistoryWalletCtv::create(
                     [
-                        'customer_id'   => $customers->id,
-                        'price'         => $request->price,
-                        'type'          => OrderConstant::WALLET_TYPE_RECEIVE,
-                        'created_at'    => Carbon::now(),
+                        'customer_id' => $customers->id,
+                        'price'       => $request->price,
+                        'type'        => OrderConstant::WALLET_TYPE_RECEIVE,
+                        'created_at'  => Carbon::now(),
                     ]
                 );
-                return $this->responseApi(ResponseStatusCode::OK, 'Chuyển tiền thành công', new CustomerResource($customers));
+                return $this->responseApi(ResponseStatusCode::OK, 'Chuyển tiền thành công',
+                    new CustomerResource($customers));
             }
         } else {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, "Không tìm thấy khách hàng");
         }
     }
+
 
 }

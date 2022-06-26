@@ -82,7 +82,8 @@ class SchedulesController extends BaseApiController
         }
 
         $customer = $request->jwtUser;
-        $category = CustomerGroup::where('customer_id', $request->customer_id)->where('branch_id',$customer->branch_id)->first();
+        $category = CustomerGroup::where('customer_id', $request->customer_id)->where('branch_id',
+            $customer->branch_id)->first();
         $user = User::where('department_id', DepartmentConstant::WAITER)->first();
         $service = Services::select('name')->whereIn('id', $request->service_id)->pluck('name')->toArray();
 //        $input = $request->all();
@@ -100,13 +101,13 @@ class SchedulesController extends BaseApiController
         $data = Schedule::create($request->except('service_id'));
 
         NotificationCustomer::create([
-                'customer_id'   => $customer->id,
-                'title'     => '🗓 Bạn có lịch hẹn lúc '.$data->time_from.' hôm nay !!!',
-                'data'      => json_encode((array)['schedule_id' => $data->id]),
-                'type'      => NotificationConstant::LICH_HEN,
-                'status'    => 0,
-                'created_at' => Carbon::now(),
-            ]);
+            'customer_id' => $customer->id,
+            'title'       => '🗓 Bạn có lịch hẹn lúc ' . $data->time_from . ' hôm nay !!!',
+            'data'        => json_encode((array)['schedule_id' => $data->id]),
+            'type'        => NotificationConstant::LICH_HEN,
+            'status'      => 0,
+            'created_at'  => Carbon::now(),
+        ]);
 
         if (!empty(setting('sms_schedules'))) {
             $date = Functions::dayMonthYear($data->date);
@@ -131,6 +132,23 @@ class SchedulesController extends BaseApiController
             }
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+    }
+
+    /**
+     * Chi tiết lịch hẹn
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        $schedule = Schedule::find($id);
+        if (isset($schedule) && $schedule) {
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new SchedulesResource($schedule));
+        } else {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy lịch hẹn');
+        }
     }
 
 }
