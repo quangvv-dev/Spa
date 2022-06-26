@@ -21,6 +21,6 @@ class NotificationConstant
     const CHUYEN_VI = 5;// CHUYỂN SỐ DƯ VÍ THÀNH CÔNG
     const NAP_VI = 6;//NẠP VÍ THÀNH CÔNG
     const TIN_QC = 7;//TIN GỬI HÀNG LOẠT
-    const RUT_TIEN = 8;//TIN GỬI HÀNG LOẠT
+    const RUT_TIEN = 8;//RÚT tiền done
 
 }

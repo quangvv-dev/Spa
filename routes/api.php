@@ -146,6 +146,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('ranking-wallet', 'OrdersController@rankingWallet');
     Route::get('history-change-wallet', 'OrdersController@historyChangeWallet');// lịch sử thanh đổi ví
     Route::get('history-change-wallet-ctv', 'WalletsController@index');// lịch sử thanh đổi ví CTV
+    Route::get('history-change-wallet-ctv/{id}', 'WalletsController@show');// Chi tiết lịch sử ví CTV
     Route::post('receive-money', 'WalletsController@receiveMoney');// Chuyển từ ví ctv sang ví thường
     Route::post('withdraw', 'WalletsController@withdraw');// Y/C rút tiền
     Route::post('uri-wallet', 'WalletsController@hiddenWallet');// Ẩn hiện ví

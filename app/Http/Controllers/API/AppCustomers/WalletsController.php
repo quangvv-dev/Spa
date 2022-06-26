@@ -33,7 +33,7 @@ class WalletsController extends BaseApiController
     {
         $customer = $request->jwtUser;
         $records = isset($request->records) ? $request->records : StatusCode::PAGINATE_10;
-        $history = HistoryWalletCtv::select('id', 'customer_id', 'price', 'type','status','description','created_at')
+        $history = HistoryWalletCtv::select('id', 'customer_id', 'price', 'type', 'status', 'description', 'created_at')
             ->where('customer_id', $customer->id)->when(isset($request->status) && $request->status,
                 function ($qr) use ($request) {
                     $qr->where('status', $request->status);
@@ -165,5 +165,26 @@ class WalletsController extends BaseApiController
     public function hiddenWallet()
     {
         return $this->responseApi(ResponseStatusCode::OK, "SUCCESS", false);
+    }
+
+    /**
+     * chi tiết lịch sử ví CTV
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        $history = HistoryWalletCtv::find($id);
+        $data = [
+            'id'          => $history->id,
+            'customer_id' => $history->customer_id,
+            'price'       => $history->price,
+            'type'        => $history->type,
+            'description' => $history->description,
+            'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, "Yêu cầu rút tiền thành công", $data);
     }
 }
