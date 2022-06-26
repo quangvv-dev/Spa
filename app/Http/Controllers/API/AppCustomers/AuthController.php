@@ -196,7 +196,8 @@ class AuthController extends BaseApiController
                     'full_name' => $customer->gioithieu->full_name,
                     'phone'     => $customer->gioithieu->phone,
                 ];
-                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Khách hàng đã nhập người giới thiệu',$data);
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Khách hàng đã nhập người giới thiệu',
+                    $data);
             }
             $agency = Customer::where('phone', $request->phone)->first();
             if (empty($agency)) {

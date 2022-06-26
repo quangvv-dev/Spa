@@ -148,6 +148,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('history-change-wallet-ctv', 'WalletsController@index');// lịch sử thanh đổi ví CTV
     Route::post('receive-money', 'WalletsController@receiveMoney');// Chuyển từ ví ctv sang ví thường
     Route::post('withdraw', 'WalletsController@withdraw');// Y/C rút tiền
+    Route::post('uri-wallet', 'WalletsController@hiddenWallet');// Ẩn hiện ví
 
     Route::get('orders-with-me', 'OrdersController@index');
     Route::post('rate-orders/{id}', 'OrdersController@rate');

@@ -112,6 +112,8 @@ class WalletsController extends BaseApiController
         $this->validator($request, $validate);
         if (!empty($this->error)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }elseif ($request->price < 100000){
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, "Số tiền rút tối thiểu 100,000 VNĐ");
         }
         $customer = $request->jwtUser;
 
@@ -145,5 +147,16 @@ class WalletsController extends BaseApiController
             'status'      => 1,
         ]);
         return $this->responseApi(ResponseStatusCode::OK, "Yêu cầu rút tiền thành công", $data);
+    }
+
+    /**
+     * Ẩn hiện ví đẩy chợ
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * false là hiển thị ví; true là ẩn
+     */
+    public function hiddenWallet()
+    {
+        return $this->responseApi(ResponseStatusCode::OK, "SUCCESS", false);
     }
 }
