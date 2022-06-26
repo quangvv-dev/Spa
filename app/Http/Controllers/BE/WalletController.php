@@ -207,7 +207,7 @@ class WalletController extends Controller
                     NotificationCustomer::create([
                         'customer_id'   => $customer->id,
                         'title'     => '💰💰💰 Nạp tiền vào ví thành công',
-                        'data'      => [],
+                        'data'      => '',
                         'type'      => NotificationConstant::NAP_VI,
                         'status'    => 1,
 //                        'created_at' => Carbon::now(),

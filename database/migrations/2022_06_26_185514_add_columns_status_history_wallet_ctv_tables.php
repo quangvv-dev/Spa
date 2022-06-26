@@ -14,10 +14,9 @@ class AddColumnsStatusHistoryWalletCtvTables extends Migration
     public function up()
     {
         Schema::table('history_wallet_ctv', function (Blueprint $table) {
-            $table->integer('status')->after('type')->comment('Trạng thái thành công hay thất bại')
+            $table->integer('status')->after('type')->comment('1: thành công, 0: đang chờ, 2 từ chối')
                 ->default(1)->nullable();
-            $table->integer('customer_id')->default(0)->nullable()->comment('Id khách hàng')->index()
-                ->change();
+            $table->integer('customer_id')->default(0)->nullable()->comment('Id khách hàng')->index()->change();
             $table->longText('description')->comment('Nội dung ghi chú nếu có')->nullable();
         });
     }

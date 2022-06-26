@@ -306,7 +306,7 @@ class OrdersController extends BaseApiController
                 NotificationCustomer::create([
                     'customer_id'   => $customer->id,
                     'title'     => '💰💰💰 Nạp tiền vào ví thành công ',
-                    'data'      => [],
+                    'data'      => '',
                     'type'      => NotificationConstant::NAP_VI,
                     'status'    => 1,
                 ]);

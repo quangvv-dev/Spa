@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\API\AppCustomers;
 
 use App\Constants\NotificationConstant;
-use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Http\Controllers\API\BaseApiController;
-use App\Http\Resources\AppCustomers\CustomerResource;
-use App\Models\Customer;
-use App\Models\HistoryWalletCtv;
 use App\Models\NotificationCustomer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

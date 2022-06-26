@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\AppCustomers;
 
+use App\Constants\NotificationConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
@@ -9,6 +10,7 @@ use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Models\Customer;
 use App\Models\HistoryWalletCtv;
+use App\Models\NotificationCustomer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -130,6 +132,18 @@ class WalletsController extends BaseApiController
             'description' => $history->description,
             'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
         ];
+        if (!empty($customer->devices_token)) {
+            $devices_token = [$customer->devices_token];
+            fcmSendCloudMessage($devices_token, '💰💰💰 Yêu cầu rút tiền thành công', 'Chạm để xem', 'notification',
+                ['type' => NotificationConstant::RUT_TIEN, 'history_id' => $history->id]);
+        }
+        NotificationCustomer::create([
+            'customer_id' => $customer->id,
+            'title'       => '💰💰💰 Yêu cầu rút tiền thành công',
+            'data'        => \GuzzleHttp\json_encode(['type' => NotificationConstant::RUT_TIEN, 'history_id' => $history->id]),
+            'type'        => NotificationConstant::RUT_TIEN,
+            'status'      => 1,
+        ]);
         return $this->responseApi(ResponseStatusCode::OK, "Yêu cầu rút tiền thành công", $data);
     }
 }
