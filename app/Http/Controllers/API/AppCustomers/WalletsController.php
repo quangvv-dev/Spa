@@ -46,6 +46,7 @@ class WalletsController extends BaseApiController
                     'price'       => $item->price,
                     'type'        => $item->type,
                     'status'      => $item->status,
+                    'description' => @$item->description,
                     'created_at'  => date('d-m-Y H:s', strtotime($item->created_at)),
                 ];
             })->toArray(),
@@ -145,8 +146,9 @@ class WalletsController extends BaseApiController
         NotificationCustomer::create([
             'customer_id' => $customer->id,
             'title'       => '💰💰💰 Yêu cầu rút tiền thành công',
-            'data'        => \GuzzleHttp\json_encode(['type'       => NotificationConstant::RUT_TIEN,
-                                                      'history_id' => $history->id,
+            'data'        => \GuzzleHttp\json_encode([
+                'type'       => NotificationConstant::RUT_TIEN,
+                'history_id' => $history->id,
             ]),
             'type'        => NotificationConstant::RUT_TIEN,
             'status'      => 1,
