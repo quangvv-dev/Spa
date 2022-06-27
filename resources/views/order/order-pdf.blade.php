@@ -92,7 +92,7 @@
                     @endforeach
                     <tr>
                         <td class="bold" colspan="3"><strong>Giảm giá</strong></td>
-                        <td class="tr bold"><strong>{{ @number_format($order->discount_order) }}</strong></td>
+                        <td class="tr bold"><strong>{{@$order->discount_order >0? @number_format($order->discount_order): number_format($order->discount_once_service)}}</strong></td>
                     </tr>
                     <tr>
                         <td class="font-bold" colspan="3"><strong>Tổng Tiền</strong></td>

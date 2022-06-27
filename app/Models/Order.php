@@ -276,6 +276,13 @@ class Order extends Model
 
     }
 
+    public function getDiscountOnceServiceAttribute()
+    {
+        $discount = OrderDetail::select('number_discount')->where('order_id', $this->id)
+            ->sum('number_discount');
+        return $discount;
+    }
+
     public function getServiceTextAttribute()
     {
         $raw = OrderDetail::where('order_id', $this->id)->pluck('booking_id')->toArray();
