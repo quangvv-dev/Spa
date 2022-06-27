@@ -531,39 +531,58 @@
             },
 
             async sendMessage(model) {
-                try {
-                    let res = await Axios({
-                        method: 'post',
-                        url: `https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`,
-                        data: {
-                            "messaging_type": "RESPONSE",
-                            "notification_type": "REGULAR",
-                            "recipient": {
-                                "id": this.fb_me
-                            },
-                            "message": {
-                                "text": model
-                            }
-                        }
-                    });
-                    let html = {
-                        message: this.contentMesage,
-                        from: {
-                            id: this.last_segment,
-                        }
-                    };
-                    this.detailMessage.push(html);
-                } catch (error) {
-                    let html = {
-                        message: this.contentMesage,
-                        is_error : 1,
-                        from: {
-                            id: this.last_segment,
-                        }
-                    };
-                    this.detailMessage.push(html);
-                    alertify.error('đã có lỗi xảy ra !',10);
-                }
+                // try {
+                //     let res = await Axios({
+                //         method: 'post',
+                //         url: `https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`,
+                //         data: {
+                //             "messaging_type": "RESPONSE",
+                //             "notification_type": "REGULAR",
+                //             "recipient": {
+                //                 "id": this.fb_me
+                //             },
+                //             "message": {
+                //                 "text": model
+                //             }
+                //         }
+                //     });
+                //     let html = {
+                //         message: this.contentMesage,
+                //         from: {
+                //             id: this.last_segment,
+                //         }
+                //     };
+                //     this.detailMessage.push(html);
+                // } catch (error) {
+                //     let html = {
+                //         message: this.contentMesage,
+                //         is_error : 1,
+                //         from: {
+                //             id: this.last_segment,
+                //         }
+                //     };
+                //     this.detailMessage.push(html);
+                //     alertify.error('đã có lỗi xảy ra !',10);
+                // }
+                let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
+                    // "messaging_type": "MESSAGE_TAG",
+                    // "tag": "HUMAN_AGENT",
+                    "messaging_type": "RESPONSE",
+                    "notification_type": "REGULAR",
+                    "recipient": {
+                        "id": this.fb_me
+                    },
+                    "message": {
+                        "text": model
+                    }
+                })
+                let html = {
+                    message: this.contentMesage,
+                    from: {
+                        id: this.last_segment,
+                    }
+                };
+                this.detailMessage.push(html);
 
 
                 let data_image_response = [];

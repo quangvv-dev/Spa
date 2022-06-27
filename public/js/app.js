@@ -2394,7 +2394,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       if (server.type) {
         _this2.customerNewComment(server);
       } else {
-        var _html = {
+        var html = {
           message: server.message.text,
           from: {
             id: server.sender.id
@@ -2410,7 +2410,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
             if (server.message.attachments[0].type == 'image') {
               // html.attachments.data[0].image_data.url = url
-              _html = {
+              html = {
                 message: server.message.text,
                 from: {
                   id: server.sender.id
@@ -2424,7 +2424,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 }
               };
             } else if (server.message.attachments[0].type == 'video') {
-              _html = {
+              html = {
                 message: server.message.text,
                 from: {
                   id: server.sender.id
@@ -2440,7 +2440,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             }
           }
 
-          _this2.detailMessage.push(_html);
+          _this2.detailMessage.push(html);
         }
       }
 
@@ -2485,67 +2485,73 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var res, _html2, _html3, data_image_response, data_delete;
-
+        var rq, html, data_image_response, data_delete;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
-                return Axios({
-                  method: 'post',
-                  url: "https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token),
-                  data: {
-                    "messaging_type": "RESPONSE",
-                    "notification_type": "REGULAR",
-                    "recipient": {
-                      "id": _this4.fb_me
-                    },
-                    "message": {
-                      "text": model
-                    }
+                // try {
+                //     let res = await Axios({
+                //         method: 'post',
+                //         url: `https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`,
+                //         data: {
+                //             "messaging_type": "RESPONSE",
+                //             "notification_type": "REGULAR",
+                //             "recipient": {
+                //                 "id": this.fb_me
+                //             },
+                //             "message": {
+                //                 "text": model
+                //             }
+                //         }
+                //     });
+                //     let html = {
+                //         message: this.contentMesage,
+                //         from: {
+                //             id: this.last_segment,
+                //         }
+                //     };
+                //     this.detailMessage.push(html);
+                // } catch (error) {
+                //     let html = {
+                //         message: this.contentMesage,
+                //         is_error : 1,
+                //         from: {
+                //             id: this.last_segment,
+                //         }
+                //     };
+                //     this.detailMessage.push(html);
+                //     alertify.error('đã có lỗi xảy ra !',10);
+                // }
+                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
+                  // "messaging_type": "MESSAGE_TAG",
+                  // "tag": "HUMAN_AGENT",
+                  "messaging_type": "RESPONSE",
+                  "notification_type": "REGULAR",
+                  "recipient": {
+                    "id": _this4.fb_me
+                  },
+                  "message": {
+                    "text": model
                   }
                 });
-
-              case 3:
-                res = _context2.sent;
-                _html2 = {
+                html = {
                   message: _this4.contentMesage,
                   from: {
                     id: _this4.last_segment
                   }
                 };
 
-                _this4.detailMessage.push(_html2);
+                _this4.detailMessage.push(html);
 
-                _context2.next = 13;
-                break;
-
-              case 8:
-                _context2.prev = 8;
-                _context2.t0 = _context2["catch"](0);
-                _html3 = {
-                  message: _this4.contentMesage,
-                  is_error: 1,
-                  from: {
-                    id: _this4.last_segment
-                  }
-                };
-
-                _this4.detailMessage.push(_html3);
-
-                alertify.error('đã có lỗi xảy ra !', 10);
-
-              case 13:
                 data_image_response = [];
-                _context2.next = 16;
+                _context2.next = 6;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/test', _this4.data_images_upload_server).then(function (response) {
                   // this.detailMessage = response.data.messages.data.reverse();
                   data_image_response = response.data;
                 });
 
-              case 16:
+              case 6:
                 if (data_image_response.length > 0) {
                   data_image_response.forEach( /*#__PURE__*/function () {
                     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(f) {
@@ -2613,12 +2619,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this4.contentMesage = '';
 
-              case 18:
+              case 8:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2);
       }))();
     },
     changeNavChat: function changeNavChat(type) {
@@ -3187,8 +3193,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this18 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        var access_token, fields, url, res, index, _html4;
-
+        var access_token, fields, url, res, index, html;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -3209,7 +3214,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   _this18.navChatDefault[index].snippet = res.data.message;
                   _this18.navChatDefault[index].updated_time = res.data.created_time;
                 } else {
-                  _html4 = {
+                  html = {
                     check_phone: 0,
                     id: res.data.thread_id,
                     participants: {
@@ -3226,7 +3231,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                     updated_time: res.data.created_time
                   };
 
-                  _this18.navChatDefault.unshift(_html4);
+                  _this18.navChatDefault.unshift(html);
                 }
 
               case 8:
@@ -3758,7 +3763,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             if (server.type) {
               _this2.customerNewComment(server);
             } else {
-              var _html = {
+              var html = {
                 message: server.message.text,
                 from: {
                   id: server.sender.id
@@ -3774,7 +3779,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                   if (server.message.attachments[0].type == 'image') {
                     // html.attachments.data[0].image_data.url = url
-                    _html = {
+                    html = {
                       message: server.message.text,
                       from: {
                         id: server.sender.id
@@ -3788,7 +3793,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                       }
                     };
                   } else if (server.message.attachments[0].type == 'video') {
-                    _html = {
+                    html = {
                       message: server.message.text,
                       from: {
                         id: server.sender.id
@@ -3804,7 +3809,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   }
                 }
 
-                _this2.detailMessage.push(_html);
+                _this2.detailMessage.push(html);
               }
             } // console.log(server, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
 
@@ -3849,67 +3854,73 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var res, _html2, _html3, data_image_response;
-
+        var rq, html, data_image_response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
-                return Axios({
-                  method: 'post',
-                  url: "https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token),
-                  data: {
-                    "messaging_type": "RESPONSE",
-                    "notification_type": "REGULAR",
-                    "recipient": {
-                      "id": _this4.fb_me
-                    },
-                    "message": {
-                      "text": model
-                    }
+                // try {
+                //     let res = await Axios({
+                //         method: 'post',
+                //         url: `https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`,
+                //         data: {
+                //             "messaging_type": "RESPONSE",
+                //             "notification_type": "REGULAR",
+                //             "recipient": {
+                //                 "id": this.fb_me
+                //             },
+                //             "message": {
+                //                 "text": model
+                //             }
+                //         }
+                //     });
+                //     let html = {
+                //         message: this.contentMesage,
+                //         from: {
+                //             id: this.last_segment,
+                //         }
+                //     };
+                //     this.detailMessage.push(html);
+                // } catch (error) {
+                //     let html = {
+                //         message: this.contentMesage,
+                //         is_error : 1,
+                //         from: {
+                //             id: this.last_segment,
+                //         }
+                //     };
+                //     this.detailMessage.push(html);
+                //     alertify.error('đã có lỗi xảy ra !',10);
+                // }
+                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
+                  // "messaging_type": "MESSAGE_TAG",
+                  // "tag": "HUMAN_AGENT",
+                  "messaging_type": "RESPONSE",
+                  "notification_type": "REGULAR",
+                  "recipient": {
+                    "id": _this4.fb_me
+                  },
+                  "message": {
+                    "text": model
                   }
                 });
-
-              case 3:
-                res = _context2.sent;
-                _html2 = {
+                html = {
                   message: _this4.contentMesage,
                   from: {
                     id: _this4.last_segment
                   }
                 };
 
-                _this4.detailMessage.push(_html2);
+                _this4.detailMessage.push(html);
 
-                _context2.next = 13;
-                break;
-
-              case 8:
-                _context2.prev = 8;
-                _context2.t0 = _context2["catch"](0);
-                _html3 = {
-                  message: _this4.contentMesage,
-                  is_error: 1,
-                  from: {
-                    id: _this4.last_segment
-                  }
-                };
-
-                _this4.detailMessage.push(_html3);
-
-                alertify.error('đã có lỗi xảy ra !', 10);
-
-              case 13:
                 data_image_response = [];
-                _context2.next = 16;
+                _context2.next = 6;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/test', _this4.data_images_upload_server).then(function (response) {
                   // this.detailMessage = response.data.messages.data.reverse();
                   data_image_response = response.data;
                 });
 
-              case 16:
+              case 6:
                 if (data_image_response.length > 0) {
                   data_image_response.forEach( /*#__PURE__*/function () {
                     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(f) {
@@ -3973,12 +3984,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this4.contentMesage = '';
 
-              case 18:
+              case 8:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2);
       }))();
     },
     changeNavChat: function changeNavChat(type) {
@@ -4634,8 +4645,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this18 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var access_token, fields, url, res, index, _html4;
-
+        var access_token, fields, url, res, index, html;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -4656,7 +4666,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   _this18.navChatDefault[index].snippet = res.data.message;
                   _this18.navChatDefault[index].updated_time = res.data.created_time;
                 } else {
-                  _html4 = {
+                  html = {
                     check_phone: 0,
                     id: res.data.thread_id,
                     participants: {
@@ -4673,7 +4683,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                     updated_time: res.data.created_time
                   };
 
-                  _this18.navChatDefault.unshift(_html4);
+                  _this18.navChatDefault.unshift(html);
                 }
 
               case 8:
@@ -67588,7 +67598,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _socket_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./socket.js */ "./node_modules/socket.io-client/build/esm/socket.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Socket", function() { return _socket_js__WEBPACK_IMPORTED_MODULE_2__["Socket"]; });
 
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "protocol", function() { return socket_io_parser__WEBPACK_IMPORTED_MODULE_3__["protocol"]; });
 
 
@@ -67664,7 +67674,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Manager", function() { return Manager; });
 /* harmony import */ var engine_io_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! engine.io-client */ "./node_modules/engine.io-client/build/esm/index.js");
 /* harmony import */ var _socket_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./socket.js */ "./node_modules/socket.io-client/build/esm/socket.js");
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
 /* harmony import */ var _on_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./on.js */ "./node_modules/socket.io-client/build/esm/on.js");
 /* harmony import */ var _contrib_backo2_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./contrib/backo2.js */ "./node_modules/socket.io-client/build/esm/contrib/backo2.js");
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
@@ -68052,7 +68062,7 @@ function on(obj, ev, fn) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Socket", function() { return Socket; });
-/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-parser/build/esm/index.js");
+/* harmony import */ var socket_io_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-parser */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js");
 /* harmony import */ var _on_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./on.js */ "./node_modules/socket.io-client/build/esm/on.js");
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
 
@@ -68726,10 +68736,10 @@ function url(uri, path = "", loc) {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-parser/build/esm/binary.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/socket.io-parser/build/esm/binary.js ***!
-  \***********************************************************/
+/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js":
+/*!*****************************************************************************************!*\
+  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js ***!
+  \*****************************************************************************************/
 /*! exports provided: deconstructPacket, reconstructPacket */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -68737,7 +68747,7 @@ function url(uri, path = "", loc) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deconstructPacket", function() { return deconstructPacket; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reconstructPacket", function() { return reconstructPacket; });
-/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-parser/build/esm/is-binary.js");
+/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js");
 
 /**
  * Replaces every Buffer | ArrayBuffer | Blob | File in packet with a numbered placeholder.
@@ -68817,10 +68827,10 @@ function _reconstructPacket(data, buffers) {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-parser/build/esm/index.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/socket.io-parser/build/esm/index.js ***!
-  \**********************************************************/
+/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/index.js ***!
+  \****************************************************************************************/
 /*! exports provided: protocol, PacketType, Encoder, Decoder */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -68831,8 +68841,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Encoder", function() { return Encoder; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Decoder", function() { return Decoder; });
 /* harmony import */ var _socket_io_component_emitter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @socket.io/component-emitter */ "./node_modules/@socket.io/component-emitter/index.mjs");
-/* harmony import */ var _binary_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./binary.js */ "./node_modules/socket.io-parser/build/esm/binary.js");
-/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-parser/build/esm/is-binary.js");
+/* harmony import */ var _binary_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/binary.js");
+/* harmony import */ var _is_binary_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./is-binary.js */ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js");
 
 
 
@@ -69122,10 +69132,10 @@ class BinaryReconstructor {
 
 /***/ }),
 
-/***/ "./node_modules/socket.io-parser/build/esm/is-binary.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/socket.io-parser/build/esm/is-binary.js ***!
-  \**************************************************************/
+/***/ "./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js":
+/*!********************************************************************************************!*\
+  !*** ./node_modules/socket.io-client/node_modules/socket.io-parser/build/esm/is-binary.js ***!
+  \********************************************************************************************/
 /*! exports provided: isBinary, hasBinary */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -82686,7 +82696,9 @@ var render = function() {
                                 "div",
                                 {
                                   staticClass: "chat-content",
-                                  class: { errors: item.is_error == 1 }
+                                  class: {
+                                    errors: item.is_error && item.is_error == 1
+                                  }
                                 },
                                 [
                                   item.file == "image"
@@ -82722,7 +82734,9 @@ var render = function() {
                                 "div",
                                 {
                                   staticClass: "chat-content",
-                                  class: { errors: item.is_error == 1 },
+                                  class: {
+                                    errors: item.is_error && item.is_error == 1
+                                  },
                                   staticStyle: { "margin-bottom": "0" }
                                 },
                                 [
@@ -99735,8 +99749,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\PHP\xampp\htdocs\Spa\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\PHP\xampp\htdocs\Spa\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! E:\PHP\Spa\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! E:\PHP\Spa\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
