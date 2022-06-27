@@ -80,6 +80,8 @@
                         <td class="padding5"><strong>SL</strong></td>
                         <td class="padding5"><strong>T.Tiền</strong></td>
                     </tr>
+                    @php
+                    @endphp
                     @foreach($order->orderDetails as $key => $orderDetail)
                         <tr class="font12">
                             <td class="tl position">{{ $orderDetail->service->name }}</td>
@@ -90,7 +92,7 @@
                     @endforeach
                     <tr>
                         <td class="bold" colspan="3"><strong>Giảm giá</strong></td>
-                        <td class="tr bold"><strong>{{ @number_format($order->discount) }}</strong></td>
+                        <td class="tr bold"><strong>{{ @number_format($order->discount_order) }}</strong></td>
                     </tr>
                     <tr>
                         <td class="font-bold" colspan="3"><strong>Tổng Tiền</strong></td>
