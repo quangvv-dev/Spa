@@ -84,14 +84,14 @@
                         <div class="chats" v-for="(item,index) in emotions">
                             <div class="chat" v-if="item.from.id ==last_segment">
                                 <div class="chat-body">
-                                    <div class="chat-content" v-if="item.display==1">
+                                    <div class="chat-content" :class="{'errors':item.is_error == 1}" v-if="item.display==1">
                                         <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
                                         <p v-else v-html="item.message" :title="date(item.created_time)"></p>
 
                                     </div>
-                                    <div class="chat-content" v-else style="margin-bottom: 0">
+                                    <div class="chat-content" :class="{'errors':item.is_error == 1}" v-else style="margin-bottom: 0">
                                         <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
@@ -526,26 +526,40 @@
             },
 
             async sendMessage(model) {
-                let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
-                    // "messaging_type": "MESSAGE_TAG",
-                    // "tag": "HUMAN_AGENT",
-                    "messaging_type": "RESPONSE",
-                    "notification_type": "REGULAR",
-                    "recipient": {
-                        "id": this.fb_me
-                    },
-                    "message": {
-                        "text": model
-                    }
-                })
 
-                let html = {
-                    message: this.contentMesage,
-                    from: {
-                        id: this.last_segment,
-                    }
-                };
-                this.detailMessage.push(html);
+                try {
+                    let res = await Axios({
+                        method: 'post',
+                        url: `https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`,
+                        data: {
+                            "messaging_type": "RESPONSE",
+                            "notification_type": "REGULAR",
+                            "recipient": {
+                                "id": this.fb_me
+                            },
+                            "message": {
+                                "text": model
+                            }
+                        }
+                    });
+                    let html = {
+                        message: this.contentMesage,
+                        from: {
+                            id: this.last_segment,
+                        }
+                    };
+                    this.detailMessage.push(html);
+                } catch (error) {
+                    let html = {
+                        message: this.contentMesage,
+                        is_error : 1,
+                        from: {
+                            id: this.last_segment,
+                        }
+                    };
+                    this.detailMessage.push(html);
+                    alertify.error('đã có lỗi xảy ra !',10);
+                }
 
 
                 let data_image_response = [];
@@ -584,7 +598,7 @@
                             this.changeNavChat('images')
                         }).catch(error =>{
                             if(error){
-                                alertify.error('đã có lỗi xảy ra !');
+                                alertify.error('đã có lỗi xảy ra !',10);
                             }
                         })
 

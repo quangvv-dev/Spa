@@ -36,7 +36,7 @@ class ChatController extends Controller
         }
         $fanpages = Fanpage::search($data)->get();
         $mkts = User::where('department_id', DepartmentConstant::MARKETING)->get();
-        $group_multi = self::getGroupMulti();
+        $group_multi = MultiplePageGroup::where('user_id', $user->id)->get();
         if ($request->ajax()) {
             return view('marketing.chat_fanpage.ajax', compact('fanpages', 'mkts'));
         }
@@ -90,6 +90,7 @@ class ChatController extends Controller
 
     public function updateGroup(Request $request)
     {
+        $user = Auth::user();
         if ($request->name) {
             $data['name'] = $request->name;
         }
@@ -99,7 +100,7 @@ class ChatController extends Controller
             $data['page_ids'] = "[]";
         }
         MultiplePageGroup::find($request->id)->update($data);
-        $group_multi = self::getGroupMulti();
+        $group_multi = MultiplePageGroup::where('user_id', $user->id)->get();
         return $group_multi;
     }
 

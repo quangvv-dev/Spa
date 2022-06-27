@@ -2394,7 +2394,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       if (server.type) {
         _this2.customerNewComment(server);
       } else {
-        var html = {
+        var _html = {
           message: server.message.text,
           from: {
             id: server.sender.id
@@ -2410,7 +2410,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
             if (server.message.attachments[0].type == 'image') {
               // html.attachments.data[0].image_data.url = url
-              html = {
+              _html = {
                 message: server.message.text,
                 from: {
                   id: server.sender.id
@@ -2424,7 +2424,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 }
               };
             } else if (server.message.attachments[0].type == 'video') {
-              html = {
+              _html = {
                 message: server.message.text,
                 from: {
                   id: server.sender.id
@@ -2440,7 +2440,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             }
           }
 
-          _this2.detailMessage.push(html);
+          _this2.detailMessage.push(_html);
         }
       }
 
@@ -2485,40 +2485,67 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var rq, html, data_image_response, data_delete;
+        var res, _html2, _html3, data_image_response, data_delete;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
-                  // "messaging_type": "MESSAGE_TAG",
-                  // "tag": "HUMAN_AGENT",
-                  "messaging_type": "RESPONSE",
-                  "notification_type": "REGULAR",
-                  "recipient": {
-                    "id": _this4.fb_me
-                  },
-                  "message": {
-                    "text": model
+                _context2.prev = 0;
+                _context2.next = 3;
+                return Axios({
+                  method: 'post',
+                  url: "https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token),
+                  data: {
+                    "messaging_type": "RESPONSE",
+                    "notification_type": "REGULAR",
+                    "recipient": {
+                      "id": _this4.fb_me
+                    },
+                    "message": {
+                      "text": model
+                    }
                   }
                 });
-                html = {
+
+              case 3:
+                res = _context2.sent;
+                _html2 = {
                   message: _this4.contentMesage,
                   from: {
                     id: _this4.last_segment
                   }
                 };
 
-                _this4.detailMessage.push(html);
+                _this4.detailMessage.push(_html2);
 
+                _context2.next = 13;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                _html3 = {
+                  message: _this4.contentMesage,
+                  is_error: 1,
+                  from: {
+                    id: _this4.last_segment
+                  }
+                };
+
+                _this4.detailMessage.push(_html3);
+
+                alertify.error('đã có lỗi xảy ra !', 10);
+
+              case 13:
                 data_image_response = [];
-                _context2.next = 6;
+                _context2.next = 16;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/test', _this4.data_images_upload_server).then(function (response) {
                   // this.detailMessage = response.data.messages.data.reverse();
                   data_image_response = response.data;
                 });
 
-              case 6:
+              case 16:
                 if (data_image_response.length > 0) {
                   data_image_response.forEach( /*#__PURE__*/function () {
                     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(f) {
@@ -2557,7 +2584,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                                 _this4.changeNavChat('images');
                               })["catch"](function (error) {
                                 if (error) {
-                                  alertify.error('đã có lỗi xảy ra !');
+                                  alertify.error('đã có lỗi xảy ra !', 10);
                                 }
                               });
 
@@ -2586,12 +2613,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this4.contentMesage = '';
 
-              case 8:
+              case 18:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, null, [[0, 8]]);
       }))();
     },
     changeNavChat: function changeNavChat(type) {
@@ -3160,7 +3187,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this18 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        var access_token, fields, url, res, index, html;
+        var access_token, fields, url, res, index, _html4;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -3181,7 +3209,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   _this18.navChatDefault[index].snippet = res.data.message;
                   _this18.navChatDefault[index].updated_time = res.data.created_time;
                 } else {
-                  html = {
+                  _html4 = {
                     check_phone: 0,
                     id: res.data.thread_id,
                     participants: {
@@ -3198,7 +3226,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                     updated_time: res.data.created_time
                   };
 
-                  _this18.navChatDefault.unshift(html);
+                  _this18.navChatDefault.unshift(_html4);
                 }
 
               case 8:
@@ -3730,7 +3758,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             if (server.type) {
               _this2.customerNewComment(server);
             } else {
-              var html = {
+              var _html = {
                 message: server.message.text,
                 from: {
                   id: server.sender.id
@@ -3746,7 +3774,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                   if (server.message.attachments[0].type == 'image') {
                     // html.attachments.data[0].image_data.url = url
-                    html = {
+                    _html = {
                       message: server.message.text,
                       from: {
                         id: server.sender.id
@@ -3760,7 +3788,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                       }
                     };
                   } else if (server.message.attachments[0].type == 'video') {
-                    html = {
+                    _html = {
                       message: server.message.text,
                       from: {
                         id: server.sender.id
@@ -3776,7 +3804,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   }
                 }
 
-                _this2.detailMessage.push(html);
+                _this2.detailMessage.push(_html);
               }
             } // console.log(server, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
 
@@ -3821,40 +3849,67 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var rq, html, data_image_response;
+        var res, _html2, _html3, data_image_response;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                rq = axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token), {
-                  // "messaging_type": "MESSAGE_TAG",
-                  // "tag": "HUMAN_AGENT",
-                  "messaging_type": "RESPONSE",
-                  "notification_type": "REGULAR",
-                  "recipient": {
-                    "id": _this4.fb_me
-                  },
-                  "message": {
-                    "text": model
+                _context2.prev = 0;
+                _context2.next = 3;
+                return Axios({
+                  method: 'post',
+                  url: "https://graph.facebook.com/v13.0/me/messages?access_token=".concat(_this4.access_token),
+                  data: {
+                    "messaging_type": "RESPONSE",
+                    "notification_type": "REGULAR",
+                    "recipient": {
+                      "id": _this4.fb_me
+                    },
+                    "message": {
+                      "text": model
+                    }
                   }
                 });
-                html = {
+
+              case 3:
+                res = _context2.sent;
+                _html2 = {
                   message: _this4.contentMesage,
                   from: {
                     id: _this4.last_segment
                   }
                 };
 
-                _this4.detailMessage.push(html);
+                _this4.detailMessage.push(_html2);
 
+                _context2.next = 13;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                _html3 = {
+                  message: _this4.contentMesage,
+                  is_error: 1,
+                  from: {
+                    id: _this4.last_segment
+                  }
+                };
+
+                _this4.detailMessage.push(_html3);
+
+                alertify.error('đã có lỗi xảy ra !', 10);
+
+              case 13:
                 data_image_response = [];
-                _context2.next = 6;
+                _context2.next = 16;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/marketing/setting-quick-reply/test', _this4.data_images_upload_server).then(function (response) {
                   // this.detailMessage = response.data.messages.data.reverse();
                   data_image_response = response.data;
                 });
 
-              case 6:
+              case 16:
                 if (data_image_response.length > 0) {
                   data_image_response.forEach( /*#__PURE__*/function () {
                     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(f) {
@@ -3893,7 +3948,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                                 _this4.changeNavChat('images');
                               })["catch"](function (error) {
                                 if (error) {
-                                  alertify.error('đã có lỗi xảy ra !');
+                                  alertify.error('đã có lỗi xảy ra !', 10);
                                 }
                               });
 
@@ -3918,12 +3973,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
                 _this4.contentMesage = '';
 
-              case 8:
+              case 18:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, null, [[0, 8]]);
       }))();
     },
     changeNavChat: function changeNavChat(type) {
@@ -4579,7 +4634,8 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       var _this18 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var access_token, fields, url, res, index, html;
+        var access_token, fields, url, res, index, _html4;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -4600,7 +4656,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                   _this18.navChatDefault[index].snippet = res.data.message;
                   _this18.navChatDefault[index].updated_time = res.data.created_time;
                 } else {
-                  html = {
+                  _html4 = {
                     check_phone: 0,
                     id: res.data.thread_id,
                     participants: {
@@ -4617,7 +4673,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                     updated_time: res.data.created_time
                   };
 
-                  _this18.navChatDefault.unshift(html);
+                  _this18.navChatDefault.unshift(_html4);
                 }
 
               case 8:
@@ -82626,39 +82682,47 @@ var render = function() {
                     ? _c("div", { staticClass: "chat" }, [
                         _c("div", { staticClass: "chat-body" }, [
                           item.display == 1
-                            ? _c("div", { staticClass: "chat-content" }, [
-                                item.file == "image"
-                                  ? _c("img", {
-                                      attrs: {
-                                        width: "320",
-                                        height: "180",
-                                        src: item.url,
-                                        title: _vm.date(item.created_time),
-                                        alt: ""
-                                      }
-                                    })
-                                  : item.file == "video"
-                                  ? _c("video", {
-                                      attrs: {
-                                        width: "320",
-                                        height: "180",
-                                        controls: "",
-                                        src: item.url
-                                      }
-                                    })
-                                  : _c("p", {
-                                      attrs: {
-                                        title: _vm.date(item.created_time)
-                                      },
-                                      domProps: {
-                                        innerHTML: _vm._s(item.message)
-                                      }
-                                    })
-                              ])
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "chat-content",
+                                  class: { errors: item.is_error == 1 }
+                                },
+                                [
+                                  item.file == "image"
+                                    ? _c("img", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          src: item.url,
+                                          title: _vm.date(item.created_time),
+                                          alt: ""
+                                        }
+                                      })
+                                    : item.file == "video"
+                                    ? _c("video", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          controls: "",
+                                          src: item.url
+                                        }
+                                      })
+                                    : _c("p", {
+                                        attrs: {
+                                          title: _vm.date(item.created_time)
+                                        },
+                                        domProps: {
+                                          innerHTML: _vm._s(item.message)
+                                        }
+                                      })
+                                ]
+                              )
                             : _c(
                                 "div",
                                 {
                                   staticClass: "chat-content",
+                                  class: { errors: item.is_error == 1 },
                                   staticStyle: { "margin-bottom": "0" }
                                 },
                                 [
@@ -84004,39 +84068,47 @@ var render = function() {
                     ? _c("div", { staticClass: "chat" }, [
                         _c("div", { staticClass: "chat-body" }, [
                           item.display == 1
-                            ? _c("div", { staticClass: "chat-content" }, [
-                                item.file == "image"
-                                  ? _c("img", {
-                                      attrs: {
-                                        width: "320",
-                                        height: "180",
-                                        src: item.url,
-                                        title: _vm.date(item.created_time),
-                                        alt: ""
-                                      }
-                                    })
-                                  : item.file == "video"
-                                  ? _c("video", {
-                                      attrs: {
-                                        width: "320",
-                                        height: "180",
-                                        controls: "",
-                                        src: item.url
-                                      }
-                                    })
-                                  : _c("p", {
-                                      attrs: {
-                                        title: _vm.date(item.created_time)
-                                      },
-                                      domProps: {
-                                        innerHTML: _vm._s(item.message)
-                                      }
-                                    })
-                              ])
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "chat-content",
+                                  class: { errors: item.is_error == 1 }
+                                },
+                                [
+                                  item.file == "image"
+                                    ? _c("img", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          src: item.url,
+                                          title: _vm.date(item.created_time),
+                                          alt: ""
+                                        }
+                                      })
+                                    : item.file == "video"
+                                    ? _c("video", {
+                                        attrs: {
+                                          width: "320",
+                                          height: "180",
+                                          controls: "",
+                                          src: item.url
+                                        }
+                                      })
+                                    : _c("p", {
+                                        attrs: {
+                                          title: _vm.date(item.created_time)
+                                        },
+                                        domProps: {
+                                          innerHTML: _vm._s(item.message)
+                                        }
+                                      })
+                                ]
+                              )
                             : _c(
                                 "div",
                                 {
                                   staticClass: "chat-content",
+                                  class: { errors: item.is_error == 1 },
                                   staticStyle: { "margin-bottom": "0" }
                                 },
                                 [
