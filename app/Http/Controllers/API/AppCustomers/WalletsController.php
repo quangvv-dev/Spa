@@ -125,6 +125,7 @@ class WalletsController extends BaseApiController
             [
                 'customer_id' => $customer->id,
                 'price'       => $request->price,
+                'status'      => 0,
                 'type'        => OrderConstant::WALLET_TYPE_MONEY,
                 'created_at'  => Carbon::now(),
                 'description' => $request->description,
@@ -134,6 +135,7 @@ class WalletsController extends BaseApiController
             'id'          => $history->id,
             'customer_id' => $history->customer_id,
             'price'       => $history->price,
+            'status'      => $history->status,
             'type'        => $history->type,
             'description' => $history->description,
             'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
@@ -182,6 +184,7 @@ class WalletsController extends BaseApiController
             'customer_id' => $history->customer_id,
             'price'       => $history->price,
             'type'        => $history->type,
+            'status'      => $history->status,
             'description' => $history->description,
             'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
         ];
