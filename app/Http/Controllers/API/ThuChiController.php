@@ -12,6 +12,7 @@ use App\Http\Resources\NotificationResource;
 use App\Models\Branch;
 use App\Models\DanhMucThuChi;
 use App\Models\Notification;
+use App\Models\NotificationCustomer;
 use App\Models\ThuChi;
 use App\User;
 use Illuminate\Support\Facades\Validator;
@@ -209,7 +210,44 @@ class ThuChiController extends BaseApiController
                 'message' => $validator->errors()->first(),
             ]);
         }
-        $result = fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification', ['type' => $request->type]);
+        $text = "<p>☑️ TRẺ HÓA LÁ VÀNG 24K, liên tục gây sốt, Dành tặng 1 suất miễn phí cho 10 khách hàng đầu tiên ghé chuỗi hệ thống.<br />
+═════--------🍃🏵️🍃--------═════</p>
+
+<p>🔱 ROYAL SPA - Đẹp mãi với thời gian<br />
+☎Hotline tổng: 1900299269<br />
+🏡 CS1: Số 38 ngõ 12 Láng Hạ, Ba Đình, Hà Nội�<br />
+☎ Hotline: 0982.966.663<br />
+🏡 CS2: Số 20 Đà Nẵng, tt Núi Đèo, Thủy Nguyên, Hải Phòng�<br />
+☎ Hotline: 0982.813.226<br />
+🏡 CS3: Số 172 Nguyễn Gia Thiều - P. Suối Hoa - TP. Bắc Ninh�<br />
+☎ Hotline: 0982.488.663<br />
+🏡 CS4: Số 580 Nguyễn Trãi, Tp Bắc Ninh.�<br />
+☎ Hotline: 0981.665.299<br />
+🏡 CS5: Số 203 Hai Bà Trưng, Cát Dài, TP. Hải Phòng�<br />
+☎Hotline : 0982.592.663<br />
+🏡 CS6: Số 458 Hoàng Minh Thảo, Lê Chân, TP. Hải Phòng�<br />
+☎ Hotline : 0988.589.663<br />
+🏡 CS8: Số 22 Hùng Vương, Tp. Vĩnh Yên<br />
+☎ Hotline: 0981.693.266<br />
+🏡Cơ sở 9: Số 286/3 Tô Hiến Thành, Phường 15, Quận 10, TP.HCM<br />
+☎ Hotline: 0982.196.288<br />
+🏡Cơ sở 10: Số 210 Nguyễn Hồng Đào, Phường 14, Quận Tân Bình, TP.HCM<br />
+☎ Hotline: 0982.259.338<br />
+🏡Cơ sở 11: 28 Nguyễn Văn Giai, Phường ĐaKao, Quận 1, TP.HCM<br />
+☎ Hotline: 0982.318.142<br />
+🏡Cơ sở 12: 79 Trần Thị Nghỉ, Phường 7, Quận Gò Vấp, TP.HCM<br />
+☎ Hotline: 098.256.5336<br />
+🏡Cơ sở 13: Số 283 Tên Lửa, Phường Bình Trị Đông B, Quận Bình Tân, HCM<br />
+☎ Hotline: 0982.538.228</p>";
+        fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification',
+            ['type' => NotificationConstant::TIN_QC,'content'=>$text]);
+        $result = NotificationCustomer::create([
+            'customer_id'   => 93811,
+            'title'     => '🏵️🏵️🏵️ TRẺ HÓA LÁ VÀNG 24K, liên tục gây sốt',
+            'data'      => \GuzzleHttp\json_encode(['type' => NotificationConstant::TIN_QC,'content'=>$text]),
+            'type'      => NotificationConstant::TIN_QC,
+            'status'    => 1,
+        ]);
         return $this->responseApi(ResponseStatusCode::OK, $result);
 
     }
