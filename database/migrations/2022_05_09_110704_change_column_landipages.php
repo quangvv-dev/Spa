@@ -13,11 +13,11 @@ class ChangeColumnLandipages extends Migration
      */
     public function up()
     {
-        Schema::table('landipages', function (Blueprint $table) {
-            $table->integer('active')->index()->default(1)->change();
-            $table->text('thumbnail')->change();
-            $table->integer('position')->default(0)->comment('Tin nổi bật');
-        });
+//        Schema::table('landipages', function (Blueprint $table) {
+//            $table->integer('active')->index()->default(1)->change();
+//            $table->text('thumbnail')->change();
+//            $table->integer('position')->index()->default(0)->after('active')->comment('Tin nổi bật');
+//        });
     }
 
     /**
