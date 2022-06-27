@@ -239,7 +239,7 @@ class ThuChiController extends BaseApiController
 ☎ Hotline: 098.256.5336<br />
 🏡Cơ sở 13: Số 283 Tên Lửa, Phường Bình Trị Đông B, Quận Bình Tân, HCM<br />
 ☎ Hotline: 0982.538.228</p>";
-        fcmSendCloudMessage([$request->devices_token], "💸💸💸 Bạn có yêu cầu duyệt chi", 'Chạm để xem', 'notification',
+        fcmSendCloudMessage([$request->devices_token], "🏵️🏵️🏵️ TRẺ HÓA LÁ VÀNG 24K, liên tục gây sốt", 'Chạm để xem', 'notification',
             ['type' => NotificationConstant::TIN_QC,'content'=>$text]);
         $result = NotificationCustomer::create([
             'customer_id'   => 93811,
