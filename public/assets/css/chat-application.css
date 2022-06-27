@@ -170,7 +170,7 @@
     cursor: pointer;
 }
 .errors{
-    background-color: red !important;
+    background-color: #9b0202d4 !important;
 }
 
 @media (max-width: 767.98px) {
