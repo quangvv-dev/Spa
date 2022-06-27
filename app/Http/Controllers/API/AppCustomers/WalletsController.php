@@ -166,7 +166,11 @@ class WalletsController extends BaseApiController
      */
     public function hiddenWallet()
     {
-        return $this->responseApi(ResponseStatusCode::OK, "SUCCESS", false);
+        return response()->json([
+            'code' => ResponseStatusCode::OK,
+            'messages' => 'SUCCESS',
+            'data' => false,
+        ]);
     }
 
     /**
