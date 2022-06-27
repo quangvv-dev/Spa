@@ -36,7 +36,7 @@ class ChatController extends Controller
         }
         $fanpages = Fanpage::search($data)->get();
         $mkts = User::where('department_id', DepartmentConstant::MARKETING)->get();
-        $group_multi = MultiplePageGroup::where('user_id', $user->id)->get();
+        $group_multi = self::getGroupMulti();
         if ($request->ajax()) {
             return view('marketing.chat_fanpage.ajax', compact('fanpages', 'mkts'));
         }
@@ -100,16 +100,16 @@ class ChatController extends Controller
             $data['page_ids'] = "[]";
         }
         MultiplePageGroup::find($request->id)->update($data);
-        $group_multi = MultiplePageGroup::where('user_id', $user->id)->get();
+        $group_multi = self::getGroupMulti();
         return $group_multi;
     }
 
     public function getGroupMulti()
     {
         $user = Auth::user();
-        if ($user->department_id == DepartmentConstant::MARKETING) {
+        if ($user->department_id == DepartmentConstant::MARKETING || $user->department_id == DepartmentConstant::CARE_PAGE) {
             $group_multi = MultiplePageGroup::where('user_id', $user->id)->get();
-        } elseif ($user->department_id == DepartmentConstant::CARE_PAGE || $user->department_id == DepartmentConstant::ADMIN) {
+        } elseif ($user->department_id == DepartmentConstant::ADMIN) {
             $group_multi = MultiplePageGroup::get();
         } else {
             $group_multi = [];
