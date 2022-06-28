@@ -93,7 +93,6 @@ class ServiceController extends Controller
         $input['price_buy'] = $request->price_buy ? str_replace(',', '', $request->price_buy) : 0;
         $input['price_sell'] = $request->price_sell ? str_replace(',', '', $request->price_sell) : 0;
         $input['promotion_price'] = $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0;
-        $input['description'] = $request->description ? str_replace('\r\n', '', $request->description) : 0;
         $data = Service::create($input);
         $data->update([
             'code' => $data->id,
@@ -142,8 +141,6 @@ class ServiceController extends Controller
             'price_buy' => $request->price_buy ? str_replace(',', '', $request->price_buy) : 0,
             'price_sell' => $request->price_sell ? str_replace(',', '', $request->price_sell) : 0,
             'promotion_price' => $request->promotion_price ? str_replace(',', '', $request->promotion_price) : 0,
-            'description' => $request->description ? str_replace('\r\n', '', $request->description) : 0,
-
         ]);
         $image = Functions::checkUploadImage($request, $service, 'services');
         $service->update($request->except('img_file', 'image'));

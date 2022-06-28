@@ -23,7 +23,8 @@ class ServiceResource extends JsonResource
                 'price_sell'    => @$this->price_sell,
                 'images'        => @$this->images,
                 'category_name' => @$this->category->name,
-                'description'   => @$this->description,
+                'description'   => @$this->description ? str_replace('\r\n', '', @$this->description) : '',
+,
             ];
         } else {
             return [
