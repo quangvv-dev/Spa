@@ -132,7 +132,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('schedules/{id}', 'SchedulesController@show');
     Route::get('get-albums-with-me', 'HomePageController@album');
     Route::get('info', 'AuthController@info');
-    Route::post('update-agency', 'AuthController@info');
+    Route::post('update-agency', 'AuthController@updateAgency');
     Route::post('update-device-token-customer', 'AuthController@updateDevicesTokenCustomer');
     Route::post('update-info', 'AuthController@updateProfile');
     Route::get('vourchers', 'AuthController@vouchers');
