@@ -100,7 +100,8 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
-                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id','user_id','support_id')->with('service');
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id','user_id','support_id')
+                    ->orWhere('support2_id', $item->id)->select('id','user_id','support_id')->with('service');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
@@ -111,7 +112,7 @@ class CommissionController extends Controller
                         }
                         if ($item->id == $item2->user_id) {
                             $cong_chinh +=  1;
-                        } elseif ($item->id == @$item2->support_id) {
+                        } elseif ($item->id == @$item2->support_id || $item->id == @$item2->support2_id) {
                             $cong_phu +=  1;
                         }
                     }

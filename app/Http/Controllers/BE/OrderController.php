@@ -610,6 +610,8 @@ class OrderController extends Controller
         }
         HistoryUpdateOrder::create([
             'user_id' => $request->user_id,
+            'support_id' => isset($request->support_id)&& $request->support_id ?$request->support_id:'',
+            'support2_id' => isset($request->support2_id)&& $request->support2_id ?$request->support2_id:'',
             'order_id' => $order->id,
             'service_id' => $request->service_id,
             'type' => $request->type_delete,
@@ -665,7 +667,7 @@ class OrderController extends Controller
      */
     public function getOrderById(Request $request, $id)
     {
-        $order = Order::with('historyUpdateOrders.user', 'historyUpdateOrders.service', 'customer',
+        $order = Order::with('historyUpdateOrders.user','historyUpdateOrders.support','historyUpdateOrders.support2', 'historyUpdateOrders.service', 'customer',
             'orderDetails.service', 'orderDetails')->find($id);
 
         return Response::json($order);

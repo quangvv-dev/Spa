@@ -20,6 +20,10 @@ class HistoryUpdateOrder extends Model
     {
         return $this->belongsTo(User::class, 'support_id', 'id');
     }
+    public function support2()
+    {
+        return $this->belongsTo(User::class, 'support2_id', 'id');
+    }
 
     public function branch()
     {

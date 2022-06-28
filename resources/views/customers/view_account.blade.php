@@ -767,10 +767,11 @@
                         name_type = 'Đang bảo lưu';
                     }
                     let name_support = item.support && item.support.full_name ?item.support.full_name:'';
+                    let name_support2 = item.support2 && item.support2.full_name ?' | '+item.support2.full_name:'';
                     html += '<tr >' + '<td class="text-center">' + index + '</td>' +
                         '<td class="text-center">' + item.created_at + '</td>' +
                         '<td class="text-center">' + item.user.full_name + '</td>' +
-                        '<td class="text-center">' + name_support + '</td>' +
+                        '<td class="text-center">' + name_support +name_support2 +'</td>' +
                         '<td class="text-center">' + name + '</td>' +
                         '<td class="text-center">' + (item.description ? item.description : '') + '</td>' +
                         '<td class="text-center">' + (name_type ? name_type : '') + '</td>' +
