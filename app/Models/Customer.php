@@ -171,7 +171,7 @@ class Customer extends Model
 
     public function gioithieu()
     {
-        return $this->belongsTo(Status::class, 'is_gioithieu', 'id')->withTrashed();
+        return $this->belongsTo(Customer::class, 'is_gioithieu', 'id')->withTrashed();
     }
 
     public function marketing()
