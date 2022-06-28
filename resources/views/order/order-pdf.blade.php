@@ -85,7 +85,20 @@
                     @foreach($order->orderDetails as $key => $orderDetail)
                         <tr class="font12">
                             <td class="tl position">{{ $orderDetail->service->name }}</td>
-                            <td class="tc">{{ number_format($orderDetail->price) }}</td>
+                            @if($orderDetail->number_discount > 0)
+                                <td class="tc">
+                                    {{@number_format((int)$orderDetail->price - (int)((int)$orderDetail->number_discount/(int)$orderDetail->quantity))}}
+                                    <br>
+                                    <div style="text-decoration: line-through;">
+                                        {{ number_format($orderDetail->price)}}
+                                    </div>
+                                </td>
+                            @else
+                                <td class="tc">
+                                    {{ number_format($orderDetail->price)}}
+                                </td>
+                            @endif
+
                             <td class="tc">{{ $orderDetail->quantity }}</td>
                             <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
                         </tr>
