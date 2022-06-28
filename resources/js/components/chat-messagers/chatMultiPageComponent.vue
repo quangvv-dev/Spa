@@ -531,59 +531,37 @@
             },
 
             async sendMessage(model) {
-                // try {
-                //     let res = await Axios({
-                //         method: 'post',
-                //         url: `https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`,
-                //         data: {
-                //             "messaging_type": "RESPONSE",
-                //             "notification_type": "REGULAR",
-                //             "recipient": {
-                //                 "id": this.fb_me
-                //             },
-                //             "message": {
-                //                 "text": model
-                //             }
-                //         }
-                //     });
-                //     let html = {
-                //         message: this.contentMesage,
-                //         from: {
-                //             id: this.last_segment,
-                //         }
-                //     };
-                //     this.detailMessage.push(html);
-                // } catch (error) {
-                //     let html = {
-                //         message: this.contentMesage,
-                //         is_error : 1,
-                //         from: {
-                //             id: this.last_segment,
-                //         }
-                //     };
-                //     this.detailMessage.push(html);
-                //     alertify.error('đã có lỗi xảy ra !',10);
-                // }
-                let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
-                    // "messaging_type": "MESSAGE_TAG",
-                    // "tag": "HUMAN_AGENT",
-                    "messaging_type": "RESPONSE",
-                    "notification_type": "REGULAR",
-                    "recipient": {
-                        "id": this.fb_me
-                    },
-                    "message": {
-                        "text": model
-                    }
-                })
-                let html = {
-                    message: this.contentMesage,
-                    from: {
-                        id: this.last_segment,
-                    }
-                };
-                this.detailMessage.push(html);
-
+                try {
+                    await axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
+                        // "messaging_type": "MESSAGE_TAG",
+                        // "tag": "HUMAN_AGENT",
+                        "messaging_type": "RESPONSE",
+                        "notification_type": "REGULAR",
+                        "recipient": {
+                            "id": this.fb_me
+                        },
+                        "message": {
+                            "text": model
+                        }
+                    })
+                    let html = {
+                        message: this.contentMesage,
+                        from: {
+                            id: this.last_segment,
+                        }
+                    };
+                    this.detailMessage.push(html);
+                } catch (error) {
+                    let html = {
+                        message: this.contentMesage,
+                        is_error : 1,
+                        from: {
+                            id: this.last_segment,
+                        }
+                    };
+                    this.detailMessage.push(html);
+                    alertify.error('đã có lỗi xảy ra !',10);
+                }
 
                 let data_image_response = [];
                 await axios.post('/marketing/setting-quick-reply/test', this.data_images_upload_server).then(response => {
@@ -740,12 +718,14 @@
                                 return b.updated_time.localeCompare(a.updated_time);
                             });
                             this.navChat = this.navChatDefault;
-
                         })
-                    }
 
-                    // this.navChat = abc;
-                    // this.navChatDefault = abc;
+                    } else {
+                        this.navChatDefault.sort(function (a, b) {
+                            return b.updated_time.localeCompare(a.updated_time);
+                        });
+                        this.navChat = this.navChatDefault;
+                    }
                 })
             },
             selectMessage(item,index) {
