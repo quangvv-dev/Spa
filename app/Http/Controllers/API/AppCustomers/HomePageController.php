@@ -40,7 +40,7 @@ class HomePageController extends BaseApiController
     public function getServices(Request $request)
     {
         $input = $request->all();
-        $paginate = isset($request->records) && $request->records ? $request->records : 4;
+        $paginate = isset($request->records) && $request->records ? $request->records : 2;
         $request->merge(['type' => StatusCode::SERVICE]);
         $docs = Services::where('type', StatusCode::SERVICE)->where('enable', StatusCode::ON)
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
@@ -59,7 +59,7 @@ class HomePageController extends BaseApiController
     public function getProducts(Request $request)
     {
         $input = $request->all();
-        $paginate = isset($request->records) && $request->records ? $request->records : 4;
+        $paginate = isset($request->records) && $request->records ? $request->records : 2;
         $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $q->where('category_id', $input['category_id']);
