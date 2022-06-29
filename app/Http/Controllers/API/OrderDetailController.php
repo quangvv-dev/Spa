@@ -3,17 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Constants\ResponseStatusCode;
-use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
-use App\Constants\UserConstant;
-use App\Helpers\Functions;
 use App\Http\Resources\OrderResource;
-use App\Models\CallCenter;
-use App\Models\Customer;
 use App\Models\Order;
-use App\Models\PaymentHistory;
-use App\Models\Schedule;
-use App\User;
 use Illuminate\Http\Request;
 
 

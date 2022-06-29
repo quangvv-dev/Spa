@@ -18,7 +18,7 @@ class OrderResource extends JsonResource
         if ($request->type == 'app-customer') {
             return [
                 'id'             => @$this->id,
-                'service_text'   => @$this->service_text,
+                'name'           => @$this->service_text,
                 'all_total'      => @$this->all_total,
                 'gross_revenue'  => (int)$this->gross_revenue,
                 'the_rest'       => (int)$this->the_rest,
