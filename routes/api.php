@@ -103,6 +103,8 @@ Route::get('voucher/{id}', 'API\PromotionController@checkVoucher');
 Route::get('product-depot', 'API\DepotController@productDepot');
 Route::get('depots/statistical', 'API\DepotController@index');
 
+Route::get('uri-wallet', 'API\AppCustomers\WalletsController@hiddenWallet');// Ẩn hiện ví
+
 /*
 |--------------------------------------------------------------------------
 | APIs APP KHÁCH HÀNG
@@ -149,8 +151,6 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::get('history-change-wallet-ctv/{id}', 'WalletsController@show');// Chi tiết lịch sử ví CTV
     Route::post('receive-money', 'WalletsController@receiveMoney');// Chuyển từ ví ctv sang ví thường
     Route::post('withdraw', 'WalletsController@withdraw');// Y/C rút tiền
-    Route::get('uri-wallet', 'WalletsController@hiddenWallet');// Ẩn hiện ví
-
     Route::get('orders-with-me', 'OrdersController@index');
     Route::post('rate-orders/{id}', 'OrdersController@rate');
 
