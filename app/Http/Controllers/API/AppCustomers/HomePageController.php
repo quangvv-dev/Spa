@@ -59,7 +59,7 @@ class HomePageController extends BaseApiController
     public function getProducts(Request $request)
     {
         $input = $request->all();
-        $paginate = isset($request->records) && $request->records ? $request->records : 2;
+        $paginate = isset($request->records) && $request->records ? $request->records : 4;
         $docs = Services::where('type', StatusCode::PRODUCT)->where('enable', StatusCode::ON)
             ->when(isset($input['category_id']) && $input['category_id'], function ($q) use ($input) {
                 $q->where('category_id', $input['category_id']);
