@@ -169,7 +169,7 @@ class WalletsController extends BaseApiController
         return response()->json([
             'code' => ResponseStatusCode::OK,
             'messages' => 'SUCCESS',
-            'data' => false,
+            'data' => true,
         ]);
     }
 
