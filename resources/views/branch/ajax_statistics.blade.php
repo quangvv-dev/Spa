@@ -63,6 +63,7 @@
         </thead>
 
         <tbody>
+
         @php
             $i=0;
             $customer_new = 0;
@@ -83,20 +84,35 @@
         @if(count($users))
             @foreach($users as $item)
                 @php $i++ ;
-                $customer_new += $item->customer_new;
-                $order_new += $item->order_new;
-                $schedules_percent += $item->schedules_den >0 && $item->customer_new>0 ?round(($item->schedules_new/$item->customer_new)*100,1):0;
-                $revenue_new += $item->revenue_new;
-                $payment_new += $item->payment_new;
-                $schedules_new += $item->schedules_new;
-                $order_old += $item->order_old;
-                $revenue_old += $item->revenue_old;
-                $payment_old += $item->payment_old;
-                $all_payment += $item->all_payment;
-                $all_schedules_den += $item->schedules_den;
-                $all_detail_new += $item->detail_new;
 
                 @endphp
+
+                <tr>
+                    <td class="text-center"></td>
+                    <td class="text-center bold">Tổng cộng</td>
+                    <td class="text-center bold">{{@number_format($users->sum('customer_new'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('schedules_new'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('schedules_den'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('order_new'))}}</td>
+                    <td class="text-center bold">{{!empty($users->sum('schedules_new'))&& !empty($users->sum('customer_new'))?round($users->sum('schedules_new')/$users->sum('customer_new')*100,1):0}}%</td>
+                    <td class="text-center bold">{{!empty($users->sum('schedules_den'))&& !empty($users->sum('schedules_new'))?round($users->sum('schedules_den')/$users->sum('schedules_new')*100,1):0}}%</td>
+                    <td class="text-center bold">{{!empty($users->sum('schedules_den'))&& !empty($users->sum('order_new'))?round($users->sum('order_new')/$users->sum('schedules_den')*100,1):0}}%</td>
+                    <td class="text-center bold">{{@number_format($users->sum('revenue_new'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('payment_new'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('detail_new') - $users->sum('payment_new'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('detail_new'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('order_old'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('revenue_old'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('payment_old'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('all_payment') - $users->sum('detail_new') - $users->sum('payment_old'))}}</td>
+                    <td class="text-center bold">{{@number_format($users->sum('all_payment') - $users->sum('detail_new'))}}</td>
+                    <td class="text-center bold">{{!empty($users->sum('payment_old'))&& !empty($users->sum('order_old'))?number_format($users->sum('payment_old')/$users->sum('order_old')):0}}</td>
+                    <td class="bold">{{number_format($allTotal)}}</td>
+                    <td class="bold">{{number_format($users->sum('payment_new') + $users->sum('payment_old'))}}</td>
+                    <td class="bold">{{number_format(($users->sum('all_payment') - $users->sum('payment_new') - $users->sum('payment_old'))>0?$users->sum('all_payment') - $users->sum('payment_new') - $users->sum('payment_old'):0)}}</td>
+                    <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
+                </tr>
+
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->name}}
@@ -116,7 +132,6 @@
                     <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->detail_new - $item->payment_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->detail_new)}}</td>
-                    {{--<td class="text-center pdr10">{{$item->comment_old}}</td>--}}
                     <td class="text-center pdr10">{{$item->order_old}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
@@ -131,33 +146,33 @@
                 </tr>
             @endforeach
         @endif
-        <tr>
-            <td class="text-center"></td>
-            <td class="text-center bold">Tổng cộng</td>
-            <td class="text-center bold">{{@number_format($customer_new)}}</td>
+        {{--<tr>--}}
+            {{--<td class="text-center"></td>--}}
+            {{--<td class="text-center bold">Tổng cộng</td>--}}
+            {{--<td class="text-center bold">{{@number_format($customer_new)}}</td>--}}
             {{--<td class="text-center bold">{{@number_format($comment_new)}}</td>--}}
-            <td class="text-center bold">{{@number_format($schedules_new)}}</td>
-            <td class="text-center bold">{{@number_format($all_schedules_den)}}</td>
-            <td class="text-center bold">{{@number_format($order_new)}}</td>
-            <td class="text-center bold">{{!empty($schedules_new)&& !empty($customer_new)?round($schedules_new/$customer_new*100,1):0}}%</td>
-            <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($schedules_new)?round($all_schedules_den/$schedules_new*100,1):0}}%</td>
-            <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($order_new)?round($order_new/$all_schedules_den*100,1):0}}%</td>
-            <td class="text-center bold">{{@number_format($revenue_new)}}</td>
-            <td class="text-center bold">{{@number_format($payment_new)}}</td>
-            <td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>
-            <td class="text-center bold">{{@number_format($all_detail_new)}}</td>
+            {{--<td class="text-center bold">{{@number_format($schedules_new)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($all_schedules_den)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($order_new)}}</td>--}}
+            {{--<td class="text-center bold">{{!empty($schedules_new)&& !empty($customer_new)?round($schedules_new/$customer_new*100,1):0}}%</td>--}}
+            {{--<td class="text-center bold">{{!empty($all_schedules_den)&& !empty($schedules_new)?round($all_schedules_den/$schedules_new*100,1):0}}%</td>--}}
+            {{--<td class="text-center bold">{{!empty($all_schedules_den)&& !empty($order_new)?round($order_new/$all_schedules_den*100,1):0}}%</td>--}}
+            {{--<td class="text-center bold">{{@number_format($revenue_new)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($payment_new)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($all_detail_new)}}</td>--}}
             {{--<td class="text-center bold">{{@number_format($comment_old)}}</td>--}}
-            <td class="text-center bold">{{@number_format($order_old)}}</td>
-            <td class="text-center bold">{{@number_format($revenue_old)}}</td>
-            <td class="text-center bold">{{@number_format($payment_old)}}</td>
-            <td class="text-center bold">{{@number_format($all_payment - $all_detail_new - $payment_old)}}</td>
-            <td class="text-center bold">{{@number_format($all_payment - $all_detail_new)}}</td>
-            <td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>
-            <td class="bold">{{number_format($allTotal)}}</td>
-            <td class="bold">{{number_format($payment_new + $payment_old)}}</td>
-            <td class="bold">{{number_format(($all_payment - $payment_new - $payment_old)>0?$all_payment - $payment_new - $payment_old:0)}}</td>
-            <td class="bold">{{number_format($all_payment)}}</td>
-        </tr>
+            {{--<td class="text-center bold">{{@number_format($order_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($revenue_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($payment_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($all_payment - $all_detail_new - $payment_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($all_payment - $all_detail_new)}}</td>--}}
+            {{--<td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>--}}
+            {{--<td class="bold">{{number_format($allTotal)}}</td>--}}
+            {{--<td class="bold">{{number_format($payment_new + $payment_old)}}</td>--}}
+            {{--<td class="bold">{{number_format(($all_payment - $payment_new - $payment_old)>0?$all_payment - $payment_new - $payment_old:0)}}</td>--}}
+            {{--<td class="bold">{{number_format($all_payment)}}</td>--}}
+        {{--</tr>--}}
 
         </tbody>
     </table>
