@@ -40,15 +40,12 @@ class BranchController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        if (count($request->all()) == 2) {
-            $input['branch_id'] = 1;
-        }
         if (isset($request->location_id)) {
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
         $users = Branch::select('id', 'name')->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-            $q->whereIn('branch_id', $request->group_branch);
+            $q->whereIn('id', $request->group_branch);
         })->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('branch_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"]);
 
@@ -85,7 +82,7 @@ class BranchController extends Controller
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
             $item->payment_old = $order_old->sum('gross_revenue'); //da thu trong ky
-            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
+            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
             $item->all_payment = $detail->sum('price');
             return $item;
         })->filter(function ($it){
