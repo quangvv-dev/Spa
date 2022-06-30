@@ -85,12 +85,15 @@
             <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
         </tr>
 
-        @php$i=0;@endphp
+        @php
+            $k=0;
+        @endphp
         @if(count($users))
             @foreach($users as $item)
-                @php $i++; @endphp
+                @php $k++;
+                @endphp
                 <tr class="">
-                    <td class="text-center pdr10">{{$i}}</td>
+                    <td class="text-center pdr10">{{$k}}</td>
                     <td class="text-center pdr10">{{$item->name}}
                     <td class="text-center pdr10">{{$item->customer_new}}</td>
                     {{--<td class="text-center pdr10">{{$item->comment_new}}</td>--}}
