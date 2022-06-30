@@ -88,6 +88,10 @@ class BranchController extends Controller
             $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
+        })->filter(function ($it){
+            if ($it->all_payment >0){
+                return $it;
+            }
         })->sortByDesc('all_payment');
         \View::share([
             'allTotal' => $users->sum('revenue_total'),
