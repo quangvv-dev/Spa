@@ -239,4 +239,6 @@ class SalesController extends Controller
             $q->where('branch_id', $input->branch_id);
         });
     }
+
+
 }

@@ -181,6 +181,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('group-sale', 'SalesController@indexGroupCategory')->name('report.groupSale');
         Route::get('commission', 'CommissionController@statistical')->name('report.commission');
         Route::get('tasks', 'TaskController@statistical')->name('report.tasks');
+        Route::get('branchs', 'Branch\BranchController@index')->name('report.branchs');
     });
     Route::resource('promotions', 'PromotionController');
     Route::resource('trademark', 'TrademarkController');
