@@ -71,7 +71,7 @@ class BranchController extends Controller
 
             $request->merge(['branch_id' => $item->id]);
             $wallet = PaymentWallet::search($request->all(),'price'); // đã thu trong kỳ ví
-            $item->payment_wallet = $wallet->price;
+            $item->payment_wallet = $wallet->sum('price');
 
             $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
             $detail_new = clone $detail;
