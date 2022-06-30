@@ -103,7 +103,7 @@
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
                 <div class="col-md-4">
-                    <h3 class="card-title bold">BÁO CÁO DOANH THU CHI NHÁNH</h3></br>
+                    <h3 class="card-title bold">NGUỒN THU TỪ ĐƠN TOÀN CHI NHÁNH</h3></br>
 
                 </div>
                 <div class="col-md-3">
