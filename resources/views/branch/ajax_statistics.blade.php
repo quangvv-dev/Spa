@@ -10,7 +10,6 @@
         </tr>
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center no-wrap">SĐT</th>
-            {{--<th class="text-center">Trao đổi</th>--}}
             <th class="text-center">Lịch hẹn</th>
             <th class="text-center">Khách đến</th>
             <th class="text-center">Đơn chốt</th>
@@ -21,7 +20,6 @@
             <th class="text-center">Doanh thu</th>
             <th class="text-center no-wrap">Thu nợ</th>
             <th class="text-center no-wrap">Thực thu</th>
-            {{--<th class="text-center no-wrap">Trao đổi</th>--}}
             <th class="text-center no-wrap">Đơn chốt</th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
             <th class="text-center">Doanh thu</th>
@@ -37,7 +35,6 @@
             <th class="text-center">(1)</th>
             <th class="text-center">(2)</th>
             <th class="text-center">(3)</th>
-            {{--<th class="text-center">(4)</th>--}}
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
             <th class="text-center">(6.1)</th>
@@ -48,7 +45,6 @@
             <th class="text-center">(8)</th>
             <th class="text-center">(9)</th>
             <th class="text-center">(10)</th>
-            {{--<th class="text-center">(11)</th>--}}
             <th class="text-center">(12)</th>
             <th class="text-center">(13)</th>
             <th class="text-center">(14)</th>
@@ -63,56 +59,36 @@
         </thead>
 
         <tbody>
+        <tr>
+            <td class="text-center"></td>
+            <td class="text-center bold">Tổng cộng</td>
+            <td class="text-center bold">{{@number_format($users->sum('customer_new'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('schedules_new'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('schedules_den'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('order_new'))}}</td>
+            <td class="text-center bold">{{!empty($users->sum('schedules_new'))&& !empty($users->sum('customer_new'))?round($users->sum('schedules_new')/$users->sum('customer_new')*100,1):0}}%</td>
+            <td class="text-center bold">{{!empty($users->sum('schedules_den'))&& !empty($users->sum('schedules_new'))?round($users->sum('schedules_den')/$users->sum('schedules_new')*100,1):0}}%</td>
+            <td class="text-center bold">{{!empty($users->sum('schedules_den'))&& !empty($users->sum('order_new'))?round($users->sum('order_new')/$users->sum('schedules_den')*100,1):0}}%</td>
+            <td class="text-center bold">{{@number_format($users->sum('revenue_new'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('payment_new'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('detail_new') - $users->sum('payment_new'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('detail_new'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('order_old'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('revenue_old'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('payment_old'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('all_payment') - $users->sum('detail_new') - $users->sum('payment_old'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('all_payment') - $users->sum('detail_new'))}}</td>
+            <td class="text-center bold">{{!empty($users->sum('payment_old'))&& !empty($users->sum('order_old'))?number_format($users->sum('payment_old')/$users->sum('order_old')):0}}</td>
+            <td class="bold">{{number_format($allTotal)}}</td>
+            <td class="bold">{{number_format($users->sum('payment_new') + $users->sum('payment_old'))}}</td>
+            <td class="bold">{{number_format(($users->sum('all_payment') - $users->sum('payment_new') - $users->sum('payment_old'))>0?$users->sum('all_payment') - $users->sum('payment_new') - $users->sum('payment_old'):0)}}</td>
+            <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
+        </tr>
 
-        @php
-            $i=0;
-            $customer_new = 0;
-            $order_new = 0;
-            $schedules_percent = 0;
-            $revenue_new = 0;
-            $payment_new = 0;
-            $schedules_old = 0;
-            $order_old = 0;
-            $revenue_old = 0;
-            $payment_old = 0;
-            $all_payment = 0;
-            $all_detail_new = 0;
-            $schedules_new = 0;
-            $all_schedules_den = 0;
-        @endphp
-
+        @php$i=0;@endphp
         @if(count($users))
             @foreach($users as $item)
-                @php $i++ ;
-
-                @endphp
-
-                <tr>
-                    <td class="text-center"></td>
-                    <td class="text-center bold">Tổng cộng</td>
-                    <td class="text-center bold">{{@number_format($users->sum('customer_new'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('schedules_new'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('schedules_den'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('order_new'))}}</td>
-                    <td class="text-center bold">{{!empty($users->sum('schedules_new'))&& !empty($users->sum('customer_new'))?round($users->sum('schedules_new')/$users->sum('customer_new')*100,1):0}}%</td>
-                    <td class="text-center bold">{{!empty($users->sum('schedules_den'))&& !empty($users->sum('schedules_new'))?round($users->sum('schedules_den')/$users->sum('schedules_new')*100,1):0}}%</td>
-                    <td class="text-center bold">{{!empty($users->sum('schedules_den'))&& !empty($users->sum('order_new'))?round($users->sum('order_new')/$users->sum('schedules_den')*100,1):0}}%</td>
-                    <td class="text-center bold">{{@number_format($users->sum('revenue_new'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('payment_new'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('detail_new') - $users->sum('payment_new'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('detail_new'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('order_old'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('revenue_old'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('payment_old'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('all_payment') - $users->sum('detail_new') - $users->sum('payment_old'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('all_payment') - $users->sum('detail_new'))}}</td>
-                    <td class="text-center bold">{{!empty($users->sum('payment_old'))&& !empty($users->sum('order_old'))?number_format($users->sum('payment_old')/$users->sum('order_old')):0}}</td>
-                    <td class="bold">{{number_format($allTotal)}}</td>
-                    <td class="bold">{{number_format($users->sum('payment_new') + $users->sum('payment_old'))}}</td>
-                    <td class="bold">{{number_format(($users->sum('all_payment') - $users->sum('payment_new') - $users->sum('payment_old'))>0?$users->sum('all_payment') - $users->sum('payment_new') - $users->sum('payment_old'):0)}}</td>
-                    <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
-                </tr>
-
+                @php $i++ @endphp
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->name}}
