@@ -88,7 +88,7 @@
         @php$i=0;@endphp
         @if(count($users))
             @foreach($users as $item)
-                @php $i++ @endphp
+                @php $i++; @endphp
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->name}}
