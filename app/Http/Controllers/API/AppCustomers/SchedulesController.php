@@ -158,12 +158,15 @@ class SchedulesController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $schedule = Schedule::find($id);
+        $customer = $request->jwtUser;
         if (isset($schedule) && $schedule) {
-            if ($schedule->status != ScheduleConstant::DAT_LICH){
-                return $this->responseApi(ResponseStatusCode::OK, 'Không thể hủy lịch hẹn đã được xử lý');
+            if ($schedule->status != ScheduleConstant::DAT_LICH) {
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không thể hủy lịch hẹn đã được xử lý');
+            } elseif ($customer->id != $schedule->user_id) {
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Đây không phải lịch hẹn của bạn');
             }
             $schedule->delete();
             return $this->responseApi(ResponseStatusCode::OK, 'Hủy lịch hẹn thành công');
