@@ -11,6 +11,7 @@ use App\Models\CallCenter;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\PaymentHistory;
+use App\Models\PaymentWallet;
 use App\Models\Schedule;
 use App\User;
 use Illuminate\Http\Request;
@@ -67,7 +68,11 @@ class BranchController extends Controller
             })->count();
             //lich hen
 
+
             $request->merge(['branch_id' => $item->id]);
+            $wallet = PaymentWallet::search($request->all(),'price'); // đã thu trong kỳ ví
+            $item->payment_wallet = $wallet->price;
+
             $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
             $detail_new = clone $detail;
 
@@ -84,16 +89,15 @@ class BranchController extends Controller
             $item->payment_old = $order_old->sum('gross_revenue'); //da thu trong ky
             $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
             $item->all_payment = $detail->sum('price');
+
+            $item->payment_used = $detail->where('payment_type',3)->sum('price');//thanh toán điểm
+
             return $item;
         })->filter(function ($it){
             if ($it->all_payment >0){
                 return $it;
             }
         })->sortByDesc('all_payment');
-        \View::share([
-            'allTotal' => $users->sum('revenue_total'),
-            'grossRevenue' => $users->sum('payment_revenue'),
-        ]);
 
         if ($request->ajax()) {
             return view('branch.ajax_statistics', compact('users'));

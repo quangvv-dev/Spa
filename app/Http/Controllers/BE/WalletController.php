@@ -189,7 +189,7 @@ class WalletController extends Controller
                         'order_wallet_id' => $order->id,
                         'price'           => $order->gross_revenue,
                         'description'     => 'TT:ZaloPay -- app_trans_id:' . $apptransid . ' -- NG.HANG ' . $response->bankcode,
-                        'payment_type'    => 5,//thanh toán zaloPay
+                        'payment_type'    => 2,//thanh toán zaloPay
                         'payment_date'    => Carbon::now()->format('Y-m-d'),
                         'branch_id'       => $order->branch_id,
                         'app_trans_id'    => $apptransid,
