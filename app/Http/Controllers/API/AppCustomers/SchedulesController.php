@@ -151,4 +151,25 @@ class SchedulesController extends BaseApiController
         }
     }
 
+    /**
+     * Xóa lịch hẹn
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id)
+    {
+        $schedule = Schedule::find($id);
+        if (isset($schedule) && $schedule) {
+            if ($schedule->status != ScheduleConstant::DAT_LICH){
+                return $this->responseApi(ResponseStatusCode::OK, 'Không thể hủy lịch hẹn đã được xử lý');
+            }
+            $schedule->delete();
+            return $this->responseApi(ResponseStatusCode::OK, 'Hủy lịch hẹn thành công');
+        } else {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy lịch hẹn');
+        }
+    }
+
 }
