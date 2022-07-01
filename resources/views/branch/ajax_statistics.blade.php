@@ -63,7 +63,7 @@
 
         <tbody>
         <tr>
-            <td class="text-center"></td>
+            <td class="text-center" data-fill-color="1E9AD6"></td>
             <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true" data-a-h="center">Tổng cộng</td>
             <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{@number_format($users->sum('customer_new'))}}</td>
             <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{@number_format($users->sum('schedules_new'))}}</td>
@@ -97,35 +97,35 @@
                 @php $k++;
                 @endphp
                 <tr class="">
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{$k}}</td>
-                    <td class="text-center pdr10 bold" data-f-bold="true" data-fill-color="1E9AD6">{{$item->name}}
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->customer_new}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->schedules_new}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->schedules_den}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->order_new}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{!empty($item->schedules_new) && !empty($item->customer_new) ?round(($item->schedules_new/$item->customer_new)*100,1):0}}
+                    <td class="text-center pdr10" >{{$k}}</td>
+                    <td class="text-center pdr10 bold" data-f-bold="true">{{$item->name}}
+                    <td class="text-center pdr10" >{{$item->customer_new}}</td>
+                    <td class="text-center pdr10" >{{$item->schedules_new}}</td>
+                    <td class="text-center pdr10" >{{$item->schedules_den}}</td>
+                    <td class="text-center pdr10" >{{$item->order_new}}</td>
+                    <td class="text-center pdr10" >{{!empty($item->schedules_new) && !empty($item->customer_new) ?round(($item->schedules_new/$item->customer_new)*100,1):0}}
                         %
                     </td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{!empty($item->schedules_den) && !empty($item->schedules_new) ? round($item->schedules_den/$item->schedules_new*100,1):0}}%</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->order_new>0&&$item->schedules_den >0 ?round(($item->order_new/$item->schedules_den)*100,1):0}}
+                    <td class="text-center pdr10" >{{!empty($item->schedules_den) && !empty($item->schedules_new) ? round($item->schedules_den/$item->schedules_new*100,1):0}}%</td>
+                    <td class="text-center pdr10" >{{$item->order_new>0&&$item->schedules_den >0 ?round(($item->order_new/$item->schedules_den)*100,1):0}}
                         %
                     </td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->revenue_new)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->payment_new)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->detail_new - $item->payment_new)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->detail_new)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->order_old}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->revenue_old)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->payment_old)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->all_payment - $item->detail_new -$item->payment_old)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->all_payment - $item->detail_new)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{!empty($item->payment_old) && !empty($item->order_old) ? number_format($item->payment_old/$item->order_old):0}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->revenue_total)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->revenue_new)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->payment_new)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->detail_new - $item->payment_new)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->detail_new)}}</td>
+                    <td class="text-center pdr10" >{{$item->order_old}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->revenue_old)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->payment_old)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->all_payment - $item->detail_new -$item->payment_old)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->all_payment - $item->detail_new)}}</td>
+                    <td class="text-center pdr10" >{{!empty($item->payment_old) && !empty($item->order_old) ? number_format($item->payment_old/$item->order_old):0}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->revenue_total)}}</td>
 
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->payment_new + $item->payment_old)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format(($item->all_payment - $item->payment_new - $item->payment_old)>0?$item->all_payment - $item->payment_new - $item->payment_old:0)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->all_payment)}}</td>
-                    <td class="text-center pdr10" data-fill-color="1E9AD6">{{number_format($item->all_payment + $item->payment_wallet - $item->payment_used)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->payment_new + $item->payment_old)}}</td>
+                    <td class="text-center pdr10" >{{number_format(($item->all_payment - $item->payment_new - $item->payment_old)>0?$item->all_payment - $item->payment_new - $item->payment_old:0)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->all_payment)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->all_payment + $item->payment_wallet - $item->payment_used)}}</td>
                 </tr>
             @endforeach
         @endif
