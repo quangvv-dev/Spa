@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Commission;
 use App\Models\Customer;
@@ -29,6 +30,12 @@ class CommissionController extends Controller
     {
         $this->middleware('permission:report.commission', ['only' => ['statistical']]);
         $this->commissionService = $commissionService;
+        $branchs = Branch::search()->pluck('name', 'id');
+        $location = Branch::$location;
+        view()->share([
+            'branchs' => $branchs,
+            'location' => $location,
+        ]);
     }
 
     public function index($id)
@@ -49,7 +56,7 @@ class CommissionController extends Controller
     {
         $input = $request->except('_token', 'all_total');
 
-        $commission = $this->commissionService->create($input, $id);
+        $this->commissionService->create($input, $id);
 
         return redirect(url('order/' . $id . '/show'));
     }
@@ -84,11 +91,16 @@ class CommissionController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-//        $category_price = Category::select('price', 'id')->pluck('price', 'id')->toArray();
         $input = $request->all();
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
         $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
             ->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
             })->get();
         if (count($data)) {
 
@@ -100,7 +112,7 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
-                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id','user_id','support_id','support2_id')
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id', 'user_id', 'support_id', 'support2_id')
                     ->orWhere('support2_id', $item->id)->with('service');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
@@ -111,9 +123,9 @@ class CommissionController extends Controller
                             $price [] = (int)$item2->service->price_buy ?: 0;
                         }
                         if ($item->id == $item2->user_id) {
-                            $cong_chinh +=  1;
+                            $cong_chinh += 1;
                         } elseif ($item->id == @$item2->support_id || $item->id == @$item2->support2_id) {
-                            $cong_phu +=  1;
+                            $cong_phu += 1;
                         }
                     }
                 }
@@ -130,7 +142,7 @@ class CommissionController extends Controller
                     'earn' => Commission::search($input, 'earn')->sum('earn'),
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
-                if ($doc['days'] > 0 || $doc['price'] > 0|| $doc['days_phu'] > 0) {
+                if ($doc['days'] > 0 || $doc['price'] > 0 || $doc['days_phu'] > 0) {
                     $docs[] = $doc;
                 }
             }
