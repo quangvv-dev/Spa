@@ -42,23 +42,23 @@
             {{--<th class="text-center">(5)</th>--}}
             {{--<th class="text-center">(6)</th>--}}
             {{--<th class="text-center">(6.1)</th>--}}
-            <th class="text-center">(5)/(3)</th>
-            <th class="text-center">(6)/(5)</th>
-            <th class="text-center">(6.1)/(6)</th>
+            <th class="text-center">(4)</th>
+            <th class="text-center">(4)/(3)</th>
+            <th class="text-center">(5)</th>
+            <th class="text-center">(6)</th>
             <th class="text-center">(7)</th>
             <th class="text-center">(8)</th>
             <th class="text-center">(9)</th>
-            <th class="text-center">(10)</th>
             {{--<th class="text-center">(11)</th>--}}
+            <th class="text-center">(10)</th>
+            <th class="text-center">(11)</th>
             <th class="text-center">(12)</th>
             <th class="text-center">(13)</th>
+            <th class="text-center">(11)/(10)</th>
             <th class="text-center">(14)</th>
             <th class="text-center">(15)</th>
-            <th class="text-center">(14)+(15)</th>
-            <th class="text-center">(7)+(12)</th>
-            <th class="text-center">(8)+(13)</th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
+            <th class="text-center">(16)</th>
+            <th class="text-center">(17)</th>
             {{--<th class="text-center"></th>--}}
         </tr>
         </thead>
