@@ -1,31 +1,32 @@
-<div class="card-header" style="margin-bottom: 11%;border-bottom: none;">
-    <div class="bxh bxh-container" style="border:1px solid transparent;">
-        @php $int =0;$i =0; @endphp
-        @foreach($data as $value)
-            @php $int++ ;
-        if ($int>=10)
-            @endphp
-            <div {{$int>10?'style=display:none':''}} class="item-rank" style="right: {{$int*9}}%;top: {{$int*2}}%">
-                <div class="king-sale">
-                    <img src="{{$int==1?asset('default/bxh2.png'):''}}">
-                </div>
-                <div class="avatar-container  blink">
-                    <img class="avatar-img" src="{{asset(@$value['avatar'])}}">
-                </div>
-                <div class="item-info {{'item-info'.($int)}}" style="font-size: 12px">
-                    <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
-                    <div class="item-tennv">{{@$value['full_name']}}</div>
-                    <div >{{number_format($value['gross_revenue'])}}</div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-</div>
+{{--<div class="card-header" style="margin-bottom: 11%;border-bottom: none;">--}}
+    {{--<div class="bxh bxh-container" style="border:1px solid transparent;">--}}
+        {{--@foreach($data as $value)--}}
+            {{--@php $int++ ;--}}
+        {{--if ($int>=10)--}}
+            {{--@endphp--}}
+            {{--<div {{$int>10?'style=display:none':''}} class="item-rank" style="right: {{$int*9}}%;top: {{$int*2}}%">--}}
+                {{--<div class="king-sale">--}}
+                    {{--<img src="{{$int==1?asset('default/bxh2.png'):''}}">--}}
+                {{--</div>--}}
+                {{--<div class="avatar-container  blink">--}}
+                    {{--<img class="avatar-img" src="{{asset(@$value['avatar'])}}">--}}
+                {{--</div>--}}
+                {{--<div class="item-info {{'item-info'.($int)}}" style="font-size: 12px">--}}
+                    {{--<div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>--}}
+                    {{--<div class="item-tennv">{{@$value['full_name']}}</div>--}}
+                    {{--<div >{{number_format($value['gross_revenue'])}}</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--@endforeach--}}
+    {{--</div>--}}
+{{--</div>--}}
+@php $i =0; @endphp
 
 <div class="table-responsive tableFixHead">
     <table class="table card-table table-center text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
+            <th class="text-white text-center">STT</th>
             <th class="text-white text-center">Nhân viên</th>
             <th class="text-white text-center">Số công chính</th>
             <th class="text-white text-center">Số công phụ</th>
@@ -38,8 +39,10 @@
         </thead>
         <tbody>
         @if(@count($data))
-            @foreach($data as $k => $s)
+            @foreach($data as $s)
+                @php $i ++; @endphp
                 <tr>
+                    <td class="text-center">{{$i}}</td>
                     <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s['id']}}">
                             <i class="fas fa-info-circle"></i>
                             {{@$s['full_name']}}</a>
