@@ -100,8 +100,8 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
-                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id','user_id','support_id')
-                    ->orWhere('support2_id', $item->id)->select('id','user_id','support_id')->with('service');
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id','user_id','support_id','support2_id')
+                    ->orWhere('support2_id', $item->id)->with('service');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
@@ -130,7 +130,7 @@ class CommissionController extends Controller
                     'earn' => Commission::search($input, 'earn')->sum('earn'),
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
-                if ($doc['days'] > 0 || $doc['price'] > 0) {
+                if ($doc['days'] > 0 || $doc['price'] > 0|| $doc['days_phu'] > 0) {
                     $docs[] = $doc;
                 }
             }
