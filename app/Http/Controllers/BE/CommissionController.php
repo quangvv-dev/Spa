@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\DepartmentConstant;
+use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
@@ -11,6 +13,8 @@ use App\Models\Commission;
 use App\Models\Customer;
 use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
+use App\Models\PaymentHistory;
+use App\Models\Schedule;
 use App\Services\CommissionService;
 use App\User;
 use Illuminate\Support\Facades\Response;
@@ -160,5 +164,88 @@ class CommissionController extends Controller
         $data = Commission::where('user_id', $request->user_id)->whereBetween('created_at', getTime($request->data_time))
             ->has('orders')->with('orders')->paginate(StatusCode::PAGINATE_10);
         return response()->json($data);
+    }
+
+    public function statisticalWaiters(Request $request)
+    {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+        if (count($request->all()) == 2) {
+            $input['branch_id'] = 1;
+        }
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
+        $users = User::where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                });
+
+            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('telesales_id', $item->id);
+                });
+            $orders2 = clone $orders;
+            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+
+//            $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+////                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+////                    $q->whereIn('branch_id', $request->group_branch);
+////                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+////                    $q->where('branch_id', $request->branch_id);
+////                });
+////            $schedules_den = clone $schedules;
+////            $schedules_new = clone $schedules;
+////
+////            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+////                ->whereHas('customer', function ($qr) {
+////                    $qr->where('old_customer', 0);
+////                })->count();
+////            $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
+////                $qr->where('old_customer', 0);
+////            })->count();
+            //lich hen
+
+            $request->merge(['telesales' => $item->id]);
+            $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
+            $detail_new = clone $detail;
+
+            $item->detail_new = $detail_new->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+            })->sum('price');
+            $item->customer_new = $data_new->count();
+            $item->order_new = $order_new->count();
+            $item->order_old = $order_old->count();
+            $item->revenue_new = $order_new->sum('all_total');
+            $item->revenue_old = $order_old->sum('all_total');
+            $item->payment_revenue = $orders->sum('gross_revenue');
+            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
+            $item->payment_old = $order_old->sum('gross_revenue'); //da thu trong ky
+            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
+            $item->all_payment = $detail->sum('price');
+            return $item;
+        })->sortByDesc('all_payment')
+            ->filter(function ($it) {
+                if ($it->all_payment > 0 || $it->customer_new) {
+                return $it;
+                }
+            });
+
+        if ($request->ajax()) {
+            return view('waiters.ajax', compact('users'));
+        }
+        return view('waiters.index', compact('users'));
     }
 }

@@ -240,13 +240,6 @@
                                 <li><a href="{{url('marketing/leader')}}">Báo cáo doanh thu</a></li>
                             </ul>
                         </li>
-                        <li class="sub-with-sub">
-                            <a href="#">CarePage</a>
-                            <ul>
-                                <li><a href="{{url('marketing/carepage-ranking')}}">Bảng xếp hạng</a></li>
-                                <li><a href="{{url('marketing/carepage')}}">Báo cáo doanh thu</a></li>
-                            </ul>
-                        </li>
 
                         @if($roleGlobal->permission('report.sale') || $roleGlobal->permission('statistics.taskSchedules'))
                             <li class="sub-with-sub">
@@ -261,6 +254,15 @@
                                 </ul>
                             </li>
                         @endif
+
+                        <li class="sub-with-sub">
+                            <a href="#">Phòng ban khác</a>
+                            <ul>
+                                <li><a href="{{url('marketing/carepage-ranking')}}">Bảng xếp hạng CarePage</a></li>
+                                <li><a href="{{url('marketing/carepage')}}">Báo cáo doanh thu CarePage</a></li>
+                                <li><a href="{{url('report/waiters')}}">Báo cáo doanh thu lễ tân</a></li>
+                            </ul>
+                        </li>
 
                         @if($roleGlobal->permission('sms.history'))
                             <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
