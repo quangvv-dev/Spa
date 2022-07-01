@@ -97,14 +97,14 @@ class CommissionController extends Controller
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
+        $data = User::select('id', 'full_name', 'avatar','branch_id')->whereIn('role', [UserConstant::TECHNICIANS])
             ->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
             })->with('branch')->get();
-        if (count($data)) {
 
+        if (count($data)) {
             foreach ($data as $item) {
                 $price = [];
                 $input['support_id'] = $item->id;
@@ -134,6 +134,7 @@ class CommissionController extends Controller
                 $doc = [
                     'id' => $item->id,
                     'avatar' => $item->avatar,
+                    'branch_name' => isset($item->branch) ? @$item->branch->name : '',
                     'full_name' => $item->full_name,
                     'orders' => $order->count(),
                     'all_total' => $order->sum('all_total'),
@@ -173,7 +174,7 @@ class CommissionController extends Controller
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $users = User::select('id','full_name')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
+        $users = User::select('id', 'full_name')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -234,7 +235,7 @@ class CommissionController extends Controller
         })->sortByDesc('all_payment')
             ->filter(function ($it) {
                 if ($it->all_payment > 0 || $it->customer_new) {
-                return $it;
+                    return $it;
                 }
             });
 

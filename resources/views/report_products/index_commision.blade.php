@@ -110,6 +110,12 @@
         .form-control {
             font-size: 14px;
         }
+
+        .small-tip {
+            font-size: 11px;
+            color: #999;
+        }
+
     </style>
 @endsection
 @section('content')

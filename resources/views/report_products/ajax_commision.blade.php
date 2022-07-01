@@ -46,6 +46,7 @@
                     <td class="text-center"><a href="javascript:void(0)" id="click_detail" data-id="{{$s['id']}}">
                             <i class="fas fa-info-circle"></i>
                             {{@$s['full_name']}}</a>
+                        <span class="small-tip">({{@$s['branch_name']}})</span>
                     </td>
                     <td class="text-center">{{@number_format($s['days'])}}</td>
                     <td class="text-center">{{@number_format($s['days_phu'])}}</td>
