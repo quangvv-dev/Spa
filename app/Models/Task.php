@@ -173,6 +173,8 @@ class Task extends Model
                 $q->where('type', $input['type']);
             })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
             })->when(isset($input['task_status_id']) && isset($input['task_status_id']), function ($q) use ($input) {
                 $q->where('task_status_id', $input['task_status_id']);
             })

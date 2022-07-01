@@ -46,10 +46,15 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $branchs = Branch::pluck('name', 'id')->toArray();
+        $location = Branch::$location;
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
         $admin = auth()->user();
         if (!$admin->permission('tasks.employee')) {
             $input['sale_id'] = Auth::user()->id;
@@ -76,7 +81,7 @@ class TaskController extends Controller
             return view('kanban_board.ajax', compact('new', 'done', 'fail'));
         }
 
-        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs'));
+        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs','location'));
     }
 
     /**
