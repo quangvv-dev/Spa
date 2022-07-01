@@ -55,7 +55,7 @@
         @endforeach
         @else
             <tr>
-                <td id="no-data" class="text-center" colspan="7">Không tồn tại dữ liệu</td>
+                <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>
             </tr>
         @endif
     </table>

@@ -119,11 +119,12 @@
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
                     </button>
                 </div>
+                <div class="col-2">
+                    <a class="excel-html" data-toggle="tooltip" data-placement="right" title="Tải xuống Excel">
+                        <i class="fas fa-download" style="color: dodgerblue"></i></a>
+                </div>
             </div>
             {{ Form::close() }}
-            {{--<a title="Download Data" style="position: absolute;right: 2%" class="btn download-pdf"--}}
-               {{--href="javascript:void(0)">--}}
-                {{--<i class="fas fa-download"></i></a>--}}
         </div>
     </div>
     <div class="col-md-12 col-lg-12" id="registration-form">
@@ -133,12 +134,6 @@
     <script src="{{asset('js/dateranger-config.js')}}"></script>
 @endsection
 @section('_script')
-    {{--<script>--}}
-        {{--$(document).on('click', '.download-pdf', function (e) {--}}
-            {{--let time_choose = $('#time_choose').val();--}}
-            {{--let url = location.href + '?data_time=' + time_choose + '&dowload_pdf=1';--}}
-            {{--location.href = url;--}}
-        {{--});--}}
-    {{--</script>--}}
+
 @endsection
 

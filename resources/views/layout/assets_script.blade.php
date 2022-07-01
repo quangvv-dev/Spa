@@ -56,6 +56,8 @@
 <script src="{{asset('js/user.js')}}"></script>
 <script src="{{asset('js/datepicker.js')}}"></script>
 <script src="{{asset('assets/js/tableHeadFixer.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/tableToExcel.js')}}"></script>
+
 
 {{--<script type="module">--}}
     {{--// Import the functions you need from the SDKs you need--}}
@@ -89,6 +91,17 @@
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $('.excel-html').on('click', function () {
+
+        let today = new Date().toISOString().slice(0, 10);
+        TableToExcel.convert(document.getElementById("table-excel"), {
+            name: "Excel-AdamBeauty-" + today + ".xlsx",
+            sheet: {
+                name: "Sheet 1"
+            }
+        });
+    })
 
     // validate error
     $.validator.setDefaults({
