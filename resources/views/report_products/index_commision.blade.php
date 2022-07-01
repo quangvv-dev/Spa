@@ -127,7 +127,7 @@
                     {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
                 </div>
                 <div class="col-lg-2 col-md-3">
-                    {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control', 'placeholder' => 'Tất cả chi nhánh')) !!}
+                    {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control', 'placeholder' => 'Tất cả chi nhánh')) !!}
                 </div>
                 <div class="col-lg-2 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
