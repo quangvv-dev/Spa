@@ -98,7 +98,7 @@
                 @endphp
                 <tr class="">
                     <td class="text-center pdr10" data-fill-color="1E9AD6">{{$k}}</td>
-                    <td class="text-center pdr10 bold" data-fill-color="1E9AD6">{{$item->name}}
+                    <td class="text-center pdr10 bold" data-f-bold="true" data-fill-color="1E9AD6">{{$item->name}}
                     <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->customer_new}}</td>
                     <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10" data-fill-color="1E9AD6">{{$item->schedules_den}}</td>
