@@ -117,7 +117,7 @@ class CommissionController extends Controller
                         }
                     }
                 }
-
+                $input['user_id'] = $item->id;
                 $doc = [
                     'id' => $item->id,
                     'avatar' => $item->avatar,
