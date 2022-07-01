@@ -36,7 +36,7 @@
         </tr>
         <tr class="number_index">
             <th class="text-center">(1)</th>
-            <th class="text-center">(2)</th>
+            <th class="text-center" style="min-width: 120px">(2)</th>
             <th class="text-center">(3)</th>
             {{--<th class="text-center">(4)</th>--}}
             {{--<th class="text-center">(5)</th>--}}

@@ -258,9 +258,9 @@
                         <li class="sub-with-sub">
                             <a href="#">Phòng ban khác</a>
                             <ul>
-                                <li><a href="{{url('marketing/carepage-ranking')}}">Bảng xếp hạng CarePage</a></li>
-                                <li><a href="{{url('marketing/carepage')}}">Báo cáo doanh thu CarePage</a></li>
-                                <li><a href="{{url('report/waiters')}}">Báo cáo doanh thu lễ tân</a></li>
+                                <li><a href="{{url('marketing/carepage-ranking')}}">Xếp hạng CarePage</a></li>
+                                <li><a href="{{url('marketing/carepage')}}">Báo cáo DT CarePage</a></li>
+                                <li><a href="{{url('report/waiters')}}">Báo cáo DT lễ tân</a></li>
                             </ul>
                         </li>
 
