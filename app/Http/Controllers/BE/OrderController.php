@@ -76,7 +76,7 @@ class OrderController extends Controller
             'branchs' => $branchs,
         ]);
     }
-
+//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
     public function index(Request $request)
     {
         $customerId = $request->customer_id;
