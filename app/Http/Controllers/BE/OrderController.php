@@ -86,7 +86,7 @@ class OrderController extends Controller
             'id');
         $title = 'Tạo đơn hàng';
 //        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
 //        $combo = Services::whereIn('type', [StatusCode::PRODUCT, StatusCode::SERVICE])->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
         return view('order.index',
@@ -108,9 +108,9 @@ class OrderController extends Controller
         $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
-        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
-        $combo = Services::with('category')->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
+        $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
         return view('order.indexService',
             compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'products', 'combo'));
