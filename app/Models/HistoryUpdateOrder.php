@@ -14,15 +14,15 @@ class HistoryUpdateOrder extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
     }
     public function support()
     {
-        return $this->belongsTo(User::class, 'support_id', 'id');
+        return $this->belongsTo(User::class, 'support_id', 'id')->withTrashed();
     }
     public function support2()
     {
-        return $this->belongsTo(User::class, 'support2_id', 'id');
+        return $this->belongsTo(User::class, 'support2_id', 'id')->withTrashed();
     }
 
     public function branch()

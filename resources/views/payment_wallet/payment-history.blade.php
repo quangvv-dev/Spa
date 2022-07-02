@@ -17,10 +17,12 @@
                     <td class="fz-12">{{ date('d-m-Y', strtotime($item->payment_date)) }}</td>
                     <td class="fz-12"><span style="color: grey;font-size: 10px">({{$item->payment_type==0?'Tiền mặt':'C.Khoản'}})</span>  {{ number_format($item->price) }}</td>
                     <td class="fz-12">{{ $item->description }}</td>
+                    @if(in_array(\Illuminate\Support\Facades\Auth::user()->department_id,[\App\Constants\DepartmentConstant::WAITER,\App\Constants\DepartmentConstant::ADMIN,\App\Constants\DepartmentConstant::KE_TOAN]))
                     <td class="fz-12">
                         <a title="Xóa" class="btn delete" href="javascript:void(0)"
                            data-url="{{ url('payment-wallet/' . $item->id) }}"><i class="fas fa-trash-alt"></i></a>
                     </td>
+                    @endif
                 </tr>
             @endforeach
         @endif
