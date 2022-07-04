@@ -106,7 +106,7 @@ class SchedulesController extends BaseApiController
             'data'        => json_encode((array)['type' => NotificationConstant::LICH_HEN,'schedule_id' => $data->id]),
             'type'        => NotificationConstant::LICH_HEN,
             'status'      => 0,
-            'created_at'  => $request->date.' '.$data->time_from,
+            'created_at'  => $data->date.' '.$data->time_from,
         ]);
 
         if (!empty(setting('sms_schedules'))) {
@@ -126,8 +126,8 @@ class SchedulesController extends BaseApiController
                     'phone'       => @$data->customer->phone,
                     'campaign_id' => 0,
                     'message'     => $text,
-                    'created_at'  => $request->date.' '.$data->time_from,
-                    'updated_at'  => $request->date.' '.$data->time_from,
+                    'created_at'  => $data->date.' '.$data->time_from,
+                    'updated_at'  => $data->date.' '.$data->time_from,
                 ]);
             }
         }
