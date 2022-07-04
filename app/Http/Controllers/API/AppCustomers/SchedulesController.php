@@ -103,7 +103,7 @@ class SchedulesController extends BaseApiController
         NotificationCustomer::create([
             'customer_id' => $customer->id,
             'title'       => '🗓 Bạn có lịch hẹn lúc ' . $data->time_from . ' hôm nay !!!',
-            'data'        => json_encode((array)['schedule_id' => $data->id]),
+            'data'        => json_encode((array)['type' => NotificationConstant::LICH_HEN,'schedule_id' => $data->id]),
             'type'        => NotificationConstant::LICH_HEN,
             'status'      => 0,
             'created_at'  => $request->date.' '.$data->time_from,

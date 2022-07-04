@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\NotificationCustomer;
 use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -42,7 +43,26 @@ class  ActionNotification extends Command
     public function handle()
     {
         $now = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i');
-        Notification::where('status', NotificationConstant::HIDDEN)->where('created_at', $now)
+        $after = Carbon::now('Asia/Ho_Chi_Minh')->addMinutes(30)->format('Y-m-d H:i');
+
+        Notification::where('status', NotificationConstant::HIDDEN)
+            ->whereBetween('created_at', [$now, $after])
             ->update(['status' => NotificationConstant::UNREAD]);
+        try {
+            $data = NotificationCustomer::where('status', NotificationConstant::HIDDEN)
+                ->whereBetween('created_at', [$now, $after])->with('customer')->get();
+            if (count($data)) {
+                foreach ($data as $item) {
+                    if (isset($item->customer) && $item->customer->devices_token) {
+                        fcmSendCloudMessage([$item->customer->devices_token], $item->title, 'Chạm để xem', 'notification',
+                            (array)\GuzzleHttp\json_decode($item->data));
+                    }
+                }
+            }
+
+        } catch (\Exception $exception) {
+            return $exception;
+        }
+
     }
 }
