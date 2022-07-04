@@ -53,6 +53,8 @@ class  ActionNotification extends Command
                 ->whereBetween('created_at', [$now, $after])->with('customer')->get();
             if (count($data)) {
                 foreach ($data as $item) {
+                    $item->status = NotificationConstant::UNREAD;
+                    $item->save();
                     if (isset($item->customer) && $item->customer->devices_token) {
                         fcmSendCloudMessage([$item->customer->devices_token], $item->title, 'Chạm để xem', 'notification',
                             (array)\GuzzleHttp\json_decode($item->data));
