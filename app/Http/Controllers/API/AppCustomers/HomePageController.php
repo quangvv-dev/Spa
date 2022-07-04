@@ -183,7 +183,11 @@ class HomePageController extends BaseApiController
             $process = HistoryUpdateOrder::whereIn('order_id', $order)->where('type',
                 0)->orderByDesc('created_at')->get()
                 ->transform(function ($i) {
+                    $support = isset($i->support) ? $i->support->full_name:'';
+                    $support2 = isset($i->support2) ? '| '.$i->support2->full_name:'';
+
                     return [
+                        'support'     => $support . $support2,
                         'employee'    => isset($i->user) ? $i->user->full_name : '',
                         'date'        => @\date('d-m-Y', strtotime($i->created_at)),
                         'time'        => @\date('H:i', strtotime($i->created_at)),
