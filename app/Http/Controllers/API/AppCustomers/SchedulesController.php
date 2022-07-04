@@ -82,7 +82,7 @@ class SchedulesController extends BaseApiController
         }
 
         $customer = $request->jwtUser;
-        $category = CustomerGroup::where('customer_id', $request->customer_id)->where('branch_id',
+        $category = CustomerGroup::where('customer_id', $customer->id)->where('branch_id',
             $customer->branch_id)->first();
         $user = User::where('department_id', DepartmentConstant::WAITER)->first();
         $service = Services::select('name')->whereIn('id', $request->service_id)->pluck('name')->toArray();
@@ -97,7 +97,6 @@ class SchedulesController extends BaseApiController
             'category_id'   => isset($category) ? $category->category_id : 0,
             'note'          => 'DV quan tâm: ' . implode($service, ','),
         ]);
-
         $data = Schedule::create($request->except('service_id','customer_id'));
 
         NotificationCustomer::create([
@@ -106,7 +105,7 @@ class SchedulesController extends BaseApiController
             'data'        => json_encode((array)['type' => NotificationConstant::LICH_HEN,'schedule_id' => $data->id]),
             'type'        => NotificationConstant::LICH_HEN,
             'status'      => 0,
-            'created_at'  => $data->date.' '.$data->time_from,
+            'created_at'  => $data->date.' '.$data->time_from.":00",
         ]);
 
         if (!empty(setting('sms_schedules'))) {
@@ -126,8 +125,8 @@ class SchedulesController extends BaseApiController
                     'phone'       => @$data->customer->phone,
                     'campaign_id' => 0,
                     'message'     => $text,
-                    'created_at'  => $data->date.' '.$data->time_from,
-                    'updated_at'  => $data->date.' '.$data->time_from,
+                    'created_at'  => $data->date.' '.$data->time_from.":00",
+                    'updated_at'  => $data->date.' '.$data->time_from.":00",
                 ]);
             }
         }
