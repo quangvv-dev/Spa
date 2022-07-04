@@ -106,7 +106,7 @@ class SchedulesController extends BaseApiController
             'data'        => json_encode((array)['schedule_id' => $data->id]),
             'type'        => NotificationConstant::LICH_HEN,
             'status'      => 0,
-            'created_at'  => Carbon::now(),
+            'created_at'  => $request->date.' '.$data->time_from,
         ]);
 
         if (!empty(setting('sms_schedules'))) {
@@ -126,8 +126,8 @@ class SchedulesController extends BaseApiController
                     'phone'       => @$data->customer->phone,
                     'campaign_id' => 0,
                     'message'     => $text,
-                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                    'updated_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                    'created_at'  => $request->date.' '.$data->time_from,
+                    'updated_at'  => $request->date.' '.$data->time_from,
                 ]);
             }
         }
