@@ -98,7 +98,7 @@ class SchedulesController extends BaseApiController
             'note'          => 'DV quan tâm: ' . implode($service, ','),
         ]);
 
-        $data = Schedule::create($request->except('service_id'));
+        $data = Schedule::create($request->except('service_id','customer_id'));
 
         NotificationCustomer::create([
             'customer_id' => $customer->id,
