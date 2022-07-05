@@ -48,7 +48,7 @@
                     <div class="col-6">
                         <div class="form-group required {{ $errors->has('tip_id') ? 'has-error' : '' }}">
                             {!! Form::label('tip_id', 'Thủ thuật (nếu có)') !!}
-                            {!! Form::select('tip_id',$tips, null, array('class' => 'form-control select2')) !!}
+                            {!! Form::select('tip_id',$tips, null, array('class' => 'form-control select2','placeholder'=>'Chọn thủ thuật')) !!}
                             <span class="help-block">{{ $errors->first('user_id', ':message') }}</span>
                         </div>
                     </div>
