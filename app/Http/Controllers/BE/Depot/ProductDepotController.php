@@ -136,8 +136,7 @@ class ProductDepotController extends Controller
 
     public function getDetail($id)
     {
-        $search['branch_id'] = $id;
-        $product = ProductDepot::search($search)->with('product')->get();
+        $product = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->get();
         return response()->json([
             'product' => $product
         ]);

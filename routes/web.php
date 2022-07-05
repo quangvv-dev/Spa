@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('combos', 'CombosController');
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
+    Route::resource('tips', 'PaymentWallet\TipController');
 //    Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::get('customers-group', 'CustomerController@createGroup')->name('customers.indexGroup');
@@ -206,7 +207,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::resource('list', 'DepotController');
         Route::get('statistical', 'HistoryDepotController@statistical');
         Route::post('import-product', 'ProductDepotController@import')->name('import');
-
     });
 
     Route::resource('danh-muc-thu-chi', 'ThuChi\DanhMucController');

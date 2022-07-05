@@ -60,10 +60,10 @@ class HistoryDepotController extends Controller
 
         $docs = HistoryDepot::search($input)->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return view('history_depot.ajax', compact('docs','checkRole'));
+            return view('history_depot.ajax', compact('docs', 'checkRole'));
         }
 
-        return view('history_depot.index', compact('docs','checkRole'));
+        return view('history_depot.index', compact('docs', 'checkRole'));
     }
 
     /**
@@ -85,10 +85,10 @@ class HistoryDepotController extends Controller
     public function store(Request $request)
     {
         $input = $request->except('product', 'quantity');
-
         if (!empty($request->product) && count($request->product) && count($request->quantity)) {
             foreach ($request->product as $key => $item) {
                 $input['product_id'] = $item;
+                $input['quantity'] = (int)$request->quantity[$key]?:0;
                 $input['user_id'] = !empty(Auth::user()->id) ? Auth::user()->id : 0;
                 $doc = ProductDepot::search($input)->first();
                 if (isset($doc) && $doc) {
@@ -100,9 +100,24 @@ class HistoryDepotController extends Controller
                         $doc->quantity = $doc->quantity - (int)$request->quantity[$key];
                     }
                     $doc->save();
-//                    $input['quantity_rest'] = $doc->quantity;
-                    $input['quantity'] = (int)$request->quantity[$key];
                     $this->historyDepot->create($input);
+                } else {
+                    ///check chưa nhập
+                    if ($input['status'] == OrderConstant::NHAP_KHO && !empty($request->quantity[$key])) {
+                        ProductDepot::create([
+                            'branch_id' => $request->branch_id,
+                            'product_id' => $input['product_id'],
+                            'quantity' => $input['quantity'] ?: 0,
+                        ]);
+                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO]) && !empty($request->quantity[$key])) {
+                        ProductDepot::create([
+                            'branch_id' => $request->branch_id,
+                            'product_id' => $input['product_id'],
+                            'quantity' => $input['quantity']?(-$input['quantity']): 0,
+                        ]);
+                    }
+                    $this->historyDepot->create($input);
+
                 }
             }
 
@@ -197,9 +212,9 @@ class HistoryDepotController extends Controller
             });
 
         if ($request->ajax()) {
-            return view('history_depot.statisticalAjax', compact('docs','checkRole'));
+            return view('history_depot.statisticalAjax', compact('docs', 'checkRole'));
         }
 
-        return view('history_depot.statistical', compact('docs','checkRole'));
+        return view('history_depot.statistical', compact('docs', 'checkRole'));
     }
 }

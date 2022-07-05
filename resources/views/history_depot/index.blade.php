@@ -65,10 +65,11 @@
                     success:function (data) {
                         html = '<option value="">--Chọn sản phẩm--</option>';
                         let product_id = $(document).find('.products')
+
                         if(data.product.length > 0){
                             data.product.forEach(function (item) {
                                 html += `
-                                <option value="`+item.product_id+`">`+item.product.name+`</option>
+                                <option value="`+item.id+`">`+item.name+`</option>
                             `
                             })
 
@@ -88,7 +89,7 @@
                 var html = `<tr>
                 <input type="hidden" name="product[]" value="` + id + `">
                 <td><span id="">` + text + `</span></td>
-                <td style="width: 20%;">
+                <td style="width: 30%;">
                     <input type="text" maxlength="5" class="form-control text-center txt-dotted"style="height: 23px !important;" name="quantity[]">
                 </td>
             </tr>`;
