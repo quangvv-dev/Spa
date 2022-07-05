@@ -16,6 +16,10 @@ class HistoryUpdateOrder extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
     }
+    public function tip()
+    {
+        return $this->belongsTo(Tip::class, 'tip_id', 'id')->withTrashed();
+    }
     public function support()
     {
         return $this->belongsTo(User::class, 'support_id', 'id')->withTrashed();

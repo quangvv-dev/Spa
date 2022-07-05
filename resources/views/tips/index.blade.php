@@ -1,4 +1,9 @@
 @extends('layout.app')
+<style>
+    .table-primary{
+        background-color:white !important;
+    }
+</style>
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -31,10 +36,10 @@
             let id = $(this).data('id');
             let data = {
                 name: $(this).closest('tr').find('.name').val(),
-                price: $(this).closest('tr').find('.price').val(),
+                price: $(this).closest('tr').find('#price').val(),
             }
             $.ajax({
-                url: 'branch/' + id,
+                url: 'tips/' + id,
                 data: data,
                 method: 'PUT',
                 success: function (data) {

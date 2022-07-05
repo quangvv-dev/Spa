@@ -86,3 +86,8 @@
 </div>
 @include('customers.modal_order')
 @include('customers.modal_update_history_order')
+<script>
+    $('.select2').select2({ //apply select2 to my element
+        allowClear: true
+    });
+</script>

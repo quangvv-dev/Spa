@@ -35,7 +35,7 @@ class TipController extends Controller
      */
     public function index(Request $request)
     {
-        $tips = Tip::orderByDesc('id')->get();
+        $tips = Tip::orderByDesc('id')->paginate(StatusCode::PAGINATE_10);
         if ($request->ajax()) {
             return view('tips.ajax', compact('tips'));
         }
@@ -106,7 +106,16 @@ class TipController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $tip = Tip::find($id);
+        $request->merge([
+            'price'=> str_replace(',', '', $request->price),
+        ]);
+        if (isset($tip) && $tip) {
+            $tip->update($request->all());
+        }
+        if ($request->ajax()) {
+            return 1;
+        }
     }
 
     /**
@@ -118,32 +127,10 @@ class TipController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $payment = PaymentWallet::find($id);
-        if (!empty($payment) && isset($payment->order_wallet)) {
-            $order = $payment->order_wallet;
-            $customer = Customer::find($order->customer_id);
 
-            if ($order->gross_revenue < $order->order_price) {
-                $customer->wallet = ($customer->wallet - $payment->price) > 0 ? $customer->wallet - $payment->price : 0;
-            } elseif ($order->gross_revenue >= $order->order_price) {
-                $customer->wallet = $customer->wallet - $payment->price - ($order->price - $order->order_price);
-                $customer->wallet = $customer->wallet > 0 ? $customer->wallet : 0;
-            }
-            $order->gross_revenue = ($order->gross_revenue - $payment->price) > 0 ? $order->gross_revenue - $payment->price : 0;
-            $order->save();
-            $customer->save();
-
-            $payment->delete();
-            $request->session()->flash('error', 'Xóa lịch sử thanh toán thành công!');
-        } else {
-            $request->session()->flash('error', 'Không tồn tại đơn nạp ví !');
+        Tip::find($id)->delete();
+        if ($request->ajax()) {
+            $request->session()->flash('error', 'Xoá thủ thuật thành công!');
         }
-    }
-
-    public function pdf($id)
-    {
-        $order = $this->walletService->find($id);
-        $payment = PaymentWallet::where('order_wallet_id', $id)->latest()->first();
-        return view('payment_wallet.order-pdf', compact('order', 'payment'));
     }
 }

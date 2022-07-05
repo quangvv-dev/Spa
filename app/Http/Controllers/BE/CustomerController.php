@@ -30,6 +30,7 @@ use App\Models\Services;
 use App\Models\Status;
 use App\Models\Task;
 use App\Models\TaskStatus;
+use App\Models\Tip;
 use App\Models\WalletHistory;
 use App\Services\CustomerService;
 use App\Models\RuleOutput;
@@ -234,6 +235,7 @@ class CustomerController extends Controller
     public function show(Request $request, $id)
     {
         $title = 'Trao đổi';
+        $tips = Tip::pluck('name','id')->toArray();
         $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer')->findOrFail($id);
         if (isset($customer) && $customer) {
             $waiters = User::where('role', UserConstant::TECHNICIANS)->where('branch_id', $customer->branch_id)->pluck('full_name', 'id');
@@ -307,14 +309,14 @@ class CustomerController extends Controller
             }
             $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
-            return view('customers.order', compact('orders', 'waiters'));
+            return view('customers.order', compact('orders', 'waiters','tips'));
         }
         //END
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
                 'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'departments', 'history', 'wallet',
-                'package', 'call_center', 'orders'));
+                'package', 'call_center', 'orders','tips'));
     }
 
     /**

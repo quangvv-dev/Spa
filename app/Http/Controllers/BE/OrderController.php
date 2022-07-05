@@ -615,6 +615,7 @@ class OrderController extends Controller
             'order_id' => $order->id,
             'service_id' => $request->service_id,
             'type' => $request->type_delete,
+            'tip_id' => $request->tip_id?:0,
             'description' => $request->description,
             'branch_id' => !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $order->branch_id,
         ]);

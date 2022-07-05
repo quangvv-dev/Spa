@@ -113,15 +113,15 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
-                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id', 'user_id', 'support_id', 'support2_id')
-                    ->orWhere('support2_id', $item->id)->with('service');
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id', 'user_id', 'support_id', 'support2_id','tip_id','service_id')
+                    ->orWhere('support2_id', $item->id)->with('service','tip');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
                 if (count($history)) {
                     foreach ($history as $item2) {
-                        if (isset($item2->service)) {
-                            $price [] = (int)$item2->service->price_buy ?: 0;
+                        if (isset($item2->tip)) {
+                            $price [] = (int)$item2->tip->price ?: 0;
                         }
                         if ($item->id == $item2->user_id) {
                             $cong_chinh += 1;

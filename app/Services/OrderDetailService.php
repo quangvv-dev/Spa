@@ -95,7 +95,7 @@ class OrderDetailService
         }
         $orderDetail =[];
         if (count($dataArr)){
-            OrderDetail::where('order_id', $orderId)->delete();
+//            OrderDetail::where('order_id', $orderId)->delete();
             foreach ($dataArr as $item) {
                 if (!empty($item['id'])) {
                     $orderDetail = OrderDetail::where('id', $item['id'])->first();

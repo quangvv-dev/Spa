@@ -162,6 +162,7 @@
                             <ul>
                                 @if($roleGlobal->permission('services.list'))
                                     <li><a href="{!! route('services.index') !!}">Danh sách dịch vụ</a></li>
+                                    <li><a href="{!! route('tips.index') !!}">Danh sách thủ thuật (công)</a></li>
                                 @endif
                                 @if($roleGlobal->permission('products.list'))
                                     <li><a href="{!! route('products.index') !!}">Danh sách sản phẩm</a></li>
@@ -261,6 +262,9 @@
                                 <li><a href="{{url('marketing/carepage-ranking')}}">Xếp hạng CarePage</a></li>
                                 <li><a href="{{url('marketing/carepage')}}">Báo cáo DT CarePage</a></li>
                                 <li><a href="{{url('report/waiters')}}">Báo cáo DT lễ tân</a></li>
+                                @if($roleGlobal->permission('report.commission'))
+                                    <li><a href="{{url('report/commission')}}">Báo cáo KTV</a></li>
+                                @endif
                             </ul>
                         </li>
 
@@ -269,9 +273,6 @@
                         @endif
                         @if($roleGlobal->permission('report.tasks'))
                             <li><a href="{{url('report/tasks')}}">Hiệu quả công việc</a></li>
-                        @endif
-                        @if($roleGlobal->permission('report.commission'))
-                            <li><a href="{{url('report/commission')}}">Hoa hồng KTV</a></li>
                         @endif
                         @if($roleGlobal->permission('call-center'))
                             <li><a href="{{route('call-center.index')}}">Quản lý tổng đài</a></li>

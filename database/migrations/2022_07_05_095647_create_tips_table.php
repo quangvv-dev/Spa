@@ -18,6 +18,10 @@ class CreateTipsTable extends Migration
             $table->text('name')->comment('Tên thủ thuật');
             $table->integer('price')->default(0)->comment('Giá tiền thủ thuật');
             $table->timestamps();
+            $table->softDeletes();
+        });
+        Schema::table('history_update_orders', function (Blueprint $table) {
+            $table->integer('tip_id')->default(0)->after('support2_id')->comment('thủ thuât thực hiện')->nullable();
         });
     }
 
