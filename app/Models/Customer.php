@@ -246,7 +246,7 @@ class Customer extends Model
                 }
             }
         }
-        $text = implode($text, ',');
+        $text = implode($text, ",");
         return $text;
     }
 
