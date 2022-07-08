@@ -287,7 +287,7 @@ class Order extends Model
     {
         $raw = OrderDetail::where('order_id', $this->id)->pluck('booking_id')->toArray();
         $service = Services::whereIn('id', $raw)->withTrashed()->pluck('name')->toArray();
-        return count($service) ? implode($service, "<br>") : '';
+        return count($service) ? implode("<br>",$service) : '';
     }
 
     public static function boot()
@@ -332,7 +332,6 @@ class Order extends Model
                     $q->whereIn('branch_id', $input['group_branch']);
                 });
         }
-
         $data = $data->get();
         return $data;
     }

@@ -7,6 +7,7 @@
                 <th class="text-center" style="width: 30px;">STT</th>
                 <th class="text-center nowrap">Thủ thuật</th>
                 <th class="text-center">Giá công</th>
+                <th class="text-center">Cụm</th>
                 <th class="text-center">
                     <a id="add_new_status" style="cursor: pointer"><i class="fa fa-plus"></i> Thêm</a>
                 </th>
@@ -25,6 +26,9 @@
                         </td>
                         <td class="text-center">
                             <input type="text" id="price" class="txt-dotted form-control number" value="{{number_format($item->price)}}">
+                        </td>
+                        <td class="text-center">
+                            {!! Form::select('location_id',[1=>'Cụm miền bắc',3=>'Cụm miền nam'], @$item->location_id, array('class' => 'form-control location_id','placeholder'=>'-Tất cả chi nhánh-')) !!}
                         </td>
                         <td class="text-center">
                             <a class="btn save-status" href="javascript:void(0)" data-id="{{$item->id}}"><i class="fa fa-save"></i>

@@ -37,6 +37,7 @@
             let data = {
                 name: $(this).closest('tr').find('.name').val(),
                 price: $(this).closest('tr').find('#price').val(),
+                location_id: $(this).closest('tr').find('.location_id').val(),
             }
             $.ajax({
                 url: 'tips/' + id,

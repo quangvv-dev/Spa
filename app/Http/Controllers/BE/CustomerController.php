@@ -235,13 +235,15 @@ class CustomerController extends Controller
     public function show(Request $request, $id)
     {
         $title = 'Trao đổi';
-        $tips = Tip::pluck('name','id')->toArray();
         $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer')->findOrFail($id);
         if (isset($customer) && $customer) {
             $waiters = User::where('role', UserConstant::TECHNICIANS)->where('branch_id', $customer->branch_id)->pluck('full_name', 'id');
         } else {
             $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         }
+        $location = isset(Auth::user()->branch)?[0,Auth::user()->branch->location_id]:[0,@$customer->branch->location_id];
+        $tips = Tip::whereIn('location_id',$location)->pluck('name','id')->toArray();
+
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
