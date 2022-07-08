@@ -146,6 +146,7 @@ class TipController extends Controller
                 $i = 1;
                 if ($data) {
                     foreach ($data as $k => $ex) {
+                        $i++;
                         $sheet->row($i, [
                             @$ex->name,
                             @number_format($ex->price),
