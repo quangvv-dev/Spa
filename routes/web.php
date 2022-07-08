@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('tips', 'PaymentWallet\TipController');
+    Route::get('tips-export', 'PaymentWallet\TipController@exportData');
 //    Route::resource('users', 'UserController')->middleware('admin');
     Route::resource('customers', 'CustomerController');
     Route::get('customers-group', 'CustomerController@createGroup')->name('customers.indexGroup');

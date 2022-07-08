@@ -3,18 +3,11 @@
 namespace App\Http\Controllers\BE\PaymentWallet;
 
 use App\Constants\StatusCode;
-use App\Helpers\Functions;
-use App\Models\Branch;
-use App\Models\Customer;
-use App\Models\PaymentWallet;
 use App\Models\Tip;
-use App\Models\WalletHistory;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\View;
-use App\Services\WalletService;
+use Excel;
 
 class TipController extends Controller
 {
@@ -108,7 +101,7 @@ class TipController extends Controller
     {
         $tip = Tip::find($id);
         $request->merge([
-            'price'=> str_replace(',', '', $request->price),
+            'price' => str_replace(',', '', $request->price),
         ]);
         if (isset($tip) && $tip) {
             $tip->update($request->all());
@@ -132,5 +125,36 @@ class TipController extends Controller
         if ($request->ajax()) {
             $request->session()->flash('error', 'Xoá thủ thuật thành công!');
         }
+    }
+
+    public function exportData()
+    {
+        $data = Tip::get();
+        Excel::create('DS thủ thuật (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($data) {
+                $sheet->cell('A1:C1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->freezeFirstRow();
+                $sheet->row(1, [
+                    'Thủ thuật',
+                    'Giá công',
+                    'Cụm áp dụng',
+                ]);
+
+                $i = 1;
+                if ($data) {
+                    foreach ($data as $k => $ex) {
+                        $sheet->row($i, [
+                            @$ex->name,
+                            @number_format($ex->price),
+                            @$ex->location_id==1?'Cụm Miền Bắc':($ex->location_id==3)?'Cụm miền nam':"Tất cả chi nhánh",
+                        ]);
+                    }
+                }
+            });
+        })->export('xlsx');
+
     }
 }

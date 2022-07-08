@@ -9,6 +9,10 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">DANH SÁCH CÔNG THỦ THUẬT</h3></br>
+                <div class="col-2">
+                    <a href="{{url('tips-export')}}" data-toggle="tooltip" data-placement="right" title="Tải xuống Excel">
+                        <i class="fas fa-download" style="color: dodgerblue"></i></a>
+                </div>
             </div>
             @include('tips.ajax')
         </div>
