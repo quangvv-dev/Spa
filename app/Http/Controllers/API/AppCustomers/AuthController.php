@@ -290,7 +290,7 @@ class AuthController extends BaseApiController
         $validate = [
             'full_name'   => "required",
             'phone'       => "required",
-            'category_id' => "required",
+//            'category_id' => "required",
             'branch_id'   => "required",
             'password'    => "required",
         ];
@@ -307,10 +307,10 @@ class AuthController extends BaseApiController
 
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
-        if (count($request->category_id)) {
-            $category = Category::whereIn('id', $request->category_id)->get();
-            self::createCustomerGroup($category, 1, $input['branch_id']);
-        }
+//        if (count($request->category_id)) {
+//            $category = Category::whereIn('id', $request->category_id)->get();
+//            self::createCustomerGroup($category, 1, $input['branch_id']);
+//        }
         $payload = $customer->toArray();
         $payload['time'] = strtotime(Date::now());
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
