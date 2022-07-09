@@ -308,8 +308,8 @@ class AuthController extends BaseApiController
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
 //        if (count($request->category_id)) {
-//            $category = Category::whereIn('id', $request->category_id)->get();
-//            self::createCustomerGroup($category, 1, $input['branch_id']);
+            $category = Category::whereIn('name','like', '%DV Khác%')->get();
+            self::createCustomerGroup($category, $customer->id, $input['branch_id']);
 //        }
         $payload = $customer->toArray();
         $payload['time'] = strtotime(Date::now());
