@@ -82,12 +82,12 @@ class HomePageController extends BaseApiController
         $docs = $docs->transform(function ($i) {
             $short = new \Html2Text\Html2Text($i->content);
             return [
-                'id'                => $i->id,
-                'title'             => $i->title,
+                'id' => $i->id,
+                'title' => $i->title,
                 'short_description' => str_limit($short->getText(), 35),
-                'content'           => $i->content,
-                'thumbnail'         => $i->thumbnail,
-                'created_at'        => \date('d/m/Y', strtotime($i->created_at)),
+                'content' => $i->content,
+                'thumbnail' => $i->thumbnail,
+                'created_at' => \date('d/m/Y', strtotime($i->created_at)),
             ];
         });
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
@@ -102,24 +102,26 @@ class HomePageController extends BaseApiController
      */
     public function getBranchWithDistance(Request $request)
     {
-        $validate = [
-            'lat'  => "required",
-            'long' => "required",
-            //            'location_id' => "required",
-        ];
-        $this->validator($request, $validate);
-        if (!empty($this->error)) {
-            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
-        }
+//        $validate = [
+//            'lat'  => "required",
+//            'long' => "required",
+//            //            'location_id' => "required",
+//        ];
+//        $this->validator($request, $validate);
+//        if (!empty($this->error)) {
+//            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+//        }
         $input = $request->all();
         $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long', 'phone')
             ->when(isset($input['location_id']) && $input['location_id'], function ($q) use ($input) {
                 $q->where('location_id', $input['location_id']);
             })->whereNotNull('lat')->get()->map(function ($item) use ($input) {
                 $item->distance = "";
-                if ($item->lat && $item->long) {
-                    $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
-                    $item->distance = round($adctual, 1, PHP_ROUND_HALF_UP);
+                if (isset($input['lat']) & isset($input['long'])) {
+                    if ($item->lat && $item->long) {
+                        $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
+                        $item->distance = round($adctual, 1, PHP_ROUND_HALF_UP);
+                    }
                 }
                 unset($item->lat, $item->long);
                 return $item;
@@ -183,18 +185,18 @@ class HomePageController extends BaseApiController
             $process = HistoryUpdateOrder::whereIn('order_id', $order)->where('type',
                 0)->orderByDesc('created_at')->get()
                 ->transform(function ($i) {
-                    $support = isset($i->support) ? $i->support->full_name:'';
-                    $support2 = isset($i->support2) ? '| '.$i->support2->full_name:'';
+                    $support = isset($i->support) ? $i->support->full_name : '';
+                    $support2 = isset($i->support2) ? '| ' . $i->support2->full_name : '';
 
                     return [
-                        'support'     => $support . $support2,
-                        'employee'    => isset($i->user) ? $i->user->full_name : '',
-                        'date'        => @\date('d-m-Y', strtotime($i->created_at)),
-                        'time'        => @\date('H:i', strtotime($i->created_at)),
-                        'branch_name' => isset($i->branch) ? $i->branch->address: '',
-                        'phone'       => isset($i->branch) ? $i->branch->phone : '',
-                        'service'     => isset($i->service) ? $i->service->name : '',
-                        'image'       => isset($i->service) && !empty($i->service->images) ? $i->service->images : '',
+                        'support' => $support . $support2,
+                        'employee' => isset($i->user) ? $i->user->full_name : '',
+                        'date' => @\date('d-m-Y', strtotime($i->created_at)),
+                        'time' => @\date('H:i', strtotime($i->created_at)),
+                        'branch_name' => isset($i->branch) ? $i->branch->address : '',
+                        'phone' => isset($i->branch) ? $i->branch->phone : '',
+                        'service' => isset($i->service) ? $i->service->name : '',
+                        'image' => isset($i->service) && !empty($i->service->images) ? $i->service->images : '',
                     ];
                 });
         }
