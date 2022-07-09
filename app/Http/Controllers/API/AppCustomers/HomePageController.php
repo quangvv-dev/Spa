@@ -102,27 +102,27 @@ class HomePageController extends BaseApiController
      */
     public function getBranchWithDistance(Request $request)
     {
-        $validate = [
-            'lat' => "required",
-            'long' => "required",
-            //            'location_id' => "required",
-        ];
-        $this->validator($request, $validate);
-        if (!empty($this->error)) {
-            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
-        }
+//        $validate = [
+//            'lat'  => "required",
+//            'long' => "required",
+//            //            'location_id' => "required",
+//        ];
+//        $this->validator($request, $validate);
+//        if (!empty($this->error)) {
+//            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+//        }
         $input = $request->all();
         $branch = Branch::select('id', 'name', 'address', 'location_id', 'lat', 'long', 'phone')
             ->when(isset($input['location_id']) && $input['location_id'], function ($q) use ($input) {
                 $q->where('location_id', $input['location_id']);
             })->whereNotNull('lat')->get()->map(function ($item) use ($input) {
                 $item->distance = "";
-//                if (isset($input['lat']) & isset($input['long'])) {
-                if ($item->lat && $item->long) {
-                    $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
-                    $item->distance = round($adctual, 1, PHP_ROUND_HALF_UP);
+                if (isset($input['lat']) & isset($input['long'])) {
+                    if ($item->lat && $item->long) {
+                        $adctual = distance($input['lat'], $input['long'], $item->lat, $item->long, "K");
+                        $item->distance = round($adctual, 1, PHP_ROUND_HALF_UP);
+                    }
                 }
-//                }
                 unset($item->lat, $item->long);
                 return $item;
             })->sortBy("distance");
