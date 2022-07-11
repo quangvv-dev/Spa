@@ -606,6 +606,7 @@ class CustomerController extends Controller
             $check2 = RuleOutput::where('event', 'change_relation')->first();
 
             if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
+                $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
                 $rule = $check2->rules;
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
                 $rule_status = Functions::checkRuleStatusCustomer($config);
@@ -644,8 +645,18 @@ class CustomerController extends Controller
                         }
                         // Tạo công việc
                         $jobs = Functions::checkRuleJob($config);
+                        $controlRule = $item->rules;
+
                         if (count($jobs)) {
                             foreach ($jobs as $job) {
+                                if (@$job->configs->type_job && @$job->configs->type_job =='cskh' && count($cskh)){
+                                    $user_id = !empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0;
+                                    $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
+                                    $controlRule->save();
+                                }else{
+                                    $user_id = @$customer->telesales_id;
+                                }
+
                                 $day = $job->configs->delay_value;
                                 $sms_content = $job->configs->sms_content;
                                 $category = @$customer->categories;
@@ -662,7 +673,7 @@ class CustomerController extends Controller
                                     'time_from' => '07:00',
                                     'time_to' => '21:00',
                                     'code' => 'CSKH',
-                                    'user_id' => @$customer->telesales_id,
+                                    'user_id' => $user_id,
                                     'all_day' => 'on',
                                     'priority' => 1,
                                     'branch_id' => @$customer->branch_id,

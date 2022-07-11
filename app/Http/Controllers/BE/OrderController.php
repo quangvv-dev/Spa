@@ -76,6 +76,7 @@ class OrderController extends Controller
             'branchs' => $branchs,
         ]);
     }
+
 //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
     public function index(Request $request)
     {
@@ -516,12 +517,18 @@ class OrderController extends Controller
                             }
                         }
                         $jobs = Functions::checkRuleJob($config);
-                        if (count($jobs) && $order->role_type != StatusCode::PRODUCT) {
+                        $controlRule = $item->rules;
 
+                        if (count($jobs) && $order->role_type != StatusCode::PRODUCT) {
                             foreach ($jobs as $job) {
-//                                if (@$job->configs->type_job && @$job->configs->type_job =='cskh'){
-//                                    $user_id = !empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0;
-//                                }
+                                if ($job->configs->type_job && @$job->configs->type_job == 'cskh' && count($cskh)) {
+                                    $user_id = !empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0;
+                                    $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
+                                    $controlRule->save();
+                                } else {
+                                    $user_id = @$check3->order->customer->telesales_id;
+                                }
+
                                 $day = $job->configs->delay_value;
                                 $sms_content = $job->configs->sms_content;
                                 $category = @$check3->order->customer->categories;
@@ -540,7 +547,7 @@ class OrderController extends Controller
                                     'time_from' => '07:00',
                                     'time_to' => '21:00',
                                     'code' => 'CSKH',
-                                    'user_id' => @$check3->order->customer->telesales_id,
+                                    'user_id' => @$user_id,
                                     'all_day' => 'on',
                                     'priority' => 1,
                                     'branch_id' => @$check3->order->branch_id,
@@ -553,9 +560,6 @@ class OrderController extends Controller
                                             @$check3->order->branch->name, @$check3->order->branch->phone,
                                             @$check3->order->branch->address),
                                 ];
-
-//                                $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
-//                                $controlRule->save();
 
                                 $task = $this->taskService->create($input);
                                 $follow = User::where('role', UserConstant::ADMIN)->orWhere(function ($query) {
@@ -614,12 +618,12 @@ class OrderController extends Controller
         }
         HistoryUpdateOrder::create([
             'user_id' => $request->user_id,
-            'support_id' => isset($request->support_id)&& $request->support_id ?$request->support_id:'',
-            'support2_id' => isset($request->support2_id)&& $request->support2_id ?$request->support2_id:'',
+            'support_id' => isset($request->support_id) && $request->support_id ? $request->support_id : '',
+            'support2_id' => isset($request->support2_id) && $request->support2_id ? $request->support2_id : '',
             'order_id' => $order->id,
             'service_id' => $request->service_id,
             'type' => $request->type_delete,
-            'tip_id' => $request->tip_id?:0,
+            'tip_id' => $request->tip_id ?: 0,
             'description' => $request->description,
             'branch_id' => !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $order->branch_id,
         ]);
@@ -672,7 +676,7 @@ class OrderController extends Controller
      */
     public function getOrderById(Request $request, $id)
     {
-        $order = Order::with('historyUpdateOrders.user','historyUpdateOrders.support','historyUpdateOrders.support2', 'historyUpdateOrders.service', 'customer',
+        $order = Order::with('historyUpdateOrders.user', 'historyUpdateOrders.support', 'historyUpdateOrders.support2', 'historyUpdateOrders.service', 'customer',
             'orderDetails.service', 'orderDetails')->find($id);
 
         return Response::json($order);
