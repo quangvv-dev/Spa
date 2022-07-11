@@ -451,7 +451,7 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
-//        $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
+        $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
@@ -517,7 +517,11 @@ class OrderController extends Controller
                         }
                         $jobs = Functions::checkRuleJob($config);
                         if (count($jobs) && $order->role_type != StatusCode::PRODUCT) {
+
                             foreach ($jobs as $job) {
+//                                if (@$job->configs->type_job && @$job->configs->type_job =='cskh'){
+//                                    $user_id = !empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0;
+//                                }
                                 $day = $job->configs->delay_value;
                                 $sms_content = $job->configs->sms_content;
                                 $category = @$check3->order->customer->categories;
