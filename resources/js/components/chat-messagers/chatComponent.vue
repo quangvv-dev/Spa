@@ -672,6 +672,7 @@
                         }
                         return m;
                     })
+
                     this.navChat = abc;
                     this.navChatDefault = abc;
                 })
@@ -1089,6 +1090,7 @@
                 else {
                     let html = {
                         check_phone : 0,
+                        access_token : access_token,
                         id : res.data.thread_id,
                         participants : {
                             data:[

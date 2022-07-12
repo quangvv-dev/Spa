@@ -3208,6 +3208,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 } else {
                   _html4 = {
                     check_phone: 0,
+                    access_token: access_token,
                     id: res.data.thread_id,
                     participants: {
                       data: [{
@@ -4656,6 +4657,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                 } else {
                   _html4 = {
                     check_phone: 0,
+                    access_token: access_token,
                     id: res.data.thread_id,
                     participants: {
                       data: [{
