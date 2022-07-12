@@ -645,14 +645,13 @@ class CustomerController extends Controller
                         }
                         // Tạo công việc
                         $jobs = Functions::checkRuleJob($config);
-                        $controlRule = $item->rules;
 
                         if (count($jobs)) {
                             foreach ($jobs as $job) {
-                                if (@$job->configs->type_job && @$job->configs->type_job =='cskh' && count($cskh)){
-                                    $user_id = !empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0;
-                                    $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
-                                    $controlRule->save();
+                                if (isset($job->configs->type_job) && @$job->configs->type_job =='cskh' && count($cskh)){
+                                    $user_id = !empty($cskh[$rule->position]) ? $cskh[$rule->position] : 0;
+                                    $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
+                                    $rule->save();
                                 }else{
                                     $user_id = @$customer->telesales_id;
                                 }
@@ -680,8 +679,7 @@ class CustomerController extends Controller
                                     'customer_status' => @$customer->status_id,
                                     'type' => 2,
                                     'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => 'CSKH ' . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode($text_category,
-                                            ',') . ' ,' . @$customer->branch->name,
+                                    'name' => 'CSKH ' . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$customer->branch->name,
                                     'description' => $text_order . "--" . replaceVariable($sms_content,
                                             @$customer->full_name, @$customer->phone,
                                             @$customer->branch->name, @$customer->branch->phone,

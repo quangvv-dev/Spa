@@ -56,17 +56,14 @@
                         <div class="custom-controls-stacked">
                             <div>
                                 <label class="custom-control custom-radio">
-                                    <input checked class="type-job-action custom-control-input job-input"
-                                           type="radio"
-                                           name="type_job" id="cskh" value="cskh">
-                                    <span class="custom-control-label">CSKH</span>
+                                    <input class="type-job-action custom-control-input" type="radio" name="type_job" id="call_back" value="call_back">
+                                    <span class="custom-control-label">Gọi lại</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="custom-control custom-radio">
-                                    <input class="type-job-action custom-control-input" type="radio"
-                                           name="type_job" id="call_back" value="call_back">
-                                    <span class="custom-control-label">Gọi lại</span>
+                                    <input checked class="type-job-action custom-control-input job-input" type="radio" name="type_job" id="cskh" value="cskh">
+                                    <span class="custom-control-label">CSKH</span>
                                 </label>
                             </div>
                         </div>

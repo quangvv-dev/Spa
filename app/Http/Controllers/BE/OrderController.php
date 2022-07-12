@@ -517,21 +517,19 @@ class OrderController extends Controller
                             }
                         }
                         $jobs = Functions::checkRuleJob($config);
-                        $controlRule = $item->rules;
-
-                        if (count($jobs) && $order->role_type != StatusCode::PRODUCT) {
+                        if (count($jobs) && $order->role_type != StatusCode::PRODUCT) { //add thêm role type
                             foreach ($jobs as $job) {
                                 if ($job->configs->type_job && @$job->configs->type_job == 'cskh' && count($cskh)) {
-                                    $user_id = !empty($cskh[$controlRule->position]) ? $cskh[$controlRule->position] : 0;
-                                    $controlRule->position = ($controlRule->position + 1) < count($cskh) ? $controlRule->position + 1 : 0;
-                                    $controlRule->save();
+                                    $user_id = !empty($cskh[$rule->position]) ? $cskh[$rule->position] : 0;
+                                    $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
+                                    $rule->save();
                                 } else {
-                                    $user_id = @$check3->order->customer->telesales_id;
+                                    $user_id = @$customer->telesales_id;
                                 }
 
                                 $day = $job->configs->delay_value;
                                 $sms_content = $job->configs->sms_content;
-                                $category = @$check3->order->customer->categories;
+                                $category = @$customer->categories;
                                 $text_category = [];
                                 if (count($category)) {
                                     foreach ($category as $item) {
@@ -542,7 +540,7 @@ class OrderController extends Controller
                                     . number_format($check3->order->gross_revenue) . " Còn nợ : " . number_format($check3->order->the_rest)
                                     . "--Các dịch vụ :" . @str_replace('<br>', "|", @$check3->order->service_text);
                                 $input = [
-                                    'customer_id' => @$check3->order->customer->id,
+                                    'customer_id' => @$customer->id,
                                     'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
                                     'time_from' => '07:00',
                                     'time_to' => '21:00',
@@ -553,8 +551,7 @@ class OrderController extends Controller
                                     'branch_id' => @$check3->order->branch_id,
                                     'type' => 2,
                                     'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode($text_category,
-                                            ',') . ' ,' . @$check3->order->branch->name,
+                                    'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$check3->order->branch->name,
                                     'description' => $text_order . "--" . replaceVariable($sms_content,
                                             @$check3->order->customer->full_name, @$check3->order->customer->phone,
                                             @$check3->order->branch->name, @$check3->order->branch->phone,
