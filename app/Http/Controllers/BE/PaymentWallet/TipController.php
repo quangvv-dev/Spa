@@ -102,6 +102,7 @@ class TipController extends Controller
         $tip = Tip::find($id);
         $request->merge([
             'price' => str_replace(',', '', $request->price),
+            'location_id' => $request->location_id?:0,
         ]);
         if (isset($tip) && $tip) {
             $tip->update($request->all());
@@ -150,7 +151,7 @@ class TipController extends Controller
                         $sheet->row($i, [
                             @$ex->name,
                             @number_format($ex->price),
-                            @$ex->location_id==1?'Cụm Miền Bắc':($ex->location_id==3)?'Cụm miền nam':"Tất cả chi nhánh",
+                            @$ex->location_id==1?'Cụm Miền Bắc':(($ex->location_id==3)?'Cụm miền nam':"Tất cả chi nhánh"),
                         ]);
                     }
                 }
