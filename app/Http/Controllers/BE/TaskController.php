@@ -59,11 +59,9 @@ class TaskController extends Controller
         if (!$admin->permission('tasks.employee')) {
             $input['sale_id'] = Auth::user()->id;
         }
-        if (isset($request->type) && $request->type) {
-            $input['sale_id'] = Auth::user()->id;
-        }
+
 //        $user = User::whereIn('department_id',[UserConstant::TELESALES,UserConstant::WAITER,UserConstant::CSKH]);
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id')
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id','type')
             ->with('user')->get();
         $new = [];
         $done = [];

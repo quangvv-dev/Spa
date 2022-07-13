@@ -104,20 +104,25 @@
 
             <div class="card-header">
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-12 row', 'id'=> 'gridForm','role'=>'form')) !!}
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
                 </div>
                 @if($roleGlobal->permission('tasks.employee'))
                     <div class="col-md-2">
-                        {!! Form::select('type', [1=>'Của tôi'], null, array('class' => 'form-control type', 'placeholder'=>'Toàn phòng ban')) !!}
+                        {!! Form::select('sale_id', [\Illuminate\Support\Facades\Auth::user()->id =>'Của tôi'], null, array('class' => 'form-control type', 'placeholder'=>'Toàn phòng ban')) !!}
                     </div>
                     <div class="col-md-2">
                         {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
                     </div>
                     <div class="col-lg-2 col-md-3">
                         {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
+                    </div>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
+                    <div class="col-lg-2">
+                        {!! Form::select('type', [\App\Constants\StatusCode::GOI_LAI=>"Gọi lại",\App\Constants\StatusCode::CSKH=>'CSKH'], null, array('class' => 'form-control', 'placeholder' => 'Loại công việc')) !!}
                     </div>
                 @endif
                 <div class="col-lg-2 col-md-6">

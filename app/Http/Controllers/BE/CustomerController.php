@@ -652,8 +652,13 @@ class CustomerController extends Controller
                                     $user_id = !empty($cskh[$rule->position]) ? $cskh[$rule->position] : 0;
                                     $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
                                     $rule->save();
+                                    $type = StatusCode::CSKH;
+                                    $prefix = "CSKH ";
+
                                 }else{
                                     $user_id = @$customer->telesales_id;
+                                    $type = StatusCode::GOI_LAI;
+                                    $prefix = "Gọi lại ";
                                 }
 
                                 $day = $job->configs->delay_value;
@@ -677,9 +682,9 @@ class CustomerController extends Controller
                                     'priority' => 1,
                                     'branch_id' => @$customer->branch_id,
                                     'customer_status' => @$customer->status_id,
-                                    'type' => 2,
+                                    'type' => $type,
                                     'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => 'CSKH ' . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$customer->branch->name,
+                                    'name' => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$customer->branch->name,
                                     'description' => $text_order . "--" . replaceVariable($sms_content,
                                             @$customer->full_name, @$customer->phone,
                                             @$customer->branch->name, @$customer->branch->phone,

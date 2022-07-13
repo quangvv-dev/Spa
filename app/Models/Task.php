@@ -169,7 +169,7 @@ class Task extends Model
         })
             ->when(isset($input['sale_id']) && isset($input['sale_id']), function ($q) use ($input) {
                 $q->where('user_id', $input['sale_id']);
-            })->when(isset($input['type']) && isset($input['type']), function ($q) use ($input) {
+            })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {
                 $q->where('type', $input['type']);
             })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);

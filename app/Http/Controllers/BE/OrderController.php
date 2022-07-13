@@ -523,8 +523,12 @@ class OrderController extends Controller
                                     $user_id = !empty($cskh[$rule->position]) ? $cskh[$rule->position] : 0;
                                     $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
                                     $rule->save();
+                                    $type = StatusCode::CSKH;
+                                    $prefix = "CSKH ";
                                 } else {
                                     $user_id = @$customer->telesales_id;
+                                    $type = StatusCode::CSKH;
+                                    $prefix = "Gọi lại ";
                                 }
 
                                 $day = $job->configs->delay_value;
@@ -549,9 +553,9 @@ class OrderController extends Controller
                                     'all_day' => 'on',
                                     'priority' => 1,
                                     'branch_id' => @$check3->order->branch_id,
-                                    'type' => 2,
+                                    'type' => $type,
                                     'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => 'CSKH ' . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$check3->order->branch->name,
+                                    'name' => $prefix . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$check3->order->branch->name,
                                     'description' => $text_order . "--" . replaceVariable($sms_content,
                                             @$check3->order->customer->full_name, @$check3->order->customer->phone,
                                             @$check3->order->branch->name, @$check3->order->branch->phone,
