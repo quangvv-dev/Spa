@@ -257,7 +257,7 @@ class AuthController extends BaseApiController
         }
         $device = Otp::where('deviceId', $request->deviceId)->count();
         if ($device > 5) {
-            return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày thiết bị được yêu cầu OTP không quá 5 lần !');
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mỗi ngày thiết bị được yêu cầu OTP không quá 5 lần !');
         }
         $data = Otp::where('phone', $request->phone)->first();
         $otp = Functions::generateRandomNumber();
@@ -285,7 +285,7 @@ class AuthController extends BaseApiController
                     $data->save();
                 }
             } else {
-                return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày SĐT được yêu cầu OTP không quá 5 lần !');
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mỗi ngày SĐT được yêu cầu OTP không quá 5 lần !');
             }
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$err]);
