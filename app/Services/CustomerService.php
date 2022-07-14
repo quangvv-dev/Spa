@@ -51,10 +51,11 @@ class CustomerService
         }
         if (empty($input['carepage_id'])) {
             $input['carepage_id'] = 0;
-        } else {
-            $input['carepage_id'] = Auth::user()->id;
         }
-        $customer = Customer::create($input);
+        $data = $this->data($input);
+        $customer = $this->customer->fill($data);
+        $customer->save();
+
         return $customer;
     }
 
@@ -64,11 +65,7 @@ class CustomerService
             $userLogin = Auth::user()->id;
             $input['mkt_id'] = $userLogin;
         }
-        if (empty($input['carepage_id'])) {
-            $input['carepage_id'] = 0;
-        } else {
-            $input['carepage_id'] = Auth::user()->id;
-        }
+        $input['carepage_id'] = Auth::user()->id;
         $data = $this->data($input);
         $customer = $this->customer->fill($data);
         $customer->save();
