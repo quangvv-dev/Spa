@@ -364,28 +364,31 @@ class AuthController extends BaseApiController
     {
         $validate = [
             'full_name' => "required",
-            'phone' => "required",
-//            'category_id' => "required",
+            'phone'     => "required",
             'branch_id' => "required",
-//            'password' => "required",
+            'otp'       => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
+
+        $otp = Otp::where('phone', $request->phone)->where('otp', $request->otp)->first();
+        if (empty($otp)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
+        }
+
         $input = $request->except('category_id');
-        $input['mkt_id'] = 0;
-        $input['carepage_id'] = 0;
-        $input['telesales_id'] = 0;
-        $input['wallet'] = 0;
-        $input['wallet_ctv'] = 0;
-        $input['post_id'] = 0;
-        $input['status_id'] = Functions::getStatusWithCode('moi');
+        $input['mkt_id']        = 0;
+        $input['carepage_id']   = 0;
+        $input['telesales_id']  = 0;
+        $input['wallet']        = 0;
+        $input['wallet_ctv']    = 0;
+        $input['post_id']       = 0;
+        $input['status_id']     = Functions::getStatusWithCode('moi');
 //        $input['password'] = Hash::make($input['password']);
 
-//        $customer = Customer::create($input);
         $customer = $this->customerService->create($input);
-
         $this->update_code($customer);
         $category = Category::where('name', 'like', '%DV Khác%')->get();
         self::createCustomerGroup($category, $customer->id, $input['branch_id']);
@@ -405,7 +408,6 @@ class AuthController extends BaseApiController
         $code = 'KH' . $customer_id;
         $customer->account_code = $code;
         $customer->save();
-//        $customer->update(['account_code' => $code]);
     }
 
     protected function createCustomerGroup($category, $customer_id, $branch_id)
