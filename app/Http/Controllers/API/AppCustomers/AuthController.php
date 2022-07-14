@@ -236,7 +236,7 @@ class AuthController extends BaseApiController
             $now = strtotime($now);
             $to = strtotime($data->updated_at);
             $distance = round(($now - $to) / 60);
-            if ($data < 6) {
+            if ($data->count < 6) {
                 if ((int)$distance < 15) {
                     return $this->responseApi(ResponseStatusCode::OK, 'OTP chưa hết hiệu lực 15 phút. Chưa thể gửi thêm !');
 
