@@ -115,6 +115,7 @@ Route::get('uri-wallet', 'API\AppCustomers\WalletsController@hiddenWallet');// á
 Route::group(['namespace' => 'API\AppCustomers'], function () { // Route non token
 
     Route::post('otp', 'AuthController@getOtp');
+    Route::post('login-customer-otp', 'AuthController@loginOTP');
     Route::post('login-customer', 'AuthController@login');
     Route::post('forgot-password', 'AuthController@forgotPassword');
     Route::get('check-phone-exist', 'AuthController@checkPhoneExist');

@@ -58,6 +58,35 @@ class AuthController extends BaseApiController
     }
 
     /**
+     * Login APP
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loginOTP(Request $request)
+    {
+        $otp = Otp::where('phone', $request->phone)->where('otp', $request->otp)->first();
+        if (empty($otp)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
+        }
+
+        $info = Customer::where('phone', $request->phone)->first();
+        if (empty($info)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'SĐT chưa được đăng ký');
+        } else {
+            $payload = $info->toArray();
+            $payload['time'] = strtotime(Date::now());
+            $data = [
+                'token' => jwtencode($payload),
+                'info' => new CustomerResource($info),
+            ];
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
+        }
+    }
+
+    /**
      * Check số điện thoại tồn tại
      *
      * @param Request $request
@@ -221,6 +250,11 @@ class AuthController extends BaseApiController
      */
     public function getOtp(Request $request)
     {
+        $validate = ['phone' => "required"];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
         $data = Otp::where('phone', $request->phone)->first();
         $otp = Functions::generateRandomNumber();
         $text = 'Ma xac minh ROYAL: ' . (string)$otp . '. Co hieu luc trong 15 phut. KHONG chia se ma nay voi nguoi khac, ke ca nhan vien ROYAL';
@@ -250,7 +284,7 @@ class AuthController extends BaseApiController
             }
         }
         $err = Functions::sendSmsV3($request->phone, @$text);
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',[$err]);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$err]);
     }
 
     /**
