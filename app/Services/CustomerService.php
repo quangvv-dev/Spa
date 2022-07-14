@@ -42,19 +42,11 @@ class CustomerService
 
     public function createApi($input)
     {
-        if ($input['mkt_id'] === null) {
-            $userLogin = Auth::user()->id;
-            $input['mkt_id'] = $userLogin;
-        }
-        if (empty($input['telesales_id'])) {
-            $input['telesales_id'] = 0;
-        }
-        if (empty($input['carepage_id'])) {
-            $input['carepage_id'] = 0;
-        }
-        $data = $this->data($input);
-        $customer = $this->customer->fill($data);
-        $customer->save();
+        $input['mkt_id'] = 0;
+        $input['carepage_id'] = 0;
+        $input['telesales_id'] = 0;
+
+        $customer = Customer::create($input);
 
         return $customer;
     }

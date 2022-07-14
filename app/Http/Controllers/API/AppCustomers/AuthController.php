@@ -383,9 +383,6 @@ class AuthController extends BaseApiController
         }
 
         $input = $request->except('category_id');
-        $input['mkt_id'] = 0;
-        $input['carepage_id'] = 0;
-        $input['telesales_id'] = 0;
         $input['wallet'] = 0;
         $input['wallet_ctv'] = 0;
         $input['post_id'] = 0;
