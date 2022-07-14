@@ -250,10 +250,14 @@ class AuthController extends BaseApiController
      */
     public function getOtp(Request $request)
     {
-        $validate = ['phone' => "required"];
+        $validate = ['phone' => "required", 'deviceId' => "required"];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $device = Otp::where('deviceId', $request->deviceId)->count();
+        if ($device > 5) {
+            return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày thiết bị được yêu cầu OTP không quá 5 lần !');
         }
         $data = Otp::where('phone', $request->phone)->first();
         $otp = Functions::generateRandomNumber();
@@ -264,6 +268,7 @@ class AuthController extends BaseApiController
                 'phone' => $request->phone,
                 'otp' => $otp,
                 'count' => 1,
+                'deviceId' => $request->deviceId,
             ]);
         } else {
             $now = Carbon::now()->format('Y-m-d H:i:s');
@@ -280,7 +285,7 @@ class AuthController extends BaseApiController
                     $data->save();
                 }
             } else {
-                return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày chỉ được yêu cầu OTP không quá 5 lần !');
+                return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày SĐT được yêu cầu OTP không quá 5 lần !');
             }
         }
         $err = Functions::sendSmsV3($request->phone, @$text);
@@ -364,9 +369,9 @@ class AuthController extends BaseApiController
     {
         $validate = [
             'full_name' => "required",
-            'phone'     => "required",
+            'phone' => "required",
             'branch_id' => "required",
-            'otp'       => "required",
+            'otp' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -379,13 +384,13 @@ class AuthController extends BaseApiController
         }
 
         $input = $request->except('category_id');
-        $input['mkt_id']        = 0;
-        $input['carepage_id']   = 0;
-        $input['telesales_id']  = 0;
-        $input['wallet']        = 0;
-        $input['wallet_ctv']    = 0;
-        $input['post_id']       = 0;
-        $input['status_id']     = Functions::getStatusWithCode('moi');
+        $input['mkt_id'] = 0;
+        $input['carepage_id'] = 0;
+        $input['telesales_id'] = 0;
+        $input['wallet'] = 0;
+        $input['wallet_ctv'] = 0;
+        $input['post_id'] = 0;
+        $input['status_id'] = Functions::getStatusWithCode('moi');
 //        $input['password'] = Hash::make($input['password']);
 
         $customer = $this->customerService->create($input);
@@ -402,7 +407,7 @@ class AuthController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
-    public function update_code($customer)
+    public function update_codđae($customer)
     {
         $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
         $code = 'KH' . $customer_id;
