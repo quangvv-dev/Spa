@@ -277,8 +277,7 @@ class AuthController extends BaseApiController
             $distance = round(($now - $to) / 60);
             if ($data->count < 6) {
                 if ((int)$distance < 15) {
-                    return $this->responseApi(ResponseStatusCode::OK, 'OTP chưa hết hiệu lực 15 phút. Chưa thể gửi thêm !');
-
+                    return $this->responseApi(ResponseStatusCode::OK, 'OTP chưa hết hiệu lực 15 phút. Vui lòng kiểm tra tin nhắn !');
                 } else {
                     $err = Functions::sendSmsV3($request->phone, @$text);
                     $data->otp = $otp;
