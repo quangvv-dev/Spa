@@ -81,7 +81,7 @@ class AuthController extends BaseApiController
                 'token' => jwtencode($payload),
                 'info' => new CustomerResource($info),
             ];
-            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+            return $this->responseApi(ResponseStatusCode::OK, 'Đăng nhập thành công', $data);
 
         }
     }
@@ -235,9 +235,9 @@ class AuthController extends BaseApiController
             }
             $customer->is_gioithieu = $agency->id;
             $customer->save();
-            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+            return $this->responseApi(ResponseStatusCode::OK, 'Đăng ký thành công');
         } else {
-            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'Token không hợp lệ');
+            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'Không tồn tại khách hàng này');
         }
 
     }
