@@ -235,15 +235,20 @@ class AuthController extends BaseApiController
             $now = Carbon::now()->format('Y-m-d H:i:s');
             $now = strtotime($now);
             $to = strtotime($data->updated_at);
-            $distance = ($to - $now) / 3600;
-            if ($distance > 0 && $distance < 15) {
-                return $this->responseApi(ResponseStatusCode::OK, 'Sau 15 phút mới có thể lấy OTP tiếp !');
+            $distance = round(($now - $to) / 60);
+            if ($data < 6) {
+                if ((int)$distance < 15) {
+                    return $this->responseApi(ResponseStatusCode::OK, 'OTP chưa hết hiệu lực 15 phút. Chưa thể gửi thêm !');
 
+                } else {
+                    $data->otp = $otp;
+                    $data->count = $data->count + 1;
+                    $data->save();
+                }
             } else {
-                $data->otp = $otp;
-                $data->save();
+                return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày chỉ được yêu cầu OTP không quá 5 lần !');
             }
-//            $err = Functions::sendSmsV3($request->phone, @$text);
+            $err = Functions::sendSmsV3($request->phone, @$text);
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
     }
