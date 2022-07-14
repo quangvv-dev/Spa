@@ -40,17 +40,36 @@ class CustomerService
         return $customer;
     }
 
-    public function create($input)
+    public function createApi($input)
     {
-
         if ($input['mkt_id'] === null) {
             $userLogin = Auth::user()->id;
             $input['mkt_id'] = $userLogin;
         }
-        $input['carepage_id'] = Auth::user()->id;
+        if (empty($input['telesales_id'])) {
+            $input['telesales_id'] = 0;
+        }
+        if (empty($input['carepage_id'])) {
+            $input['carepage_id'] = 0;
+        } else {
+            $input['carepage_id'] = Auth::user()->id;
+        }
+        $customer = Customer::create($input);
+        return $customer;
+    }
 
+    public function create($input)
+    {
+        if ($input['mkt_id'] === null) {
+            $userLogin = Auth::user()->id;
+            $input['mkt_id'] = $userLogin;
+        }
+        if (empty($input['carepage_id'])) {
+            $input['carepage_id'] = 0;
+        } else {
+            $input['carepage_id'] = Auth::user()->id;
+        }
         $data = $this->data($input);
-
         $customer = $this->customer->fill($data);
         $customer->save();
 

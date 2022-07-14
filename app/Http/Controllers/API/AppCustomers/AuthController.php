@@ -367,7 +367,7 @@ class AuthController extends BaseApiController
             'phone' => "required",
 //            'category_id' => "required",
             'branch_id' => "required",
-            'password' => "required",
+//            'password' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -375,17 +375,20 @@ class AuthController extends BaseApiController
         }
         $input = $request->except('category_id');
         $input['mkt_id'] = 0;
+        $input['carepage_id'] = 0;
+        $input['telesales_id'] = 0;
         $input['wallet'] = 0;
+        $input['wallet_ctv'] = 0;
         $input['post_id'] = 0;
         $input['status_id'] = Functions::getStatusWithCode('moi');
-        $input['password'] = Hash::make($input['password']);
+//        $input['password'] = Hash::make($input['password']);
 
+//        $customer = Customer::create($input);
         $customer = $this->customerService->create($input);
+
         $this->update_code($customer);
-//        if (count($request->category_id)) {
-        $category = Category::whereIn('name', 'like', '%DV Khác%')->get();
+        $category = Category::where('name', 'like', '%DV Khác%')->get();
         self::createCustomerGroup($category, $customer->id, $input['branch_id']);
-//        }
         $payload = $customer->toArray();
         $payload['time'] = strtotime(Date::now());
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
@@ -400,7 +403,9 @@ class AuthController extends BaseApiController
     {
         $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
         $code = 'KH' . $customer_id;
-        $customer->update(['account_code' => $code]);
+        $customer->account_code = $code;
+        $customer->save();
+//        $customer->update(['account_code' => $code]);
     }
 
     protected function createCustomerGroup($category, $customer_id, $branch_id)
