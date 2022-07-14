@@ -403,7 +403,7 @@ class AuthController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
-    public function update_codđae($customer)
+    public function update_code($customer)
     {
         $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
         $code = 'KH' . $customer_id;
