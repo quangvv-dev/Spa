@@ -262,8 +262,8 @@ class AuthController extends BaseApiController
         $data = Otp::where('phone', $request->phone)->first();
         $otp = Functions::generateRandomNumber();
         $text = 'Ma xac minh ROYAL: ' . (string)$otp . '. Co hieu luc trong 15 phut. KHONG chia se ma nay voi nguoi khac, ke ca nhan vien ROYAL';
-
         if (empty($data)) {
+            $err = Functions::sendSmsV3($request->phone, @$text);
             Otp::create([
                 'phone' => $request->phone,
                 'otp' => $otp,
@@ -280,6 +280,7 @@ class AuthController extends BaseApiController
                     return $this->responseApi(ResponseStatusCode::OK, 'OTP chưa hết hiệu lực 15 phút. Chưa thể gửi thêm !');
 
                 } else {
+                    $err = Functions::sendSmsV3($request->phone, @$text);
                     $data->otp = $otp;
                     $data->count = $data->count + 1;
                     $data->save();
@@ -288,7 +289,6 @@ class AuthController extends BaseApiController
                 return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày SĐT được yêu cầu OTP không quá 5 lần !');
             }
         }
-        $err = Functions::sendSmsV3($request->phone, @$text);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$err]);
     }
 
