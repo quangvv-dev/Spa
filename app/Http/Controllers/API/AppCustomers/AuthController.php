@@ -243,9 +243,9 @@ class AuthController extends BaseApiController
                 $data->otp = $otp;
                 $data->save();
             }
-            Functions::sendSmsV3($request->phone, @$text);
+            $err = Functions::sendSmsV3($request->phone, @$text);
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$err]);
     }
 
     /**
