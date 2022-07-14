@@ -250,7 +250,7 @@ class AuthController extends BaseApiController
             }
             $err = Functions::sendSmsV3($request->phone, @$text);
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',[$err]);
     }
 
     /**
