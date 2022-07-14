@@ -18,6 +18,7 @@ class CreateOtpsTable extends Migration
             $table->string('phone')->comment('Số điện thoại');
             $table->integer('otp')->nullable()->comment('OTP');
             $table->integer('count')->nullable()->comment('Số lần gửi otp trong ngày');
+            $table->string('deviceId')->nullable()->comment('Mã thiết bị');
             $table->timestamps();
         });
     }
