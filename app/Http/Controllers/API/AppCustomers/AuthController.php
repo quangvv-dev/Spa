@@ -248,8 +248,8 @@ class AuthController extends BaseApiController
             } else {
                 return $this->responseApi(ResponseStatusCode::OK, 'Mỗi ngày chỉ được yêu cầu OTP không quá 5 lần !');
             }
-            $err = Functions::sendSmsV3($request->phone, @$text);
         }
+        $err = Functions::sendSmsV3($request->phone, @$text);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',[$err]);
     }
 
