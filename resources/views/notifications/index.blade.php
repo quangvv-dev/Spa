@@ -26,7 +26,6 @@
         $('body').delegate('td', 'click', function () {
             var id = $(this).data('id');
             var url = $(this).data('url');
-            console.log(id, url);
             $.ajax({
                 type: 'GET',
                 url: '/ajax/change-notification/' + id,

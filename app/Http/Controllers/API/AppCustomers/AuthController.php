@@ -10,6 +10,7 @@ use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\Otp;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -49,7 +50,7 @@ class AuthController extends BaseApiController
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
                 $data = [
                     'token' => jwtencode($payload),
-                    'info'  => new CustomerResource($info),
+                    'info' => new CustomerResource($info),
                 ];
                 return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
             }
@@ -88,7 +89,7 @@ class AuthController extends BaseApiController
     public function forgotPassword(Request $request)
     {
         $validate = [
-            'phone'    => "required",
+            'phone' => "required",
             'password' => "required",
         ];
         $this->validator($request, $validate);
@@ -124,7 +125,7 @@ class AuthController extends BaseApiController
         $messages = [
             'old_password.required' => 'Vui lòng nhập mật khẩu cũ',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới',
-            'new_password.min'      => 'Mật khẩu phải lớn hơn 6 ký tự!',
+            'new_password.min' => 'Mật khẩu phải lớn hơn 6 ký tự!',
         ];
 
         if ($user->password != '' || $user->password != null) {
@@ -140,7 +141,7 @@ class AuthController extends BaseApiController
 
         if ($validator->fails()) {
             return response()->json([
-                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->all(),
             ]);
         }
@@ -194,7 +195,7 @@ class AuthController extends BaseApiController
             if ($customer->is_gioithieu) {
                 $data = [
                     'full_name' => $customer->gioithieu->full_name,
-                    'phone'     => $customer->gioithieu->phone,
+                    'phone' => $customer->gioithieu->phone,
                 ];
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Khách hàng đã nhập người giới thiệu',
                     $data);
@@ -213,6 +214,41 @@ class AuthController extends BaseApiController
     }
 
     /**
+     * Lấy OTP
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getOtp(Request $request)
+    {
+        $data = Otp::where('phone', $request->phone)->first();
+        $otp = Functions::generateRandomNumber();
+        $text = 'Ma xac minh ROYAL: ' . (string)$otp . '. Co hieu luc trong 15 phut. KHONG chia se ma nay voi nguoi khac, ke ca nhan vien ROYAL';
+
+        if (empty($data)) {
+            Otp::create([
+                'phone' => $request->phone,
+                'otp' => $otp,
+                'count' => 1,
+            ]);
+        } else {
+            $now = Carbon::now()->format('Y-m-d H:i:s');
+            $now = strtotime($now);
+            $to = strtotime($data->updated_at);
+            $distance = ($to - $now) / 3600;
+            if ($distance > 0 && $distance < 15) {
+                return $this->responseApi(ResponseStatusCode::OK, 'Sau 15 phút mới có thể lấy OTP tiếp !');
+
+            } else {
+                $data->otp = $otp;
+                $data->save();
+            }
+            Functions::sendSmsV3($request->phone, @$text);
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+    }
+
+    /**
      * Update device token firebase
      *
      * @param Request $request
@@ -227,7 +263,7 @@ class AuthController extends BaseApiController
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->first(),
             ]);
         }
@@ -288,11 +324,11 @@ class AuthController extends BaseApiController
     public function register(Request $request)
     {
         $validate = [
-            'full_name'   => "required",
-            'phone'       => "required",
+            'full_name' => "required",
+            'phone' => "required",
 //            'category_id' => "required",
-            'branch_id'   => "required",
-            'password'    => "required",
+            'branch_id' => "required",
+            'password' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -308,15 +344,15 @@ class AuthController extends BaseApiController
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
 //        if (count($request->category_id)) {
-            $category = Category::whereIn('name','like', '%DV Khác%')->get();
-            self::createCustomerGroup($category, $customer->id, $input['branch_id']);
+        $category = Category::whereIn('name', 'like', '%DV Khác%')->get();
+        self::createCustomerGroup($category, $customer->id, $input['branch_id']);
 //        }
         $payload = $customer->toArray();
         $payload['time'] = strtotime(Date::now());
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
         $data = [
             'token' => jwtencode($payload),
-            'info'  => new CustomerResource($customer),
+            'info' => new CustomerResource($customer),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
@@ -335,8 +371,8 @@ class AuthController extends BaseApiController
                 CustomerGroup::create([
                     'customer_id' => $customer_id,
                     'category_id' => $item->id,
-                    'branch_id'   => $branch_id,
-                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                    'branch_id' => $branch_id,
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                 ]);
             }
         }

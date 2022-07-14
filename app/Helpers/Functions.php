@@ -35,6 +35,24 @@ class Functions
     }
 
     /**
+     * Random voucher
+     *
+     * @param length
+     *
+     * @return random String
+     */
+    public static function generateRandomNumber($length = 6)
+    {
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomNumber = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomNumber .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomNumber;
+    }
+
+    /**
      * check action trang thai khach hang in rules
      *
      * @param $config
