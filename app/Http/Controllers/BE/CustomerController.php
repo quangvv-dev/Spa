@@ -68,11 +68,14 @@ class CustomerController extends Controller
         $this->taskService = $taskService;
         $this->customerService = $customerService;
 
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->select('name', 'id')->pluck('name', 'id')->toArray();//mối quan hệ
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->select('name', 'id')->pluck('name',
+            'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
-        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->pluck('name', 'id')->toArray();// nguồn KH
+        $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->pluck('name',
+            'id')->toArray();// nguồn KH
         $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
-        $marketingUsers = User::whereIn('department_id', [DepartmentConstant::MARKETING])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::whereIn('department_id', [DepartmentConstant::MARKETING])->select('full_name',
+            'id')->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::select('id', 'name')->pluck('name', 'id')->toArray();
         $telesales = [];
         User::select('id', 'department_id', 'full_name')->get()->map(function ($item) use (&$telesales) {
@@ -86,20 +89,20 @@ class CustomerController extends Controller
             return $item;
         });
         $the_rest = [
-            OrderConstant::THE_REST => 'Còn nợ',
+            OrderConstant::THE_REST  => 'Còn nợ',
             OrderConstant::NONE_REST => 'Đã thanh toán',
         ];
         $location = Branch::$location;
         view()->share([
-            'the_rest' => $the_rest,
-            'status' => $status,
-            'group' => $group,
-            'source' => $source,
-            'branchs' => $branchs,
-            'telesales' => $telesales,
+            'the_rest'       => $the_rest,
+            'status'         => $status,
+            'group'          => $group,
+            'source'         => $source,
+            'branchs'        => $branchs,
+            'telesales'      => $telesales,
             'marketingUsers' => $marketingUsers,
-            'genitives' => $genitives,
-            'location' => $location,
+            'genitives'      => $genitives,
+            'location'       => $location,
         ]);
     }
 
@@ -127,7 +130,8 @@ class CustomerController extends Controller
         if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
             unset($input['branch_id']);
         }
-        $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
+        $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name',
+            'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
         $customers = Customer::search($input);
@@ -187,7 +191,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'fb_name' => $request->full_name,
+            'fb_name'   => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
         ]);
         $input = $request->except(['group_id', 'image']);
@@ -236,13 +240,15 @@ class CustomerController extends Controller
     {
         $title = 'Trao đổi';
         $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer')->findOrFail($id);
+        $curent_branch = Auth::user()->branch_id ?Auth::user()->branch_id: '';
         if (isset($customer) && $customer) {
-            $waiters = User::where('role', UserConstant::TECHNICIANS)->where('branch_id', $customer->branch_id)->pluck('full_name', 'id');
+            $waiters = User::where('role', UserConstant::TECHNICIANS)->where('branch_id',
+                $curent_branch)->pluck('full_name', 'id');
         } else {
             $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
         }
-        $location = isset(Auth::user()->branch)?[0,Auth::user()->branch->location_id]:[0,@$customer->branch->location_id];
-        $tips = Tip::whereIn('location_id',$location)->pluck('name','id')->toArray();
+        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id,];
+        $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
 
         $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
@@ -295,7 +301,8 @@ class CustomerController extends Controller
         }
 
         if ($request->tasks) {
-            $tasks = Task::where('customer_id', $request->tasks)->orderByDesc('date_from')->paginate(StatusCode::PAGINATE_20);
+            $tasks = Task::where('customer_id',
+                $request->tasks)->orderByDesc('date_from')->paginate(StatusCode::PAGINATE_20);
             return view('tasks._form', compact('tasks'));
         }
 
@@ -311,14 +318,14 @@ class CustomerController extends Controller
             }
             $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
-            return view('customers.order', compact('orders', 'waiters','tips'));
+            return view('customers.order', compact('orders', 'waiters', 'tips'));
         }
         //END
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
                 'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'departments', 'history', 'wallet',
-                'package', 'call_center', 'orders','tips'));
+                'package', 'call_center', 'orders', 'tips'));
     }
 
     /**
@@ -341,7 +348,7 @@ class CustomerController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -363,8 +370,9 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Request $request
+     * @param Request  $request
      * @param Customer $customer
+     *
      * @throws \Exception
      */
     public function destroy(Request $request, Customer $customer)
@@ -408,7 +416,10 @@ class CustomerController extends Controller
         }
         $now = Carbon::now()->format('d/m/Y');
         $data = Customer::orderBy('id', 'desc')
-            ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+            ->whereBetween('created_at', [
+                Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                Functions::yearMonthDay($request->end_date) . " 23:59:59",
+            ])
             ->when(isset($request->gender), function ($query) use ($request) {
                 $query->where('gender', $request->gender);
             })->with('orders', 'categories');
@@ -464,7 +475,8 @@ class CustomerController extends Controller
                         foreach ($ex->categories as $category) {
                             $categoryName .= $category->name . ', ';
                         }
-                        $comment = GroupComment::select('created_at', 'messages')->where('customer_id', $ex->id)->orderByDesc('id')->take(3)->get();
+                        $comment = GroupComment::select('created_at', 'messages')->where('customer_id',
+                            $ex->id)->orderByDesc('id')->take(3)->get();
                         $date_comment = count($comment) ? $comment->pluck('created_at')->toArray() : [];
                         $messages = count($comment) ? $comment->pluck('messages')->toArray() : [];
                         $date_comment = count($messages) ? implode("||", $date_comment) : '';
@@ -518,22 +530,22 @@ class CustomerController extends Controller
                         if (empty($check)) {
                             if ($row['so_dien_thoai']) {
                                 $data = Customer::create([
-                                    'full_name' => $row['ten_khach_hang'],
+                                    'full_name'    => $row['ten_khach_hang'],
                                     'account_code' => !empty($row['ma_khach_hang']) ? $row['ma_khach_hang'] : "KH" . ($k + 1),
-                                    'mkt_id' => @Auth::user()->id,
+                                    'mkt_id'       => @Auth::user()->id,
                                     'telesales_id' => isset($telesale) ? $telesale->id : 1,
-                                    'status_id' => isset($status) ? $status->id : 1,
-                                    'source_id' => isset($source) ? $source->id : 18,
-                                    'phone' => strlen($row['so_dien_thoai']) > 9 ? $row['so_dien_thoai'] : '0' . $row['so_dien_thoai'],
-                                    'birthday' => isset($row['sinh_nhat']) ? $row['sinh_nhat'] : '',
-                                    'gender' => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
-                                    'address' => $row['dia_chi'] ?: '',
-                                    'facebook' => $row['link_facebook'] ?: '',
-                                    'description' => $row['mo_ta'],
-                                    'wallet' => !empty($row['so_du_vi']) ? $row['so_du_vi'] : 0,
-                                    'branch_id' => isset($branch) && $branch ? $branch->id : '',
-                                    'created_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
-                                    'updated_at' => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                    'status_id'    => isset($status) ? $status->id : 1,
+                                    'source_id'    => isset($source) ? $source->id : 18,
+                                    'phone'        => strlen($row['so_dien_thoai']) > 9 ? $row['so_dien_thoai'] : '0' . $row['so_dien_thoai'],
+                                    'birthday'     => isset($row['sinh_nhat']) ? $row['sinh_nhat'] : '',
+                                    'gender'       => str_slug($row['gioi_tinh']) == 'nu' ? 0 : 1,
+                                    'address'      => $row['dia_chi'] ?: '',
+                                    'facebook'     => $row['link_facebook'] ?: '',
+                                    'description'  => $row['mo_ta'],
+                                    'wallet'       => !empty($row['so_du_vi']) ? $row['so_du_vi'] : 0,
+                                    'branch_id'    => isset($branch) && $branch ? $branch->id : '',
+                                    'created_at'   => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
+                                    'updated_at'   => isset($date) && $date ? $date . ' 00:00:00' : Carbon::now()->format('Y-m-d H:i:s'),
                                 ]);
                                 if (count($category)) {
                                     foreach ($category as $item) {
@@ -542,8 +554,8 @@ class CustomerController extends Controller
                                             CustomerGroup::create([
                                                 'customer_id' => $data->id,
                                                 'category_id' => isset($field) ? $field->id : 0,
-                                                'branch_id' => $data->branch_id,
-                                                'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                                                'branch_id'   => $data->branch_id,
+                                                'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                                             ]);
                                         }
                                     }
@@ -551,8 +563,8 @@ class CustomerController extends Controller
                                     CustomerGroup::create([
                                         'customer_id' => $data->id,
                                         'category_id' => 0,
-                                        'branch_id' => $data->branch_id,
-                                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                                        'branch_id'   => $data->branch_id,
+                                        'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                                     ]);
                                 }
 
@@ -565,11 +577,11 @@ class CustomerController extends Controller
                                         $item = Carbon::createFromFormat('H:i d-m-Y', trim($item))->format('Y-m-d H:i');
                                         $comment_value[] = [
                                             'customer_id' => $data->id,
-                                            'user_id' => Auth::user()->id,
-                                            'messages' => @$row['noi_dung_trao_doi'][$key_date],
-                                            'created_at' => $item,
-                                            'updated_at' => $item,
-                                            'branch_id' => $data->branch_id,
+                                            'user_id'     => Auth::user()->id,
+                                            'messages'    => @$row['noi_dung_trao_doi'][$key_date],
+                                            'created_at'  => $item,
+                                            'updated_at'  => $item,
+                                            'branch_id'   => $data->branch_id,
                                         ];
                                     }
                                     GroupComment::insertOrIgnore($comment_value);
@@ -626,18 +638,18 @@ class CustomerController extends Controller
                                     $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
                                     if (isset($err) && $err) {
                                         HistorySms::insert([
-                                            'phone' => @$customer->phone,
+                                            'phone'       => @$customer->phone,
                                             'campaign_id' => 0,
-                                            'message' => $text,
-                                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                            'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                            'message'     => $text,
+                                            'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                            'updated_at'  => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
                                         ]);
                                     }
                                 } else {
                                     SchedulesSms::create([
-                                        'phone' => $customer->phone,
-                                        'content' => @$text,
-                                        'exactly_value' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                        'phone'           => $customer->phone,
+                                        'content'         => @$text,
+                                        'exactly_value'   => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
                                         'status_customer' => @$customer->status_id,
                                     ]);
                                 }
@@ -648,14 +660,14 @@ class CustomerController extends Controller
 
                         if (count($jobs)) {
                             foreach ($jobs as $job) {
-                                if (isset($job->configs->type_job) && @$job->configs->type_job =='cskh' && count($cskh)){
+                                if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh' && count($cskh)) {
                                     $user_id = !empty($cskh[$rule->position]) ? $cskh[$rule->position] : 0;
                                     $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
                                     $rule->save();
                                     $type = StatusCode::CSKH;
                                     $prefix = "CSKH ";
 
-                                }else{
+                                } else {
                                     $user_id = @$customer->telesales_id;
                                     $type = StatusCode::GOI_LAI;
                                     $prefix = "Gọi lại ";
@@ -672,20 +684,21 @@ class CustomerController extends Controller
                                 }
                                 $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
                                 $input = [
-                                    'customer_id' => @$customer->id,
-                                    'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
-                                    'time_from' => '07:00',
-                                    'time_to' => '21:00',
-                                    'code' => 'CSKH',
-                                    'user_id' => $user_id,
-                                    'all_day' => 'on',
-                                    'priority' => 1,
-                                    'branch_id' => @$customer->branch_id,
+                                    'customer_id'     => @$customer->id,
+                                    'date_from'       => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                    'time_from'       => '07:00',
+                                    'time_to'         => '21:00',
+                                    'code'            => 'CSKH',
+                                    'user_id'         => $user_id,
+                                    'all_day'         => 'on',
+                                    'priority'        => 1,
+                                    'branch_id'       => @$customer->branch_id,
                                     'customer_status' => @$customer->status_id,
-                                    'type' => $type,
-                                    'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$customer->branch->name,
-                                    'description' => $text_order . "--" . replaceVariable($sms_content,
+                                    'type'            => $type,
+                                    'sms_content'     => Functions::vi_to_en($sms_content),
+                                    'name'            => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",
+                                            $text_category) . ' ,' . @$customer->branch->name,
+                                    'description'     => $text_order . "--" . replaceVariable($sms_content,
                                             @$customer->full_name, @$customer->phone,
                                             @$customer->branch->name, @$customer->branch->phone,
                                             @$customer->branch->address),
@@ -700,13 +713,13 @@ class CustomerController extends Controller
                                 $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
                                     : '📅📅📅 Bạn có công việc chăm sóc mới !';
                                 Notification::insert([
-                                    'title' => $title,
-                                    'user_id' => $task->user_id,
-                                    'type' => $task->type,
-                                    'task_id' => $task->id,
-                                    'status' => NotificationConstant::HIDDEN,
+                                    'title'      => $title,
+                                    'user_id'    => $task->user_id,
+                                    'type'       => $task->type,
+                                    'task_id'    => $task->id,
+                                    'status'     => NotificationConstant::HIDDEN,
                                     'created_at' => $task->date_from . ' ' . $task->time_from,
-                                    'data' => json_encode((array)['task_id' => $task->id]),
+                                    'data'       => json_encode((array)['task_id' => $task->id]),
                                 ]);
                             }
                         }
@@ -752,7 +765,7 @@ class CustomerController extends Controller
         $services = Services::handleChart($arr, $input);
         $service1 = $services->orderBy('count_order', 'desc')->paginate(10);
         $orders = [
-            'sum' => $services->get()->sum('count_order'),
+            'sum'   => $services->get()->sum('count_order'),
             'count' => $services->get()->sum('count'),
         ];
 
@@ -863,7 +876,7 @@ class CustomerController extends Controller
 
         return [
             'customer' => $customer,
-            'data' => $telesales,
+            'data'     => $telesales,
         ];
     }
 
@@ -876,8 +889,8 @@ class CustomerController extends Controller
                 CustomerGroup::create([
                     'customer_id' => $customer_id,
                     'category_id' => $item->id,
-                    'branch_id' => $branch_id,
-                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i')
+                    'branch_id'   => $branch_id,
+                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                 ]);
             }
         }
