@@ -189,6 +189,7 @@ class HomePageController extends BaseApiController
                     $support2 = isset($i->support2) ? '| ' . $i->support2->full_name : '';
 
                     return [
+                        'id' => $i->id,
                         'support' => $support . $support2,
                         'employee' => isset($i->user) ? $i->user->full_name : '',
                         'date' => @\date('d-m-Y', strtotime($i->created_at)),
@@ -197,6 +198,8 @@ class HomePageController extends BaseApiController
                         'phone' => isset($i->branch) ? $i->branch->phone : '',
                         'service' => isset($i->service) ? $i->service->name : '',
                         'image' => isset($i->service) && !empty($i->service->images) ? $i->service->images : '',
+                        'rate' =>@$i->rate,
+                        'comment_rate' =>@$i->comment_rate,
                     ];
                 });
         }

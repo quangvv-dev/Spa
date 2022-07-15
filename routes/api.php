@@ -156,6 +156,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API\AppCustome
     Route::post('withdraw', 'WalletsController@withdraw');// Y/C rút tiền
     Route::get('orders-with-me', 'OrdersController@index');
     Route::post('rate-orders/{id}', 'OrdersController@rate');
+    Route::post('rate-history/{id}', 'OrdersController@rateHistory');
 
     Route::get('notification-customers', 'NotificationController@index');//thông báo khách hàng
     Route::get('count-notification-customers', 'NotificationController@countNotification');//Đếm số thông báo
