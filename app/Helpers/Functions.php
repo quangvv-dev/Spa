@@ -720,7 +720,7 @@ class Functions
      * @param $otp
      * @return int
      */
-    public function checkExpiredOtp($otp)
+    public static function checkExpiredOtp($otp)
     {
         $now = Carbon::now()->format('Y-m-d H:i:s');
         $now = strtotime($now);
