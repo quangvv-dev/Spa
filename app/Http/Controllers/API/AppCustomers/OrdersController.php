@@ -48,13 +48,15 @@ class OrdersController extends BaseApiController
     {
         $customer = $request->jwtUser;
         $request->merge(['type' => 'app-customer']);
-        $orders = Order::select('id', 'all_total', 'gross_revenue', 'role_type', 'the_rest', 'rate', 'comment_rate', 'created_at')
-            ->where('member_id', $customer->id)->orderByDesc('id')->with('orderDetails')->paginate(StatusCode::PAGINATE_10);
+        $orders = Order::select('id', 'all_total', 'gross_revenue', 'role_type', 'the_rest', 'rate', 'comment_rate',
+            'created_at')
+            ->where('member_id',
+                $customer->id)->orderByDesc('id')->with('orderDetails')->paginate(StatusCode::PAGINATE_10);
 
         $datas = [
-            'data' => OrderResource::collection($orders),
+            'data'        => OrderResource::collection($orders),
             'currentPage' => !empty($request->page) ? $request->page : 1,
-            'lastPage' => $orders->lastPage(),
+            'lastPage'    => $orders->lastPage(),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
     }
@@ -84,8 +86,8 @@ class OrdersController extends BaseApiController
                 $order->comment_rate = !empty($request->comment_rate) ? $request->comment_rate : '';
                 $order->save();
                 $data = [
-                    'id' => $order->id,
-                    'rate' => (int)$order->rate,
+                    'id'           => $order->id,
+                    'rate'         => (int)$order->rate,
                     'comment_rate' => $order->comment_rate,
                 ];
                 return $this->responseApi(ResponseStatusCode::OK, 'Đánh giá đơn hàng thành công', $data);
@@ -109,19 +111,15 @@ class OrdersController extends BaseApiController
         }
         $order = HistoryUpdateOrder::find($id);// ls trừ liệu trình
         if (!empty($order)) {
-            if ($order->member_id == $customer->id) {
-                $order->rate = $request->rate;
-                $order->comment_rate = !empty($request->comment_rate) ? $request->comment_rate : '';
-                $order->save();
-                $data = [
-                    'id' => $order->id,
-                    'rate' => (int)$order->rate,
-                    'comment_rate' => $order->comment_rate,
-                ];
-                return $this->responseApi(ResponseStatusCode::OK, 'Đánh giá liệu trình thành công', $data);
-            } else {
-                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Đây không phải đơn của bạn');
-            }
+            $order->rate = $request->rate;
+            $order->comment_rate = !empty($request->comment_rate) ? $request->comment_rate : '';
+            $order->save();
+            $data = [
+                'id'           => $order->id,
+                'rate'         => (int)$order->rate,
+                'comment_rate' => $order->comment_rate,
+            ];
+            return $this->responseApi(ResponseStatusCode::OK, 'Đánh giá liệu trình thành công', $data);
         } else {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tìm thấy liệu trình');
         }
@@ -139,12 +137,12 @@ class OrdersController extends BaseApiController
         $package = PackageWallet::findOrFail($request->package_id);
         $customer = $request->jwtUser;
         $input = [
-            'package_id' => $package->id,
+            'package_id'  => $package->id,
             'customer_id' => $customer->id,
-            'user_id' => $customer->id,
-            'price' => $package->price,
+            'user_id'     => $customer->id,
+            'price'       => $package->price,
             'order_price' => $package->order_price,
-            'branch_id' => $customer->branch_id ?: 1,
+            'branch_id'   => $customer->branch_id ?: 1,
         ];
         $wallet = $this->walletService->create($input);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $wallet);
@@ -171,9 +169,9 @@ class OrdersController extends BaseApiController
         $page = !empty($request->page) ? $request->page : 1;
         $value = Functions::paginationArray($page, $data, StatusCode::PAGINATE_10);
         $datas = [
-            'data' => $value,
+            'data'        => $value,
             'currentPage' => $page,
-            'lastPage' => (int)round(count($data) / StatusCode::PAGINATE_10) > 0 ? round(count($data) / StatusCode::PAGINATE_10) : 1,
+            'lastPage'    => (int)round(count($data) / StatusCode::PAGINATE_10) > 0 ? round(count($data) / StatusCode::PAGINATE_10) : 1,
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $datas);
     }
@@ -270,21 +268,21 @@ class OrdersController extends BaseApiController
         $key1 = config('app.ZALOPAY_KEY1');
         $key2 = config('app.ZALOPAY_KEY2');
         $postInput = [
-            'amount' => $value['amount'],
-            'app_id' => $app_id,
-            'app_time' => floor(microtime(true) * 1000),
+            'amount'       => $value['amount'],
+            'app_id'       => $app_id,
+            'app_time'     => floor(microtime(true) * 1000),
             'app_trans_id' => date("ymd") . "_" . $value['order_id'] . "_" . time(),
-            'app_user' => 'demo',
-            'bankcode' => $value['bankcode'],
-            'currency' => '',
-            'description' => 'Demo - Thanh toán đơn hàng', #220609_13626996
+            'app_user'     => 'demo',
+            'bankcode'     => $value['bankcode'],
+            'currency'     => '',
+            'description'  => 'Demo - Thanh toán đơn hàng', #220609_13626996
             'callback_url' => request()->getSchemeAndHttpHost() . '/api/callback-zalo-pay',
             'redirect_url' => request()->getSchemeAndHttpHost() . '/vnpay',
-            'embed_data' => $value['embed_data'],
-            'item' => \GuzzleHttp\json_encode([]),
-            'key1' => $key1,
-            'key2' => $key2,
-            'more_param' => "currency=VND&phone=0925226173",
+            'embed_data'   => $value['embed_data'],
+            'item'         => \GuzzleHttp\json_encode([]),
+            'key1'         => $key1,
+            'key2'         => $key2,
+            'more_param'   => "currency=VND&phone=0925226173",
         ];
         $dataHash = self::createOrderMacData($postInput);
         $mac = self::compute($dataHash, $key1);
@@ -297,7 +295,7 @@ class OrdersController extends BaseApiController
                 'application/json',
                 'application/xml',
             ],
-            'form_params' => $postInput,
+            'form_params'  => $postInput,
         ]);
         $response = \GuzzleHttp\json_decode($request->getBody()->read(1024));
         return $response->order_url;
@@ -320,12 +318,12 @@ class OrdersController extends BaseApiController
                 $type = PaymentWallet::$typePayment[$params['channel']] ?: '';
                 $input = [
                     'order_wallet_id' => $order->id,
-                    'price' => $params['amount'],
-                    'description' => 'TT:ZaloPay -- app_trans_id:' . $params['app_trans_id'] . ' --' . $type,
-                    'payment_type' => 2,//thanh toán zaloPay
-                    'payment_date' => Carbon::now()->format('Y-m-d'),
-                    'branch_id' => $order->branch_id,
-                    'app_trans_id' => $params['app_trans_id'],
+                    'price'           => $params['amount'],
+                    'description'     => 'TT:ZaloPay -- app_trans_id:' . $params['app_trans_id'] . ' --' . $type,
+                    'payment_type'    => 2,//thanh toán zaloPay
+                    'payment_date'    => Carbon::now()->format('Y-m-d'),
+                    'branch_id'       => $order->branch_id,
+                    'app_trans_id'    => $params['app_trans_id'],
                 ];
                 PaymentWallet::create($input);
                 $customer = Customer::find($order->customer_id);
@@ -333,29 +331,30 @@ class OrdersController extends BaseApiController
                 $customer->save();
                 if (!empty($customer->devices_token)) {
                     $devices_token = [$customer->devices_token];
-                    fcmSendCloudMessage($devices_token, '💰💰💰 Nạp tiền vào ví thành công', 'Chạm để xem', 'notification', ['type' => NotificationConstant::NAP_VI]);
+                    fcmSendCloudMessage($devices_token, '💰💰💰 Nạp tiền vào ví thành công', 'Chạm để xem',
+                        'notification', ['type' => NotificationConstant::NAP_VI]);
                 }
                 NotificationCustomer::create([
                     'customer_id' => $customer->id,
-                    'title' => '💰💰💰 Nạp tiền vào ví thành công ',
-                    'data' => '',
-                    'type' => NotificationConstant::NAP_VI,
-                    'status' => 1,
+                    'title'       => '💰💰💰 Nạp tiền vào ví thành công ',
+                    'data'        => '',
+                    'type'        => NotificationConstant::NAP_VI,
+                    'status'      => 1,
                 ]);
 
                 return response()->json([
                     'returncode' => $result["returncode"],
-                    'messages' => $result["returnmessage"],
+                    'messages'   => $result["returnmessage"],
                 ]);
             } else {
                 return response()->json([
-                    "returncode" => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
+                    "returncode"    => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
                     "returnmessage" => "exception",
                 ]);
             }
         } catch (Exception $exception) {
             return response()->json([
-                "returncode" => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
+                "returncode"    => 0, # ZaloPay Server sẽ callback lại tối đa 3 lần
                 "returnmessage" => $exception,
             ]);
         }
@@ -371,15 +370,15 @@ class OrdersController extends BaseApiController
         }
 
         $order = [
-            "appid" => $app_id,
-            "apptime" => getTimeStamp(),
-            "apptransid" => self::GenTransID(),
-            "appuser" => array_key_exists("appuser", $params) ? $params["appuser"] : "demo",
-            "item" => \GuzzleHttp\json_encode(array_key_exists("item", $params) ? $params["item"] : []),
-            "embeddata" => \GuzzleHttp\json_encode($embeddata),
-            "bankcode" => array_key_exists("bankcode", $params) ? $params["bankcode"] : "zalopayapp",
+            "appid"       => $app_id,
+            "apptime"     => getTimeStamp(),
+            "apptransid"  => self::GenTransID(),
+            "appuser"     => array_key_exists("appuser", $params) ? $params["appuser"] : "demo",
+            "item"        => \GuzzleHttp\json_encode(array_key_exists("item", $params) ? $params["item"] : []),
+            "embeddata"   => \GuzzleHttp\json_encode($embeddata),
+            "bankcode"    => array_key_exists("bankcode", $params) ? $params["bankcode"] : "zalopayapp",
             "description" => array_key_exists("description", $params) ? $params['description'] : "",
-            "amount" => $params['amount'],
+            "amount"      => $params['amount'],
         ];
 
         return $order;
@@ -450,19 +449,19 @@ class OrdersController extends BaseApiController
         $vnp_BankCode = $data['bank_code'];
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         $inputData = [
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
+            "vnp_Version"    => "2.1.0",
+            "vnp_TmnCode"    => $vnp_TmnCode,
+            "vnp_Amount"     => $vnp_Amount,
+            "vnp_Command"    => "pay",
             "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_ReturnUrl,
-            "vnp_TxnRef" => $vnp_TxnRef,
-            "vnp_Merchant" => 'DEMO',
+            "vnp_CurrCode"   => "VND",
+            "vnp_IpAddr"     => $vnp_IpAddr,
+            "vnp_Locale"     => $vnp_Locale,
+            "vnp_OrderInfo"  => $vnp_OrderInfo,
+            "vnp_OrderType"  => $vnp_OrderType,
+            "vnp_ReturnUrl"  => $vnp_ReturnUrl,
+            "vnp_TxnRef"     => $vnp_TxnRef,
+            "vnp_Merchant"   => 'DEMO',
         ];
 
         if (isset($vnp_BankCode) && $vnp_BankCode != "") {
