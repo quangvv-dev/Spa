@@ -162,7 +162,7 @@ class OrdersController extends BaseApiController
 
         if ((int)$platinum > (int)$total['payment']) {
             $gross = (int)$platinum - (int)$total['payment'];
-            $param['title'] = 'Chi tiêu ' . number_format($gross) . 'đ nữa để thăng hạng';
+            $param['title'] = 'Chi tiêu ' . number_format($gross) . 'đ nữa để thăng hạng VIP';
         } else {
             $param['title'] = 'Khách hàng đã đạt hạng cao nhất';
         }

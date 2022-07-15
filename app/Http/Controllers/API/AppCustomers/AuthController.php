@@ -69,21 +69,26 @@ class AuthController extends BaseApiController
         $otp = Otp::where('phone', $request->phone)->where('otp', $request->otp)->first();
         if (empty($otp)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
-        }
-
-        $info = Customer::where('phone', $request->phone)->first();
-        if (empty($info)) {
-            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'SĐT chưa được đăng ký');
         } else {
-            $payload = $info->toArray();
-            $payload['time'] = strtotime(Date::now());
-            $data = [
-                'token' => jwtencode($payload),
-                'info' => new CustomerResource($info),
-            ];
-            return $this->responseApi(ResponseStatusCode::OK, 'Đăng nhập thành công', $data);
-
+            $check = Functions::checkExpiredOtp($otp);
+            if ($check == 1) {
+                $info = Customer::where('phone', $request->phone)->first();
+                if (empty($info)) {
+                    return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'SĐT chưa được đăng ký');
+                } else {
+                    $payload = $info->toArray();
+                    $payload['time'] = strtotime(Date::now());
+                    $data = [
+                        'token' => jwtencode($payload),
+                        'info' => new CustomerResource($info),
+                    ];
+                    return $this->responseApi(ResponseStatusCode::OK, 'Đăng nhập thành công', $data);
+                }
+            } else {
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
+            }
         }
+
     }
 
     /**
@@ -271,12 +276,9 @@ class AuthController extends BaseApiController
                 'deviceId' => $request->deviceId,
             ]);
         } else {
-            $now = Carbon::now()->format('Y-m-d H:i:s');
-            $now = strtotime($now);
-            $to = strtotime($data->updated_at);
-            $distance = round(($now - $to) / 60);
+            $check = Functions::checkExpiredOtp($data);
             if ($data->count < 6) {
-                if ((int)$distance < 15) {
+                if ($check == 1) {
                     return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'OTP chưa hết hiệu lực 15 phút. Vui lòng kiểm tra tin nhắn !');
                 } else {
                     $err = Functions::sendSmsV3($request->phone, @$text);
@@ -381,13 +383,16 @@ class AuthController extends BaseApiController
         if (empty($otp)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
         }
+        $check = Functions::checkExpiredOtp($otp);
+        if ($check == 0){
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
+        }
 
         $input = $request->except('category_id');
         $input['wallet'] = 0;
         $input['wallet_ctv'] = 0;
         $input['post_id'] = 0;
         $input['status_id'] = Functions::getStatusWithCode('moi');
-//        $input['password'] = Hash::make($input['password']);
 
         $customer = $this->customerService->createApi($input);
         $this->update_code($customer);

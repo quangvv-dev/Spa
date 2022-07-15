@@ -183,7 +183,7 @@ class Functions
      *
      * @param UploadedFile $file
      * @param              $path
-     * @param string       $namevalidate
+     * @param string $namevalidate
      *
      * @return null
      */
@@ -410,10 +410,10 @@ class Functions
         }
         $result = $client->call('BulkSendSms',
             [
-                'msisdn'           => $phone,
-                'alias'            => 'VMGtest',
-                'message'          => $sms_text,
-                'sendTime'         => $send_after,
+                'msisdn' => $phone,
+                'alias' => 'VMGtest',
+                'message' => $sms_text,
+                'sendTime' => $send_after,
                 //                'sendTime'         => '15/08/2019 15:32',
                 'authenticateUser' => 'vmgtest1',
                 'authenticatePass' => 'vmG@123b',
@@ -429,29 +429,29 @@ class Functions
     public static function sendSmsV3($phone, $sms_text, $send_after = '')
     {
         $data = [
-            'to'         => $phone,
-            'from'       => "ROYAL SPA",
-            'message'    => $sms_text,
-            'scheduled'  => $send_after,//15-01-2019 16:05
-            'requestId'  => "",
+            'to' => $phone,
+            'from' => "ROYAL SPA",
+            'message' => $sms_text,
+            'scheduled' => $send_after,//15-01-2019 16:05
+            'requestId' => "",
             'useUnicode' => 0,//sử dụng có dấu hay k dấu
-            'type'       => 1 // CSKH hay QC
+            'type' => 1 // CSKH hay QC
         ];
         $data = json_encode((object)$data);
         $base_url = 'http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c24iOiJyb3lhbHNwYSIsInNpZCI6ImFmZTIxOWQ4LTdhM2UtNDA5MS05NjBmLThmZjViNGI4NzRhMiIsIm9idCI6IiIsIm9iaiI6IiIsIm5iZiI6MTU4OTM1NDE4MCwiZXhwIjoxNTg5MzU3NzgwLCJpYXQiOjE1ODkzNTQxODB9.Hx8r30IR1nqAkOClihx0n9upfvgOg1f-E3MwNEwWT-0';
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL            => $base_url,
+            CURLOPT_URL => $base_url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => "",
-            CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => "POST",
-            CURLOPT_POSTFIELDS     => $data,
-            CURLOPT_HTTPHEADER     => [
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json",
                 "token: $token",
             ],
@@ -482,16 +482,16 @@ class Functions
         }
         $result = $client->call('wsCpMt',
             [
-                'User'        => 'smsbrand_royal_spa',
-                'Password'    => '123456a@',
-                'CPCode'      => 'ROYAL_SPA',
-                'UserID'      => $phone,
-                'RequestID'   => '1',
-                'ReceiverID'  => $phone,
-                'ServiceID'   => 'ROYAL-SPA',
+                'User' => 'smsbrand_royal_spa',
+                'Password' => '123456a@',
+                'CPCode' => 'ROYAL_SPA',
+                'UserID' => $phone,
+                'RequestID' => '1',
+                'ReceiverID' => $phone,
+                'ServiceID' => 'ROYAL-SPA',
                 'CommandCode' => 'bulksms',
                 'ContentType' => '0',
-                'Content'     => $sms_text,
+                'Content' => $sms_text,
             ], '', '', ''
         );
 
@@ -516,7 +516,7 @@ class Functions
         $all_price = (int)$total->sum('gross_revenue') + (int)$wallet->sum('gross_revenue');
 //        $total = (int)$payment + (int)$wallet;
         $money = [
-            'total'   => $total->count(),
+            'total' => $total->count(),
             'payment' => $all_price,
         ];
         return $money;
@@ -628,7 +628,7 @@ class Functions
         $params = [
             'query' => [
                 'access_token' => $token,
-                'fields'       => $field,
+                'fields' => $field,
             ],
         ];
 
@@ -712,6 +712,25 @@ class Functions
                 $data = [];
         }
         return $data;
+    }
+
+    /**
+     * Check time Expired OTP
+     *
+     * @param $otp
+     * @return int
+     */
+    public function checkExpiredOtp($otp)
+    {
+        $now = Carbon::now()->format('Y-m-d H:i:s');
+        $now = strtotime($now);
+        $to = strtotime($otp->updated_at);
+        $distance = round(($now - $to) / 60);
+        if ($distance < 16) {
+            return 1; // còn hiệu lực OTP 15p
+        } else {
+            return 0;// OTP hết hiệu lực
+        }
     }
 
 }
