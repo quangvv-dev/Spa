@@ -159,7 +159,7 @@ class OrdersController extends BaseApiController
         $customer = $request->jwtUser;
         $total = Functions::sumOrder($customer->id);
         $platinum = setting('platinum') ?: 0;
-        if ((int)$platinum > (int)$total) {
+        if ((int)$platinum > (int)$total['payment']) {
             $gross = (int)$platinum - (int)$total;
             $param['title'] = 'Chi tiêu ' . number_format($gross) . 'đ nữa để thăng hạng';
         } else {

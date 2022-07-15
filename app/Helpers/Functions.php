@@ -512,12 +512,12 @@ class Functions
     public static function sumOrder($id)
     {
         $total = Order::select('id', 'gross_revenue')->where('member_id', $id);
-//        $payment = Order::where('member_id', $id)->sum('gross_revenue');
-//        $wallet = WalletHistory::where('customer_id', $id)->sum('order_price');
+        $wallet = WalletHistory::select('id', 'gross_revenue')->where('customer_id', $id);
+        $all_price = (int)$total->sum('gross_revenue') + (int)$wallet->sum('gross_revenue');
 //        $total = (int)$payment + (int)$wallet;
         $money = [
             'total'   => $total->count(),
-            'payment' => $total->sum('gross_revenue'),
+            'payment' => $all_price,
         ];
         return $money;
     }
