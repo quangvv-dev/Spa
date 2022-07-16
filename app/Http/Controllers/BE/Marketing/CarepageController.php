@@ -67,7 +67,7 @@ class CarepageController extends Controller
                 $item->schedules = 0;
                 $item->schedules_den = 0;
             }
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+            $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
             $payment = PaymentHistory::search($input, 'price')->whereHas('order', function ($qr) use ($input) {
                 $qr->where('carepage_id', $input['carepage_id']);
             });
