@@ -55,10 +55,10 @@ class Order extends Model
         return $this->belongsTo(User::class, 'support_id', 'id');
     }
 
-    public function paymentHistory()
-    {
-        return $this->hasMany(PaymentHistory::class, 'id', 'order_id');
-    }
+//    public function paymentHistory()
+//    {
+//        return $this->hasMany(PaymentHistory::class);
+//    }
 
     public function owner()
     {

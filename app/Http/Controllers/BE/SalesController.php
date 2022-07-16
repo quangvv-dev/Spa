@@ -80,8 +80,6 @@ class SalesController extends Controller
                     $q->where('branch_id', $request->branch_id);
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
-                })->whereHas('paymentHistory', function ($qr) use ($item , $request) {
-                    $qr->whereBetween('payment_date', [Functions::yearMonthDay($request->start_date), Functions::yearMonthDay($request->end_date)]);
                 });
             $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
@@ -129,13 +127,12 @@ class SalesController extends Controller
             $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('all_total');
             $item->revenue_old = $order_old->sum('all_total');
-//            $item->payment_revenue = $orders->sum('gross_revenue');
-//            $item->payment_new = $order_new->sum('gross_revenue');
-//            $item->payment_old = $order_old->sum('gross_revenue');
-
-            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
-            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
-            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
+            $item->payment_revenue = $orders->sum('gross_revenue');
+            $item->payment_new = $order_new->sum('gross_revenue');
+            $item->payment_old = $order_old->sum('gross_revenue');
+//            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
+//            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
+//            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
             $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
