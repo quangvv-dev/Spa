@@ -72,12 +72,13 @@ class CarepageController extends Controller
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = count($payment)? (int)$payment->sum('price'):0;
-            if (!is_numeric((int)$payment->sum('price'))){
-                dd($payment->sum('price'));
-            }
+            $item->payment = $payment->sum('price');
             return $item;
-        })->sortByDesc('payment');
+        })->sortByDesc('payment')->filter(function ($q){
+            if ((int)$q->payment >0 ){
+                return $q;
+            }
+        });
         if ($request->ajax()) {
             return view('marketing.carepage.ajax', compact('marketing'));
         }
