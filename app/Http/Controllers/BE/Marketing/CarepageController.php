@@ -72,8 +72,8 @@ class CarepageController extends Controller
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = count($payment)? (float)$payment->sum('price'):0;
-            if (!is_numeric($payment->sum('price'))){
+            $item->payment = count($payment)? (int)$payment->sum('price'):0;
+            if (!is_numeric((int)$payment->sum('price'))){
                 dd($payment->sum('price'));
             }
             return $item;
