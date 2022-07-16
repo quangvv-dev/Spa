@@ -67,14 +67,16 @@ class PaymentHistory extends Model
         }
         if (!empty($input['carepage_id'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
-                $item->where('carepage_id', $input['carepage_id']);
+                $item->whereHas('customer', function ($q) use ($input) {
+                    $q->where('carepage_id', $input['carepage_id']);
+                });
             });
         }
         if (isset($input['telesales'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
-//                $item->whereHas('customer', function ($q) use ($input) {
-                    $item->where('telesale_id', $input['telesales']);
-//                });
+                $item->whereHas('customer', function ($q) use ($input) {
+                    $q->where('telesale_id', $input['telesales']);
+                });
             });
         }
 
