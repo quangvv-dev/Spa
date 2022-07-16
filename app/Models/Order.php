@@ -57,7 +57,7 @@ class Order extends Model
 
     public function paymentHistory()
     {
-        return $this->hasMany(PaymentHistory::class);
+        return $this->hasMany(PaymentHistory::class, 'id', 'order_id');
     }
 
     public function owner()
