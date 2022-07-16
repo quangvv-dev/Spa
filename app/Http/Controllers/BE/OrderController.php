@@ -452,7 +452,6 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
-        $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
