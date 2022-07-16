@@ -49,7 +49,7 @@
                 <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('contact')) ?round($marketing->sum('schedules_den')/$marketing->sum('contact')*100,1):0 }}%</td>
                 <td class="text-center bold">{{number_format($marketing->sum('all_total'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('gross_revenue'))}}</td>
-                {{--<td class="text-center bold">{{number_format(((int)$marketing->sum('payment') > (int)$marketing->sum('gross_revenue'))?number_format((int)$marketing->sum('payment') - (int)$marketing->sum('gross_revenue')):0)}}</td>--}}
+                <td class="text-center bold">{{number_format(((int)$marketing->sum('payment') > (int)$marketing->sum('gross_revenue'))?number_format((int)$marketing->sum('payment') - (int)$marketing->sum('gross_revenue'),0):0)}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('payment'),0)}}</td>
             </tr>
             @foreach($marketing as $i => $item)
