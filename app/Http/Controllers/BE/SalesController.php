@@ -22,8 +22,6 @@ use App\Services\TaskService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Response;
-use Dompdf\Dompdf;
 
 class SalesController extends Controller
 {
@@ -59,7 +57,7 @@ class SalesController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         if (count($request->all()) == 2) {
-            $input['branch_id'] = 1;
+            $request->merge(['branch_id' => 1]);
         }
         if (isset($request->location_id)) {
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
@@ -74,7 +72,7 @@ class SalesController extends Controller
                     $q->where('branch_id', $request->branch_id);
                 });
 
-            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            $orders = Order::select('id','member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                     $q->whereIn('branch_id', $request->group_branch);
@@ -82,6 +80,8 @@ class SalesController extends Controller
                     $q->where('branch_id', $request->branch_id);
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
+                })->whereHas('paymentHistory', function ($qr) use ($item , $request) {
+                    $qr->whereBetween('payment_date', [Functions::yearMonthDay($request->start_date), Functions::yearMonthDay($request->end_date)]);
                 });
             $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
@@ -117,7 +117,8 @@ class SalesController extends Controller
             //lich hen
 
             $request->merge(['telesales' => $item->id]);
-            $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
+            $params = $request->all();
+            $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
             $detail_new = clone $detail;
 
             $item->detail_new = $detail_new->whereHas('order', function ($qr) {
@@ -128,9 +129,13 @@ class SalesController extends Controller
             $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('all_total');
             $item->revenue_old = $order_old->sum('all_total');
-            $item->payment_revenue = $orders->sum('gross_revenue');
-            $item->payment_new = $order_new->sum('gross_revenue');//da thu trong ky
-            $item->payment_old = $order_old->sum('gross_revenue'); //da thu trong ky
+//            $item->payment_revenue = $orders->sum('gross_revenue');
+//            $item->payment_new = $order_new->sum('gross_revenue');
+//            $item->payment_old = $order_old->sum('gross_revenue');
+
+            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
+            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
+            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
             $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
             $item->all_payment = $detail->sum('price');
             return $item;
