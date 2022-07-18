@@ -121,7 +121,7 @@ class FanpageController extends Controller
 
     public function postLoginFB(Request $request)
     {
-        return Socialite::driver('facebook')->scopes(['public_profile', 'email', 'pages_messaging','pages_read_engagement', 'pages_manage_metadata', 'pages_show_list'])->redirect();
+        return Socialite::driver('facebook')->scopes(['public_profile', 'email', 'pages_messaging','pages_read_engagement', 'pages_manage_metadata', 'pages_show_list','pages_manage_engagement'])->redirect();
     }
 
     public function callbackFB(Request $request)
