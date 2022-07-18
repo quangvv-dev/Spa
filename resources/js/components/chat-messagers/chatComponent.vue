@@ -117,6 +117,7 @@
                                             {{item.message}}
                                             <br>
                                             <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
+                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-commenting"></i></span>
                                         </p>
 
                                     </div>
@@ -220,7 +221,34 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button @click="sendReplyComment()" type="button" class="btn btn-primary">Gửi</button>
+                                        <!--<button @click="sendReplyComment()" type="button" class="btn btn-primary">Gửi</button>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="send_comment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalComment">Trả lời comment</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                {{chat_current_name}}
+                                            </div>
+                                            <hr>
+                                            <div class="col-12">
+                                                <textarea v-model="contentComment" cols="30" rows="4" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button @click="sendComment()" type="button" class="btn btn-primary">Bình luận</button>
                                     </div>
                                 </div>
                             </div>
@@ -347,6 +375,7 @@
             return {
                 textSearch: '',
                 contentMesage: '',
+                contentComment: '',
                 navChat: [],
                 navChatDefault: [],
                 fb_me: '',
@@ -1050,6 +1079,36 @@
                 this.comment_id = item.comment_id;
                 $('#reply_comment').modal({show: true})
             },
+
+            showModalComment(item){
+                this.comment_id = item.comment_id;
+                $('#send_comment').modal({show: true})
+            },
+            sendComment(){
+                let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
+                    // "messaging_type": "MESSAGE_TAG",
+                    // "tag": "HUMAN_AGENT",
+                    // "messaging_type": "UPDATE",
+                    // "recipient": {
+                    //     "comment_id": this.comment_id
+                    // },
+                    // "message": {
+                    //     "text": this.contentMesage
+                    // }
+                }).then(res=>{
+                    if(res){
+                        alertify.success('Trả lời thành công!',5);
+                        $('#send_comment').modal('hide');
+                        // this.newElement(res.data.message_id);
+                    }
+                }).catch(error=>{
+                    if(error){
+                        alertify.warning('Bạn đã trả lời bình luận này rồi!',5);
+                        $('#send_comment').modal('hide');
+                    }
+                })
+
+            },
             sendReplyComment(){
                     let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                         // "messaging_type": "MESSAGE_TAG",
@@ -1075,6 +1134,7 @@
                     })
                 this.contentMesage = '';
             },
+
             async newElement(message_id){
                 let access_token = this.access_token;
                 let fields = 'from,message,to,created_time,thread_id';
