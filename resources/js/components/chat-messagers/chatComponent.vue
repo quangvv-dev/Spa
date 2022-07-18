@@ -221,7 +221,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <!--<button @click="sendReplyComment()" type="button" class="btn btn-primary">Gửi</button>-->
+                                        <button @click="sendReplyComment()" type="button" class="btn btn-primary">Gửi</button>
                                     </div>
                                 </div>
                             </div>
