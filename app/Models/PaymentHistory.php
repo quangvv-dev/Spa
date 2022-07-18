@@ -75,7 +75,7 @@ class PaymentHistory extends Model
         if (isset($input['telesales'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
                 $item->whereHas('customer', function ($q) use ($input) {
-                    $q->where('telesale_id', $input['telesales']);
+                    $q->where('telesales_id', $input['telesales']);
                 });
             });
         }
