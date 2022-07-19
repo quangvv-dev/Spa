@@ -170,6 +170,29 @@ class HomePageController extends BaseApiController
     }
 
     /**
+     * DS dịch vụ trừ liệu trình
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function serviceProcess(Request $request)
+    {
+        $customer = $request->jwtUser;
+        $order = Order::select('id')->where('member_id', $customer->id)->pluck('id')->toArray();
+        $process = [];
+        if (count($order)) {
+            $process = HistoryUpdateOrder::select('service_id')->whereIn('order_id', $order)->where('type', 0)->with('service')->get()
+                ->transform(function ($i) {
+                    return [
+                        'id' => $i->service->id,
+                        'name' => @$i->service->name,
+                    ];
+                });
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $process);
+    }
+
+    /**
      * Lịch sử trừ liệu trình
      *
      * @param Request $request
@@ -182,9 +205,10 @@ class HomePageController extends BaseApiController
         $order = Order::select('id')->where('member_id', $customer->id)->pluck('id')->toArray();
         $process = [];
         if (count($order)) {
-            $process = HistoryUpdateOrder::whereIn('order_id', $order)->where('type',
-                0)->orderByDesc('created_at')->get()
-                ->transform(function ($i) {
+            $process = HistoryUpdateOrder::whereIn('order_id', $order)->where('type', 0)
+                ->when(!empty($request->service_id), function ($q) use ($request) {
+                    $q->where('service_id', $request->service_id);
+                })->get()->transform(function ($i) {
                     $support = isset($i->support) ? $i->support->full_name : '';
                     $support2 = isset($i->support2) ? '| ' . $i->support2->full_name : '';
 
@@ -198,8 +222,8 @@ class HomePageController extends BaseApiController
                         'phone' => isset($i->branch) ? $i->branch->phone : '',
                         'service' => isset($i->service) ? $i->service->name : '',
                         'image' => isset($i->service) && !empty($i->service->images) ? $i->service->images : '',
-                        'rate' =>@$i->rate,
-                        'comment_rate' =>@$i->comment_rate,
+                        'rate' => @$i->rate,
+                        'comment_rate' => @$i->comment_rate,
                     ];
                 });
         }
