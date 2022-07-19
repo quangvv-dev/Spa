@@ -208,7 +208,8 @@ class HomePageController extends BaseApiController
             $process = HistoryUpdateOrder::whereIn('order_id', $order)->where('type', 0)
                 ->when(!empty($request->service_id), function ($q) use ($request) {
                     $q->where('service_id', $request->service_id);
-                })->get()->transform(function ($i) {
+                })->orderByDesc('created_at')->get()
+                ->transform(function ($i) {
                     $support = isset($i->support) ? $i->support->full_name : '';
                     $support2 = isset($i->support2) ? '| ' . $i->support2->full_name : '';
 
