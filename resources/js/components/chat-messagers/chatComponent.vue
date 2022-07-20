@@ -116,8 +116,8 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
-                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-commenting"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="mdi mdi-facebook-messenger"></i></span>
+                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-comment-dots"></i></span>
                                         </p>
 
                                     </div>
@@ -473,8 +473,6 @@
                             id: server.sender.id,
                         }
                     };
-                    console.log(server.sender.id, server.recipient.id, newTime, 1, server.message.text, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
-
                     this.customerNewMessage(server.sender.id, server.recipient.id, newTime, 1, server.message.text, server.message.mid);
                     if (this.classClick == server.sender.id) {
                         if (!server.message.text) {
@@ -813,7 +811,6 @@
                 this.chat_current_name = item.participants.data[0].name
                 this.getListQuickReply();
                 this.scrollToBottom();
-
             },
 
             async customerNewMessage(sender_id, page_id, created_time, unread_count, mess, mid) {
@@ -1086,24 +1083,39 @@
             },
             sendComment(){
                 let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
-                    // "messaging_type": "MESSAGE_TAG",
-                    // "tag": "HUMAN_AGENT",
-                    // "messaging_type": "UPDATE",
-                    // "recipient": {
-                    //     "comment_id": this.comment_id
-                    // },
-                    // "message": {
-                    //     "text": this.contentMesage
-                    // }
                 }).then(res=>{
                     if(res){
                         alertify.success('Trả lời thành công!',5);
                         $('#send_comment').modal('hide');
+                        let url = '/marketing/get-detail-comment';
+                        let splitted = this.post_id.split("_", 2);
+                        let params = {
+                            page_id: this.last_segment,
+                            post_id: splitted,
+                            FB_ID: this.fb_me
+                        }
+                        axios.get(url,{
+                            params: params
+                        }).then(response => {
+                            let data = JSON.parse(response.data.content);
+                            if(data.length > 0){
+                                data = data.map(m=>{
+                                    m['from'] = {
+                                        id:response.data.FB_ID,
+                                        name:response.data.fb_name,
+                                    }
+                                    return m;
+                                })
+                            }
+                            this.detailMessage = data;
+                        })
+
+
                         // this.newElement(res.data.message_id);
                     }
                 }).catch(error=>{
                     if(error){
-                        alertify.warning('Bạn đã trả lời bình luận này rồi!',5);
+                        alertify.warning('Không trả lời được bình luận!',5);
                         $('#send_comment').modal('hide');
                     }
                 })

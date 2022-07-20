@@ -1897,12 +1897,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-upload-multiple-image */ "./node_modules/vue-upload-multiple-image/src/main.js");
+/* harmony import */ var vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-upload-multiple-image */ "./node_modules/vue-upload-multiple-image/src/main.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/build/esm/index.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/build/esm/index.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -1931,7 +1931,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var port = 2022;
 var host = 'https://' + location.host + ':' + port;
-var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
+var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1939,6 +1939,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     return {
       textSearch: '',
       contentMesage: '',
+      contentComment: '',
       navChat: [],
       navChatDefault: [],
       fb_me: '',
@@ -1988,7 +1989,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     };
   },
   components: {
-    VueUploadMultipleImage: vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_4__["default"]
+    VueUploadMultipleImage: vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   created: function created() {
     this.getListChat();
@@ -2031,7 +2032,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     var _this2 = this;
 
     socket.on(this.last_segment, function (server) {
-      var newTime = moment__WEBPACK_IMPORTED_MODULE_2___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
+      var newTime = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
       if (server.type) {
         _this2.customerNewComment(server);
@@ -2042,7 +2043,6 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             id: server.sender.id
           }
         };
-        console.log(server.sender.id, server.recipient.id, newTime, 1, server.message.text, 'Active Devices'); // x8WIv7-mJelg7on_ALbx
 
         _this2.customerNewMessage(server.sender.id, server.recipient.id, newTime, 1, server.message.text, server.message.mid);
 
@@ -2091,7 +2091,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
   },
   methods: {
     date: function date(_date) {
-      return moment__WEBPACK_IMPORTED_MODULE_2___default()(_date).format('D-M-YY h:mm');
+      return moment__WEBPACK_IMPORTED_MODULE_3___default()(_date).format('D-M-YY h:mm');
     },
     onEnter: function onEnter() {
       this.sendMessage(this.contentMesage);
@@ -2794,8 +2794,55 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
         show: true
       });
     },
-    sendReplyComment: function sendReplyComment() {
+    showModalComment: function showModalComment(item) {
+      this.comment_id = item.comment_id;
+      $('#send_comment').modal({
+        show: true
+      });
+    },
+    sendComment: function sendComment() {
       var _this17 = this;
+
+      var rq = axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://graph.facebook.com/v13.0/".concat(this.comment_id, "/comments?message=").concat(this.contentComment, "&access_token=").concat(this.access_token), {}).then(function (res) {
+        if (res) {
+          alertify.success('Trả lời thành công!', 5);
+          $('#send_comment').modal('hide');
+          var url = '/marketing/get-detail-comment';
+
+          var splitted = _this17.post_id.split("_", 2);
+
+          var params = {
+            page_id: _this17.last_segment,
+            post_id: splitted,
+            FB_ID: _this17.fb_me
+          };
+          axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(url, {
+            params: params
+          }).then(function (response) {
+            var data = JSON.parse(response.data.content);
+
+            if (data.length > 0) {
+              data = data.map(function (m) {
+                m['from'] = {
+                  id: response.data.FB_ID,
+                  name: response.data.fb_name
+                };
+                return m;
+              });
+            }
+
+            _this17.detailMessage = data;
+          }); // this.newElement(res.data.message_id);
+        }
+      })["catch"](function (error) {
+        if (error) {
+          alertify.warning('Không trả lời được bình luận!', 5);
+          $('#send_comment').modal('hide');
+        }
+      });
+    },
+    sendReplyComment: function sendReplyComment() {
+      var _this18 = this;
 
       var rq = axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
         // "messaging_type": "MESSAGE_TAG",
@@ -2812,7 +2859,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           alertify.success('Trả lời thành công!', 5);
           $('#reply_comment').modal('hide');
 
-          _this17.newElement(res.data.message_id);
+          _this18.newElement(res.data.message_id);
         }
       })["catch"](function (error) {
         if (error) {
@@ -2823,7 +2870,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       this.contentMesage = '';
     },
     newElement: function newElement(message_id) {
-      var _this18 = this;
+      var _this19 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var access_token, fields, url, res, index, _html4;
@@ -2832,7 +2879,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                access_token = _this18.access_token;
+                access_token = _this19.access_token;
                 fields = 'from,message,to,created_time,thread_id';
                 url = "https://graph.facebook.com/v13.0/".concat(message_id, "?fields=").concat(fields, "&access_token=").concat(access_token);
                 _context6.next = 5;
@@ -2840,13 +2887,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
               case 5:
                 res = _context6.sent;
-                index = _this18.navChatDefault.findIndex(function (fd) {
+                index = _this19.navChatDefault.findIndex(function (fd) {
                   return fd.participants.data[1].id == res.data.from.id && fd.participants.data[0].id == res.data.to.data[0].id && fd.type != 'comment';
                 });
 
                 if (index > -1) {
-                  _this18.navChatDefault[index].snippet = res.data.message;
-                  _this18.navChatDefault[index].updated_time = res.data.created_time;
+                  _this19.navChatDefault[index].snippet = res.data.message;
+                  _this19.navChatDefault[index].updated_time = res.data.created_time;
                 } else {
                   _html4 = {
                     check_phone: 0,
@@ -2866,7 +2913,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
                     updated_time: res.data.created_time
                   };
 
-                  _this18.navChatDefault.unshift(_html4);
+                  _this19.navChatDefault.unshift(_html4);
                 }
 
               case 8:
@@ -2878,7 +2925,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }))();
     },
     getNextPage: function getNextPage() {
-      var _this19 = this;
+      var _this20 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
         var data, data_1;
@@ -2887,20 +2934,20 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
             switch (_context7.prev = _context7.next) {
               case 0:
                 _context7.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_this19.next_page);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_this20.next_page);
 
               case 2:
                 data = _context7.sent;
 
                 if (data.data.paging.next) {
-                  _this19.next_page = data.data.paging.next;
+                  _this20.next_page = data.data.paging.next;
                 } else {
-                  _this19.next_page = null;
+                  _this20.next_page = null;
                 }
 
                 data_1 = data.data.data.reverse();
-                data_1.push.apply(data_1, _toConsumableArray(_this19.detailMessage));
-                _this19.detailMessage = data_1;
+                data_1.push.apply(data_1, _toConsumableArray(_this20.detailMessage));
+                _this20.detailMessage = data_1;
 
               case 7:
               case "end":
@@ -2924,12 +2971,12 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-upload-multiple-image */ "./node_modules/vue-upload-multiple-image/src/main.js");
+/* harmony import */ var vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-upload-multiple-image */ "./node_modules/vue-upload-multiple-image/src/main.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/build/esm/index.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/build/esm/index.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -2960,7 +3007,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var port = 2022;
 var host = 'https://' + location.host + ':' + port;
-var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(host, {
+var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(host, {
   transports: ['websocket', 'polling', 'flashsocket']
 });
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3019,7 +3066,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
     };
   },
   components: {
-    VueUploadMultipleImage: vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_4__["default"]
+    VueUploadMultipleImage: vue_upload_multiple_image__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   created: function created() {
     this.getListChat();
@@ -3065,7 +3112,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       if (this.arr_page_id.length > 0) {
         this.arr_page_id.forEach(function (item) {
           socket.on(item.id, function (server) {
-            var newTime = moment__WEBPACK_IMPORTED_MODULE_2___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
+            var newTime = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DDTHH:mm:ssZZ');
 
             if (server.type) {
               _this2.customerNewComment(server);
@@ -3135,7 +3182,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }.bind(this), 1500);
     },
     date: function date(_date) {
-      return moment__WEBPACK_IMPORTED_MODULE_2___default()(_date).format('D-M-YY h:mm');
+      return moment__WEBPACK_IMPORTED_MODULE_3___default()(_date).format('D-M-YY h:mm');
     },
     searchTimeOut: function searchTimeOut() {
       var _this3 = this;
@@ -4495,7 +4542,15 @@ var render = function render() {
         }
       }
     }, [_c("i", {
-      staticClass: "fa fa-comment pointer"
+      staticClass: "mdi mdi-facebook-messenger"
+    })]) : _vm._e(), _vm._v(" "), item.comment_id ? _c("span", {
+      on: {
+        click: function click($event) {
+          return _vm.showModalComment(item);
+        }
+      }
+    }, [_c("i", {
+      staticClass: "fa fa-comment-dots"
     })]) : _vm._e()])]) : _c("div", {
       staticClass: "chat-content",
       staticStyle: {
@@ -4711,13 +4766,76 @@ var render = function render() {
         return _vm.sendReplyComment();
       }
     }
-  }, [_vm._v("Gửi")])])])])])], 1), _vm._v(" "), _c("section", {
+  }, [_vm._v("Gửi")])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal fade",
+    attrs: {
+      id: "send_comment",
+      tabindex: "-1",
+      role: "dialog",
+      "aria-labelledby": "exampleModalLabel",
+      "aria-hidden": "true"
+    }
+  }, [_c("div", {
+    staticClass: "modal-dialog",
+    attrs: {
+      role: "document"
+    }
+  }, [_c("div", {
+    staticClass: "modal-content"
+  }, [_vm._m(2), _vm._v(" "), _c("div", {
+    staticClass: "modal-body"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-12"
+  }, [_vm._v("\n                                            " + _vm._s(_vm.chat_current_name) + "\n                                        ")]), _vm._v(" "), _c("hr"), _vm._v(" "), _c("div", {
+    staticClass: "col-12"
+  }, [_c("textarea", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.contentComment,
+      expression: "contentComment"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      cols: "30",
+      rows: "4"
+    },
+    domProps: {
+      value: _vm.contentComment
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.contentComment = $event.target.value;
+      }
+    }
+  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal-footer"
+  }, [_c("button", {
+    staticClass: "btn btn-secondary",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal"
+    }
+  }, [_vm._v("Close")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.sendComment();
+      }
+    }
+  }, [_vm._v("Bình luận")])])])])])], 1), _vm._v(" "), _c("section", {
     staticClass: "chat-app-form"
   }, [_c("div", {
     staticClass: "chat-app-input d-flex"
   }, [_c("fieldset", {
     staticClass: "form-group position-relative has-icon-left col-10 m-0"
-  }, [_vm._m(2), _vm._v(" "), _c("input", {
+  }, [_vm._m(3), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -5044,6 +5162,29 @@ var staticRenderFns = [function () {
       id: "exampleModalLabel"
     }
   }, [_vm._v("Tin nhắn mới")]), _vm._v(" "), _c("button", {
+    staticClass: "close",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal",
+      "aria-label": "Close"
+    }
+  }, [_c("span", {
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }, [_vm._v("×")])])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "modal-header"
+  }, [_c("h5", {
+    staticClass: "modal-title",
+    attrs: {
+      id: "exampleModalComment"
+    }
+  }, [_vm._v("Trả lời comment")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {
       type: "button",
@@ -96710,11 +96851,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-select/dist/vue-select.css */ "./node_modules/vue-select/dist/vue-select.css");
 /* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-cookies */ "./node_modules/vue-cookies/vue-cookies.js");
-/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_cookies__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue_js_popover__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-js-popover */ "./node_modules/vue-js-popover/dist/index.js");
-/* harmony import */ var vue_js_popover__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_js_popover__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var vue_lazyload__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-lazyload */ "./node_modules/vue-lazyload/vue-lazyload.esm.js");
+/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-cookies */ "./node_modules/vue-cookies/vue-cookies.js");
+/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_cookies__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vue_js_popover__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-js-popover */ "./node_modules/vue-js-popover/dist/index.js");
+/* harmony import */ var vue_js_popover__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_js_popover__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_lazyload__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-lazyload */ "./node_modules/vue-lazyload/vue-lazyload.esm.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -96729,13 +96870,13 @@ Vue.component('paginate', vuejs_paginate__WEBPACK_IMPORTED_MODULE_0___default.a)
 Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
 
 
-Vue.use(vue_cookies__WEBPACK_IMPORTED_MODULE_4___default.a, {
+Vue.use(vue_cookies__WEBPACK_IMPORTED_MODULE_3___default.a, {
   expire: '7d'
 });
 
-Vue.use(vue_js_popover__WEBPACK_IMPORTED_MODULE_5___default.a);
+Vue.use(vue_js_popover__WEBPACK_IMPORTED_MODULE_4___default.a);
 
-Vue.use(vue_lazyload__WEBPACK_IMPORTED_MODULE_6__["default"]);
+Vue.use(vue_lazyload__WEBPACK_IMPORTED_MODULE_5__["default"]);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

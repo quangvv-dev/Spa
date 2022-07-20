@@ -74,6 +74,12 @@ class ChatController extends Controller
         return $data;
     }
 
+    public function updateComment(Request $request)
+    {
+        $data = Comment::where('post_id', $request->post_id)->where('FB_ID', $request->FB_ID)->first();
+        return $data;
+    }
+
     public function updateReadComment(Request $request)
     {
         $data = Comment::where('page_id', $request->page_id)->where('post_id', $request->post_id)->where('FB_ID', $request->FB_ID)->first();
