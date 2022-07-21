@@ -33,24 +33,24 @@
             <th class="text-center">(1)</th>
             <th class="text-center">(2)</th>
             <th class="text-center">(3)</th>
-            <th class="text-center">(3.1)</th>
             <th class="text-center">(4)</th>
-            <th class="text-center">(4.1)</th>
-            <th class="text-center">(4.2)</th>
-            <th class="text-center">(4.3)</th>
-            <th class="text-center">(4.4)</th>
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
-            <th class="text-center">(6.1)</th>
-            <th class="text-center">(5)/(3)</th>
-            <th class="text-center">(6)/(5)</th>
-            <th class="text-center">(6.1)/(6)</th>
+            <th class="text-center">(5+6)</th>
             <th class="text-center">(7)</th>
+            <th class="text-center">(5+6)/(7)</th>
             <th class="text-center">(8)</th>
             <th class="text-center">(9)</th>
-            <th class="text-center">(9.1)</th>
             <th class="text-center">(10)</th>
             <th class="text-center">(11)</th>
+            <th class="text-center">(4)/(10)</th>
+            <th class="text-center">(10)/(7)</th>
+            <th class="text-center">(12)</th>
+            <th class="text-center">(13)</th>
+            <th class="text-center">(3)/(14)</th>
+            <th class="text-center">(3)/(15)</th>
+            <th class="text-center">(14)</th>
+            <th class="text-center">(15)</th>
         </tr>
         </thead>
 
