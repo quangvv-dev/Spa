@@ -78,7 +78,12 @@ class MarketingController extends Controller
                 $item->schedules_den = 0;
             }
             $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
-            $payment = PaymentHistory::search($input, 'price')->whereIn('order_id', $orders->pluck('id')->toArray());
+//            $payment = PaymentHistory::search($input, 'price,order_id')->whereIn('order_id', $orders->pluck('id')->toArray());
+            $payment = PaymentHistory::search($input, 'price,order_id');
+            $paymentNew = clone $payment;
+            $paymentNew = $paymentNew->whereHas('order', function ($item) use ($input) {
+                $item->where('mkt_id', $input['marketing']);
+            });
 
             unset($input['marketing']);
             $input['user_id'] = $item->id;
@@ -90,14 +95,16 @@ class MarketingController extends Controller
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = $payment->sum('price');
+            $item->payment = $paymentNew->sum('price');
+            $item->paymentAll = $payment->sum('price');
             $item->nap = $thu_chi->sum('so_tien');
             return $item;
-        })->sortByDesc('payment')->filter(function ($qr) {
-            if ($qr->payment > 0){
-                return $qr;
-            }
-        });
+        })->sortByDesc('payment');
+//            ->filter(function ($qr) {
+//            if ($qr->payment > 0){
+//                return $qr;
+//            }
+//        });
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
