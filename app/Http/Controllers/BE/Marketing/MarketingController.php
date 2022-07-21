@@ -63,7 +63,7 @@ class MarketingController extends Controller
             $params = $input;
             unset($params['marketing'], $params['branch_id'], $params['location_id']);
 
-            $thu_chi = ThuChi::search($params,'so_tien')->where('status', 1);
+            $thu_chi = ThuChi::search($params, 'so_tien')->where('status', 1);
             $customer = Customer::search($input)->select('id');
             $item->contact = $customer->count();
             $group_user = $customer->pluck('id')->toArray();
@@ -82,7 +82,7 @@ class MarketingController extends Controller
 
             unset($input['marketing']);
             $input['user_id'] = $item->id;
-            $price = PriceMarketing::search($input)->select('budget','comment','message', \DB::raw('sum(budget) as total_budget'),
+            $price = PriceMarketing::search($input)->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
                 \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
             $item->budget = $price->total_budget; //ngân sách
             $item->comment = $price->total_comment; //comment
@@ -93,7 +93,11 @@ class MarketingController extends Controller
             $item->payment = $payment->sum('price');
             $item->nap = $thu_chi->sum('so_tien');
             return $item;
-        })->sortByDesc('payment');
+        })->sortByDesc('payment')->filter(function ($qr) {
+            if ($qr->payment > 0){
+                return $qr;
+            }
+        });
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
@@ -181,11 +185,11 @@ class MarketingController extends Controller
             foreach ($request->id as $key => $item) {
                 PriceMarketing::find($item)->update([
                     'source_id' => $request->source_id,
-                    'budget'    => str_replace(",", "", $request->budget[$key]),
-                    'comment'   => str_replace(",", "", $request->comment[$key]),
-                    'message'   => str_replace(",", "", $request->message[$key]),
-                    'date'      => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
-                    'user_id'   => $user->id,
+                    'budget' => str_replace(",", "", $request->budget[$key]),
+                    'comment' => str_replace(",", "", $request->comment[$key]),
+                    'message' => str_replace(",", "", $request->message[$key]),
+                    'date' => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
+                    'user_id' => $user->id,
                     'branch_id' => $request->branch_id,
                 ]);
             }
@@ -193,12 +197,12 @@ class MarketingController extends Controller
             foreach ($request->budget as $key => $item) {
                 PriceMarketing::create([
                     'source_id' => $request->source_id,
-                    'user_id'   => $user->id,
+                    'user_id' => $user->id,
                     'branch_id' => $request->branch_id,
-                    'budget'    => str_replace(",", "", $item),
-                    'comment'   => str_replace(",", "", $request->comment[$key]),
-                    'message'   => str_replace(",", "", $request->message[$key]),
-                    'date'      => Functions::createYearMonthDay($request->date[$key]),
+                    'budget' => str_replace(",", "", $item),
+                    'comment' => str_replace(",", "", $request->comment[$key]),
+                    'message' => str_replace(",", "", $request->message[$key]),
+                    'date' => Functions::createYearMonthDay($request->date[$key]),
                 ]);
             }
         }
