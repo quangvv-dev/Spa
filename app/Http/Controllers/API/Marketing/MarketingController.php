@@ -9,6 +9,7 @@ use App\Constants\ScheduleConstant;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
+use App\Http\Resources\CarepageResource;
 use App\Http\Resources\MarketingResource;
 use App\Models\Branch;
 use App\Models\Customer;
@@ -99,8 +100,8 @@ class MarketingController extends BaseApiController
             $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
             $payment = PaymentHistory::search($input, 'price','order_id')->get();
             $item->orders = $orders->count();
-            $item->all_total = $orders->sum('all_total');
-            $item->gross_revenue = $orders->sum('gross_revenue');
+            $item->all_total = (int)$orders->sum('all_total');
+            $item->gross_revenue = (int)$orders->sum('gross_revenue');
             $item->payment = $payment->sum('price');
             return $item;
         })->sortByDesc('payment')->filter(function ($q){
@@ -108,7 +109,7 @@ class MarketingController extends BaseApiController
                 return $q;
             }
         });
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',$marketing);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',CarepageResource::collection($marketing));
 
     }
 

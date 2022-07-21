@@ -16,13 +16,14 @@ class CarepageResource extends JsonResource
     public function toArray($request)
     {
         $result = [
-            'id'            => @$this->id,
-            'full_name'     => @$this->full_name,
-            'avatar'        => @$this->avatar,
-            'contact'       => @$this->contact,
-            'budget'        => $this->budget ?: 0,
-            'orders'        => @(int)$this->orders,
-            'gross_revenue' => @$this->gross_revenue,
+            'id'                => @$this->id,
+            'full_name'         => @$this->full_name,
+            'contact'           => @$this->contact,
+            'schedules'         => @$this->schedules,
+            'orders'            => $this->orders,
+            'all_total'         => @(int)$this->all_total,
+            'gross_revenue'     => @(int)$this->gross_revenue,
+            'payment'           => @$this->payment,
         ];
         return $result;
     }
