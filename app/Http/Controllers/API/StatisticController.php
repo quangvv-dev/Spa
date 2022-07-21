@@ -104,8 +104,8 @@ class StatisticController extends BaseApiController
                     $q->where('branch_id', $input['branch_id']);
                 })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
-                })->when(isset($input['type']), function ($q) use ($input) {
-                    $q->whereIn('type', $input['type']);
+                })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {
+                    $q->where('type', $input['type']);
                 });
                 $task1 = clone $task;
                 $item->all_task = $task->count();
