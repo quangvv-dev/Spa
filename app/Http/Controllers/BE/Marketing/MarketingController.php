@@ -81,8 +81,8 @@ class MarketingController extends Controller
 //            $payment = PaymentHistory::search($input, 'price,order_id')->whereIn('order_id', $orders->pluck('id')->toArray());
             $payment = PaymentHistory::search($input, 'price,order_id');
             $paymentNew = clone $payment;
-            $paymentNew = $paymentNew->whereHas('order', function ($item) use ($input) {
-                $item->where('mkt_id', $input['marketing']);
+            $paymentNew = $paymentNew->whereHas('order', function ($item) {
+                $item->where('is_upsale', 1);
             });
 
             unset($input['marketing']);
