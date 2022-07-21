@@ -81,7 +81,8 @@ class MarketingController extends BaseApiController
             $input['group_branch'] = $group_branch;
         }
 
-        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::MARKETING)
+            ->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $input['thuc_hien_id'] = $item->id;
             $params = $input;
