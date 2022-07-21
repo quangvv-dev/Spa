@@ -82,7 +82,7 @@ class MarketingController extends Controller
             $payment = PaymentHistory::search($input, 'price,order_id');
             $paymentNew = clone $payment;
             $paymentNew = $paymentNew->whereHas('order', function ($item) {
-                $item->where('is_upsale', 1);
+                $item->where('is_upsale', 0);
             });
 
             unset($input['marketing']);
