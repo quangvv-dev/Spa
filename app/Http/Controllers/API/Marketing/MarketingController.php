@@ -112,15 +112,15 @@ class MarketingController extends BaseApiController
             $input['user_id'] = $item->id;
             $price = PriceMarketing::search($input)->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
                 \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
-            $item->budget = $price->total_budget; //ngân sách
-            $item->comment = $price->total_comment; //comment
-            $item->message = $price->total_message; //tin nhắn
-            $item->orders = $orders->count();
-            $item->all_total = $orders->sum('all_total');
-            $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = $paymentNew->sum('price');
-            $item->paymentAll = $payment->sum('price');
-            $item->nap = $thu_chi->sum('so_tien');
+            $item->budget = (int)$price->total_budget; //ngân sách
+            $item->comment = (int)$price->total_comment; //comment
+            $item->message = (int)$price->total_message; //tin nhắn
+            $item->orders = (int)$orders->count();
+            $item->all_total = (int)$orders->sum('all_total');
+            $item->gross_revenue = (int)$orders->sum('gross_revenue');
+            $item->payment = (int)$paymentNew->sum('price');
+            $item->paymentAll = (int)$payment->sum('price');
+            $item->nap = (int)$thu_chi->sum('so_tien');
             return $item;
         })->sortByDesc('payment')
             ->filter(function ($qr) {
