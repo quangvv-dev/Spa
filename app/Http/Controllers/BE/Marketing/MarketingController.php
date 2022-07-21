@@ -99,12 +99,12 @@ class MarketingController extends Controller
             $item->paymentAll = $payment->sum('price');
             $item->nap = $thu_chi->sum('so_tien');
             return $item;
-        })->sortByDesc('payment');
-//            ->filter(function ($qr) {
-//            if ($qr->payment > 0){
-//                return $qr;
-//            }
-//        });
+        })->sortByDesc('payment')
+            ->filter(function ($qr) {
+            if ($qr->payment > 0){
+                return $qr;
+            }
+        });
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
