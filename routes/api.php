@@ -54,6 +54,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
 
     Route::get('branch', 'AuthController@branch');
     Route::get('marketing', 'Marketing\MarketingController@index');
+    Route::get('statistic-marketing', 'Marketing\MarketingController@statistic');
     Route::get('sales', 'SaleController@sale');
     Route::get('call', 'CallController@index');
     Route::get('orders', 'OrderController@index');

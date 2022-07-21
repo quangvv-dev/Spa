@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Marketing;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
@@ -12,9 +13,11 @@ use App\Http\Resources\MarketingResource;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\PaymentHistory;
 use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
+use App\Models\ThuChi;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -66,13 +69,66 @@ class MarketingController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Đánh giá chi tiết MKT
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function statistic(Request $request)
     {
-        //
+        $input = $request->all();
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
+
+        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+            $input['marketing'] = $item->id;
+            $input['thuc_hien_id'] = $item->id;
+            $params = $input;
+            unset($params['marketing'], $params['branch_id'], $params['location_id']);
+
+            $thu_chi = ThuChi::search($params, 'so_tien')->where('status', 1);
+            $customer = Customer::searchApi($input)->select('id');
+            $item->contact = $customer->count();
+            $group_user = $customer->pluck('id')->toArray();
+            $input['group_user'] = $group_user;
+
+            if (count($group_user)) {
+                $schedules = Schedule::search($input)->select('id');
+                $item->schedules = $schedules->count();
+                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            } else {
+                $item->schedules = 0;
+                $item->schedules_den = 0;
+            }
+            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+            $payment = PaymentHistory::search($input, 'price,order_id');
+            $paymentNew = clone $payment;
+            $paymentNew = $paymentNew->whereHas('order', function ($item) {
+                $item->where('is_upsale', 0);
+            });
+
+            unset($input['marketing']);
+            $input['user_id'] = $item->id;
+            $price = PriceMarketing::search($input)->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
+                \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
+            $item->budget = $price->total_budget; //ngân sách
+            $item->comment = $price->total_comment; //comment
+            $item->message = $price->total_message; //tin nhắn
+            $item->orders = $orders->count();
+            $item->all_total = $orders->sum('all_total');
+            $item->gross_revenue = $orders->sum('gross_revenue');
+            $item->payment = $paymentNew->sum('price');
+            $item->paymentAll = $payment->sum('price');
+            $item->nap = $thu_chi->sum('so_tien');
+            return $item;
+        })->sortByDesc('payment')
+            ->filter(function ($qr) {
+                if ($qr->payment > 0){
+                    return $qr;
+                }
+            });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $marketing);
     }
 
     /**
@@ -132,39 +188,6 @@ class MarketingController extends BaseApiController
         return view('marketing.dashbroad.index', compact('source'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function addLinePriceMarketing(Request $request)
-    {
-        $user = Auth::user();
-        if ($request->id && count($request->id)) {
-
-            foreach ($request->id as $key => $item) {
-                PriceMarketing::find($item)->update([
-                    'source_id' => $request->source_id,
-                    'budget' => str_replace(",", "", $request->budget[$key]),
-                    'date' => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
-                    'user_id' => $user->id,
-                    'branch_id' => $request->branch_id,
-                ]);
-            }
-        } else {
-            foreach ($request->budget as $key => $item) {
-                PriceMarketing::create([
-                    'source_id' => $request->source_id,
-                    'user_id' => $user->id,
-                    'branch_id' => $request->branch_id,
-                    'budget' => str_replace(",", "", $item),
-                    'date' => Functions::createYearMonthDay($request->date[$key]),
-                ]);
-            }
-        }
-        return back();
-    }
 
     public function searchPriceMarketing(Request $request)
     {
