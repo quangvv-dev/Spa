@@ -2,13 +2,17 @@
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-center" colspan="5">THÔNG TIN NGUỒN</th>
-            <th class="text-center" colspan="9">THÔNG TIN HIỆU QUẢ MARKETING</th>
+            <th class="text-center" colspan="8">THÔNG TIN NGUỒN</th>
+            <th class="text-center" colspan="10">THÔNG TIN HIỆU QUẢ MARKETING</th>
         </tr>
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center">STT</th>
             <th class="text-center">Marketing</th>
+            <th class="text-center">Nạp tiền</th>
             <th class="text-center">Ngân sách</th>
+            <th class="text-center">Tin nhắn</th>
+            <th class="text-center">Comment</th>
+            <th class="text-center">Data</th>
             <th class="text-center">Số contact</th>
             <th class="text-center">Giá contact</th>
             <th class="text-center">Lịch hẹn</th>
@@ -26,7 +30,11 @@
             <th class="text-center">(1)</th>
             <th class="text-center">(2)</th>
             <th class="text-center">(3)</th>
+            <th class="text-center">(3.1)</th>
             <th class="text-center">(4)</th>
+            <th class="text-center">(4.1)</th>
+            <th class="text-center">(4.2)</th>
+            <th class="text-center">(4.3)</th>
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
             <th class="text-center">(6.1)</th>
@@ -48,7 +56,11 @@
         @if(count($marketing))
             <tr>
                 <td class="text-center bold" colspan="2">Tổng</td>
+                <td class="text-center bold">{{number_format($marketing->sum('nap'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('budget'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('message'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('comment'))}}</td>
+                <td class="text-center bold">{{number_format($marketing->sum('message')+ $marketing->sum('comment'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('contact'))}}</td>
                 <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?number_format(round($marketing->sum('budget')/$marketing->sum('contact'))):0}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('schedules'))}}</td>
@@ -65,7 +77,11 @@
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->full_name}}
+                    <td class="text-center pdr10">{{number_format($item->nap)}}</td> {{--Nạp tiền--}}
                     <td class="text-center pdr10">{{number_format($item->budget)}}</td> {{--ngân sách--}}
+                    <td class="text-center pdr10">{{number_format($item->message)}}</td> {{--message--}}
+                    <td class="text-center pdr10">{{number_format($item->comment)}}</td> {{--comment--}}
+                    <td class="text-center pdr10">{{number_format($item->message + $item->comment)}}</td> {{--data--}}
                     <td class="text-center pdr10">{{number_format($item->contact)}}</td>
                     <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->contact)?number_format(round($item->budget/$item->contact)):0}}</td>{{--giá contact--}}
                     <td class="text-center pdr10">{{number_format($item->schedules)}}</td>
