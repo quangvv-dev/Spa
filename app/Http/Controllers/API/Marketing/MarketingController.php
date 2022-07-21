@@ -6,11 +6,13 @@ use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\CarepageResource;
 use App\Http\Resources\MarketingResource;
+use App\Http\Resources\WaiterResource;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
@@ -98,18 +100,76 @@ class MarketingController extends BaseApiController
                 $item->schedules_den = 0;
             }
             $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
-            $payment = PaymentHistory::search($input, 'price','order_id')->get();
+            $payment = PaymentHistory::search($input, 'price', 'order_id')->get();
             $item->orders = $orders->count();
             $item->all_total = (int)$orders->sum('all_total');
             $item->gross_revenue = (int)$orders->sum('gross_revenue');
             $item->payment = $payment->sum('price');
             return $item;
-        })->sortByDesc('payment')->filter(function ($q){
-            if ((int)$q->payment >0 ){
+        })->sortByDesc('payment')->filter(function ($q) {
+            if ((int)$q->payment > 0) {
                 return $q;
             }
         });
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',CarepageResource::collection($marketing));
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', CarepageResource::collection($marketing));
+
+    }
+
+    public function waiters(Request $request)
+    {
+        $input = $request->all();
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
+        $users = User::select('id', 'full_name')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                });
+
+            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('telesales_id', $item->id);
+                });
+            $orders2 = clone $orders;
+            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+            //lich hen
+
+            $request->merge(['telesales' => $item->id]);
+            $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
+            $detail_new = clone $detail;
+
+            $item->detail_new = (int)$detail_new->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+            })->sum('price');
+            $item->customer_new = $data_new->count();
+            $item->order_new = $order_new->count();
+            $item->order_old = $order_old->count();
+            $item->revenue_new = (int)$order_new->sum('all_total');
+            $item->revenue_old = (int)$order_old->sum('all_total');
+            $item->payment_revenue = (int)$orders->sum('gross_revenue');
+            $item->payment_new = (int)$order_new->sum('gross_revenue');//da thu trong ky
+            $item->payment_old = (int)$order_old->sum('gross_revenue'); //da thu trong ky
+            $item->revenue_total = (int)$order_new->sum('all_total') + $order_old->sum('all_total');;
+            $item->all_payment = (int)$detail->sum('price');
+            return $item;
+        })->sortByDesc('all_payment')
+            ->filter(function ($it) {
+                if ($it->all_payment > 0 || $it->customer_new) {
+                    return $it;
+                }
+            });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', WaiterResource::collection($users));
 
     }
 
