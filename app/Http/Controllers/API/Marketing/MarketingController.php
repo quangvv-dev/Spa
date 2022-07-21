@@ -149,18 +149,15 @@ class MarketingController extends BaseApiController
             $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
             $detail_new = clone $detail;
 
-            $item->detail_new = (int)$detail_new->whereHas('order', function ($qr) {
+            $item->payment_new = (int)$detail_new->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
-            $item->customer_new = $data_new->count();
+            $item->contact = $data_new->count();
             $item->order_new = $order_new->count();
             $item->order_old = $order_old->count();
-            $item->revenue_new = (int)$order_new->sum('all_total');
-            $item->revenue_old = (int)$order_old->sum('all_total');
-            $item->payment_revenue = (int)$orders->sum('gross_revenue');
-            $item->payment_new = (int)$order_new->sum('gross_revenue');//da thu trong ky
-            $item->payment_old = (int)$order_old->sum('gross_revenue'); //da thu trong ky
-            $item->revenue_total = (int)$order_new->sum('all_total') + $order_old->sum('all_total');;
+            $item->total_new = (int)$order_new->sum('all_total');
+            $item->total_old = (int)$order_old->sum('all_total');
+            $item->all_total = (int)$order_new->sum('all_total') + $order_old->sum('all_total');;
             $item->all_payment = (int)$detail->sum('price');
             return $item;
         })->sortByDesc('all_payment')
