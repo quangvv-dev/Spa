@@ -108,7 +108,7 @@ class MarketingController extends BaseApiController
                 return $q;
             }
         });
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',(array)$marketing);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',$marketing);
 
     }
 
