@@ -429,9 +429,9 @@ class RevenueController extends BaseApiController
             $thu = $payment->sum('price') + $payment_wallet->sum('price');
             $chi = ThuChi::search($input)->where('status', UserConstant::ACTIVE)->sum('so_tien');
             $data = [
-                'thu' => $thu,
-                'chi' => $chi,
-                'loi_nhuan' => $thu - $chi,
+                'thu' => (int)$thu,
+                'chi' => (int)$chi,
+                'loi_nhuan' => (int)$thu - (int)$chi,
             ];
 
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
