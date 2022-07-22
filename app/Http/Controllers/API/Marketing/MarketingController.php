@@ -183,7 +183,7 @@ class MarketingController extends BaseApiController
             $input['group_branch'] = $group_branch;
         }
         $data = [];
-        $marketing = User::select('id', 'name')->where('department_id', DepartmentConstant::MARKETING)
+        $marketing = User::select('id')->where('department_id', DepartmentConstant::MARKETING)
             ->when(isset($input['mkt_id']) && $input['mkt_id'], function ($query) use ($input) {
                 $query->where('id', $input['mkt_id']);
             })->get();
