@@ -20,6 +20,7 @@ class CarepageResource extends JsonResource
             'full_name'         => @$this->full_name,
             'contact'           => @$this->contact,
             'schedules'         => @$this->schedules,
+            'schedules_den'     => @$this->schedules_den,
             'orders'            => $this->orders,
             'all_total'         => @(int)$this->all_total,
             'gross_revenue'     => @(int)$this->gross_revenue,

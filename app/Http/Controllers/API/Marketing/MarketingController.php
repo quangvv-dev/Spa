@@ -92,12 +92,12 @@ class MarketingController extends BaseApiController
             $input['group_user'] = $group_user;
 
             if (count($group_user)) {
-                $schedules = Schedule::search($input)->select('id','status');
+                $schedules = Schedule::search($input)->select('id');
                 $item->schedules = $schedules->count();
-                $item->schedule_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
             } else {
                 $item->schedules = 0;
-                $item->schedule_den = 0;
+                $item->schedules_den = 0;
             }
             $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
             $payment = PaymentHistory::search($input, 'price', 'order_id')->get();
