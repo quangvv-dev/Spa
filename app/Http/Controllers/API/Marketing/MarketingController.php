@@ -92,7 +92,7 @@ class MarketingController extends BaseApiController
             $input['group_user'] = $group_user;
 
             if (count($group_user)) {
-                $schedules = Schedule::search($input)->select('id');
+                $schedules = Schedule::search($input)->select('id','status');
                 $item->schedules = $schedules->count();
                 $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
             } else {
@@ -168,6 +168,18 @@ class MarketingController extends BaseApiController
             });
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', WaiterResource::collection($users));
 
+    }
+
+
+    /**
+     * ds MKT
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMarketingUser()
+    {
+        $marketing = User::select('id', 'full_name')->where('department_id', DepartmentConstant::MARKETING)->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $marketing);
     }
 
     /**
