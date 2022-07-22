@@ -84,7 +84,7 @@ class MarketingController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name','avatar')->get()->map(function ($item) use ($input) {
             $input['carepage_id'] = $item->id;
             $customer = Customer::searchApi($input)->select('id');
             $item->contact = $customer->count();
@@ -122,7 +122,7 @@ class MarketingController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $users = User::select('id', 'full_name')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
+        $users = User::select('id', 'full_name','avatar')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
