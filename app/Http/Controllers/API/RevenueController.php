@@ -429,11 +429,20 @@ class RevenueController extends BaseApiController
             $thu = $payment->sum('price') + $payment_wallet->sum('price');
             $chi = ThuChi::search($input)->where('status', UserConstant::ACTIVE)->sum('so_tien');
             $data = [
-                'thu' => (int)$thu,
-                'chi' => (int)$chi,
-                'loi_nhuan' => (int)$thu - (int)$chi,
-            ];
+                [
+                    'name' => 'Thực thu',
+                    'all_total' => (int)$thu,
 
+                ],
+                [
+                    'name' => 'Chi',
+                    'all_total' => (int)$chi,
+                ],
+                [
+                    'name' => 'Lợi nhuận',
+                    'all_total' => (int)$thu - (int)$chi,
+                ],
+            ];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
         }
