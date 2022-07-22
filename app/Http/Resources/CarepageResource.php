@@ -18,6 +18,7 @@ class CarepageResource extends JsonResource
         $result = [
             'id'                => @$this->id,
             'full_name'         => @$this->full_name,
+            'avatar'            => @$this->avatar,
             'contact'           => @$this->contact,
             'schedules'         => @$this->schedules,
             'schedules_den'     => @$this->schedules_den,

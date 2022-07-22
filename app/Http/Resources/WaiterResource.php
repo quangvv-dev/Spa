@@ -18,6 +18,7 @@ class WaiterResource extends JsonResource
         $result = [
             'id' => @$this->id,
             'full_name' => @$this->full_name,
+            'avatar'            => @$this->avatar,
             'payment_new' => @$this->payment_new,
             'contact' => @$this->contact,
             'order_new' => $this->order_new,
