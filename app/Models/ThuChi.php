@@ -14,7 +14,7 @@ class ThuChi extends Model
     protected $guarded = ['id'];
 
 
-    public static function search($param,$select="*")
+    public static function search($param, $select = "*")
     {
 
         $data = self::select($select)->when(isset($param['category_id']) && $param['category_id'], function ($query) use ($param) {
@@ -23,13 +23,15 @@ class ThuChi extends Model
             $query->where('status', $param['status']);
         })->when(isset($param['thuc_hien_id']) && $param['thuc_hien_id'], function ($query) use ($param) {
             $query->where('thuc_hien_id', $param['thuc_hien_id']);
+        })->when(isset($param['arr_thuc_hien']) && $param['arr_thuc_hien'], function ($query) use ($param) {
+            $query->whereIn('thuc_hien_id', $param['arr_thuc_hien']);
         })->when(isset($param['duyet_id']) && $param['duyet_id'], function ($query) use ($param) {
             $query->where('duyet_id', $param['duyet_id']);
         })->when(isset($param['id']) && $param['id'], function ($query) use ($param) {
             $query->where('id', $param['id']);
         })->when(isset($param['branch_id']) && $param['branch_id'], function ($query) use ($param) {
             $query->where('branch_id', $param['branch_id']);
-        }) ->when(isset($param['group_branch']) && count($param['group_branch']), function ($q) use ($param) {
+        })->when(isset($param['group_branch']) && count($param['group_branch']), function ($q) use ($param) {
             $q->whereIn('branch_id', $param['group_branch']);
         })->when(isset($param['start_date']) && isset($param['end_date']), function ($query) use ($param) {
             $query->whereBetween('created_at', [
@@ -45,9 +47,10 @@ class ThuChi extends Model
     {
         return $this->belongsTo(DanhMucThuChi::class);
     }
+
     public function lyDoThuChi()
     {
-        return $this->belongsTo(LyDoThuChi::class,'ly_do_id');
+        return $this->belongsTo(LyDoThuChi::class, 'ly_do_id');
     }
 
     public function branch()

@@ -172,6 +172,8 @@ class Order extends Model
                 })
                 ->when(isset($input['marketing']), function ($query) use ($input) {
                     $query->where('mkt_id', $input['marketing']);
+                })->when(isset($input['arr_marketing']), function ($query) use ($input) {
+                    $query->whereIn('mkt_id', $input['arr_marketing']);
                 })
                 ->when(isset($input['service']), function ($query) use ($input) {
                     $query->whereHas('orderDetails', function ($q) use ($input) {
