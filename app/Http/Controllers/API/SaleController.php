@@ -228,30 +228,21 @@ class SaleController extends BaseApiController
         });//đã thu trong kỳ
         $detail_new = clone $detail;
 
-        $response['detail_new'] = $detail_new->whereHas('order', function ($qr) {
+        $response['payment_new'] = $detail_new->whereHas('order', function ($qr) {
             $qr->where('is_upsale', OrderConstant::NON_UPSALE);
         })->sum('price');
 
-        $response['customer_new'] = $data_new->count();
+        $response['contact'] = $data_new->count();
         $response['order_new'] = $order_new->count();
         $response['order_old'] = $order_old->count();
-        $response['revenue_new'] = $order_new->sum('all_total');
-        $response['revenue_old'] = $order_old->sum('all_total');
+        $response['total_new'] = $order_new->sum('all_total');
+        $response['total_old'] = $order_old->sum('all_total');
+
         $response['payment_revenue'] = $orders->sum('gross_revenue');
-        $response['payment_new'] = $order_new->sum('gross_revenue');
-        $response['payment_old'] = $order_old->sum('gross_revenue');
-//            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
-//            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
-//            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
+        $response['gross_new'] = $order_new->sum('gross_revenue');
+        $response['gross_old'] = $order_old->sum('gross_revenue');
         $response['revenue_total'] = $order_new->sum('all_total') + $order_old->sum('all_total');;
         $response['all_payment'] = $detail->sum('price');
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
-
-//        return $item;
-//            })->sortByDesc('all_payment');
-//        \View::share([
-//            'allTotal' => $users->sum('revenue_total'),
-//            'grossRevenue' => $users->sum('payment_revenue'),
-//        ]);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$response]);
     }
 }
