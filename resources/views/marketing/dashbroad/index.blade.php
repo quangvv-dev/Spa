@@ -173,7 +173,7 @@
         })
 
         $(document).on('click', '.delete-item', function (e) {
-            let target = $(e.target).closest('tr');
+            let parent = $(e.target).closest('tr');
             var url = $(this).data('url');
             swal({
                 title: 'Bạn có muốn xóa ?',
@@ -192,7 +192,7 @@
                     },
                     success: function () {
                         let target = $(e.target).parent();
-                        $(target).remove();
+                        $(parent).remove();
                     }
                 })
             })
