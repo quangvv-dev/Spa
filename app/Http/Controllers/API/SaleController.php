@@ -199,8 +199,6 @@ class SaleController extends BaseApiController
         $comment_new = clone $group_comment;
 
         $response['comment_new'] = $comment_new->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi;
-//        $response['comment_old'] = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
-
         $schedules = Schedule::select('id')->whereIn('creator_id', $sale)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
             ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
@@ -238,10 +236,8 @@ class SaleController extends BaseApiController
         $response['total_new'] = $order_new->sum('all_total');
         $response['total_old'] = $order_old->sum('all_total');
 
-        $response['payment_revenue'] = $orders->sum('gross_revenue');
         $response['gross_new'] = $order_new->sum('gross_revenue');
         $response['gross_old'] = $order_old->sum('gross_revenue');
-        $response['revenue_total'] = $order_new->sum('all_total') + $order_old->sum('all_total');;
         $response['all_payment'] = $detail->sum('price');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$response]);
     }
