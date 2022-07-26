@@ -226,19 +226,19 @@ class SaleController extends BaseApiController
         });//đã thu trong kỳ
         $detail_new = clone $detail;
 
-        $response['payment_new'] = $detail_new->whereHas('order', function ($qr) {
+        $response['payment_new'] = (int)$detail_new->whereHas('order', function ($qr) {
             $qr->where('is_upsale', OrderConstant::NON_UPSALE);
         })->sum('price');
 
         $response['contact'] = $data_new->count();
         $response['order_new'] = $order_new->count();
         $response['order_old'] = $order_old->count();
-        $response['total_new'] = $order_new->sum('all_total');
-        $response['total_old'] = $order_old->sum('all_total');
+        $response['total_new'] = (int)$order_new->sum('all_total');
+        $response['total_old'] = (int)$order_old->sum('all_total');
 
-        $response['gross_new'] = $order_new->sum('gross_revenue');
-        $response['gross_old'] = $order_old->sum('gross_revenue');
-        $response['all_payment'] = $detail->sum('price');
+        $response['gross_new'] = (int)$order_new->sum('gross_revenue');
+        $response['gross_old'] = (int)$order_old->sum('gross_revenue');
+        $response['all_payment'] = (int)$detail->sum('price');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$response]);
     }
 }
