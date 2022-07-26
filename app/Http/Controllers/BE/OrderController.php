@@ -48,14 +48,9 @@ class OrderController extends Controller
      * @param OrderService $orderService
      * @param OrderDetailService $orderDetailService
      */
-    public function __construct(
-        OrderService $orderService,
-        OrderDetailService $orderDetailService,
-        TaskService $taskService
-    )
+    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService, TaskService $taskService)
     {
         $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
-
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
         $this->taskService = $taskService;
@@ -154,7 +149,7 @@ class OrderController extends Controller
                 DB::rollBack();
             }
             $countOrders = Order::where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
-            if (@$countOrders > 1) {
+            if (@$countOrders >= 2) {
                 $customer->old_customer = 1;
                 $customer->save();
                 $order->is_upsale = 1;
@@ -180,7 +175,6 @@ class OrderController extends Controller
                 }
 
             }
-
 
             $orderDetail = $this->orderDetailService->create($param, $order->id);
 
