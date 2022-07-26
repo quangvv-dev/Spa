@@ -239,6 +239,6 @@ class SaleController extends BaseApiController
         $response['gross_new'] = (int)$order_new->sum('gross_revenue');
         $response['gross_old'] = (int)$order_old->sum('gross_revenue');
         $response['all_payment'] = (int)$detail->sum('price');
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$response]);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($response));
     }
 }
