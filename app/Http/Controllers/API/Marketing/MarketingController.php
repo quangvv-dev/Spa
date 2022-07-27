@@ -220,8 +220,8 @@ class MarketingController extends BaseApiController
                 $data['schedules_den'] = 0;
             }
             $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
-            if (count($params['arr_marketing']) != 1) {
-                unset($params['arr_marketing']);
+            if (count($input['arr_marketing']) != 1) {
+                unset($input['arr_marketing']);
             }
             $payment = PaymentHistory::search($input, 'price,order_id');
             $paymentNew = clone $payment;
