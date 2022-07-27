@@ -84,7 +84,7 @@ class MarketingController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name','avatar')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['carepage_id'] = $item->id;
             $customer = Customer::searchApi($input)->select('id');
             $item->contact = $customer->count();
@@ -122,7 +122,7 @@ class MarketingController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $users = User::select('id', 'full_name','avatar')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
+        $users = User::select('id', 'full_name', 'avatar')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -199,7 +199,6 @@ class MarketingController extends BaseApiController
             ->when(isset($input['mkt_id']) && $input['mkt_id'], function ($query) use ($input) {
                 $query->where('id', $input['mkt_id']);
             })->get();
-
         if (count($marketing)) {
             $input['arr_marketing'] = $marketing->pluck('id')->toArray();
             $input['arr_thuc_hien'] = $marketing->pluck('id')->toArray();
@@ -220,8 +219,10 @@ class MarketingController extends BaseApiController
                 $data['schedules'] = 0;
                 $data['schedules_den'] = 0;
             }
-
             $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+            if (count($params['arr_marketing']) != 1) {
+                unset($params['arr_marketing']);
+            }
             $payment = PaymentHistory::search($input, 'price,order_id');
             $paymentNew = clone $payment;
             $paymentNew = $paymentNew->whereHas('order', function ($item) {
