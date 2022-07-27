@@ -230,7 +230,10 @@ class MarketingController extends BaseApiController
             });
 
             unset($input['marketing']);
-            $price = PriceMarketing::search($input)->whereIn('user_id', $input['arr_marketing'])->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
+            $price = PriceMarketing::search($input)
+                ->when(isset($input['arr_marketing']), function ($query) use ($input) {
+                    $query->whereIn('user_id', $input['arr_marketing']);
+                })->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
                 \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
             $data['budget'] = (int)$price->total_budget; //ngân sách
             $data['comment'] = (int)$price->total_comment; //comment
