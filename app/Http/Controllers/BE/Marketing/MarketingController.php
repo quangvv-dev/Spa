@@ -144,6 +144,10 @@ class MarketingController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $users = Auth::user();
+        if ($users->department_id == DepartmentConstant::WAITER) {
+            $request->merge(['branch_id' => $users->branch_id]);
+        }
         $input = $request->all();
         $input['searchAccept'] = UserConstant::ACTIVE;
         $source = Source::with('user')->get()->map(function ($item) use ($input) {
