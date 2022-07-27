@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
@@ -94,10 +95,14 @@ class CallController extends BaseApiController
      */
     public function getEmployeeCall(Request $request)
     {
-        $data = User::select('id', 'full_name', 'caller_number')->where('caller_number', '!=', '')->get();
-        if (count($data) <= 0) {
-            $data = User::select('id', 'full_name', 'caller_number')->whereIn('role',
-                [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
+        if ($request->type =='all_sale'){
+            $data = User::select('id', 'full_name', 'caller_number')->where('department_id',DepartmentConstant::TELESALES)->get();
+        }else{
+            $data = User::select('id', 'full_name', 'caller_number')->where('caller_number', '!=', '')->get();
+            if (count($data) <= 0) {
+                $data = User::select('id', 'full_name', 'caller_number')->whereIn('role',
+                    [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
+            }
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
