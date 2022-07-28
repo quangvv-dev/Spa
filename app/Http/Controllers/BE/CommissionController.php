@@ -31,6 +31,7 @@ class CommissionController extends Controller
     public function __construct(CommissionService $commissionService)
     {
         $this->middleware('permission:report.commission', ['only' => ['statistical']]);
+        $this->middleware('permission:report.waiters', ['only' => ['statisticalWaiters']]);
         $this->commissionService = $commissionService;
         $branchs = Branch::search()->pluck('name', 'id');
         $location = Branch::$location;

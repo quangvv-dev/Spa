@@ -22,7 +22,6 @@ class RoleController extends Controller
         'landipages',
         'posts',
         'promotions',
-
         'category',
         'category-product',
         'products',
@@ -56,6 +55,10 @@ class RoleController extends Controller
         'marketing.fanpage',
         'marketing.fanpage_post',
         'marketing.seeding_number',
+        'marketing.dashboard',
+        'report.waiters',
+        'report.commission',
+        'carepage.index',
     ];
     protected $permissions = ['list', 'edit', 'add', 'delete'];
 

@@ -78,14 +78,15 @@
                         @if($roleGlobal->permission('marketing.fanpage_post'))
                             <li><a href="{{route('marketing.fanpage-post.index')}}">Fanpage Post</a></li>
                         @endif
-                        <li class="sub-with-sub">
-                            <a href="#">Xếp hạng</a>
-                            <ul>
-                                <li><a href="{{route('marketing.dashboard')}}">Marketing Dashbroad</a></li>
-                                <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
-                            </ul>
-
-                        </li>
+                        @if($roleGlobal->permission('marketing.dashboard'))
+                            <li class="sub-with-sub">
+                                <a href="#">Xếp hạng</a>
+                                <ul>
+                                    <li><a href="{{route('marketing.dashboard')}}">Marketing Dashbroad</a></li>
+                                    <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
+                                </ul>
+                            </li>
+                        @endif
                         @if($roleGlobal->permission('source.list') || $roleGlobal->permission('marketing.seeding_number'))
                             <li class="sub-with-sub">
                                 <a href="#">Dữ liệu</a>
@@ -125,16 +126,6 @@
                                 </ul>
                             </li>
                         @endif
-
-                        {{--@if($roleGlobal->permission('posts.list'))--}}
-                        {{--<li><a href="{{route('posts.index')}}">Optin Form</a></li>--}}
-                        {{--@endif--}}
-
-                        {{--@if(empty($permissions) || !in_array('customer-post.index',$permissions))--}}
-                        {{--@if($roleGlobal->permission('post.customer'))--}}
-                        {{--<li><a href="{{route('post.customer')}}">Khách hàng từ form</a></li>--}}
-                        {{--@endif--}}
-                        {{--@endif--}}
                     </ul>
                 </div>
             </li>
@@ -259,9 +250,13 @@
                         <li class="sub-with-sub">
                             <a href="#">Phòng ban khác</a>
                             <ul>
-                                <li><a href="{{url('marketing/carepage-ranking')}}">Xếp hạng CarePage</a></li>
-                                <li><a href="{{url('marketing/carepage')}}">Báo cáo DT CarePage</a></li>
-                                <li><a href="{{url('report/waiters')}}">Báo cáo DT lễ tân</a></li>
+                                @if($roleGlobal->permission('carepage.index'))
+                                    <li><a href="{{url('marketing/carepage-ranking')}}">Xếp hạng CarePage</a></li>
+                                    <li><a href="{{url('marketing/carepage')}}">Báo cáo DT CarePage</a></li>
+                                @endif
+                                @if($roleGlobal->permission('report.waiters'))
+                                    <li><a href="{{url('report/waiters')}}">Báo cáo DT lễ tân</a></li>
+                                @endif
                                 @if($roleGlobal->permission('report.commission'))
                                     <li><a href="{{url('report/commission')}}">Báo cáo KTV</a></li>
                                 @endif

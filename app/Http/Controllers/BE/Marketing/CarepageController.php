@@ -27,6 +27,7 @@ class CarepageController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:carepage.index', ['only' => ['index','ranking']]);
         $branchs = Branch::search()->pluck('name', 'id');
         $location = Branch::$location;
         view()->share([

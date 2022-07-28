@@ -171,11 +171,11 @@
             </td>
         </tr>
         {{--<tr>--}}
-        {{--<td>Marketing Dashbroad</td>--}}
-        {{--<td>--}}
-        {{--<input type="checkbox" id="input10" name="permissions[]"--}}
-        {{--value="source.update" {{@$doc && $doc->hasAccess('marketing.dashboard') ? 'checked' : ''}}>--}}
-        {{--</td>--}}
+            {{--<td>Marketing Dashboard</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input10" name="permissions[]"--}}
+                       {{--value="source.update" {{@$doc && $doc->hasAccess('marketing.dashboard') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
         {{--</tr>--}}
         <tr>
             <td>QL danh mục thu chi</td>

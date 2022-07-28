@@ -21,7 +21,7 @@ return [
     "status"                   => "QL CRM",
     // Thống kê
     "report.tasks"             => "Hiệu quả công việc",
-    "report.commission"        => "Hoa hồng KTV",
+    "report.commission"        => "Báo cáo KTV",
     "statistics.taskSchedules" => "BĐ công việc là lịch hẹn",
     "statistics.index"         => "Doanh thu",
     "report.groupSale"         => "Doanh thu nhóm sản phẩm & Dịch vụ",
@@ -41,4 +41,7 @@ return [
     'leaderMKT'                => "Đặc quyền TP Marketing",
     'call-center'              => "Quản lý tổng đài",
     'tasks.index'              => "Công việc CSKH (Nhân viên)",
+    'marketing.dashboard'      => "Marketing Dashboard",
+    'report.waiters'           => "Báo cáo lễ tân",
+    'carepage.index'           => "Báo cáo CarePage",
 ];
