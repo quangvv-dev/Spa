@@ -279,7 +279,6 @@ exports.ChatComment = (value,io) => {
                     model.UpdateComment(data.id, value.value.message, content);
                     value.check_create =2;
                 }
-                console.log('Chuẩn bị bắn socket');
                 io.emit(page_id, value);
                 console.log('Đã bắn socket');
 

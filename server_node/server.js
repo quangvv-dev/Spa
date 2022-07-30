@@ -42,27 +42,6 @@ app.post('/webhook',async function (req, res) {
                 if (message.message) {
                     controller.sendSocketMessages(message, io);
                 }
-                // var senderId = message.sender.id;
-                // var recipientId = message.recipient.id;
-                // if (message.message) {
-                //     controller.sendSocketMessages(message, io);
-                //     if (message.message.text) {
-                //         let text = message.message.text;
-                //         text = text.replace(".", "");
-                //         text = text.replace("O", "0");
-                //         // text = text.replace("o", "0");
-                //         let letr = text.match(/\d+/g);
-                //         if (!letr){
-                //             return false;
-                //         }
-                //         letr.every(function (i) {
-                //             if (i.length === 10) {
-                //                 controller.SetCustomers(i, recipientId, message.message.text, senderId);
-                //                 return false;
-                //             }
-                //         })
-                //     }
-                // }
             }
         } else {
 
@@ -71,22 +50,7 @@ app.post('/webhook',async function (req, res) {
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
                     value.type = 'comment';
-                    let comment =  controller.ChatComment(value,io);
-                    console.log('ket quả check',comment);
-                    // let splitted = value.value.post_id.split("_", 2);
-                    // value.type = 'comment';
-
-                    // if(comment == 0){
-                    //     return;
-                    // } else if (comment == 1) {
-                    //     value.check_create = 1; //thêm mới
-                    // } else {
-                    //     value.check_create = 2; //update
-                    // }
-                    // console.log('Chuẩn bị bắn socket');
-                    // controller.sendSocketComment(splitted[0],value, io);
-                    // console.log('Đã bắn socket');
-
+                    controller.ChatComment(value,io);
                 }
                 return false;
             }
