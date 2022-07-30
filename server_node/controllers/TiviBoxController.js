@@ -250,15 +250,15 @@ exports.sendSocketComment = (page_id, message, io) => {
 
 exports.ChatComment = (value) => {
     model.CheckFanpage(value.value.from.id, function (err, fanpage) {
-        let check = 0;
         if (fanpage.length < 1) {
             let splitted = value.value.post_id.split("_", 2);
             const page_id = splitted[0], post_id = splitted[1];
             const FB_ID = value.value.from.id;
             const fb_name = value.value.from.name;
             const created_at = localeTime();
-            model.CheckExistsComment(page_id, post_id, value.value.from.id, function (err, comment) {
+            model.CheckExistsComment(page_id, post_id, FB_ID, function (err, comment) {
                 // model.CheckExistsComment(page_id,post_id,value.value.from.id).then(comment=>{
+                let check = 1;
                 let data_content = [{
                     // created_time: new Date(value.value.created_time).toISOString(),
                     created_time: new Date().toISOString(),
@@ -270,15 +270,16 @@ exports.ChatComment = (value) => {
                     let content = JSON.stringify(data_content);
                     model.CreateComment(page_id, post_id, FB_ID, fb_name, value.value.message, content, created_at, function (err, comment) {
                     });
-                    return 1;
+                    check = 1;
                 } else { //trường hợp đã tồn tại
+                    check = 2;
                     let data = comment[0];
                     let content_old = JSON.parse(data.content);
                     content_old.push(data_content[0]);
                     let content = JSON.stringify(content_old);
                     model.UpdateComment(data.id, value.value.message, content);
-                    return 2;
                 }
+                return check;
             });
         } else {
             return 0;
