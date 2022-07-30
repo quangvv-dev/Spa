@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
@@ -94,7 +95,7 @@ class StatisticController extends BaseApiController
     public function tasks(Request $request)
     {
         $input = $request->all();
-        $users = User::select('id', 'full_name')->whereIn('department_id', [2,5])
+        $users = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER,DepartmentConstant::CSKH])
             ->get()->map(function ($item) use ($input) {
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -103,13 +104,19 @@ class StatisticController extends BaseApiController
                     $q->where('branch_id', $input['branch_id']);
                 })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
+                })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {
+                    $q->where('type', $input['type']);
                 });
                 $task1 = clone $task;
                 $item->all_task = $task->count();
                 $item->all_done = $task->where('task_status_id', StatusCode::DONE_TASK)->count();
                 $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
                 return $item;
-            })->sortByDesc('all_task');
+            })->sortByDesc('all_task')->filter(function ($qr) {
+                if ($qr->all_task > 0){
+                    return $qr;
+                }
+            });
 
         $data = TasksResource::collection($users);
 
@@ -232,12 +239,12 @@ class StatisticController extends BaseApiController
         })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('branch_id', $input['group_branch']);
         })
-        ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input, $loc) {
-            $q->whereBetween($loc, [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ]);
-        });
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input, $loc) {
+                $q->whereBetween($loc, [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            });
         return $query;
     }
 

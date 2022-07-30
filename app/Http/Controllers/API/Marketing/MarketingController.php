@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers\API\Marketing;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
+use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
+use App\Http\Resources\CarepageResource;
 use App\Http\Resources\MarketingResource;
+use App\Http\Resources\WaiterResource;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\PaymentHistory;
 use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
+use App\Models\ThuChi;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,11 +53,11 @@ class MarketingController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $data = User::where('department_id', 3)->select('id', 'full_name','avatar')->get()->map(function ($item) use ($input) {
+        $data = User::where('department_id', 3)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $customer = Customer::searchApi($input)->select('id');
             $item->contact = $customer->count();
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue','all_total');
+            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
             unset($input['marketing']);
             $input['user_id'] = $item->id;
             $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
@@ -66,13 +72,181 @@ class MarketingController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Thống kê carepage
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function carepage(Request $request)
+    {
+        $input = $request->all();
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+            $input['carepage_id'] = $item->id;
+            $customer = Customer::searchApi($input)->select('id');
+            $item->contact = $customer->count();
+            $group_user = $customer->pluck('id')->toArray();
+            $input['group_user'] = $group_user;
+
+            if (count($group_user)) {
+                $schedules = Schedule::search($input)->select('id');
+                $item->schedules = $schedules->count();
+                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            } else {
+                $item->schedules = 0;
+                $item->schedules_den = 0;
+            }
+            $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
+            $payment = PaymentHistory::search($input, 'price', 'order_id')->get();
+            $item->orders = $orders->count();
+            $item->all_total = (int)$orders->sum('all_total');
+            $item->gross_revenue = (int)$orders->sum('gross_revenue');
+            $item->payment = $payment->sum('price');
+            return $item;
+        })->sortByDesc('payment')->filter(function ($q) {
+            if ((int)$q->payment > 0) {
+                return $q;
+            }
+        });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', CarepageResource::collection($marketing));
+
+    }
+
+    public function waiters(Request $request)
+    {
+        $input = $request->all();
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
+        $users = User::select('id', 'full_name', 'avatar')->where('department_id', DepartmentConstant::WAITER)->get()->map(function ($item) use ($request) {
+            $data_new = Customer::select('id')->where('telesales_id', $item->id)
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                });
+
+            $orders = Order::select('member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('telesales_id', $item->id);
+                });
+            $orders2 = clone $orders;
+            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+            //lich hen
+
+            $request->merge(['telesales' => $item->id]);
+            $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
+            $detail_new = clone $detail;
+
+            $item->payment_new = (int)$detail_new->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+            })->sum('price');
+            $item->contact = $data_new->count();
+            $item->order_new = $order_new->count();
+            $item->order_old = $order_old->count();
+            $item->total_new = (int)$order_new->sum('all_total');
+            $item->total_old = (int)$order_old->sum('all_total');
+            $item->all_total = (int)$order_new->sum('all_total') + $order_old->sum('all_total');;
+            $item->all_payment = (int)$detail->sum('price');
+            return $item;
+        })->sortByDesc('all_payment')
+            ->filter(function ($it) {
+                if ($it->all_payment > 0 || $it->customer_new) {
+                    return $it;
+                }
+            });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', WaiterResource::collection($users));
+
+    }
+
+
+    /**
+     * ds MKT
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMarketingUser()
+    {
+        $marketing = User::select('id', 'full_name')->where('department_id', DepartmentConstant::MARKETING)->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $marketing);
+    }
+
+    /**
+     * Đánh giá chi tiết MKT
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function statistic(Request $request)
     {
-        //
+        $input = $request->all();
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
+        $data = [];
+        $marketing = User::select('id')->where('department_id', DepartmentConstant::MARKETING)
+            ->when(isset($input['mkt_id']) && $input['mkt_id'], function ($query) use ($input) {
+                $query->where('id', $input['mkt_id']);
+            })->get();
+        if (count($marketing)) {
+            $input['arr_marketing'] = $marketing->pluck('id')->toArray();
+            $input['arr_thuc_hien'] = $marketing->pluck('id')->toArray();
+            $params = $input;
+            unset($params['marketing'], $params['branch_id'], $params['location_id']);
+            $thu_chi = ThuChi::search($params, 'so_tien')->where('status', 1);
+            $customer = Customer::searchApi($input)->select('id');
+
+            $data['contact'] = $customer->count();
+            $group_user = $customer->pluck('id')->toArray();
+            $input['group_user'] = $group_user;
+
+            if (count($group_user)) {
+                $schedules = Schedule::search($input)->select('id');
+                $data['schedules'] = $schedules->count();
+                $data['schedules_den'] = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            } else {
+                $data['schedules'] = 0;
+                $data['schedules_den'] = 0;
+            }
+            if (count($input['arr_marketing']) != 1) {
+                unset($input['arr_marketing']);
+            }
+            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+            $payment = PaymentHistory::search($input, 'price,order_id');
+            $paymentNew = clone $payment;
+            $paymentNew = $paymentNew->whereHas('order', function ($item) {
+                $item->where('is_upsale', 0);
+            });
+
+            unset($input['marketing']);
+            $price = PriceMarketing::search($input)
+                ->when(isset($input['arr_marketing']), function ($query) use ($input) {
+                    $query->whereIn('user_id', $input['arr_marketing']);
+                })->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
+                \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
+            $data['budget'] = (int)$price->total_budget; //ngân sách
+            $data['comment'] = (int)$price->total_comment; //comment
+            $data['message'] = (int)$price->total_message; //tin nhắn
+            $data['orders'] = (int)$orders->count();
+            $data['all_total'] = (int)$orders->sum('all_total');
+            $data['gross_revenue'] = (int)$orders->sum('gross_revenue');
+            $data['payment'] = (int)$paymentNew->sum('price');
+            $data['paymentAll'] = (int)$payment->sum('price');
+            $data['nap'] = (int)$thu_chi->sum('so_tien');
+        }
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
     /**
@@ -114,7 +288,7 @@ class MarketingController extends BaseApiController
             $input['source_id'] = $item->id;
 
             $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
-                ->select('id', 'gross_revenue','all_total');
+                ->select('id', 'gross_revenue', 'all_total');
             unset($input['marketing']);
             $input['user_id'] = $item->id;
             $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
@@ -132,39 +306,6 @@ class MarketingController extends BaseApiController
         return view('marketing.dashbroad.index', compact('source'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function addLinePriceMarketing(Request $request)
-    {
-        $user = Auth::user();
-        if ($request->id && count($request->id)) {
-
-            foreach ($request->id as $key => $item) {
-                PriceMarketing::find($item)->update([
-                    'source_id' => $request->source_id,
-                    'budget' => str_replace(",", "", $request->budget[$key]),
-                    'date' => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
-                    'user_id' => $user->id,
-                    'branch_id' => $request->branch_id,
-                ]);
-            }
-        } else {
-            foreach ($request->budget as $key => $item) {
-                PriceMarketing::create([
-                    'source_id' => $request->source_id,
-                    'user_id' => $user->id,
-                    'branch_id' => $request->branch_id,
-                    'budget' => str_replace(",", "", $item),
-                    'date' => Functions::createYearMonthDay($request->date[$key]),
-                ]);
-            }
-        }
-        return back();
-    }
 
     public function searchPriceMarketing(Request $request)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\ScheduleConstant;
@@ -12,6 +13,7 @@ use App\Http\Resources\SaleResource;
 use App\Models\Branch;
 use App\Models\CallCenter;
 use App\Models\Customer;
+use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
@@ -152,5 +154,91 @@ class SaleController extends BaseApiController
         })->sortByDesc('totalAll');
         $users = SaleResource::collection($users);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
+    }
+
+    public function statistic(Request $request)
+    {
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
+        $response = [];
+        $input = $request->all();
+        $sale = User::select('id')->where('department_id', DepartmentConstant::TELESALES)
+            ->when(isset($input['sale_id']) && $input['sale_id'], function ($query) use ($input) {
+                $query->where('id', $input['sale_id']);
+            })->pluck('id')->toArray();
+
+        $data_new = Customer::select('id')->whereIn('telesales_id', $sale)
+            ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            });
+
+        $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            ->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            })->with('orderDetails')->whereHas('customer', function ($qr) use ($sale) {
+                $qr->whereIn('telesales_id', $sale);
+            });
+        $orders2 = clone $orders;
+        $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+        $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+
+        $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+            ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            });
+        $comment_new = clone $group_comment;
+
+        $response['comment_new'] = $comment_new->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi;
+        $schedules = Schedule::select('id')->whereIn('creator_id', $sale)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+            ->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('branch_id', $input['group_branch']);
+            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('branch_id', $input['branch_id']);
+            });
+        $schedules_den = clone $schedules;
+        $schedules_new = clone $schedules;
+
+        $response['schedules_den'] = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+            ->whereHas('customer', function ($qr) {
+                $qr->where('old_customer', 0);
+            })->count();
+        $response['schedules_new'] = $schedules_new->whereHas('customer', function ($qr) {
+            $qr->where('old_customer', 0);
+        })->count();
+        //lich hen
+
+//        $request->merge(['telesales' => $item->id]);
+        $params = $request->all();
+        $detail = PaymentHistory::search($params, 'price')->whereHas('order', function ($item) use ($sale) {
+            $item->whereHas('customer', function ($q) use ($sale) {
+                $q->whereIn('telesales_id', $sale);
+            });
+        });//đã thu trong kỳ
+        $detail_new = clone $detail;
+
+        $response['payment_new'] = (int)$detail_new->whereHas('order', function ($qr) {
+            $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+        })->sum('price');
+
+        $response['contact'] = $data_new->count();
+        $response['order_new'] = $order_new->count();
+        $response['order_old'] = $order_old->count();
+        $response['total_new'] = (int)$order_new->sum('all_total');
+        $response['total_old'] = (int)$order_old->sum('all_total');
+
+        $response['gross_new'] = (int)$order_new->sum('gross_revenue');
+        $response['gross_old'] = (int)$order_old->sum('gross_revenue');
+        $response['all_payment'] = (int)$detail->sum('price');
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
     }
 }

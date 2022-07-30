@@ -32,11 +32,11 @@ class ChartResource extends JsonResource
             ];
         } elseif ($request->type_api == 'all_branch') {
             $result = [
-                'branch_id'    => @$this->branch_id,
-                'total'   => @$this->total,
-                'revenue' => @$this->revenue,
-                'payment' => @$this->payment,
-                'name'    => @$this->name,
+                'branch_id'    => !empty($this->id) ? $this->id : $this->branch_id,
+                'total'        => @$this->total,
+                'revenue'      => @$this->revenue,
+                'payment'      => @$this->payment,
+                'name'         => @$this->name,
             ];
         }
 

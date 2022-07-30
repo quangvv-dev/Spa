@@ -84,9 +84,10 @@ class Customer extends Model
                 $query->where('branch_id', $conditions['branch_id']);
             })->when(isset($conditions['group_branch']) && count($conditions['group_branch']), function ($q) use ($conditions) {
                 $q->whereIn('branch_id', $conditions['group_branch']);
-            })
-            ->when(isset($conditions['marketing']), function ($query) use ($conditions) {
+            })->when(isset($conditions['marketing']), function ($query) use ($conditions) {
                 $query->where('mkt_id', $conditions['marketing']);
+            })->when(isset($conditions['arr_marketing']), function ($query) use ($conditions) {
+                $query->whereIn('mkt_id', $conditions['arr_marketing']);
             })->when(isset($conditions['carepage_id']), function ($query) use ($conditions) {
                 $query->where('carepage_id', $conditions['carepage_id']);
             })->when(isset($conditions['source_fb']), function ($query) use ($conditions) {

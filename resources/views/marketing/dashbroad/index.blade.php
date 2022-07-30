@@ -24,6 +24,9 @@
         tr.fixed th {
             font-size: 12px;
         }
+        .budget,.comment,.message{
+            width: 105px;
+        }
     </style>
 
 @endsection
@@ -46,9 +49,7 @@
                             <input type="hidden" name="end_date" id="end_date">
                             <input id="reportrange" type="text" class="form-control square">
                         </div>
-                        {{--<div class="col-md-2">--}}
-                        {{--{{Form::select('type',[\App\Constants\StatusCode::SERVICE=>'Nhóm dịch vụ',\App\Constants\StatusCode::PRODUCT=>'Nhóm sản phẩm'], @$type, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Chọn loại nhóm'))}}--}}
-                        {{--</div>--}}
+                        @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
                         <div class="col-md-2">
                             <select name="branch_id" id="branch_id" class="form-control">
                                 <option value="">Tất cả chi nhánh</option>
@@ -60,6 +61,7 @@
                         <div class="col-lg-2 col-md-3">
                             {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
                         </div>
+                        @endif
                         <div class="col-lg-2 col-md-6">
                             <button type="submit" class="btn btn-primary"> Tìm kiếm
                             </button>
@@ -98,24 +100,23 @@
 
             let source = source_item;
             let chanel = source.chanel == 1 ? 'GOOGLE ADS' : source.chanel == 2 ? 'FACEBOOK ADS' : 'ZALO ADS';
+            chanel = '(' + chanel + ')';
             $('.list-data').append(
+                `<tr>
+                        <input type="hidden" name="source_id" value="` + source.id + `">
+                        <input type="hidden" name="branch_id" value="` + source.branch_id + `">
+                        <td></td>
+                        <td><span style="font-size: 9px;color: gray;">`+chanel+`</span> `+ source.name + `</td>
+                        <td><input type="text" class="txt-dotted form-control budget" name="budget[]"></td>
+                        <td><input type="text" class="txt-dotted form-control comment" name="comment[]"></td>
+                        <td><input type="text" class="txt-dotted form-control message" name="message[]"></td>
+                        <td><input type='text' name="date[]" id="datepicker" data-toggle="datepicker" class="form-control"/></td>
+                        <td></td>
+                        <td class="text-center">
+                            <a href="javascript:void(0)" class="delete-item" data-url="` + chanel + `"><i class="fa fa-trash fa-2x"></i></a>
+                        </td>
+                    </tr>
                 `
-                            <tr>
-                                <input type="hidden" name="source_id" value="` + source.id + `">
-                                <input type="hidden" name="branch_id" value="` + source.branch_id + `">
-                                <td></td>
-                                <td>` + source.name + `</td>
-                                <td>` + chanel + `</td>
-                                <td>
-                                    <input type="text" class="txt-dotted form-control budget" name="budget[]">
-                                </td>
-                                <td><input type='text' name="date[]" id="datepicker" data-toggle="datepicker" class="form-control"/></td>
-                                <td></td>
-                                <td class="text-center">
-                                    <a href="javascript:void(0)" class="delete-item" data-url="` + chanel + `"><i class="fa fa-trash fa-2x"></i></a>
-                                </td>
-                            </tr>
-                        `
             )
             $('[data-toggle="datepicker"]').datepicker({
                 format: 'dd-mm-yyyy',
@@ -142,20 +143,22 @@
                 success: function (data) {
                     if (data.length > 0) {
                         data.forEach((el, i) => {
-                            let chanel = source.chanel == 1 ? 'GOOGLE ADS' : source.chanel == 2 ? 'FACEBOOK ADS' : 'ZALO ADS'
+                            let chanel = source.chanel == 1 ? 'GOOGLE ADS' : source.chanel == 2 ? 'FACEBOOK ADS' : 'ZALO ADS';
+                            chanel = '(' + chanel + ')';
                             html += `
                                 <tr>
                                     <input type="hidden" name="id[]" value="` + el.id + `">
                                     <input type="hidden" name="source_id" value="` + source.id + `">
                                     <input type="hidden" name="date[]" value="` + el.date + `">
                                     <td>` + Number(i + 1) + `</td>
-                                    <td>` + source.name + `</td>
-                                    <td>` + chanel + `</td>
+                                    <td><span style="font-size: 9px;color: gray;">`+chanel+`</span> `+ source.name + `</td>
                                     <td><input type="text" class="txt-dotted budget number" name="budget[]" value="` + formatNumber(el.budget) + `"></td>
+                                    <td><input type="text" class="txt-dotted comment number" name="comment[]" value="` + formatNumber(el.comment) + `"></td>
+                                    <td><input type="text" class="txt-dotted message number" name="message[]" value="` + formatNumber(el.message) + `"></td>
                                     <td>` + el.date + `</td>
                                     <td>` + el.user.full_name + `</td>
                                     <td class="text-center">
-                                        <a href="javascript:void(0)" class="delete-item" data-url="` + window.location.href +'/'+ el.id + `"><i class="fa fa-trash fa-2x"></i></a>
+                                        <a href="javascript:void(0)" class="delete-item" data-url="` + window.location.href + '/' + el.id + `"><i class="fa fa-trash fa-2x"></i></a>
                                     </td>
                                 </tr>
                             `
@@ -169,7 +172,7 @@
         })
 
         $(document).on('click', '.delete-item', function (e) {
-            let target = $(e.target).closest('tr');
+            let parent = $(e.target).closest('tr');
             var url = $(this).data('url');
             swal({
                 title: 'Bạn có muốn xóa ?',
@@ -188,7 +191,7 @@
                     },
                     success: function () {
                         let target = $(e.target).parent();
-                        $(target).remove();
+                        $(parent).remove();
                     }
                 })
             })

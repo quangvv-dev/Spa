@@ -31,8 +31,9 @@
                         <tr>
                             <th class="text-center">STT</th>
                             <th class="text-center">Landing</th>
-                            <th class="text-center">Kênh quảng cáo</th>
                             <th class="text-center">Ngân sách</th>
+                            <th class="text-center">Comment</th>
+                            <th class="text-center">Tin nhắn</th>
                             <th class="text-center">Dữ liệu ngày</th>
                             <th class="text-center">Cập nhật</th>
                             <th class="text-center"><a id="add_new_price_marketing"><i class="fa fa-plus"></i> Thêm</a>

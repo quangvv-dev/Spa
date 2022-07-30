@@ -15,6 +15,7 @@ use App\Models\PaymentHistory;
 use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
+use App\Models\ThuChi;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ class MarketingController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:carepage.index', ['only' => ['index']]);
         $branchs = Branch::search()->pluck('name', 'id');
         $location = Branch::$location;
         view()->share([
@@ -51,10 +53,18 @@ class MarketingController extends Controller
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-//        $input['marketing'] = 0;
+        if (Auth::user()->department_id == DepartmentConstant::MARKETING) {
+            $group_branch = Branch::where('location_id', @Auth::user()->branch->location_id)->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
 
         $marketing = User::where('department_id', DepartmentConstant::MARKETING)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
+            $input['thuc_hien_id'] = $item->id;
+            $params = $input;
+            unset($params['marketing'], $params['branch_id'], $params['location_id']);
+
+            $thu_chi = ThuChi::search($params, 'so_tien')->where('status', 1);
             $customer = Customer::search($input)->select('id');
             $item->contact = $customer->count();
             $group_user = $customer->pluck('id')->toArray();
@@ -68,19 +78,34 @@ class MarketingController extends Controller
                 $item->schedules = 0;
                 $item->schedules_den = 0;
             }
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue','all_total');
-            $payment = PaymentHistory::search($input, 'price')->whereIn('order_id', $orders->pluck('id')->toArray());
+            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+//            $payment = PaymentHistory::search($input, 'price,order_id')->whereIn('order_id', $orders->pluck('id')->toArray());
+            $payment = PaymentHistory::search($input, 'price,order_id');
+            $paymentNew = clone $payment;
+            $paymentNew = $paymentNew->whereHas('order', function ($item) {
+                $item->where('is_upsale', 0);
+            });
 
             unset($input['marketing']);
             $input['user_id'] = $item->id;
-            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
+            $price = PriceMarketing::search($input)->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
+                \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
             $item->budget = $price->total_budget; //ngân sách
+            $item->comment = $price->total_comment; //comment
+            $item->message = $price->total_message; //tin nhắn
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = $payment->sum('price');
+            $item->payment = $paymentNew->sum('price');
+            $item->paymentAll = $payment->sum('price');
+            $item->nap = $thu_chi->sum('so_tien');
             return $item;
-        })->sortByDesc('payment');
+        })->sortByDesc('payment')
+            ->filter(function ($qr) {
+            if ($qr->payment > 0){
+                return $qr;
+            }
+        });
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
@@ -120,6 +145,10 @@ class MarketingController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $users = Auth::user();
+        if ($users->department_id == DepartmentConstant::WAITER) {
+            $request->merge(['branch_id' => $users->branch_id]);
+        }
         $input = $request->all();
         $input['searchAccept'] = UserConstant::ACTIVE;
         $source = Source::with('user')->get()->map(function ($item) use ($input) {
@@ -137,7 +166,7 @@ class MarketingController extends Controller
             $input['source_id'] = $item->id;
 
             $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
-                ->select('id', 'gross_revenue','all_total');
+                ->select('id', 'gross_revenue', 'all_total');
             unset($input['marketing']);
             $input['source_id'] = $item->id;
             $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
@@ -165,11 +194,12 @@ class MarketingController extends Controller
     {
         $user = Auth::user();
         if ($request->id && count($request->id)) {
-
             foreach ($request->id as $key => $item) {
                 PriceMarketing::find($item)->update([
                     'source_id' => $request->source_id,
                     'budget' => str_replace(",", "", $request->budget[$key]),
+                    'comment' => str_replace(",", "", $request->comment[$key]),
+                    'message' => str_replace(",", "", $request->message[$key]),
                     'date' => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
                     'user_id' => $user->id,
                     'branch_id' => $request->branch_id,
@@ -182,6 +212,8 @@ class MarketingController extends Controller
                     'user_id' => $user->id,
                     'branch_id' => $request->branch_id,
                     'budget' => str_replace(",", "", $item),
+                    'comment' => str_replace(",", "", $request->comment[$key]),
+                    'message' => str_replace(",", "", $request->message[$key]),
                     'date' => Functions::createYearMonthDay($request->date[$key]),
                 ]);
             }

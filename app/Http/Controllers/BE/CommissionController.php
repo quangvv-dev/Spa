@@ -17,6 +17,7 @@ use App\Services\CommissionService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CommissionController extends Controller
@@ -30,6 +31,7 @@ class CommissionController extends Controller
     public function __construct(CommissionService $commissionService)
     {
         $this->middleware('permission:report.commission', ['only' => ['statistical']]);
+        $this->middleware('permission:report.waiters', ['only' => ['statisticalWaiters']]);
         $this->commissionService = $commissionService;
         $branchs = Branch::search()->pluck('name', 'id');
         $location = Branch::$location;
@@ -92,12 +94,16 @@ class CommissionController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $users = Auth::user();
+        if ($users->department_id == DepartmentConstant::WAITER) {
+            $request->merge(['branch_id' => $users->branch_id]);
+        }
         $input = $request->all();
         if (isset($input['location_id'])) {
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $data = User::select('id', 'full_name', 'avatar','branch_id')->whereIn('role', [UserConstant::TECHNICIANS])
+        $data = User::select('id', 'full_name', 'avatar', 'branch_id')->whereIn('role', [UserConstant::TECHNICIANS])
             ->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
@@ -113,8 +119,8 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
-                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id', 'user_id', 'support_id', 'support2_id','tip_id','service_id')
-                    ->orWhere('support2_id', $item->id)->with('service','tip');
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id', 'user_id', 'support_id', 'support2_id', 'tip_id', 'service_id')
+                    ->orWhere('support2_id', $item->id)->with('service', 'tip');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
@@ -168,6 +174,10 @@ class CommissionController extends Controller
     {
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+        $users = Auth::user();
+        if ($users->department_id == DepartmentConstant::WAITER) {
+            $request->merge(['branch_id' => $users->branch_id]);
         }
 
         if (isset($request->location_id)) {

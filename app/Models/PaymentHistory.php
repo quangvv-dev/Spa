@@ -65,6 +65,20 @@ class PaymentHistory extends Model
         if (!empty($input['payment_type'])) {
             $detail = $detail->where('payment_type', $input['payment_type']);
         }
+        if (!empty($input['marketing'])) {
+            $detail = $detail->whereHas('order', function ($item) use ($input) {
+                $item->whereHas('customer', function ($q) use ($input) {
+                    $q->where('mkt_id', $input['marketing']);
+                });
+            });
+        }
+        if (!empty($input['arr_marketing'])) {
+            $detail = $detail->whereHas('order', function ($item) use ($input) {
+                $item->whereHas('customer', function ($q) use ($input) {
+                    $q->whereIn('mkt_id', $input['arr_marketing']);
+                });
+            });
+        }
         if (!empty($input['carepage_id'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
                 $item->whereHas('customer', function ($q) use ($input) {
