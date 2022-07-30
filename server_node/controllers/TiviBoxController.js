@@ -248,7 +248,7 @@ exports.sendSocketComment = (page_id, message, io) => {
     io.emit(page_id, message);
 };
 
-exports.ChatComment = (value) => {
+exports.ChatComment = (value,io) => {
     model.CheckFanpage(value.value.from.id, async function (err, fanpage) {
         if (fanpage.length < 1) {
             let splitted = value.value.post_id.split("_", 2);
@@ -258,7 +258,6 @@ exports.ChatComment = (value) => {
             const created_at = localeTime();
             await model.CheckExistsComment(page_id, post_id, FB_ID, function (err, comment) {
                 // model.CheckExistsComment(page_id,post_id,value.value.from.id).then(comment=>{
-                let check = 1;
                 let data_content = [{
                     // created_time: new Date(value.value.created_time).toISOString(),
                     created_time: new Date().toISOString(),
@@ -268,19 +267,23 @@ exports.ChatComment = (value) => {
                 }]
                 console.log(comment,comment.length,'check length comment');
                 if (comment.length <1) { //trường hợp thêm mới
-                    check = 1;
                     let content = JSON.stringify(data_content);
                     model.CreateComment(page_id, post_id, FB_ID, fb_name, value.value.message, content, created_at, function (err, comment) {
                     });
+                    value.check_create =1;
                 } else { //trường hợp đã tồn tại
-                    check = 2;
                     let data = comment[0];
                     let content_old = JSON.parse(data.content);
                     content_old.push(data_content[0]);
                     let content = JSON.stringify(content_old);
                     model.UpdateComment(data.id, value.value.message, content);
+                    value.check_create =2;
                 }
-                return check;
+                console.log('Chuẩn bị bắn socket');
+                sendSocketComment(page_id,value, io);
+                console.log('Đã bắn socket');
+
+                return 0;
             });
         } else {
             return 0;

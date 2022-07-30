@@ -70,38 +70,23 @@ app.post('/webhook',async function (req, res) {
             console.log(comments, 'COMMENT');
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
-                    let comment = await controller.ChatComment(value);
-                    console.log('ket quả check',comment);
-                    let splitted = value.value.post_id.split("_", 2);
                     value.type = 'comment';
+                    let comment =  controller.ChatComment(value,io);
+                    console.log('ket quả check',comment);
+                    // let splitted = value.value.post_id.split("_", 2);
+                    // value.type = 'comment';
 
-                    if(comment == 0){
-                        return;
-                    } else if (comment == 1) {
-                        value.check_create = 1; //thêm mới
-                    } else {
-                        value.check_create = 2; //update
-                    }
-                    console.log('Chuẩn bị bắn socket');
-                    controller.sendSocketComment(splitted[0],value, io);
-                    console.log('Đã bắn socket');
-
-
-
-                    // let text2 = value.value.message;
-                    // text2 = text2.replace(".", "");
-                    // text2 = text2.replace("O", "0");
-                    // // text2 = text2.replace("o", "0");
-                    // let letr = text2.match(/\d+/g);
-                    // if (!letr){
-                    //     return false;
+                    // if(comment == 0){
+                    //     return;
+                    // } else if (comment == 1) {
+                    //     value.check_create = 1; //thêm mới
+                    // } else {
+                    //     value.check_create = 2; //update
                     // }
-                    // letr.every(function (i) {
-                    //     if (i.length === 10) {
-                    //         controller.SetComment(i, value.value.post_id, value.value.message, value.value.from.name);
-                    //         return false;
-                    //     }
-                    // })
+                    // console.log('Chuẩn bị bắn socket');
+                    // controller.sendSocketComment(splitted[0],value, io);
+                    // console.log('Đã bắn socket');
+
                 }
                 return false;
             }
