@@ -115,7 +115,8 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="mdi mdi-facebook-messenger"></i></span>
+                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-comment-dots"></i></span>
                                         </p>
                                     </div>
                                     <div class="chat-content" v-else style="margin-bottom: 0">
@@ -125,7 +126,8 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="fa fa-comment pointer"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="mdi mdi-facebook-messenger"></i></span>
+                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-comment-dots"></i></span>
                                         </p>
                                     </div>
                                 </div>
@@ -226,6 +228,37 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade" id="send_comment" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalComment">Trả lời comment</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                {{chat_current_name}}
+                                            </div>
+                                            <hr>
+                                            <div class="col-12">
+                                                <textarea v-model="contentComment" cols="30" rows="4"
+                                                          class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <button @click="sendComment()" type="button" class="btn btn-primary">Bình luận
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <section class="chat-app-form">
                         <div class="chat-app-input d-flex">
@@ -317,7 +350,7 @@
                 <div class="col-12 mb-1">
                     <textarea rows="4" class="form-control" v-model="description" placeholder="Mô tả"></textarea>
                     <!--<input v-model="description" type="text" class="form-control"-->
-                                                <!--placeholder="Mô tả">-->
+                    <!--placeholder="Mô tả">-->
                 </div>
                 <div class="col-12">
                     <button class="btn btn-primary" @click="insertCustomer">Thêm KH</button>
@@ -344,6 +377,7 @@
             return {
                 textSearch: '',
                 contentMesage: '',
+                contentComment: '',
                 navChat: [],
                 navChatDefault: [],
                 fb_me: '',
@@ -627,9 +661,9 @@
                 }
             },
 
-             async getListChat() {
+            async getListChat() {
                 let arr_page_id = this.$cookies.get('arr_page_id');
-                 let length_list_page = 0;
+                let length_list_page = 0;
                 if(arr_page_id){
                     arr_page_id = JSON.parse(arr_page_id);
                     length_list_page = arr_page_id.length;
@@ -655,8 +689,8 @@
                     this.arr_page_id = arr_page_id; //tác dụng để get socket
                     this.getSocket();
                 }
-                 this.getPhonePage();
-                 this.getCommentPage();
+                this.getPhonePage();
+                this.getCommentPage();
             },
 
 
@@ -760,9 +794,16 @@
 
                             if(data.length > 0){
                                 data = data.map(m=>{
-                                    m['from'] = {
-                                        id:response.data.FB_ID,
-                                        name:response.data.fb_name,
+                                    if (m.type == 'me') {
+                                        m['from'] = {
+                                            id: this.last_segment,
+                                            name: response.data.fb_name,
+                                        }
+                                    } else {
+                                        m['from'] = {
+                                            id: response.data.FB_ID,
+                                            name: response.data.fb_name,
+                                        }
                                     }
                                     return m;
                                 })
@@ -1085,6 +1126,73 @@
             showModalReply(item){
                 this.comment_id = item.comment_id;
                 $('#reply_comment').modal({show: true})
+            },
+            showModalComment(item) {
+                this.comment_id = item.comment_id;
+                $('#send_comment').modal({show: true})
+            },
+            sendComment() {
+                let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
+                }).then(res=>{
+                    if(res){
+
+                        let splitted = this.post_id.split("_", 2);
+                        let params = {
+                            page_id: this.last_segment,
+                            post_id: splitted[1],
+                            FB_ID: this.fb_me
+                        };
+                        axios.get('/marketing/get-detail-comment', {
+                            params: params
+                        }).then(response => {
+                            let content = JSON.parse(response.data.content);
+                            let current_date = new Date().toISOString();
+                            let new_comment = {
+                                created_time: current_date,
+                                message: this.contentComment,
+                                comment_id: 11,
+                                type: "me"
+                            };
+                            content.push(new_comment);
+                            // Cập nhật comment vào FB
+                            axios.post('/marketing/update-comment/' + response.data.id, {
+                                content: content,
+                                snippet: this.contentComment,
+                            }).then(response => {
+                                if (content.length > 0) {
+                                    content = content.map(m => {
+                                        if (m.type == 'me') {
+                                            m['from'] = {
+                                                id: this.last_segment,
+                                                name: 'QAA',
+                                            }
+                                        } else {
+                                            m['from'] = {
+                                                id: this.fb_me,
+                                                name: 'this.fb_me',
+                                            }
+                                        }
+                                        return m;
+                                    })
+                                    this.detailMessage = content;
+                                    this.findComment(this.fb_me,this.last_segment,this.contentComment,0);
+                                }
+                                alertify.success('Trả lời thành công!',5);
+                                $('#send_comment').modal('hide');
+                            });
+
+                        });
+
+
+                        $('#send_comment').modal('hide');
+                    }
+                }).catch(error=>{
+                    if(error){
+                        alertify.warning('Không trả lời được bình luận!',5);
+                        $('#send_comment').modal('hide');
+                    }
+                })
+
             },
             sendReplyComment(){
                 let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {

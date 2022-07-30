@@ -2797,100 +2797,70 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
     sendComment: function sendComment() {
       var _this17 = this;
 
-      var url = '/marketing/get-detail-comment';
-      var splitted = this.post_id.split("_", 2);
-      var params = {
-        page_id: this.last_segment,
-        post_id: splitted[1],
-        FB_ID: this.fb_me
-      };
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(url, {
-        params: params
-      }).then(function (response) {
-        var content = JSON.parse(response.data.content);
-        var current_date = new Date().toISOString();
-        var new_comment = {
-          created_time: current_date,
-          message: _this17.contentComment,
-          comment_id: 11,
-          type: "me"
-        };
-        content.push(new_comment);
-        axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/marketing/update-comment/' + response.data.id, {
-          content: content,
-          snippet: _this17.contentComment
-        }).then(function (response) {
-          console.log(content, 'content');
+      var rq = axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://graph.facebook.com/v13.0/".concat(this.comment_id, "/comments?message=").concat(this.contentComment, "&access_token=").concat(this.access_token), {}).then(function (res) {
+        if (res) {
+          var splitted = _this17.post_id.split("_", 2);
 
-          if (content.length > 0) {
-            content = content.map(function (m) {
-              if (m.type == 'me') {
-                m['from'] = {
-                  id: _this17.last_segment,
-                  name: 'QAA'
-                };
-              } else {
-                m['from'] = {
-                  id: _this17.fb_me,
-                  name: 'this.fb_me'
-                };
+          var params = {
+            page_id: _this17.last_segment,
+            post_id: splitted[1],
+            FB_ID: _this17.fb_me
+          };
+          axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/marketing/get-detail-comment', {
+            params: params
+          }).then(function (response) {
+            var content = JSON.parse(response.data.content);
+            var current_date = new Date().toISOString();
+            var new_comment = {
+              created_time: current_date,
+              message: _this17.contentComment,
+              comment_id: 11,
+              type: "me"
+            };
+            content.push(new_comment); // Cập nhật comment vào FB
+
+            axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/marketing/update-comment/' + response.data.id, {
+              content: content,
+              snippet: _this17.contentComment
+            }).then(function (response) {
+              if (content.length > 0) {
+                content = content.map(function (m) {
+                  if (m.type == 'me') {
+                    m['from'] = {
+                      id: _this17.last_segment,
+                      name: 'QAA'
+                    };
+                  } else {
+                    m['from'] = {
+                      id: _this17.fb_me,
+                      name: 'this.fb_me'
+                    };
+                  }
+
+                  return m;
+                });
+                _this17.detailMessage = content;
+
+                _this17.findComment(_this17.fb_me, _this17.last_segment, _this17.contentComment, 0);
               }
 
-              return m;
+              alertify.success('Trả lời thành công!', 5);
+              $('#send_comment').modal('hide');
             });
-            console.log(content);
-            _this17.detailMessage = content;
-
-            _this17.findComment(_this17.fb_me, _this17.last_segment, _this17.contentComment, 0);
-          }
-
+          });
           $('#send_comment').modal('hide');
-        });
-      }); // let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
-      // }).then(res=>{
-      //     if(res){
-      //         alertify.success('Trả lời thành công!',5);
-      //         $('#send_comment').modal('hide');
-      //         let url = '/marketing/get-detail-comment';
-      //         let splitted = this.post_id.split("_", 2);
-      //         let params = {
-      //             page_id: this.last_segment,
-      //             post_id: splitted,
-      //             FB_ID: this.fb_me
-      //         };
-      //         axios.get(url,{
-      //             params: params
-      //         }).then(response => {
-      //             let data = JSON.parse(response.data.content);
-      //
-      //             if(data.length > 0){
-      //                 data = data.map(m=>{
-      //                     m['from'] = {
-      //                         id:response.data.FB_ID,
-      //                         name:response.data.fb_name,
-      //                     }
-      //                     return m;
-      //                 })
-      //             }
-      //             this.detailMessage = data;
-      //         })
-      //
-      //
-      //         // this.newElement(res.data.message_id);
-      //     }
-      // }).catch(error=>{
-      //     if(error){
-      //         alertify.warning('Không trả lời được bình luận!',5);
-      //         $('#send_comment').modal('hide');
-      //     }
-      // })
+        }
+      })["catch"](function (error) {
+        if (error) {
+          alertify.warning('Không trả lời được bình luận!', 5);
+          $('#send_comment').modal('hide');
+        }
+      });
     },
     sendReplyComment: function sendReplyComment() {
       var _this18 = this;
 
       var rq = axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
-        // "messaging_type": "MESSAGE_TAG",
-        // "tag": "HUMAN_AGENT",
         "messaging_type": "UPDATE",
         "recipient": {
           "comment_id": this.comment_id
@@ -3076,6 +3046,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
     return {
       textSearch: '',
       contentMesage: '',
+      contentComment: '',
       navChat: [],
       navChatDefault: [],
       fb_me: '',
@@ -3647,10 +3618,18 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
 
           if (data.length > 0) {
             data = data.map(function (m) {
-              m['from'] = {
-                id: response.data.FB_ID,
-                name: response.data.fb_name
-              };
+              if (m.type == 'me') {
+                m['from'] = {
+                  id: _this9.last_segment,
+                  name: response.data.fb_name
+                };
+              } else {
+                m['from'] = {
+                  id: response.data.FB_ID,
+                  name: response.data.fb_name
+                };
+              }
+
               return m;
             });
           }
@@ -4023,8 +4002,77 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
         show: true
       });
     },
-    sendReplyComment: function sendReplyComment() {
+    showModalComment: function showModalComment(item) {
+      this.comment_id = item.comment_id;
+      $('#send_comment').modal({
+        show: true
+      });
+    },
+    sendComment: function sendComment() {
       var _this17 = this;
+
+      var rq = axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://graph.facebook.com/v13.0/".concat(this.comment_id, "/comments?message=").concat(this.contentComment, "&access_token=").concat(this.access_token), {}).then(function (res) {
+        if (res) {
+          var splitted = _this17.post_id.split("_", 2);
+
+          var params = {
+            page_id: _this17.last_segment,
+            post_id: splitted[1],
+            FB_ID: _this17.fb_me
+          };
+          axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/marketing/get-detail-comment', {
+            params: params
+          }).then(function (response) {
+            var content = JSON.parse(response.data.content);
+            var current_date = new Date().toISOString();
+            var new_comment = {
+              created_time: current_date,
+              message: _this17.contentComment,
+              comment_id: 11,
+              type: "me"
+            };
+            content.push(new_comment); // Cập nhật comment vào FB
+
+            axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/marketing/update-comment/' + response.data.id, {
+              content: content,
+              snippet: _this17.contentComment
+            }).then(function (response) {
+              if (content.length > 0) {
+                content = content.map(function (m) {
+                  if (m.type == 'me') {
+                    m['from'] = {
+                      id: _this17.last_segment,
+                      name: 'QAA'
+                    };
+                  } else {
+                    m['from'] = {
+                      id: _this17.fb_me,
+                      name: 'this.fb_me'
+                    };
+                  }
+
+                  return m;
+                });
+                _this17.detailMessage = content;
+
+                _this17.findComment(_this17.fb_me, _this17.last_segment, _this17.contentComment, 0);
+              }
+
+              alertify.success('Trả lời thành công!', 5);
+              $('#send_comment').modal('hide');
+            });
+          });
+          $('#send_comment').modal('hide');
+        }
+      })["catch"](function (error) {
+        if (error) {
+          alertify.warning('Không trả lời được bình luận!', 5);
+          $('#send_comment').modal('hide');
+        }
+      });
+    },
+    sendReplyComment: function sendReplyComment() {
+      var _this18 = this;
 
       var rq = axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("https://graph.facebook.com/v13.0/me/messages?access_token=".concat(this.access_token), {
         // "messaging_type": "MESSAGE_TAG",
@@ -4041,7 +4089,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
           alertify.success('Trả lời thành công!', 5);
           $('#reply_comment').modal('hide');
 
-          _this17.newElement(res.data.message_id);
+          _this18.newElement(res.data.message_id);
         }
       })["catch"](function (error) {
         if (error) {
@@ -4052,7 +4100,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
       this.contentMesage = '';
     },
     newElement: function newElement(message_id) {
-      var _this18 = this;
+      var _this19 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
         var access_token, fields, url, res, index, _html4;
@@ -4061,7 +4109,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                access_token = _this18.access_token;
+                access_token = _this19.access_token;
                 fields = 'from,message,to,created_time,thread_id';
                 url = "https://graph.facebook.com/v13.0/".concat(message_id, "?fields=").concat(fields, "&access_token=").concat(access_token);
                 _context6.next = 5;
@@ -4069,13 +4117,13 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
 
               case 5:
                 res = _context6.sent;
-                index = _this18.navChatDefault.findIndex(function (fd) {
+                index = _this19.navChatDefault.findIndex(function (fd) {
                   return fd.participants.data[1].id == res.data.from.id && fd.participants.data[0].id == res.data.to.data[0].id && fd.type != 'comment';
                 });
 
                 if (index > -1) {
-                  _this18.navChatDefault[index].snippet = res.data.message;
-                  _this18.navChatDefault[index].updated_time = res.data.created_time;
+                  _this19.navChatDefault[index].snippet = res.data.message;
+                  _this19.navChatDefault[index].updated_time = res.data.created_time;
                 } else {
                   _html4 = {
                     check_phone: 0,
@@ -4095,7 +4143,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
                     updated_time: res.data.created_time
                   };
 
-                  _this18.navChatDefault.unshift(_html4);
+                  _this19.navChatDefault.unshift(_html4);
                 }
 
               case 8:
@@ -4107,7 +4155,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
       }))();
     },
     getNextPage: function getNextPage() {
-      var _this19 = this;
+      var _this20 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var data, data_1;
@@ -4116,20 +4164,20 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
             switch (_context7.prev = _context7.next) {
               case 0:
                 _context7.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_this19.next_page);
+                return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_this20.next_page);
 
               case 2:
                 data = _context7.sent;
 
                 if (data.data.paging.next) {
-                  _this19.next_page = data.data.paging.next;
+                  _this20.next_page = data.data.paging.next;
                 } else {
-                  _this19.next_page = null;
+                  _this20.next_page = null;
                 }
 
                 data_1 = data.data.data.reverse();
-                data_1.push.apply(data_1, _toConsumableArray(_this19.detailMessage));
-                _this19.detailMessage = data_1;
+                data_1.push.apply(data_1, _toConsumableArray(_this20.detailMessage));
+                _this20.detailMessage = data_1;
 
               case 7:
               case "end":
@@ -5575,7 +5623,15 @@ var render = function render() {
         }
       }
     }, [_c("i", {
-      staticClass: "fa fa-comment pointer"
+      staticClass: "mdi mdi-facebook-messenger"
+    })]) : _vm._e(), _vm._v(" "), item.comment_id ? _c("span", {
+      on: {
+        click: function click($event) {
+          return _vm.showModalComment(item);
+        }
+      }
+    }, [_c("i", {
+      staticClass: "fa fa-comment-dots"
     })]) : _vm._e()])]) : _c("div", {
       staticClass: "chat-content",
       staticStyle: {
@@ -5607,7 +5663,15 @@ var render = function render() {
         }
       }
     }, [_c("i", {
-      staticClass: "fa fa-comment pointer"
+      staticClass: "mdi mdi-facebook-messenger"
+    })]) : _vm._e(), _vm._v(" "), item.comment_id ? _c("span", {
+      on: {
+        click: function click($event) {
+          return _vm.showModalComment(item);
+        }
+      }
+    }, [_c("i", {
+      staticClass: "fa fa-comment-dots"
     })]) : _vm._e()])])])])]);
   })], 2), _vm._v(" "), _c("div", {}, [_c("popover", {
     staticClass: "ngon-ngay",
@@ -5791,13 +5855,76 @@ var render = function render() {
         return _vm.sendReplyComment();
       }
     }
-  }, [_vm._v("Gửi")])])])])])], 1), _vm._v(" "), _c("section", {
+  }, [_vm._v("Gửi")])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal fade",
+    attrs: {
+      id: "send_comment",
+      tabindex: "-1",
+      role: "dialog",
+      "aria-labelledby": "exampleModalLabel",
+      "aria-hidden": "true"
+    }
+  }, [_c("div", {
+    staticClass: "modal-dialog",
+    attrs: {
+      role: "document"
+    }
+  }, [_c("div", {
+    staticClass: "modal-content"
+  }, [_vm._m(2), _vm._v(" "), _c("div", {
+    staticClass: "modal-body"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-12"
+  }, [_vm._v("\n                                            " + _vm._s(_vm.chat_current_name) + "\n                                        ")]), _vm._v(" "), _c("hr"), _vm._v(" "), _c("div", {
+    staticClass: "col-12"
+  }, [_c("textarea", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.contentComment,
+      expression: "contentComment"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      cols: "30",
+      rows: "4"
+    },
+    domProps: {
+      value: _vm.contentComment
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.contentComment = $event.target.value;
+      }
+    }
+  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal-footer"
+  }, [_c("button", {
+    staticClass: "btn btn-secondary",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal"
+    }
+  }, [_vm._v("Close\n                                    ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.sendComment();
+      }
+    }
+  }, [_vm._v("Bình luận\n                                    ")])])])])])], 1), _vm._v(" "), _c("section", {
     staticClass: "chat-app-form"
   }, [_c("div", {
     staticClass: "chat-app-input d-flex"
   }, [_c("fieldset", {
     staticClass: "form-group position-relative has-icon-left col-10 m-0"
-  }, [_vm._m(2), _vm._v(" "), _c("input", {
+  }, [_vm._m(3), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -6124,6 +6251,29 @@ var staticRenderFns = [function () {
       id: "exampleModalLabel"
     }
   }, [_vm._v("Tin nhắn mới")]), _vm._v(" "), _c("button", {
+    staticClass: "close",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal",
+      "aria-label": "Close"
+    }
+  }, [_c("span", {
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }, [_vm._v("×")])])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "modal-header"
+  }, [_c("h5", {
+    staticClass: "modal-title",
+    attrs: {
+      id: "exampleModalComment"
+    }
+  }, [_vm._v("Trả lời comment")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {
       type: "button",

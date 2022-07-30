@@ -124,10 +124,8 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i
-                                                    class="mdi mdi-facebook-messenger"></i></span>
-                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i
-                                                    class="fa fa-comment-dots"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i class="mdi mdi-facebook-messenger"></i></span>
+                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-comment-dots"></i></span>
                                         </p>
 
                                     </div>
@@ -1095,101 +1093,70 @@
                 $('#send_comment').modal({show: true})
             },
             sendComment() {
+                let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
+                }).then(res=>{
+                    if(res){
 
-                let url = '/marketing/get-detail-comment';
-                let splitted = this.post_id.split("_", 2);
-                let params = {
-                    page_id: this.last_segment,
-                    post_id: splitted[1],
-                    FB_ID: this.fb_me
-                };
-                axios.get(url, {
-                    params: params
-                }).then(response => {
-                    let content = JSON.parse(response.data.content);
-                    let current_date = new Date().toISOString();
-                    let new_comment = {
-                        created_time: current_date,
-                        message: this.contentComment,
-                        comment_id: 11,
-                        type: "me"
-                    };
-
-                    content.push(new_comment);
-                    axios.post('/marketing/update-comment/' + response.data.id, {
-                        content: content,
-                        snippet: this.contentComment,
-                    }).then(response => {
-                        console.log(content, 'content');
-                        if (content.length > 0) {
-                            content = content.map(m => {
-                                if (m.type == 'me') {
-                                    m['from'] = {
-                                        id: this.last_segment,
-                                        name: 'QAA',
-                                    }
-                                } else {
-                                    m['from'] = {
-                                        id: this.fb_me,
-                                        name: 'this.fb_me',
-                                    }
+                        let splitted = this.post_id.split("_", 2);
+                        let params = {
+                            page_id: this.last_segment,
+                            post_id: splitted[1],
+                            FB_ID: this.fb_me
+                        };
+                        axios.get('/marketing/get-detail-comment', {
+                            params: params
+                        }).then(response => {
+                            let content = JSON.parse(response.data.content);
+                            let current_date = new Date().toISOString();
+                            let new_comment = {
+                                created_time: current_date,
+                                message: this.contentComment,
+                                comment_id: 11,
+                                type: "me"
+                            };
+                            content.push(new_comment);
+                            // Cập nhật comment vào FB
+                            axios.post('/marketing/update-comment/' + response.data.id, {
+                                content: content,
+                                snippet: this.contentComment,
+                            }).then(response => {
+                                if (content.length > 0) {
+                                    content = content.map(m => {
+                                        if (m.type == 'me') {
+                                            m['from'] = {
+                                                id: this.last_segment,
+                                                name: 'QAA',
+                                            }
+                                        } else {
+                                            m['from'] = {
+                                                id: this.fb_me,
+                                                name: 'this.fb_me',
+                                            }
+                                        }
+                                        return m;
+                                    })
+                                    this.detailMessage = content;
+                                    this.findComment(this.fb_me,this.last_segment,this.contentComment,0);
                                 }
-                                return m;
-                            })
-                            console.log(content);
-                            this.detailMessage = content;
-                            this.findComment(this.fb_me,this.last_segment,this.contentComment,0);
-                        }
+                                alertify.success('Trả lời thành công!',5);
+                                $('#send_comment').modal('hide');
+                            });
+
+                        });
+
 
                         $('#send_comment').modal('hide');
-
-                    });
-                });
-
-                // let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
-                // }).then(res=>{
-                //     if(res){
-                //         alertify.success('Trả lời thành công!',5);
-                //         $('#send_comment').modal('hide');
-                //         let url = '/marketing/get-detail-comment';
-                //         let splitted = this.post_id.split("_", 2);
-                //         let params = {
-                //             page_id: this.last_segment,
-                //             post_id: splitted,
-                //             FB_ID: this.fb_me
-                //         };
-                //         axios.get(url,{
-                //             params: params
-                //         }).then(response => {
-                //             let data = JSON.parse(response.data.content);
-                //
-                //             if(data.length > 0){
-                //                 data = data.map(m=>{
-                //                     m['from'] = {
-                //                         id:response.data.FB_ID,
-                //                         name:response.data.fb_name,
-                //                     }
-                //                     return m;
-                //                 })
-                //             }
-                //             this.detailMessage = data;
-                //         })
-                //
-                //
-                //         // this.newElement(res.data.message_id);
-                //     }
-                // }).catch(error=>{
-                //     if(error){
-                //         alertify.warning('Không trả lời được bình luận!',5);
-                //         $('#send_comment').modal('hide');
-                //     }
-                // })
+                    }
+                }).catch(error=>{
+                    if(error){
+                        alertify.warning('Không trả lời được bình luận!',5);
+                        $('#send_comment').modal('hide');
+                    }
+                })
 
             },
             sendReplyComment() {
                 let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
-                    // "messaging_type": "MESSAGE_TAG",
-                    // "tag": "HUMAN_AGENT",
                     "messaging_type": "UPDATE",
                     "recipient": {
                         "comment_id": this.comment_id
