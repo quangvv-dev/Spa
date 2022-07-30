@@ -849,7 +849,7 @@
             },
             customerNewComment(data){
                 let splitted = data.value.post_id.split("_", 2);
-                if (data.value.check_create == 1){ //trường hợp thêm mới
+                if (data.check_create == 1){ //trường hợp thêm mới
                     let customer_new_comment = {
                         'unread_count' : 0
                     };

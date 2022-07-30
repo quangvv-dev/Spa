@@ -880,8 +880,7 @@
             },
             customerNewComment(data) {
                 let splitted = data.value.post_id.split("_", 2);
-                console.log(data.value);
-                if (data.value.check_create == 1) { //trường hợp thêm mới
+                if (data.check_create == 1) { //trường hợp thêm mới
                     let customer_new_comment = {};
                     customer_new_comment.participants = {
                         data: [
@@ -1233,7 +1232,6 @@
                     return (f.participants.data[0].id == from_id && f.participants.data[1].id == page_id && f.type == 'comment');
                 })
                 let customer_new_comment = this.navChatDefault[index];
-                console.log(customer_new_comment,'noi dung cmt')
                 customer_new_comment.unread_count = unread_count;
                 customer_new_comment.updated_time = new Date().toISOString();
                 customer_new_comment.snippet = message;
