@@ -266,25 +266,22 @@ exports.ChatComment = (value) => {
                     comment_id: value.value.comment_id,
                     parent_id: value.value.parent_id,
                 }]
-                if (comment.length < 1) { //trường hợp thêm mới
+                if (comment.length == 0) { //trường hợp thêm mới
                     let content = JSON.stringify(data_content);
                     model.CreateComment(page_id, post_id, FB_ID, fb_name, value.value.message, content, created_at, function (err, comment) {
-                        // model.CreateComment(page_id,post_id,FB_ID,fb_name,value.value.message,content,created_at).then(data=>{
-                        check = 1;
-                        return 1;
-                    })
+                    });
+                    return 1;
                 } else { //trường hợp đã tồn tại
                     let data = comment[0];
                     let content_old = JSON.parse(data.content);
                     content_old.push(data_content[0]);
                     let content = JSON.stringify(content_old);
                     model.UpdateComment(data.id, value.value.message, content);
-                    check = 2;
                     return 2;
                 }
             });
         } else {
-            check = 0;
+            return 0;
         }
     });
 }
