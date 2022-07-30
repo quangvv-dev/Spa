@@ -1137,7 +1137,7 @@
                             let new_comment = {
                                 created_time: current_date,
                                 message: this.contentComment,
-                                comment_id: 11,
+                                comment_id: res.data.id,
                                 type: "me"
                             };
                             content.push(new_comment);

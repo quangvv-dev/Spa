@@ -2583,7 +2583,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
         this.navChat = this.navChatDefault;
       } else {
         //trường hợp tồn tại
-        this.findComment(data.value.from.id, splitted[0], data.value.message, 1);
+        this.findComment(data.value.from.id, splitted[0], data.value.message, 1, true);
       }
     },
     selectElement: function selectElement(item) {
@@ -2814,7 +2814,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
             var new_comment = {
               created_time: current_date,
               message: _this17.contentComment,
-              comment_id: 11,
+              comment_id: res.data.id,
               type: "me"
             };
             content.push(new_comment); // Cập nhật comment vào FB
@@ -3705,21 +3705,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
         this.navChat = this.navChatDefault;
       } else {
         //trường hợp tồn tại
-        var index = this.navChatDefault.findIndex(function (f) {
-          return f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type == 'comment';
-        });
-        var _customer_new_comment = this.navChatDefault[index];
-        _customer_new_comment.unread_count = 1;
-        _customer_new_comment.updated_time = new Date().toISOString();
-        _customer_new_comment.snippet = data.value.message;
-        _customer_new_comment.new_message = true;
-
-        if (index > -1) {
-          this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
-        }
-
-        this.navChatDefault.unshift(_customer_new_comment);
-        this.navChat = this.navChatDefault;
+        this.findComment(data.value.from.id, splitted[0], data.value.message, 1, true);
       }
     },
     selectElement: function selectElement(item) {
@@ -4028,7 +4014,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
             var new_comment = {
               created_time: current_date,
               message: _this17.contentComment,
-              comment_id: 11,
+              comment_id: res.data.id,
               type: "me"
             };
             content.push(new_comment); // Cập nhật comment vào FB
@@ -4055,7 +4041,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
                 });
                 _this17.detailMessage = content;
 
-                _this17.findComment(_this17.fb_me, _this17.last_segment, _this17.contentComment, 0);
+                _this17.findComment(_this17.fb_me, _this17.last_segment, _this17.contentComment, 0, false);
               }
 
               alertify.success('Trả lời thành công!', 5);
@@ -4186,6 +4172,23 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
           }
         }, _callee6);
       }))();
+    },
+    findComment: function findComment(from_id, page_id, message, unread_count, status) {
+      var index = this.navChatDefault.findIndex(function (f) {
+        return f.participants.data[0].id == from_id && f.participants.data[1].id == page_id && f.type == 'comment';
+      });
+      var customer_new_comment = this.navChatDefault[index];
+      customer_new_comment.unread_count = unread_count;
+      customer_new_comment.updated_time = new Date().toISOString();
+      customer_new_comment.snippet = message;
+      customer_new_comment.new_message = status;
+
+      if (index > -1) {
+        this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+      }
+
+      this.navChatDefault.unshift(customer_new_comment);
+      this.navChat = this.navChatDefault;
     }
   }
 });

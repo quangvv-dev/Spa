@@ -1096,7 +1096,6 @@
                 let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
                 }).then(res=>{
                     if(res){
-
                         let splitted = this.post_id.split("_", 2);
                         let params = {
                             page_id: this.last_segment,
@@ -1111,7 +1110,7 @@
                             let new_comment = {
                                 created_time: current_date,
                                 message: this.contentComment,
-                                comment_id: 11,
+                                comment_id: res.data.id,
                                 type: "me"
                             };
                             content.push(new_comment);
