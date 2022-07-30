@@ -2561,6 +2561,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
     },
     customerNewComment: function customerNewComment(data) {
       var splitted = data.value.post_id.split("_", 2);
+      console.log(data, data.check_create, 'Server');
 
       if (data.check_create == 1) {
         //trường hợp thêm mới

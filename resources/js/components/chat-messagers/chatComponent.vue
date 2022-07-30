@@ -880,6 +880,7 @@
             },
             customerNewComment(data) {
                 let splitted = data.value.post_id.split("_", 2);
+                console.log(data,data.check_create,'Server')
                 if (data.check_create == 1) { //trường hợp thêm mới
                     let customer_new_comment = {};
                     customer_new_comment.participants = {
