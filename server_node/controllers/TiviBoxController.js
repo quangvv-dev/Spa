@@ -249,14 +249,14 @@ exports.sendSocketComment = (page_id, message, io) => {
 };
 
 exports.ChatComment = (value) => {
-    model.CheckFanpage(value.value.from.id, function (err, fanpage) {
+    model.CheckFanpage(value.value.from.id, async function (err, fanpage) {
         if (fanpage.length < 1) {
             let splitted = value.value.post_id.split("_", 2);
             const page_id = splitted[0], post_id = splitted[1];
             const FB_ID = value.value.from.id;
             const fb_name = value.value.from.name;
             const created_at = localeTime();
-            model.CheckExistsComment(page_id, post_id, FB_ID, function (err, comment) {
+            await model.CheckExistsComment(page_id, post_id, FB_ID, function (err, comment) {
                 // model.CheckExistsComment(page_id,post_id,value.value.from.id).then(comment=>{
                 let check = 1;
                 let data_content = [{
