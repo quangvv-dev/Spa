@@ -80,6 +80,16 @@ class ChatController extends Controller
         return $data;
     }
 
+    public function updateContentComment(Request $request, $id)
+    {
+        $input = $request->all();
+        $data = Comment::find($id);
+        $data->content = \GuzzleHttp\json_encode($input['content']);
+        $data->snippet = $input['snippet'];
+        $data->save();
+        return $data;
+    }
+
     public function updateReadComment(Request $request)
     {
         $data = Comment::where('page_id', $request->page_id)->where('post_id', $request->post_id)->where('FB_ID', $request->FB_ID)->first();
@@ -131,7 +141,7 @@ class ChatController extends Controller
 
     public function getDataFormCustomer()
     {
-        $group = Category::select('id', 'name')->where('type',StatusCode::SERVICE)->get();
+        $group = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->get();// nguồn KH
         $branchs = Branch::select('name', 'id')->get();// chi nhánh
         $telesales = User::select('id', 'department_id', 'full_name')->whereIn('department_id', [DepartmentConstant::WAITER, DepartmentConstant::TELESALES, UserConstant::TECHNICIANS])->get();
@@ -167,6 +177,7 @@ class ChatController extends Controller
             'success' => true
         ]);
     }
+
     public function update_code($customer)
     {
         $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
