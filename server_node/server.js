@@ -75,6 +75,8 @@ app.post('/webhook', function (req, res) {
 
                     let splitted = value.value.post_id.split("_", 2);
                     value.type = 'comment';
+                    console.log(comment,'Value comment ban socket');
+
                     if(comment == 0){
                         return;
                     } else if (comment == 1) {

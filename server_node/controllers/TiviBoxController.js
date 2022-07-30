@@ -266,11 +266,12 @@ exports.ChatComment = (value) => {
                     comment_id: value.value.comment_id,
                     parent_id: value.value.parent_id,
                 }]
-                if (comment.length == 0) { //trường hợp thêm mới
+                console.log(comment,comment.length,'check length comment');
+                if (comment.length <1) { //trường hợp thêm mới
+                    check = 1;
                     let content = JSON.stringify(data_content);
                     model.CreateComment(page_id, post_id, FB_ID, fb_name, value.value.message, content, created_at, function (err, comment) {
                     });
-                    check = 1;
                 } else { //trường hợp đã tồn tại
                     check = 2;
                     let data = comment[0];
