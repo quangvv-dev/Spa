@@ -2583,6 +2583,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
         this.navChat = this.navChatDefault;
       } else {
         //trường hợp tồn tại
+        console.log('Vao TH này');
         this.findComment(data.value.from.id, splitted[0], data.value.message, 1, true);
       }
     },
@@ -2976,6 +2977,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
         return f.participants.data[0].id == from_id && f.participants.data[1].id == page_id && f.type == 'comment';
       });
       var customer_new_comment = this.navChatDefault[index];
+      console.log(customer_new_comment, 'noi dung cmt');
       customer_new_comment.unread_count = unread_count;
       customer_new_comment.updated_time = new Date().toISOString();
       customer_new_comment.snippet = message;
