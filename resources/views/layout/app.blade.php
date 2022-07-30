@@ -77,8 +77,8 @@
         font-weight: 400;
         position: absolute;
         z-index: 1;
-        top: -27px;
-        left: -9px;
+        /*top: -27px;*/
+        /*left: -9px;*/
     }
 
     .tooltip-nav:hover .tooltiptext {

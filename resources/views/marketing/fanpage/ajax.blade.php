@@ -48,9 +48,12 @@
                            data-fanpageId="{{$item->page_id}}"
                            data-token="{{$item->access_token}}"
                            href="javascript:void(0)"
-                           title="Đồng bộ bài post theo cấu hình"
-                        >
+                           title="Đồng bộ bài post theo cấu hình">
                             <i class="fa fa-retweet" aria-hidden="true"></i>
+                        </a>
+                        <a href="/marketing/chat-messages/{{$item->page_id}}" class="tooltip-nav">
+                            <i class="mdi mdi-facebook-box" aria-hidden="true"></i>
+                            <span class="tooltiptext">Nhập khách hàng (excel)</span>
                         </a>
                     </td>
                 </tr>

@@ -37,6 +37,10 @@
         tr td {
             padding: 0.75rem !important;
         }
+        /*.tooltip-nav .tooltiptext {*/
+             /*top: 0;*/
+             /*left: 0;*/
+        /*}*/
 
     </style>
     <div class="col-md-12 col-lg-12">
