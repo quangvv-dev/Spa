@@ -34,22 +34,19 @@
                         <p>{{$item->updated_at}}</p>
                     </td>
                     <td class="text-center">
-                        <a class="action-control mr-1 save" href="javascript:void(0)"
-                           data-id="{{$item->id}}"
-                           data-token="{{$item->access_token}}"
-                           data-fanpageId="{{$item->page_id}}"
-                           title="Lưu"><i class="fa fa-save"></i></a>
-                        <a class="action-control mr-1"
-                           href="{{route('marketing.fanpage-post.index')}}"
-                           data-id="1" title="Danh sách bài post"><i
-                                    class="fa fa-list"></i></a>
-                        <a class="action-control retweet"
-                           data-show="{{$item->used?'true':'false'}}"
-                           data-fanpageId="{{$item->page_id}}"
-                           data-token="{{$item->access_token}}"
-                           href="javascript:void(0)"
-                           title="Đồng bộ bài post theo cấu hình">
+                        <a class="action-control mr-1 save" href="javascript:void(0)" data-id="{{$item->id}}"
+                           data-token="{{$item->access_token}}" data-fanpageId="{{$item->page_id}}">
+                            <i class="fa fa-save"></i>
+                        </a>
+                        <a class="action-control mr-1 tooltip-nav" href="{{route('marketing.fanpage-post.index')}}" data-id="1">
+                            <i class="fa fa-list"></i>
+                            <span class="tooltiptext">Danh sách bài post</span>
+                        </a>
+                        <a class="action-control retweet tooltip-nav" data-show="{{$item->used?'true':'false'}}" data-fanpageId="{{$item->page_id}}"
+                           data-token="{{$item->access_token}}" href="javascript:void(0)">
                             <i class="fa fa-retweet" aria-hidden="true"></i>
+                            <span class="tooltiptext">Đồng bộ bài post</span>
+
                         </a>
                         <a href="/marketing/chat-messages/{{$item->page_id}}" class="tooltip-nav">
                             <i class="mdi mdi-facebook-box" aria-hidden="true"></i>
