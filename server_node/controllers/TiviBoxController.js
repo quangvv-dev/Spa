@@ -280,7 +280,7 @@ exports.ChatComment = (value,io) => {
                     value.check_create =2;
                 }
                 console.log('Chuẩn bị bắn socket');
-                sendSocketComment(page_id,value, io);
+                this.sendSocketComment(page_id,value, io);
                 console.log('Đã bắn socket');
 
                 return 0;
