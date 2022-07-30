@@ -878,20 +878,7 @@
                     this.navChat = this.navChatDefault;
                 }
                 else { //trường hợp tồn tại
-                    let index = this.navChatDefault.findIndex(f => {
-                        return (f.participants.data[0].id == data.value.from.id && f.participants.data[1].id == splitted[0] && f.type =='comment');
-                    })
-                    let customer_new_comment = this.navChatDefault[index];
-                    customer_new_comment.unread_count = 1;
-                    customer_new_comment.updated_time = new Date().toISOString();
-                    customer_new_comment.snippet = data.value.message;
-                    customer_new_comment.new_message = true;
-
-                    if (index > -1) {
-                        this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
-                    }
-                    this.navChatDefault.unshift(customer_new_comment);
-                    this.navChat = this.navChatDefault;
+                    this.findComment(data.value.from.id,splitted[0],data.value.message,1,true);
                 }
             },
 
@@ -1175,7 +1162,7 @@
                                         return m;
                                     })
                                     this.detailMessage = content;
-                                    this.findComment(this.fb_me,this.last_segment,this.contentComment,0);
+                                    this.findComment(this.fb_me,this.last_segment,this.contentComment,0,false);
                                 }
                                 alertify.success('Trả lời thành công!',5);
                                 $('#send_comment').modal('hide');
@@ -1264,8 +1251,23 @@
                 let data_1 = data.data.data.reverse();
                 data_1.push(...this.detailMessage);
                 this.detailMessage = data_1;
-            }
+            },
+            findComment(from_id, page_id, message,unread_count,status) {
+                let index = this.navChatDefault.findIndex(f => {
+                    return (f.participants.data[0].id == from_id && f.participants.data[1].id == page_id && f.type == 'comment');
+                })
+                let customer_new_comment = this.navChatDefault[index];
+                customer_new_comment.unread_count = unread_count;
+                customer_new_comment.updated_time = new Date().toISOString();
+                customer_new_comment.snippet = message;
+                customer_new_comment.new_message = status;
 
+                if (index > -1) {
+                    this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
+                }
+                this.navChatDefault.unshift(customer_new_comment);
+                this.navChat = this.navChatDefault;
+            }
         }
 
     }

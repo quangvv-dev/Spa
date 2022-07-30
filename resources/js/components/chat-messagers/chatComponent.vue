@@ -903,7 +903,7 @@
                     this.navChat = this.navChatDefault;
                 } else { //trường hợp tồn tại
 
-                    this.findComment(data.value.from.id,splitted[0],data.value.message,1);
+                    this.findComment(data.value.from.id,splitted[0],data.value.message,1,true);
                 }
 
             },
