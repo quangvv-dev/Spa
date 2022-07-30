@@ -31,7 +31,7 @@ app.get('/webhook', function (req, res) {
     res.send('Error, wrong validation token');
 });
 
-app.post('/webhook', function (req, res) {
+app.post('/webhook',async function (req, res) {
     var entries = req.body.entry;
     res.sendStatus(200);
     for (var entry of entries) {
@@ -70,7 +70,7 @@ app.post('/webhook', function (req, res) {
             console.log(comments, 'COMMENT');
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
-                    let comment = controller.ChatComment(value);
+                    let comment = await controller.ChatComment(value);
                     console.log('ket quả check',comment);
                     let splitted = value.value.post_id.split("_", 2);
                     value.type = 'comment';
