@@ -2841,7 +2841,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
                 });
                 _this17.detailMessage = content;
 
-                _this17.findComment(_this17.fb_me, _this17.last_segment, _this17.contentComment, 0);
+                _this17.findComment(_this17.fb_me, _this17.last_segment, _this17.contentComment, 0, false);
               }
 
               alertify.success('Trả lời thành công!', 5);
@@ -2971,7 +2971,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
         }, _callee7);
       }))();
     },
-    findComment: function findComment(from_id, page_id, message, unread_count) {
+    findComment: function findComment(from_id, page_id, message, unread_count, status) {
       var index = this.navChatDefault.findIndex(function (f) {
         return f.participants.data[0].id == from_id && f.participants.data[1].id == page_id && f.type == 'comment';
       });
@@ -2979,7 +2979,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
       customer_new_comment.unread_count = unread_count;
       customer_new_comment.updated_time = new Date().toISOString();
       customer_new_comment.snippet = message;
-      customer_new_comment.new_message = true;
+      customer_new_comment.new_message = status;
 
       if (index > -1) {
         this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only

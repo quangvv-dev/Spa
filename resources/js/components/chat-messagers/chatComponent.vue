@@ -1135,7 +1135,7 @@
                                         return m;
                                     })
                                     this.detailMessage = content;
-                                    this.findComment(this.fb_me,this.last_segment,this.contentComment,0);
+                                    this.findComment(this.fb_me,this.last_segment,this.contentComment,0,false);
                                 }
                                 alertify.success('Trả lời thành công!',5);
                                 $('#send_comment').modal('hide');
@@ -1227,7 +1227,7 @@
                 this.detailMessage = data_1;
             },
 
-                findComment(from_id, page_id, message,unread_count) {
+                findComment(from_id, page_id, message,unread_count,status) {
                 let index = this.navChatDefault.findIndex(f => {
                     return (f.participants.data[0].id == from_id && f.participants.data[1].id == page_id && f.type == 'comment');
                 })
@@ -1235,7 +1235,7 @@
                 customer_new_comment.unread_count = unread_count;
                 customer_new_comment.updated_time = new Date().toISOString();
                 customer_new_comment.snippet = message;
-                customer_new_comment.new_message = true;
+                customer_new_comment.new_message = status;
 
                 if (index > -1) {
                     this.navChatDefault.splice(index, 1); // 2nd parameter means remove one item only
