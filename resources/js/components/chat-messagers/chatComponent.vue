@@ -390,7 +390,7 @@
     var port = 2022;
     var host = 'https://' + location.host + ':' + port;
 
-    // var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
+    var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
     export default {
         data() {

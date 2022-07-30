@@ -1930,8 +1930,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 // var host = 'https://thammyroyal.adamtech.vn:2022/';
 
 var port = 2022;
-var host = 'https://' + location.host + ':' + port; // var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
-
+var host = 'https://' + location.host + ':' + port;
+var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(host, {
+  transports: ['websocket', 'polling', 'flashsocket']
+});
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3065,8 +3067,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 // var host = 'https://thammyroyal.adamtech.vn:2022/';
 
 var port = 2022;
-var host = 'https://' + location.host + ':' + port; // var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
-
+var host = 'https://' + location.host + ':' + port;
+var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(host, {
+  transports: ['websocket', 'polling', 'flashsocket']
+});
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
