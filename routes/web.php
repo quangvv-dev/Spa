@@ -147,6 +147,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('order-detail', 'OrderController@store')->name('order-detail.store');
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
+    Route::get('orders-destroy', 'OrderController@getOrderDestroy')->name('order.orders-destroy');//đã thu trong kỳ
+
 
 
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');

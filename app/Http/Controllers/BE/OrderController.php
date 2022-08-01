@@ -548,7 +548,7 @@ class OrderController extends Controller
                                     'branch_id' => @$check3->order->branch_id,
                                     'type' => $type,
                                     'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => $prefix . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",",$text_category) . ' ,' . @$check3->order->branch->name,
+                                    'name' => $prefix . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",", $text_category) . ' ,' . @$check3->order->branch->name,
                                     'description' => $text_order . "--" . replaceVariable($sms_content,
                                             @$check3->order->customer->full_name, @$check3->order->customer->phone,
                                             @$check3->order->branch->name, @$check3->order->branch->phone,
@@ -948,5 +948,23 @@ class OrderController extends Controller
         ];
 
         return $map[$order->type] ?? null;
+    }
+
+    public function getOrderDestroy(Request $request)
+    {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+        $input =$request->all();
+        $orders = Order::searchAll($input)->onlyTrashed();
+        View::share([
+            'allTotal' => $orders->sum('price'),
+        ]);
+        $datas = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
+        dd($datas);
+        View::share([
+            'allTotalPage' => $orders->sum('price'),
+        ]);
+        return view('OrderDestroy.index', compact('$datas'));
     }
 }
