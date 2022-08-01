@@ -12,7 +12,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="{{asset('assets/images/brand/logo.png')}}" type="image/x-icon"/>
+    <link rel="icon" href="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" type="image/x-icon"/>
     <link rel="shortcut icon" type="image/x-icon" href="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" />
 
     <!-- Title -->
