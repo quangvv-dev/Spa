@@ -963,6 +963,9 @@ class OrderController extends Controller
             'allGross' => $orders->sum('gross_revenue'),
         ]);
         $datas = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
+        if ($request->ajax()) {
+            return view('OrderDestroy.ajax', compact('datas'));
+        }
         return view('OrderDestroy.index', compact('datas'));
     }
 }
