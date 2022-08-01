@@ -12,7 +12,6 @@
             {{--<th class="text-white text-center">Doanh thu</th>--}}
             <th class="text-white text-center">Người lên đơn</th>
             <th class="text-white text-center">Chi nhánh</th>
-            <th class="text-white text-center"></th>
         </tr>
         </thead>
         <tbody>
@@ -26,7 +25,7 @@
                     <td class="text-center">{{isset($data->customer) ? @$data->customer->phone :''}}</td>
                     <td class="text-center">{!! $data->service_text_destroy !!}
                     <td class="text-center">{{ @number_format($data->all_total) }}</td>
-                    <td class="text-center">{{isset($data->user) ? @$data->user->full_name :''}}</td>
+                    <td class="text-center">{{isset($data->owner) ? @$data->owner->full_name :''}}</td>
                     <td class="text-center">{{@$data->branch->name}}</td>
                 </tr>
             @endforeach
