@@ -22,12 +22,12 @@ class Order extends Model
 
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
+        return $this->hasMany(OrderDetail::class, 'order_id', 'id')->withTrashed();
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'member_id', 'id');
+        return $this->belongsTo(Customer::class, 'member_id', 'id')->withTrashed();
     }
 
     public function paymentHistories()
@@ -293,6 +293,13 @@ class Order extends Model
     public function getServiceTextAttribute()
     {
         $raw = OrderDetail::where('order_id', $this->id)->pluck('booking_id')->toArray();
+        $service = Services::whereIn('id', $raw)->withTrashed()->pluck('name')->toArray();
+        return count($service) ? implode("<br>",$service) : '';
+    }
+
+    public function getServiceTextDestroyAttribute()
+    {
+        $raw = OrderDetail::where('order_id', $this->id)->withTrashed()->pluck('booking_id')->toArray();
         $service = Services::whereIn('id', $raw)->withTrashed()->pluck('name')->toArray();
         return count($service) ? implode("<br>",$service) : '';
     }

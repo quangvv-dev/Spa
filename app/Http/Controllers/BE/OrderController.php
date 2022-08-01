@@ -957,14 +957,11 @@ class OrderController extends Controller
         }
         $input =$request->all();
         $orders = Order::searchAll($input)->onlyTrashed();
-//        View::share([
-//            'allTotal' => $orders->sum('price'),
-//        ]);
+        View::share([
+            'allTotal' => $orders->sum('all_total'),
+            'allGross' => $orders->sum('gross_revenue'),
+        ]);
         $datas = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
-        dd($datas);
-//        View::share([
-//            'allTotalPage' => $orders->sum('price'),
-//        ]);
-        return view('OrderDestroy.index', compact('$datas'));
+        return view('OrderDestroy.index', compact('datas'));
     }
 }
