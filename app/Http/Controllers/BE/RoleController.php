@@ -59,6 +59,7 @@ class RoleController extends Controller
         'report.waiters',
         'report.commission',
         'carepage.index',
+        'order.orders-destroy',
     ];
     protected $permissions = ['list', 'edit', 'add', 'delete'];
 

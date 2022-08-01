@@ -165,9 +165,7 @@
                         @if($roleGlobal->permission('trademark.list'))
                             <li><a href="{!! route('trademark.index') !!}">Nhà cung cấp</a></li>
                         @endif
-                        {{--@if($roleGlobal->permission('combos.list'))--}}
-                        {{--<li><a href="{!! route('combos.index') !!}">Danh sách combo</a></li>--}}
-                        {{--@endif--}}
+
                         <li class="sub-with-sub">
                             <a href="#">Quản lý đơn hàng</a>
                             <ul>
@@ -187,7 +185,9 @@
                                 @endif
                             </ul>
                         </li>
-
+                        @if($roleGlobal->permission('order.orders-destroy'))
+                        <li><a href="{!! route('order.orders-destroy') !!}">Đơn hàng bị xoá</a></li>
+                        @endif
                     </ul>
                 </div>
             </li>

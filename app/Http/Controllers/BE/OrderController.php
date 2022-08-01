@@ -51,6 +51,7 @@ class OrderController extends Controller
     public function __construct(OrderService $orderService, OrderDetailService $orderDetailService, TaskService $taskService)
     {
         $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
+        $this->middleware('permission:order.orders-destroy', ['only' => ['order.orders-destroy']]);
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
         $this->taskService = $taskService;

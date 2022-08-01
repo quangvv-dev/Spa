@@ -44,4 +44,5 @@ return [
     'marketing.dashboard'      => "Marketing Dashboard",
     'report.waiters'           => "Báo cáo lễ tân",
     'carepage.index'           => "Báo cáo CarePage",
+    'order.orders-destroy'     => "Đơn hàng đã bị xoá",
 ];

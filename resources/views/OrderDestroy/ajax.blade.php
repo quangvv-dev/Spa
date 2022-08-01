@@ -9,7 +9,7 @@
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Dịch vụ</th>
             <th class="text-white text-center">Doanh số</th>
-            <th class="text-white text-center">Doanh thu</th>
+            {{--<th class="text-white text-center">Doanh thu</th>--}}
             <th class="text-white text-center">Người lên đơn</th>
             <th class="text-white text-center">Chi nhánh</th>
             <th class="text-white text-center"></th>
@@ -24,9 +24,8 @@
                     <td class="text-center">{{@date("d-m-Y", strtotime($data->payment_date))}}</td>
                     <td class="text-center">{{isset($data->customer) ? @$data->customer->full_name :''}}</td>
                     <td class="text-center">{{isset($data->customer) ? @$data->customer->phone :''}}</td>
-                    <td class="text-center">{{@$data->service_text_destroy}}
+                    <td class="text-center">{!! $data->service_text_destroy !!}
                     <td class="text-center">{{ @number_format($data->all_total) }}</td>
-                    <td class="text-center">{{ @number_format($data->gross_revenue) }}</td>
                     <td class="text-center">{{isset($data->user) ? @$data->user->full_name :''}}</td>
                     <td class="text-center">{{@$data->branch->name}}</td>
                 </tr>
@@ -35,15 +34,13 @@
                 <td class="text-center" colspan="5"></td>
                 <td class="text-center bold">Tổng trang</td>
                 <td class="text-center bold">{{ @number_format($datas->sum('all_total')) }}</td>
-                <td class="text-center bold">{{ @number_format($datas->sum('gross_revenue')) }}</td>
-                <td class="text-center" colspan="3"></td>
+                <td class="text-center" colspan="2"></td>
             </tr>
             <tr class="fixed">
                 <td class="text-center" colspan="5"></td>
                 <td class="text-center bold">Tổng cộng</td>
                 <td class="text-center bold">{{ @number_format($allTotal) }}</td>
-                <td class="text-center bold">{{ @number_format($allGross) }}</td>
-                <td class="text-center" colspan="3"></td>
+                <td class="text-center" colspan="2"></td>
 
             </tr>
         @else
