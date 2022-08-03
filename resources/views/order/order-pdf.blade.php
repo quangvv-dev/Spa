@@ -88,10 +88,6 @@
                             @if($orderDetail->number_discount > 0)
                                 <td class="tc">
                                     {{@number_format((int)$orderDetail->price - (int)((int)$orderDetail->number_discount/(int)$orderDetail->quantity))}}
-                                    <br>
-                                    <div style="text-decoration: line-through;">
-                                        {{ number_format($orderDetail->price)}}
-                                    </div>
                                 </td>
                             @else
                                 <td class="tc">
@@ -99,8 +95,13 @@
                                 </td>
                             @endif
 
-                            <td class="tc">{{ $orderDetail->quantity }}</td>
-                            <td class="tr">{{ number_format($orderDetail->total_price) }}</td>
+                            <td class="tc">{{ $orderDetail->days > 0 ? $orderDetail->days : $orderDetail->quantity }}</td>
+                            <td class="tr">{{ number_format($orderDetail->total_price) }}
+                                <br>
+                                <div style="text-decoration: line-through;">
+                                    {{$orderDetail->days > 0? number_format($orderDetail->price * 1):number_format((int)$orderDetail->price * (int)$orderDetail->quantity)}}
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     <tr>
