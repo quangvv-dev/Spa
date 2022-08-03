@@ -321,17 +321,8 @@
         })
 
         $(document).on('click','.submitMultiPage',function () {
-            let favorite = [];
-            $.each($("input.checkPage:checked"), function () {
-                let data = {
-                    'id': $(this).val(),
-                    'token': $(this).data('token'),
-                    'name': $(this).data('name')
-                }
-                favorite.push(data);
-            });
-            if(favorite.length>1){
-                let arr_page_id = JSON.stringify(favorite);
+            if(arr_page.length>1){
+                let arr_page_id = JSON.stringify(arr_page);
                 document.cookie = `arr_page_id = ${arr_page_id};max-age=31536000;path=/`;
                 location.href = `/marketing/chat-multi-page`
             }else {

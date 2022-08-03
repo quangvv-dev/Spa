@@ -85,13 +85,19 @@
                             <div class="chat" v-if="item.from.id != fb_me">
                                 <div class="chat-body">
                                     <div class="chat-content" :class="{'errors':item.is_error == 1}" v-if="item.display==1">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
+                                        <span v-if="item.file =='image'">
+                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                                 :src="item1.image_data.url" :title="date(item.created_time)" alt="">
+                                        </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
                                         <p v-else v-html="item.message" :title="date(item.created_time)"></p>
                                     </div>
                                     <div class="chat-content" :class="{'errors':item.is_error == 1}" v-else style="margin-bottom: 0">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
+                                        <span v-if="item.file =='image'">
+                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                                 :src="item1.image_data.url" :title="date(item.created_time)" alt="">
+                                        </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
                                         <p v-else v-html="item.message" :title="date(item.created_time)"></p>
@@ -109,7 +115,10 @@
                                 </div>
                                 <div class="chat-body">
                                     <div class="chat-content" v-if="item.display==1">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
+                                        <span v-if="item.file =='image'">
+                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                                 :src="item1.image_data.url" :title="date(item.created_time)" alt="">
+                                        </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
                                         <p v-else :title="date(item.created_time)">
@@ -120,7 +129,10 @@
                                         </p>
                                     </div>
                                     <div class="chat-content" v-else style="margin-bottom: 0">
-                                        <img v-if="item.file =='image'" width="320" height="180" :src="item.url" :title="date(item.created_time)" alt="">
+                                        <span v-if="item.file =='image'">
+                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                                 :src="item1.image_data.url" :title="date(item.created_time)" alt="">
+                                        </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
                                         <p v-else :title="date(item.created_time)">
