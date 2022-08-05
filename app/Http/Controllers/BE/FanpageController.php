@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Category;
@@ -20,8 +21,8 @@ class FanpageController extends Controller
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();//mối quan hệ
         $group = Category::pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-        $marketingUsers = User::where('role', UserConstant::MARKETING)->pluck('full_name', 'id')->toArray();
-        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::where('department_id', DepartmentConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $telesales = User::where('department_id', DepartmentConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         view()->share([
             'status'         => $status,
             'group'          => $group,

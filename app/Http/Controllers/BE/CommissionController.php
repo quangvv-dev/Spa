@@ -44,7 +44,7 @@ class CommissionController extends Controller
     public function index($id)
     {
         $title = 'Hoa hồng upsale';
-        $customers = User::where('role', '<>', UserConstant::MARKETING)->pluck('full_name', 'id');
+        $customers = User::where('department_id', '<>', DepartmentConstant::MARKETING)->pluck('full_name', 'id');
         $doc = Commission::where('order_id', $id)->first();
         $commissions = Commission::where('order_id', $id)->get();
         $order = Order::where('id', $id)->first();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
@@ -78,8 +79,8 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
+        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
 //        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
@@ -101,8 +102,8 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
+        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
@@ -203,7 +204,7 @@ class OrderController extends Controller
         }
         $group = Category::pluck('name', 'id')->toArray();
         $marketingUsers = User::pluck('full_name', 'id')->toArray();
-        $telesales = User::where('role', UserConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        $telesales = User::where('department_id', DepartmentConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
@@ -557,7 +558,7 @@ class OrderController extends Controller
                                 ];
 
                                 $task = $this->taskService->create($input);
-                                $follow = User::where('role', UserConstant::ADMIN)->orWhere(function ($query) {
+                                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
                                     $query->where('role', UserConstant::TELESALES)->where('is_leader',
                                         UserConstant::IS_LEADER);
                                 })->get();
@@ -689,8 +690,8 @@ class OrderController extends Controller
     {
         $order = $this->orderService->find($id);
 
-        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
+        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('role', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
@@ -717,8 +718,8 @@ class OrderController extends Controller
     {
         $order = $this->orderService->find($id);
 
-        $spaTherapissts = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('role', [UserConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
+        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');

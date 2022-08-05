@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class PostsController extends Controller
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $branchs = Branch::pluck('name', 'id')->toArray();
         $category = Category::orderByDesc('id')->pluck('name', 'id')->toArray();
-        $sale = User::where('role', UserConstant::TELESALES)->where('active', UserConstant::ACTIVE)->orderByDesc('id')
+        $sale = User::where('department_id', DepartmentConstant::TELESALES)->where('active', DepartmentConstant::ACTIVE)->orderByDesc('id')
             ->pluck('full_name', 'id')->toArray();
         \View::share([
             'campaigns' => $campaigns,

@@ -167,7 +167,7 @@ class CustomerController extends Controller
     public function createGroup()
     {
         $title = 'Thêm mới khách hàng';
-        $user_sale = User::where('role', UserConstant::TELESALES);
+        $user_sale = User::where('department_id', DepartmentConstant::TELESALES);
         $sale = $user_sale->pluck('id')->toArray();
         $name = $user_sale->pluck('full_name')->toArray();
         $sale_name = '';
@@ -242,15 +242,15 @@ class CustomerController extends Controller
         $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer')->findOrFail($id);
         $curent_branch = Auth::user()->branch_id ?Auth::user()->branch_id: '';
         if (isset($customer) && $customer) {
-            $waiters = User::where('role', UserConstant::TECHNICIANS)->where('branch_id',
+            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)->where('branch_id',
                 $curent_branch)->pluck('full_name', 'id');
         } else {
-            $waiters = User::where('role', UserConstant::TECHNICIANS)->pluck('full_name', 'id');
+            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
         }
         $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id,];
         $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
 
-        $staff = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
+        $staff = User::where('department_id', '<>', DepartmentConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
         //Task
@@ -705,8 +705,8 @@ class CustomerController extends Controller
                                 ];
 
                                 $task = $this->taskService->create($input);
-                                $follow = User::where('role', UserConstant::ADMIN)->orWhere(function ($query) {
-                                    $query->where('role', UserConstant::TELESALES)->where('is_leader',
+                                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
+                                    $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
                                         UserConstant::IS_LEADER);
                                 })->get();
                                 $task->users()->attach($follow);

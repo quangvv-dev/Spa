@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
@@ -36,7 +37,7 @@ class ScheduleController extends Controller
 
         $this->taskService = $taskService;
         $category = Category::pluck('name', 'id')->toArray();//nhóm KH
-        $user = User::where('role', '<>', UserConstant::ADMIN)->get()->pluck('full_name', 'id');
+        $user = User::where('department_id', '<>', DepartmentConstant::ADMIN)->get()->pluck('full_name', 'id');
         $staff = $user->toArray();
         $staff2 = $user->prepend('Tất cả người tạo', 0)->toArray();
         $branchs = Branch::search()->pluck('name', 'id');
