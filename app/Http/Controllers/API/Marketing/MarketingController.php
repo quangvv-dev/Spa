@@ -17,6 +17,7 @@ use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\PaymentHistory;
+use App\Models\PaymentWallet;
 use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
@@ -228,7 +229,6 @@ class MarketingController extends BaseApiController
             $paymentNew = $paymentNew->whereHas('order', function ($item) {
                 $item->where('is_upsale', 0);
             });
-
             unset($input['marketing']);
             $price = PriceMarketing::search($input)
                 ->when(isset($input['arr_marketing']), function ($query) use ($input) {
@@ -244,6 +244,10 @@ class MarketingController extends BaseApiController
             $data['payment'] = (int)$paymentNew->sum('price');
             $data['paymentAll'] = (int)$payment->sum('price');
             $data['nap'] = (int)$thu_chi->sum('so_tien');
+            $payment_wallet = PaymentWallet::search($input, 'price')->sum('price');
+            $payment_used = $payment->where('payment_type', 3)->sum('price');
+            $data['paymentAll'] = $data['paymentAll'] + $payment_wallet - $payment_used;
+
         }
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
