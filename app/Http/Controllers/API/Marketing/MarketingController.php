@@ -223,6 +223,7 @@ class MarketingController extends BaseApiController
                 unset($input['arr_marketing']);
             }
             $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+            $order_new = clone $orders;
             $payment = PaymentHistory::search($input, 'price,order_id');
             $paymentNew = clone $payment;
             $paymentNew = $paymentNew->whereHas('order', function ($item) {
@@ -237,7 +238,7 @@ class MarketingController extends BaseApiController
             $data['budget'] = (int)$price->total_budget; //ngân sách
             $data['comment'] = (int)$price->total_comment; //comment
             $data['message'] = (int)$price->total_message; //tin nhắn
-            $data['orders'] = (int)$orders->count();
+            $data['orders'] = (int)$order_new->where('is_upsale', 0)->count();
             $data['all_total'] = (int)$orders->sum('all_total');
             $data['gross_revenue'] = (int)$orders->sum('gross_revenue');
             $data['payment'] = (int)$paymentNew->sum('price');
