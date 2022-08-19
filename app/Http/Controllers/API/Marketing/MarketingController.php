@@ -204,10 +204,9 @@ class MarketingController extends BaseApiController
             $input['arr_marketing'] = $marketing->pluck('id')->toArray();
             $input['arr_thuc_hien'] = $marketing->pluck('id')->toArray();
             $params = $input;
-            unset($params['marketing'], $params['branch_id'], $params['location_id']);
             $thu_chi = ThuChi::search($params, 'so_tien')->where('status', 1);
             $customer = Customer::searchApi($input)->select('id');
-
+            unset($params['marketing'], $params['branch_id'], $params['location_id']);
             $data['contact'] = $customer->count();
             $group_user = $customer->pluck('id')->toArray();
             $input['group_user'] = $group_user;
