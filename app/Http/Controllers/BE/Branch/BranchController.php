@@ -70,9 +70,9 @@ class BranchController extends Controller
 
 
             $request->merge(['branch_id' => $item->id]);
+            dd($request->all());
             $wallet = PaymentWallet::search($request->all(),'price'); // đã thu trong kỳ ví
             $item->payment_wallet = $wallet->sum('price');
-
             $detail = PaymentHistory::search($request->all(), 'price');//đã thu trong kỳ
             $detail_new = clone $detail;
 
@@ -89,7 +89,6 @@ class BranchController extends Controller
             $item->payment_old = $order_old->sum('gross_revenue'); //da thu trong ky
             $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
             $item->all_payment = $detail->sum('price');
-
             $item->payment_used = $detail->where('payment_type',3)->sum('price');//thanh toán điểm
 
             return $item;

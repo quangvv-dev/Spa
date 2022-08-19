@@ -80,7 +80,7 @@
             <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{@number_format($users->sum('revenue_old'))}}</td>
             <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{@number_format($users->sum('payment_old'))}}</td>
             <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{@number_format($users->sum('all_payment') - $users->sum('detail_new') - $users->sum('payment_old'))}}</td>
-            <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{@number_format($users->sum('all_payment') - $users->sum('detail_new'))}}</td>
+            <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{@number_format($users->sum('all_payment') +  $users->sum('payment_wallet') - $users->sum('payment_used') - $users->sum('detail_new'))}}</td>
             <td class="text-center bold" data-fill-color="1E9AD6" data-f-bold="true">{{!empty($users->sum('payment_old'))&& !empty($users->sum('order_old'))?number_format($users->sum('payment_old')/$users->sum('order_old')):0}}</td>
             <td class="bold" data-fill-color="1E9AD6" data-f-bold="true">{{number_format($users->sum('revenue_total'))}}</td>
             <td class="bold" data-fill-color="1E9AD6" data-f-bold="true">{{number_format($users->sum('payment_new') + $users->sum('payment_old'))}}</td>
@@ -118,7 +118,7 @@
                     <td class="text-center pdr10" >{{number_format($item->revenue_old)}}</td>
                     <td class="text-center pdr10" >{{number_format($item->payment_old)}}</td>
                     <td class="text-center pdr10" >{{number_format($item->all_payment - $item->detail_new -$item->payment_old)}}</td>
-                    <td class="text-center pdr10" >{{number_format($item->all_payment - $item->detail_new)}}</td>
+                    <td class="text-center pdr10" >{{number_format($item->all_payment + $item->payment_wallet - $item->payment_used - $item->detail_new)}}</td>
                     <td class="text-center pdr10" >{{!empty($item->payment_old) && !empty($item->order_old) ? number_format($item->payment_old/$item->order_old):0}}</td>
                     <td class="text-center pdr10" >{{number_format($item->revenue_total)}}</td>
 
