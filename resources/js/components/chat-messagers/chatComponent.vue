@@ -26,7 +26,7 @@
                                :class="{'bg-blue-grey bg-lighten-5':select_active == index}"
                                v-for="(item,index) in navChat"
                                @click="selectMessage(item,index)"
-                               :key="index">
+                               :key="item.id">
                                 <div class="media-left pr-1">
                                       <span class="avatar avatar-md avatar-online">
                                         <img class="media-object rounded-circle"
@@ -760,6 +760,7 @@
                             customer_new_comment.snippet = f.snippet;
                             customer_new_comment.new_message = f.is_read == 0 ? true : false;
                             customer_new_comment.post_id = f.post_id;
+                            customer_new_comment.id = f.id;
                             customer_new_comment.type = 'comment';
                             this.navChatDefault.unshift(customer_new_comment);
                             this.navChatDefault.sort(function (a, b) {
@@ -1081,15 +1082,18 @@
             },
             filterList() {
                 this.navChat = this.navChatDefault;
+                let navChat;
                 if (this.filter_phone != null) {
-                    this.navChat = this.navChat.filter(item => {
+                    navChat = this.navChat.filter(item => {
                         return item.check_phone == this.filter_phone;
                     });
+                    this.navChat = navChat;
                 }
                 if (this.filter_comment == 1) {
-                    this.navChat = this.navChat.filter(item => {
+                    navChat = this.navChat.filter(item => {
                         return item.type == 'comment';
                     });
+                    this.navChat = navChat;
                 }
             },
             showModalReply(item) {

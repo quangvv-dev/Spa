@@ -1,9 +1,12 @@
 <template>
     <div class="chat-application">
         <div class="d-flex filterChat">
-            <button class="btn btn-filter" :class="{'active':filter_phone == 1}" @click="filterPhone"><i class="fa fa-phone"></i></button>
-            <button class="btn btn-filter" :class="{'active':filter_phone == 0}" @click="filterNotPhone"><i class="fa fa-phone-slash"></i></button>
-            <button class="btn btn-filter" :class="{'active':filter_comment == 1}" @click="filterComment"><i class="fa fa-book"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_phone == 1}" @click="filterPhone"><i
+                    class="fa fa-phone"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_phone == 0}" @click="filterNotPhone"><i
+                    class="fa fa-phone-slash"></i></button>
+            <button class="btn btn-filter" :class="{'active':filter_comment == 1}" @click="filterComment"><i
+                    class="fa fa-book"></i></button>
         </div>
         <div class="sidebar-left sidebar-fixed">
             <div class="sidebar">
@@ -23,7 +26,7 @@
                                :class="{'bg-blue-grey bg-lighten-5':select_active == index}"
                                v-for="(item,index) in navChat"
                                @click="selectMessage(item,index)"
-                               :key="index">
+                               :key="item.id">
                                 <div class="media-left pr-1">
                                       <span class="avatar avatar-md avatar-online">
                                         <img class="media-object rounded-circle"
@@ -66,7 +69,8 @@
                     <div class="info-customer align-items-center" v-if="chat_current_name != ''">
                         <div class="avatar-customer d-flex align-items-center">
                                 <span class="avatar avatar-md avatar-online mr-1">
-                                    <img alt="avatar" :src="`https://graph.facebook.com/${fb_me}/picture?type=normal&access_token=${access_token}`"/>
+                                    <img alt="avatar"
+                                         :src="`https://graph.facebook.com/${fb_me}/picture?type=normal&access_token=${access_token}`"/>
                                 </span>
                             <span class="name bold">{{chat_current_name}} ({{chat_current_page}}) {{post_id ? '(post_id:'+post_id+')': ''}}</span>
                         </div>
@@ -74,7 +78,7 @@
                     <section class="chat-app-window">
                         <!--<div class="badge badge-default mb-1">Chat History</div>-->
                         <div class="" v-if="next_page">
-                            <span ><button class="btn btn-primary" @click="getNextPage()">Xem thêm</button></span>
+                            <span><button class="btn btn-primary" @click="getNextPage()">Xem thêm</button></span>
                         </div>
                         <div class="" v-if="post_created_time" style="width: 50%">
                             <p v-html="post_message"></p>
@@ -84,18 +88,20 @@
                         <div class="chats" v-for="(item,index) in emotions">
                             <div class="chat" v-if="item.from.id != fb_me">
                                 <div class="chat-body">
-                                    <div class="chat-content" :class="{'errors':item.is_error == 1}" v-if="item.display==1">
+                                    <div class="chat-content" :class="{'errors':item.is_error == 1}"
+                                         v-if="item.display==1">
                                         <span v-if="item.file =='image'">
-                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                            <img width="320" height="180" v-for="item1 in item.attachments.data"
                                                  :src="item1.image_data.url" :title="date(item.created_time)" alt="">
                                         </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
                                                :src="item.url"></video>
                                         <p v-else v-html="item.message" :title="date(item.created_time)"></p>
                                     </div>
-                                    <div class="chat-content" :class="{'errors':item.is_error == 1}" v-else style="margin-bottom: 0">
+                                    <div class="chat-content" :class="{'errors':item.is_error == 1}" v-else
+                                         style="margin-bottom: 0">
                                         <span v-if="item.file =='image'">
-                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                            <img width="320" height="180" v-for="item1 in item.attachments.data"
                                                  :src="item1.image_data.url" :title="date(item.created_time)" alt="">
                                         </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
@@ -116,7 +122,7 @@
                                 <div class="chat-body">
                                     <div class="chat-content" v-if="item.display==1">
                                         <span v-if="item.file =='image'">
-                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                            <img width="320" height="180" v-for="item1 in item.attachments.data"
                                                  :src="item1.image_data.url" :title="date(item.created_time)" alt="">
                                         </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
@@ -124,13 +130,15 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="mdi mdi-facebook-messenger"></i></span>
-                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-comment-dots"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i
+                                                    class="mdi mdi-facebook-messenger"></i></span>
+                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i
+                                                    class="fa fa-comment-dots"></i></span>
                                         </p>
                                     </div>
                                     <div class="chat-content" v-else style="margin-bottom: 0">
                                         <span v-if="item.file =='image'">
-                                            <img width="320" height="180"  v-for="item1 in item.attachments.data"
+                                            <img width="320" height="180" v-for="item1 in item.attachments.data"
                                                  :src="item1.image_data.url" :title="date(item.created_time)" alt="">
                                         </span>
                                         <video v-else-if="item.file =='video'" width="320" height="180" controls
@@ -138,8 +146,10 @@
                                         <p v-else :title="date(item.created_time)">
                                             {{item.message}}
                                             <br>
-                                            <span v-if="post_id" @click="showModalReply(item)"><i class="mdi mdi-facebook-messenger"></i></span>
-                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i class="fa fa-comment-dots"></i></span>
+                                            <span v-if="post_id" @click="showModalReply(item)"><i
+                                                    class="mdi mdi-facebook-messenger"></i></span>
+                                            <span v-if="item.comment_id" @click="showModalComment(item)"><i
+                                                    class="fa fa-comment-dots"></i></span>
                                         </p>
                                     </div>
                                 </div>
@@ -190,7 +200,8 @@
                                 </div>
                             </div>
                         </popover>
-                        <div class="modal fade text-left" id="add_new_form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel35"
+                        <div class="modal fade text-left" id="add_new_form" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel35"
                              style="display: none;" aria-hidden="true">
                             <div class="modal-dialog modal-xl" role="document" style="max-width: 90%">
                                 <div class="modal-content" style="min-height: 550px;">
@@ -213,7 +224,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal fade" id="reply_comment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="reply_comment" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -229,13 +241,16 @@
                                             </div>
                                             <hr>
                                             <div class="col-12">
-                                                <textarea v-model="contentMesage" cols="30" rows="4" class="form-control"></textarea>
+                                                <textarea v-model="contentMesage" cols="30" rows="4"
+                                                          class="form-control"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button @click="sendReplyComment()" type="button" class="btn btn-primary">Gửi</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <button @click="sendReplyComment()" type="button" class="btn btn-primary">Gửi
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -278,7 +293,8 @@
                                 <div class="form-control-position">
                                     <i class="icon-emoticon-smile"></i>
                                 </div>
-                                <input v-on:keyup.enter="onEnter" type="text" class="form-control" id="iconLeft4" placeholder="Type your message"
+                                <input v-on:keyup.enter="onEnter" type="text" class="form-control" id="iconLeft4"
+                                       placeholder="Type your message"
                                        v-model="contentMesage">
                                 <div class="form-control-position control-position-right" v-if="this.last_segment">
                                     <!--<i class="ft-image" v-popover.top="{ name: 'images'}"></i>-->
@@ -380,7 +396,7 @@
     // var host = 'https://crm.santa.name.vn:2022/';
     // var host = 'https://thammyroyal.adamtech.vn:2022/';
     var port = 2022;
-    var host = 'https://' + location.host + ':'+port;
+    var host = 'https://' + location.host + ':' + port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -397,19 +413,19 @@
                 access_token: '',
                 detailMessage: [],
                 last_segment: '',
-                post_id:'',
+                post_id: '',
                 comment_id: '',
                 avatar_page: '/default/logo.png',
                 classClick: '',
                 arr_page_id: [],
 
                 dataQuickReply: [],
-                images:[],
-                data_images_upload_server:[],
-                data_images_upload_server_default:[],
-                chat_current_name : '',
-                chat_current_page : '',
-                next_page : null,
+                images: [],
+                data_images_upload_server: [],
+                data_images_upload_server_default: [],
+                chat_current_name: '',
+                chat_current_page: '',
+                next_page: null,
 
                 //data form thêm khách hàng
                 description: '',
@@ -430,15 +446,15 @@
                     {id: 1, value: "Nam"}
                 ],
                 //filter
-                filter_phone : null,
-                filter_comment : 0,
-                select_active:null,
+                filter_phone: null,
+                filter_comment: 0,
+                select_active: null,
 
                 //comment
                 click_comment: false,
                 post_created_time: '',
                 post_full_picture: '',
-                post_message : ''
+                post_message: ''
             }
         },
         components: {
@@ -479,12 +495,12 @@
             }
         },
         methods: {
-            getSocket(){
-                if(this.arr_page_id.length>0){
-                    this.arr_page_id.forEach(item=>{
+            getSocket() {
+                if (this.arr_page_id.length > 0) {
+                    this.arr_page_id.forEach(item => {
                         socket.on(item.id, (server) => {
                             let newTime = moment().format('YYYY-MM-DDTHH:mm:ssZZ');
-                            if(server.type){
+                            if (server.type) {
                                 this.customerNewComment(server);
                             } else {
                                 let html = {
@@ -567,9 +583,9 @@
                 this.timer = setTimeout(() => {
                     this.navChat = this.navChatDefault.filter(item => {
                         let re = new RegExp(`${this.textSearch}`, 'gi');
-                        if(item.participants.data[0].name.match(re)){
+                        if (item.participants.data[0].name.match(re)) {
                             return item.participants.data[0].name.match(re);
-                        } else if(item.phone && item.phone.match(re)){
+                        } else if (item.phone && item.phone.match(re)) {
                             return item.phone.match(re);
                         }
                     });
@@ -600,13 +616,13 @@
                 } catch (error) {
                     let html = {
                         message: this.contentMesage,
-                        is_error : 1,
+                        is_error: 1,
                         from: {
                             id: this.last_segment,
                         }
                     };
                     this.detailMessage.push(html);
-                    alertify.error('đã có lỗi xảy ra !',10);
+                    alertify.error('đã có lỗi xảy ra !', 10);
                 }
 
                 let data_image_response = [];
@@ -614,8 +630,8 @@
                     // this.detailMessage = response.data.messages.data.reverse();
                     data_image_response = response.data;
                 });
-                if(data_image_response.length > 0){
-                    data_image_response.forEach(async f =>{
+                if (data_image_response.length > 0) {
+                    data_image_response.forEach(async f => {
                         await axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                             "messaging_type": "RESPONSE",
                             "notification_type": "REGULAR",
@@ -623,27 +639,28 @@
                                 "id": this.fb_me
                             },
                             "message": {
-                                attachment:{"type":"image",
-                                    "payload":{
+                                attachment: {
+                                    "type": "image",
+                                    "payload": {
                                         "is_reusable": true,
-                                        "url":location.origin+'/'+f
+                                        "url": location.origin + '/' + f
                                     }
                                 }
                             }
-                        }).then(res=>{
+                        }).then(res => {
                             html = {
                                 display: 1,
-                                file:"image",
+                                file: "image",
                                 from: {
                                     id: this.last_segment,
                                 },
-                                url: location.origin+'/'+f
+                                url: location.origin + '/' + f
                             }
                             this.detailMessage.push(html);
                             this.changeNavChat('images');
-                        }).catch(error =>{
-                            if(error){
-                                alertify.error('đã có lỗi xảy ra !',10);
+                        }).catch(error => {
+                            if (error) {
+                                alertify.error('đã có lỗi xảy ra !', 10);
                             }
                         })
 
@@ -658,16 +675,16 @@
 
                 this.contentMesage = '';
             },
-            changeNavChat(type){
+            changeNavChat(type) {
                 let index = this.navChatDefault.findIndex(f => {
                     return (f.participants.data[0].id == this.fb_me && f.participants.data[1].id == this.last_segment);
                 });
 
-                if(type == 'images'){
+                if (type == 'images') {
                     this.navChatDefault[index].snippet = 'Bạn đã gửi 1 ảnh';
-                }else if(type == 'message') {
+                } else if (type == 'message') {
                     this.navChatDefault[index].snippet = this.contentMesage;
-                } else if(type = 'phone') {
+                } else if (type = 'phone') {
                     this.navChatDefault[index].phone = this.phone;
                     this.navChatDefault[index].check_phone = 1;
                 }
@@ -678,10 +695,10 @@
 
                 // let arr_page_id = this.$cookies.get('arr_page_id');
                 let length_list_page = 0;
-                if(arr_page_id){
+                if (arr_page_id) {
                     arr_page_id = JSON.parse(arr_page_id);
                     length_list_page = arr_page_id.length;
-                    for (const item of arr_page_id){
+                    for (const item of arr_page_id) {
                         let access_token = item.token;
                         let fields = 'updated_time,name,id,participants,snippet';
                         let url = 'https://graph.facebook.com/v13.0/me/conversations?fields=' + fields + '&access_token=' + access_token;
@@ -689,15 +706,17 @@
                         try {
                             const res = await axios.get(url);
                             let data = res.data.data;
-                            data = data.map((m)=>{
+                            data = data.map((m) => {
                                 m.access_token = item.token;
                                 return m;
                             })
                             this.navChatDefault.push(...data);
                             this.navChat = this.navChatDefault;
                         } catch (e) {
-                            arr_page_id = arr_page_id.filter(f=>{return f.id != item.id})
-                            alertify.error(`Token hết hạn: ${item.id}`,10)
+                            arr_page_id = arr_page_id.filter(f => {
+                                return f.id != item.id
+                            })
+                            alertify.error(`Token hết hạn: ${item.id}`, 10)
                         }
                     }
                     this.arr_page_id = arr_page_id; //tác dụng để get socket
@@ -708,16 +727,18 @@
             },
 
 
-            getPhonePage(){
-                let arr_page = this.arr_page_id.map(m=> m.id);
-                axios.get('/marketing/get-phone-page',{
-                    params:{
+            getPhonePage() {
+                let arr_page = this.arr_page_id.map(m => m.id);
+                axios.get('/marketing/get-phone-page', {
+                    params: {
                         arr_page: arr_page
                     }
                 }).then(response => {
-                    let abc = this.navChat.map(m=>{
-                        let bcd = response.data.filter(f=>{return(f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)})
-                        if(bcd.length > 0){
+                    let abc = this.navChat.map(m => {
+                        let bcd = response.data.filter(f => {
+                            return (f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)
+                        })
+                        if (bcd.length > 0) {
                             m.phone = bcd[0].phone;
                             m.check_phone = 1;
                         } else {
@@ -731,18 +752,18 @@
                     this.navChatDefault = abc;
                 })
             },
-            getCommentPage(){
-                let arr_page = this.arr_page_id.map(m=>m.id);
+            getCommentPage() {
+                let arr_page = this.arr_page_id.map(m => m.id);
                 axios.get('/marketing/get-comment-page', {
                     params: {
                         arr_page: arr_page
                     }
                 }).then(response => {
-                    if(response.data && response.data.length > 0){
-                        response.data.forEach(f=>{
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(f => {
                             let data_content = JSON.parse(f.content);
                             let customer_new_comment = {};
-                            let page = this.arr_page_id.filter(ft=> ft.id == f.page_id);
+                            let page = this.arr_page_id.filter(ft => ft.id == f.page_id);
                             customer_new_comment.participants = {
                                 data: [
                                     {
@@ -757,10 +778,11 @@
                             }
                             customer_new_comment.access_token = page[0].token;
                             customer_new_comment.unread_count = f.is_read == 0 ? 1 : 0;
-                            customer_new_comment.updated_time = data_content[data_content.length-1].created_time;
+                            customer_new_comment.updated_time = data_content[data_content.length - 1].created_time;
                             customer_new_comment.snippet = f.snippet;
                             customer_new_comment.new_message = f.is_read == 0 ? true : false;
                             customer_new_comment.post_id = f.post_id;
+                            customer_new_comment.id = f.id;
                             customer_new_comment.type = 'comment';
                             this.navChatDefault.unshift(customer_new_comment);
                             this.navChatDefault.sort(function (a, b) {
@@ -777,13 +799,13 @@
                     }
                 })
             },
-            selectMessage(item,index) {
+            selectMessage(item, index) {
                 this.post_created_time = '';
                 this.post_full_picture = '';
                 this.post_message = '';
                 this.next_page = null;
                 this.post_id = '';
-                if(item.type && item.type == 'comment'){
+                if (item.type && item.type == 'comment') {
                     let url = '/marketing/get-detail-comment';
                     let fb_id = item.participants.data[0].id;
                     let page_id = item.participants.data[1].id;
@@ -793,21 +815,21 @@
                         FB_ID: fb_id
                     }
 
-                    let index = this.navChatDefault.findIndex(fd=>{
+                    let index = this.navChatDefault.findIndex(fd => {
                         return fd.participants.data[1].id == page_id && fd.participants.data[0].id == fb_id && fd.type == 'comment';
                     })
 
                     this.navChatDefault[index].unread_count = 0;
                     this.navChatDefault[index].new_message = false;
 
-                    axios.get(url,{
+                    axios.get(url, {
                         params: params
                     })
                         .then(response => {
                             let data = JSON.parse(response.data.content);
 
-                            if(data.length > 0){
-                                data = data.map(m=>{
+                            if (data.length > 0) {
+                                data = data.map(m => {
                                     if (m.type == 'me') {
                                         m['from'] = {
                                             id: this.last_segment,
@@ -825,15 +847,15 @@
                             this.detailMessage = data;
                             this.post_id = this.last_segment + '_' + response.data.post_id;
                             let url_detail_post = `https://graph.facebook.com/v13.0/${this.post_id}?fields=message%2Ccreated_time%2Cfull_picture%2Cid%2Cattachments&access_token=${this.access_token}`
-                            axios.get(url_detail_post).then(res=>{
+                            axios.get(url_detail_post).then(res => {
                                 this.post_created_time = res.data.created_time;
                                 this.post_full_picture = res.data.attachments.data[0].media.image.src;
-                                this.post_message = res.data.message.replaceAll('\n\n','<br>');
+                                this.post_message = res.data.message.replaceAll('\n\n', '<br>');
                             })
                         })
                     //update is_read comment
-                    axios.post('/marketing/update-is-read-comment',params)
-                }else {
+                    axios.post('/marketing/update-is-read-comment', params)
+                } else {
                     let id = item.id;
                     let access_token = item.access_token;
 
@@ -861,11 +883,11 @@
                 this.getListQuickReply();
                 this.scrollToBottom();
             },
-            customerNewComment(data){
+            customerNewComment(data) {
                 let splitted = data.value.post_id.split("_", 2);
-                if (data.check_create == 1){ //trường hợp thêm mới
+                if (data.check_create == 1) { //trường hợp thêm mới
                     let customer_new_comment = {
-                        'unread_count' : 0
+                        'unread_count': 0
                     };
 
                     customer_new_comment.participants = {
@@ -880,7 +902,7 @@
                         ]
                     }
 
-                    let page = this.arr_page_id.filter(ft=> ft.id == splitted[0]);
+                    let page = this.arr_page_id.filter(ft => ft.id == splitted[0]);
                     customer_new_comment.unread_count = 1;
                     customer_new_comment.access_token = page[0].token;
                     customer_new_comment.updated_time = new Date().toISOString();
@@ -890,32 +912,31 @@
                     customer_new_comment.type = 'comment';
                     this.navChatDefault.unshift(customer_new_comment);
                     this.navChat = this.navChatDefault;
-                }
-                else { //trường hợp tồn tại
-                    this.findComment(data.value.from.id,splitted[0],data.value.message,1,true);
+                } else { //trường hợp tồn tại
+                    this.findComment(data.value.from.id, splitted[0], data.value.message, 1, true);
                 }
             },
 
-            selectElement(item){
+            selectElement(item) {
                 this.data_images_upload_server = this.data_images_upload_server_default = [];
                 this.images = [];
                 this.contentMesage = item.message;
-                if(item.images && item.images.length>0){
-                    item.images.forEach(f=>{
+                if (item.images && item.images.length > 0) {
+                    item.images.forEach(f => {
                         let data = {
-                            'default':1,
+                            'default': 1,
                             'highlight': 1,
-                            'name':f,
-                            'path':''
+                            'name': f,
+                            'path': ''
                         }
                         this.data_images_upload_server.push(data);
                     });
                     this.data_images_upload_server_default = this.data_images_upload_server;
                 }
             },
-            getListQuickReply(){
+            getListQuickReply() {
                 axios.get(`/marketing/get-quick-reply/${this.last_segment}`).then(response => {
-                    if(response.data){
+                    if (response.data) {
                         this.dataQuickReply = response.data.data;
                     }
                 })
@@ -929,15 +950,18 @@
                 if (customer_new.length > 0) {
                     customer_new_mess = customer_new[0];
                     customer_new_mess.unread_count = customer_new_mess.unread_count && customer_new_mess.unread_count > 0 ? unread_count + customer_new[0].unread_count : unread_count;
-                }
-                else {
-                    let token = this.arr_page_id.filter(f=> {return f.id == page_id});
+                } else {
+                    let token = this.arr_page_id.filter(f => {
+                        return f.id == page_id
+                    });
                     let access_token = token[0].token;
 
                     let fields = 'id,created_time,message,thread_id,attachments,from';
                     let url = `https://graph.facebook.com/v13.0/${mid}/?fields=${fields}&access_token=${access_token}`;
                     await axios.get(url).then(response => {
-                        let page=this.arr_page_id.filter(f=>{return f.id == page_id});
+                        let page = this.arr_page_id.filter(f => {
+                            return f.id == page_id
+                        });
                         customer_new_mess.id = response.data.thread_id;
                         customer_new_mess.participants = {
                             data: [
@@ -956,9 +980,9 @@
                     customer_new_mess.access_token = access_token;
                 }
                 customer_new_mess.updated_time = created_time;
-                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name +" đã gửi đa phương tiện...";
+                customer_new_mess.snippet = mess ? mess : customer_new_mess.participants.data[0].name + " đã gửi đa phương tiện...";
                 customer_new_mess.new_message = true;
-                let index = this.navChatDefault.findIndex(f=> {
+                let index = this.navChatDefault.findIndex(f => {
                     return (f.participants.data[0].id == sender_id && f.participants.data[1].id == page_id);
                 })
 
@@ -970,18 +994,18 @@
                 this.navChat = this.navChatDefault;
             },
 
-            openForm(){
+            openForm() {
                 $('#add_new_form').modal({show: true})
             },
             uploadImageSuccess(formData, index, fileList) {
                 this.data_images_upload_server = fileList;
             },
-            beforeRemove (index, done, fileList) {
+            beforeRemove(index, done, fileList) {
                 var r = confirm("remove image")
                 if (r == true) {
-                    if (fileList.length>1){
-                        fileList.forEach(f=>{
-                            this.data_images_upload_server = this.data_images_upload_server.filter(ft=>{
+                    if (fileList.length > 1) {
+                        fileList.forEach(f => {
+                            this.data_images_upload_server = this.data_images_upload_server.filter(ft => {
                                 return ft.name != f.name;
                             })
                         })
@@ -990,13 +1014,13 @@
                 } else {
                 }
             },
-            editImage (formData, index, fileList) {
+            editImage(formData, index, fileList) {
 
             },
-            dataChange (){
+            dataChange() {
 
             },
-            clearImage(){
+            clearImage() {
                 this.data_images_upload_server = [];
                 this.images = [];
             },
@@ -1077,7 +1101,7 @@
                         console.log('error', err)
                     })
             },
-            resetValue(){
+            resetValue() {
                 this.phone = '';
                 this.gender = null;
                 this.telesales_id = null;
@@ -1086,45 +1110,48 @@
                 this.value_chi_nhanh = null;
                 this.description = ''
             },
-            filterPhone(){
-                if(this.filter_phone != 1){
+            filterPhone() {
+                if (this.filter_phone != 1) {
                     this.filter_phone = 1;
                 } else {
                     this.filter_phone = null;
                 }
                 this.filterList();
             },
-            filterNotPhone(){
-                if(this.filter_phone != 0){
+            filterNotPhone() {
+                if (this.filter_phone != 0) {
                     this.filter_phone = 0;
                 } else {
                     this.filter_phone = null;
                 }
                 this.filterList();
             },
-            filterComment(){
-                if(this.filter_comment == 0){
+            filterComment() {
+                if (this.filter_comment == 0) {
                     this.filter_comment = 1;
                 } else {
                     this.filter_comment = 0;
                 }
                 this.filterList();
             },
-            filterList(){
+            filterList() {
                 this.navChat = this.navChatDefault;
-                if(this.filter_phone != null){
-                    this.navChat = this.navChat.filter(item => {
+                let navChat;
+                if (this.filter_phone != null) {
+                    navChat = this.navChat.filter(item => {
                         return item.check_phone == this.filter_phone;
                     });
+                    navChat = this.navChat;
                 }
-                if(this.filter_comment == 1){
-                    this.navChat = this.navChat.filter(item => {
+                if (this.filter_comment == 1) {
+                    navChat = this.navChat.filter(item => {
                         return item.type == 'comment';
                     });
+                    navChat = this.navChat;
                 }
 
             },
-            showModalReply(item){
+            showModalReply(item) {
                 this.comment_id = item.comment_id;
                 $('#reply_comment').modal({show: true})
             },
@@ -1133,9 +1160,8 @@
                 $('#send_comment').modal({show: true})
             },
             sendComment() {
-                let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {
-                }).then(res=>{
-                    if(res){
+                let rq = axios.post(`https://graph.facebook.com/v13.0/${this.comment_id}/comments?message=${this.contentComment}&access_token=${this.access_token}`, {}).then(res => {
+                    if (res) {
 
                         let splitted = this.post_id.split("_", 2);
                         let params = {
@@ -1176,9 +1202,9 @@
                                         return m;
                                     })
                                     this.detailMessage = content;
-                                    this.findComment(this.fb_me,this.last_segment,this.contentComment,0,false);
+                                    this.findComment(this.fb_me, this.last_segment, this.contentComment, 0, false);
                                 }
-                                alertify.success('Trả lời thành công!',5);
+                                alertify.success('Trả lời thành công!', 5);
                                 $('#send_comment').modal('hide');
                             });
 
@@ -1187,15 +1213,15 @@
 
                         $('#send_comment').modal('hide');
                     }
-                }).catch(error=>{
-                    if(error){
-                        alertify.warning('Không trả lời được bình luận!',5);
+                }).catch(error => {
+                    if (error) {
+                        alertify.warning('Không trả lời được bình luận!', 5);
                         $('#send_comment').modal('hide');
                     }
                 })
 
             },
-            sendReplyComment(){
+            sendReplyComment() {
                 let rq = axios.post(`https://graph.facebook.com/v13.0/me/messages?access_token=${this.access_token}`, {
                     // "messaging_type": "MESSAGE_TAG",
                     // "tag": "HUMAN_AGENT",
@@ -1206,58 +1232,58 @@
                     "message": {
                         "text": this.contentMesage
                     }
-                }).then(res=>{
-                    if(res){
-                        alertify.success('Trả lời thành công!',5);
+                }).then(res => {
+                    if (res) {
+                        alertify.success('Trả lời thành công!', 5);
                         $('#reply_comment').modal('hide');
                         this.newElement(res.data.message_id);
                     }
-                }).catch(error=>{
-                    if(error){
-                        alertify.warning('Bạn đã trả lời bình luận này rồi!',5);
+                }).catch(error => {
+                    if (error) {
+                        alertify.warning('Bạn đã trả lời bình luận này rồi!', 5);
                         $('#reply_comment').modal('hide');
                     }
                 })
                 this.contentMesage = '';
             },
-            async newElement(message_id){
+            async newElement(message_id) {
                 let access_token = this.access_token;
                 let fields = 'from,message,to,created_time,thread_id';
                 let url = `https://graph.facebook.com/v13.0/${message_id}?fields=${fields}&access_token=${access_token}`;
                 const res = await axios.get(url);
-                let index = this.navChatDefault.findIndex(fd=>{
+                let index = this.navChatDefault.findIndex(fd => {
                     return fd.participants.data[1].id == res.data.from.id && fd.participants.data[0].id == res.data.to.data[0].id && fd.type != 'comment';
                 })
-                if (index > -1){
+                if (index > -1) {
                     this.navChatDefault[index].snippet = res.data.message;
                     this.navChatDefault[index].updated_time = res.data.created_time;
-                }
-                else {
+                } else {
                     let html = {
-                        check_phone : 0,
+                        check_phone: 0,
                         access_token: access_token,
-                        id : res.data.thread_id,
-                        participants : {
-                            data:[
+                        id: res.data.thread_id,
+                        participants: {
+                            data: [
                                 {
-                                    id:res.data.to.data[0].id,
-                                    name:res.data.to.data[0].name
+                                    id: res.data.to.data[0].id,
+                                    name: res.data.to.data[0].name
                                 },
                                 {
-                                    id:res.data.from.id,
-                                    name:res.data.from.name
+                                    id: res.data.from.id,
+                                    name: res.data.from.name
                                 }
-                            ]},
-                        phone:"",
-                        snippet:res.data.message,
-                        updated_time:res.data.created_time
+                            ]
+                        },
+                        phone: "",
+                        snippet: res.data.message,
+                        updated_time: res.data.created_time
                     }
                     this.navChatDefault.unshift(html);
                 }
             },
-            async getNextPage(){
+            async getNextPage() {
                 let data = await axios.get(this.next_page);
-                if(data.data.paging.next){
+                if (data.data.paging.next) {
                     this.next_page = data.data.paging.next;
                 } else {
                     this.next_page = null;
@@ -1266,7 +1292,7 @@
                 data_1.push(...this.detailMessage);
                 this.detailMessage = data_1;
             },
-            findComment(from_id, page_id, message,unread_count,status) {
+            findComment(from_id, page_id, message, unread_count, status) {
                 let index = this.navChatDefault.findIndex(f => {
                     return (f.participants.data[0].id == from_id && f.participants.data[1].id == page_id && f.type == 'comment');
                 })
@@ -1352,44 +1378,52 @@
         bottom: 14%;
     }
 
-    .info-customer{
+    .info-customer {
         padding: 10px 22px;
     }
-    .chat-application .chat-app-window{
-        height:calc(100% - 139px);
+
+    .chat-application .chat-app-window {
+        height: calc(100% - 139px);
     }
-    .ant-popover-inner-content{
-        overflow-y:scroll ;
+
+    .ant-popover-inner-content {
+        overflow-y: scroll;
     }
-    body{
+
+    body {
         overflow: hidden !important;
     }
 
-    .openForm{
+    .openForm {
         position: relative;
-        font-size:20px;
+        font-size: 20px;
         margin-right: 10px;
     }
-    .openPopover{
-        font-size:20px;
+
+    .openPopover {
+        font-size: 20px;
     }
-    .openForm .badge{
+
+    .openForm .badge {
         position: absolute;
         font-size: 10px;
         top: -7px;
         right: -7px;
     }
+
     .openForm .badge:hover .ngonngay {
         display: none;
     }
+
     .openForm .badge:hover .ngonngay1 {
         display: block !important;
     }
 
-    .openForm .badge:not(:hover) .ngonngay{
+    .openForm .badge:not(:hover) .ngonngay {
         display: block !important;
     }
-    .openForm .badge:not(:hover) .ngonngay1{
+
+    .openForm .badge:not(:hover) .ngonngay1 {
         display: none !important;
     }
 
