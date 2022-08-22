@@ -106,7 +106,6 @@ class ChatController extends Controller
 
     public function updateGroup(Request $request)
     {
-        $user = Auth::user();
         if ($request->name) {
             $data['name'] = $request->name;
         }
@@ -229,5 +228,29 @@ class ChatController extends Controller
             'code' => $code,
             'success' => true
         ]);
+    }
+
+    public function getDataGroup(Request $request,$group_id){
+        $data = MultiplePageGroup::find($group_id);
+        if($data){
+            $arr_page_id = $data->page_ids;
+            if($request->type=='submitPage'){
+                if($arr_page_id != '[]'){
+                    $arr_page = json_decode($arr_page_id);
+                    $data = Fanpage::select('id','name','access_token')->whereIn('page_id',$arr_page)->get()->transform(function ($tran){
+                        return [
+                            'id' => $tran->id,
+                            'token' => $tran->access_token,
+                            'name' =>$tran->name
+                        ];
+                    });
+                } else {
+                    $data = [];
+                }
+
+            }
+        }
+
+        return $data;
     }
 }

@@ -13,7 +13,7 @@
                 <nav style="height: 50px;">
                     <div class="nav nav-tabs listTab" id="nav-tab" role="tablist">
                         @forelse($group_multi as $key=> $item)
-                            <a class="nav-item nav-link group-name {{$key==0 ? 'active': ''}}" data-name="{{$item->name}}" data-id="{{$item->id}}" data-toggle="tab" role="tab" aria-selected="true">
+                            <a class="nav-item nav-link group-name group-name-key-{{$key}}" data-name="{{$item->name}}" data-id="{{$item->id}}" data-toggle="tab" role="tab" aria-selected="true">
                                 {{$item->name}}
                                 <span class="delete-group" style="display: none" data-id="{{$item->id}}">x</span>
                             </a>

@@ -265,6 +265,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('get-quick-reply/{page_id}', 'SettingChatController@getQuickReply');
 
         //Chat multi_page
+        Route::get('get-data-group/{group_id}','ChatController@getDataGroup');
         Route::post('add-group','ChatController@addGroup');
         Route::put('update-group','ChatController@updateGroup');
         Route::delete('delete-group/{id}','ChatController@deleteGroup');

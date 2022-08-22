@@ -97,58 +97,15 @@
             </div>
         </div>
     </div>
-    <input type="hidden" class="groupMulti" value="{{$group_multi}}">
     <input type="hidden" class="arrPage" value="{{$fanpages}}">
 @endsection
 @section('_script')
     <script>
         let group_id = 0;
-        let arr_page = [];
         let arr_curent_group = [];
-        $(function () {
-            let data = $('.groupMulti').val();
-            if(data){
-                data = JSON.parse(data);
-                if(data.length>0){
-                    let pages = data[0].page_ids;
-                    group_id = data[0].id;
-                    if(pages){
-                        pages = JSON.parse(pages);
-                        arr_curent_group = pages;
-                        if(pages.length>0){
-                            pages.forEach(f=>{
-                                $('.' + f).prop('checked', true)
-                            })
-                        }
-                        $('.multipage-selectedCount').html(pages.length);
-                    }
-                }
-            }
-
-            let data_arr_page = $('.arrPage').val();
-            if(data_arr_page){
-                data_arr_page = JSON.parse(data_arr_page);
-                if(arr_curent_group.length>0){
-                    arr_curent_group.forEach(f=>{
-                        let check = data_arr_page.findIndex(find=>{
-                           return  find.page_id == f;
-                        })
-                        if(check > -1){
-                            let data_push = {
-                                "id":data_arr_page[check].page_id,
-                                "token":data_arr_page[check].access_token,
-                                "name":data_arr_page[check].name,
-                            }
-                            arr_page.push(data_push);
-                        }
-                    })
-                }
-            }
-        })
-
         $(document).on('click','.openModal',function () {
-
             $('#modalMultiPage').modal('show');
+            $('#modalMultiPage .group-name-key-0').click();
         })
 
         $(document).on('click','.addTab',function () {
@@ -185,28 +142,29 @@
         }
 
         $(document).on('click', '.group-name', function (e) {
-            $('.checkPage').prop('checked', false);
             group_id = $(this).data('id');
-            let data = $('.groupMulti').val();
-
-            if(data){
-                data = JSON.parse(data);
-                if(data.length>0){
-                    let pages = data.filter(f=>f.id == group_id);
-                    if(pages){
-                        pages = JSON.parse(pages[0].page_ids);
-                        arr_curent_group = pages;
+            arr_curent_group = [];
+            $('input:checkbox').not(this).prop('checked', false);
+            $.ajax({
+                url:'get-data-group/'+group_id,
+                success:function (data) {
+                    if(data && data.page_ids != '[]'){
+                        let pages = JSON.parse(data.page_ids);
                         if(pages.length>0){
+                            arr_curent_group = pages;
                             pages.forEach(f=>{
                                 $('.' + f).prop('checked', true)
                             })
                         }else {
-                            arr_page = [];
+                            arr_curent_group = [];
                         }
                         $('.multipage-selectedCount').html(pages.length);
+                    } else {
+                        $('.multipage-selectedCount').html(0);
                     }
                 }
-            }
+
+            })
         });
 
         $(document).on('dblclick', '.group-name', function (e) {
@@ -255,6 +213,7 @@
                     method: "delete",
                     success: function (data) {
                         el.closest('a').remove();
+                        location.reload();
                     }
                 })
             })
@@ -271,72 +230,43 @@
         $(document).on('click','.checkPage',function () {
             let checked = $(this).is(":checked");
             let page_id = $(this).val();
-            let page_token = $(this).data('token');
-            let page_name = $(this).data('name');
             if(checked){
-                if(arr_page.length > 0){
-                    const index = arr_page.findIndex(f => f.id === page_id);
-                    if(index > -1){
-                        let checked = $('.' + page_id).is(":checked");
-                        if(!checked){
-                            $('.' + page_id).prop('checked', true);
-                        }
-                    } else {
-                        let data = {
-                            id: page_id,
-                            token : page_token,
-                            name: page_name
-                        }
-                        arr_page.push(data);
-                    }
-                } else {
-                    let data = {
-                        id: page_id,
-                        token : page_token,
-                        name: page_name
-                    }
-                    arr_page.push(data);
-                }
+                arr_curent_group.push(page_id);
             } else {
-                arr_page = arr_page.filter(f=>{return f.id != page_id})
+                arr_curent_group = arr_curent_group.filter(fb=>fb != page_id);
             }
-            $('.multipage-selectedCount').html(arr_page.length);
 
-            let data_arr_page = arr_page.map(m=>{return m.id})
             $.ajax({
                 url: "/marketing/update-group",
                 method: "put",
                 data: {
                     id: group_id,
-                    arr_page: data_arr_page,
+                    arr_page: arr_curent_group,
                 },
                 success: function (data) {
-                    $('.groupMulti').val(JSON.stringify(data));
+                    if(data){
+                        $('.multipage-selectedCount').html(arr_curent_group.length)
+                    }
                 }
             })
-
-            setTimeout(function () {
-                $('.countPage').html(arr_page.length)
-            },400)
         })
 
         $(document).on('click','.submitMultiPage',function () {
-            let favorite = [];
-            $.each($("input.checkPage:checked"), function () {
-                let data = {
-                    'id': $(this).val(),
-                    'token': $(this).data('token'),
-                    'name': $(this).data('name')
+            $.ajax({
+                url:'get-data-group/'+group_id,
+                data:{
+                    type: 'submitPage'
+                },
+                success:function (data) {
+                    if(data && data.length > 0){
+                        let arr_page_id = JSON.stringify(data);
+                        localStorage.setItem("arr_page_id", arr_page_id);
+                        location.href = `/marketing/chat-multi-page`
+                    }
                 }
-                favorite.push(data);
-            });
-            if(arr_page.length>1){
-                let arr_page_id = JSON.stringify(favorite);
-                localStorage.setItem("arr_page_id", arr_page_id);
-                location.href = `/marketing/chat-multi-page`
-            }else {
-                alertify.warning('vui lòng chọn nhiều hơn 1 page !');
-            }
+
+            })
+
         })
 
 
