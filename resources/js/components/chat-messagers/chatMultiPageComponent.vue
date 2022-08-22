@@ -1141,13 +1141,13 @@
                     navChat = this.navChat.filter(item => {
                         return item.check_phone == this.filter_phone;
                     });
-                    navChat = this.navChat;
+                    this.navChat = navChat ;
                 }
                 if (this.filter_comment == 1) {
                     navChat = this.navChat.filter(item => {
                         return item.type == 'comment';
                     });
-                    navChat = this.navChat;
+                    this.navChat = navChat ;
                 }
 
             },

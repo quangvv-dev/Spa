@@ -3983,14 +3983,14 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
         navChat = this.navChat.filter(function (item) {
           return item.check_phone == _this16.filter_phone;
         });
-        navChat = this.navChat;
+        this.navChat = navChat;
       }
 
       if (this.filter_comment == 1) {
         navChat = this.navChat.filter(function (item) {
           return item.type == 'comment';
         });
-        navChat = this.navChat;
+        this.navChat = navChat;
       }
     },
     showModalReply: function showModalReply(item) {
