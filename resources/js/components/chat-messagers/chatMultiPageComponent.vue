@@ -674,7 +674,9 @@
             },
 
             async getListChat() {
-                let arr_page_id = this.$cookies.get('arr_page_id');
+                let arr_page_id = localStorage.getItem('arr_page_id');
+
+                // let arr_page_id = this.$cookies.get('arr_page_id');
                 let length_list_page = 0;
                 if(arr_page_id){
                     arr_page_id = JSON.parse(arr_page_id);

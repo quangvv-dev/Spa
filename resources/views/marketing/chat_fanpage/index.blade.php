@@ -332,7 +332,7 @@
             });
             if(arr_page.length>1){
                 let arr_page_id = JSON.stringify(favorite);
-                document.cookie = `arr_page_id = ${arr_page_id};max-age=31536000;path=/`;
+                localStorage.setItem("arr_page_id", arr_page_id);
                 location.href = `/marketing/chat-multi-page`
             }else {
                 alertify.warning('vui lòng chọn nhiều hơn 1 page !');
