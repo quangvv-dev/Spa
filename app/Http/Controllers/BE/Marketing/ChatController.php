@@ -237,7 +237,7 @@ class ChatController extends Controller
             if($request->type=='submitPage'){
                 if($arr_page_id != '[]'){
                     $arr_page = json_decode($arr_page_id);
-                    $data = Fanpage::select('id','name','access_token')->whereIn('page_id',$arr_page)->get()->transform(function ($tran){
+                    $data = Fanpage::select('page_id','name','access_token')->whereIn('page_id',$arr_page)->get()->transform(function ($tran){
                         return [
                             'id' => $tran->page_id,
                             'token' => $tran->access_token,
