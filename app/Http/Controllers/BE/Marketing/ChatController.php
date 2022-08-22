@@ -239,7 +239,7 @@ class ChatController extends Controller
                     $arr_page = json_decode($arr_page_id);
                     $data = Fanpage::select('id','name','access_token')->whereIn('page_id',$arr_page)->get()->transform(function ($tran){
                         return [
-                            'id' => $tran->id,
+                            'id' => $tran->page_id,
                             'token' => $tran->access_token,
                             'name' =>$tran->name
                         ];
