@@ -3185,12 +3185,10 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
       var _e$target = e.target,
           scrollTop = _e$target.scrollTop,
           offsetHeight = _e$target.offsetHeight,
-          scrollHeight = _e$target.scrollHeight;
-      console.log(scrollTop, offsetHeight, scrollHeight);
+          scrollHeight = _e$target.scrollHeight; // console.log(scrollTop, offsetHeight, scrollHeight);
 
       if (scrollTop + offsetHeight > scrollHeight) {
-        ++this.current;
-        console.log('bottom!');
+        ++this.current; // console.log('bottom!')
       }
     },
     getSocket: function getSocket() {
@@ -3568,7 +3566,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
           arr_page: arr_page
         }
       }).then(function (response) {
-        var abc = _this7.navChat.map(function (m) {
+        var abc = _this7.navChatDefault.map(function (m) {
           var bcd = response.data.filter(function (f) {
             return f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id;
           });
@@ -4028,8 +4026,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
       if (this.filter_phone != null) {
         navChat = this.navChatDefault.filter(function (item) {
           return item.check_phone == _this16.filter_phone;
-        });
-        console.log(navChat.length, this.navChatDefault, 'navChatPhone - navDefault');
+        }); // console.log(navChat.length, this.navChatDefault, 'navChatPhone - navDefault')
       } else if (this.filter_comment == 1) {
         navChat = this.navChatDefault.filter(function (item) {
           return item.type == 'comment';

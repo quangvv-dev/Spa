@@ -533,10 +533,10 @@
         methods: {
             onScroll(e) {
                 const {scrollTop, offsetHeight, scrollHeight} = e.target
-                console.log(scrollTop, offsetHeight, scrollHeight);
+                // console.log(scrollTop, offsetHeight, scrollHeight);
                 if ((scrollTop + offsetHeight) > scrollHeight) {
                     ++this.current;
-                    console.log('bottom!')
+                    // console.log('bottom!')
                 }
             },
 
@@ -779,7 +779,7 @@
                         arr_page: arr_page
                     }
                 }).then(response => {
-                    let abc = this.navChat.map(m => {
+                    let abc = this.navChatDefault.map(m => {
                         let bcd = response.data.filter(f => {
                             return (f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)
                         })
@@ -1185,7 +1185,7 @@
                     navChat = this.navChatDefault.filter(item => {
                         return item.check_phone == this.filter_phone;
                     });
-                    console.log(navChat.length, this.navChatDefault, 'navChatPhone - navDefault')
+                    // console.log(navChat.length, this.navChatDefault, 'navChatPhone - navDefault')
                 } else if (this.filter_comment == 1) {
                     navChat = this.navChatDefault.filter(item => {
                         return item.type == 'comment';
