@@ -8,7 +8,7 @@
             <button class="btn btn-filter" :class="{'active':filter_comment == 1}" @click="filterComment"><i
                     class="fa fa-book"></i></button>
         </div>
-        <div class="sidebar-left sidebar-fixed">
+        <div class="sidebar-left sidebar-fixed" @scroll="onScroll">
             <div class="sidebar">
                 <div class="sidebar-content card d-none d-lg-block">
                     <div class="card-body chat-fixed-search">
@@ -24,7 +24,7 @@
                         <div class="users-list-padding media-list">
                             <a class="media border-0"
                                :class="{'bg-blue-grey bg-lighten-5':select_active == index}"
-                               v-for="(item,index) in navChat"
+                               v-for="(item,index) in paginated"
                                @click="selectMessage(item,index)"
                                :key="item.id">
                                 <div class="media-left pr-1">
@@ -56,6 +56,11 @@
                                     </p>
                                 </div>
                             </a>
+                            <!--<ul class="pagination-list">-->
+                            <!--<li>-->
+                            <!--<a @click="next">Xem thêm ...</a>-->
+                            <!--</li>-->
+                            <!--</ul>-->
                         </div>
                     </div>
                 </div>
@@ -394,9 +399,9 @@
     import moment from 'moment';
 
     // var host = 'https://crm.santa.name.vn:2022/';
-    // var host = 'https://thammyroyal.adamtech.vn:2022/';
+    var host = 'https://thammyroyal.adamtech.vn:2022';
     var port = 2022;
-    var host = 'https://' + location.host + ':' + port;
+    // var host = 'https://' + location.host + ':' + port;
 
     var socket = io.connect(host, {transports: ['websocket', 'polling', 'flashsocket']});
 
@@ -454,7 +459,10 @@
                 click_comment: false,
                 post_created_time: '',
                 post_full_picture: '',
-                post_message: ''
+                post_message: '',
+
+                current: 1,
+                pageSize: 300,
             }
         },
         components: {
@@ -492,9 +500,46 @@
 
                     return value
                 });
+            },
+            indexStart() {
+                return (this.current - 1) * this.pageSize;
+            },
+            indexEnd() {
+                return this.indexStart + this.pageSize;
+            },
+            paginated() {
+                let record = this.navChatDefault;
+                let navChat;
+                if (this.filter_phone != null || this.filter_comment == 1) {
+                    navChat = this.filterList();
+                    let data = navChat.slice(this.indexStart, this.indexEnd);
+                    if (this.current > 1) {
+                        this.navChat.push(...data)
+                    } else {
+                        this.navChat = data;
+                    }
+                } else {
+                    let data = record.slice(this.indexStart, this.indexEnd);
+                    if (this.current > 1) {
+                        this.navChat.push(...data)
+                    } else {
+                        this.navChat = data;
+                    }
+                }
+                return this.navChat;
+
             }
         },
         methods: {
+            onScroll(e) {
+                const {scrollTop, offsetHeight, scrollHeight} = e.target
+                console.log(scrollTop, offsetHeight, scrollHeight);
+                if ((scrollTop + offsetHeight) > scrollHeight) {
+                    ++this.current;
+                    console.log('bottom!')
+                }
+            },
+
             getSocket() {
                 if (this.arr_page_id.length > 0) {
                     this.arr_page_id.forEach(item => {
@@ -711,7 +756,7 @@
                                 return m;
                             })
                             this.navChatDefault.push(...data);
-                            this.navChat = this.navChatDefault;
+                            // this.navChat = this.navChatDefault;
                         } catch (e) {
                             arr_page_id = arr_page_id.filter(f => {
                                 return f.id != item.id
@@ -748,7 +793,7 @@
                         return m;
                     })
 
-                    this.navChat = abc;
+                    // this.navChat = abc;
                     this.navChatDefault = abc;
                 })
             },
@@ -788,14 +833,14 @@
                             this.navChatDefault.sort(function (a, b) {
                                 return b.updated_time.localeCompare(a.updated_time);
                             });
-                            this.navChat = this.navChatDefault;
+                            // this.navChat = this.navChatDefault;
                         })
 
                     } else {
                         this.navChatDefault.sort(function (a, b) {
                             return b.updated_time.localeCompare(a.updated_time);
                         });
-                        this.navChat = this.navChatDefault;
+                        // this.navChat = this.navChatDefault;
                     }
                 })
             },
@@ -1116,7 +1161,7 @@
                 } else {
                     this.filter_phone = null;
                 }
-                this.filterList();
+                this.current = 1;
             },
             filterNotPhone() {
                 if (this.filter_phone != 0) {
@@ -1124,7 +1169,7 @@
                 } else {
                     this.filter_phone = null;
                 }
-                this.filterList();
+                this.current = 1;
             },
             filterComment() {
                 if (this.filter_comment == 0) {
@@ -1132,23 +1177,23 @@
                 } else {
                     this.filter_comment = 0;
                 }
-                this.filterList();
+                this.current = 1;
             },
             filterList() {
-                this.navChat = this.navChatDefault;
                 let navChat;
                 if (this.filter_phone != null) {
-                    navChat = this.navChat.filter(item => {
+                    navChat = this.navChatDefault.filter(item => {
                         return item.check_phone == this.filter_phone;
                     });
-                    this.navChat = navChat ;
-                }
-                if (this.filter_comment == 1) {
-                    navChat = this.navChat.filter(item => {
+                    console.log(navChat.length, this.navChatDefault, 'navChatPhone - navDefault')
+                } else if (this.filter_comment == 1) {
+                    navChat = this.navChatDefault.filter(item => {
                         return item.type == 'comment';
                     });
-                    this.navChat = navChat ;
+                } else {
+                    navChat = this.navChatDefault;
                 }
+                return navChat;
 
             },
             showModalReply(item) {
@@ -1431,6 +1476,10 @@
         position: relative;
         bottom: 2px;
         padding: 0 2px;
+    }
+
+    .pagination-list {
+        text-align: center;
     }
 
     @media (min-width: 992px) {
