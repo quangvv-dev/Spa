@@ -8,6 +8,8 @@
 
 namespace App\Services;
 
+use App\Models\Customer;
+use App\Models\HistoryWalletCtv;
 use App\Models\WalletHistory;
 
 class WalletService
@@ -39,5 +41,21 @@ class WalletService
 
         return $model->delete();
 
+    }
+
+    public static function exchangeWalletCtv($price, $customer_id)
+    {
+        $exchange = ($price / 100) * setting('exchange');
+        HistoryWalletCtv::create([
+            'customer_id' => $customer_id,
+            'price' => $exchange,
+            'type' => 1,
+            'description' => 'Hệ thống cộng hoa hồng',
+        ]);
+        $gioithieu = Customer::find($customer_id);
+        if (isset($gioithieu) && $gioithieu) {
+            $gioithieu->wallet_ctv = (int)$gioithieu->wallet_ctv + (int)$exchange;
+            $gioithieu->save();
+        }
     }
 }

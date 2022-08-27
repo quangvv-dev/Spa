@@ -50,6 +50,11 @@
                                                 {!! Form::text('gold',@@number_format(setting('gold')), array('class' => 'form-control')) !!}
                                                 <span class="help-block">{{ $errors->first('gold', ':message') }}</span>
                                             </div>
+                                            <div class="form-group">
+                                                {!! Form::label('exchange', '% Hoa hồng CTV', array('class' => 'control-label required')) !!}
+                                                {!! Form::text('exchange',@@number_format(setting('exchange')), array('class' => 'form-control')) !!}
+                                                <span class="help-block">{{ $errors->first('exchange', ':message') }}</span>
+                                            </div>
                                         </div>
                                         <div class="col bot" style="margin-top: 5px">
                                             <button type="submit" class="btn btn-success" id="click-sent">Lưu

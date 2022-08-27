@@ -22,6 +22,7 @@ use App\Models\Notification;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use App\Services\PaymentHistoryService;
+use App\Services\WalletService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -474,6 +475,9 @@ class OrderController extends Controller
             $check2 = RuleOutput::where('event', 'add_order')->groupBy('rule_id')->whereIn('category_id',
                 $group_customer)->get();
 
+            if (setting('exchange') > 0 && isset($customer->gioithieu) && $customer->gioithieu->id) {
+                WalletService::exchangeWalletCtv($paymentHistory->price,$customer->gioithieu->id);
+            }
 
             if (count($check) <= 1 && isset($check2) && count($check2)) {
                 $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();

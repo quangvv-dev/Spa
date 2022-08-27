@@ -167,6 +167,17 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
+                            {!! Form::label('is_gioithieu', 'SĐT khách giới thiệu') !!}
+                            @if(isset($customer))
+                                {!! Form::text('is_gioithieu',isset($customer)? (@$customer->gioithieu->phone.' ('.@$customer->gioithieu->full_name.' )'):null, array('id' => 'is_gioithieu','class' => 'form-control',$customer->is_gioithieu!=0?'readonly':'')) !!}
+                            @else
+                                {!! Form::text('is_gioithieu',null, array('id' => 'is_gioithieu','class' => 'form-control')) !!}
+                            @endif
+                            <span class="help-block">{{ $errors->first('is_gioithieu', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                             {!! Form::label('avatar', 'Ảnh đại diện') !!}
                             <div class="fileupload fileupload-{{isset($customer) ? 'exists' : 'new' }}"
@@ -186,6 +197,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="col" style="margin-bottom: 10px;">
@@ -218,6 +230,19 @@
                     },
                     phone: {
                         required: true,
+                        remote: {
+                            url: "{{ url('api/check-unique-customers') }}",
+                            type: "post",
+                            data: {
+                                phone: function () {
+                                    return $("#phone").val();
+                                },
+                                id: {{ isset($customer) ? $customer->id : 0 }},
+                            },
+                        }
+                    },
+                    is_gioithieu: {
+                        // required: true,
                         remote: {
                             url: "{{ url('api/check-unique-customers') }}",
                             type: "post",

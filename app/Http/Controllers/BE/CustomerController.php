@@ -130,8 +130,7 @@ class CustomerController extends Controller
         if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
             unset($input['branch_id']);
         }
-        $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name',
-            'id')->pluck('full_name', 'id')->toArray();
+        $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
         $customers = Customer::search($input);
@@ -146,8 +145,7 @@ class CustomerController extends Controller
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
-
-            return Response::json(view('customers.ajax', compact('customers', 'statuses', 'rank'))->render());
+            return view('customers.ajax', compact('customers', 'statuses', 'rank'));
         }
 
         return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers'));
@@ -195,6 +193,10 @@ class CustomerController extends Controller
             'full_name' => str_replace("'", "", $request->full_name),
         ]);
         $input = $request->except(['group_id', 'image']);
+        if (isset($input['is_gioithieu']) && $input['is_gioithieu']){
+            $customer_gioithieu = Customer::where('phone',$input['is_gioithieu'])->first();
+            $input['is_gioithieu'] = isset($customer_gioithieu)&& $customer_gioithieu ?$customer_gioithieu->id:0;
+        }
         $input['mkt_id'] = $request->mkt_id;
         $input['image'] = $request->image;
         if ((int)$input['status_id'] == StatusCode::ALL) {
