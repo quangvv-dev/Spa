@@ -12,6 +12,7 @@ class OrderDetail extends Model
 {
     protected $table = 'order_detail';
     protected $guarded = ['id'];
+
     use SoftDeletes;
 
     public function user()
@@ -21,7 +22,8 @@ class OrderDetail extends Model
 
     public function service()
     {
-        return $this->belongsTo(Services::class, 'booking_id', 'id')->withTrashed();
+//        return $this->belongsTo(Services::class, 'booking_id', 'id')->withTrashed();
+        return $this->belongsTo(Services::class, 'booking_id', 'id');
     }
 
     public function order()

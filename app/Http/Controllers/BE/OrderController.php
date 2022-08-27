@@ -760,10 +760,11 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $order = $this->orderService->update($id, $input);
-
             if (!$order) {
                 DB::rollBack();
             }
+
+            OrderDetail::where('order_id', $id)->delete();
             $orderDetail = $this->orderDetailService->update($input, $id);
 
             if (!$orderDetail) {
@@ -782,11 +783,10 @@ class OrderController extends Controller
 
     public function importDataByExcel(Request $request)
     {
-        if (``) {
+        if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
-//                    dd($row);
                     $row['doanh_so'] = str_replace(',', '', $row['doanh_so']);
                     $row['doanh_thu'] = str_replace(',', '', $row['doanh_thu']);
                     $row['con_no'] = str_replace(',', '', $row['con_no']);

@@ -110,7 +110,7 @@
                                         </div>
                                     </td>
                                     <td class="text-center" width="50">
-                                        @if($orderDetail->service->type == \App\Constants\StatusCode::PRODUCT)
+                                        @if(@$orderDetail->service->type == \App\Constants\StatusCode::PRODUCT)
                                             {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
                                             {!! Form::hidden('days[]', 0, array('class' => 'form-control', 'required' => true)) !!}
                                         @else

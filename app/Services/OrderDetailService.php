@@ -19,6 +19,7 @@ class OrderDetailService
 
     public function create($data, $orderId)
     {
+
         $dataArr = [];
 
         if (empty($data) && is_array($data) == false) {
@@ -93,17 +94,20 @@ class OrderDetailService
             }
 
         }
+
         $orderDetail =[];
+
         if (count($dataArr)){
-//            OrderDetail::where('order_id', $orderId)->delete();
+           OrderDetail::where('order_id', $orderId)->delete();
+
             foreach ($dataArr as $item) {
-                if (!empty($item['id'])) {
-                    $orderDetail = OrderDetail::where('id', $item['id'])->first();
-                    $orderDetail->update($item);
-                }
-                if (empty($item['id'])) {
+//                if (!empty($item['id'])) {
+//                    $orderDetail = OrderDetail::where('id', $item['id'])->first();
+//                    $orderDetail->update($item);
+//                }
+//                if (empty($item['id'])) {
                     $orderDetail = OrderDetail::create($item);
-                }
+//                }
             }
         }
 
