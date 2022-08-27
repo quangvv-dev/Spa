@@ -173,6 +173,17 @@
     background-color: #9b0202d4 !important;
 }
 
+.loadingSmall{
+    position: absolute;
+    z-index: 1234;
+    top: 100px;
+    left: 37%;
+    display: none;
+}
+.loadingSmall.active{
+    display: block;
+}
+
 @media (max-width: 767.98px) {
     .chat-application .chat-app-window {
         height: calc(100% - 132px);

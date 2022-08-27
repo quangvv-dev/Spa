@@ -9,6 +9,7 @@
                     class="fa fa-book"></i></button>
         </div>
         <div class="sidebar-left sidebar-fixed" @scroll="onScroll">
+            <img src="/assets/images/loading_small.gif" class="loadingSmall" :class="{'active' : show_loading}" alt="">
             <div class="sidebar">
                 <div class="sidebar-content card d-none d-lg-block">
                     <div class="card-body chat-fixed-search">
@@ -24,7 +25,7 @@
                         <div class="users-list-padding media-list">
                             <a class="media border-0"
                                :class="{'bg-blue-grey bg-lighten-5':select_active == index}"
-                               v-for="(item,index) in paginated"
+                               v-for="(item,index) in this.navChat"
                                @click="selectMessage(item,index)"
                                :key="item.id">
                                 <div class="media-left pr-1">
@@ -462,7 +463,9 @@
                 post_message: '',
 
                 current: 1,
-                pageSize: 300,
+                pageSize: 10,
+                navChatSearch: [],
+                show_loading : false
             }
         },
         components: {
@@ -507,36 +510,22 @@
             indexEnd() {
                 return this.indexStart + this.pageSize;
             },
-            paginated() {
-                let record = this.navChatDefault;
-                let navChat;
-                if (this.filter_phone != null || this.filter_comment == 1) {
-                    navChat = this.filterList();
-                    let data = navChat.slice(this.indexStart, this.indexEnd);
-                    if (this.current > 1) {
-                        this.navChat.push(...data)
-                    } else {
-                        this.navChat = data;
-                    }
-                } else {
-                    let data = record.slice(this.indexStart, this.indexEnd);
-                    if (this.current > 1) {
-                        this.navChat.push(...data)
-                    } else {
-                        this.navChat = data;
-                    }
-                }
-                return this.navChat;
 
-            }
         },
         methods: {
             onScroll(e) {
-                const {scrollTop, offsetHeight, scrollHeight} = e.target
-                console.log(scrollTop, offsetHeight, scrollHeight);
+                const {scrollTop, offsetHeight, scrollHeight} = e.target;
                 if ((scrollTop + offsetHeight) > scrollHeight) {
                     ++this.current;
-                    console.log('bottom!')
+                    this.paginated(this.navChatSearch);
+                }
+            },
+            paginated(navChat) {
+                let data = navChat.slice(this.indexStart, this.indexEnd);
+                if (this.current > 1) {
+                    this.navChat.push(...data)
+                } else {
+                    this.navChat = data;
                 }
             },
 
@@ -626,7 +615,7 @@
                     this.timer = null;
                 }
                 this.timer = setTimeout(() => {
-                    this.navChat = this.navChatDefault.filter(item => {
+                    let data = this.navChatDefault.filter(item => {
                         let re = new RegExp(`${this.textSearch}`, 'gi');
                         if (item.participants.data[0].name.match(re)) {
                             return item.participants.data[0].name.match(re);
@@ -634,6 +623,9 @@
                             return item.phone.match(re);
                         }
                     });
+                    this.navChatSearch = data;
+                    this.current = 1;
+                    this.paginated(data);
                 }, 800);
             },
 
@@ -736,6 +728,7 @@
             },
 
             async getListChat() {
+                this.show_loading = true;
                 let arr_page_id = localStorage.getItem('arr_page_id');
 
                 // let arr_page_id = this.$cookies.get('arr_page_id');
@@ -756,6 +749,7 @@
                                 return m;
                             })
                             this.navChatDefault.push(...data);
+                            this.paginated(this.navChatDefault);
                             // this.navChat = this.navChatDefault;
                         } catch (e) {
                             arr_page_id = arr_page_id.filter(f => {
@@ -764,22 +758,23 @@
                             alertify.error(`Token hết hạn: ${item.id}`, 10)
                         }
                     }
+
                     this.arr_page_id = arr_page_id; //tác dụng để get socket
                     this.getSocket();
                 }
-                this.getPhonePage();
-                this.getCommentPage();
+                await this.getPhonePage();
+                await this.getCommentPage();
             },
 
 
-            getPhonePage() {
+            async getPhonePage() {
                 let arr_page = this.arr_page_id.map(m => m.id);
-                axios.get('/marketing/get-phone-page', {
+                await axios.get('/marketing/get-phone-page', {
                     params: {
                         arr_page: arr_page
                     }
                 }).then(response => {
-                    let abc = this.navChat.map(m => {
+                    let abc = this.navChatDefault.map(m => {
                         let bcd = response.data.filter(f => {
                             return (f.page_id == m.participants.data[1].id && f.FB_ID == m.participants.data[0].id)
                         })
@@ -830,20 +825,18 @@
                             customer_new_comment.id = f.id;
                             customer_new_comment.type = 'comment';
                             this.navChatDefault.unshift(customer_new_comment);
-                            this.navChatDefault.sort(function (a, b) {
-                                return b.updated_time.localeCompare(a.updated_time);
-                            });
                             // this.navChat = this.navChatDefault;
                         })
-
-                    } else {
-                        this.navChatDefault.sort(function (a, b) {
-                            return b.updated_time.localeCompare(a.updated_time);
-                        });
-                        // this.navChat = this.navChatDefault;
                     }
+                    let data_sort = this.navChatDefault.sort(function (a, b) {
+                        return b.updated_time.localeCompare(a.updated_time);
+                    });
+                    this.navChatSearch = data_sort;
+                    this.paginated(data_sort);
+                    this.show_loading = false;
                 })
             },
+
             selectMessage(item, index) {
                 this.post_created_time = '';
                 this.post_full_picture = '';
@@ -1162,6 +1155,8 @@
                     this.filter_phone = null;
                 }
                 this.current = 1;
+                this.filter_comment = 0;
+                this.filterList();
             },
             filterNotPhone() {
                 if (this.filter_phone != 0) {
@@ -1170,30 +1165,34 @@
                     this.filter_phone = null;
                 }
                 this.current = 1;
+                this.filter_comment = 0;
+                this.filterList();
             },
             filterComment() {
                 if (this.filter_comment == 0) {
                     this.filter_comment = 1;
+                    this.filter_phone = null;
                 } else {
                     this.filter_comment = 0;
                 }
                 this.current = 1;
+                this.filterList();
             },
             filterList() {
-                let navChat;
+                let navChat = this.navChatDefault;
+                let data = this.navChatDefault;
                 if (this.filter_phone != null) {
-                    navChat = this.navChatDefault.filter(item => {
+                    data = navChat.filter(item => {
                         return item.check_phone == this.filter_phone;
                     });
-                    console.log(navChat.length, this.navChatDefault, 'navChatPhone - navDefault')
-                } else if (this.filter_comment == 1) {
-                    navChat = this.navChatDefault.filter(item => {
+                }
+                if (this.filter_comment == 1) {
+                     data = this.navChatDefault.filter(item => {
                         return item.type == 'comment';
                     });
-                } else {
-                    navChat = this.navChatDefault;
                 }
-                return navChat;
+                this.navChatSearch = data;
+                this.paginated(data);
 
             },
             showModalReply(item) {
