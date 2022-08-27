@@ -3911,7 +3911,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       post_full_picture: '',
       post_message: '',
       current: 1,
-      pageSize: 10,
+      pageSize: 20,
       navChatSearch: [],
       show_loading: false
     };
@@ -4858,7 +4858,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_3__["default"].connect(ho
       }
 
       if (this.filter_comment == 1) {
-        data = this.navChatDefault.filter(function (item) {
+        data = navChat.filter(function (item) {
           return item.type == 'comment';
         });
       }

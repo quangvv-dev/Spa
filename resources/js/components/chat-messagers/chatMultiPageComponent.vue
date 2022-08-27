@@ -463,7 +463,7 @@
                 post_message: '',
 
                 current: 1,
-                pageSize: 10,
+                pageSize: 20,
                 navChatSearch: [],
                 show_loading : false
             }
@@ -1187,7 +1187,7 @@
                     });
                 }
                 if (this.filter_comment == 1) {
-                     data = this.navChatDefault.filter(item => {
+                    data = navChat.filter(item => {
                         return item.type == 'comment';
                     });
                 }
