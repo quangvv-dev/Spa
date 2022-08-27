@@ -3102,7 +3102,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["default"].connect(ho
       post_full_picture: '',
       post_message: '',
       current: 1,
-      pageSize: 300
+      pageSize: 1000
     };
   },
   components: {
