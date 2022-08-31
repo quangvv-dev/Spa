@@ -85,7 +85,7 @@ class OrderController extends Controller
             'id');
         $title = 'Tạo đơn hàng';
 //        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
 //        $combo = Services::whereIn('type', [StatusCode::PRODUCT, StatusCode::SERVICE])->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
         return view('order.index',
