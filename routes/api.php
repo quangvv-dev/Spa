@@ -72,6 +72,9 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('group/{id}', 'StatisticController@groupDetail');
     Route::get('get-employee-category', 'StatisticController@getUserCategory');
     Route::get('get-employee-call', 'CallController@getEmployeeCall');
+    // Route khách hàng
+    Route::apiResource('customers', 'CustomerController');
+
     Route::group(['prefix' => 'revenue'], function () {
         Route::get('customers', 'RevenueController@index');
         Route::get('orders', 'RevenueController@orders');

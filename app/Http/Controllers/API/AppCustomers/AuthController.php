@@ -416,7 +416,7 @@ class AuthController extends BaseApiController
         $customer->save();
     }
 
-    protected function createCustomerGroup($category, $customer_id, $branch_id)
+    public static function createCustomerGroup($category, $customer_id, $branch_id)
     {
         if (count($category)) {
             foreach ($category as $item) {
