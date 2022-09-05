@@ -140,8 +140,7 @@ class StatisticController extends BaseApiController
         $input = $request->all();
         $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item) use ($input) {
             $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
-            $order = OrderDetail::select('total_price','order_id',DB::raw('SUM(total_price) AS all_total'),
-                DB::raw('COUNT(total_price) AS all_total'))->whereIn('booking_id', $services)
+            $order = OrderDetail::select('total_price','order_id',DB::raw('SUM(total_price) AS all_total'))->whereIn('booking_id', $services)
                 ->when(!empty($input['start_date']) && !empty($input['end_date']),
                     function ($q) use ($input) {
                         $q->whereBetween('created_at', [
