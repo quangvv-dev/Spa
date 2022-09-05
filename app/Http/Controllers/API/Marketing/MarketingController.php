@@ -228,7 +228,8 @@ class MarketingController extends BaseApiController
             if (count($input['arr_marketing']) != 1) {
                 unset($input['arr_marketing']);
             }
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+//            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+            $orders = Order::returnRawData($input)->select('id', 'gross_revenue', 'all_total');
             $order_new = clone $orders;
             $payment = PaymentHistory::search($input, 'price,order_id');
             $paymentNew = clone $payment;
