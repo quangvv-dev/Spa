@@ -210,7 +210,7 @@ class MarketingController extends BaseApiController
             $data['contact'] = $customer->count();
             $group_user = $customer->pluck('id')->toArray();
             $input['group_user'] = $group_user;
-            if (isset($input['group_branch']) || !empty($input['branch_id'])){
+            if (isset($input['group_branch']) || empty($input['branch_id'])) {
                 unset($input['group_user']);
             }
             if (count($group_user)) {
@@ -236,7 +236,7 @@ class MarketingController extends BaseApiController
                 ->when(isset($input['arr_marketing']), function ($query) use ($input) {
                     $query->whereIn('user_id', $input['arr_marketing']);
                 })->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
-                \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
+                    \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
             $data['budget'] = (int)$price->total_budget; //ngân sách
             $data['comment'] = (int)$price->total_comment; //comment
             $data['message'] = (int)$price->total_message; //tin nhắn
