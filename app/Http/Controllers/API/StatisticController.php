@@ -96,7 +96,7 @@ class StatisticController extends BaseApiController
     public function tasks(Request $request)
     {
         $input = $request->all();
-        $users = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER,DepartmentConstant::CSKH])
+        $users = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
             ->get()->map(function ($item) use ($input) {
                 $task = Task::where('user_id', $item->id)->whereBetween('date_from', [
                     Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -114,7 +114,7 @@ class StatisticController extends BaseApiController
                 $item->all_failed = $task1->where('task_status_id', StatusCode::FAILED_TASK)->count();
                 return $item;
             })->sortByDesc('all_task')->filter(function ($qr) {
-                if ($qr->all_task > 0){
+                if ($qr->all_task > 0) {
                     return $qr;
                 }
             });
@@ -140,7 +140,7 @@ class StatisticController extends BaseApiController
         $input = $request->all();
         $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item) use ($input) {
             $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
-            $order = OrderDetail::select('total_price','order_id',DB::raw('SUM(total_price) AS all_total'))
+            $order = OrderDetail::select('total_price', 'order_id', DB::raw('SUM(total_price) AS all_total'))
                 ->whereIn('booking_id', $services)
                 ->when(!empty($input['start_date']) && !empty($input['end_date']),
                     function ($q) use ($input) {
@@ -153,7 +153,10 @@ class StatisticController extends BaseApiController
                     $q->where('branch_id', $input['branch_id']);
                 })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
-                })->groupBy('order_id')->with('order')->get();
+                })->groupBy('order_id')->with('order')->get()->map(function ($item) {
+                    $item->gross_revenue = isset($item->order) ? $item->order->gross_revenue : 0;
+                    return $item;
+                });
 //            $order = Order::select('gross_revenue', 'total', 'member_id')->whereIn('id', $order_id)
 //                ->when(!empty($input['start_date']) && !empty($input['end_date']),
 //                    function ($q) use ($input) {
@@ -166,9 +169,13 @@ class StatisticController extends BaseApiController
 //                });
 
             $item->orders = $order->count();
-            $item->revuenue = $order->sum('all_total');//da thu trong ky thu thêm
+            $item->revuenue = $order->sum('gross_revenue')<=$order->sum('all_total')?$order->sum('gross_revenue'):$order->sum('all_total');//da thu trong ky thu thêm
             $item->total = $order->sum('all_total');//da thu trong ky thu thêm
             return $item;
+        })->filter(function ($filter) {
+            if ($filter->total >= 0) {
+                return $filter;
+            }
         })->sortByDesc('revuenue');
         $data['sumOrders'] = $category->sum('orders');
         $data['sumRevenue'] = $category->sum('revuenue');
