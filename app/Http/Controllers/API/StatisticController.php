@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Helpers\Functions;
 use App\Constants\UserConstant;
+use Illuminate\Support\Facades\DB;
 
 class StatisticController extends BaseApiController
 {
@@ -139,7 +140,8 @@ class StatisticController extends BaseApiController
         $input = $request->all();
         $category = Category::select('id', 'name', 'type')->where('type', $request->type)->get()->map(function ($item) use ($input) {
             $services = Services::select('id')->where('category_id', $item->id)->pluck('id')->toArray();
-            $order_id = OrderDetail::select('order_id')->whereIn('booking_id', $services)
+            $order = OrderDetail::select('order_id',DB::raw('SUM(total_price) AS all_total'),
+                DB::raw('COUNT(total_price) AS all_total'))->whereIn('booking_id', $services)
                 ->when(!empty($input['start_date']) && !empty($input['end_date']),
                     function ($q) use ($input) {
                         $q->whereBetween('created_at', [
@@ -151,20 +153,20 @@ class StatisticController extends BaseApiController
                     $q->where('branch_id', $input['branch_id']);
                 })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
-                })->groupBy('order_id')->pluck('order_id')->toArray();
-            $order = Order::select('gross_revenue', 'total', 'member_id')->whereIn('id', $order_id)
-                ->when(!empty($input['start_date']) && !empty($input['end_date']),
-                    function ($q) use ($input) {
-                        $q->whereBetween('created_at', [
-                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                        ]);
-                    })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-                    $q->whereIn('branch_id', $input['group_branch']);
-                });
+                })->groupBy('order_id');
+//            $order = Order::select('gross_revenue', 'total', 'member_id')->whereIn('id', $order_id)
+//                ->when(!empty($input['start_date']) && !empty($input['end_date']),
+//                    function ($q) use ($input) {
+//                        $q->whereBetween('created_at', [
+//                            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+//                            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+//                        ]);
+//                    })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+//                    $q->whereIn('branch_id', $input['group_branch']);
+//                });
 
             $item->orders = $order->count();
-            $item->revuenue = $order->sum('gross_revenue');//da thu trong ky thu thêm
+            $item->revuenue = $order->sum('all_total');//da thu trong ky thu thêm
             $item->total = $order->sum('all_total');//da thu trong ky thu thêm
             return $item;
         })->sortByDesc('revuenue');
