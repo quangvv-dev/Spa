@@ -217,7 +217,10 @@ class MarketingController extends BaseApiController
 //                $schedules = Schedule::search($input)->select('id');
                 $schedules = Schedule::getBooks2($input)->select('id');
                 $data['schedules'] = $schedules->count();
-                $data['schedules_den'] = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+                $data['schedules_den'] = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+                    ->whereHas('customer', function ($qr) {
+                        $qr->where('old_customer', 0);
+                    })->count();
             } else {
                 $data['schedules'] = 0;
                 $data['schedules_den'] = 0;
