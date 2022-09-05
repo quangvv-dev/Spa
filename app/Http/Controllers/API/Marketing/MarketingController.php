@@ -210,9 +210,9 @@ class MarketingController extends BaseApiController
             $data['contact'] = $customer->count();
             $group_user = $customer->pluck('id')->toArray();
             $input['group_user'] = $group_user;
-            if (isset($input['group_branch']) || empty($input['branch_id'])) {
-                unset($input['group_user']);
-            }
+//            if (isset($input['group_branch']) || empty($input['branch_id'])) {
+//                unset($input['group_user']);
+//            }
             if (count($group_user)) {
 //                $schedules = Schedule::search($input)->select('id');
                 $schedules = Schedule::getBooks2($input)->select('id');
