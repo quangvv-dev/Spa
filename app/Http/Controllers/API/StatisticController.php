@@ -173,7 +173,7 @@ class StatisticController extends BaseApiController
             $item->total = $order->sum('all_total');//da thu trong ky thu thêm
             return $item;
         })->filter(function ($filter) {
-            if ($filter->total >= 0) {
+            if ($filter->total > 0) {
                 return $filter;
             }
         })->sortByDesc('revuenue');
