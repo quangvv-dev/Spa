@@ -161,7 +161,9 @@ class Schedule extends Model
 
     public static function search($request)
     {
-        $docs = self::orderBy('id', 'desc');
+        $docs = self::orderBy('id', 'desc')->when(isset($request['group_branch']) && count($request['group_branch']), function ($q) use ($request) {
+                $q->whereIn('branch_id', $request['group_branch']);
+            });
         if (!empty($request['date'])) {
             $docs = $docs->where('date', $request['date']);
         } else {
