@@ -27,6 +27,8 @@ class CustomerResource extends JsonResource
                 'source_id'    => @$this->source_id,
                 'description'  => @$this->description,
                 'branch_id'    => @$this->branch_id,
+                'branch_name'  => @$this->branch->name,
+                'status_name'  => @$this->status->name,
             ];
         }else{
             return [
