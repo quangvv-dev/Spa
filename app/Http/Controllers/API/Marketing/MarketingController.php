@@ -245,6 +245,7 @@ class MarketingController extends BaseApiController
             $data['budget'] = (int)$price->total_budget; //ngân sách
             $data['comment'] = (int)$price->total_comment; //comment
             $data['message'] = (int)$price->total_message; //tin nhắn
+            $data['all_orders'] = (int)$orders->count();
             $data['orders'] = (int)$order_new->where('is_upsale', 0)->count();
             $data['all_total'] = (int)$orders->sum('all_total');
             $data['gross_revenue'] = (int)$orders->sum('gross_revenue');
