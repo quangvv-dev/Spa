@@ -131,7 +131,7 @@
                     @if(\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::CARE_PAGE || \Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::ADMIN)
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('telesales_id') ? 'has-error' : '' }}">
-                            {!! Form::label('mkt_id', 'MKT phụ trách', array('class' => 'control-label required')) !!}
+                            {!! Form::label('mkt_id', 'MKT phụ trách', array('class' => 'control-label')) !!}
                             <select name="telesales_id" id="telesales_id" class="form-control select2" data-placeholder="Chọn nhân viên">
                                 <option value=""></option>
                                 @foreach($marketingUsers as $k => $i)
