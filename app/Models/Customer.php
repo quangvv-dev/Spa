@@ -184,6 +184,7 @@ class Customer extends Model
     {
         return $this->belongsTo(Genitive::class, 'genitive_id', 'id');
     }
+
     public function carepage()
     {
         return $this->belongsTo(User::class, 'carepage_id', 'id');
@@ -247,7 +248,7 @@ class Customer extends Model
                 }
             }
         }
-        $text = implode(",",$text);
+        $text = implode(",", $text);
         return $text;
     }
 
@@ -433,5 +434,11 @@ class Customer extends Model
     public function fanpage()
     {
         return $this->belongsTo(Fanpage::class, 'page_id', 'page_id');
+    }
+
+    public function getGroupArrayAttribute()
+    {
+        $data = CustomerGroup::select('category_id')->where('customer_id',$this->id)->get()->pluck('category_id');
+        return $data;
     }
 }
