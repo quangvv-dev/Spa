@@ -125,7 +125,7 @@ class ThuChiController extends BaseApiController
     public function getNotification(Request $request)
     {
         $user = User::find($request->jwtUser->id);
-        $docs = Notification::select('id', 'title', 'data', 'type', 'status', 'created_at')->where('user_id', $user->id)
+        $docs = Notification::select('id', 'title', 'data', 'type', 'status', 'created_at')->where('type',NotificationConstant::THU_CHI)->where('user_id', $user->id)
             ->where('status', '<>', NotificationConstant::HIDDEN)->orderByDesc('created_at')->paginate(StatusCode::PAGINATE_10);
         $docs = NotificationResource::collection($docs);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
