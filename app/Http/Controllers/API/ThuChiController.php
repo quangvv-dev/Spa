@@ -141,7 +141,7 @@ class ThuChiController extends BaseApiController
     public function countNotification(Request $request)
     {
         $user = User::find($request->jwtUser->id);
-        $docs = Notification::select('id')->where('user_id', $user->id)
+        $docs = Notification::select('id')->where('user_id', $user->id)->where('type',NotificationConstant::THU_CHI)
             ->where('status', NotificationConstant::UNREAD)->count();
         $doc = ['unread' => $docs];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $doc);
