@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
@@ -30,7 +31,7 @@ class AuthController extends BaseApiController
             if (password_verify($request->password, $info->password) != true) {
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Sai mật khẩu');
             } else {
-                if (!in_array($info->department_id,[UserConstant::ADMIN,6]) ){
+                if (!in_array($info->department_id,[DepartmentConstant::ADMIN,DepartmentConstant::MARKETING,DepartmentConstant::CARE_PAGE]) ){
                     return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản không có quyền');
                 }
                 if ($info->active == StatusCode::ON) {
