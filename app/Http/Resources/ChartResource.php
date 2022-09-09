@@ -27,8 +27,13 @@ class ChartResource extends JsonResource
             ];
         } elseif ($request->type_api == 7) {
             $result = [
-                'name'  => @$this->status->name,
-                'total' => @$this->total,
+                'name'          => @$this->status->name,
+                'total'         => @$this->total,
+            ];
+        }elseif ($request->type_api == '7.1') {
+            $result = [
+                'name'          => @$this->name,
+                'total'         => @$this->total,
             ];
         } elseif ($request->type_api == 'all_branch') {
             $result = [

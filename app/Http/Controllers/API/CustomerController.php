@@ -6,10 +6,12 @@ use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Http\Resources\AppCustomers\CustomerResource;
+use App\Http\Resources\ChartResource;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\Order;
 use App\Models\Status;
 use App\Services\CustomerService;
 use App\Http\Controllers\API\AppCustomers\AuthController;
@@ -64,14 +66,14 @@ class CustomerController extends BaseApiController
     public function store(Request $request)
     {
         $validate = [
-            'phone'         => "required",
-            'full_name'     => "required",
-            'gender'        => "required",
-            'telesales_id'  => "required",
-            'status_id'     => "required",
-            'source_id'     => "required",
-            'group_id'      => "required",
-            'branch_id'     => "required",
+            'phone' => "required",
+            'full_name' => "required",
+            'gender' => "required",
+            'telesales_id' => "required",
+            'status_id' => "required",
+            'source_id' => "required",
+            'group_id' => "required",
+            'branch_id' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -80,18 +82,18 @@ class CustomerController extends BaseApiController
         $customer = $request->jwtUser;
 
         $request->merge([
-            'fb_name'   => $request->full_name,
+            'fb_name' => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
-            'type'      => 'full_data',
+            'type' => 'full_data',
         ]);
 
         $input = $request->except(['group_id']);
-        $input['mkt_id']        = empty($input['mkt_id']) ? $customer->id : $input['mkt_id'];
-        $input['telesales_id']  = empty($input['telesales_id']) ? $customer->id : $input['mkt_id'];
-        $input['wallet']        = 0;
-        $input['wallet_ctv']    = 0;
-        $input['post_id']       = 0;
-        $input['status_id']     = empty($input['status_id']) ? Functions::getStatusWithCode('moi') : $input['status_id'];
+        $input['mkt_id'] = empty($input['mkt_id']) ? $customer->id : $input['mkt_id'];
+        $input['telesales_id'] = empty($input['telesales_id']) ? $customer->id : $input['mkt_id'];
+        $input['wallet'] = 0;
+        $input['wallet_ctv'] = 0;
+        $input['post_id'] = 0;
+        $input['status_id'] = empty($input['status_id']) ? Functions::getStatusWithCode('moi') : $input['status_id'];
         $customer = $this->customerService->createApi($input);
         $category = Category::whereIn('id', $request->group_id)->get();
         AuthController::createCustomerGroup($category, $customer->id, $input['branch_id']);
@@ -105,11 +107,11 @@ class CustomerController extends BaseApiController
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $request->merge([
             'full_name' => str_replace("'", "", $request->full_name),
-            'type'      => 'full_data',
+            'type' => 'full_data',
         ]);
         $input = $request->except('group_id');
         $customer = $this->customerService->update($input, $id);
@@ -122,20 +124,49 @@ class CustomerController extends BaseApiController
 
     public function statusCustomer()
     {
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->select('id','name')->get();//mối quan hệ
+        $status = Status::where('type', StatusCode::RELATIONSHIP)->select('id', 'name')->get();//mối quan hệ
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $status);
     }
 
     public function sourceCustomer()
     {
-        $status = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id','name')->get();//mối quan hệ
+        $status = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get();//mối quan hệ
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $status);
     }
 
     public function groupCustomer()
     {
-        $group = Category::select('id','name')->where('type',StatusCode::SERVICE)->get();//nhóm KH
+        $group = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();//nhóm KH
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $group);
+    }
+
+    /**
+     * Thống kê nhân viên
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function revenueSourceCustomer(Request $request)
+    {
+        $input = $request->all();
+        $customers = Customer::orderByDesc('id');
+        if (isset($input['type']) && $input['type'] == 1) {
+            $request->merge(['type_api' => 7]);
+            $data = Customer::applySearchConditions($customers, $input)->select('id', 'status_id',
+                \DB::raw('COUNT(ID) AS total'))->groupBy('status_id')->with('status')->get()->sortByDesc('total');
+        } else {
+            $request->merge(['type_api' => '7.1']);
+            $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
+                $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
+                    $it->where('status_id', $item->id);
+                })->sum('gross_revenue');
+                $item->total = $orders;
+                return $item;
+            });
+        }
+        $response = ChartResource::collection($data);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
+
     }
 
 }

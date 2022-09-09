@@ -87,6 +87,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
         Route::get('revenue-branch', 'RevenueController@revevueBranch');
         Route::get('tab-schedules', 'RevenueController@tabSchedules');
         Route::get('tab-thuchi', 'RevenueController@tabThuChi');
+        Route::get('source-customers', 'CustomerController@revenueSourceCustomer');
     });
 });
 
