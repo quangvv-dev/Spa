@@ -204,13 +204,14 @@ class OrderController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $group = Category::pluck('name', 'id')->toArray();
-        $marketingUsers = User::pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::where('department_id',DepartmentConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $ktvUsers = User::where('department_id',DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id')->toArray();
         $telesales = User::where('department_id', DepartmentConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
-            $orders = Order::searchAll($input);
 
+            $orders = Order::searchAll($input);
             View::share([
                 'allTotal' => $orders->sum('all_total'),
                 'grossRevenue' => $orders->sum('gross_revenue'),
@@ -338,7 +339,7 @@ class OrderController extends Controller
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank','ktvUsers'));
     }
 
     /**

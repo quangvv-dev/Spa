@@ -145,6 +145,7 @@
     <input type="hidden" id="role_type">
     <input type="hidden" id="phone">
     <input type="hidden" id="branch_id">
+    <input type="hidden" id="support_id">
     @include('order-details.modal-upload-excel')
 @endsection
 @section('_script')
@@ -166,6 +167,7 @@
             const class_name = $(this).attr("class");
             const group = $('.group').val();
             const telesales = $('.telesales').val();
+            const support_id = $('.waiters').val();
             const marketing = $('.marketing').val();
             const customer = $('.customer').val();
             const service = $('.service').val();
@@ -202,6 +204,7 @@
             $('#filter-start-date').val(start_date);
             $('#filter-end-date').val(end_date);
             $('#branch_id').val(branch_id);
+            $('#support_id').val(support_id);
             if (typeof (data_time) != "undefined") {
                 $('#choose-time').val(data_time);
             }
@@ -239,6 +242,7 @@
                 role_type: role_type,
                 phone: phone,
                 branch_id: branch_id,
+                support_id: support_id,
             });
         })
         ;
@@ -258,6 +262,8 @@
             const phone = $('#phone').val();
             const role_type = $('#role_type').val();
             const branch_id = $('.branch_id').val();
+            const support_id = $('#support_id').val();
+
             $('#order-type').val(order_type);
             $('#role_type').val(role_type);
 
@@ -276,6 +282,7 @@
                 role_type: role_type,
                 phone: phone,
                 branch_id: branch_id,
+                support_id: support_id,
             });
         });
 
@@ -294,6 +301,7 @@
             const phone = $('#phone').val();
             const role_type = $('.role_type').val();
             const branch_id = $('.branch_id').val();
+            const support_id = $('#support_id').val();
 
             $('#role_type').val(role_type);
 
@@ -312,6 +320,7 @@
                 role_type: role_type,
                 phone: phone,
                 branch_id: branch_id,
+                support_id: support_id,
             });
         });
 
@@ -330,6 +339,7 @@
             const phone = $('#phone').val();
             const role_type = $('.role_type').val();
             const branch_id = $('.branch_id').val();
+            const support_id = $('#support_id').val();
 
             $('#role_type').val(role_type);
 
@@ -348,6 +358,7 @@
                 role_type: role_type,
                 phone: phone,
                 branch_id: branch_id,
+                support_id: support_id,
             });
         });
 
@@ -454,6 +465,8 @@
             const bor_none = $('#bor-none').val();
             const phone = $('#phone').val();
             const branch_id = $('.branch_id').val();
+            const support_id = $('#support_id').val();
+
             $.ajax({
                 url: '{{ url()->current() }}',
                 method: "get",
@@ -473,6 +486,7 @@
                     phone: phone,
                     page: pages,
                     branch_id: branch_id,
+                    support_id: support_id,
                 },
             }).done(function (data) {
                 $('#registration-form').html(data);

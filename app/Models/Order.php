@@ -244,6 +244,11 @@ class Order extends Model
                 })
                 ->when(isset($input['is_upsale']), function ($query) use ($input) {
                     $query->where('is_upsale', $input['is_upsale']);
+                })->when(isset($input['support_id']), function ($query) use ($input) {
+                    $history_orders = HistoryUpdateOrder::search($input)
+                        ->where('user_id', $input['support_id'])->orWhere('support_id', $input['support_id'])->select('order_id')
+                        ->orWhere('support2_id', $input['support_id'])->groupBy('order_id')->pluck('order_id')->toArray();
+                    $query->whereIn('id', $history_orders);
                 })
                 ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
