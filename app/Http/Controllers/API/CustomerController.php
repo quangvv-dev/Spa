@@ -163,7 +163,7 @@ class CustomerController extends BaseApiController
         } else {
             $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
                 $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
-                    $it->where('status_id', $item->id);
+                    $it->where('source_id', $item->id);
                 })->sum('gross_revenue');
                 $item->total = $orders;
                 return $item;
