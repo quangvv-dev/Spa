@@ -148,10 +148,15 @@ class CustomerController extends BaseApiController
      */
     public function revenueSourceCustomer(Request $request)
     {
+
         $input = $request->all();
-        $customers = Customer::orderByDesc('id');
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
         $request->merge(['type_api' => '7.1']);
         if (isset($input['type']) && $input['type'] == 1) {
+            $customers = Customer::orderByDesc('id');
             $data = Customer::applySearchConditions($customers, $input)->select('id', 'source_id',
                 \DB::raw('COUNT(ID) AS total'))->groupBy('source_id')->whereHas('source_customer')->get()
                 ->sortByDesc('total');
