@@ -167,7 +167,11 @@ class CustomerController extends BaseApiController
                 })->sum('gross_revenue');
                 $item->total = $orders;
                 return $item;
-            });
+            })->filter(function ($fl){
+                if ($fl->total > 0){
+                    return $fl;
+                }
+            })->sortByDesc('total');
         }
         $response = ChartResource::collection($data);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
