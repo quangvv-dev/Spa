@@ -102,6 +102,10 @@
                                         <li><a href="{{route('marketing.seeding-number.index')}}">Kho số seeding</a>
                                         </li>
                                     @endif
+                                    @if($roleGlobal->permission('posts.list'))
+                                        <li><a href="{{route('posts.list')}}">Optin form</a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </li>
                         @endif

@@ -27,7 +27,7 @@ class PostsController extends Controller
         $campaigns = Campaign::orderByDesc('id')->pluck('name', 'id')->toArray();
         $branchs = Branch::pluck('name', 'id')->toArray();
         $category = Category::orderByDesc('id')->pluck('name', 'id')->toArray();
-        $sale = User::where('department_id', DepartmentConstant::TELESALES)->where('active', DepartmentConstant::ACTIVE)->orderByDesc('id')
+        $sale = User::where('department_id', DepartmentConstant::TELESALES)->where('active', UserConstant::ACTIVE)->orderByDesc('id')
             ->pluck('full_name', 'id')->toArray();
         \View::share([
             'campaigns' => $campaigns,
