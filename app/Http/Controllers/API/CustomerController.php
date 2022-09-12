@@ -148,21 +148,30 @@ class CustomerController extends BaseApiController
      */
     public function revenueSourceCustomer(Request $request)
     {
+
         $input = $request->all();
-        $customers = Customer::orderByDesc('id');
+        if (isset($input['location_id'])) {
+            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $input['group_branch'] = $group_branch;
+        }
+        $request->merge(['type_api' => '7.1']);
         if (isset($input['type']) && $input['type'] == 1) {
-            $request->merge(['type_api' => 7]);
-            $data = Customer::applySearchConditions($customers, $input)->select('id', 'status_id',
-                \DB::raw('COUNT(ID) AS total'))->groupBy('status_id')->with('status')->get()->sortByDesc('total');
+            $customers = Customer::orderByDesc('id');
+            $data = Customer::applySearchConditions($customers, $input)->select('id', 'source_id',
+                \DB::raw('COUNT(ID) AS total'))->groupBy('source_id')->whereHas('source_customer')->get()
+                ->sortByDesc('total');
         } else {
-            $request->merge(['type_api' => '7.1']);
             $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
                 $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
-                    $it->where('status_id', $item->id);
+                    $it->where('source_id', $item->id);
                 })->sum('gross_revenue');
                 $item->total = $orders;
                 return $item;
-            });
+            })->filter(function ($fl){
+                if ($fl->total > 0){
+                    return $fl;
+                }
+            })->sortByDesc('total');
         }
         $response = ChartResource::collection($data);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);

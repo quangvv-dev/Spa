@@ -32,7 +32,7 @@ class ChartResource extends JsonResource
             ];
         }elseif ($request->type_api == '7.1') {
             $result = [
-                'name'          => @$this->name,
+                'name'          => isset($this->name)?@$this->name:@$this->source_customer->name,
                 'total'         => @$this->total,
             ];
         } elseif ($request->type_api == 'all_branch') {
