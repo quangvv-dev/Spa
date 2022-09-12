@@ -103,7 +103,7 @@
                                         </li>
                                     @endif
                                     @if($roleGlobal->permission('posts.list'))
-                                        <li><a href="{{route('posts.list')}}">Optin form</a>
+                                        <li><a href="{{route('posts.index')}}">Optin form</a>
                                         </li>
                                     @endif
                                 </ul>
