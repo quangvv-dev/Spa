@@ -156,26 +156,38 @@ class CustomerController extends BaseApiController
         }
         $request->merge(['type_api' => '7.1']);
         if (isset($input['type']) && $input['type'] == 1) {
+            $request->merge(['type_api' => 7]);
             $customers = Customer::orderByDesc('id');
             $data = Customer::applySearchConditions($customers, $input)->select('id', 'source_id',
                 \DB::raw('COUNT(ID) AS total'))->groupBy('source_id')->whereHas('source_customer')->get()
                 ->sortByDesc('total');
-        } else {
+        } else if (isset($input['type']) && $input['type'] == 2) {
             $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
                 $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
                     $it->where('source_id', $item->id);
                 })->sum('gross_revenue');
                 $item->total = $orders;
                 return $item;
-            })->filter(function ($fl){
-                if ($fl->total > 0){
+            })->filter(function ($fl) {
+                if ($fl->total > 0) {
+                    return $fl;
+                }
+            })->sortByDesc('total');
+        } else {
+            $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
+                $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
+                    $it->where('source_id', $item->id);
+                })->count();
+                $item->total = $orders;
+                return $item;
+            })->filter(function ($fl) {
+                if ($fl->total > 0) {
                     return $fl;
                 }
             })->sortByDesc('total');
         }
         $response = ChartResource::collection($data);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
-
     }
 
 }
