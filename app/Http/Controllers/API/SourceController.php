@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\Functions;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Source;
@@ -39,7 +40,7 @@ class SourceController extends Controller
             $data = $request->only('name', 'phone', 'message');
             $data['source_id'] = 30;
             $data['source_fb'] = $source->id;
-            $data['status_id'] = 1;
+            $data['status_id'] = Functions::getStatusWithCode('moi');
             $data['mkt_id'] = $source->mkt_id;
             $data['telesales_id'] = $sales[$source->position];
             $data['gender'] = 0;
