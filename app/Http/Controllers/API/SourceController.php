@@ -46,7 +46,7 @@ class SourceController extends Controller
             $data['gender'] = 0;
             $data['branch_id'] = $source->branch_id;
             $data['full_name'] = $request->name;
-//            $data['description'] = $request->message;
+            $data['description'] = (string)$request->message;
 
 //            $data['expired_time_boolean'] = CustomerConstant::QUA_HAN;
 //
