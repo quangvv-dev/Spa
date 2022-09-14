@@ -28,7 +28,7 @@ class SourceController extends Controller
                     'messages' => 'NOT FOUND SOURCE',
                 ]);
             }
-            if (empty($request->phone) || empty($request->full_name)) {
+            if (empty($request->phone) || empty($request->name)) {
                 return response()->json([
                     'code'     => 400,
                     'messages' => 'NOT FOND PHONE OR NAME',
@@ -36,7 +36,7 @@ class SourceController extends Controller
             }
 
             $sales = json_decode($source->sale_id);
-            $data = $request->only('full_name', 'phone', 'message');
+            $data = $request->only('name', 'phone', 'message');
             $data['source_id'] = 30;
             $data['source_fb'] = $source->id;
             $data['status_id'] = 1;
@@ -44,6 +44,7 @@ class SourceController extends Controller
             $data['telesales_id'] = $sales[$source->position];
             $data['gender'] = 0;
             $data['branch_id'] = $source->branch_id;
+            $data['full_name'] = $request->name;
 
 //            $data['expired_time_boolean'] = CustomerConstant::QUA_HAN;
 //

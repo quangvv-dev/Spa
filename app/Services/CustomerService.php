@@ -45,7 +45,6 @@ class CustomerService
         $input['mkt_id'] = 0;
         $input['carepage_id'] = 0;
         $input['telesales_id'] = 0;
-
         $customer = Customer::create($input);
 
         return $customer;
