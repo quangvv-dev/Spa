@@ -156,7 +156,6 @@ class CustomerController extends BaseApiController
         }
         $request->merge(['type_api' => '7.1']);
         if (isset($input['type']) && $input['type'] == 1) {
-            $request->merge(['type_api' => 7]);
             $customers = Customer::orderByDesc('id');
             $data = Customer::applySearchConditions($customers, $input)->select('id', 'source_id',
                 \DB::raw('COUNT(ID) AS total'))->groupBy('source_id')->whereHas('source_customer')->get()
