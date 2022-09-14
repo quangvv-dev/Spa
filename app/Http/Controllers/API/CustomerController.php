@@ -80,7 +80,6 @@ class CustomerController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
         $customer = $request->jwtUser;
-
         $request->merge([
             'fb_name' => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
@@ -89,12 +88,12 @@ class CustomerController extends BaseApiController
 
         $input = $request->except(['group_id']);
         $input['mkt_id'] = empty($input['mkt_id']) ? $customer->id : $input['mkt_id'];
-        $input['telesales_id'] = empty($input['telesales_id']) ? $customer->id : $input['mkt_id'];
         $input['wallet'] = 0;
         $input['wallet_ctv'] = 0;
         $input['post_id'] = 0;
+        $input['carepage_id'] = $customer->id;
         $input['status_id'] = empty($input['status_id']) ? Functions::getStatusWithCode('moi') : $input['status_id'];
-        $customer = $this->customerService->createApi($input);
+        $customer = Customer::create($input);
         $category = Category::whereIn('id', $request->group_id)->get();
         AuthController::createCustomerGroup($category, $customer->id, $input['branch_id']);
 
