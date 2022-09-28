@@ -15,18 +15,19 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
-        $order = Order::whereBetween('created_at', [
-            '2022-06-01 00:01',
-            '2022-06-13 23:59',
-        ])->where('telesale_id', 0)->with('customer')->get();
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+        $payment = PaymentHistory::select('id')->whereBetween('payment_date', [$start_date, $end_date])->pluck('id')->toArray();
+        $order = Order::whereIn('id', $payment)->with('customer')->get();
 
-        foreach ($order as $item) {
-            if ($item->customer) {
-                $item->carepage_id = !empty($item->customer->carepage_id) ? $item->customer->carepage_id : 0;
-                $item->telesale_id = !empty($item->customer->telesales_id) ? $item->customer->telesales_id : 0;
-                $item->mkt_id      = !empty($item->customer->mkt_id) ? $item->customer->mkt_id : 0;
-                $item->save();
+        foreach ($order->chunk(100) as $item) {
+            foreach ($item as $data){
+                if (isset($data->customer)) {
+                    $data->source_id = !empty($data->customer->source_id) ? $data->customer->source_id : 0;
+                    $data->save();
+                }
             }
+
         }
         return "da xong";
 
