@@ -162,11 +162,13 @@ class CustomerController extends BaseApiController
                 ->sortByDesc('total');
         } else if (isset($input['type']) && $input['type'] == 2) {
             $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
-                $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
-                    $it->where('source_id', $item->id);
-                })->pluck('id')->toArray();
+//                $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
+//                    $it->where('source_id', $item->id);
+//                })->pluck('id')->toArray();
 
-                $payment_All = PaymentHistory::search($input,'price')->whereIn('order_id',$orders);
+                $payment_All = PaymentHistory::search($input,'price')->whereHas('order',function ($it) use ($item){
+                    $it->where('source_id', $item->id);
+                });
                 $item->total = $payment_All->sum('price');
                 return $item;
             })->filter(function ($fl) {
