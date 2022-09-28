@@ -71,6 +71,7 @@ class WalletController extends Controller
             'price'       => $package->price,
             'order_price' => $package->order_price,
             'branch_id'   => $customer->branch_id,
+            'source_id'   => $customer->source_id,
         ];
         $wallet = $this->walletService->create($input);
         return redirect('/wallet/' . $wallet->id);

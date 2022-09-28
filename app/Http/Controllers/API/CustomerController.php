@@ -163,14 +163,16 @@ class CustomerController extends BaseApiController
                 ->sortByDesc('total');
         } else if (isset($input['type']) && $input['type'] == 2) {
             $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
-//                $payment_wallet = PaymentWallet::search($input, 'price');
+                $payment_wallet = PaymentWallet::search($input, 'price')->whereHas('order_wallet',function ($it) use ($item){
+                    $it->where('source_id', $item->id);
+                })->sum('price');
                 $payment_All = PaymentHistory::search($input,'price')->whereHas('order',function ($it) use ($item){
                     $it->where('source_id', $item->id);
                 });
                 $price = $payment_All->sum('price');
                 $score = $payment_All->where('payment_type', 3)->sum('price');
 
-                $item->total = $price + $score;
+                $item->total = $price + $payment_wallet - $score;
                 return $item;
             })->filter(function ($fl) {
                 if ($fl->total > 0) {

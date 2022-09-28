@@ -143,6 +143,7 @@ class OrdersController extends BaseApiController
             'price'       => $package->price,
             'order_price' => $package->order_price,
             'branch_id'   => $customer->branch_id ?: 1,
+            'source_id'   => $customer->source_id ?: 1,
         ];
         $wallet = $this->walletService->create($input);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $wallet);
