@@ -21,7 +21,7 @@ class DBController extends Controller
         $end_date = $request->end_date;
 
         if ($request->type ==1){
-            $payment_wallet = PaymentWallet::select('order_wallet_id')->whereBetween('payment_date', [$start_date, $end_date])->pluck('order_wallet_id')->toArray();
+            $payment_wallet = PaymentWallet::select('order_wallet_id')->pluck('order_wallet_id')->toArray();
             $wallet = WalletHistory::whereIn('id', $payment_wallet)->with('customer')->has('customer')->get();
             foreach ($wallet as $data){
                 if (isset($data->customer)) {
