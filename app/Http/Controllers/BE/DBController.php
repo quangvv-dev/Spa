@@ -17,8 +17,8 @@ class DBController extends Controller
     {
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-        $payment = PaymentHistory::select('id')->whereBetween('payment_date', [$start_date, $end_date])->pluck('id')->toArray();
-        $order = Order::whereIn('id', $payment)->with('customer')->get();
+        $payment = PaymentHistory::select('order_id')->whereBetween('payment_date', [$start_date, $end_date])->pluck('order_id')->toArray();
+        $order = Order::whereIn('id', $payment)->with('customer')->has('customer')->get();
 
         foreach ($order->chunk(100) as $item) {
             foreach ($item as $data){

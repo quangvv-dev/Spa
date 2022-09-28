@@ -165,7 +165,6 @@ class CustomerController extends BaseApiController
 //                $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
 //                    $it->where('source_id', $item->id);
 //                })->pluck('id')->toArray();
-
                 $payment_All = PaymentHistory::search($input,'price')->whereHas('order',function ($it) use ($item){
                     $it->where('source_id', $item->id);
                 });
