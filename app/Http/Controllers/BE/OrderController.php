@@ -146,7 +146,7 @@ class OrderController extends Controller
         $param['telesale_id'] = $customer->telesales_id ?: 0;
         DB::beginTransaction();
         try {
-
+            $param['source_id'] = $customer->source_id ?: 0;
             $order = $this->orderService->create($param);
             if (!$order) {
                 DB::rollBack();
