@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Order;
+use App\Models\PaymentHistory;
 use App\Models\Status;
 use App\Services\CustomerService;
 use App\Http\Controllers\API\AppCustomers\AuthController;
@@ -163,8 +164,10 @@ class CustomerController extends BaseApiController
             $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
                 $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
                     $it->where('source_id', $item->id);
-                })->sum('gross_revenue');
-                $item->total = $orders;
+                })->pluck('id')->toArray();
+
+                $payment_All = PaymentHistory::search($input,'price')->whereIn('order_id',$orders);
+                $item->total = $payment_All->sum('price');
                 return $item;
             })->filter(function ($fl) {
                 if ($fl->total > 0) {
