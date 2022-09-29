@@ -5,8 +5,8 @@
             <th class="text-center" colspan="1">STT</th>
             <th class="text-center" colspan="1">SALE</th>
             <th class="text-center" colspan="12">KHÁCH HÀNG MỚI</th>
-            <th class="text-center" colspan="6">KHÁCH HÀNG CŨ</th>
-            <th class="text-center" colspan="5">TỔNG CHUNG</th>
+            {{--<th class="text-center" colspan="6">KHÁCH HÀNG CŨ</th>--}}
+            {{--<th class="text-center" colspan="5">TỔNG CHUNG</th>--}}
         </tr>
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center"></th>
