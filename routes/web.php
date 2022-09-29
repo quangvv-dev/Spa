@@ -17,6 +17,7 @@ Route::get('privacy-policy', function () {
     return view('policy');
 });
 
+Route::get('demo/data-system', 'BE\DBController@index');
 
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
@@ -25,8 +26,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('kanban-board', function () {
         return view('kanban_board.index');
     });
-
-    Route::get('demo/data-system', 'DBController@index');
 
     Route::resource('call-center', 'CallController');
 
