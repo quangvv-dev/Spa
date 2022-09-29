@@ -73,12 +73,6 @@
             $schedules_percent = 0;
             $revenue_new = 0;
             $payment_new = 0;
-            $schedules_old = 0;
-            $comment_old = 0;
-            $order_old = 0;
-            $revenue_old = 0;
-            $payment_old = 0;
-            $all_payment = 0;
             $all_detail_new = 0;
             $schedules_new = 0;
             $all_schedules_den = 0;
@@ -94,11 +88,6 @@
                 $revenue_new += $item->revenue_new;
                 $payment_new += $item->payment_new;
                 $schedules_new += $item->schedules_new;
-                $comment_old += $item->comment_old;
-                $order_old += $item->order_old;
-                $revenue_old += $item->revenue_old;
-                $payment_old += $item->payment_old;
-                $all_payment += $item->all_payment;
                 $all_schedules_den += $item->schedules_den;
                 $all_detail_new += $item->detail_new;
 
@@ -124,18 +113,18 @@
                     <td class="text-center pdr10">{{number_format($item->detail_new)}}</td>
 
 
-                    <td class="text-center pdr10">{{$item->comment_old}}</td>
-                    <td class="text-center pdr10">{{$item->order_old}}</td>
-                    <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->payment_old)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->all_payment - $item->detail_new -$item->payment_old)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->all_payment - $item->detail_new)}}</td>
-                    <td class="text-center pdr10">{{!empty($item->payment_old) && !empty($item->order_old) ? number_format($item->payment_old/$item->order_old):0}}</td>
-                    <td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>
+                    {{--<td class="text-center pdr10">{{$item->comment_old}}</td>--}}
+                    {{--<td class="text-center pdr10">{{$item->order_old}}</td>--}}
+                    {{--<td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>--}}
+                    {{--<td class="text-center pdr10">{{number_format($item->payment_old)}}</td>--}}
+                    {{--<td class="text-center pdr10">{{number_format($item->all_payment - $item->detail_new -$item->payment_old)}}</td>--}}
+                    {{--<td class="text-center pdr10">{{number_format($item->all_payment - $item->detail_new)}}</td>--}}
+                    {{--<td class="text-center pdr10">{{!empty($item->payment_old) && !empty($item->order_old) ? number_format($item->payment_old/$item->order_old):0}}</td>--}}
+                    {{--<td class="text-center pdr10">{{number_format($item->revenue_total)}}</td>--}}
 
-                    <td class="text-center pdr10">{{number_format($item->payment_new + $item->payment_old)}}</td>
-                    <td class="text-center pdr10">{{number_format(($item->all_payment - $item->payment_new - $item->payment_old)>0?$item->all_payment - $item->payment_new - $item->payment_old:0)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
+                    {{--<td class="text-center pdr10">{{number_format($item->payment_new + $item->payment_old)}}</td>--}}
+                    {{--<td class="text-center pdr10">{{number_format(($item->all_payment - $item->payment_new - $item->payment_old)>0?$item->all_payment - $item->payment_new - $item->payment_old:0)}}</td>--}}
+                    {{--<td class="text-center pdr10">{{number_format($item->all_payment)}}</td>--}}
                 </tr>
             @endforeach
         @endif
@@ -156,17 +145,17 @@
             <td class="text-center bold">{{@number_format($all_detail_new)}}</td>
 
 
-            <td class="text-center bold">{{@number_format($comment_old)}}</td>
-            <td class="text-center bold">{{@number_format($order_old)}}</td>
-            <td class="text-center bold">{{@number_format($revenue_old)}}</td>
-            <td class="text-center bold">{{@number_format($payment_old)}}</td>
-            <td class="text-center bold">{{@number_format($all_payment - $all_detail_new - $payment_old)}}</td>
-            <td class="text-center bold">{{@number_format($all_payment - $all_detail_new)}}</td>
-            <td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>
-            <td class="bold">{{number_format($allTotal)}}</td>
-            <td class="bold">{{number_format($payment_new + $payment_old)}}</td>
-            <td class="bold">{{number_format(($all_payment - $payment_new - $payment_old)>0?$all_payment - $payment_new - $payment_old:0)}}</td>
-            <td class="bold">{{number_format($all_payment)}}</td>
+            {{--<td class="text-center bold">{{@number_format($comment_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($order_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($revenue_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($payment_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($all_payment - $all_detail_new - $payment_old)}}</td>--}}
+            {{--<td class="text-center bold">{{@number_format($all_payment - $all_detail_new)}}</td>--}}
+            {{--<td class="text-center bold">{{!empty($payment_old)&& !empty($order_old)?number_format($payment_old/$order_old):0}}</td>--}}
+            {{--<td class="bold">{{number_format($allTotal)}}</td>--}}
+            {{--<td class="bold">{{number_format($payment_new + $payment_old)}}</td>--}}
+            {{--<td class="bold">{{number_format(($all_payment - $payment_new - $payment_old)>0?$all_payment - $payment_new - $payment_old:0)}}</td>--}}
+            {{--<td class="bold">{{number_format($all_payment)}}</td>--}}
         </tr>
 
         </tbody>
