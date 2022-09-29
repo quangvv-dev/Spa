@@ -23,10 +23,10 @@ class DBController extends Controller
         $input = $request->all();
 
         $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
-            $payment_wallet = PaymentWallet::search($input, 'price')->whereHas('order_wallet',function ($it) use ($item){
+            $payment_wallet = PaymentWallet::search($input, 'price')->whereHas('order_wallet', function ($it) use ($item) {
                 $it->where('source_id', $item->id);
             })->sum('price');
-            $payment_All = PaymentHistory::search($input,'price')->whereHas('order',function ($it) use ($item){
+            $payment_All = PaymentHistory::search($input, 'price')->whereHas('order', function ($it) use ($item) {
                 $it->where('source_id', $item->id);
             });
             $price = $payment_All->sum('price');
@@ -39,7 +39,10 @@ class DBController extends Controller
                 return $fl;
             }
         })->sortByDesc('total');
-        return $data;
+        return [
+            'record' => $data,
+            'all_total' => $data->sum('total'),
+        ];
 
 
 //        if ($request->type ==1){
