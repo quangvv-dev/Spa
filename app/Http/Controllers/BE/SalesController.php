@@ -82,9 +82,9 @@ class SalesController extends Controller
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
-            $orders2 = clone $orders;
+//            $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+//            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -92,10 +92,10 @@ class SalesController extends Controller
                 })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                     $q->where('branch_id', $request->branch_id);
                 });
-            $comment_new = clone $group_comment;
+//            $comment_new = clone $group_comment;
 
-            $item->comment_new = $comment_new->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi
-            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
+            $item->comment_new = $group_comment->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi
+//            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -118,24 +118,25 @@ class SalesController extends Controller
             $request->merge(['telesales' => $item->id]);
             $params = $request->all();
             $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-            $detail_new = clone $detail;
+//            $detail_new = clone $detail;
 
-            $item->detail_new = $detail_new->whereHas('order', function ($qr) {
+            $item->detail_new = $detail->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
-            $item->order_old = $order_old->count();
+//            $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('all_total');
-            $item->revenue_old = $order_old->sum('all_total');
+//            $item->revenue_old = $order_old->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');
-            $item->payment_old = $order_old->sum('gross_revenue');
+//            $item->payment_old = $order_old->sum('gross_revenue');
 //            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
 //            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
 //            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
-            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');;
-            $item->all_payment = $detail->sum('price');
+//            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
+
+//            $item->all_payment = $detail->sum('price');
             return $item;
         })->sortByDesc('all_payment');
         \View::share([
@@ -175,7 +176,6 @@ class SalesController extends Controller
             }
             return $item;
         })->sortByDesc('gross_revenue')->toArray();
-
 
         $my_key = array_keys(array_column((array)$sale, 'id'), Auth::user()->id);
 

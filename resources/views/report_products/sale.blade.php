@@ -1,66 +1,6 @@
 @extends('layout.app')
 @section('_style')
     <style>
-        .bxh-container {
-            position: relative;
-            width: 100%;
-            height: 35%;
-        }
-
-        .bxh .item-rank {
-            width: 6.5%;
-            height: 6.5%;
-            display: inline-block;
-            position: absolute;
-        }
-
-        .bxh .item-rank1 .king-sale {
-            display: block;
-        }
-
-        .bxh .item-rank .avatar-container {
-            border: 6px solid #f49000;
-        }
-
-        .bxh .item-rank .avatar-container {
-            display: inline-block;
-            height: 88px;
-            width: 100%;
-            overflow: hidden;
-            border-radius: 50%;
-            border: 6px solid #53628e;
-        }
-
-        .bxh .item-rank .king-sale {
-            display: block;
-        }
-
-        .bxh .king-sale {
-            display: none;
-            text-align: center;
-            position: absolute;
-            width: 100%;
-            margin-top: -40%;
-        }
-
-        .bxh .item-rank .item-info {
-            text-align: center;
-        }
-
-        .item-info1 {
-            color: #da0e35;
-            font-weight: 600;
-        }
-
-        .item-info {
-            text-align: center;
-        }
-
-        .page-main {
-            background-color: #fff;
-        }
-    </style>
-    <style>
         .form-control {
             font-size: 14px;
         }

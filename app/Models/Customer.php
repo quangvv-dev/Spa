@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
@@ -131,12 +132,14 @@ class Customer extends Model
     {
         $user = Auth::user();
         $data = self::latest();
-        if ($user->role == UserConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
+        if ($user->department_id == DepartmentConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
             if ($user->is_leader == UserConstant::IS_LEADER) {
                 $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 $data = $data->where('telesales_id', $user->id);
             }
+        }elseif ($user->department_id == DepartmentConstant::TELESALES && setting('view_customer_sale') == StatusCode::ON){
+            $data = $data->where('telesales_id', $user->id);
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }

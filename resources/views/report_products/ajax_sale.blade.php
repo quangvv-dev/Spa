@@ -1,25 +1,3 @@
-<div class="bxh bxh-container" style="border:1px solid transparent;">
-    @php $int =0;$i =0; @endphp
-    @foreach($users as $value)
-        @php $int++ ;
-        if ($int>=10)
-        @endphp
-        <div {{$int>10?'style=display:none':''}} class="item-rank" style="right: {{$int*9}}%;top: {{$int*2}}%">
-            <div class="king-sale">
-                <img src="{{$int==1?asset('default/bxh2.png'):''}}">
-            </div>
-            <div class="avatar-container  blink">
-                <img class="avatar-img" src="{{asset(@$value->avatar)}}">
-            </div>
-            <div class="item-info {{'item-info'.($int)}}" style="font-size: 12px">
-                <div class="item-stt">{{$int==1 ?'#'.($int):($int)}}</div>
-                <div class="item-tennv">{{$value->full_name}}</div>
-                <div class="">{{number_format($value->all_payment)}}</div>
-            </div>
-        </div>
-    @endforeach
-
-</div>
 <div style="width: 100%; overflow: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
@@ -45,17 +23,17 @@
             <th class="text-center">Doanh thu</th>
             <th class="text-center no-wrap">Thu nợ</th>
             <th class="text-center no-wrap">Thực thu</th>
-            <th class="text-center no-wrap">Trao đổi</th>
-            <th class="text-center no-wrap">Đơn chốt</th>
-            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
-            <th class="text-center">Doanh thu</th>
-            <th class="text-center">Thu nợ</th>
-            <th class="text-center">Thực thu</th>
-            <th class="text-center">Doanh thu<span class=""><br>TB/đơn</span></th>
-            <th class="text-center">Doanh<span class=""><br>số</span></th>
-            <th class="text-center">Doanh<span class=""><br>thu</span></th>
-            <th class="text-center">Thu nợ</th>
-            <th class="text-center">Đã thu<span class=""><br>T.kỳ</span></th>
+            {{--<th class="text-center no-wrap">Trao đổi</th>--}}
+            {{--<th class="text-center no-wrap">Đơn chốt</th>--}}
+            {{--<th class="text-center">Doanh số<span class=""><br>sau CK</span></th>--}}
+            {{--<th class="text-center">Doanh thu</th>--}}
+            {{--<th class="text-center">Thu nợ</th>--}}
+            {{--<th class="text-center">Thực thu</th>--}}
+            {{--<th class="text-center">Doanh thu<span class=""><br>TB/đơn</span></th>--}}
+            {{--<th class="text-center">Doanh<span class=""><br>số</span></th>--}}
+            {{--<th class="text-center">Doanh<span class=""><br>thu</span></th>--}}
+            {{--<th class="text-center">Thu nợ</th>--}}
+            {{--<th class="text-center">Đã thu<span class=""><br>T.kỳ</span></th>--}}
         </tr>
         <tr class="number_index">
             <th class="text-center">(1)</th>
@@ -72,22 +50,23 @@
             <th class="text-center">(8)</th>
             <th class="text-center">(9)</th>
             <th class="text-center">(10)</th>
-            <th class="text-center">(11)</th>
-            <th class="text-center">(12)</th>
-            <th class="text-center">(13)</th>
-            <th class="text-center">(14)</th>
-            <th class="text-center">(15)</th>
-            <th class="text-center">(14)+(15)</th>
-            <th class="text-center">(7)+(12)</th>
-            <th class="text-center">(8)+(13)</th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
+            {{--<th class="text-center">(11)</th>--}}
+            {{--<th class="text-center">(12)</th>--}}
+            {{--<th class="text-center">(13)</th>--}}
+            {{--<th class="text-center">(14)</th>--}}
+            {{--<th class="text-center">(15)</th>--}}
+            {{--<th class="text-center">(14)+(15)</th>--}}
+            {{--<th class="text-center">(7)+(12)</th>--}}
+            {{--<th class="text-center">(8)+(13)</th>--}}
+            {{--<th class="text-center"></th>--}}
+            {{--<th class="text-center"></th>--}}
+            {{--<th class="text-center"></th>--}}
         </tr>
         </thead>
 
         <tbody>
         @php
+            $i=0;
             $customer_new = 0;
             $comment_new = 0;
             $order_new = 0;
@@ -143,6 +122,8 @@
                     <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->detail_new - $item->payment_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->detail_new)}}</td>
+
+
                     <td class="text-center pdr10">{{$item->comment_old}}</td>
                     <td class="text-center pdr10">{{$item->order_old}}</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_old)}}</td>
@@ -173,6 +154,8 @@
             <td class="text-center bold">{{@number_format($payment_new)}}</td>
             <td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>
             <td class="text-center bold">{{@number_format($all_detail_new)}}</td>
+
+
             <td class="text-center bold">{{@number_format($comment_old)}}</td>
             <td class="text-center bold">{{@number_format($order_old)}}</td>
             <td class="text-center bold">{{@number_format($revenue_old)}}</td>
