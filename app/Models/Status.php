@@ -16,7 +16,11 @@ class Status extends Model
 
     public function customers()
     {
-        return $this->hasMany(Customer::class, 'status_id', 'id');
+        if ($this->type == StatusCode::SOURCE_CUSTOMER) {
+            return $this->hasMany(Customer::class, 'source_id', 'id');
+        } elseif ($this->type == StatusCode::RELATIONSHIP) {
+            return $this->hasMany(Customer::class, 'status_id', 'id');
+        }
     }
 
     public function customerSources()
