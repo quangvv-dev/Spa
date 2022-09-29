@@ -165,9 +165,10 @@ class SalesController extends Controller
         $sale = User::where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($params) {
             $params['telesales'] = $item->id;
             $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-            if (isset($params['is_upsale']) && $params['is_upsale']) {
-                $item->gross_revenue = $detail->whereHas('order', function ($qr) {
-                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+
+            if (isset($params['is_upsale'])) {
+                $item->gross_revenue = $detail->whereHas('order', function ($qr)use ($params) {
+                    $qr->where('is_upsale', $params['is_upsale']);
                 })->sum('price');
             } else {
                 $item->gross_revenue = $detail->sum('price');
