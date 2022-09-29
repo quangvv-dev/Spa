@@ -132,14 +132,16 @@ class Customer extends Model
     {
         $user = Auth::user();
         $data = self::latest();
-        if ($user->department_id == DepartmentConstant::TELESALES && setting('view_customer_sale') != StatusCode::ON) {
+        if ($user->department_id == DepartmentConstant::TELESALES) {
             if ($user->is_leader == UserConstant::IS_LEADER) {
                 $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
-                $data = $data->where('telesales_id', $user->id);
+                if (setting('view_customer_sale') == StatusCode::ON) {
+                    $data = $data->where('telesales_id', $user->id);
+                } else {
+                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+                }
             }
-        }elseif ($user->department_id == DepartmentConstant::TELESALES && setting('view_customer_sale') == StatusCode::ON){
-            $data = $data->where('telesales_id', $user->id);
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
@@ -441,7 +443,7 @@ class Customer extends Model
 
     public function getGroupArrayAttribute()
     {
-        $data = CustomerGroup::select('category_id')->where('customer_id',$this->id)->get()->pluck('category_id');
+        $data = CustomerGroup::select('category_id')->where('customer_id', $this->id)->get()->pluck('category_id');
         return $data;
     }
 }
