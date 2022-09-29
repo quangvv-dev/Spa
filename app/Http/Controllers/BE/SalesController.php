@@ -22,6 +22,7 @@ use App\Services\TaskService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
@@ -72,7 +73,7 @@ class SalesController extends Controller
                     $q->where('branch_id', $request->branch_id);
                 });
 
-            $orders = Order::select('id','member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                     $q->whereIn('branch_id', $request->group_branch);
@@ -146,6 +147,41 @@ class SalesController extends Controller
             return view('report_products.ajax_sale', compact('users'));
         }
         return view('report_products.sale', compact('users'));
+    }
+
+    /**
+     * Xếp hạng telesale
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function ranking(Request $request)
+    {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+
+        $params = $request->all();
+        $sale = User::where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($params) {
+            $params['telesales'] = $item->id;
+            $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
+            if (isset($params['is_upsale']) && $params['is_upsale']) {
+                $item->gross_revenue = $detail->whereHas('order', function ($qr) {
+                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+                })->sum('price');
+            } else {
+                $item->gross_revenue = $detail->sum('price');
+            }
+            return $item;
+        })->sortByDesc('gross_revenue')->toArray();
+
+
+        $my_key = array_keys(array_column((array)$sale, 'id'), Auth::user()->id);
+
+        if ($request->ajax()) {
+            return view('sale.ranking.ajax', compact('sale', 'my_key'));
+        }
+        return view('sale.ranking.index', compact('sale', 'my_key'));
     }
 
     /**
