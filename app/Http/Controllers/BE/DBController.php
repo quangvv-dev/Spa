@@ -22,6 +22,13 @@ class DBController extends Controller
 //        $end_date = $request->end_date;
         $input = $request->all();
 
+        $payment_wallet = PaymentWallet::search($input, 'price')->sum('price');
+
+        $payment_All = PaymentHistory::search($input, 'price');
+        $price = $payment_All->sum('price');
+        $score = $payment_All->where('payment_type', 3)->sum('price');
+
+
         $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
             $payment_wallet = PaymentWallet::search($input, 'price')->whereHas('order_wallet', function ($it) use ($item) {
                 $it->where('source_id', $item->id);
@@ -42,6 +49,7 @@ class DBController extends Controller
         return [
             'record' => $data,
             'all_total' => $data->sum('total'),
+            'all_total_thuc' => $price + $payment_wallet - $score,
         ];
 
 
