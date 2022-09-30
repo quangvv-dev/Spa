@@ -137,9 +137,9 @@ class Customer extends Model
                 $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON) {
-                    $data = $data->where('telesales_id', $user->id);
-                } else {
                     $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+                } else {
+                    $data = $data->where('telesales_id', $user->id);
                 }
             }
         } else {
