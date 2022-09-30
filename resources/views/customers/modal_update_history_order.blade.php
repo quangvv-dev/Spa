@@ -3,7 +3,7 @@
         color: #0a0c0d !important;
     }
 </style>
-<div class="modal fade" id="updateHistoryOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="updateHistoryOrderModal" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -78,6 +78,6 @@
 <script>
     $('.select2').select2({ //apply select2 to my element
         allowClear: true,
-        dropdownParent: $('#example-Modal3')
+        // dropdownParent: $('#example-Modal3')
     });
 </script>
