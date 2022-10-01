@@ -6,6 +6,7 @@ use App\Constants\OrderConstant;
 use App\Constants\StatusConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
+use App\Models\Gift;
 use App\Models\HistoryDepot;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -208,8 +209,13 @@ class HistoryDepotController extends Controller
                         Functions::yearMonthDayTime($input['start_date']),
                         Functions::yearMonthDayTime($input['end_date']),
                     ])->sum('quantity');
+                $params = $input;
+                $params['product_id'] = $item->product_id;
+                $gifts =  Gift::search($params)->select('id','order_id','quantity');
+                $item->quantityGifts = $gifts->sum('quantity');
+                $item->orderGifts = $gifts->get()->count();
                 return $item;
-            });
+            })->sortByDesc('quantityGifts');
 
         if ($request->ajax()) {
             return view('history_depot.statisticalAjax', compact('docs', 'checkRole'));

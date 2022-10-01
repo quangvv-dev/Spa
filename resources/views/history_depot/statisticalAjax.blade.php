@@ -9,7 +9,7 @@
                 <th class="text-center">Tồn</th>
                 <th class="text-center">Xuất bán</th>
                 <th class="text-center">Tiêu hao/hỏng</th>
-                <th class="text-center">Dự kiến bán hết</th>
+                <th class="text-center">Hàng tặng</th>
 
             </tr>
             <tr class="bold">
@@ -18,14 +18,13 @@
                 <td class="text-center bold">{{@number_format($docs->sum('quantity'))}} </td>
                 <td class="text-center bold">{{@number_format($docs->sum('xuat_ban'))}}</td>
                 <td class="text-center bold">{{@number_format($docs->sum('tieu_hao'))}}</td>
-                <td class="text-center"></td>
+                <td class="text-center">{{$docs->sum('quantityGifts') >0 ?@number_format($docs->sum('quantityGifts')).'/ '. @number_format($docs->sum('orderGifts')).' đơn':0}}</td>
 
             </tr>
             </thead>
             <tbody>
             @if(count($docs))
                 @foreach($docs as $key => $item)
-                    {{--{{dd($item)}}--}}
                     <tr>
                         <td class="text-center">{{@$key+1}}</td>
                         <td class="text-center">{{@$item->branch->name}}</td>
@@ -33,7 +32,7 @@
                         <td class="text-center">{{@number_format($item->quantity)}} </td>
                         <td class="text-center">{{@number_format($item->xuat_ban)}}</td>
                         <td class="text-center">{{@number_format($item->tieu_hao)}}</td>
-                        <td class="text-center">{{$item->created_at}}</td>
+                        <td class="text-center">{{$item->quantityGifts > 0 ?@number_format($item->quantityGifts) .'/ '.@number_format($item->orderGifts).' đơn':0}} </td>
                     </tr>
                 @endforeach
             @else
