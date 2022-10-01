@@ -33,8 +33,8 @@ class Gift extends Model
     {
         $data = self::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('created_at', [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                Functions::yearMonthDayTime($input['start_date']),
+                Functions::yearMonthDayTime($input['end_date']),
             ]);
         })->when(isset($input['branch_id']), function ($query) use ($input) {
             $query->where('branch_id', $input['branch_id']);

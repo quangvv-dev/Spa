@@ -18,7 +18,7 @@
                 <td class="text-center bold">{{@number_format($docs->sum('quantity'))}} </td>
                 <td class="text-center bold">{{@number_format($docs->sum('xuat_ban'))}}</td>
                 <td class="text-center bold">{{@number_format($docs->sum('tieu_hao'))}}</td>
-                <td class="text-center">{{$docs->sum('quantityGifts') >0 ?@number_format($docs->sum('quantityGifts')).'/ '. @number_format($docs->sum('orderGifts')).' đơn':0}}</td>
+                <td class="text-center bold">{{$docs->sum('quantityGifts') >0 ?@number_format($docs->sum('quantityGifts')).' ('. @number_format($docs->sum('orderGifts')).' đơn)':0}}</td>
 
             </tr>
             </thead>
@@ -32,7 +32,7 @@
                         <td class="text-center">{{@number_format($item->quantity)}} </td>
                         <td class="text-center">{{@number_format($item->xuat_ban)}}</td>
                         <td class="text-center">{{@number_format($item->tieu_hao)}}</td>
-                        <td class="text-center">{{$item->quantityGifts > 0 ?@number_format($item->quantityGifts) .'/ '.@number_format($item->orderGifts).' đơn':0}} </td>
+                        <td class="text-center">{{$item->quantityGifts > 0 ?@number_format($item->quantityGifts) .' ('.@number_format($item->orderGifts).' đơn)':0}} </td>
                     </tr>
                 @endforeach
             @else
