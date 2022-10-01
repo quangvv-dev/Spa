@@ -126,7 +126,7 @@ class OrderService
         $order = $this->find($id);
         GroupComment::create([
             'customer_id' => $order->member_id,
-            'user_id' => Auth::user()->id,
+            'user_id' => 1,
             'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . $order->all_total,
         ]);
         if ($order->role_type == StatusCode::PRODUCT) {

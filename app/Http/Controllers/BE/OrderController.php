@@ -407,11 +407,12 @@ class OrderController extends Controller
 
     public function show($id)
     {
+        $products = Services::select('id','name')->where('type',StatusCode::PRODUCT)->pluck('name','id')->toArray();
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
         $now = Carbon::now()->format('d-m-Y');
         $order->now = $now;
         $payment = $order->paymentHistories;
-        return view('order.order', compact('order', 'payment'));
+        return view('order.order', compact('order', 'payment','products'));
     }
 
     /**

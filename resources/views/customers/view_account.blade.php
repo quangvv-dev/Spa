@@ -292,6 +292,8 @@
                                             @endif
                                             <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Tin nhắn</a></li>
+                                            <li><a href="#tabGift" id="click_tab_gift" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Quà Tặng</a></li>
                                             <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Khuyến mại</a></li>
                                             <li><a href="#tab12" id="click_tab_12" data-phone="{{$customer->phone}}"
@@ -437,6 +439,9 @@
                                         <div class="tab-pane" id="tab13">
                                             @include('albums.index')
                                         </div>
+                                        <div class="tab-pane" id="tabGift">
+                                            @include('gifts.ajax')
+                                        </div>
                                         {{--<div class="tab-pane" id="tab14">--}}
                                             {{--@include('message_fb.index')--}}
                                         {{--</div>--}}
@@ -552,6 +557,18 @@
                 data: {member_id: id}
             }).done(function (data) {
                 $('#order_customer').html(data);
+            });
+        })
+
+        $(document).on('click', '#click_tab_gift', function () {
+            const id = $(this).data('id');
+            $('#tabGift').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url('gifts') }}",
+                method: "get",
+                data: {customer_id: id}
+            }).done(function (data) {
+                $('#tabGift').html(data);
             });
         })
         $(document).on('click', '#click_tab_8', function () {

@@ -90,7 +90,7 @@
                 <input type="hidden" name="product[]" value="` + id + `">
                 <td><span id="">` + text + `</span></td>
                 <td style="width: 30%;">
-                    <input type="text" maxlength="5" class="form-control text-center txt-dotted"style="height: 23px !important;" name="quantity[]">
+                    <input type="text" maxlength="5" class="form-control text-center txt-dotted" name="quantity[]">
                 </td>
             </tr>`;
                 $('.list-product').append(html);

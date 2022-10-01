@@ -176,6 +176,11 @@
                                 class="fas fa-dollar-sign"></i>&nbsp;Hoa hồng</a>
                     </button>
                 </div>
+                <div class="btn-group dropup fl task_footer_box">
+                    <button class="btn btn-pink ml5" data-toggle="modal" data-target="#addGifts">
+                        <a><i class="fa fa-gift"></i>&nbsp;Quà tặng</a>
+                    </button>
+                </div>
                 <div class="fl task_footer_box cancel_order">
                     <button class="btn btn-default fr ml5">
                         <a href="{{route('order.list')}}">Trở lại</a>
@@ -184,16 +189,40 @@
             </div>
         </div>
         @include('order.modal')
+        @include('gifts._form')
         @endsection
         @section('_script')
             <script src="{{ asset('js/format-number.js') }}"></script>
             <script>
+                $(document).on('keyup', '.number', function () {
+                    let earn = $(this).val();
+                    $(this).val(formatNumber(earn));
+                })
                 $(document).ready(function () {
                     $('[data-toggle="datepicker"]').datepicker({
                         format: 'dd-mm-yyyy',
                         autoHide: true,
                         zIndex: 2048,
                     });
+
+                    $('#product_id').change(function () {
+                        let id = $(this).val();
+                        if (!id) return false;
+                        var text = $(this).find(":selected").text();
+                        var html = `<tr>
+                <input type="hidden" name="product[]" value="` + id + `">
+                <td><span id="">` + text + `</span></td>
+                <td style="width: 30%;">
+                    <input type="text" maxlength="5" class="form-control txt-dotted number"style="height: 23px !important;" name="quantity[]">
+                </td>
+                <td> <a class="delGift"><i class="fa fa-trash-alt"></i></a> </td>
+                </tr>`;
+                        $('.list-product').append(html);
+                    })
+                });
+
+                $(document).on('click', '.delGift', function (e) {
+                    $(this).closest('tr').remove();
                 });
 
                 $(document).on('click', '#finish', function () {
