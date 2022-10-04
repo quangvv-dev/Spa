@@ -16,6 +16,7 @@ class OrderConstant
     const XUAT_KHO = 2;//Xuất kho
     const TIEU_HAO = 3;//Tiêu Hao
     const HONG_VO = 4;//Hỏng vỡ
+    const TANG_KHACH = 5;//Hỏng vỡ
 
     const IS_UPSALE = 1;//đơn upsale
     const NON_UPSALE = 0;//đơn mới

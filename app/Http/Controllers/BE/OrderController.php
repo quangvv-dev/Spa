@@ -151,7 +151,7 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
-            $countOrders = Order::where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
+            $countOrders = Order::select('id')->where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
             if (@$countOrders >= 2) {
                 $customer->old_customer = 1;
                 $customer->save();

@@ -37,6 +37,7 @@ class HistoryDepotController extends Controller
             OrderConstant::XUAT_KHO => 'Xuất kho',
             OrderConstant::TIEU_HAO => 'Vật phẩm tiêu hao',
             OrderConstant::HONG_VO => 'Hàng rơi, hỏng',
+            OrderConstant::TANG_KHACH => 'Chi nhánh tặng khách',
         ];
 
         view()->share([
@@ -110,7 +111,7 @@ class HistoryDepotController extends Controller
                             'product_id' => $input['product_id'],
                             'quantity' => $input['quantity'] ?: 0,
                         ]);
-                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO]) && !empty($request->quantity[$key])) {
+                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO,OrderConstant::TANG_KHACH]) && !empty($request->quantity[$key])) {
                         ProductDepot::create([
                             'branch_id' => $request->branch_id,
                             'product_id' => $input['product_id'],

@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers\BE\Gift;
 
+use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
 use App\Models\Gift;
 use App\Models\GroupComment;
+use App\Models\ProductDepot;
+use App\Services\ProductHistoryService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class GiftController extends Controller
 {
+    private $historyDepot;
+
+    public function __construct(ProductHistoryService $historyDepot)
+    {
+        $this->historyDepot = $historyDepot;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -44,12 +54,22 @@ class GiftController extends Controller
     public function store(Request $request)
     {
         $param = $request->except('product', 'quantity');
-        $param['branch_id'] = Auth::user()->branch_id;
+        $param['branch_id'] = Auth::user()->branch_id?:0;
         if (count($request->quantity)) {
             foreach ($request->quantity as $key => $item) {
                 $param['quantity'] = $item;
                 $param['product_id'] = @$request->product[$key];
                 Gift::create($param);
+
+                $doc = ProductDepot::search($param)->first();
+                if (isset($doc) && $doc) {
+                    $doc->quantity = $doc->quantity - (int)$param['quantity'];
+                    unset($param['order_id'],$param['customer_id']);
+                    $input = $param;
+                    $input['status'] = OrderConstant::TANG_KHACH;
+                    $input['note'] = "LỄ TÂN XUẤT TẶNG KHÁCH";
+                    $this->historyDepot->create($input);
+                }
             }
         }
         return back()->with('success', 'Tạo quà KH thành công');
