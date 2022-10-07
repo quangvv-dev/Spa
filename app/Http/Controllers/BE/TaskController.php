@@ -10,6 +10,7 @@ use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Department;
 use App\Models\Notification;
+use App\Models\Status;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Services\TaskService;
@@ -45,6 +46,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
+        $color = Status::where('type',StatusCode::RELATIONSHIP)->pluck('color','id')->toArray();
         $branchs = Branch::pluck('name', 'id')->toArray();
         $location = Branch::$location;
         if (!$request->start_date) {
@@ -61,8 +63,8 @@ class TaskController extends Controller
         }
 
 //        $user = User::whereIn('department_id',[UserConstant::TELESALES,UserConstant::WAITER,UserConstant::CSKH]);
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id','type')
-            ->with('user')->get();
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id','type','customer_id')
+            ->with('user','customer')->get();
         $new = [];
         $done = [];
         $fail = [];
@@ -76,10 +78,10 @@ class TaskController extends Controller
                     $done[] = $item;
             }
         if ($request->ajax()) {
-            return view('kanban_board.ajax', compact('new', 'done', 'fail'));
+            return view('kanban_board.ajax', compact('new', 'done', 'fail','color'));
         }
 
-        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs','location'));
+        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs','location','color'));
     }
 
     /**
