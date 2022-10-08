@@ -90,7 +90,7 @@ class HistoryDepotController extends Controller
         if (!empty($request->product) && count($request->product) && count($request->quantity)) {
             foreach ($request->product as $key => $item) {
                 $input['product_id'] = $item;
-                $input['quantity'] = (int)$request->quantity[$key]?:0;
+                $input['quantity'] = (int)$request->quantity[$key] ?: 0;
                 $input['user_id'] = !empty(Auth::user()->id) ? Auth::user()->id : 0;
                 $doc = ProductDepot::search($input)->first();
                 if (isset($doc) && $doc) {
@@ -98,7 +98,7 @@ class HistoryDepotController extends Controller
                         return redirect(route('depots.history.index'))->with('waring', 'Chưa điền số tiền');
                     if ($input['status'] == OrderConstant::NHAP_KHO && !empty($request->quantity[$key])) {
                         $doc->quantity = $doc->quantity + (int)$request->quantity[$key];
-                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO]) && !empty($request->quantity[$key])) {
+                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO, OrderConstant::TANG_KHACH]) && !empty($request->quantity[$key])) {
                         $doc->quantity = $doc->quantity - (int)$request->quantity[$key];
                     }
                     $doc->save();
@@ -111,11 +111,11 @@ class HistoryDepotController extends Controller
                             'product_id' => $input['product_id'],
                             'quantity' => $input['quantity'] ?: 0,
                         ]);
-                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO,OrderConstant::TANG_KHACH]) && !empty($request->quantity[$key])) {
+                    } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO, OrderConstant::TANG_KHACH]) && !empty($request->quantity[$key])) {
                         ProductDepot::create([
                             'branch_id' => $request->branch_id,
                             'product_id' => $input['product_id'],
-                            'quantity' => $input['quantity']?(-$input['quantity']): 0,
+                            'quantity' => $input['quantity'] ? (-$input['quantity']) : 0,
                         ]);
                     }
                     $this->historyDepot->create($input);
@@ -169,8 +169,22 @@ class HistoryDepotController extends Controller
      */
     public function destroy($id)
     {
-        $this->historyDepot->delete($id);
+        $doc = $this->historyDepot->find($id);
+        $params = [
+            'branch_id' => $doc->branch_id,
+            'product_id' => $doc->product_id,
+        ];
+        $depot = ProductDepot::search($params)->first();
 
+        if (isset($depot) && $depot) {
+            if ($doc->status == OrderConstant::NHAP_KHO) {
+                $depot->quantity = $depot->quantity - $doc->quantity;
+            } elseif (in_array($doc->status == OrderConstant::NHAP_KHO, [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO, OrderConstant::TANG_KHACH])) {
+                $depot->quantity = $depot->quantity + $doc->quantity;
+            }
+            $depot->save();
+            $this->historyDepot->delete($id);
+        }
         return 1;
     }
 
@@ -212,7 +226,7 @@ class HistoryDepotController extends Controller
                     ])->sum('quantity');
                 $params = $input;
                 $params['product_id'] = $item->product_id;
-                $gifts =  Gift::search($params)->select('id','order_id','quantity');
+                $gifts = Gift::search($params)->select('id', 'order_id', 'quantity');
                 $item->quantityGifts = $gifts->sum('quantity');
                 $item->orderGifts = $gifts->get()->count();
                 return $item;

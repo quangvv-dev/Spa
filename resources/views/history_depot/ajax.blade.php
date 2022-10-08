@@ -31,7 +31,7 @@
                         <td class="text-center">{{@$item->note}}</td>
                         <td class="text-center">{{$item->created_at}}</td>
                         <td class="text-center">
-                            @if($item->status == \App\Constants\OrderConstant::NHAP_KHO)
+                            @if($item->status == \App\Constants\OrderConstant::NHAP_KHO||$item->status == \App\Constants\OrderConstant::TANG_KHACH)
                                 <a class="btn delete" href="javascript:void(0)" data-url="{{url('/depots/history/'.$item->id)}}"><i class="fa fa-trash"></i></a>
                             @endif
                         </td>

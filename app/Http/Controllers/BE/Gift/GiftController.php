@@ -128,7 +128,7 @@ class GiftController extends Controller
                 'branch_id' => $gift->branch_id,
                 'product_id' => $gift->product_id,
             ];
-            $doc = ProductDepot::search($params)->where('user_id',0)->first();
+            $doc = ProductDepot::search($params)->where('status',OrderConstant::TANG_KHACH)->first();
             $doc->delete();
             $gift->delete();
 
