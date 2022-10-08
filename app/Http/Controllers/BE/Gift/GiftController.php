@@ -54,7 +54,7 @@ class GiftController extends Controller
     public function store(Request $request)
     {
         $param = $request->except('product', 'quantity');
-        $param['branch_id'] = Auth::user()->branch_id?:0;
+        $param['branch_id'] = Auth::user()->branch_id ?: 0;
         if (count($request->quantity)) {
             foreach ($request->quantity as $key => $item) {
                 $param['quantity'] = $item;
@@ -64,7 +64,7 @@ class GiftController extends Controller
                 $doc = ProductDepot::search($param)->first();
                 if (isset($doc) && $doc) {
                     $doc->quantity = $doc->quantity - (int)$param['quantity'];
-                    unset($param['order_id'],$param['customer_id']);
+                    unset($param['order_id'], $param['customer_id']);
                     $input = $param;
                     $input['status'] = OrderConstant::TANG_KHACH;
                     $input['note'] = "LỄ TÂN XUẤT TẶNG KHÁCH";
@@ -124,7 +124,14 @@ class GiftController extends Controller
                 'user_id' => 1,
                 'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã hủy quà tặng ' . @$gift->product->name,
             ]);
+            $params = [
+                'branch_id' => $gift->branch_id,
+                'product_id' => $gift->product_id,
+            ];
+            $doc = ProductDepot::search($params)->where('user_id',0)->first();
+            $doc->delete();
             $gift->delete();
+
         } else {
             return back();
         }
