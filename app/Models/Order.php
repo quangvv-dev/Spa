@@ -189,6 +189,15 @@ class Order extends Model
                     $query->whereHas('customer', function ($q) use ($input) {
                         $q->where('source_fb', $input['source_fb']);
                     });
+                })->when(isset($input['gifts']), function ($query) use ($input) {
+                    $arrOrders = Gift::select('order_id')->where('product_id',$input['gifts'])
+                        ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                            $q->whereBetween('created_at', [
+                                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                            ]);
+                        })->pluck('order_id')->toArray();
+                    $query->whereIn('id', $arrOrders);
                 })
                 ->when(isset($input['payment_type']), function ($query) use ($input) {
                     $query->whereNotNull('payment_type')->where('payment_type', $input['payment_type']);
@@ -299,14 +308,14 @@ class Order extends Model
     {
         $raw = OrderDetail::where('order_id', $this->id)->pluck('booking_id')->toArray();
         $service = Services::whereIn('id', $raw)->withTrashed()->pluck('name')->toArray();
-        return count($service) ? implode("<br>",$service) : '';
+        return count($service) ? implode("<br>", $service) : '';
     }
 
     public function getServiceTextDestroyAttribute()
     {
         $raw = OrderDetail::where('order_id', $this->id)->withTrashed()->pluck('booking_id')->toArray();
         $service = Services::whereIn('id', $raw)->withTrashed()->pluck('name')->toArray();
-        return count($service) ? implode("<br>",$service) : '';
+        return count($service) ? implode("<br>", $service) : '';
     }
 
     public static function boot()

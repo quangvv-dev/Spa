@@ -15,6 +15,7 @@ use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
+use App\Models\ProductDepot;
 use App\Models\Promotion;
 use App\Models\Services;
 use App\Models\Status;
@@ -204,6 +205,10 @@ class OrderController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $group = Category::pluck('name', 'id')->toArray();
+        $gifts = ProductDepot::select('product_id')->with('product')->has('product')->groupBy('product_id')->get()->map(function ($item){
+            $item->name = @$item->product->name;
+            return $item;
+        })->pluck('name','product_id')->toArray();
         $marketingUsers = User::where('department_id',DepartmentConstant::MARKETING)->pluck('full_name', 'id')->toArray();
         $ktvUsers = User::where('department_id',DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id')->toArray();
         $telesales = User::where('department_id', DepartmentConstant::TELESALES)->pluck('full_name', 'id')->toArray();
@@ -304,6 +309,7 @@ class OrderController extends Controller
                     });
                 })->export('xlsx');
             }
+
             $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
                 'allTotalPage' => $orders->sum('all_total'),
@@ -335,11 +341,11 @@ class OrderController extends Controller
         $rank = $orders->firstItem();
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax',
-                compact('orders', 'title', 'rank'))->render());
+                compact('orders', 'title', 'rank','gifts'))->render());
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank','ktvUsers'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank','ktvUsers','gifts'));
     }
 
     /**
@@ -933,7 +939,7 @@ class OrderController extends Controller
             && !isset($request->customer) && !isset($request->service) && !isset($request->payment_type)
             && !isset($request->data_time) && !isset($request->start_date) && !isset($request->end_date)
             && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none)
-            && !isset($request->role_type) && !isset($request->branch_id)) {
+            && !isset($request->role_type) && !isset($request->branch_id)&& !isset($request->gifts)) {
             return 1;
 
         } else {

@@ -146,6 +146,7 @@
     <input type="hidden" id="phone">
     <input type="hidden" id="branch_id">
     <input type="hidden" id="support_id">
+    <input type="hidden" id="gifts">
     @include('order-details.modal-upload-excel')
 @endsection
 @section('_script')
@@ -178,6 +179,7 @@
             const role_type = $('#role_type').val();
             const phone = $('.phone').val();
             const branch_id = $('.branch_id').val();
+            const gifts = $('.gifts').val();
             var bor_none = '';
             if (class_name == 'choose_time') {
                 var data_time = $(target).find('.choose_time').data('time');
@@ -205,6 +207,7 @@
             $('#filter-end-date').val(end_date);
             $('#branch_id').val(branch_id);
             $('#support_id').val(support_id);
+            $('#gifts').val(gifts);
             if (typeof (data_time) != "undefined") {
                 $('#choose-time').val(data_time);
             }
@@ -243,6 +246,7 @@
                 phone: phone,
                 branch_id: branch_id,
                 support_id: support_id,
+                gifts: gifts,
             });
         })
         ;

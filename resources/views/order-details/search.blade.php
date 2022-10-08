@@ -56,6 +56,11 @@
                                 {!! Form::select('marketing', $marketingUsers, null, array('class' => 'form-control marketing', 'placeholder'=>'Người tạo KH')) !!}
                             </div>
                         </div>
+                        <div class="col-md-6 col-xs-12">
+                            <div class="form-group">
+                                {!! Form::select('gifts', $gifts, null, array('class' => 'form-control gifts select2', 'placeholder'=>'Quà đã tặng')) !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
