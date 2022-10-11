@@ -6,6 +6,7 @@ use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
 use App\Models\Gift;
 use App\Models\GroupComment;
+use App\Models\HistoryDepot;
 use App\Models\ProductDepot;
 use App\Services\ProductHistoryService;
 use Illuminate\Http\Request;
@@ -64,6 +65,7 @@ class GiftController extends Controller
                 $doc = ProductDepot::search($param)->first();
                 if (isset($doc) && $doc) {
                     $doc->quantity = $doc->quantity - (int)$param['quantity'];
+                    $param['code_order'] = $param['order_id'];
                     unset($param['order_id'], $param['customer_id']);
                     $input = $param;
                     $input['status'] = OrderConstant::TANG_KHACH;
@@ -122,13 +124,18 @@ class GiftController extends Controller
             GroupComment::create([
                 'customer_id' => $gift->customer_id,
                 'user_id' => 1,
-                'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã hủy quà tặng ' . @$gift->product->name,
+                'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã hủy quà tặng ' . @$gift->product->name . ' x ' . @$gift->quantity,
             ]);
             $params = [
                 'branch_id' => $gift->branch_id,
                 'product_id' => $gift->product_id,
             ];
-            $doc = ProductDepot::search($params)->where('status',OrderConstant::TANG_KHACH)->first();
+            $doc = HistoryDepot::search($params)->where('status', OrderConstant::TANG_KHACH)->first();
+            $productDepot = ProductDepot::search($params)->first();
+            if (isset($productDepot) && $productDepot) {
+                $productDepot->quantity = $productDepot->quantity - $gift->quantity;
+                $productDepot->save();
+            }
             $doc->delete();
             $gift->delete();
 
