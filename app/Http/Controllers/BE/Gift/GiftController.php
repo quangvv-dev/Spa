@@ -71,6 +71,7 @@ class GiftController extends Controller
                     $input['status'] = OrderConstant::TANG_KHACH;
                     $input['note'] = "LỄ TÂN XUẤT TẶNG KHÁCH";
                     $this->historyDepot->create($input);
+                    $doc->save();
                 }
             }
         }
