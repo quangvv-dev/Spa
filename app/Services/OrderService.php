@@ -135,7 +135,7 @@ class OrderService
             foreach ($order_detail as $item) {
                 $product = ProductDepot::where('branch_id', $order->branch_id)->where('product_id', $item->booking_id)->first();
                 if (isset($product)) {
-                    $product->quantity = $product->quantity - $item->quantity;
+                    $product->quantity = $product->quantity + $item->quantity;
                     $product->save();
                 }
             }
