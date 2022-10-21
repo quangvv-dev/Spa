@@ -193,9 +193,12 @@
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                     </td>
-                    <td class="text-center phone-customer"
-                        data-customer-id="{{ $customer->id }}">{{ $customer->phone }}</td>
-                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
+                    <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">{{ $customer->phone }}
+                        @if(!empty($customer->call_back))
+                            <span><i class="fas fa-calendar call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
+                        @endif
+                    </td>
+                @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
                         <td class="text-center" style="position: relative;max-width: 146px">
                             <textarea class="description-cus">{{ $customer->message }}</textarea>
                         </td>

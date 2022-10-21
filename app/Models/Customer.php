@@ -446,4 +446,19 @@ class Customer extends Model
         $data = CustomerGroup::select('category_id')->where('customer_id', $this->id)->get()->pluck('category_id');
         return $data;
     }
+
+    public function getCallBackAttribute()
+    {
+        $params = [
+            'customer_id' => $this->id,
+            'date_from' => Carbon::now()->format('Y-m-d'),
+            'task_status_id' => StatusCode::GOI_LAI,
+        ];
+        $task = Task::search($params)->select('id')->first();
+        if (!empty($task)){
+            return $task->id;
+        }else{
+            return 0;
+        }
+    }
 }

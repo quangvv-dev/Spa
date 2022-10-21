@@ -5,6 +5,7 @@
 @endphp
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('assets/css/toggle-switch-custom.css') }}" rel="stylesheet"/>
     <style>
         .card i {
             color: #3b8fec !important;
@@ -133,6 +134,7 @@
             @include('customers.modal-update-relation')
             @include('customers.modal-update-account-manager')
             @include('customers.modal-branch')
+            @include('kanban_board.modal')
             <input type="hidden" id="status">
             <input type="hidden" id="invalid_account">
             <input type="hidden" id="group">
@@ -1276,6 +1278,43 @@
         $(document).on('click','#view_chat .sale-note',function () {
             $('#view_chat .chat-ajax').show();
             $('#view_chat .chatApplication').hide();
+        })
+        var thisCallBack ='';
+        $(document).on('click', '.call-back', function () {
+             thisCallBack = $(this);
+            $.ajax({
+                url: '/ajax/tasks/' + $(this).data('id'),
+                method: 'GET',
+                success: function (data) {
+                    let abc = data.description.replaceAll("--", '\n');
+                    let link = '/customers/'+data.customer.id;
+                    $('#name').val(data.name).change();
+                    $("a[href]").attr("href",link);
+                    $('.modal-body .name-customer').html(data.customer.full_name).change();
+                    $('.modal-body .phone-customer').val(data.customer.phone).change();
+                    $('.modal-body #user_id').val(data.user.full_name).change();
+                    $('.modal-body #date_from').val(data.date_from).change();
+                    $('.modal-body #time_from').val(data.time_from).change();
+                    $('.modal-body #time_to').val(data.time_to).change();
+                    $('.modal-body #description').html(abc).change();
+                    $('.checkTask').data('id',data.id);
+                    $('.modal-task').modal('show');
+                    $('.checkTask').prop("checked",false);
+                }
+            })
+        })
+        $(document).on('change', '.checkTask', function () {
+            let id =  $(this).data('id');
+            console.log(this.checked,id);
+            $.ajax({
+                url: '/ajax/tasks/' + id,
+                method: 'PUT',
+                data: {task_status_id: 3},
+                success: function (data) {
+                    $('.modal-task').modal('hide');
+                    thisCallBack.remove();
+                }
+            });
         })
 
     </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
@@ -70,11 +71,11 @@ class TaskController extends Controller
         $fail = [];
         if (count($docs))
             foreach ($docs as $item) {
-                if ($item->task_status_id == 1)
+                if ($item->task_status_id == StatusConstant::TASK_TODO)
                     $new[] = $item;
-                if ($item->task_status_id == 2)
+                if ($item->task_status_id == StatusConstant::TASK_FAILED)
                     $fail[] = $item;
-                if ($item->task_status_id == 3)
+                if ($item->task_status_id == StatusConstant::TASK_DONE)
                     $done[] = $item;
             }
         if ($request->ajax()) {

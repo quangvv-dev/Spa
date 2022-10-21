@@ -169,6 +169,8 @@ class Task extends Model
         })
             ->when(isset($input['sale_id']) && isset($input['sale_id']), function ($q) use ($input) {
                 $q->where('user_id', $input['sale_id']);
+            })->when(isset($input['customer_id']) && isset($input['customer_id']), function ($q) use ($input) {
+                $q->where('customer_id', $input['customer_id']);
             })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {
                 $q->where('type', $input['type']);
             })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
@@ -177,6 +179,8 @@ class Task extends Model
                 $q->whereIn('branch_id', $input['group_branch']);
             })->when(isset($input['task_status_id']) && isset($input['task_status_id']), function ($q) use ($input) {
                 $q->where('task_status_id', $input['task_status_id']);
+            })->when(isset($input['date_from']) && isset($input['date_from']), function ($q) use ($input) {
+                $q->where('date_from', $input['date_from']);
             })
             ->orderByDesc('date_from');
         return $data;
