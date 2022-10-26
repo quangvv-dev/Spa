@@ -1305,7 +1305,6 @@
         })
         $(document).on('change', '.checkTask', function () {
             let id =  $(this).data('id');
-            console.log(this.checked,id);
             $.ajax({
                 url: '/ajax/tasks/' + id,
                 method: 'PUT',

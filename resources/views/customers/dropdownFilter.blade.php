@@ -26,4 +26,11 @@
     <div class="col-md-2">
         {!! Form::select('location_id',$location, null, array('class' => 'form-control location','placeholder'=>'Cụm khu vực')) !!}
     </div>
+    <div class="col-md-2 col-xs-12">
+        <select name="gender" class="form-control gender">
+            <option value="">Tất cả công việc</option>
+            <option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>
+            {{--<option value="{{\App\Constants\StatusCode::CSKH}}">CSKH</option>--}}
+        </select>
+    </div>
 </div>

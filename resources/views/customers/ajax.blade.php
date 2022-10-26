@@ -195,7 +195,7 @@
                     </td>
                     <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">{{ $customer->phone }}
                         @if(!empty($customer->call_back))
-                            <span><i class="fas fa-calendar call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
+                            <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
                         @endif
                     </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
