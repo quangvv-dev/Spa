@@ -98,6 +98,13 @@ class Customer extends Model
                 $query->where('source_id', $conditions['source']);
             })->when(isset($conditions['gender']), function ($query) use ($conditions) {
                 $query->where('gender', $conditions['gender']);
+            })->when(isset($conditions['call_back']), function ($query) {
+                $params = [
+                    'date_from' => Carbon::now()->format('Y-m-d'),
+                    'task_status_id' => StatusCode::GOI_LAI,
+                ];
+                $task = Task::search($params)->select('customer_id')->pluck('customer_id')->toArray();
+                $query->whereIn('id', $task);
             })
             ->when(isset($conditions['data_time']) && $conditions['data_time'], function ($query) use ($conditions) {
                 $query->when($conditions['data_time'] == 'TODAY' ||

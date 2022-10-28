@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\StatusConstant;
 use App\Helpers\Functions;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -143,7 +144,7 @@ class StatusController extends Controller
     {
         $customerId = $request->id;
         $customer = Customer::with('status')->where('id', $customerId)->first();
-        $statuses = Status::get();
+        $statuses = Status::where('type',StatusCode::RELATIONSHIP)->get();
 
         return $data = [
             'customer' => $customer,

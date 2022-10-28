@@ -84,11 +84,9 @@
                     </select>
                 </div>
                 <div class="col-md-2 col-xs-12">
-                    <select name="carepage_id" class="form-control carepage">
-                        <option value="">Người tạo</option>
-                        @foreach($carePageUsers as $k=> $item)
-                            <option value="{{$k}}">{{ $item}}</option>
-                        @endforeach
+                    <select name="call_back" class="form-control">
+                        <option value="">Tất cả công việc</option>
+                        <option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>
                     </select>
                 </div>
                 <div class="col-xs-12" style="max-width: 170px">
