@@ -134,6 +134,8 @@ class CustomerController extends Controller
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
         $customers = Customer::search($input);
+        $birthday = clone $customers;
+        $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
 
         $customers = $customers->take(StatusCode::PAGINATE_1000)->orderByDesc('id')->get();
         if (isset($input['limit'])) {
@@ -145,10 +147,10 @@ class CustomerController extends Controller
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
-            return view('customers.ajax', compact('customers', 'statuses', 'rank'));
+            return view('customers.ajax', compact('customers', 'statuses', 'rank','birthday'));
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers','birthday'));
     }
 
     /**

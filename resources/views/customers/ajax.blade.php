@@ -17,6 +17,23 @@
         width: 28px;
         height: 20px;
     }
+    .birthday-count{
+        top: -9px;
+        position: absolute;
+        left: 20px;
+    }
+    .tooltip-nav{
+        padding-left: 10px;
+    }
+    .other_time_panel{
+        left: auto;
+        right: 0px;
+        position: absolute;
+        z-index: 123;
+        width: 300px;
+        background: #f6f6f6;
+        border: 1px solid #8ccaed;
+    }
 </style>
 <div class="card-header filter-box filterbox-sticky">
     <div class="display btn-group open">
@@ -95,7 +112,7 @@
         <div class="display birthday_tab position font20 pointer mt7 tooltip-nav">
              <i class="fa fa-birthday-cake gf-icon-h02" aria-hidden="true"></i>
             <span class="tooltiptext">Sinh nhật hôm nay</span>
-            {{--<span class="not-number-account"></span>--}}
+            <span class="noti-number noti-number-on birthday-count">{{$birthday}}</span>
         </div>
         <div class="display" style="width: 28px; height: 20px;">
             <div class="dropdown ope tooltip-nav">
@@ -109,11 +126,25 @@
                 </ul>
             </div>
         </div>
-        <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav" style="padding-left: 5px">
+        <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav">
             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i id="created_at_icon"
               class="far fa-clock" style="font-size:22px"></i></a>
             <span class="tooltiptext">Thời gian tạo KH</span>
-
+            <div class="add-drop add-d-right other_time_panel"
+                 style="left: auto; right: 0px; display: none;"><s class="gf-icon-neotop"></s>
+                <div class="padding tl"><p>Ngày bắt đầu</p>
+                    <input type="text" class="form-control filter_start_date" id="datepicker"
+                           data-toggle="datepicker" name="payment_date">
+                </div>
+                <div class="padding tl"><p>Ngày kết thúc</p>
+                    <input type="text" class="form-control filter_end_date" id="datepicker"
+                           data-toggle="datepicker" name="payment_date">
+                </div>
+                <div class="padding5-10 tl mb5">
+                    <button class="btn btn-info submit_other_time">Tìm kiếm</button>
+                    <button class="btn btn-default cancel_other_time">Đóng</button>
+                </div>
+            </div>
             <ul class="dropdown-menu pull-right tr">
                 <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
                         nay</a>
@@ -128,6 +159,9 @@
                         này</a></li>
                 <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
                         trước</a></li>
+                <li class="created_at_item bor-bot tc">
+                    <a class="other_time">Khác</a>
+                </li>
             </ul>
         </div>
     </div>

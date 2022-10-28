@@ -414,14 +414,22 @@
             });
 
             $(document).on('click', '.birthday_tab', function () {
-                let birthday = $('.birthday_tab').data('original-title');
-                $('#birthday_tab').val(birthday);
-                let data = {birthday: birthday};
+                $('#birthday_tab').val(1);
+                let data = {birthday: 1};
 
                 searchAjax(data);
             });
-
-            $(document).on('click', '.btn_choose_time', function (e) {
+            $(document).on('click', '.other_time', function () {
+                $(".other_time_panel").css({'display': ''});
+            });
+            $(document).ready(function () {
+                $('[data-toggle="datepicker"]').datepicker({
+                    format: 'dd-mm-yyyy',
+                    autoHide: true,
+                    zIndex: 2048,
+                });
+            });
+            $(document).on('click', '.btn_choose_time, .submit_other_time', function (e) {
                 let target = $(e.target).parent();
                 let data_time = $(target).find('.btn_choose_time').data('time');
                 $('#birthday_tab').val('');
@@ -436,7 +444,10 @@
                 let branch_id = $('.branch_id').val();
                 let gender = $('.gender').val();
                 let location = $('.location').val();
-
+                const start_date = $('.filter_start_date').val();
+                const end_date = $('.filter_end_date').val();
+                $('.filter_start_date').val('');
+                $('.filter_end_date').val('');
                 let data = {
                     data_time: data_time,
                     carepage_id: carepage_id,
@@ -449,6 +460,8 @@
                     branch_id: branch_id,
                     gender: gender,
                     location_id: location,
+                    start_date: start_date,
+                    end_date: end_date,
                 };
                 searchAjax(data);
             });
