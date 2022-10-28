@@ -84,7 +84,7 @@
                     </select>
                 </div>
                 <div class="col-md-2 col-xs-12">
-                    <select name="call_back" class="form-control">
+                    <select name="call_back" class="form-control call_back">
                         <option value="">Tất cả công việc</option>
                         <option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>
                     </select>
@@ -477,8 +477,9 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location,.carepage', delay(function () {
+            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location,.carepage, .call_back', delay(function () {
                 let marketing = $('.group-product').val();
+                let call_back = $('.call_back').val();
                 let carepage_id = $('.carepage').val();
                 let gender = $('.gender').val();
                 let location = $('.location').val();
@@ -495,9 +496,10 @@
                 $('#birthday_tab').val('');
                 let data_time = $('#btn_choose_time').val();
                 let status = $('#status').val();
-
+console.log(call_back,'123123');
                 let data = {
                     marketing: marketing,
+                    call_back: call_back,
                     carepage_id: carepage_id,
                     gender: gender,
                     location_id: location,
@@ -690,7 +692,6 @@
                 $(target).find('.status-db').empty();
                 let id = $(this).data('id');
                 let html = '';
-
                 $.ajax({
                     url: "ajax/statuses/",
                     method: "get",
