@@ -253,7 +253,7 @@ class CustomerController extends Controller
         } else {
             $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
         }
-        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id,];
+        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];
         $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
 
         $staff = User::where('department_id', '<>', DepartmentConstant::ADMIN)->get()->pluck('full_name', 'id')->toArray();

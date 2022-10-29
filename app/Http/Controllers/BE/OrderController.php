@@ -20,6 +20,7 @@ use App\Models\Promotion;
 use App\Models\Services;
 use App\Models\Status;
 use App\Models\Notification;
+use App\Models\Tip;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use App\Services\PaymentHistoryService;
@@ -413,12 +414,23 @@ class OrderController extends Controller
 
     public function show($id)
     {
+        $curent_branch = Auth::user()->branch_id ? Auth::user()->branch_id : '';
+        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];
+        $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
+        if (isset($curent_branch) && $curent_branch) {
+            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)
+                ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
+                    $q->where('branch_id', $curent_branch);
+                })->pluck('full_name', 'id');
+        } else {
+            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        }
         $products = Services::select('id','name')->where('type',StatusCode::PRODUCT)->pluck('name','id')->toArray();
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
         $now = Carbon::now()->format('d-m-Y');
         $order->now = $now;
         $payment = $order->paymentHistories;
-        return view('order.order', compact('order', 'payment','products'));
+        return view('order.order', compact('order', 'payment','products','waiters','tips'));
     }
 
     /**

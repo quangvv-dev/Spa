@@ -181,6 +181,11 @@
                         <a><i class="fa fa-gift"></i>&nbsp;Quà tặng</a>
                     </button>
                 </div>
+                <div class="btn-group dropup fl task_footer_box">
+                    <button class="btn btn-danger ml5 edit-order" data-order-id="{{$order->id}}">
+                        <a><i class="fa fa-balance-scale"></i>&nbsp;Trừ L.trình</a>
+                    </button>
+                </div>
                 <div class="fl task_footer_box cancel_order">
                     <button class="btn btn-default fr ml5">
                         <a href="{{route('order.list')}}">Trở lại</a>
@@ -190,10 +195,53 @@
         </div>
         @include('order.modal')
         @include('gifts._form')
+        @include('customers.modal_update_history_order')
         @endsection
         @section('_script')
             <script src="{{ asset('js/format-number.js') }}"></script>
             <script>
+
+                var orderCurrentId = '';
+                $(document).on('click', '.edit-order', function () {
+                    // let id = $(this).data('order-id');
+                    orderCurrentId = $(this).data('order-id');
+                    let html = "";
+                    //
+                    $.ajax({
+                        type: 'get',
+                        url: "{{ Url('ajax/services-with-order/') }}" + "/" + orderCurrentId,
+                        success: function (res) {
+                            res.forEach(element => {
+                                html += `<option value="` + element.id + `">` + element.name + `</option>`;
+                            });
+                            $('#service_modal').html(html);
+                            $('#updateHistoryOrderModal').modal('show');
+                        }
+                    })
+                })
+                $('.save-update-history-order').click(function () {
+                    swal({
+                        title: 'Bạn có muốn xử  liệu trình ?',
+                        showCancelButton: true,
+                        cancelButtonClass: 'btn-secondary waves-effect',
+                        confirmButtonClass: 'btn-danger waves-effect waves-light',
+                        confirmButtonText: 'OK'
+                    }, function () {
+                        $.ajax({
+                            type: 'PUT',
+                            url: "{{ Url('ajax/orders/') }}" + "/" + orderCurrentId,
+                            data: $('#historyUpdateOrrder').serialize(),
+                            success: function (res) {
+                                if (res == 'Success')
+                                    alert("Cập nhật liệu trình thành công");
+                                else if (res == "Failed")
+                                    alert("Số liệu trình đã hết");
+                                window.location.reload();
+                            }
+                        })
+                    })
+                });
+
                 $(document).on('keyup', '.number', function () {
                     let earn = $(this).val();
                     $(this).val(formatNumber(earn));
