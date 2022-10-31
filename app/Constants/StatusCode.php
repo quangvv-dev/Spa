@@ -68,4 +68,8 @@ class StatusCode
     const CUM_MIEN_BAC = 1;
     const CUM_MIEN_TRUNG = 2;
     const CUM_MIEN_NAM = 3;
+
+    // Server Call Center
+    const SERVER_3CX = 1;
+    const SERVER_GTC_TELECOM = 2;
 }

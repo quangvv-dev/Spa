@@ -311,6 +311,12 @@
                 </li>
             @endif
 
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
+                   href="{!! route('customers.index') !!}"><i
+                            class="fas fa-cog"></i><span>Cài đặt</span></a>
+            </li>
+
         </ul>
         <div class="div-info">
             <div class="left">

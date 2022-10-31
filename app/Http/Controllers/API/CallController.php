@@ -29,14 +29,31 @@ class CallController extends BaseApiController
         if ($request->api_key != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
-        $input = $request->only('caller_number', 'dest_number', 'answer_time', 'call_status', 'recording_url',
-            'caller_id', 'call_type', 'start_time');
+        $server = setting('server_call_center');
+        if (isset($server) && $server == StatusCode::SERVER_GTC_TELECOM) {
+            $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
+            $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
+            $input = [
+                'caller_id'     => $request->CallId,
+                'call_type'     => $direction,
+                'start_time'    => $request->CallDate . ' ' . $request->CallDateTimeStart,
+                'caller_number' => $request->ExtensionNumber,
+                'dest_number'   => str_replace('+84', '0', $request->PhoneNumber),
+                'answer_time'   => $request->Duration,
+                'call_status'   => $status,
+                'recording_url' => $request->RecordingPath,
+            ];
+
+        } else {
+            $input = $request->only('caller_number', 'dest_number', 'answer_time', 'call_status', 'recording_url',
+                'caller_id', 'call_type', 'start_time');
+        }
 
         $isset = CallCenter::where('caller_id', $request->caller_id)->first();
         if (empty($isset) && $request->call_type != 'INBOUND') {
             CallCenter::insert($input);
-
         }
+
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
 
     }
@@ -95,9 +112,9 @@ class CallController extends BaseApiController
      */
     public function getEmployeeCall(Request $request)
     {
-        if ($request->type =='all_sale'){
-            $data = User::select('id', 'full_name', 'caller_number')->where('department_id',DepartmentConstant::TELESALES)->get();
-        }else{
+        if ($request->type == 'all_sale') {
+            $data = User::select('id', 'full_name', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)->get();
+        } else {
             $data = User::select('id', 'full_name', 'caller_number')->where('caller_number', '!=', '')->get();
             if (count($data) <= 0) {
                 $data = User::select('id', 'full_name', 'caller_number')->whereIn('role',

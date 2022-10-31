@@ -56,6 +56,14 @@
                                                 <span class="help-block">{{ $errors->first('exchange', ':message') }}</span>
                                             </div>
                                         </div>
+                                        <div class="col-md-6 col-xs-12">
+                                            <div class="form-group">
+                                                {!! Form::label('server_call_center', 'SERVER TỔNG ĐÀI', array('class' => 'control-label required')) !!}
+                                                {!! Form::select('server_call_center',[\App\Constants\StatusCode::SERVER_3CX=>'Sever 3CX',\App\Constants\StatusCode::SERVER_GTC_TELECOM=>'Server GtcTelecom' ], @setting('server_call_center'), array('class' => 'form-control','data-placeholder'=>'Danh mục cha')) !!}
+                                            </div>
+                                            <div class="form-group"></div>
+                                            </div>
+
                                         <div class="col bot" style="margin-top: 5px">
                                             <button type="submit" class="btn btn-success" id="click-sent">Lưu
                                             </button>
