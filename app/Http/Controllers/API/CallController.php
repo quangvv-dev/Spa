@@ -34,13 +34,13 @@ class CallController extends BaseApiController
             $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
             $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
             $input = [
-                'caller_id'     => $request->CallId,
-                'call_type'     => $direction,
-                'start_time'    => $request->CallDate . ' ' . $request->CallDateTimeStart,
+                'caller_id' => $request->CallId,
+                'call_type' => $direction,
+                'start_time' => $request->CallDate . ' ' . $request->CallDateTimeStart,
                 'caller_number' => $request->ExtensionNumber,
-                'dest_number'   => str_replace('+84', '0', $request->PhoneNumber),
-                'answer_time'   => $request->Duration,
-                'call_status'   => $status,
+                'dest_number' => str_replace('+84', '0', $request->PhoneNumber),
+                'answer_time' => $request->Duration,
+                'call_status' => $status,
                 'recording_url' => $request->RecordingPath,
             ];
 
@@ -56,6 +56,26 @@ class CallController extends BaseApiController
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
 
+    }
+
+    /**
+     * Cuộc gọi đến GtcTelecom
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function inComing()
+    {
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
+    }
+
+    /**
+     * Click to Call GtcTelecom (Cuộc gọi đi)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function callOut()
+    {
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
     }
 
     /**
