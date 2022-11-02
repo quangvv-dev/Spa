@@ -227,7 +227,9 @@
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                     </td>
-                    <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">{{ $customer->phone }}
+                    <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">
+                        <a href="callto:{{ $customer->phone }}">{{ $customer->phone }}</a>
+
                         @if(!empty($customer->call_back))
                             <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
                         @endif
