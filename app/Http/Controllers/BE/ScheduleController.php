@@ -218,7 +218,7 @@ class ScheduleController extends Controller
     {
         $status = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();
         $now = Carbon::now()->format('Y-m-d');
-        if(!empty(Auth::user()->branch_id)){
+        if (!empty(Auth::user()->branch_id)) {
             $request->merge(['branch_id' => Auth::user()->branch_id]);
         }
         if (!count($request->all())) {
@@ -226,7 +226,14 @@ class ScheduleController extends Controller
 
         }
 
-        $docs = Schedule::search($request->all())->has('customer')->with('customer');
+        $prevMonth = Carbon::now()->addMonth(-1)->startOfMonth()->format('Y-m-d');
+        $nextMonth = Carbon::now()->addMonth(1)->endOfMonth()->format('Y-m-d');
+        $params = $request->all();
+        $params['start_date'] = $prevMonth;
+        $params['end_date'] = $nextMonth;
+
+        $docs = Schedule::search($params)->has('customer')->with('customer');
+
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
             $check = Schedule::orderBy('id', 'desc')->where('date', $now)->with('creator')

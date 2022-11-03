@@ -46,8 +46,8 @@
         <div id="fix-scroll" class="row padding mb10 header-dard border-bot shadow row">
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
-                <div class="col-md-4"><h3 class="card-title bold">XẾP HẠNG TELESALE</h3></div>
-                <div class="col-md-3">
+                <div class="col-md-3"><h3 class="card-title bold">XẾP HẠNG TELESALE</h3></div>
+                <div class="col-md-2">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
@@ -57,6 +57,9 @@
                 </div>
                 <div class="col-lg-2 col-md-3">
                     {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control', 'placeholder' => 'Tất cả chi nhánh')) !!}
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    {!! Form::select('filter_date', ['created_at'=>'Ngày data về hệ thống','ngay_sale_nhan_data'=>'Ngày sale nhận data'], null, array('class' => 'form-control', 'placeholder' => 'Kiểu lọc')) !!}
                 </div>
 
                 <div class="col-lg-1 col-md-6">
