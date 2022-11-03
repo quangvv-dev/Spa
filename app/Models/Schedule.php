@@ -162,13 +162,13 @@ class Schedule extends Model
     public static function search($request)
     {
         $docs = self::orderBy('id', 'desc')->when(isset($request['group_branch']) && count($request['group_branch']), function ($q) use ($request) {
-                $q->whereIn('branch_id', $request['group_branch']);
-            });
+            $q->whereIn('branch_id', $request['group_branch']);
+        });
         if (!empty($request['date'])) {
             $docs = $docs->where('date', $request['date']);
         } else {
-            $prevMonth = Carbon::now()->addMonth(-1)->startOfMonth()->format('Y-m-d');
-            $nextMonth = Carbon::now()->addMonth(1)->endOfMonth()->format('Y-m-d');
+            $prevMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $nextMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
             $docs = $docs->whereBetween('date', [
                 Functions::yearMonthDay($prevMonth) . ' 00:00',
                 Functions::yearMonthDay($nextMonth) . ' 23:59',

@@ -248,6 +248,7 @@
                 zIndex: 2048,
             });
 
+
             $('#update_schedule').click(function () {
                 let id = $('#update_id').val();
                 let date = $('#update_date').val();
@@ -296,6 +297,38 @@
                     console.log(data);
                 })
             })
+
+            $('body').on('click', 'button.fc-prev-button, button.fc-next-button', function () {
+                let moment = $('#calendar1').fullCalendar('getDate');
+                let calDate = moment.format('YYYY-MM-DD'); //Here you can format your D
+                let month = new Date(moment).getMonth() + 1;
+                month = month < 10 ? '0' + month : month;
+                let year = new Date(moment).getFullYear();
+                let endDate = `${year}-${month}-31`;
+
+                // let endDate = date('Y-m-d H:i:s', strtotime('+30day', strtotime(calDate)));
+                // console.log(calDate, endDate);
+                return false;
+                let status = $('#status').val();
+                let user = $('#person_action').val();
+                let customer = $('#customer_plus').val();
+                let branch_id = $('#branch_id').val();
+                let date = $('#search').val();
+
+                searchAjax({
+                    customer: customer,
+                    branch_id: branch_id,
+                    status: status,
+                    user: user,
+                    date: date,
+                    search: arr,
+                    start_date: calDate,
+                    end_date: arr,
+                });
+
+                console.log(calDate);
+            });
+
 
             function chooseColor(status) {
                 if (status == 1)
