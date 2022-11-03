@@ -225,13 +225,7 @@ class ScheduleController extends Controller
             $request->merge(['branch_id' => 1]);
 
         }
-
-        $prevMonth = Carbon::now()->addMonth(-1)->startOfMonth()->format('Y-m-d');
-        $nextMonth = Carbon::now()->addMonth(1)->endOfMonth()->format('Y-m-d');
         $params = $request->all();
-        $params['start_date'] = $prevMonth;
-        $params['end_date'] = $nextMonth;
-
         $docs = Schedule::search($params)->has('customer')->with('customer');
 
         $docs = $docs->get()->map(function ($item) use ($now) {

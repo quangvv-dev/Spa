@@ -167,7 +167,12 @@ class Schedule extends Model
         if (!empty($request['date'])) {
             $docs = $docs->where('date', $request['date']);
         } else {
-            $docs = $docs->whereYear('date', Carbon::now()->format('Y'));
+            $prevMonth = Carbon::now()->addMonth(-1)->startOfMonth()->format('Y-m-d');
+            $nextMonth = Carbon::now()->addMonth(1)->endOfMonth()->format('Y-m-d');
+            $docs = $docs->whereBetween('date', [
+                Functions::yearMonthDay($prevMonth) . ' 00:00',
+                Functions::yearMonthDay($nextMonth) . ' 23:59',
+            ]);
         }
         $docs->when(isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
