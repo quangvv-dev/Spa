@@ -166,7 +166,7 @@ class Schedule extends Model
         });
         if (!empty($request['date'])) {
             $docs = $docs->where('date', $request['date']);
-        } else {
+        } elseif(empty($request['start_date'])) {
             $prevMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
             $nextMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
             $docs = $docs->whereBetween('date', [
