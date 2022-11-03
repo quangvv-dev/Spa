@@ -308,7 +308,6 @@
 
                 // let endDate = date('Y-m-d H:i:s', strtotime('+30day', strtotime(calDate)));
                 // console.log(calDate, endDate);
-                return false;
                 let status = $('#status').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
