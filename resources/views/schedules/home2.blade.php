@@ -322,7 +322,7 @@
                     date: date,
                     search: arr,
                     start_date: calDate,
-                    end_date: arr,
+                    end_date: endDate,
                 });
 
                 console.log(calDate);
