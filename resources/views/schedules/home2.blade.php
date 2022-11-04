@@ -97,6 +97,8 @@
             $('.breadcrumb').hide();
 
             function searchAjax(data) {
+                // $('#calendar1').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+
                 $.ajax({
                     url: "{{ Url('schedules/') }}",
                     method: "get",
@@ -306,8 +308,6 @@
                 let year = new Date(moment).getFullYear();
                 let endDate = `${year}-${month}-31`;
 
-                // let endDate = date('Y-m-d H:i:s', strtotime('+30day', strtotime(calDate)));
-                // console.log(calDate, endDate);
                 let status = $('#status').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
@@ -324,8 +324,6 @@
                     start_date: calDate,
                     end_date: endDate,
                 });
-
-                console.log(calDate);
             });
 
 

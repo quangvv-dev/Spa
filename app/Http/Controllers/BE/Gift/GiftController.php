@@ -65,7 +65,7 @@ class GiftController extends Controller
                 $doc = ProductDepot::search($param)->first();
                 if (isset($doc) && $doc) {
                     $doc->quantity = $doc->quantity - (int)$param['quantity'];
-                    $param['code_order'] = $param['order_id'];
+//                    $param['code_order'] = $param['order_id'];
                     unset($param['order_id'], $param['customer_id']);
                     $input = $param;
                     $input['status'] = OrderConstant::TANG_KHACH;
