@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
@@ -109,9 +110,13 @@ class TaskController extends Controller
             'user_id' => Auth::user()->id,
             'priority' => 1,
             'branch_id' => $customer->branch_id,
-            'type' => 2,
         ]);
         $input = $request->except('ajax');
+        if (Auth::user()->department_id == DepartmentConstant::TELESALES){
+            $input['type']= StatusCode::GOI_LAI;
+        }else{
+            $input['type']= StatusCode::CSKH;
+        }
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);
