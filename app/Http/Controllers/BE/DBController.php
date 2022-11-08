@@ -34,11 +34,12 @@ class DBController extends Controller
                     'STT',
                     'Ngày thanh toán',
                     'Ngày tạo thanh toán',
-                    'Ngày xóa',
+                    'Mã đơn',
                     'Số tiền',
                     'Tên KH',
                     'SĐT',
                     'Doanh số',
+                    'Doanh thu',
                 ]);
                 $i = 1;
                 if ($orders2) {
@@ -53,6 +54,7 @@ class DBController extends Controller
                             @$ex->order->customer->full_name,
                             @$ex->order->customer->phone,
                             @$ex->order->all_total,
+                            @$ex->order->gross_revenue,
                         ]);
                     }
                 }
