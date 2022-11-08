@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\Status;
 use App\Models\WalletHistory;
 use Illuminate\Http\Request;
+use Excel;
 
 class DBController extends Controller
 {
