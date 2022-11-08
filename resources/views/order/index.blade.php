@@ -203,7 +203,7 @@
                                 <div class="col row">
                                     <input type="hidden" value="0" name="spa_therapisst_id">
                                     <div class="col-md-5">
-                                        {!! Form::label('support_id', 'người tư vấn (nếu có)') !!}
+                                        {!! Form::label('support_id', 'Người tư vấn (nếu có)') !!}
                                         {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
                                     </div>
                                     <div class="col-md-5">

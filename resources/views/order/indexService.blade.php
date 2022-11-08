@@ -169,11 +169,11 @@
                                     {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
 
                                     <div class="col-md-4">
-                                        {!! Form::label('spa_therapisst_id', 'Kỹ thuật viên') !!}
+                                        {!! Form::label('spa_therapisst_id', 'Bác sĩ') !!}
                                         {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
                                     </div>
                                     <div class="col-md-4">
-                                        {!! Form::label('support_id', 'người tư vấn (nếu có)') !!}
+                                        {!! Form::label('support_id', 'Người tư vấn (nếu có)') !!}
                                         {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
                                     </div>
                                     <div class="col-md-4">

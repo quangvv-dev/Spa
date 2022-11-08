@@ -19,4 +19,5 @@ class DepartmentConstant
     const TU_VAN_VIEN = 7;//TƯ VẤN VIÊN CSKH
     const KE_TOAN = 8; //KE TOÁN
     const CARE_PAGE = 9;
+    const DOCTOR = 10;
 }

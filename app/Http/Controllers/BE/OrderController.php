@@ -78,11 +78,18 @@ class OrderController extends Controller
     }
 
 //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
+
+    /**
+     * Display orders
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
         $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
@@ -105,7 +112,7 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
         $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
@@ -206,12 +213,12 @@ class OrderController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $group = Category::pluck('name', 'id')->toArray();
-        $gifts = ProductDepot::select('product_id')->with('product')->has('product')->groupBy('product_id')->get()->map(function ($item){
+        $gifts = ProductDepot::select('product_id')->with('product')->has('product')->groupBy('product_id')->get()->map(function ($item) {
             $item->name = @$item->product->name;
             return $item;
-        })->pluck('name','product_id')->toArray();
-        $marketingUsers = User::where('department_id',DepartmentConstant::MARKETING)->pluck('full_name', 'id')->toArray();
-        $ktvUsers = User::where('department_id',DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id')->toArray();
+        })->pluck('name', 'product_id')->toArray();
+        $marketingUsers = User::where('department_id', DepartmentConstant::MARKETING)->pluck('full_name', 'id')->toArray();
+        $ktvUsers = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id')->toArray();
         $telesales = User::where('department_id', DepartmentConstant::TELESALES)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
@@ -342,11 +349,11 @@ class OrderController extends Controller
         $rank = $orders->firstItem();
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax',
-                compact('orders', 'title', 'rank','gifts'))->render());
+                compact('orders', 'title', 'rank', 'gifts'))->render());
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank','ktvUsers','gifts'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank', 'ktvUsers', 'gifts'));
     }
 
     /**
@@ -425,12 +432,12 @@ class OrderController extends Controller
         } else {
             $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
         }
-        $products = Services::select('id','name')->where('type',StatusCode::PRODUCT)->pluck('name','id')->toArray();
+        $products = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->pluck('name', 'id')->toArray();
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
         $now = Carbon::now()->format('d-m-Y');
         $order->now = $now;
         $payment = $order->paymentHistories;
-        return view('order.order', compact('order', 'payment','products','waiters','tips'));
+        return view('order.order', compact('order', 'payment', 'products', 'waiters', 'tips'));
     }
 
     /**
@@ -496,7 +503,7 @@ class OrderController extends Controller
                 $group_customer)->get();
 
             if (setting('exchange') > 0 && isset($customer->gioithieu) && $customer->gioithieu->id) {
-                WalletService::exchangeWalletCtv($paymentHistory->price,$customer->gioithieu->id);
+                WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id);
             }
 
             if (count($check) <= 1 && isset($check2) && count($check2)) {
@@ -714,7 +721,7 @@ class OrderController extends Controller
     {
         $order = $this->orderService->find($id);
 
-        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
         $customer_support = User::whereIn('role', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
@@ -742,7 +749,7 @@ class OrderController extends Controller
     {
         $order = $this->orderService->find($id);
 
-        $spaTherapissts = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
         $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
@@ -951,7 +958,7 @@ class OrderController extends Controller
             && !isset($request->customer) && !isset($request->service) && !isset($request->payment_type)
             && !isset($request->data_time) && !isset($request->start_date) && !isset($request->end_date)
             && !isset($request->order_type) && !isset($request->phone) && !isset($request->bor_none)
-            && !isset($request->role_type) && !isset($request->branch_id)&& !isset($request->gifts)) {
+            && !isset($request->role_type) && !isset($request->branch_id) && !isset($request->gifts)) {
             return 1;
 
         } else {
@@ -981,7 +988,7 @@ class OrderController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        $input =$request->all();
+        $input = $request->all();
         $orders = Order::searchAll($input)->onlyTrashed();
         View::share([
             'allTotal' => $orders->sum('all_total'),
