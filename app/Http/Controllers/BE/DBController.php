@@ -21,7 +21,7 @@ class DBController extends Controller
     {
 
         $orders2 = PaymentHistory::where('price', '>', 0)
-            ->whereBetween('created_at', ['2022-08-01 00:00:00', '2022-08-09 23:59:59'])->where('branch_id', 5)->with('order')->onlyTrashed()->get();
+            ->whereBetween('created_at', ['2022-08-01 00:00:00', '2022-11-09 23:59:59'])->where('branch_id', 5)->with('order')->onlyTrashed()->get();
 
         Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
             $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
