@@ -18,72 +18,42 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
-        $start_date = $request->start_date;
-        $end_date = $request->end_date;
-//        $input = $request->all();
-//
-//        $payment_wallet = PaymentWallet::search($input, 'price')->sum('price');
-//
-//        $payment_All = PaymentHistory::search($input, 'price');
-//        $price = $payment_All->sum('price');
-//        $score = $payment_All->where('payment_type', 3)->sum('price');
-//
-//        $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
-//            $payment_wallet = PaymentWallet::search($input, 'price')->whereHas('order_wallet', function ($it) use ($item) {
-//                $it->where('source_id', $item->id);
-//            })->sum('price');
-//            $payment_All = PaymentHistory::search($input, 'price')->whereHas('order', function ($it) use ($item) {
-//                $it->where('source_id', $item->id);
-//            });
-//            $price = $payment_All->sum('price');
-//            $score = $payment_All->where('payment_type', 3)->sum('price');
-//
-//            $item->total = $price + $payment_wallet - $score;
-//            return $item;
-//        })->filter(function ($fl) {
-//            if ($fl->total > 0) {
-//                return $fl;
-//            }
-//        })->sortByDesc('total');
-//        return [
-//            'record' => $data,
-//            'all_total' => $data->sum('total'),
-//            'all_total_thuc' => $price + $payment_wallet - $score,
-//        ];
 
+        $orders2 = PaymentHistory::where('price', '>', 0)
+            ->whereBetween('created_at', ['2022-08-01 00:00:00', '2022-08-09 23:59:59'])->where('branch_id', 5)->with('order')->onlyTrashed()->get();
 
-        if ($request->type ==1){
-            $wallet = WalletHistory::with('customer')->has('customer')->get();
-            foreach ($wallet as $data){
-                if (isset($data->customer)) {
-                    $data->source_id = !empty($data->customer->source_id) ? $data->customer->source_id : 0;
-                    $data->save();
-                }
-            }
-        }else{
-//            $payment = PaymentHistory::select('order_id')->whereBetween('payment_date', [$start_date, $end_date])->pluck('order_id')->toArray();
-//            $payment = PaymentHistory::select('order_id')->pluck('order_id')->toArray();
-//            $order = Order::whereIn('id', $payment)->with('customer')->has('customer')->get();
-            $order = Order::with('customer')->has('customer')->get();
-
-            foreach ($order->chunk(100) as $item) {
-                foreach ($item as $data){
-                    if (isset($data->customer)) {
-                        $data->source_id = !empty($data->customer->source_id) ? $data->customer->source_id : 0;
-                        $data->save();
+        Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
+                $sheet->cell('A1:P1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->freezeFirstRow();
+                $sheet->row(1, [
+                    'STT',
+                    'Ngày thanh toán',
+                    'Ngày tạo thanh toán',
+                    'Ngày xóa',
+                    'Số tiền',
+                    'Tên KH',
+                    'SĐT',
+                ]);
+                $i = 1;
+                if ($orders2) {
+                    foreach ($orders2 as $k => $ex) {
+                        $i++;
+                        $sheet->row($i, [
+                            @$k + 1,
+                            isset($ex->payment_date) ? date("d/m/Y", strtotime($ex->payment_date)) : '',
+                            isset($ex->created_at) ? date("d/m/Y", strtotime($ex->created_at)) : '',
+                            @$ex->price,
+                            @$ex->order->customer->full_name,
+                            @$ex->order->customer->phone,
+                        ]);
                     }
                 }
+            });
+        })->export('xlsx');
 
-            }
-        }
-        return "da xong";
-
-//     $role =  Role::with('users')->get();
-//     foreach ($role as $item){
-//         if ($item->users()){
-//             $item->users()->update(['department_id'=>$item->department_id]);
-//         }
-//     }
-//        return "OKIE";
     }
 }
