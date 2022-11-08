@@ -38,6 +38,7 @@ class DBController extends Controller
                     'Số tiền',
                     'Tên KH',
                     'SĐT',
+                    'Doanh số',
                 ]);
                 $i = 1;
                 if ($orders2) {
@@ -51,6 +52,7 @@ class DBController extends Controller
                             @$ex->price,
                             @$ex->order->customer->full_name,
                             @$ex->order->customer->phone,
+                            @$ex->order->all_total,
                         ]);
                     }
                 }
