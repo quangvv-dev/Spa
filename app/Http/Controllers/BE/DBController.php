@@ -47,6 +47,7 @@ class DBController extends Controller
                             @$k + 1,
                             isset($ex->payment_date) ? date("d/m/Y", strtotime($ex->payment_date)) : '',
                             isset($ex->created_at) ? date("d/m/Y", strtotime($ex->created_at)) : '',
+                            isset($ex->deleted_at) ? date("d/m/Y", strtotime($ex->deleted_at)) : '',
                             @$ex->price,
                             @$ex->order->customer->full_name,
                             @$ex->order->customer->phone,
