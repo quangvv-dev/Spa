@@ -26,7 +26,7 @@ class StatusConstant
     const TYPE_CONNECT_WEBSITE = 3;
 
     const TASK_TODO = 1;
-    const TASK_FAILED = 2;
+    const TASK_FAILED = 6;
     const TASK_DONE = 3;
 
 }
