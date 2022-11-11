@@ -42,8 +42,6 @@ class  ActionJob extends Command
     public function handle()
     {
         $yesterday = Carbon::yesterday('Asia/Ho_Chi_Minh')->format('Y-m-d');
-//        $now = Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
-//        dd($yesterday);
         Task::where('date_from', $yesterday)->with('customer', 'user')->where('task_status_id', 1)
             ->update(['task_status_id' => 6]);
     }
