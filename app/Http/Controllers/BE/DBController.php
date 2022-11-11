@@ -19,10 +19,13 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
-
+        $param = $request->all();
         $orders2 = PaymentHistory::where('price', '>', 0)
-            ->whereBetween('created_at', ['2022-01-01 00:00:00', '2022-11-10 23:59:59'])->where('branch_id', $request->branch_id)
-            ->with('order')->onlyTrashed()->get();
+            ->whereBetween('created_at', ['2022-01-01 00:00:00', '2022-11-10 23:59:59'])->where('branch_id', $param['branch_id'])
+            ->with('order')
+            ->when(isset($param['type']), function ($q) use ($param) {
+                $q->onlyTrashed();
+            })->get();
 
         Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
             $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
