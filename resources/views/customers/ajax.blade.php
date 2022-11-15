@@ -183,6 +183,7 @@
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center mota" style="min-width: 121px;">Mô tả</th>
             <th class="text-white text-center">DV liên quan</th>
+            <th class="text-white text-center">Nhóm tính cách</th>
             <th class="text-white text-center">C.Nhánh</th>
             <th class="text-white text-center">Người tạo</th>
             <th class="text-white text-center">Lich Hẹn</th>
@@ -191,7 +192,7 @@
             <th class="text-white text-center">Nguồn KH</th>
             <th class="text-white text-center">Link FB</th>
             <th class="text-white text-center">Giới tính</th>
-            <th class="text-white text-center">Mã KH</th>
+            {{--<th class="text-white text-center">Mã KH</th>--}}
             <th class="text-white text-center">Số đơn</th>
             <th class="text-white text-center">Tổng doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
@@ -234,7 +235,7 @@
                             <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
                         @endif
                     </td>
-                @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
+                @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
                         <td class="text-center" style="position: relative;max-width: 146px">
                             <textarea class="description-cus">{{ $customer->message }}</textarea>
                         </td>
@@ -250,6 +251,7 @@
                     <td class="text-center category-tip" data-id="{{$customer->id}}">
                         <span class="badge badge-primary span-tips">{{str_limit($customer->group_tips,30)}}</span>
                     </td>
+                    <td class="text-center genitive-db" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>
                     <td class="text-center">{{@$customer->branch->name}}</td>
                     <td class="text-center">{{@$customer->carepage->full_name}}</td>
                     <td class="text-center" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
