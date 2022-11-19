@@ -436,7 +436,10 @@ class CustomerController extends Controller
         })->when(isset($request->gender), function ($query) use ($request) {
             $query->where('gender', $request->gender);
         })->when(!empty($request->group), function ($query) use ($request) {
-            $arr = CustomerGroup::where('category_id', $request->group);
+            $arr = CustomerGroup::select('customer_id')->where('category_id', $request->group)->whereBetween('created_at', [
+                Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                Functions::yearMonthDay($request->end_date) . " 23:59:59",
+            ]);
             if (!empty($request->branch_id)) {
                 $arr = $arr->where('branch_id', $request->branch_id);
             }
