@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sms:revenue')->dailyAt('07:00');
         $schedule->command('job:action')->dailyAt('08:00');
         $schedule->command('otp:refresh')->dailyAt('01:00');
+        $schedule->command('deleted:Call')->dailyAt('01:00');
 //        $schedule->command('notification:action')->everyMinute();
     }
 
