@@ -73,7 +73,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;{{ $order->customer->phone }}
+                                <b>Điện thoại:</b>&nbsp;{{ str_limit($order->customer->phone,7,'xxx') }}
                             </td>
                             <td style="width:50%">
                                 <b>Ngày đặt hàng:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}
@@ -81,7 +81,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Người nhận:</b>&nbsp;{{ $order->customer->full_name }} - Điện thoại: {{ $order->customer->phone }}
+                                <b>Người nhận:</b>&nbsp;{{ $order->customer->full_name }} - Điện thoại: {{ str_limit($order->customer->phone,7,'xxx') }}
                             </td>
                             <td style="width:50%">
                                 <b>Phương thức thanh toán:</b>&nbsp;{{$order->name_payment_type}}

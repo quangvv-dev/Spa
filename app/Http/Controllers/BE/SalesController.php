@@ -94,7 +94,7 @@ class SalesController extends Controller
                 });
 //            $comment_new = clone $group_comment;
 
-            $item->comment_new = $group_comment->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->count();// trao doi moi
+            $item->comment_new = $group_comment->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->get()->count();// trao doi moi
 //            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
