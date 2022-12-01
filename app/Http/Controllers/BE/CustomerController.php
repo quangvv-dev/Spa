@@ -365,7 +365,7 @@ class CustomerController extends Controller
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
         }
-        if (str_contains($input['phone'], 'xxx')) {
+        if (isset($input['phone']) && str_contains($input['phone'], 'xxx')) {
             unset($input['phone']);
         }
         $customer = $this->customerService->update($input, $id);
@@ -622,7 +622,7 @@ class CustomerController extends Controller
     public function ajaxUpdate(Request $request, $id)
     {
         $input = $request->except('category_ids', 'category_tips');
-        if (str_contains($input['phone'], 'xxx')) {
+        if (isset($input['phone'])&& str_contains($input['phone'], 'xxx')) {
             unset($input['phone']);
         }
         $before = $this->customerService->find($id);
