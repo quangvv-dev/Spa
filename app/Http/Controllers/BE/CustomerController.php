@@ -147,10 +147,10 @@ class CustomerController extends Controller
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
         $rank = $customers->firstItem();
         if ($request->ajax()) {
-            return view('customers.ajax', compact('customers', 'statuses', 'rank','birthday'));
+            return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday'));
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers','birthday'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday'));
     }
 
     /**
@@ -195,9 +195,9 @@ class CustomerController extends Controller
             'full_name' => str_replace("'", "", $request->full_name),
         ]);
         $input = $request->except(['group_id', 'image']);
-        if (isset($input['is_gioithieu']) && $input['is_gioithieu']){
-            $customer_gioithieu = Customer::where('phone',$input['is_gioithieu'])->first();
-            $input['is_gioithieu'] = isset($customer_gioithieu)&& $customer_gioithieu ?$customer_gioithieu->id:0;
+        if (isset($input['is_gioithieu']) && $input['is_gioithieu']) {
+            $customer_gioithieu = Customer::where('phone', $input['is_gioithieu'])->first();
+            $input['is_gioithieu'] = isset($customer_gioithieu) && $customer_gioithieu ? $customer_gioithieu->id : 0;
         }
         $input['mkt_id'] = $request->mkt_id;
         $input['image'] = $request->image;
@@ -364,6 +364,9 @@ class CustomerController extends Controller
         $input = $request->except('group_id');
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
+        }
+        if (str_contains($input['phone'], 'xxx')) {
+            unset($input['phone']);
         }
         $customer = $this->customerService->update($input, $id);
         CustomerGroup::where('customer_id', $customer->id)->delete();
