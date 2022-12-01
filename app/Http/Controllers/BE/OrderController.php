@@ -148,7 +148,11 @@ class OrderController extends Controller
         $param = $request->all();
 
         $param['count_day'] = isset($param['days']) && count($param['days']) ? array_sum($param['days']) : 0;
-        $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
+        $inputCustomer = $request->only('full_name', 'phone', 'address', 'status_id');
+        if (str_contains($inputCustomer['phone'], 'xxx')) {
+            unset($inputCustomer['phone']);
+        }
+        $customer->update($inputCustomer);
         $param['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
         $param['mkt_id'] = $customer->mkt_id ?: 0;
         $param['carepage_id'] = $customer->carepage_id ?: 0;
