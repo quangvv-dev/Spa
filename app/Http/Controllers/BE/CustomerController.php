@@ -622,6 +622,9 @@ class CustomerController extends Controller
     public function ajaxUpdate(Request $request, $id)
     {
         $input = $request->except('category_ids', 'category_tips');
+        if (str_contains($input['phone'], 'xxx')) {
+            unset($input['phone']);
+        }
         $before = $this->customerService->find($id);
         $data = [];
         if (isset($before) && $before) {
