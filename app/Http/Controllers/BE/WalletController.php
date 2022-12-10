@@ -180,7 +180,7 @@ class WalletController extends Controller
                 ]);
                 $response = \GuzzleHttp\json_decode($request->getBody()->read(1024));
                 $pay_id = explode('_', $apptransid)[1];
-                # Giao dịch thành công, tiền hành xử lý đơn hàng
+                # Giao dịch thành công, tiền hành xử lý đơn hàng..
                 $order = WalletHistory::find($pay_id);// đơn nạp ví
                 if ($response->returncode === 1) {
                     $order->gross_revenue = (int)$order->gross_revenue+(int)$response->amount;
