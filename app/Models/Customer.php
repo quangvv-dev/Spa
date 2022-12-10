@@ -49,7 +49,10 @@ class Customer extends Model
         'page_id',
         'carepage_id',
         'devices_token',
-        'is_gioithieu'
+        'is_gioithieu',
+        'expired_time',
+        'time_move_cskh',
+        'expired_time_boolean'
     ];
 
 
@@ -177,6 +180,18 @@ class Customer extends Model
         return $data;
     }
 
+    public static function search1($input)
+    {
+        $docs = self::when(isset($input['expired_time_boolean']), function ($q) use ($input) {
+                $q->where('expired_time_boolean', $input['expired_time_boolean']);
+            })->when(isset($input['date_check_move']), function ($q) use ($input) {
+                $q->where('time_move_cskh', '<=', $input['date_check_move']);
+            })->when(isset($input['date_check_expired']), function ($q) use ($input) {
+                $q->where('expired_time', '<=', $input['date_check_expired']);
+            });
+        return $docs;
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id', 'id');
@@ -302,6 +317,11 @@ class Customer extends Model
     public function groupCustomer()
     {
         return $this->hasMany(CustomerGroup::class, 'customer_id', 'id');
+    }
+
+    public function timeStatus()
+    {
+        return $this->hasOne(TimeStatus::class, 'status_id', 'status_id');
     }
 
     public function getStatisticsUsers()
@@ -467,5 +487,28 @@ class Customer extends Model
         }else{
             return 0;
         }
+    }
+
+    /**
+     * get thời gian quá hạn để update
+     *
+     * @param $status_id
+     *
+     * @return int
+     */
+    public static function timeExpired($status_id)
+    {
+        $date = date('Y-m-d H:i:s');
+        $customer_stauts = TimeStatus::where('status_id',$status_id)->first();
+        $time_expired = $customer_stauts ? $customer_stauts->expired_time : null;
+        $time_move_cskh = $customer_stauts ? $customer_stauts->time_move_cskh : null;
+
+        $data['expired_time'] = empty($time_expired) ? NULL : date('Y-m-d H:i:s',
+            strtotime('+' . $time_expired . 'minute', strtotime($date)));
+
+        $data['time_move_cskh'] = empty($time_move_cskh) ? NULL : date('Y-m-d H:i:s',
+            strtotime('+' . $time_move_cskh . 'minute', strtotime($data['expired_time'])));
+
+        return $data;
     }
 }

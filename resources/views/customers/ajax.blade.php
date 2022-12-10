@@ -34,6 +34,12 @@
         background: #f6f6f6;
         border: 1px solid #8ccaed;
     }
+    .qua-han td{
+        color: red !important;
+    }
+    .qua-han td textarea,.qua-han td a{
+        color: red !important;
+    }
 </style>
 <div class="card-header filter-box filterbox-sticky">
     <div class="display btn-group open">
@@ -212,7 +218,7 @@
                 </tr>
             @endif
             @foreach($customers as $key => $customer)
-                <tr>
+                <tr class="{{$customer->expired_time_boolean == 1 ? 'qua-han' : ''}}">
                     <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}">
                         <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
                     <td class="text-center">{{ $rank ++ }}</td>

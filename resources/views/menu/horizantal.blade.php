@@ -312,9 +312,14 @@
             @endif
 
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
-                   href="{!! route('customers.index') !!}"><i
+                <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
+                   href="#"><i
                             class="fas fa-cog"></i><span>Cài đặt</span></a>
+                <div class="sub-item">
+                    <ul>
+                        <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
+                    </ul>
+                </div>
             </li>
 
         </ul>

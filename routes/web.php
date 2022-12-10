@@ -273,6 +273,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('create-comment-customer','ChatController@createCommentCustomer');
 
     });
+    Route::group(['namespace' => 'Setting', 'prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::resource('time-status','TimeStatusController');
+    });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');
     Route::get('login/facebook/callback', 'Marketing\FanpageController@callbackFB');
