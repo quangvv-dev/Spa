@@ -199,7 +199,7 @@
                                             data-original-title="Liên hệ chính" rel="tooltip"
                                             class="fa fa-star text-warning" aria-hidden="true"></i></p>
                                     <p></p>
-                                    <p class="clearfix">&nbsp;{{ str_limit($customer->phone,7,'xxx') }}</p>
+                                    <p class="clearfix">&nbsp;{{ $customer->phone}}</p>
                                 </div>
                                 <div class="col-md-12 no-padd hide"><a><i data-task-type="2"
                                                                           class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>
