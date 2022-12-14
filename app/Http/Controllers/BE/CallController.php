@@ -38,7 +38,6 @@ class CallController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
-
         $docs = CallCenter::search($input);
         $answers = clone $docs;
         $answers = $answers->where('call_status', 'ANSWERED');

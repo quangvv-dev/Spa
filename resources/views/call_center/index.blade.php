@@ -84,7 +84,6 @@
                 <div class="col-md-2">
                     {!! Form::text('dest_number', null, array('class' => 'form-control','id'=>'dest_number', 'placeholder'=>'SĐT khách hàng')) !!}
                 </div>
-                <input type="hidden" id="valuePage" name="page" value="1">
                 <div class="col-lg-2 col-md-6">
                     <button type="submit" class="btn btn-primary btnSearch"> Tìm kiếm
                     </button>
@@ -146,7 +145,7 @@
             // let branch_id = $('.branch_id').val();
             let dest_number = $('#dest_number').val();
             searchAjax({
-                telesales: telesales,
+                caller_number: telesales,
                 start_date: start_date,
                 end_date: end_date,
                 call_status: call_status,
