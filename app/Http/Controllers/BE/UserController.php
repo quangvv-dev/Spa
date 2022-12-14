@@ -6,6 +6,7 @@ use App\Components\Filesystem\Filesystem;
 use App\Http\Requests\UserRequest;
 use App\Models\Branch;
 use App\Models\Department;
+use App\Models\Location;
 use App\Models\Role;
 use App\Services\UserService;
 use App\User;
@@ -47,6 +48,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $department = Department::select('id', 'name')->pluck('name', 'id')->toArray();
+        $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
         $input = $request->all();
         $users = User::search($input);
         $title = 'Quản lý người dùng';
@@ -55,7 +57,7 @@ class UserController extends Controller
             return Response::json(view('users.ajax', compact('department', 'input', 'users', 'title'))->render());
         }
 
-        return view('users.index', compact('department', 'input', 'users', 'title'));
+        return view('users.index', compact('department', 'input', 'users', 'title','location'));
     }
 
     /**
@@ -109,7 +111,9 @@ class UserController extends Controller
         $title = 'Sửa người dùng';
         $departments = Department::pluck('name', 'id');
         $role = Role::where('department_id', $user->department_id)->get();
-        return view('users._form', compact('user', 'title', 'departments', 'role'));
+        $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
+
+        return view('users._form', compact('user', 'title', 'departments', 'role','location'));
     }
 
     /**

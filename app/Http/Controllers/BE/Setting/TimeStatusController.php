@@ -9,6 +9,13 @@ use App\Http\Controllers\Controller;
 
 class TimeStatusController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:time-status.index', ['only' => ['index']]);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -54,7 +61,6 @@ class TimeStatusController extends Controller
         });
         return view('settings.time_status', compact('status', 'time_status'));
     }
-
 
 
     /**

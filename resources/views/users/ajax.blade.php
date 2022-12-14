@@ -5,7 +5,7 @@
             <th class="text-white">ID</th>
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">Số điện thoại</th>
-            <th class="text-white text-center">Email</th>
+            <th class="text-white text-center">Cụm</th>
             <th class="text-white text-center">Phòng ban</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Chi nhánh</th>
@@ -19,7 +19,7 @@
                     <th scope="row">{{ $user->id }}</th>
                     <td class="text-center">{{ $user->full_name }}</td>
                     <td class="text-center">{{ $user->phone }}</td>
-                    <td class="text-center">{{ $user->email }}</td>
+                    <td class="text-center">{{ @$user->location->name }}</td>
                     <td class="text-center">{{ @$user->department->name}}</td>
                     <td class="text-center">{{ $user->role_text }}</td>
                     <td class="text-center">{{ isset($user->branch)?$user->branch->name:'Tất cả chi nhánh'}}</td>

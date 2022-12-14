@@ -184,6 +184,13 @@
                        value="danh-muc-thu-chi.index" {{@$doc && $doc->hasAccess('danh-muc-thu-chi.index') ? 'checked' : ''}}>
             </td>
         </tr>
+        <tr>
+            <td>QL thời gian quá hạn</td>
+            <td>
+                <input type="checkbox" id="input11" name="permissions[]"
+                       value="time-status.index" {{@$doc && $doc->hasAccess('time-status.index') ? 'checked' : ''}}>
+            </td>
+        </tr>
         </tbody>
     </table>
 

@@ -190,7 +190,7 @@
                             </ul>
                         </li>
                         @if($roleGlobal->permission('order.orders-destroy'))
-                        <li><a href="{!! route('order.orders-destroy') !!}">Đơn hàng bị xoá</a></li>
+                            <li><a href="{!! route('order.orders-destroy') !!}">Đơn hàng bị xoá</a></li>
                         @endif
                     </ul>
                 </div>
@@ -311,13 +311,17 @@
                 </li>
             @endif
 
+
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
                    href="#"><i
                             class="fas fa-cog"></i><span>Cài đặt</span></a>
                 <div class="sub-item">
                     <ul>
-                        <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
+                        @if($roleGlobal->permission('time-status.index'))
+                            <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
+                        @endif
+
                     </ul>
                 </div>
             </li>
