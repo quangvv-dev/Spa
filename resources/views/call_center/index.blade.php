@@ -84,9 +84,9 @@
                 <div class="col-md-2">
                     {!! Form::text('dest_number', null, array('class' => 'form-control','id'=>'dest_number', 'placeholder'=>'SĐT khách hàng')) !!}
                 </div>
-
+                <input type="hidden" id="valuePage" name="page" value="1">
                 <div class="col-lg-2 col-md-6">
-                    <button type="submit" class="btn btn-primary"> Tìm kiếm
+                    <button type="submit" class="btn btn-primary btnSearch"> Tìm kiếm
                     </button>
                 </div>
                 {{ Form::close() }}
@@ -119,7 +119,6 @@
         }
 
 
-
         // delay keyup
         function delay(callback, ms) {
             // alert(ms);
@@ -137,7 +136,10 @@
         $(document).on('click', 'a.page-link', function (e) {
             e.preventDefault();
             let pages = $(this).attr('href').split('page=')[1];
-            let telesales = $('#caller_number').val();
+            // $('#valuePage').val(pages);
+            // $('.btnSearch').click();
+
+            let telesales = $('#telesales').val();
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
             let call_status = $('#call_status').val();
