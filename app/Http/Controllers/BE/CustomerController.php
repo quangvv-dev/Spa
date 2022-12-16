@@ -210,6 +210,9 @@ class CustomerController extends Controller
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
+
+        $time = Customer::timeExpired($customer->status_id);
+        $customer->update($time);
         return redirect('customers/' . $customer->id)->with('status', 'Tạo người dùng thành công');
     }
 
@@ -755,7 +758,11 @@ class CustomerController extends Controller
                 $customer->birthday = Functions::dayMonthYear($data->birthday);
             }
 
+            $time = Customer::timeExpired($customer->status_id);
+            $customer->update($time);
+
             $data = Customer::with('status', 'categories', 'telesale', 'genitive')->where('id', $id)->first();
+
             $data->tips = $data->group_tips;
         }
         return $data;

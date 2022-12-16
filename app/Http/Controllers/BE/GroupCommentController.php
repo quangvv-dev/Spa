@@ -109,6 +109,9 @@ class GroupCommentController extends Controller
         $input['user_id'] = Auth::user()->id;
         $input['customer_id'] = @$customer->id;
 
+        $time = Customer::timeExpired($customer->status_id);
+        $customer->update($time);
+
         $groupComment = $this->groupCommentService->create($input);
         return redirect()->back();
     }
@@ -177,6 +180,10 @@ class GroupCommentController extends Controller
         $groupComment = GroupComment::create($input);
 
         $groupComment1 = GroupComment::with('user', 'customer')->where('id', $groupComment->id)->first();
+
+        $customer = Customer::find($request->customer_id);
+        $time = Customer::timeExpired($customer->status_id);
+        $customer->update($time);
 
         return response()->json(['group_comment' => $groupComment1, 'id_login' => Auth::user()->id]);
     }
