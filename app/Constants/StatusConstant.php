@@ -29,4 +29,7 @@ class StatusConstant
     const TASK_FAILED = 6;
     const TASK_DONE = 3;
 
+    const CHUA_QUA_HAN = 0; // trạng thái chưa quá hạn
+    const QUA_HAN = 1; // trạng thái quá hạn
+    const MOVE_CSKH = 2; // trạng thái đã chuyển về trưởng phòng
 }

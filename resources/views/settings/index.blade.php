@@ -18,6 +18,7 @@
                                     CRM</a></li>
                             <li><a href="#tab2" class="pages" id="click2" data-id="'.click2'" data-toggle="tab">QL chi
                                     nhánh</a></li>
+                            <li><a href="#tab3" class="pages" id="click3" data-id="'.click3'" data-toggle="tab">QL cụm</a></li>
                         </ul>
                     </div>
                 </div>
@@ -76,6 +77,9 @@
                         <div class="tab-pane " id="tab2">
                             @include('settings.branch')
                         </div>
+                        <div class="tab-pane" id="tab3">
+                            @include('settings.location')
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,6 +119,17 @@
             })
         })
 
+        $(document).on('click', '#add_new_location', function () {
+            $.ajax({
+                url: '{{route('settings.storeLocation')}}',
+                method: 'POST',
+                success: function (data) {
+                    location.reload();
+                    console.log(data);
+                }
+            })
+        })
+
         $(document).on('click', '.save-status', function () {
             let id = $(this).data('id');
             let data = {
@@ -127,6 +142,26 @@
             }
             $.ajax({
                 url: 'branch/' + id,
+                data: data,
+                method: 'PUT',
+                success: function (data) {
+                    if (data) {
+                        swal({
+                            title: 'Cập nhật thành công !!!',
+                            type: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            })
+        })
+        $(document).on('click', '.save-location', function () {
+            let id = $(this).data('id');
+            let data = {
+                name: $(this).closest('tr').find('.name').val(),
+            }
+            $.ajax({
+                url: 'location/' + id,
                 data: data,
                 method: 'PUT',
                 success: function (data) {

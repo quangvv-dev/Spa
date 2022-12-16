@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Components\Filesystem\Filesystem;
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\Location;
 use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
@@ -34,8 +35,10 @@ class SettingController extends Controller
     public function index()
     {
         $branchs = Branch::get();
-        $location = Branch::$location;
-        return view('settings.index', compact('branchs', 'location'));
+//        $location = Branch::$location;
+        $location = Location::pluck('name','id')->toArray();
+        $locations = Location::all();
+        return view('settings.index', compact('branchs', 'location', 'locations'));
     }
 
     public function storeBranch()
@@ -145,5 +148,24 @@ class SettingController extends Controller
 
         return back()->with('status', 'Đã cập nhật thông tin khách hàng thành công !!!');
 
+    }
+
+    public function storeLocation(Request $request){
+        Location::create(['name'=>'Tên cụm']);
+        return 1;
+    }
+
+    public function updateLocation(Request $request,$id){
+        Location::find($id)->update($request->all());
+        return 1;
+    }
+
+    public function deleteLocation($id){
+        if($id <=3 ){
+            return 0;
+        } else {
+            Location::find($id)->delete();
+            return 1;
+        }
     }
 }

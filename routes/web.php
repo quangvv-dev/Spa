@@ -80,8 +80,11 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('super-admin', 'SettingController@indexAdmin')->name('settings.indexAdmin');
     Route::post('super-admin', 'SettingController@storeAdmin')->name('settings.storeAdmin');
     Route::post('store-branch', 'SettingController@storeBranch')->name('settings.storeBranch');
+    Route::post('store-location', 'SettingController@storeLocation')->name('settings.storeLocation');
     Route::put('branch/{id}', 'SettingController@updateBranch')->name('settings.updateBranch');
+    Route::put('location/{id}', 'SettingController@updateLocation')->name('settings.updateLocation');
     Route::delete('branch/{id}', 'SettingController@destroy')->name('settings.destroy');
+    Route::delete('location/{id}', 'SettingController@deleteLocation')->name('settings.deleteLocation');
     Route::get('settings/phan-bo-data', 'SettingController@phanbo')->name('settings.phanbo');//Phân bổ data Sale
     Route::post('settings/post', 'SettingController@postPhanBo')->name('settings.postPhanBo');
 
@@ -272,6 +275,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::delete('delete-group/{id}','ChatController@deleteGroup');
         Route::post('create-comment-customer','ChatController@createCommentCustomer');
 
+    });
+    Route::group(['namespace' => 'Setting', 'prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::resource('time-status','TimeStatusController');
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');

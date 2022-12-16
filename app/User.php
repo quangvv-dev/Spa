@@ -6,6 +6,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Branch;
 use App\Models\Department;
+use App\Models\Location;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -47,6 +48,7 @@ class User extends Authenticatable
         'is_leader',
         'branch_id',
         'caller_number',
+        'location_id'
     ];
 
     /**
@@ -123,5 +125,9 @@ class User extends Authenticatable
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 }
