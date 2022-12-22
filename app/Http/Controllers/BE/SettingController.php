@@ -11,8 +11,10 @@ use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Location;
 use App\Models\Status;
+use App\Models\UserFilterGrid;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class SettingController extends Controller
@@ -167,5 +169,19 @@ class SettingController extends Controller
             Location::find($id)->delete();
             return 1;
         }
+    }
+
+    public function userFilterGrid(Request $request){
+        $user = Auth::user();
+        $data = $request->all();
+        $data['user_id'] = $user->id;
+        $user_filter = UserFilterGrid::where('user_id', $user->id)->where('url', $request->url)->first();
+        if ($user_filter) {
+            $user_filter->update($data);
+        } else {
+            UserFilterGrid::create($data);
+        }
+
+        return 1;
     }
 }

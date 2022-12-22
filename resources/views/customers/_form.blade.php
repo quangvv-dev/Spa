@@ -105,6 +105,12 @@
                     @else
                         <input type="hidden" name="branch_id" value="{{$checkRole}}">
                     @endif
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <label for="ctv" style="width: 100%;cursor: pointer;">Cộng tác viên</label>
+                            <input id="ctv" type="checkbox" name="type_ctv" style="width: 30px;height: 25px;cursor: pointer;">
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="col-xs-12 col-md-12">

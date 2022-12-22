@@ -43,7 +43,7 @@ class WalletService
 
     }
 
-    public static function exchangeWalletCtv($price, $customer_id)
+    public static function exchangeWalletCtv($price, $customer_id, $payment_history_id)
     {
         $exchange = ($price / 100) * setting('exchange');
         HistoryWalletCtv::create([
@@ -51,6 +51,8 @@ class WalletService
             'price' => $exchange,
             'type' => 1,
             'description' => 'Hệ thống cộng hoa hồng',
+            'percent' => setting('exchange'),
+            'payment_history_id' => $payment_history_id
         ]);
         $gioithieu = Customer::find($customer_id);
         if (isset($gioithieu) && $gioithieu) {

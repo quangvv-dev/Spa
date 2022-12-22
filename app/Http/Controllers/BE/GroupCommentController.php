@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
 use App\Models\Customer;
 use App\Models\Status;
 use App\Services\CustomerService;
@@ -110,6 +111,7 @@ class GroupCommentController extends Controller
         $input['customer_id'] = @$customer->id;
 
         $time = Customer::timeExpired($customer->status_id);
+        $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
         $customer->update($time);
 
         $groupComment = $this->groupCommentService->create($input);
@@ -183,6 +185,7 @@ class GroupCommentController extends Controller
 
         $customer = Customer::find($request->customer_id);
         $time = Customer::timeExpired($customer->status_id);
+        $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
         $customer->update($time);
 
         return response()->json(['group_comment' => $groupComment1, 'id_login' => Auth::user()->id]);

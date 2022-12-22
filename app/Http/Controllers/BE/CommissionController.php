@@ -11,6 +11,7 @@ use App\Models\Branch;
 use App\Models\Commission;
 use App\Models\Customer;
 use App\Models\HistoryUpdateOrder;
+use App\Models\HistoryWalletCtv;
 use App\Models\Order;
 use App\Models\PaymentHistory;
 use App\Services\CommissionService;
@@ -253,5 +254,38 @@ class CommissionController extends Controller
             return view('waiters.ajax', compact('users'));
         }
         return view('waiters.index', compact('users'));
+    }
+
+    public function statisticalCTV(Request $request){
+        if(!$request->start_date){
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+
+        $request['start_date'] = "21-06-2021";
+
+        $ctv = Customer::select('id','full_name','is_gioithieu')->where('type_ctv',1)->get()->map(function ($item) use ($request){
+            $orders = Order::where('member_id',$item->id)
+                ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($request['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($request['end_date']) . " 23:59:59",
+                    ]);
+                });
+            $orders1 = clone $orders;
+            $orders1 = $orders1->pluck('id')->toArray();
+            $item->doanh_so = $orders->sum('all_total');
+
+            $item->doanh_thu = PaymentHistory::whereIn('order_id',$orders1)->sum('price');
+
+            $item->doanh_thu_ctv = HistoryWalletCtv::where('customer_id',$item->id)->sum('price');
+
+            $item->total_khach_gt = Customer::whereBetween('created_at', [
+                Functions::yearMonthDay($request['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($request['end_date']) . " 23:59:59",
+            ])->where('is_gioithieu',$item->id)->count();
+
+            return $item;
+        });
+        return view('statistics.hoa_hong_ctv',compact('ctv'));
     }
 }

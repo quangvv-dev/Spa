@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
@@ -52,7 +53,8 @@ class Customer extends Model
         'is_gioithieu',
         'expired_time',
         'time_move_cskh',
-        'expired_time_boolean'
+        'expired_time_boolean',
+        'type_ctv'
     ];
 
 
@@ -182,13 +184,18 @@ class Customer extends Model
 
     public static function search1($input)
     {
-        $docs = self::when(isset($input['expired_time_boolean']), function ($q) use ($input) {
-                $q->where('expired_time_boolean', $input['expired_time_boolean']);
-            })->when(isset($input['date_check_move']), function ($q) use ($input) {
-                $q->where('time_move_cskh', '<=', $input['date_check_move']);
-            })->when(isset($input['date_check_expired']), function ($q) use ($input) {
-                $q->where('expired_time', '<=', $input['date_check_expired']);
-            });
+        $docs = self::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
+        })->when(isset($input['expired_time_boolean']), function ($q) use ($input) {
+            $q->where('expired_time_boolean', $input['expired_time_boolean']);
+        })->when(isset($input['date_check_move']), function ($q) use ($input) {
+            $q->where('time_move_cskh', '<=', $input['date_check_move']);
+        })->when(isset($input['date_check_expired']), function ($q) use ($input) {
+            $q->where('expired_time', '<=', $input['date_check_expired']);
+        });
         return $docs;
     }
 
@@ -200,6 +207,11 @@ class Customer extends Model
     public function gioithieu()
     {
         return $this->belongsTo(Customer::class, 'is_gioithieu', 'id')->withTrashed();
+    }
+
+    public function child()
+    {
+        return $this->hasMany(Customer::class, 'id', 'is_gioithieu');
     }
 
     public function marketing()
@@ -482,9 +494,9 @@ class Customer extends Model
             'task_status_id' => StatusCode::GOI_LAI,
         ];
         $task = Task::search($params)->select('id')->first();
-        if (!empty($task)){
+        if (!empty($task)) {
             return $task->id;
-        }else{
+        } else {
             return 0;
         }
     }
@@ -499,7 +511,7 @@ class Customer extends Model
     public static function timeExpired($status_id)
     {
         $date = date('Y-m-d H:i:s');
-        $customer_stauts = TimeStatus::where('status_id',$status_id)->first();
+        $customer_stauts = TimeStatus::where('status_id', $status_id)->first();
         $time_expired = $customer_stauts ? $customer_stauts->expired_time : null;
         $time_move_cskh = $customer_stauts ? $customer_stauts->time_move_cskh : null;
 
@@ -510,5 +522,34 @@ class Customer extends Model
             strtotime('+' . $time_move_cskh . 'minute', strtotime($data['expired_time'])));
 
         return $data;
+    }
+
+    public function getExpiredTextAttribute()
+    {
+        $now = Date::now()->format('Y-m-d H:i:s');
+
+        if (!empty($this->expired_time)) {
+            $countdown = strtotime($this->expired_time) - strtotime($now);
+            $days = ($countdown / 86400) >= 1 ? floor($countdown / 86400) : 0;
+            $hours = floor(($countdown % 86400) / 3600);
+            $minutes = round((($countdown % 86400) % 3600) / 60);
+
+            return ($days > 0 ? $days . ' ngày ' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
+        }
+        return '';
+    }
+
+    public function getTimeMoveAttribute()
+    {
+        $now = Date::now()->format('Y-m-d H:i:s');
+
+        if (!empty($this->time_move_sale)) {
+            $countdown = strtotime($this->time_move_sale) - strtotime($now);
+            $days = ($countdown / 86400) >= 1 ? floor($countdown / 86400) : 0;
+            $hours = floor(($countdown % 86400) / 3600);
+            $minutes = round((($countdown % 86400) % 3600) / 60);
+            return ($days > 0 ? $days . ' ngày ;' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
+        }
+        return '';
     }
 }

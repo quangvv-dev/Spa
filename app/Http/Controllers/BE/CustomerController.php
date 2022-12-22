@@ -7,6 +7,7 @@ use App\Constants\DepartmentConstant;
 use App\Constants\NotificationConstant;
 use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\CustomerPost;
 use App\Helpers\Functions;
@@ -31,6 +32,7 @@ use App\Models\Status;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\Tip;
+use App\Models\UserFilterGrid;
 use App\Models\WalletHistory;
 use App\Services\CustomerService;
 use App\Models\RuleOutput;
@@ -150,7 +152,15 @@ class CustomerController extends Controller
             return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday'));
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday'));
+        $url = '/customers';
+        $user = Auth::user();
+        $user_filter_grid = UserFilterGrid::select('fields')->where('user_id', $user->id)->where('url', $url)->first();
+        if ($user_filter_grid) {
+            $user_filter_grid = json_decode($user_filter_grid->fields);
+        } else {
+            $user_filter_grid = [];
+        }
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday','user_filter_grid'));
     }
 
     /**
@@ -194,7 +204,7 @@ class CustomerController extends Controller
             'fb_name' => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
         ]);
-        $input = $request->except(['group_id', 'image']);
+        $input = $request->except(['group_id', 'image', 'type_ctv']);
         if (isset($input['is_gioithieu']) && $input['is_gioithieu']) {
             $customer_gioithieu = Customer::where('phone', $input['is_gioithieu'])->first();
             $input['is_gioithieu'] = isset($customer_gioithieu) && $customer_gioithieu ? $customer_gioithieu->id : 0;
@@ -207,11 +217,14 @@ class CustomerController extends Controller
         if (Auth::user()->department_id == DepartmentConstant::WAITER) {
             $request->merge(['telesales_id' => Auth::user()->id]);
         }
+        $input['type_ctv'] = $request->type_ctv == 'on' ? 1 : 0;
+
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
 
         $time = Customer::timeExpired($customer->status_id);
+        $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
         $customer->update($time);
         return redirect('customers/' . $customer->id)->with('status', 'Tạo người dùng thành công');
     }
@@ -759,6 +772,7 @@ class CustomerController extends Controller
             }
 
             $time = Customer::timeExpired($customer->status_id);
+            $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
             $customer->update($time);
 
             $data = Customer::with('status', 'categories', 'telesale', 'genitive')->where('id', $id)->first();

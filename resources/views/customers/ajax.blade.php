@@ -170,6 +170,10 @@
                 </li>
             </ul>
         </div>
+        <div class="display dropdown-custom1" title="Cài đặt hiển thị bảng">
+            @include('components.user_filter_grid')
+        </div>
+
     </div>
 </div>
 <div class="table-responsive fixed-scrollbar" style="font-size: 12px">
@@ -177,32 +181,52 @@
         <thead class="bg-primary text-white">
         <tr>
             <th ><input type="checkbox" class="selectall myCheck"/></th>
-            <th class="text-white text-center">STT</th>
-            <th class="text-white text-center">Ngày tạo KH</th>
-            <th class="text-white text-center">Họ tên</th>
-            <th class="text-white text-center">SĐT</th>
-            @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
-                <th class="text-white text-center" style="min-width: 130px">Tin nhắn</th>
-            @endif
-            <th class="text-white text-center">Nhóm KH</th>
-            <th class="text-white text-center">Trạng Thái</th>
-            <th class="text-white text-center">Người phụ trách</th>
-            <th class="text-white text-center mota" style="min-width: 121px;">Mô tả</th>
-            <th class="text-white text-center">DV liên quan</th>
-            <th class="text-white text-center">Nhóm tính cách</th>
-            <th class="text-white text-center">C.Nhánh</th>
-            <th class="text-white text-center">Người tạo</th>
-            <th class="text-white text-center">Lich Hẹn</th>
-            <th class="text-white text-center">Ngày sinh</th>
-            <th class="text-white text-center">MKT phụ trách</th>
-            <th class="text-white text-center">Nguồn KH</th>
-            <th class="text-white text-center">Link FB</th>
-            <th class="text-white text-center">Giới tính</th>
-            {{--<th class="text-white text-center">Mã KH</th>--}}
-            <th class="text-white text-center">Số đơn</th>
-            <th class="text-white text-center">Tổng doanh thu</th>
-            <th class="text-white text-center">Đã thanh toán</th>
-            <th class="text-white text-center">Còn lại</th>
+            @forelse($user_filter_list as $key => $item)
+                @if($key == 4)
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
+                        <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}" style="min-width: 130px">Tin nhắn</th>
+                    @endif
+                @else
+                    <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}"
+                        style="{{$key==8 ? 'min-width: 121px;z-index: 1;' : ''}}"
+                    >
+                        {{$item}}
+                    </th>
+                @endif
+            @empty
+
+            @endforelse
+
+
+
+            {{--<th ><input type="checkbox" class="selectall myCheck"/></th>--}}
+            {{--<th class="text-white text-center">STT</th>--}}
+            {{--<th class="text-white text-center">Ngày tạo KH</th>--}}
+            {{--<th class="text-white text-center">Họ tên</th>--}}
+            {{--<th class="text-white text-center">SĐT</th>--}}
+            {{--@if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)--}}
+                {{--<th class="text-white text-center" style="min-width: 130px">Tin nhắn</th>--}}
+            {{--@endif--}}
+            {{--<th class="text-white text-center">Nhóm KH</th>--}}
+            {{--<th class="text-white text-center">Trạng Thái</th>--}}
+            {{--<th class="text-white text-center">Người phụ trách</th>--}}
+            {{--<th class="text-white text-center mota" style="min-width: 121px;z-index: 1">Mô tả</th>--}}
+            {{--<th class="text-white text-center">T/g tác nghiệp</th>--}}
+            {{--<th class="text-white text-center">Chuyển về TP</th>--}}
+            {{--<th class="text-white text-center">C.Nhánh</th>--}}
+            {{--<th class="text-white text-center">DV liên quan</th>--}}
+            {{--<th class="text-white text-center">Nhóm tính cách</th>--}}
+            {{--<th class="text-white text-center">Người tạo</th>--}}
+            {{--<th class="text-white text-center">Lich Hẹn</th>--}}
+            {{--<th class="text-white text-center">Ngày sinh</th>--}}
+            {{--<th class="text-white text-center">MKT phụ trách</th>--}}
+            {{--<th class="text-white text-center">Nguồn KH</th>--}}
+            {{--<th class="text-white text-center">Link FB</th>--}}
+            {{--<th class="text-white text-center">Giới tính</th>--}}
+            {{--<th class="text-white text-center">Số đơn</th>--}}
+            {{--<th class="text-white text-center">Tổng doanh thu</th>--}}
+            {{--<th class="text-white text-center">Đã thanh toán</th>--}}
+            {{--<th class="text-white text-center">Còn lại</th>--}}
             <th class="text-white text-center">Chỉnh sửa</th>
         </tr>
         </thead>
@@ -220,10 +244,11 @@
             @foreach($customers as $key => $customer)
                 <tr class="{{$customer->expired_time_boolean == 1 ? 'qua-han' : ''}}">
                     <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}">
-                        <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/></td>
-                    <td class="text-center">{{ $rank ++ }}</td>
-                    <td class="text-center">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
-                    <td class="text-center name-customer" data-customer-id="{{ $customer->id }}">
+                        <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/>
+                    </td>
+                    <td class="text-center {{in_array(0,$user_filter_grid) ? '':'display-none'}}">{{ $rank ++ }}</td>
+                    <td class="text-center {{in_array(1,$user_filter_grid) ? '':'display-none'}}">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
+                    <td class="text-center name-customer {{in_array(2,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
                             @if($customer->FB_ID)
                             <i class="fab fa-facebook-messenger" style="font-size: 16px"></i>
@@ -234,7 +259,7 @@
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                     </td>
-                    <td class="text-center phone-customer" data-customer-id="{{ $customer->id }}">
+                    <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{ str_limit($customer->phone,7,'xxx') }}</a>
 
                         @if(!empty($customer->call_back))
@@ -242,38 +267,40 @@
                         @endif
                     </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
-                        <td class="text-center" style="position: relative;max-width: 146px">
+                        <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
                             <textarea class="description-cus">{{ $customer->message }}</textarea>
                         </td>
                     @endif
-                    <td class="text-center category-db"
+                    <td class="text-center category-db {{in_array(5,$user_filter_grid) ? '':'display-none'}}"
                         data-id="{{$customer->id}}">{{str_limit($customer->group_text,30)}}</td>
-                    <td class="text-center status-db" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
-                    <td class="text-center telesale-customer"
+                    <td class="text-center status-db {{in_array(6,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
+                    <td class="text-center telesale-customer {{in_array(7,$user_filter_grid) ? '':'display-none'}}"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center" style="position: relative;max-width: 146px">
+                    <td class="text-center {{in_array(8,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
                         <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
                     </td>
-                    <td class="text-center category-tip" data-id="{{$customer->id}}">
+                    <td class="text-center {{in_array(9,$user_filter_grid) ? '':'display-none'}}">{{$customer->expired_text}}</td>
+                    <td class="text-center {{in_array(10,$user_filter_grid) ? '':'display-none'}}">{{@$customer->time_move}}</td>
+                    <td class="text-center {{in_array(11,$user_filter_grid) ? '':'display-none'}}">{{@$customer->branch->name}}</td>
+
+                    <td class="text-center category-tip {{in_array(12,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">
                         <span class="badge badge-primary span-tips">{{str_limit($customer->group_tips,30)}}</span>
                     </td>
-                    <td class="text-center genitive-db" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>
-                    <td class="text-center">{{@$customer->branch->name}}</td>
-                    <td class="text-center">{{@$customer->carepage->full_name}}</td>
-                    <td class="text-center" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
+                    <td class="text-center genitive-db {{in_array(13,$user_filter_grid) ? '':'display-none'}}" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>
+                    <td class="text-center {{in_array(14,$user_filter_grid) ? '':'display-none'}}">{{@$customer->carepage->full_name}}</td>
+                    <td class="text-center {{in_array(15,$user_filter_grid) ? '':'display-none'}}" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
                     </td>
-                    <td class="text-center customer-birthday"
+                    <td class="text-center customer-birthday {{in_array(16,$user_filter_grid) ? '':'display-none'}}"
                         data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
-                    <td class="text-center">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
-                    <td class="text-center">{{ @$customer->source_customer->name}}</td>
-                    <td class="text-center">{{ @$customer->facebook}}</td>
-                    <td class="text-center">{{ $customer->gender_text  }}</td>
-                    <td class="text-center">{{ $customer->account_code }}</td>
-                    <td class="text-center">{{ count($customer->orders) }}</td>
-                    <td class="text-center">{{ number_format($customer->orders->sum('all_total')) }}</td>
-                    <td class="text-center">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
-                    <td class="text-center">{{ number_format($customer->orders->sum('the_rest')) }}</td>
+                    <td class="text-center {{in_array(17,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
+                    <td class="text-center {{in_array(18,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->source_customer->name}}</td>
+                    <td class="text-center {{in_array(19,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->facebook}}</td>
+                    <td class="text-center {{in_array(20,$user_filter_grid) ? '':'display-none'}}">{{ $customer->gender_text  }}</td>
+                    <td class="text-center {{in_array(21,$user_filter_grid) ? '':'display-none'}}">{{ count($customer->orders) }}</td>
+                    <td class="text-center {{in_array(22,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('all_total')) }}</td>
+                    <td class="text-center {{in_array(23,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
+                    <td class="text-center {{in_array(24,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('the_rest')) }}</td>
                     <td class="text-center"><a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a></td>
                 </tr>
             @endforeach

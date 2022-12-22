@@ -507,7 +507,7 @@ class OrderController extends Controller
                 $group_customer)->get();
 
             if (setting('exchange') > 0 && isset($customer->gioithieu) && $customer->gioithieu->id) {
-                WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id);
+                WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id, $paymentHistory->id);
             }
 
             if (count($check) <= 1 && isset($check2) && count($check2)) {

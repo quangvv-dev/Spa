@@ -140,7 +140,10 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
         Route::post('marketing/add-line-price-marketing', 'Marketing\MarketingController@addLinePriceMarketing');
         Route::get('marketing/search-price-marketing', 'Marketing\MarketingController@searchPriceMarketing');
+
 //        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
+
+        Route::post('user-filter-grid', 'SettingController@userFilterGrid');
 
     });
 
@@ -188,6 +191,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('sale-ranking', 'SalesController@ranking')->name('report.saleRanking');
         Route::get('group-sale', 'SalesController@indexGroupCategory')->name('report.groupSale');
         Route::get('commission', 'CommissionController@statistical')->name('report.commission');
+        Route::get('hoa-hong-ctv', 'CommissionController@statisticalCTV');
         Route::get('waiters', 'CommissionController@statisticalWaiters')->name('report.waiters');
         Route::get('tasks', 'TaskController@statistical')->name('report.tasks');
         Route::get('branchs', 'Branch\BranchController@index')->name('report.branchs');
