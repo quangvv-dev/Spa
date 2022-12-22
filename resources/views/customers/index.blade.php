@@ -2,36 +2,6 @@
 @php
     $roleGlobal = auth()->user()?:[];
     $checkRole = checkRoleAlready();
-    $user_filter_list= array(
-        0=>'STT',
-        1=>'Ngày tạo KH',
-        2=>'Họ tên',
-        3=>'SĐT',
-        4=>'Tin nhắn',
-        5=>'Nhóm KH',
-        6=>'Trạng thái',
-        7=>'Người phụ trách',
-        8=>'Mô tả',
-        9=>'T/G tác nghiệp',
-        10=>'Chuyển về TP',
-        11=>'C.Nhánh',
-        12=>'DV liên quan',
-        13=>'Nhóm tính cách',
-        14=>'Người tạo',
-        15=>'Lịch hẹn',
-        16=>'Ngày sinh',
-        17=>'MKT Phụ trách',
-        18=>'Nguồn KH',
-        19=>'Linh FB',
-        20=>'Giới tính',
-        21=>'Số đơn',
-        22=>'Tổng doanh thu',
-        23=>'Đã thanh toán',
-        24=>'Còn lại'
-    );
-    if(empty($user_filter_grid)){
-        $user_filter_grid = array_keys($user_filter_list);
-    }
 @endphp
 @section('_style')
     <link href="{{ asset('css/customer.css') }}" rel="stylesheet"/>

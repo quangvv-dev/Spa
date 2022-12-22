@@ -148,19 +148,47 @@ class CustomerController extends Controller
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
         $rank = $customers->firstItem();
-        if ($request->ajax()) {
-            return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday'));
-        }
 
         $url = '/customers';
         $user = Auth::user();
+        $user_filter_list= array(
+            0=>'STT',
+            1=>'Ngày tạo KH',
+            2=>'Họ tên',
+            3=>'SĐT',
+            4=>'Tin nhắn',
+            5=>'Nhóm KH',
+            6=>'Trạng thái',
+            7=>'Người phụ trách',
+            8=>'Mô tả',
+            9=>'T/G tác nghiệp',
+            10=>'Chuyển về TP',
+            11=>'C.Nhánh',
+            12=>'DV liên quan',
+            13=>'Nhóm tính cách',
+            14=>'Người tạo',
+            15=>'Lịch hẹn',
+            16=>'Ngày sinh',
+            17=>'MKT Phụ trách',
+            18=>'Nguồn KH',
+            19=>'Linh FB',
+            20=>'Giới tính',
+            21=>'Số đơn',
+            22=>'Tổng doanh thu',
+            23=>'Đã thanh toán',
+            24=>'Còn lại'
+        );
         $user_filter_grid = UserFilterGrid::select('fields')->where('user_id', $user->id)->where('url', $url)->first();
         if ($user_filter_grid) {
             $user_filter_grid = json_decode($user_filter_grid->fields);
         } else {
-            $user_filter_grid = [];
+            $user_filter_grid = array_keys($user_filter_list);
         }
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday','user_filter_grid'));
+        if ($request->ajax()) {
+            return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday','user_filter_list','user_filter_grid'));
+        }
+
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday','user_filter_grid','user_filter_list'));
     }
 
     /**
