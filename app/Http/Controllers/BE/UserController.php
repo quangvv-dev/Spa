@@ -33,8 +33,11 @@ class UserController extends Controller
 
         $this->userService = $userService;
         $branchs = Branch::search()->pluck('name', 'id');
+        $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
+
         \View::share([
             'branchs' => $branchs,
+            'location' => $location
         ]);
     }
 
@@ -48,7 +51,6 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $department = Department::select('id', 'name')->pluck('name', 'id')->toArray();
-        $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
         $input = $request->all();
         $users = User::search($input);
         $title = 'Quản lý người dùng';
@@ -111,7 +113,6 @@ class UserController extends Controller
         $title = 'Sửa người dùng';
         $departments = Department::pluck('name', 'id');
         $role = Role::where('department_id', $user->department_id)->get();
-        $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
 
         return view('users._form', compact('user', 'title', 'departments', 'role','location'));
     }
