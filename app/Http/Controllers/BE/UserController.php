@@ -59,7 +59,7 @@ class UserController extends Controller
             return Response::json(view('users.ajax', compact('department', 'input', 'users', 'title'))->render());
         }
 
-        return view('users.index', compact('department', 'input', 'users', 'title','location'));
+        return view('users.index', compact('department', 'input', 'users', 'title'));
     }
 
     /**
@@ -114,7 +114,7 @@ class UserController extends Controller
         $departments = Department::pluck('name', 'id');
         $role = Role::where('department_id', $user->department_id)->get();
 
-        return view('users._form', compact('user', 'title', 'departments', 'role','location'));
+        return view('users._form', compact('user', 'title', 'departments', 'role'));
     }
 
     /**
