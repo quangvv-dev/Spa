@@ -830,7 +830,7 @@ console.log(call_back,'123123');
 
             $(document).on('click', '.selectall', function () {
                 if ($(this).hasClass('active')) {
-                    $(':checkbox').each(function () {
+                    $('.myCheck').each(function () {
                         this.checked = false;
                     });
                     $(this).html('Chọn tất cả');
@@ -838,7 +838,7 @@ console.log(call_back,'123123');
 
                 } else {
                     $(this).addClass('active');
-                    $(':checkbox').each(function () {
+                    $('.myCheck').each(function () {
                         this.checked = true;
                     });
                     $(this).html('Bỏ chọn tất cả');

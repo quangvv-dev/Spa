@@ -188,7 +188,7 @@
                     @endif
                 @else
                     <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}"
-                        style="{{$key==8 ? 'min-width: 121px;z-index: 1;' : ''}}"
+                        style="{{$key==8 ? 'min-width: 121px;' : ''}}z-index: 1;"
                     >
                         {{$item}}
                     </th>

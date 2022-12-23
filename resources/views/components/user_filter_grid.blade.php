@@ -1,5 +1,5 @@
 <style>
-    .dropdown-custom1.show .dropdown-menu-custom.show{
+    .dropdown-custom1.show .dropdown-menu-custom.show {
         display: block !important;
     }
 </style>
@@ -7,7 +7,7 @@
    class="dropdown-toggle nav-link fa fa-filter pointer"
    aria-expanded="true"></i>
 <div class="dropdown-menu-custom dropdown-menu dropdown-menu-right show"
-     style="padding: 10px; width: 560px;background-color: #d5d5d5; display: none">
+     style="padding: 10px; width: 650px; display: none;border: 1px solid #3b8fec;">
     <div class="row">
         @if(isset($user_filter_list) && count($user_filter_list))
             @foreach($user_filter_list as $key => $item)
@@ -19,9 +19,7 @@
                 </div>
             @endforeach
         @endif
-    </div>
-    <div class="row">
-        <div class="col item">
+        <div class="col-3 item">
             <label class="click-label"><input type="checkbox" id="checkAll">&nbsp;Tất cả</label>
         </div>
     </div>
