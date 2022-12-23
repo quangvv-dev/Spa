@@ -80,6 +80,8 @@ class Customer extends Model
                 $query->whereHas('status', function ($q) use ($conditions) {
                     $q->where('name', $conditions['status']);
                 });
+            })->when(isset($conditions['expired_time_boolean']), function ($query) use ($conditions) {
+                $query->where('expired_time_boolean', $conditions['expired_time_boolean']);
             })->when(isset($conditions['group']), function ($query) use ($conditions) {
                 $group_customer = CustomerGroup::where('category_id', $conditions['group'])->pluck('customer_id')->toArray();
                 $query->whereIn('id', $group_customer);

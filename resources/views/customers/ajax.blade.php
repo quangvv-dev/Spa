@@ -17,15 +17,18 @@
         width: 28px;
         height: 20px;
     }
-    .birthday-count{
+
+    .birthday-count {
         top: -9px;
         position: absolute;
         left: 20px;
     }
-    .tooltip-nav{
+
+    .tooltip-nav {
         padding-left: 10px;
     }
-    .other_time_panel{
+
+    .other_time_panel {
         left: auto;
         right: 0px;
         position: absolute;
@@ -34,10 +37,12 @@
         background: #f6f6f6;
         border: 1px solid #8ccaed;
     }
-    .qua-han td{
+
+    .qua-han td {
         color: red !important;
     }
-    .qua-han td textarea,.qua-han td a{
+
+    .qua-han td textarea, .qua-han td a {
         color: red !important;
     }
 </style>
@@ -46,14 +51,14 @@
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="true"
                 style="height: 39px; border-radius: 3px; margin-right: 10px"><i
-                class="fa fa-caret-down"></i></button>
+                    class="fa fa-caret-down"></i></button>
         <ul class="dropdown-menu">
             <li class="pd5" id="search">
                 <a class="invalid_account" data-invalid="1" data-icon-class="fa fa-trash"><span class="pr10"></span>
                     Đang sử dụng </a>
             </li>
             <li class="pd5"><a class="invalid_account" data-invalid="0" data-icon-class="fa fa-dot-circle-o"> <span
-                        class="pr10"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></span> Đã xoá </a>
+                            class="pr10"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></span> Đã xoá </a>
             </li>
         </ul>
     </div>
@@ -68,13 +73,14 @@
             {{--<li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>--}}
             <li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>
             <li class="dropdown_action"><a id="change_relations">Trạng thái khách hàng</a></li>
-            <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>
+            <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a>
+            </li>
             <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
             <li class="dropdown_action" id="restore_account"><a>Khôi phục</a></li>
             <li class="dropdown_action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></li>
             <li class="dropdown_action" data-toggle="modal" data-target="#show-modal-phanbo"><a>Phân bổ data</a></li>
             @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
-            <li class="dropdown_action"><a href="{{route('settings.phanbo')}}">Phân chia hàng loạt</a></li>
+                <li class="dropdown_action"><a href="{{route('settings.phanbo')}}">Phân chia hàng loạt</a></li>
             @endif
         </ul>
     </div>
@@ -98,10 +104,13 @@
         @endphp
         @foreach(@$statuses as $k => $item)
             <button class="status btn white account_relation position btn-new" data-name="{{$item->name}}"
-                    style="background: {{$item->color ?:''}}">{{ $item->name }}<span
-                    class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>
+                    style="background: {{$item->color ?:''}}">{{ $item->name }}
+                <span class="not-number-account white noti-reletion">
+                    {{ @$customer_expired[$item->id] > 0 ? $customer_expired[$item->id] : 0 }} / {{@$customer_group[$item->id]}}
+                </span>
+            </button>
             @php
-            $customers_count += $item->customers_count;
+                $customers_count += $item->customers_count;
             @endphp
         @endforeach
     </div>
@@ -116,16 +125,18 @@
     </div>
     <div class="col-md-2">
         <div class="display birthday_tab position font20 pointer mt7 tooltip-nav">
-             <i class="fa fa-birthday-cake gf-icon-h02" aria-hidden="true"></i>
+            <i class="fa fa-birthday-cake gf-icon-h02" aria-hidden="true"></i>
             <span class="tooltiptext">Sinh nhật hôm nay</span>
             <span class="noti-number noti-number-on birthday-count">{{$birthday}}</span>
         </div>
         <div class="display" style="width: 28px; height: 20px;">
             <div class="dropdown ope tooltip-nav">
-                <i class="fa fa-eye dropdown-toggle" role="button" data-toggle="dropdown" style="margin-top: 8px; margin-left: 5px;"></i>
+                <i class="fa fa-eye dropdown-toggle" role="button" data-toggle="dropdown"
+                   style="margin-top: 8px; margin-left: 5px;"></i>
                 <span class="tooltiptext">Hiển thị số trang</span>
                 <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px">
-                    <li><a class="b-white b-hover limiting active_limit bold" data-limit="20">Hiển thị 20 kết quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting active_limit bold" data-limit="20">Hiển thị 20 kết
+                            quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
                     <li><a class="b-white b-hover limiting" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
@@ -133,8 +144,9 @@
             </div>
         </div>
         <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav">
-            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i id="created_at_icon"
-              class="far fa-clock" style="font-size:22px"></i></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                <i id="created_at_icon" class="far fa-clock" style="font-size:22px"></i>
+            </a>
             <span class="tooltiptext">Thời gian tạo KH</span>
             <div class="add-drop add-d-right other_time_panel"
                  style="left: auto; right: 0px; display: none;"><s class="gf-icon-neotop"></s>
@@ -152,22 +164,13 @@
                 </div>
             </div>
             <ul class="dropdown-menu pull-right tr">
-                <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm
-                        nay</a>
-                </li>
-                <li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm
-                        qua</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần
-                        này</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần
-                        trước</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng
-                        này</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng
-                        trước</a></li>
-                <li class="created_at_item bor-bot tc">
-                    <a class="other_time">Khác</a>
-                </li>
+                <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm nay</a></li>
+                <li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm qua</a></li>
+                <li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần này</a></li>
+                <li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần trước</a></li>
+                <li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng này</a></li>
+                <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng trước</a></li>
+                <li class="created_at_item bor-bot tc"><a class="other_time">Khác</a></li>
             </ul>
         </div>
         <div class="display dropdown-custom1" title="Cài đặt hiển thị bảng">
@@ -180,11 +183,13 @@
     <table class="table card-table table-vcenter text-nowrap table-primary" style="width: 100%">
         <thead class="bg-primary text-white">
         <tr>
-            <th ><input type="checkbox" class="selectall myCheck"/></th>
+            <th><input type="checkbox" class="selectall myCheck"/></th>
             @forelse($user_filter_list as $key => $item)
                 @if($key == 5)
                     @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
-                        <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}" style="min-width: 130px">Tin nhắn</th>
+                        <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}"
+                            style="min-width: 130px">Tin nhắn
+                        </th>
                     @endif
                 @else
                     <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}"
@@ -205,7 +210,7 @@
             {{--<th class="text-white text-center">Họ tên</th>--}}
             {{--<th class="text-white text-center">SĐT</th>--}}
             {{--@if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)--}}
-                {{--<th class="text-white text-center" style="min-width: 130px">Tin nhắn</th>--}}
+            {{--<th class="text-white text-center" style="min-width: 130px">Tin nhắn</th>--}}
             {{--@endif--}}
             {{--<th class="text-white text-center">Nhóm KH</th>--}}
             {{--<th class="text-white text-center">Trạng Thái</th>--}}
@@ -243,15 +248,17 @@
             @endif
             @foreach($customers as $key => $customer)
                 <tr class="{{$customer->expired_time_boolean == 1 ? 'qua-han' : ''}}">
-                    <td class="text-center" style="background: {{isset($customer->status)?$customer->status->color :''}}">
+                    <td class="text-center"
+                        style="background: {{isset($customer->status)?$customer->status->color :''}}">
                         <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/>
                     </td>
                     <td class="text-center {{in_array(0,$user_filter_grid) ? '':'display-none'}}">{{ $rank ++ }}</td>
                     <td class="text-center {{in_array(1,$user_filter_grid) ? '':'display-none'}}">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
-                    <td class="text-center name-customer {{in_array(2,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
+                    <td class="text-center name-customer {{in_array(2,$user_filter_grid) ? '':'display-none'}}"
+                        data-customer-id="{{ $customer->id }}">
                         <a class="view_modal" id="chat-fast" data-customer-id="{{ $customer->id }}" href="#">
                             @if($customer->FB_ID)
-                            <i class="fab fa-facebook-messenger" style="font-size: 16px"></i>
+                                <i class="fab fa-facebook-messenger" style="font-size: 16px"></i>
                             @else
                                 <i class="fas fa-info-circle"></i>
                             @endif
@@ -259,41 +266,47 @@
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                     </td>
-                    <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
+                    <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}"
+                        data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{ $customer->phone }}</a>
 
                         @if(!empty($customer->call_back))
-                            <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
+                            <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}"
+                                     style="cursor: pointer;color: red !important;"></i></span>
                         @endif
                     </td>
-                    <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
-                        <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
+                    <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}"
+                        style="position: relative;max-width: 146px">
+                        <textarea data-id="{{$customer->id}}"
+                                  class="description-cus">{{ $customer->description }}</textarea>
                     </td>
-                @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
-                        <td class="text-center {{in_array(5,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
+                        <td class="text-center {{in_array(5,$user_filter_grid) ? '':'display-none'}}"
+                            style="position: relative;max-width: 146px">
                             <textarea class="description-cus">{{ $customer->message }}</textarea>
                         </td>
                     @endif
                     <td class="text-center category-db {{in_array(6,$user_filter_grid) ? '':'display-none'}}"
                         data-id="{{$customer->id}}">{{str_limit($customer->group_text,30)}}</td>
-                    <td class="text-center status-db {{in_array(7,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
+                    <td class="text-center status-db {{in_array(7,$user_filter_grid) ? '':'display-none'}}"
+                        data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
                     <td class="text-center telesale-customer {{in_array(8,$user_filter_grid) ? '':'display-none'}}"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
-
-
-
 
 
                     <td class="text-center {{in_array(9,$user_filter_grid) ? '':'display-none'}}">{{$customer->expired_text}}</td>
                     <td class="text-center {{in_array(10,$user_filter_grid) ? '':'display-none'}}">{{@$customer->time_move}}</td>
                     <td class="text-center {{in_array(11,$user_filter_grid) ? '':'display-none'}}">{{@$customer->branch->name}}</td>
 
-                    <td class="text-center category-tip {{in_array(12,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">
+                    <td class="text-center category-tip {{in_array(12,$user_filter_grid) ? '':'display-none'}}"
+                        data-id="{{$customer->id}}">
                         <span class="badge badge-primary span-tips">{{str_limit($customer->group_tips,30)}}</span>
                     </td>
-                    <td class="text-center genitive-db {{in_array(13,$user_filter_grid) ? '':'display-none'}}" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>
+                    <td class="text-center genitive-db {{in_array(13,$user_filter_grid) ? '':'display-none'}}"
+                        data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>
                     <td class="text-center {{in_array(14,$user_filter_grid) ? '':'display-none'}}">{{@$customer->carepage->full_name}}</td>
-                    <td class="text-center {{in_array(15,$user_filter_grid) ? '':'display-none'}}" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
+                    <td class="text-center {{in_array(15,$user_filter_grid) ? '':'display-none'}}"
+                        title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
                     </td>
                     <td class="text-center customer-birthday {{in_array(16,$user_filter_grid) ? '':'display-none'}}"
@@ -306,7 +319,9 @@
                     <td class="text-center {{in_array(22,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('all_total')) }}</td>
                     <td class="text-center {{in_array(23,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
                     <td class="text-center {{in_array(24,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('the_rest')) }}</td>
-                    <td class="text-center"><a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a></td>
+                    <td class="text-center"><a title="Sửa tài khoản" class="btn"
+                                               href="{{ route('customers.edit', $customer->id) }}"><i
+                                    class="fas fa-edit"></i></a></td>
                 </tr>
             @endforeach
         @else

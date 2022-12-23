@@ -41,6 +41,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use App\Models\GroupComment as Model;
 
@@ -135,7 +136,20 @@ class CustomerController extends Controller
         $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
+
         $customers = Customer::search($input);
+
+        $input2 = new \ArrayObject($input);
+        $copy = $input2->getArrayCopy();
+        unset($copy["status"]);
+        $customer_group = Customer::search($copy)->select('id', 'status_id',
+            DB::raw('count(*) as total'))->groupBy('status_id')->get()->pluck('total', 'status_id');
+
+        $copy['expired_time_boolean'] = [StatusConstant::QUA_HAN];
+
+        $customer_expired = Customer::search($copy)->select('id', 'status_id',
+            DB::raw('count(*) as total'))->groupBy('status_id')->get()->pluck('total', 'status_id');
+
         $birthday = clone $customers;
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
 
@@ -185,10 +199,10 @@ class CustomerController extends Controller
             $user_filter_grid = array_keys($user_filter_list);
         }
         if ($request->ajax()) {
-            return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday','user_filter_list','user_filter_grid'));
+            return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday','user_filter_list','user_filter_grid','customer_group','customer_expired'));
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday','user_filter_grid','user_filter_list'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday','user_filter_grid','user_filter_list','customer_group','customer_expired'));
     }
 
     /**
