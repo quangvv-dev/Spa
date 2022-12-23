@@ -26,14 +26,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
-    private $taskService;
 
     /**
      * TaskController constructor.
      *
      * @param TaskService $taskService
      */
-    public function __construct(TaskService $taskService)
+    public function __construct()
     {
         $this->middleware('permission:report.groupSale', ['only' => ['indexGroupCategory']]);
         $this->middleware('permission:report.sale', ['only' => ['index']]);
@@ -82,9 +81,9 @@ class SalesController extends Controller
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
-//            $orders2 = clone $orders;
+            $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-//            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -125,15 +124,15 @@ class SalesController extends Controller
             })->sum('price');
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
-//            $item->order_old = $order_old->count();
+            $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('all_total');
-//            $item->revenue_old = $order_old->sum('all_total');
+            $item->revenue_old = $order_old->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');
 //            $item->payment_old = $order_old->sum('gross_revenue');
 //            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
 //            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
-//            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
+            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
 //            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
 
 //            $item->all_payment = $detail->sum('price');

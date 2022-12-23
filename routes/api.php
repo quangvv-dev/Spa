@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 Route::post('callcenter/hangup', 'API\CallController@hangUp');//Api dành cho 3CX
-Route::post('callcenter/crmSendCallLog', 'API\CallController@hangUp');//api dành cho GTC Telecom
 
+Route::post('callcenter/crmSendCallLog', 'API\CallController@hangUp');//api dành cho GTC Telecom
 Route::post('callcenter/crmSendIncomingCall', 'API\CallController@inComing');//api dành cho GTC Telecom
 Route::post('callcenter/callOut', 'API\CallController@callOut');//api dành cho GTC Telecom
 
