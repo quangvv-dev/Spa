@@ -117,12 +117,12 @@ class SalesController extends Controller
             $request->merge(['telesales' => $item->id]);
             $params = $request->all();
             $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-//            $detail_new = clone $detail;
+            $detailOld = clone $detail;
 
             $item->detail_new = $detail->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
-            $item->detail_old = $detail->whereHas('order', function ($qr) {
+            $item->detail_old = $detailOld->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::IS_UPSALE);
             })->sum('price');
             $item->customer_new = $data_new->count();
