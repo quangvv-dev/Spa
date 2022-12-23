@@ -57,18 +57,7 @@ class CallCenter extends Model
             $q->where('caller_number', $param['caller_number']);
         })->when(isset($param['dest_number']) && $param['dest_number'], function ($q) use ($param) {
             $q->where('dest_number', $param['dest_number']);
-        })
-            ->when(isset($param['data_time']) && ($param['data_time'] == 'TODAY' ||
-                    $param['data_time'] == 'YESTERDAY'), function ($q) use ($param) {
-                $q->whereDate('start_time', getTime(($param['data_time'])));
-            })
-            ->when(isset($param['data_time']) && ($param['data_time'] == 'THIS_WEEK' ||
-                    $param['data_time'] == 'LAST_WEEK' ||
-                    $param['data_time'] == 'THIS_MONTH' ||
-                    $param['data_time'] == 'LAST_MONTH'), function ($q) use ($param) {
-                $q->whereBetween('start_time', getTime(($param['data_time'])));
-            })
-            ->when(isset($param['start_date']) && isset($param['end_date']), function ($q) use ($param) {
+        })->when(isset($param['start_date']) && isset($param['end_date']), function ($q) use ($param) {
                 $q->whereBetween('start_time', [
                     Functions::yearMonthDay($param['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($param['end_date']) . " 23:59:59",

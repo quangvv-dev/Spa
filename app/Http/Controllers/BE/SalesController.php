@@ -9,6 +9,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
+use App\Models\CallCenter;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -85,15 +86,30 @@ class SalesController extends Controller
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
             $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
-            $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                    $q->where('branch_id', $request->branch_id);
-                });
+            if ($item->caller_number) {
+                $paramsCenter = [
+                    'caller_number' => $item->caller_number,
+                    'call_status' => 'ANSWERED',
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date,
+                ];
+
+                $callCenter = CallCenter::search($paramsCenter,'id')->count();
+                $item->call_center = $callCenter;
+            } else {
+                $item->call_center = 0;
+            }
+
+
+//            $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+//                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+//                    $q->whereIn('branch_id', $request->group_branch);
+//                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+//                    $q->where('branch_id', $request->branch_id);
+//                });
 //            $comment_new = clone $group_comment;
 
-            $item->comment_new = $group_comment->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->get()->count();// trao doi moi
+//            $item->comment_new = $group_comment->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->get()->count();// trao doi moi
 //            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
@@ -118,7 +134,7 @@ class SalesController extends Controller
             $params = $request->all();
             $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
             $detailOld = clone $detail;
-            $item->all_payment = $detail->sum('price');
+//            $item->all_payment = $detail->sum('price');
             $item->detail_new = $detail->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
@@ -169,7 +185,7 @@ class SalesController extends Controller
             $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
 
             if (isset($params['is_upsale'])) {
-                $item->gross_revenue = $detail->whereHas('order', function ($qr)use ($params) {
+                $item->gross_revenue = $detail->whereHas('order', function ($qr) use ($params) {
                     $qr->where('is_upsale', $params['is_upsale']);
                 })->sum('price');
             } else {
