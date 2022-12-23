@@ -138,7 +138,7 @@ class SalesController extends Controller
 //            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
 //            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
 
-//            $item->all_payment = $detail->sum('price');
+            $item->all_payment = $detail->sum('price');
             return $item;
         })->sortByDesc('all_payment');
         \View::share([

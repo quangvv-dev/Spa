@@ -5,8 +5,8 @@
             <th class="text-center" colspan="1">STT</th>
             <th class="text-center" colspan="1">SALE</th>
             <th class="text-center" colspan="14">KHÁCH HÀNG MỚI</th>
-            <th class="text-center" colspan="6">KHÁCH HÀNG CŨ</th>
-            {{--<th class="text-center" colspan="5">TỔNG CHUNG</th>--}}
+            <th class="text-center" colspan="3">KHÁCH HÀNG CŨ</th>
+            <th class="text-center" colspan="1">TỔNG CHUNG</th>
         </tr>
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center"></th>
@@ -35,7 +35,7 @@
             {{--<th class="text-center">Doanh<span class=""><br>số</span></th>--}}
             {{--<th class="text-center">Doanh<span class=""><br>thu</span></th>--}}
             {{--<th class="text-center">Thu nợ</th>--}}
-            {{--<th class="text-center">Đã thu<span class=""><br>T.kỳ</span></th>--}}
+            <th class="text-center">Đã thu<span class=""><br>T.kỳ</span></th>
         </tr>
         <tr class="number_index">
             <th class="text-center">(1)</th>
@@ -57,7 +57,7 @@
             <th class="text-center">(11)</th>
             <th class="text-center">(12)</th>
             <th class="text-center">(13)</th>
-            {{--<th class="text-center">(14)</th>--}}
+            <th class="text-center">(14)</th>
             {{--<th class="text-center">(15)</th>--}}
             {{--<th class="text-center">(14)+(15)</th>--}}
             {{--<th class="text-center">(7)+(12)</th>--}}
@@ -132,7 +132,7 @@
 
                     {{--<td class="text-center pdr10">{{number_format($item->payment_new + $item->payment_old)}}</td>--}}
                     {{--<td class="text-center pdr10">{{number_format(($item->all_payment - $item->payment_new - $item->payment_old)>0?$item->all_payment - $item->payment_new - $item->payment_old:0)}}</td>--}}
-                    {{--<td class="text-center pdr10">{{number_format($item->all_payment)}}</td>--}}
+                    <td class="text-center pdr10">{{number_format($item->all_payment)}}</td>
                 </tr>
             @endforeach
         @endif
@@ -165,7 +165,7 @@
             {{--<td class="bold">{{number_format($allTotal)}}</td>--}}
             {{--<td class="bold">{{number_format($payment_new + $payment_old)}}</td>--}}
             {{--<td class="bold">{{number_format(($all_payment - $payment_new - $payment_old)>0?$all_payment - $payment_new - $payment_old:0)}}</td>--}}
-            {{--<td class="bold">{{number_format($all_payment)}}</td>--}}
+            <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
         </tr>
 
         </tbody>
