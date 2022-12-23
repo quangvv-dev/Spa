@@ -429,12 +429,12 @@ class OrderController extends Controller
         $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];
         $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
         if (isset($curent_branch) && $curent_branch) {
-            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::DOCTOR])
                 ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
                     $q->where('branch_id', $curent_branch);
                 })->pluck('full_name', 'id');
         } else {
-            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::DOCTOR])->pluck('full_name', 'id');
         }
         $products = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->pluck('name', 'id')->toArray();
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
