@@ -181,33 +181,33 @@
                                 @endif
                             </ul>
                         </li>
-                        <li class="sub-with-sub">
-                            <a href="#">Quản lý đơn nạp ví</a>
-                            <ul>
-                                @if($roleGlobal->permission('order.index_payment'))
-                                    <li><a href="{!! route('payment-wallet.index') !!}">Đã thu trong kỳ</a></li>
-                                @endif
-                            </ul>
-                        </li>
+                        {{--<li class="sub-with-sub">--}}
+                            {{--<a href="#">Quản lý đơn nạp ví</a>--}}
+                            {{--<ul>--}}
+                                {{--@if($roleGlobal->permission('order.index_payment'))--}}
+                                    {{--<li><a href="{!! route('payment-wallet.index') !!}">Đã thu trong kỳ</a></li>--}}
+                                {{--@endif--}}
+                            {{--</ul>--}}
+                        {{--</li>--}}
                         @if($roleGlobal->permission('order.orders-destroy'))
                             <li><a href="{!! route('order.orders-destroy') !!}">Đơn hàng bị xoá</a></li>
                         @endif
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}"
-                   href="{{route('tasks.index')}}">
-                    <i class="fas fa-tasks"></i><span>CSKH</span></a>
-                <div class="sub-item">
-                    <ul>
-                        @if($roleGlobal->permission('tasks.employee'))
-                            <li><a href="{{url('tasks')}}">CSKH nhân viên</a></li>
-                            <li><a href="{{url('tasks-employee')}}">CSKH phòng ban</a></li>
-                        @endif
-                    </ul>
-                </div>
-            </li>
+            {{--<li class="nav-item">--}}
+                {{--<a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}"--}}
+                   {{--href="{{route('tasks.index')}}">--}}
+                    {{--<i class="fas fa-tasks"></i><span>CSKH</span></a>--}}
+                {{--<div class="sub-item">--}}
+                    {{--<ul>--}}
+                        {{--@if($roleGlobal->permission('tasks.employee'))--}}
+                            {{--<li><a href="{{url('tasks')}}">CSKH nhân viên</a></li>--}}
+                            {{--<li><a href="{{url('tasks-employee')}}">CSKH phòng ban</a></li>--}}
+                        {{--@endif--}}
+                    {{--</ul>--}}
+                {{--</div>--}}
+            {{--</li>--}}
             <li class="nav-item with-sub">
                 <a class="nav-link {{ Request::is('statistics*')||Request::is('report*')||Request::is('history-sms') ? 'active' : '' }}"
                    href="#"><i class="fas fa-search"></i><span>Thống kê</span></a>

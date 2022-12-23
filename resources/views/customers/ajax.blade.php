@@ -182,13 +182,13 @@
         <tr>
             <th ><input type="checkbox" class="selectall myCheck"/></th>
             @forelse($user_filter_list as $key => $item)
-                @if($key == 4)
+                @if($key == 5)
                     @if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)
                         <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}" style="min-width: 130px">Tin nhắn</th>
                     @endif
                 @else
                     <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}"
-                        style="{{$key==8 ? 'min-width: 121px;' : ''}}z-index: 1;"
+                        style="{{$key==4 ? 'min-width: 121px;' : ''}}z-index: 1;"
                     >
                         {{$item}}
                     </th>
@@ -260,25 +260,30 @@
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
-                        <a href="callto:{{ $customer->phone }}">{{ str_limit($customer->phone,7,'xxx') }}</a>
+                        <a href="callto:{{ $customer->phone }}">{{ $customer->phone }}</a>
 
                         @if(!empty($customer->call_back))
                             <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
                         @endif
                     </td>
+                    <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
+                        <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
+                    </td>
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::MARKETING)
-                        <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
+                        <td class="text-center {{in_array(5,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
                             <textarea class="description-cus">{{ $customer->message }}</textarea>
                         </td>
                     @endif
-                    <td class="text-center category-db {{in_array(5,$user_filter_grid) ? '':'display-none'}}"
+                    <td class="text-center category-db {{in_array(6,$user_filter_grid) ? '':'display-none'}}"
                         data-id="{{$customer->id}}">{{str_limit($customer->group_text,30)}}</td>
-                    <td class="text-center status-db {{in_array(6,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
-                    <td class="text-center telesale-customer {{in_array(7,$user_filter_grid) ? '':'display-none'}}"
+                    <td class="text-center status-db {{in_array(7,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">{{ @$customer->status->name }}</td>
+                    <td class="text-center telesale-customer {{in_array(8,$user_filter_grid) ? '':'display-none'}}"
                         data-customer-id="{{$customer->id}}">{{ @$customer->telesale->full_name }}</td>
-                    <td class="text-center {{in_array(8,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
-                        <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
-                    </td>
+
+
+
+
+
                     <td class="text-center {{in_array(9,$user_filter_grid) ? '':'display-none'}}">{{$customer->expired_text}}</td>
                     <td class="text-center {{in_array(10,$user_filter_grid) ? '':'display-none'}}">{{@$customer->time_move}}</td>
                     <td class="text-center {{in_array(11,$user_filter_grid) ? '':'display-none'}}">{{@$customer->branch->name}}</td>

@@ -156,11 +156,11 @@ class CustomerController extends Controller
             1=>'Ngày tạo KH',
             2=>'Họ tên',
             3=>'SĐT',
-            4=>'Tin nhắn',
-            5=>'Nhóm KH',
-            6=>'Trạng thái',
-            7=>'Người phụ trách',
-            8=>'Mô tả',
+            4=>'Mô tả',
+            5=>'Tin nhắn',
+            6=>'Nhóm KH',
+            7=>'Trạng thái',
+            8=>'Người phụ trách',
             9=>'T/G tác nghiệp',
             10=>'Chuyển về TP',
             11=>'C.Nhánh',
@@ -409,9 +409,9 @@ class CustomerController extends Controller
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
         }
-        if (isset($input['phone']) && str_contains($input['phone'], 'xxx')) {
-            unset($input['phone']);
-        }
+//        if (isset($input['phone']) && str_contains($input['phone'], 'xxx')) {
+//            unset($input['phone']);
+//        }
         $customer = $this->customerService->update($input, $id);
         CustomerGroup::where('customer_id', $customer->id)->delete();
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
@@ -666,9 +666,9 @@ class CustomerController extends Controller
     public function ajaxUpdate(Request $request, $id)
     {
         $input = $request->except('category_ids', 'category_tips');
-        if (isset($input['phone'])&& str_contains($input['phone'], 'xxx')) {
-            unset($input['phone']);
-        }
+//        if (isset($input['phone'])&& str_contains($input['phone'], 'xxx')) {
+//            unset($input['phone']);
+//        }
         $before = $this->customerService->find($id);
         $data = [];
         if (isset($before) && $before) {
