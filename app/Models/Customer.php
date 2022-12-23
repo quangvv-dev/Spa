@@ -543,12 +543,12 @@ class Customer extends Model
     {
         $now = Date::now()->format('Y-m-d H:i:s');
 
-        if (!empty($this->time_move_sale)) {
-            $countdown = strtotime($this->time_move_sale) - strtotime($now);
+        if (!empty($this->time_move_cskh)) {
+            $countdown = strtotime($this->time_move_cskh) - strtotime($now);
             $days = ($countdown / 86400) >= 1 ? floor($countdown / 86400) : 0;
             $hours = floor(($countdown % 86400) / 3600);
             $minutes = round((($countdown % 86400) % 3600) / 60);
-            return ($days > 0 ? $days . ' ngày ;' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
+            return ($days > 0 ? $days . ' ngày ' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
         }
         return '';
     }
