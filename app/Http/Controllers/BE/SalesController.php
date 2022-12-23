@@ -122,6 +122,9 @@ class SalesController extends Controller
             $item->detail_new = $detail->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
+            $item->detail_old = $detail->whereHas('order', function ($qr) {
+                $qr->where('is_upsale', OrderConstant::IS_UPSALE);
+            })->sum('price');
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
             $item->order_old = $order_old->count();
@@ -132,7 +135,7 @@ class SalesController extends Controller
 //            $item->payment_old = $order_old->sum('gross_revenue');
 //            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
 //            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
-            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
+//            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
 //            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
 
 //            $item->all_payment = $detail->sum('price');
