@@ -264,13 +264,24 @@ class MarketingController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
 
-        $input = $request->all();
-        $marketing = User::where('department_id', 3)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+        $input = $request->except('doanh_so_doanh_thu');
+
+        $marketing = User::where('department_id', 3)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input,$request) {
             $input['marketing'] = $item->id;
-            $data = Order::searchAll($input)->select('gross_revenue');
-            $item->gross_revenue = $data->sum('gross_revenue');
+//            $data = Order::searchAll($input)->select('gross_revenue');
+//            $item->gross_revenue = $data->sum('gross_revenue');
+//            return $item;
+
+//            $params['telesales'] = $item->id;
+
+            if(!isset($request->doanh_so_doanh_thu) || $request->doanh_so_doanh_thu == 0){
+                $item->gross_revenue = Order::search($input)->sum('all_total');
+            } else {
+                $item->gross_revenue = PaymentHistory::search($input, 'price')->sum('price');
+            }
             return $item;
         })->sortByDesc('gross_revenue')->toArray();
+
 
         $my_key = array_keys(array_column((array)$marketing, 'id'), Auth::user()->id);
 
