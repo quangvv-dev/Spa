@@ -119,6 +119,9 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
         $input = $request->all();
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
@@ -133,6 +136,7 @@ class CustomerController extends Controller
         if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
             unset($input['branch_id']);
         }
+
         $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;

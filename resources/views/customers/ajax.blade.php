@@ -88,7 +88,7 @@
         <button data-name="" class="btn btn-default status btn white account_relation position"
                 style="height: 40px;">
             TẤT CẢ
-            <span class="not-number-account white all_count">{{$statuses->sum('customers_count')}}</span>
+            <span class="not-number-account white all_count">{{$customer_group->sum()}}</span>
         </button>
     </div>
     <div style="margin-left: 10px">
@@ -143,36 +143,36 @@
                 </ul>
             </div>
         </div>
-        <div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav">
-            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                <i id="created_at_icon" class="far fa-clock" style="font-size:22px"></i>
-            </a>
-            <span class="tooltiptext">Thời gian tạo KH</span>
-            <div class="add-drop add-d-right other_time_panel"
-                 style="left: auto; right: 0px; display: none;"><s class="gf-icon-neotop"></s>
-                <div class="padding tl"><p>Ngày bắt đầu</p>
-                    <input type="text" class="form-control filter_start_date" id="datepicker"
-                           data-toggle="datepicker" name="payment_date">
-                </div>
-                <div class="padding tl"><p>Ngày kết thúc</p>
-                    <input type="text" class="form-control filter_end_date" id="datepicker"
-                           data-toggle="datepicker" name="payment_date">
-                </div>
-                <div class="padding5-10 tl mb5">
-                    <button class="btn btn-info submit_other_time">Tìm kiếm</button>
-                    <button class="btn btn-default cancel_other_time">Đóng</button>
-                </div>
-            </div>
-            <ul class="dropdown-menu pull-right tr">
-                <li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm nay</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm qua</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần này</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần trước</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng này</a></li>
-                <li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng trước</a></li>
-                <li class="created_at_item bor-bot tc"><a class="other_time">Khác</a></li>
-            </ul>
-        </div>
+        {{--<div id="div_created_at_dropdown" class="display position pointer mt5 open tooltip-nav">--}}
+            {{--<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">--}}
+                {{--<i id="created_at_icon" class="far fa-clock" style="font-size:22px"></i>--}}
+            {{--</a>--}}
+            {{--<span class="tooltiptext">Thời gian tạo KH</span>--}}
+            {{--<div class="add-drop add-d-right other_time_panel"--}}
+                 {{--style="left: auto; right: 0px; display: none;"><s class="gf-icon-neotop"></s>--}}
+                {{--<div class="padding tl"><p>Ngày bắt đầu</p>--}}
+                    {{--<input type="text" class="form-control filter_start_date" id="datepicker"--}}
+                           {{--data-toggle="datepicker" name="payment_date">--}}
+                {{--</div>--}}
+                {{--<div class="padding tl"><p>Ngày kết thúc</p>--}}
+                    {{--<input type="text" class="form-control filter_end_date" id="datepicker"--}}
+                           {{--data-toggle="datepicker" name="payment_date">--}}
+                {{--</div>--}}
+                {{--<div class="padding5-10 tl mb5">--}}
+                    {{--<button class="btn btn-info submit_other_time">Tìm kiếm</button>--}}
+                    {{--<button class="btn btn-default cancel_other_time">Đóng</button>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--<ul class="dropdown-menu pull-right tr">--}}
+                {{--<li class="created_at_item bor-bot tc"><a data-time="TODAY" class="btn_choose_time">Hôm nay</a></li>--}}
+                {{--<li class="created_at_item bor-bot tc"><a data-time="YESTERDAY" class="btn_choose_time">Hôm qua</a></li>--}}
+                {{--<li class="created_at_item bor-bot tc"><a data-time="THIS_WEEK" class="btn_choose_time">Tuần này</a></li>--}}
+                {{--<li class="created_at_item bor-bot tc"><a data-time="LAST_WEEK" class="btn_choose_time">Tuần trước</a></li>--}}
+                {{--<li class="created_at_item bor-bot tc"><a data-time="THIS_MONTH" class="btn_choose_time">Tháng này</a></li>--}}
+                {{--<li class="created_at_item bor-bot tc"><a data-time="LAST_MONTH" class="btn_choose_time">Tháng trước</a></li>--}}
+                {{--<li class="created_at_item bor-bot tc"><a class="other_time">Khác</a></li>--}}
+            {{--</ul>--}}
+        {{--</div>--}}
         <div class="display dropdown-custom1" title="Cài đặt hiển thị bảng">
             @include('components.user_filter_grid')
         </div>
@@ -238,14 +238,14 @@
         <tbody style="background: white;">
         @if (count($customers))
 
-            @if(count($customers) <7)
-                <tr>
-                    <td colspan="22"></td>
-                </tr>
-                <tr>
-                    <td colspan="22"></td>
-                </tr>
-            @endif
+            {{--@if(count($customers) <7)--}}
+                {{--<tr>--}}
+                    {{--<td colspan="22"></td>--}}
+                {{--</tr>--}}
+                {{--<tr>--}}
+                    {{--<td colspan="22"></td>--}}
+                {{--</tr>--}}
+            {{--@endif--}}
             @foreach($customers as $key => $customer)
                 <tr class="{{$customer->expired_time_boolean == 1 ? 'qua-han' : ''}}">
                     <td class="text-center"
