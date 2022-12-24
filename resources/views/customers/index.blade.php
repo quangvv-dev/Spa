@@ -930,7 +930,9 @@
                         status: status,
                         data_time: btn_choose_time,
                         birthday: birthday,
-                        branch_id: branch_id
+                        branch_id: branch_id,
+                        start_date: $('.formSearch #start_date').val(),
+                        end_date: $('.formSearch #end_date').val(),
                     },
                 }).done(function (data) {
                     $('#registration-form').html(data);
@@ -1124,7 +1126,8 @@
                         status_id: status_id,
                     }
                 }).done(function () {
-                    window.location.reload();
+                    // window.location.reload();
+                    alertify.success('Cập nhật thành công !')
                 });
             });
 
