@@ -395,7 +395,7 @@
                 let group = $('#group').val();
                 let marketing = $('#group_product').val();
                 let source = $('#source').val();
-                let telesales = $('#telesales').val();
+                let telesales = $('#telesales_id').val();
                 let branch_id = $('.branch_id').val();
                 $('#status').val(status);
                 $('#birthday_tab').val('');
