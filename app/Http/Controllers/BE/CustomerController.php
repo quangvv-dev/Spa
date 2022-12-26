@@ -122,7 +122,11 @@ class CustomerController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        $input = $request->all();
+        if($request->search){
+            $input = $request->except('start_date','end_date');
+        } else {
+            $input = $request->all();
+        }
         $checkRole = checkRoleAlready();
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;

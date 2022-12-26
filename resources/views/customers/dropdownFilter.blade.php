@@ -8,7 +8,7 @@
         </select>
     </div>
     <div class="col-md-2 col-xs-12">
-        <select name="marketing" class="form-control group-product">
+        <select name="marketing" class="form-control group-product" id="marketing">
             <option value="">MKT phụ trách</option>
             @foreach($marketingUsers as $k=> $item)
                 <option value="{{$k}}">{{ $item}}</option>

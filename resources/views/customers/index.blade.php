@@ -542,7 +542,7 @@
                 let group = $('#group').val();
                 let telesales = $('#telesales').val();
                 let status = $('#status').val();
-                let marketing = $('#group_product').val();
+                let marketing = $('#marketing').val();
                 let source = $('#source').val();
                 let branch_id = $('.branch_id').val();
                 let gender = $('.gender').val();
