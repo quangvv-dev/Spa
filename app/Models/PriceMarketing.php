@@ -30,8 +30,8 @@ class PriceMarketing extends Model
     {
         $data = self::orderBy('id', 'desc')->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('date', [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                Functions::yearMonthDay($input['start_date']),
+                Functions::yearMonthDay($input['end_date']),
             ]);
         })->when(isset($input['source_id']), function ($query) use ($input) {
             $query->where('source_id', $input['source_id']);

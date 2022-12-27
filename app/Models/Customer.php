@@ -197,6 +197,8 @@ class Customer extends Model
             $q->where('time_move_cskh', '<=', $input['date_check_move']);
         })->when(isset($input['date_check_expired']), function ($q) use ($input) {
             $q->where('expired_time', '<=', $input['date_check_expired']);
+        })->when(isset($input['marketing']), function ($query) use ($input) {
+            $query->where('mkt_id', $input['marketing']);
         });
         return $docs;
     }

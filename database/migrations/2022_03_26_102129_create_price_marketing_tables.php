@@ -15,12 +15,12 @@ class CreatePriceMarketingTables extends Migration
     {
         Schema::create('price_marketings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('source_id')->index()->comment('Nguồn dữ liệu');
             $table->bigInteger('budget')->comment('Ngân sách')->default(0);
-            $table->integer('number_click')->comment('Số lượt click')->default(0);
+            $table->integer('data')->comment('Số data')->default(0);
+            $table->integer('invoice')->comment('tiền hóa đơn')->default(0);
             $table->date('date')->comment('dữ liệu ngày')->nullable();
             $table->integer('user_id')->index()->comment('Người cập nhật');
-            $table->integer('branch_id')->index()->comment('Chi nhánh');
+            $table->integer('branch_id')->index()->comment('Chi nhánh')->default(0);
             $table->timestamps();
         });
     }

@@ -18,9 +18,11 @@ use App\Models\Source;
 use App\Models\ThuChi;
 use App\User;
 use Carbon\Carbon;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use function JmesPath\search;
 
 class MarketingController extends Controller
@@ -102,10 +104,10 @@ class MarketingController extends Controller
             return $item;
         })->sortByDesc('payment')
             ->filter(function ($qr) {
-            if ($qr->payment > 0){
-                return $qr;
-            }
-        });
+                if ($qr->payment > 0) {
+                    return $qr;
+                }
+            });
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
@@ -150,38 +152,53 @@ class MarketingController extends Controller
             $request->merge(['branch_id' => $users->branch_id]);
         }
         $input = $request->all();
-        $input['searchAccept'] = UserConstant::ACTIVE;
-        $source = Source::with('user')->get()->map(function ($item) use ($input) {
-            $input['source_fb'] = $item->id;
-            $customer = Customer::search($input)->select('id');
-            $input['group_user'] = $customer->pluck('id')->toArray();
-            if (count($input['group_user'])) {
-                $schedules = Schedule::search($input)->select('id');
-                $item->schedules = $schedules->count();
-                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            } else {
-                $item->schedules = 0;
-                $item->schedules_den = 0;
-            }
-            $input['source_id'] = $item->id;
+        $input['active'] = UserConstant::ACTIVE;
+        $priceMKT = PriceMarketing::search($input)
+            ->select('budget', 'data', 'invoice', 'user_id', DB::raw('sum(budget) as sum_budged'), DB::raw('sum(data) as sum_data'), DB::raw('sum(invoice) as sum_invoice'))
+            ->groupBy('user_id')->with('user')->get()->map(function ($item) use ($input) {
+                $input['marketing'] = $item->user_id;
+                $item->customer = Customer::search1($input)->count();
 
-            $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
-                ->select('id', 'gross_revenue', 'all_total');
-            unset($input['marketing']);
-            $input['source_id'] = $item->id;
-            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
-            $item->budget = $price->total_budget; //ngân sách
-            $item->customers = $customer->count();
-            $item->orders = $orders->count();
-            $item->all_total = $orders->sum('all_total');
-            $item->gross_revenue = $orders->sum('gross_revenue');
-            return $item;
-        })->sortByDesc('payment');
+                $item->sum_budged = intval($item->sum_budged);
+                $item->sum_data = intval($item->sum_data);
+                $item->sum_invoice = intval($item->sum_invoice);
+                $item->doanh_so = Order::search($input)->sum('all_total');
+                $item->doanh_thu = intval(PaymentHistory::search($input, 'price')->sum('price'));
+                return $item;
+            });
+//
+//        $source = Source::with('user')->get()->map(function ($item) use ($input) {
+//            $input['source_fb'] = $item->id;
+//            $customer = Customer::search($input)->select('id');
+//            $input['group_user'] = $customer->pluck('id')->toArray();
+//            if (count($input['group_user'])) {
+//                $schedules = Schedule::search($input)->select('id');
+//                $item->schedules = $schedules->count();
+//                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+//            } else {
+//                $item->schedules = 0;
+//                $item->schedules_den = 0;
+//            }
+//            $input['source_id'] = $item->id;
+//
+//            $orders = Order::searchAll($input)->where('is_upsale', OrderConstant::NON_UPSALE)
+//                ->select('id', 'gross_revenue', 'all_total');
+//            unset($input['marketing']);
+//            $input['source_id'] = $item->id;
+//            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
+//            $item->budget = $price->total_budget; //ngân sách
+//            $item->customers = $customer->count();
+//            $item->orders = $orders->count();
+//            $item->all_total = $orders->sum('all_total');
+//            $item->gross_revenue = $orders->sum('gross_revenue');
+//            return $item;
+//        })->sortByDesc('payment');
+
         if ($request->ajax()) {
-            return view('marketing.dashbroad.ajax', compact('source'));
+            return view('marketing.dashbroad.ajax', compact('priceMKT'));
         }
 
-        return view('marketing.dashbroad.index', compact('source'));
+        return view('marketing.dashbroad.index', compact('priceMKT'));
     }
 
     /**
@@ -195,27 +212,34 @@ class MarketingController extends Controller
         $user = Auth::user();
         if ($request->id && count($request->id)) {
             foreach ($request->id as $key => $item) {
-                PriceMarketing::find($item)->update([
-                    'source_id' => $request->source_id,
-                    'budget' => str_replace(",", "", $request->budget[$key]),
-                    'comment' => str_replace(",", "", $request->comment[$key]),
-                    'message' => str_replace(",", "", $request->message[$key]),
-                    'date' => Carbon::createFromFormat('d/m/Y', $request->date[$key])->format('Y-m-d'),
-                    'user_id' => $user->id,
-                    'branch_id' => $request->branch_id,
-                ]);
+                if (empty($item)) {
+                    PriceMarketing::create([
+                        'budget' => str_replace(",", "", $request->budget[$key]),
+                        'data' => str_replace(",", "", $request->data[$key]),
+                        'invoice' => str_replace(",", "", $request->invoice[$key]),
+                        'date' => Carbon::createFromFormat('d-m-Y', $request->date[$key])->format('Y-m-d'),
+                        'user_id' => $user->id,
+                        'branch_id' => $user->branch_id ? $user->branch_id : 0,
+                    ]);
+                } else {
+                    PriceMarketing::find($item)->update([
+                        'budget' => str_replace(",", "", $request->budget[$key]),
+                        'data' => str_replace(",", "", $request->data[$key]),
+                        'invoice' => str_replace(",", "", $request->invoice[$key]),
+                        'date' => Carbon::createFromFormat('Y-m-d', $request->date[$key])->format('Y-m-d'),
+                        'user_id' => $user->id,
+                        'branch_id' => $user->branch_id ? $user->branch_id : 0,
+
+                    ]);
+                }
             }
-        } else {
-            foreach ($request->budget as $key => $item) {
-                PriceMarketing::create([
-                    'source_id' => $request->source_id,
-                    'user_id' => $user->id,
-                    'branch_id' => $request->branch_id,
-                    'budget' => str_replace(",", "", $item),
-                    'comment' => str_replace(",", "", $request->comment[$key]),
-                    'message' => str_replace(",", "", $request->message[$key]),
-                    'date' => Functions::createYearMonthDay($request->date[$key]),
-                ]);
+        }
+
+        //Trường hợp có phần tử bị xóa
+        if ($request->array_delete) {
+            $array_delete = json_decode($request->array_delete);
+            foreach ($array_delete as $item) {
+                PriceMarketing::find($item)->delete();
             }
         }
         return back();
@@ -223,7 +247,8 @@ class MarketingController extends Controller
 
     public function searchPriceMarketing(Request $request)
     {
-        $input = $request->all();
+        $input['start_date'] = Functions::yearMonthDayTimeFormat($request->start_date);
+        $input['end_date'] = Functions::yearMonthDayTimeFormat($request->end_date);
         $price = PriceMarketing::search($input)->with('user')->get();
         return $price;
     }
@@ -266,7 +291,7 @@ class MarketingController extends Controller
 
         $input = $request->except('doanh_so_doanh_thu');
 
-        $marketing = User::where('department_id', 3)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input,$request) {
+        $marketing = User::where('department_id', 3)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input, $request) {
             $input['marketing'] = $item->id;
 //            $data = Order::searchAll($input)->select('gross_revenue');
 //            $item->gross_revenue = $data->sum('gross_revenue');
@@ -274,7 +299,7 @@ class MarketingController extends Controller
 
 //            $params['telesales'] = $item->id;
 
-            if(!isset($request->doanh_so_doanh_thu) || $request->doanh_so_doanh_thu == 0){
+            if (!isset($request->doanh_so_doanh_thu) || $request->doanh_so_doanh_thu == 0) {
                 $item->gross_revenue = Order::search($input)->sum('all_total');
             } else {
                 $item->gross_revenue = PaymentHistory::search($input, 'price')->sum('price');
