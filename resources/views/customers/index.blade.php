@@ -159,6 +159,7 @@
             <input type="hidden" id="birthday_tab">
         </div>
     </div>
+    @include('components.lich_su_tac_nghiep.modal_history_operation')
 @endsection
 @section('_script')
     <script type="text/javascript">
@@ -758,16 +759,26 @@
                 let target = $(e.target).parent();
                 let status_id = $(target).find('.status-result').val();
                 let id = $(this).data('id');
+                let name = $( ".status-result option:selected").text();
 
-                $.ajax({
-                    url: "ajax/customers/" + id,
-                    method: "put",
-                    data: {
-                        status_id: status_id
+                $.ajax(
+                    // {
+                    // url: "ajax/customers/" + id,
+                    // method: "put",
+                    // data: {
+                    //     status_id: status_id
+                    // }
+                    {
+                        url: "/customers/update-multiple-status",
+                        method: "post",
+                        data: {
+                            status_id: status_id,
+                            ids: [id]
                     }
                 }).done(function (data) {
                     $(target).parent().find(".status-db").empty();
-                    $(target).parent().find('.status-db').html(data.status.name);
+                    // $(target).parent().find('.status-db').html(data.status.name);
+                    $(target).parent().find('.status-db').html(name);
                 });
             });
 
@@ -1368,7 +1379,9 @@
 
         });
 
+
+
     </script>
     @include('message_fb.js_chat_app')
-
+    @include('components.lich_su_tac_nghiep.js_history_operation')
 @endsection

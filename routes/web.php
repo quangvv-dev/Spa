@@ -144,6 +144,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 //        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
 
         Route::post('user-filter-grid', 'SettingController@userFilterGrid');
+        Route::get('customer/history-status','CustomerController@historyStatus');
 
     });
 

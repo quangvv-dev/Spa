@@ -22,6 +22,7 @@ use App\Models\Genitive;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
 
+use App\Models\HistoryWork;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\PackageWallet;
@@ -122,8 +123,8 @@ class CustomerController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        if($request->search){
-            $input = $request->except('start_date','end_date');
+        if ($request->search) {
+            $input = $request->except('start_date', 'end_date');
         } else {
             $input = $request->all();
         }
@@ -173,32 +174,32 @@ class CustomerController extends Controller
 
         $url = '/customers';
         $user = Auth::user();
-        $user_filter_list= array(
-            0=>'STT',
-            1=>'Ngày tạo KH',
-            2=>'Họ tên',
-            3=>'SĐT',
-            4=>'Mô tả',
-            5=>'Tin nhắn',
-            6=>'Nhóm KH',
-            7=>'Trạng thái',
-            8=>'Người phụ trách',
-            9=>'T/G tác nghiệp',
-            10=>'Chuyển về TP',
-            11=>'C.Nhánh',
-            12=>'DV liên quan',
-            13=>'Nhóm tính cách',
-            14=>'Người tạo',
-            15=>'Lịch hẹn',
-            16=>'Ngày sinh',
-            17=>'MKT Phụ trách',
-            18=>'Nguồn KH',
-            19=>'Linh FB',
-            20=>'Giới tính',
-            21=>'Số đơn',
-            22=>'Tổng doanh thu',
-            23=>'Đã thanh toán',
-            24=>'Còn lại'
+        $user_filter_list = array(
+            0 => 'STT',
+            1 => 'Ngày tạo KH',
+            2 => 'Họ tên',
+            3 => 'SĐT',
+            4 => 'Mô tả',
+            5 => 'Tin nhắn',
+            6 => 'Nhóm KH',
+            7 => 'Trạng thái',
+            8 => 'Người phụ trách',
+            9 => 'T/G tác nghiệp',
+            10 => 'Chuyển về TP',
+            11 => 'C.Nhánh',
+            12 => 'DV liên quan',
+            13 => 'Nhóm tính cách',
+            14 => 'Người tạo',
+            15 => 'Lịch hẹn',
+            16 => 'Ngày sinh',
+            17 => 'MKT Phụ trách',
+            18 => 'Nguồn KH',
+            19 => 'Linh FB',
+            20 => 'Giới tính',
+            21 => 'Số đơn',
+            22 => 'Tổng doanh thu',
+            23 => 'Đã thanh toán',
+            24 => 'Còn lại'
         );
         $user_filter_grid = UserFilterGrid::select('fields')->where('user_id', $user->id)->where('url', $url)->first();
         if ($user_filter_grid) {
@@ -207,10 +208,10 @@ class CustomerController extends Controller
             $user_filter_grid = array_keys($user_filter_list);
         }
         if ($request->ajax()) {
-            return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday','user_filter_list','user_filter_grid','customer_group','customer_expired'));
+            return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday', 'user_filter_list', 'user_filter_grid', 'customer_group', 'customer_expired'));
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday','user_filter_grid','user_filter_list','customer_group','customer_expired'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday', 'user_filter_grid', 'user_filter_list', 'customer_group', 'customer_expired'));
     }
 
     /**
@@ -697,14 +698,13 @@ class CustomerController extends Controller
             $customer = $this->customerService->update($input, $id);
             SchedulesSms::where('status_customer', '<>', $customer->status_id)->delete();
             $check2 = RuleOutput::where('event', 'change_relation')->first();
-
             if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
                 $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
                 $rule = $check2->rules;
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
                 $rule_status = Functions::checkRuleStatusCustomer($config);
                 foreach (array_values($rule_status) as $k1 => $item) {
-                    $list_status = $item->configs->group;
+                    $list_status = $item->configs ? $item->configs->group : [];
                     if (in_array($customer->status_id, $list_status)) {
                         $sms_ws = Functions::checkRuleSms($config);
                         if (count($sms_ws)) {
@@ -936,18 +936,45 @@ class CustomerController extends Controller
      */
     public function updateMultipleStatus(Request $request)
     {
-        $customer = Customer::whereIn('id', $request->ids);
-
+        $customer = Customer::whereIn('id', $request->ids)->select('id', 'status_id', 'telesales_id')->get();
+        $user = Auth::user();
+        $date = date('Y-m-d H:i:s');
         if (isset($request->status_id)) {
-            $customer->update([
-                'status_id' => $request->status_id,
-            ]);
+            $status = $request->status_id;
+
+            foreach ($customer as $item) {
+                if ($item->status_id != $status) {
+                    HistoryWork::create([
+                        'status_old' => $item->status_id,
+                        'status_new' => $status,
+                        'note' => '',
+                        'customer_id' => $item->id,
+                        'user_id' => $user->id,
+                    ]);
+                    $item->update([
+                        'status_id' => $status,
+                        'date_work' => $date
+                    ]);
+
+                }
+            }
         }
 
         if (isset($request->telesales_id)) {
-            $customer->update([
-                'telesales_id' => (int)$request->telesales_id,
-            ]);
+            $telesales = (int)$request->telesales_id;
+            foreach ($customer as $item) {
+                HistoryWork::create([
+                    'status_old' => $item->status_id,
+                    'status_new' => $item->status_id,
+                    'note' => '',
+                    'customer_id' => $item->id,
+                    'user_id' => $user->id,
+                ]);
+                $item->update([
+                    'telesales_id' => $telesales,
+                    'date_work' => $date
+                ]);
+            }
         }
     }
 
@@ -980,5 +1007,14 @@ class CustomerController extends Controller
                 ]);
             }
         }
+    }
+
+    public function historyStatus(Request $request){
+//        $customer = Customer::find($request->customer_id);
+        $history_new = HistoryWork::where('customer_id',$request->customer_id)->with('status_old','status_new','user')->orderByDesc('created_at')->get();
+//        $arr_customer = Customer::where('phone',$customer->phone)->where('id','<>',$request->customer_id)->orderByDesc('id')->get();
+        $data['history_new'] = $history_new;
+//        $data['arr_customer'] = $arr_customer;
+        return $data;
     }
 }

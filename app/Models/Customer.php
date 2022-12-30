@@ -54,7 +54,8 @@ class Customer extends Model
         'expired_time',
         'time_move_cskh',
         'expired_time_boolean',
-        'type_ctv'
+        'type_ctv',
+        'date_work'
     ];
 
 
@@ -125,10 +126,26 @@ class Customer extends Model
                         $q->whereBetween('created_at', getTime(($conditions['data_time'])));
                     });
             })->when(isset($conditions['start_date']) && isset($conditions['end_date']), function ($q) use ($conditions) {
-                $q->whereBetween('created_at', [
-                    Functions::yearMonthDay($conditions['start_date']) . " 00:00:00",
-                    Functions::yearMonthDay($conditions['end_date']) . " 23:59:59",
-                ]);
+                if (isset($conditions['type_search_date'])){
+                    if($conditions['type_search_date'] == 0){ //search theo ngày tác nghiệp
+                        $q->whereBetween('date_work', [
+                            Functions::yearMonthDay($conditions['start_date']) . " 00:00:00",
+                            Functions::yearMonthDay($conditions['end_date']) . " 23:59:59",
+                        ]);
+                    } else { //search theo ngày có lịch hẹn
+                        $q->whereHas('schedules', function ($item) use ($conditions) {
+                            $item->whereBetween('date',[
+                                Functions::yearMonthDay($conditions['start_date']),
+                                Functions::yearMonthDay($conditions['end_date']),
+                            ] );
+                        });
+                    }
+                } else {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($conditions['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($conditions['end_date']) . " 23:59:59",
+                    ]);
+                }
             })
             ->when(isset($conditions['invalid_account']), function ($query) use ($conditions) {
                 $query->when($conditions['invalid_account'] == 0, function ($q) use ($conditions) {
@@ -246,6 +263,11 @@ class Customer extends Model
     public function order_detail()
     {
         return $this->hasMany(OrderDetail::class, 'user_id', 'id')->orderBy('created_at', 'DESC');
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'user_id', 'id');
     }
 
     public function getGenderTextAttribute()

@@ -34,4 +34,11 @@
             {{--@endforeach--}}
         {{--</select>--}}
     {{--</div>--}}
+    <div class="col-md-2 col-xs-12">
+        <select name="type_search_date" class="form-control gender">
+            <option value="">Ngày data về hệ thống</option>
+            <option value="0">Ngày data tác nghiệp</option>
+            <option value="1">Ngày có lịch hẹn</option>
+        </select>
+    </div>
 </div>

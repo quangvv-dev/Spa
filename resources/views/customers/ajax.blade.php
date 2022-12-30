@@ -252,7 +252,7 @@
                         style="background: {{isset($customer->status)?$customer->status->color :''}}">
                         <input type="checkbox" name="delete[]" class="myCheck" value="{{$customer->id}}"/>
                     </td>
-                    <td class="text-center {{in_array(0,$user_filter_grid) ? '':'display-none'}}">{{ $rank ++ }}</td>
+                    <td class="text-center {{in_array(0,$user_filter_grid) ? '':'display-none'}} show-modal-history pointer" data-item="{{$customer}}">{{ $rank ++ }}</td>
                     <td class="text-center {{in_array(1,$user_filter_grid) ? '':'display-none'}}">{{ date('d-m-Y H:i:s', strtotime($customer->created_at)) }}</td>
                     <td class="text-center name-customer {{in_array(2,$user_filter_grid) ? '':'display-none'}}"
                         data-customer-id="{{ $customer->id }}">

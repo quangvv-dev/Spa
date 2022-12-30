@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
 use App\Models\Customer;
+use App\Models\HistoryWork;
 use App\Models\Status;
 use App\Services\CustomerService;
 use App\Services\GroupCommentService;
@@ -112,9 +113,19 @@ class GroupCommentController extends Controller
 
         $time = Customer::timeExpired($customer->status_id);
         $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
+        $time['date_work'] = date('Y-m-d H:i:s');
+        HistoryWork::create([
+            'status_old' => $customer->status_id,
+            'status_new' => $customer->status_id,
+            'note'       => $request->messages,
+            'customer_id' => $customer->id,
+            'user_id'    => Auth::user()->id
+        ]);
+
         $customer->update($time);
 
         $groupComment = $this->groupCommentService->create($input);
+
         return redirect()->back();
     }
 
