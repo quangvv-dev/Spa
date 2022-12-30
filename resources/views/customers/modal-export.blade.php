@@ -43,9 +43,9 @@
                     </div>
                     <div class="col-md-12">
                         <i style="color: red">Từ ngày - tới ngày</i><br>
-                        <input type="hidden" name="start_date" id="start_date">
-                        <input type="hidden" name="end_date" id="end_date">
-                        <input id="reportrange" type="text" class="form-control square">
+                        <input type="hidden" name="start_date" id="start_date1">
+                        <input type="hidden" name="end_date" id="end_date1">
+                        <input id="reportrange1" type="text" class="form-control square">
                     </div>
                     <div class="col-md-12" style="padding-top: 10px">
                         <button type="submit" class="btn btn-success">Tải xuống</button>

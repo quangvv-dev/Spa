@@ -63,6 +63,7 @@
                 <div class="card-header search-box searchbox-sticky">
                     <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
                            type="text" id="search">
+                    <input type="hidden" name="limit" class="per_page" value="20">
                     <div class="col-md-2 col-xs-12">
                         <select name="telesales" id="telesales_id" class="form-control telesales">
                             <option value="">Người phụ trách</option>
@@ -412,6 +413,8 @@
                     location_id: location,
                     start_date: $('.formSearch #start_date').val(),
                     end_date: $('.formSearch #end_date').val(),
+                    limit: $('.per_page').val()
+
                 };
 
                 searchAjax(data);
@@ -419,12 +422,13 @@
 
             $(document).on('click', '.limiting', function () {
                 let limit = $(this).data('limit');
-                $('#birthday_tab').val('');
-                let data = {
-                    limit: limit
-                };
-
-                searchAjax(data);
+                $('.per_page').val(limit);
+                // $('#birthday_tab').val('');
+                // let data = {
+                //     limit: limit
+                // };
+                //
+                // searchAjax(data);
             });
 
             $(document).on('click', '.birthday_tab', function () {
@@ -933,6 +937,7 @@
                         branch_id: branch_id,
                         start_date: $('.formSearch #start_date').val(),
                         end_date: $('.formSearch #end_date').val(),
+                        limit: $('.per_page').val(),
                     },
                 }).done(function (data) {
                     $('#registration-form').html(data);
