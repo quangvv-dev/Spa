@@ -97,7 +97,7 @@ class OrderController extends Controller
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
 //        $combo = Services::whereIn('type', [StatusCode::PRODUCT, StatusCode::SERVICE])->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.index',
+        return view('order.indexDesign',
             compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'products'));
     }
 
