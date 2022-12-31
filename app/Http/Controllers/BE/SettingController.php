@@ -7,6 +7,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
 use App\Components\Filesystem\Filesystem;
+use App\Models\AgeAndJob;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Location;
@@ -40,7 +41,9 @@ class SettingController extends Controller
 //        $location = Branch::$location;
         $location = Location::pluck('name','id')->toArray();
         $locations = Location::all();
-        return view('settings.index', compact('branchs', 'location', 'locations'));
+        $age_from = AgeAndJob::where('type',0)->orderBy('position')->get();
+        $customer_job = AgeAndJob::where('type',1)->orderBy('position')->get();
+        return view('settings.index', compact('branchs', 'location', 'locations','age_from','customer_job'));
     }
 
     public function storeBranch()
@@ -157,8 +160,25 @@ class SettingController extends Controller
         return 1;
     }
 
+
+    public function storeAge(Request $request){
+        AgeAndJob::create(['name'=>'Độ tuổi','type'=>0]);
+        return 1;
+    }
+
+    public function storeJob(Request $request){
+        AgeAndJob::create(['name'=>'Nghề nghiệp','type'=>1]);
+        return 1;
+    }
+
+
     public function updateLocation(Request $request,$id){
         Location::find($id)->update($request->all());
+        return 1;
+    }
+
+    public function updateAgeJob(Request $request,$id){
+        AgeAndJob::find($id)->update($request->all());
         return 1;
     }
 
@@ -169,6 +189,11 @@ class SettingController extends Controller
             Location::find($id)->delete();
             return 1;
         }
+    }
+
+    public function deleteAgeJob($id){
+        AgeAndJob::find($id)->delete();
+        return 1;
     }
 
     public function userFilterGrid(Request $request){
@@ -182,6 +207,15 @@ class SettingController extends Controller
             UserFilterGrid::create($data);
         }
 
+        return 1;
+    }
+
+    public function updateAgeJobPosition(Request $request){
+        if($request->has('data') && count($request->data)){
+            foreach ($request->data as $item){
+                AgeAndJob::find($item['id'])->update(['position'=>$item['position']]);
+            }
+        }
         return 1;
     }
 }

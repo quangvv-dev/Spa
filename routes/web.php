@@ -80,9 +80,22 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('super-admin', 'SettingController@indexAdmin')->name('settings.indexAdmin');
     Route::post('super-admin', 'SettingController@storeAdmin')->name('settings.storeAdmin');
     Route::post('store-branch', 'SettingController@storeBranch')->name('settings.storeBranch');
+
+    Route::post('store-age', 'SettingController@storeAge')->name('settings.storeAge');
+    Route::post('store-job', 'SettingController@storeJob')->name('settings.storeJob');
+
     Route::post('store-location', 'SettingController@storeLocation')->name('settings.storeLocation');
     Route::put('branch/{id}', 'SettingController@updateBranch')->name('settings.updateBranch');
     Route::put('location/{id}', 'SettingController@updateLocation')->name('settings.updateLocation');
+
+    Route::put('save-age-job/{id}', 'SettingController@updateAgeJob')->name('settings.updateAgeJob');
+
+
+    Route::delete('age-job/{id}', 'SettingController@deleteAgeJob')->name('settings.deleteAgeJob');
+    Route::put('update-age-job-position','SettingController@updateAgeJobPosition');
+
+
+
     Route::delete('branch/{id}', 'SettingController@destroy')->name('settings.destroy');
     Route::delete('location/{id}', 'SettingController@deleteLocation')->name('settings.deleteLocation');
     Route::get('settings/phan-bo-data', 'SettingController@phanbo')->name('settings.phanbo');//Phân bổ data Sale

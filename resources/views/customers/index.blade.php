@@ -762,19 +762,19 @@
                 let name = $( ".status-result option:selected").text();
 
                 $.ajax(
-                    // {
-                    // url: "ajax/customers/" + id,
-                    // method: "put",
-                    // data: {
-                    //     status_id: status_id
-                    // }
                     {
-                        url: "/customers/update-multiple-status",
-                        method: "post",
-                        data: {
-                            status_id: status_id,
-                            ids: [id]
+                    url: "ajax/customers/" + id,
+                    method: "put",
+                    data: {
+                        status_id: status_id
                     }
+                    // {
+                    //     url: "/customers/update-multiple-status",
+                    //     method: "post",
+                    //     data: {
+                    //         status_id: status_id,
+                    //         ids: [id]
+                    // }
                 }).done(function (data) {
                     $(target).parent().find(".status-db").empty();
                     // $(target).parent().find('.status-db').html(data.status.name);

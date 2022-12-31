@@ -55,7 +55,9 @@ class Customer extends Model
         'time_move_cskh',
         'expired_time_boolean',
         'type_ctv',
-        'date_work'
+        'date_work',
+        'age_from',
+        'customer_job'
     ];
 
 

@@ -32,6 +32,18 @@
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                         {!! Form::select('status',array(2 => 'Đặt lịch'), null, array('class' => 'form-control select2','required'=>true)) !!}
                     </div>
+
+
+                    <div class="col-md-6">
+                        {!! Form::label('age_from', 'Chọn độ tuổi', array('class' => ' required')) !!}
+                        {!! Form::select('age_from',$age_from, null, array('class' => 'form-control select2','required'=>true,'data-placeholder'=>'Chọn độ tuổi')) !!}
+                    </div>
+                    <div class="col-md-6">
+                        {!! Form::label('customer_job', 'Chọn nghề nghiệp', array('class' => ' required')) !!}
+                        {!! Form::select('customer_job',$customer_job, null, array('class' => 'form-control select2','required'=>true,'data-placeholder'=>'Chọn nghề nghiệp')) !!}
+                    </div>
+
+
                     <div class="col-md-6">
                         {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
                         {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2','required'=>true)) !!}

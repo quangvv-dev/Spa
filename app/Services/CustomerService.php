@@ -12,6 +12,7 @@ use App\Components\Filesystem\Filesystem;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\Customer;
+use App\Models\HistoryWork;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 
@@ -80,6 +81,16 @@ class CustomerService
     {
         $data = $this->data($input);
         $customer = $this->find($id);
+        if(isset($input['status_id'])){
+            $data['date_work'] = date('Y-m-d H:i:s');
+            HistoryWork::create([
+                'status_old' => $customer->status_id,
+                'status_new' => $input['status_id'],
+                'note' => '',
+                'customer_id' => $customer->id,
+                'user_id' => Auth::user()->id,
+            ]);
+        }
         $customer->update($data);
         return $customer;
 

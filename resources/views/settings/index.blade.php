@@ -19,6 +19,8 @@
                             <li><a href="#tab2" class="pages" id="click2" data-id="'.click2'" data-toggle="tab">QL chi
                                     nhánh</a></li>
                             <li><a href="#tab3" class="pages" id="click3" data-id="'.click3'" data-toggle="tab">QL cụm</a></li>
+                            <li><a href="#tab4" class="pages" id="click4" data-id="'.click4'" data-toggle="tab">QL độ tuổi</a></li>
+                            <li><a href="#tab5" class="pages" id="click5" data-id="'.click5'" data-toggle="tab">QL nghề nghiệp</a></li>
                         </ul>
                     </div>
                 </div>
@@ -80,6 +82,12 @@
                         <div class="tab-pane" id="tab3">
                             @include('settings.location')
                         </div>
+                        <div class="tab-pane" id="tab4">
+                            @include('settings.age_from')
+                        </div>
+                        <div class="tab-pane" id="tab5">
+                            @include('settings.customer_job')
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,6 +98,7 @@
 @endsection
 @section('_script')
     <script src="{{asset('js/format-number.js')}}"></script>
+    <script src="{{asset('js/jquery-ui.js')}}"></script>
     <script>
         // $(document).on('click', '.pages', function () {
         //     let tab = $(this).data('id');
@@ -112,6 +121,24 @@
         $(document).on('click', '#add_new_status', function () {
             $.ajax({
                 url: '{{route('settings.storeBranch')}}',
+                method: 'POST',
+                success: function (data) {
+                    location.reload();
+                }
+            })
+        })
+        $(document).on('click', '#add_new_age', function () {
+            $.ajax({
+                url: '{{route('settings.storeAge')}}',
+                method: 'POST',
+                success: function (data) {
+                    location.reload();
+                }
+            })
+        })
+        $(document).on('click', '#add_new_job', function () {
+            $.ajax({
+                url: '{{route('settings.storeJob')}}',
                 method: 'POST',
                 success: function (data) {
                     location.reload();
@@ -175,5 +202,95 @@
                 }
             })
         })
+        $(document).on('click', '.save-age-job', function () {
+            let id = $(this).data('id');
+            let data = {
+                name: $(this).closest('tr').find('.name').val(),
+            }
+            $.ajax({
+                url: '/save-age-job/' + id,
+                data: data,
+                method: 'PUT',
+                success: function (data) {
+                    if (data) {
+                        swal({
+                            title: 'Cập nhật thành công !!!',
+                            type: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            })
+        })
+
+        //sortable
+        $(function () {
+            $("#sortable2").sortable({ //update trạng thái khách hàng
+                stop: function (event, ui) {
+                    let rows = $('.table-sortable2 tbody tr');
+                    let dataPosition = [];
+                    console.log(rows.length)
+                    for (let r = 0; r < rows.length; r++) {
+                        $(rows[r]).attr('data-position', r)
+                        dataPosition.push({
+                            id: $(rows[r]).attr('data-id'),
+                            position: r
+                        })
+                    }
+
+                    swal({
+                        title: 'Bạn có muộn cập nhật?',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        showCloseButton: true,
+                    },function () {
+                        $.ajax({
+                            url: '/update-age-job-position',
+                            method:'put',
+                            data: {
+                                data:dataPosition
+                            },
+                            success:function (data) {
+                                alertify.success('Cập nhật thành công !');
+                            }
+                        })
+                    })
+                }
+            });
+            $("#sortable3").sortable({ //update trạng thái khách hàng
+                stop: function (event, ui) {
+                    let rows = $('.table-sortable3 tbody tr');
+                    let dataPosition = [];
+                    console.log(rows.length)
+                    for (let r = 0; r < rows.length; r++) {
+                        $(rows[r]).attr('data-position', r)
+                        dataPosition.push({
+                            id: $(rows[r]).attr('data-id'),
+                            position: r
+                        })
+                    }
+
+                    swal({
+                        title: 'Bạn có muộn cập nhật?',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        showCloseButton: true,
+                    }).then(function () {
+                        $.ajax({
+                            url: '/update-age-job-position',
+                            method:'put',
+                            data: {
+                                data:dataPosition
+                            },
+                            success:function (data) {
+                                alertify.success('Cập nhật thành công !');
+                            }
+                        })
+                    })
+                }
+            });
+        });
     </script>
 @endsection

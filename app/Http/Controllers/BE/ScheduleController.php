@@ -118,7 +118,7 @@ class ScheduleController extends Controller
             $note = str_replace("'", ' ', $note);
             $request->merge(['note' => $note]);
         }
-        $data = Schedule::create($request->all());
+        $data = Schedule::create($request->except('age_from','customer_job'));
         if (!empty(setting('sms_schedules'))) {
             $date = Functions::dayMonthYear($data->date);
             $text = setting('sms_schedules');
@@ -141,6 +141,7 @@ class ScheduleController extends Controller
                 ]);
             }
         }
+        $customer->update(['age_from'=>$request->age_from, 'customer_job'=>$request->customer_job]);
         return redirect()->back();
     }
 

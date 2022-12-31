@@ -33,7 +33,7 @@
                     {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control quantity', 'required' => true)) !!}
                 @endif
                 {!! Form::hidden('role_type', isset($order)&&$order->role_type?$order->role_type:\App\Constants\StatusCode::PRODUCT, array('id' => 'role_type')) !!}
-                <div class="col-xs-12 col-md-3">
+                <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
                         {!! Form::text('full_name',$customer ? $customer->full_name: null , array('class' => 'form-control full_name', 'required' => true)) !!}
@@ -47,6 +47,13 @@
                         <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                     </div>
                 </div>
+                    <div class="col-xs-12 col-md-2">
+                        <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
+                            {!! Form::label('city_id', 'Chọn Tỉnh/TP', array('class' => ' required')) !!}
+                            {!! Form::select('city_id', $city,null, array('class' => 'form-control select2 city_id', 'required' => true)) !!}
+                            <span class="help-block">{{ $errors->first('city_id', ':message') }}</span>
+                        </div>
+                    </div>
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}

@@ -11,6 +11,7 @@ use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\CustomerPost;
 use App\Helpers\Functions;
+use App\Models\AgeAndJob;
 use App\Models\Album;
 use App\Models\Branch;
 use App\Models\CallCenter;
@@ -207,6 +208,8 @@ class CustomerController extends Controller
         } else {
             $user_filter_grid = array_keys($user_filter_list);
         }
+
+
         if ($request->ajax()) {
             return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday', 'user_filter_list', 'user_filter_grid', 'customer_group', 'customer_expired'));
         }
@@ -395,10 +398,14 @@ class CustomerController extends Controller
         }
         //END
 
+
+        $age_from = AgeAndJob::where('type',0)->pluck('name','id')->prepend('','')->toArray();
+        $customer_job = AgeAndJob::where('type',1)->pluck('name','id')->prepend('','')->toArray();
+
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
                 'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'departments', 'history', 'wallet',
-                'package', 'call_center', 'orders', 'tips'));
+                'package', 'call_center', 'orders', 'tips','age_from','customer_job'));
     }
 
     /**
@@ -704,7 +711,8 @@ class CustomerController extends Controller
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
                 $rule_status = Functions::checkRuleStatusCustomer($config);
                 foreach (array_values($rule_status) as $k1 => $item) {
-                    $list_status = $item->configs ? $item->configs->group : [];
+                    $list_status = $item->configs->group;
+//                    dd($list_status);
                     if (in_array($customer->status_id, $list_status)) {
                         $sms_ws = Functions::checkRuleSms($config);
                         if (count($sms_ws)) {
@@ -809,6 +817,7 @@ class CustomerController extends Controller
                     }
                 }
             }
+
             if (isset($request->category_ids) && $request->category_ids) {
                 $customer->categories()->sync($request->category_ids);
             }

@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\HistorySms;
@@ -69,11 +70,13 @@ class OrderController extends Controller
         ];
 
         $branchs = Branch::search()->pluck('name', 'id');
+        $city = City::pluck('name', 'id');
         view()->share([
             'services' => $services,
             'status' => $status,
             'order_type' => $order_type,
             'branchs' => $branchs,
+            'city'  => $city
         ]);
     }
 
