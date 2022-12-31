@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\CallCenter;
+use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,6 +35,7 @@ class CallController extends Controller
     {
         $title = 'Quản lý tổng đài';
 
+        $status = Status::select('id', 'name')->where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
@@ -46,7 +48,7 @@ class CallController extends Controller
         if ($request->ajax()) {
             return view('call_center.ajax', compact('docs', 'answers'));
         }
-        return view('call_center.index', compact('title', 'docs', 'answers'));
+        return view('call_center.index', compact('title', 'docs', 'answers', 'status'));
     }
 
     /**

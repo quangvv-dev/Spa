@@ -70,16 +70,19 @@
             <div class="card-header">
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col row', 'id'=> 'gridForm','role'=>'form')) !!}
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
                 </div>
                 <div class="col-md-2">
-                    {!! Form::select('caller_number', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Nhân viên')) !!}
+                    {!! Form::select('caller_number', $telesales, null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Nhân viên')) !!}
                 </div>
                 <div class="col-md-2">
-                    {!! Form::select('call_status', ['ANSWERED'=>'Nghe máy','MISSED CALL'=>'Gọi lỡ'], null, array('class' => 'form-control','id'=>'call_status', 'placeholder'=>'Tất cả cuộc gọi')) !!}
+                    {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'placeholder'=>'Trạng thái')) !!}
+                </div>
+                <div class="col-md-2">
+                    {!! Form::select('call_status', ['ANSWERED'=>'Nghe máy','MISSED CALL'=>'Gọi lỡ'], null, array('class' => 'form-control select2','id'=>'call_status', 'placeholder'=>'Tất cả cuộc gọi')) !!}
                 </div>
                 <div class="col-md-2">
                     {!! Form::text('dest_number', null, array('class' => 'form-control','id'=>'dest_number', 'placeholder'=>'SĐT khách hàng')) !!}

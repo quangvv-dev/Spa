@@ -30,7 +30,9 @@
         @if (count($docs))
             @foreach($docs as $doc)
                 <tr>
-                    <td class="text-center">{{@$doc->customer->full_name?:'Số máy lạ'}}</br>
+                    <td class="text-center">{{@$doc->customer->full_name?:'Số máy lạ'}}
+                        <span class="small-tip">({{@$doc->customer->status->name}})</span>
+                        </br>
                         {{--<a href="sip:{{@$doc->dest_number}}">{{@$doc->dest_number}}</a>--}}
                         <a href="{{'customers/'.@$doc->customer->id}}">{{@$doc->dest_number}}</a>
                     </td>
