@@ -43,19 +43,19 @@
                 <tr class="">
                     <td class="text-center pdr10"></td>
                     <td class="text-center pdr10">{{$item->full_name}}
-                    <td class="text-center pdr10">{{$item->call_center}}</td>
-                    <td class="text-center pdr10">{{$item->customer_new}}</td>
+                    <td class="text-center pdr10">{{number_format($item->call_center)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->customer_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->tiep_can)}}</td>
-                    <td class="text-center pdr10">{{$item->all_schedules}}</td>
-                    <td class="text-center pdr10">{{$item->schedules_huy}}</td>
+                    <td class="text-center pdr10">{{number_format($item->all_schedules)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->schedules_huy)}}</td>
                     <td class="text-center pdr10">{{number_format($item->schedules_den)}}</td>
                     <td class="text-center pdr10">{{number_format($item->orders)}}</td>
-                    <td class="text-center pdr10">{{!empty($item->tiep_can) && !empty($item->customer_new)?($item->tiep_can/$item->customer_new)*100:0}}%</td>
-                    <td class="text-center pdr10">{{!empty($item->tiep_can) && !empty($item->all_schedules)?($item->all_schedules/$item->tiep_can)*100:0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->tiep_can) && !empty($item->customer_new)?round($item->tiep_can/$item->customer_new,1)*100:0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->tiep_can) && !empty($item->all_schedules)?round($item->all_schedules/$item->tiep_can,1)*100:0}}%</td>
                     <td class="text-center pdr10">{{number_format($item->schedules_huy)}}</td>
-                    <td class="text-center pdr10">{{!empty($item->schedules_den)?($item->schedules_den/$item->all_schedules)*100:0}}%</td>
-                    <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->schedules_den)?($item->orders/$item->schedules_den)*100:0}}%</td>
-                    <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->customer_new)?($item->orders/$item->customer_new)*100:0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->schedules_den)?round($item->schedules_den/$item->all_schedules,1)*100:0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->schedules_den)?round($item->orders/$item->schedules_den,1)*100:0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->customer_new)?round($item->orders/$item->customer_new,1)*100:0}}%</td>
                 </tr>
             @endforeach
         @endif
