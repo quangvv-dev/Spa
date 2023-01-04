@@ -53,11 +53,16 @@
                     <td class="text-center">
                         {{--<i class="fas fa-play-circle fa-2x text-primary"></i>--}}
                         @if($doc->recording_url !='None')
-                            <div class="mediPlayer">
-                                <audio class="listen" preload="none" data-size="40"
-                                       src="{{$doc->recording_url}}"></audio>
-                                <a href="{{$doc->recording_url}}" style="padding-right: 20px;font-size: 19px"><i class="fa fa-download"></i></a>
-                            </div>
+                            {{--<div class="mediPlayer">--}}
+                                {{--<audio class="listen" preload="none" data-size="40"--}}
+                                       {{--src="{{$doc->recording_url}}"></audio>--}}
+                                {{--<a href="{{$doc->recording_url}}" style="padding-right: 20px;font-size: 19px"><i class="fa fa-download"></i></a>--}}
+                            {{--</div>--}}
+                            <audio controls>
+                                <source src="horse.ogg" type="audio/ogg">
+                                <source src="{{$doc->recording_url}}" type="audio/mpeg">
+                                Your browser does not support the audio tag.
+                            </audio>
                         @endif
                     </td>
                 </tr>
