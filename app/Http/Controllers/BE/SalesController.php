@@ -9,6 +9,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
+use App\Models\CallCenter;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -64,7 +65,8 @@ class SalesController extends Controller
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $users = User::where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($request) {
+        $users = User::select('id', 'full_name', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($request) {
+
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -82,20 +84,10 @@ class SalesController extends Controller
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
-//            $orders2 = clone $orders;
-            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-//            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
-            $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                    $q->where('branch_id', $request->branch_id);
-                });
-//            $comment_new = clone $group_comment;
-
-            $item->comment_new = $group_comment->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->get()->count();// trao doi moi
-//            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
+            $input = $request->all();
+            $input['caller_number'] = $item->caller_number;
+            $item->call_center = CallCenter::search($input, 'id')->count();
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -103,46 +95,24 @@ class SalesController extends Controller
                 })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                     $q->where('branch_id', $request->branch_id);
                 });
-            $schedules_den = clone $schedules;
-            $schedules_new = clone $schedules;
+            $schedules2 = clone $schedules;
+            //Lịch hẹn
+            $item->all_schedules = $schedules->count();
+            $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+            $item->schedules_huy = $schedules2->where('status', ScheduleConstant::HUY)->count();
+            //End Lịch hẹn
 
-            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
-                ->whereHas('customer', function ($qr) {
-                    $qr->where('old_customer', 0);
-                })->count();
-            $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 0);
-            })->count();
-            //lich hen
-
-            $request->merge(['telesales' => $item->id]);
-            $params = $request->all();
-            $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-//            $detail_new = clone $detail;
-
-            $item->detail_new = $detail->whereHas('order', function ($qr) {
-                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-            })->sum('price');
             $item->customer_new = $data_new->count();
-            $item->order_new = $order_new->count();
-//            $item->order_old = $order_old->count();
-            $item->revenue_new = $order_new->sum('all_total');
-//            $item->revenue_old = $order_old->sum('all_total');
-            $item->payment_revenue = $orders->sum('gross_revenue');
-            $item->payment_new = $order_new->sum('gross_revenue');
-//            $item->payment_old = $order_old->sum('gross_revenue');
-//            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
-//            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
-//            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
-//            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
+            $item->tiep_can = $data_new->whereNotIn('status_id', [2, 20])->count();
+            $item->orders = $orders->count(); // HV chốt
 
-//            $item->all_payment = $detail->sum('price');
+//            dd($item);
             return $item;
         })->sortByDesc('all_payment');
-        \View::share([
-            'allTotal' => $users->sum('revenue_total'),
-            'grossRevenue' => $users->sum('payment_revenue'),
-        ]);
+//        \View::share([
+//            'allTotal' => $users->sum('revenue_total'),
+//            'grossRevenue' => $users->sum('payment_revenue'),
+//        ]);
 
         if ($request->ajax()) {
             return view('report_products.ajax_sale', compact('users'));
@@ -163,10 +133,10 @@ class SalesController extends Controller
         }
 
         $params = $request->except('doanh_so_doanh_thu');
-        $sale = User::where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($params,$request) {
+        $sale = User::where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($params, $request) {
             $params['telesales'] = $item->id;
 
-            if(!isset($request->doanh_so_doanh_thu) || $request->doanh_so_doanh_thu == 0){
+            if (!isset($request->doanh_so_doanh_thu) || $request->doanh_so_doanh_thu == 0) {
                 $item->gross_revenue = Order::search($params)->sum('all_total');
             } else {
                 $item->gross_revenue = PaymentHistory::search($params, 'price')->sum('price');
