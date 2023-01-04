@@ -87,6 +87,7 @@ class SalesController extends Controller
 
             $input = $request->all();
             $input['caller_number'] = $item->caller_number;
+            $input['call_status'] = 'ANSWERED';
             $item->call_center = CallCenter::search($input, 'id')->count();
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
