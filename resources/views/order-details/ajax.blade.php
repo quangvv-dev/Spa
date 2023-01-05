@@ -5,7 +5,7 @@
             <th class="text-white text-center">Thao tác</th>
             <th class="text-white">C.Nhánh</th>
             <th class="text-white text-center">Ngày đặt hàng</th>
-            <th class="text-white text-center">Ng.Hết hạn</th>
+            {{--<th class="text-white text-center">Ng.Hết hạn</th>--}}
             <th class="text-white text-center">Mã ĐH</th>
             <th class="text-white text-center">Mã KH</th>
             <th class="text-white text-center">Tên KH</th>
@@ -16,7 +16,8 @@
             <th class="text-white text-center">Doanh thu</th>
             <th class="text-white text-center">Đã thanh toán</th>
             <th class="text-white text-center">Còn lại</th>
-            <th class="text-white text-center">khuyến mại(voucher)</th>
+            <th class="text-white text-center">Đ.chỉ học viên</th>
+            {{--<th class="text-white text-center">khuyến mại(voucher)</th>--}}
             <th class="text-white text-center">Phương thức thanh toán</th>
             <th class="text-white text-center">Người lên đơn</th>
         </tr>
@@ -33,7 +34,7 @@
                     </td>
                     <td class="text-center">{{ @$order->branch->name }}</td>
                     <td class="text-center">{{ isset($order->created_at) ? date("d-m-Y", strtotime($order->created_at)) : '' }}</td>
-                    <td class="text-center">{{ isset($order->hsd) ? date("d-m-Y", strtotime($order->hsd)) : '' }}</td>
+                    {{--<td class="text-center">{{ isset($order->hsd) ? date("d-m-Y", strtotime($order->hsd)) : '' }}</td>--}}
                     <td class="text-center">{{ $order->code }}</td>
                     <td class="text-center">
                         <a class="order-detail-modal" data-toggle="modal" data-target="#oderDetailModal"
@@ -49,14 +50,15 @@
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
                     <td class="text-center">{{ number_format($order->the_rest) }}</td>
-                    <td class="text-center">{{ number_format($order->discount)}}</td>
+                    <td class="text-center">{{ @$order->cities->name }}</td>
+                    {{--<td class="text-center">{{ number_format($order->discount)}}</td>--}}
                     <td class="text-center">{{ $order->name_payment_type }}</td>
                     <td class="text-center">{{ @$order->owner->full_name }}</td>
                 </tr>
             @endforeach
             <tr class="fixed2">
                 <td class="text-center"></td>
-                <td class="text-center"></td>
+                {{--<td class="text-center"></td>--}}
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
@@ -70,11 +72,11 @@
                 <td class="text-center bold"> {{ @number_format($grossRevenuePage) }}</td>
                 <td class="text-center bold">{{ @number_format($theRestPage) }}</td>
                 <td class="text-center"></td>
-                <td class="text-center"></td>
+                {{--<td class="text-center"></td>--}}
                 <td class="text-center"></td>
             </tr>
             <tr class="fixed">
-                <td class="text-center"></td>
+                {{--<td class="text-center"></td>--}}
                 <td class="text-center"></td>
                 <td class="text-center"></td>
                 <td class="text-center"></td>
@@ -89,7 +91,7 @@
                 <td class="text-center bold"> {{ @number_format($grossRevenue) }}</td>
                 <td class="text-center bold">{{ @number_format($theRest) }}</td>
                 <td class="text-center"></td>
-                <td class="text-center"></td>
+                {{--<td class="text-center"></td>--}}
                 <td class="text-center"></td>
             </tr>
         @else

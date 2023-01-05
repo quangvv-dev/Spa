@@ -45,6 +45,11 @@ class Order extends Model
         return $this->belongsTo(Commission::class, 'order_id', 'id');
     }
 
+    public function cities()
+    {
+        return $this->belongsTo(City::class, 'city_id', 'id');
+    }
+
     public function spaTherapisst()
     {
         return $this->belongsTo(User::class, 'spa_therapisst_id', 'id');
