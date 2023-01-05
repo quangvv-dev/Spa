@@ -65,8 +65,8 @@
                            type="text" id="search">
                     <input type="hidden" name="limit" class="per_page" value="20">
                     <div class="col-md-2 col-xs-12">
-                        <select name="telesales" id="telesales_id" class="form-control telesales select2">
-                            <option value="">Người phụ trách</option>
+                        <select name="telesales" id="telesales_id" class="form-control telesales select2" data-placeholder="Người phụ trách">
+                            <option value=""></option>
                             @foreach($telesales as $k => $l)
                                 <optgroup label="{{ $k }}">
                                     @foreach($l as $kl => $vl)
@@ -78,8 +78,8 @@
                         </select>
                     </div>
                     <div class="col-md-2 col-xs-12" style="max-width: 170px">
-                        <select name="group" class="form-control group select2">
-                            <option value="">Nhóm dịch vụ</option>
+                        <select name="group" class="form-control group select2" data-placeholder="Nhóm dịch vụ">
+                            <option value=""></option>
                             @foreach($categories as $item)
                                 <option value="{{$item->id}}">{{ $item->name}}</option>
                             @endforeach
@@ -93,7 +93,7 @@
                     {{--</div>--}}
                     <div class="col-xs-12" style="max-width: 170px">
                         @if(empty($checkRole))
-                            <select name="branch_id" class="form-control branch_id select2">
+                            <select name="branch_id" class="form-control branch_id">
                                 <option value="">Tất cả chi nhánh</option>
                                 @foreach($branchs as $k=> $item)
                                     <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
