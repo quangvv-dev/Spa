@@ -121,9 +121,9 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        if (!$request->start_date) {
-            Functions::addSearchDateFormat($request, 'd-m-Y');
-        }
+//        if (!$request->start_date) {
+//            Functions::addSearchDateFormat($request, 'd-m-Y');
+//        }
         if ($request->search) {
             $input = $request->except('start_date', 'end_date');
         } else {
