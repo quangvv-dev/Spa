@@ -28,7 +28,8 @@ class PaymentHistoryService
             'price'        => $grossRevenue,
             'payment_date' => Functions::yearMonthDay($data['payment_date']),
             'description'  => $data['description'],
-            'payment_type' => $data['payment_type']
+            'payment_type' => $data['payment_type'],
+            'is_debt'      => $data['is_debt']
         ];
 
         return PaymentHistory::create($input);

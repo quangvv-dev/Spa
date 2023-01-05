@@ -488,6 +488,15 @@ class OrderController extends Controller
             $input = $request->except('customer_id');
             $customer = Customer::find($request->customer_id);
             $input['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
+
+            $find_order = Order::find($id);
+            if($find_order){
+                $get_month_now = date('m', strtotime(date('Y-m-d H:i:s')));
+                $month_check = date('m', strtotime($find_order->created_at));
+                if($get_month_now != $month_check){
+                    $input['is_debt'] = 1;
+                }
+            }
             $paymentHistory = PaymentHistoryService::create($input, $id);
 
             if ($paymentHistory->payment_type != 3) {
@@ -495,7 +504,7 @@ class OrderController extends Controller
             } else {
                 $point = ($customer->wallet - $paymentHistory->price) > 0 ? $customer->wallet - $paymentHistory->price : 0;
             }
-
+            unset($input['is_debt']);
             $customer->wallet = $point;
             $customer->save();
             $order = $this->orderService->updatePayment($input, $id);
@@ -508,6 +517,7 @@ class OrderController extends Controller
             $check = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->get();
             $check2 = RuleOutput::where('event', 'add_order')->groupBy('rule_id')->whereIn('category_id',
                 $group_customer)->get();
+
 
             if (setting('exchange') > 0 && isset($customer->gioithieu) && $customer->gioithieu->id) {
                 WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id, $paymentHistory->id);
