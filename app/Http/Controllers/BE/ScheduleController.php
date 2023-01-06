@@ -141,7 +141,6 @@ class ScheduleController extends Controller
                 ]);
             }
         }
-        $customer->update(['age_from'=>$request->age_from, 'customer_job'=>$request->customer_job]);
         return redirect()->back();
     }
 

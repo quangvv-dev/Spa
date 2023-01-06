@@ -399,13 +399,12 @@ class CustomerController extends Controller
         //END
 
 
-        $age_from = AgeAndJob::where('type',0)->pluck('name','id')->prepend('','')->toArray();
-        $customer_job = AgeAndJob::where('type',1)->pluck('name','id')->prepend('','')->toArray();
+
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
                 'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'departments', 'history', 'wallet',
-                'package', 'call_center', 'orders', 'tips','age_from','customer_job'));
+                'package', 'call_center', 'orders', 'tips'));
     }
 
     /**

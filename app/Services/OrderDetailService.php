@@ -25,7 +25,6 @@ class OrderDetailService
         if (empty($data) && is_array($data) == false) {
             return false;
         }
-
         foreach ($data['service_id'] as $key => $value) {
             $dataArr[] = [
                 'created_at' => Carbon::now()->format('Y-m-d H:i'),
@@ -36,7 +35,7 @@ class OrderDetailService
                 'quantity' => $data['quantity'][$key],
                 'price' => replaceNumberFormat($data['price'][$key]),
                 'vat' => 0,
-                'address' => $data['address'],
+//                'address' => $data['address'],
                 'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
                 'total_price' => replaceNumberFormat($data['total_price'][$key]),
                 'branch_id' => $data['branch_id'],

@@ -55,14 +55,28 @@
                     </div>
                 </div>
 
+                {{--<div class="col-xs-12 col-md-4">--}}
+                    {{--<div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}--}}
+                        {{--{!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address')) !!}--}}
+                        {{--<span class="help-block">{{ $errors->first('address', ':message') }}</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
-                <div class="col-xs-12 col-md-4">
-                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
-                        {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address')) !!}
-                        <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                    <div class="col-xs-12 col-md-2">
+                        <div class="form-group required {{ $errors->has('age_from') ? 'has-error' : '' }}">
+                            {!! Form::label('age_from', 'Chọn độ tuổi', array('class' => ' required')) !!}
+                            {!! Form::select('age_from', $age_from,null, array('class' => 'form-control select2 age_from', 'required' => true,'data-placeholder'=>'Chọn độ tuổi')) !!}
+                            <span class="help-block">{{ $errors->first('age_from', ':message') }}</span>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-xs-12 col-md-2">
+                        <div class="form-group required {{ $errors->has('age_from') ? 'has-error' : '' }}">
+                            {!! Form::label('customer_job', 'Chọn nghề nghiệp', array('class' => ' required')) !!}
+                            {!! Form::select('customer_job', $customer_job,null, array('class' => 'form-control select2 customer_job', 'required' => true,'data-placeholder'=>'Chọn nghề nghiệp')) !!}
+                            <span class="help-block">{{ $errors->first('customer_job', ':message') }}</span>
+                        </div>
+                    </div>
                 <div class="col-xs-12 col-md-2">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
@@ -179,12 +193,12 @@
                                 <div class="col row">
                                     {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
 
+                                    {{--<div class="col-md-4">--}}
+                                        {{--{!! Form::label('spa_therapisst_id', 'Bác sĩ') !!}--}}
+                                        {{--{!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}--}}
+                                    {{--</div>--}}
                                     <div class="col-md-4">
-                                        {!! Form::label('spa_therapisst_id', 'Bác sĩ') !!}
-                                        {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
-                                    </div>
-                                    <div class="col-md-4">
-                                        {!! Form::label('support_id', 'Người tư vấn (nếu có)') !!}
+                                        {!! Form::label('support_id', 'Người tư vấn trực tiếp') !!}
                                         {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
                                     </div>
                                     <div class="col-md-4">

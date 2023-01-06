@@ -6,6 +6,7 @@ use App\Constants\DepartmentConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Models\AgeAndJob;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\City;
@@ -116,15 +117,17 @@ class OrderController extends Controller
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER])->pluck('full_name',
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,UserConstant::CSKH,UserConstant::ADMIN])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
         $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
+        $age_from = AgeAndJob::where('type',0)->pluck('name','id')->prepend('','')->toArray();
+        $customer_job = AgeAndJob::where('type',1)->pluck('name','id')->prepend('','')->toArray();
         return view('order.indexService',
-            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'products', 'combo'));
+            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'products', 'combo','age_from','customer_job'));
     }
 
     public function getInfoService(Request $request)
@@ -148,10 +151,10 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $customer = Customer::find($request->user_id);
-        $param = $request->all();
+        $param = $request->except('age_from','customer_job');
 
         $param['count_day'] = isset($param['days']) && count($param['days']) ? array_sum($param['days']) : 0;
-        $inputCustomer = $request->only('full_name', 'phone', 'address', 'status_id');
+        $inputCustomer = $request->only('full_name', 'phone', 'address', 'status_id', 'age_from', 'customer_job');
         if (str_contains($inputCustomer['phone'], 'xxx')) {
             unset($inputCustomer['phone']);
         }
@@ -180,7 +183,6 @@ class OrderController extends Controller
                 $promotion->current_quantity = $promotion->current_quantity - 1;
                 $promotion->save();
             }
-
             if (isset($request->spa_therapisst_id) && $request->spa_therapisst_id != 0) {
                 foreach ($param['days'] as $k => $item) {
                     if ($item > 0) {
