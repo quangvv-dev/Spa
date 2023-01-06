@@ -497,7 +497,11 @@ class OrderController extends Controller
                 $month_check = date('m', strtotime($find_order->created_at));
                 if($get_month_now != $month_check){
                     $input['is_debt'] = 1;
+                } else {
+                    $input['is_debt'] = 0;
                 }
+            } else {
+                $input['is_debt'] = 0;
             }
             $paymentHistory = PaymentHistoryService::create($input, $id);
 
