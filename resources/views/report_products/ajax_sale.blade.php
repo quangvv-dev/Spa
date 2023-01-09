@@ -39,6 +39,25 @@
         <tbody>
 
         @if(count($users))
+            <tr>
+                <td class="text-center"></td>
+                <td class="text-center bold">Tổng cộng</td>
+                <td class="text-center bold">{{$users->sum('call_center')}}</td>
+                <td class="text-center bold">{{$users->sum('customer_new')}}</td>
+                <td class="text-center bold">{{$users->sum('tiep_can')}}</td>
+                <td class="text-center bold">{{$users->sum('all_schedules')}}</td>
+                <td class="text-center bold">{{$users->sum('schedules_huy')}}</td>
+                <td class="text-center bold">{{$users->sum('schedules_den')}}</td>
+                <td class="text-center bold">{{$users->sum('orders')}}</td>
+                <td class="text-center bold">{{$users->sum('tiep_can')}}</td>
+                <td class="text-center bold">{{!empty($users->sum('tiep_can')) && !empty($users->sum('customer_new'))?round($users->sum('tiep_can')/$users->sum('customer_new'),2)*100:0}}</td>
+                <td class="text-center bold">{{!empty($users->sum('tiep_can')) && !empty($users->sum('all_schedules'))?round($users->sum('all_schedules')/$users->sum('tiep_can'),2)*100:0}}</td>
+                <td class="text-center bold">{{$users->sum('schedules_huy')}}</td>
+                <td class="text-center bold">{{!empty($users->sum('schedules_den'))?round($users->sum('schedules_den')/$users->sum('all_schedules'),2)*100:0}}</td>
+                <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('schedules_den'))?round($users->sum('orders')/$users->sum('schedules_den'),2)*100:0}}</td>
+                <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('customer_new'))?round($users->sum('orders')/$users->sum('customer_new'),2)*100:0}}</td>
+
+            </tr>
             @foreach($users as $item)
                 <tr class="">
                     <td class="text-center pdr10"></td>
@@ -59,23 +78,6 @@
                 </tr>
             @endforeach
         @endif
-        {{--<tr>--}}
-            {{--<td class="text-center"></td>--}}
-            {{--<td class="text-center bold">Tổng cộng</td>--}}
-            {{--<td class="text-center bold">{{@number_format($customer_new)}}</td>--}}
-            {{--<td class="text-center bold">{{@number_format($comment_new)}}</td>--}}
-            {{--<td class="text-center bold">{{@number_format($schedules_new)}}</td>--}}
-            {{--<td class="text-center bold">{{@number_format($all_schedules_den)}}</td>--}}
-            {{--<td class="text-center bold">{{@number_format($order_new)}}</td>--}}
-            {{--<td class="text-center bold">{{!empty($schedules_new)&& !empty($customer_new)?round($schedules_new/$customer_new*100,1):0}}%</td>--}}
-            {{--<td class="text-center bold">{{!empty($all_schedules_den)&& !empty($schedules_new)?round($all_schedules_den/$schedules_new*100,1):0}}%</td>--}}
-            {{--<td class="text-center bold">{{!empty($all_schedules_den)&& !empty($order_new)?round($order_new/$all_schedules_den*100,1):0}}%</td>--}}
-            {{--<td class="text-center bold">{{!empty($customer_new)&& !empty($order_new)?round($order_new/$customer_new*100,1):0}}%</td>--}}
-            {{--<td class="text-center bold">{{!empty($all_detail_new)&& !empty($order_new)?number_format($all_detail_new/$order_new):0}}</td>--}}
-            {{--<td class="text-center bold">{{@number_format($revenue_new)}}</td>--}}
-            {{--<td class="text-center bold">{{@number_format($payment_new)}}</td>--}}
-            {{--<td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>--}}
-        {{--</tr>--}}
 
         </tbody>
     </table>
