@@ -18,21 +18,21 @@
             <th class="text-center">% HV chốt/HV đến</th>
             <th class="text-center">% Chốt/SĐT</th>
         <tr class="number_index">
+            <th class="text-center"></th>
+            <th class="text-center"></th>
             <th class="text-center">(1)</th>
             <th class="text-center">(2)</th>
             <th class="text-center">(3)</th>
             <th class="text-center">(4)</th>
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
-            <th class="text-center">()</th>
-            <th class="text-center">()</th>
-            <th class="text-center">()</th>
-            <th class="text-center">()</th>
-            <th class="text-center">()</th>
-            <th class="text-center">()</th>
             <th class="text-center">(7)</th>
+            <th class="text-center">(3)/(2)</th>
+            <th class="text-center">(4)/(3)</th>
             <th class="text-center">(8)</th>
-            <th class="text-center">(9)</th>
+            <th class="text-center">(6)/(4)</th>
+            <th class="text-center">(7)/(6)</th>
+            <th class="text-center">(7)/(2)</th>
         </tr>
         </thead>
 
