@@ -202,6 +202,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('customers', 'CustomerController@reportCustomer')->name('report.customers');
         Route::get('products', 'OrderController@reportProduct');
         Route::get('sales', 'SalesController@index')->name('report.sale');
+        Route::get('sales-admin', 'SalesController@adminIndex')->name('report.saleAdmin');
         Route::get('sale-ranking', 'SalesController@ranking')->name('report.saleRanking');
         Route::get('group-sale', 'SalesController@indexGroupCategory')->name('report.groupSale');
         Route::get('commission', 'CommissionController@statistical')->name('report.commission');

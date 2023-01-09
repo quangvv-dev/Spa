@@ -100,7 +100,7 @@
                     <table class="table table-vcenter text-nowrap">
                         <thead class="bg-primary text-white">
                         <tr style="white-space: nowrap">
-                            <th class="text-white text-center" width="250px">Dịch vụ</th>
+                            <th class="text-white text-center" width="400px">Dịch vụ</th>
                             <th class="text-white text-center">S.buổi | SL</th>
                             <th class="text-white text-center">Đơn giá</th>
                             {{--<th class="text-white text-center">VAT (%)</th>--}}

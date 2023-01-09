@@ -25,4 +25,8 @@ class OrderConstant
     const WALLET_TYPE_RECEIVE = 2; // chuyển tiền sang ví
     const WALLET_TYPE_MONEY = 3;// Rút tiền từ ví ctv
 
+    const TRUE_DEBT = 1; //công nợ
+    const FALSE_DEBT = 0; //thanh toán đơn mơi
+
+
 }

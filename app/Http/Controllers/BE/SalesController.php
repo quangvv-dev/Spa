@@ -17,6 +17,7 @@ use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
+use App\Models\PaymentWallet;
 use App\Models\Schedule;
 use App\Models\Services;
 use App\Services\TaskService;
@@ -255,5 +256,45 @@ class SalesController extends Controller
         });
     }
 
+    public function adminIndex(Request $request)
+    {
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+        if (count($request->all()) == 2) {
+            $request->merge(['branch_id' => 1]);
+        }
+        if (isset($request->location_id)) {
+            $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
+            $request->merge(['group_branch' => $group_branch]);
+        }
 
+        $users = User::select('id', 'full_name')->where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($request) {
+
+            $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                    $q->whereIn('branch_id', $request->group_branch);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('telesales_id', $item->id);
+                });
+            $params = $request->all();
+            $params['telesales'] = $item->id;
+            $payment = PaymentHistory::search($params, 'price');
+            $is_debt = clone $payment;
+
+            $item->all_total = $orders->sum('all_total');
+            $item->gross_revenue = $payment->where('is_debt',OrderConstant::FALSE_DEBT)->sum('price');
+            $item->the_rest = $is_debt->where('is_debt',OrderConstant::TRUE_DEBT)->sum('price');
+            $item->orders = $orders->count(); // HV chốt
+            return $item;
+        })->sortByDesc('all_total');
+
+        if ($request->ajax()) {
+            return view('sale.admin.ajax', compact('users'));
+        }
+        return view('sale.admin.index', compact('users'));
+    }
 }
