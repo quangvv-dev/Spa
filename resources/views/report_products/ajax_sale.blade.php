@@ -49,13 +49,12 @@
                 <td class="text-center bold">{{$users->sum('schedules_huy')}}</td>
                 <td class="text-center bold">{{$users->sum('schedules_den')}}</td>
                 <td class="text-center bold">{{$users->sum('orders')}}</td>
-                <td class="text-center bold">{{$users->sum('tiep_can')}}</td>
-                <td class="text-center bold">{{!empty($users->sum('tiep_can')) && !empty($users->sum('customer_new'))?round($users->sum('tiep_can')/$users->sum('customer_new'),2)*100:0}}</td>
-                <td class="text-center bold">{{!empty($users->sum('tiep_can')) && !empty($users->sum('all_schedules'))?round($users->sum('all_schedules')/$users->sum('tiep_can'),2)*100:0}}</td>
+                <td class="text-center bold">{{!empty($users->sum('tiep_can')) && !empty($users->sum('customer_new'))?round($users->sum('tiep_can')/$users->sum('customer_new'),2)*100:0}}%</td>
+                <td class="text-center bold">{{!empty($users->sum('tiep_can')) && !empty($users->sum('all_schedules'))?round($users->sum('all_schedules')/$users->sum('tiep_can'),2)*100:0}}%</td>
                 <td class="text-center bold">{{$users->sum('schedules_huy')}}</td>
-                <td class="text-center bold">{{!empty($users->sum('schedules_den'))?round($users->sum('schedules_den')/$users->sum('all_schedules'),2)*100:0}}</td>
-                <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('schedules_den'))?round($users->sum('orders')/$users->sum('schedules_den'),2)*100:0}}</td>
-                <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('customer_new'))?round($users->sum('orders')/$users->sum('customer_new'),2)*100:0}}</td>
+                <td class="text-center bold">{{!empty($users->sum('schedules_den'))?round($users->sum('schedules_den')/$users->sum('all_schedules'),2)*100:0}}%</td>
+                <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('schedules_den'))?round($users->sum('orders')/$users->sum('schedules_den'),2)*100:0}}%</td>
+                <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('customer_new'))?round($users->sum('orders')/$users->sum('customer_new'),2)*100:0}}%</td>
 
             </tr>
             @foreach($users as $item)
