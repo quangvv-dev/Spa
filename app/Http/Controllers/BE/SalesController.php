@@ -289,11 +289,10 @@ class SalesController extends Controller
             $params = $request->all();
             $params['telesales'] = $item->id;
             $payment = PaymentHistory::search($params, 'price');
-            $is_debt = clone $payment;
 
             $item->all_total = $orders->sum('all_total');
-            $item->gross_revenue = $payment->where('is_debt',OrderConstant::FALSE_DEBT)->sum('price');
-            $item->the_rest = $is_debt->where('is_debt',OrderConstant::TRUE_DEBT)->sum('price');
+            $item->gross_revenue = $payment->sum('price');
+            $item->the_rest = $payment->where('is_debt',OrderConstant::TRUE_DEBT)->sum('price');
             $item->orders = $orders->count(); // HV chốt
             return $item;
         })->sortByDesc('all_total');
