@@ -27,6 +27,7 @@ return [
     "report.groupSale"         => "Doanh thu nhóm sản phẩm & Dịch vụ",
     "report.sale"              => "Xếp hạng Telesales",
     "sms.history"              => "Tin nhắn đã gửi",
+    "report.saleAdmin"         => "Báo cáo doanh thu sale (Admin)",
     //Quyền nâng cao
     'marketing.seeding_number' => "Kho số seeding",
     'marketing.fanpage_post'   => "Fanpage Post",

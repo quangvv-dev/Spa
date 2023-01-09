@@ -40,7 +40,8 @@ class RoleController extends Controller
         'report.commission',
         'report.sale',
         'statistics.taskSchedules',
-        'call-center'
+        'call-center',
+        'report.saleAdmin'
     ];
 
     protected $other = [

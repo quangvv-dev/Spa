@@ -28,16 +28,16 @@ use Illuminate\Support\Facades\Auth;
 
 class SalesController extends Controller
 {
-    private $taskService;
 
     /**
      * TaskController constructor.
      *
      * @param TaskService $taskService
      */
-    public function __construct(TaskService $taskService)
+    public function __construct()
     {
         $this->middleware('permission:report.groupSale', ['only' => ['indexGroupCategory']]);
+        $this->middleware('permission:report.saleAdmin', ['only' => ['adminIndex']]);
         $this->middleware('permission:report.sale', ['only' => ['index']]);
         $location = Branch::$location;
         $branchs = Branch::pluck('name', 'id');
@@ -256,6 +256,12 @@ class SalesController extends Controller
         });
     }
 
+    /**
+     * Báo cáo doanh thu admin
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function adminIndex(Request $request)
     {
         if (!$request->start_date) {
