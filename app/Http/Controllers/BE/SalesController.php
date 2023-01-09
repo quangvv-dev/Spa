@@ -88,9 +88,9 @@ class SalesController extends Controller
             $input = $request->all();
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';
-            if (!empty($item->caller_number)){
+            if (!empty($item->caller_number)) {
                 $item->call_center = CallCenter::search($input, 'id')->count();
-            }else{
+            } else {
                 $item->call_center = 0;
             }
 
@@ -111,13 +111,12 @@ class SalesController extends Controller
             $item->tiep_can = $data_new->whereNotIn('status_id', [2, 20])->count();
             $item->orders = $orders->count(); // HV chốt
 
-//            dd($item);
             return $item;
+        })->filter(function ($f) {
+            if ($f->customer_new > 0){
+                return $f;
+            }
         })->sortByDesc('all_payment');
-//        \View::share([
-//            'allTotal' => $users->sum('revenue_total'),
-//            'grossRevenue' => $users->sum('payment_revenue'),
-//        ]);
 
         if ($request->ajax()) {
             return view('report_products.ajax_sale', compact('users'));
@@ -295,10 +294,10 @@ class SalesController extends Controller
 
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $payment->sum('price');
-            $item->the_rest = $payment->where('is_debt',OrderConstant::TRUE_DEBT)->sum('price');
+            $item->the_rest = $payment->where('is_debt', OrderConstant::TRUE_DEBT)->sum('price');
             $item->orders = $orders->count(); // HV chốt
             return $item;
-        })->filter(function ($f){
+        })->filter(function ($f) {
             if ($f->all_total > 0) return $f;
         })->sortByDesc('all_total');
 
