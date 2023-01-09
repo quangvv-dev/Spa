@@ -22,16 +22,16 @@
         <tbody>
 
         @if(count($users))
+            <tr>
+                <td class="text-center"></td>
+                <td class="text-center bold">Tổng cộng</td>
+                <td class="text-center bold">{{@number_format($users->sum('orders'))}}</td>
+                <td class="text-center bold">{{@number_format($users->sum('all_total'))}}</td>
+                <td class="text-center bold">{{@number_format($users->sum('gross_revenue'))}}</td>
+                <td class="text-center bold">{{@number_format($users->sum('the_rest'))}}</td>
+                <td class="text-center bold">{{!empty($users->sum('orders'))?@number_format($users->sum('all_total')/$users->sum('orders')):0}}</td>
+            </tr>
             @foreach($users as $item)
-                <tr>
-                    <td class="text-center"></td>
-                    <td class="text-center bold">Tổng cộng</td>
-                    <td class="text-center bold">{{@number_format($users->sum('orders'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('all_total'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('gross_revenue'))}}</td>
-                    <td class="text-center bold">{{@number_format($users->sum('the_rest'))}}</td>
-                    <td class="text-center bold">{{!empty($users->sum('orders'))?@number_format($users->sum('all_total')/$users->sum('orders')):0}}</td>
-                </tr>
                 <tr class="">
                     <td class="text-center pdr10"></td>
                     <td class="text-center pdr10">{{$item->full_name}}
