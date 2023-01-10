@@ -113,11 +113,12 @@ class StatisticController extends Controller
         $orders3 = clone $orders;
         $orders_combo = clone $orders;
         $ordersYear = $payment_years->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
-        $age = AgeAndJob::select('id', 'name')->where('type', StatusConstant::INACTIVE)->map(function ($item) use ($input) {
+        $age = AgeAndJob::select('id', 'name')->where('type', StatusConstant::INACTIVE)->get()->map(function ($item) use ($input) {
             $orderArray = Order::searchAll($input)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item) {
                 $qr->where('age_from', $item->id);
             });
             $item->price = $orderArray->sum('all_total');
+            return $item;
         });
 
         $city = City::select('id', 'name')->get()->map(function ($item) use ($input) {
