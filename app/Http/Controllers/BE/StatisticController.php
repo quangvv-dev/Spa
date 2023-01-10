@@ -114,7 +114,7 @@ class StatisticController extends Controller
 
         $city = City::select('id', 'name')->get()->map(function ($item) use ($input) {
             $input['city_id'] = $item->id;
-            $item->price = Order::search($input)->select('all_total')->sum('all_total');
+            $item->price = Order::searchAll($input)->select('all_total')->sum('all_total');
             return $item;
         })->sortByDesc('price')->take(5);
 
