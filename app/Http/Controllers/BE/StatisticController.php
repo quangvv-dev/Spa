@@ -5,6 +5,8 @@ namespace App\Http\Controllers\BE;
 use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
+use App\Models\AgeAndJob;
 use App\Models\Branch;
 use App\Models\City;
 use App\Models\Customer;
@@ -44,8 +46,8 @@ class StatisticController extends Controller
         $this->customer = $customer;
         $location = Branch::$location;
         view()->share([
-            'user'     => $user,
-            'branchs'  => $branchs,
+            'user' => $user,
+            'branchs' => $branchs,
             'location' => $location,
         ]);
     }
@@ -86,7 +88,7 @@ class StatisticController extends Controller
         $schedule = Schedule::getBooks2($input, 'id');
         $schedules = [
             'all_schedules' => $schedule->count(),
-            'become'        => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+            'become' => $schedule->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
                 ->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count(),
@@ -111,12 +113,18 @@ class StatisticController extends Controller
         $orders3 = clone $orders;
         $orders_combo = clone $orders;
         $ordersYear = $payment_years->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
+        $age = AgeAndJob::select('id', 'name')->where('type', StatusConstant::INACTIVE)->map(function ($item) use ($input) {
+            $orderArray = Order::searchAll($input)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item) {
+                $qr->where('age_from', $item->id);
+            });
+            $item->price = $orderArray->sum('all_total');
+        });
 
         $city = City::select('id', 'name')->get()->map(function ($item) use ($input) {
             $input['city_id'] = $item->id;
             $item->price = Order::searchAll($input)->select('all_total')->sum('all_total');
             return $item;
-        })->sortByDesc('price');
+        })->sortByDesc('price')->take(5);
 
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
         $payment_wallet = PaymentWallet::search($input, 'price');
@@ -134,7 +142,7 @@ class StatisticController extends Controller
             if ((int)$price->sum('total_price') > 0) {
                 $statusRevenues[] = [
                     'revenue' => (int)$price->sum('total_price'),
-                    'name'    => $source->name,
+                    'name' => $source->name,
                 ];
             }
         }
@@ -157,26 +165,27 @@ class StatisticController extends Controller
             ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
 
         $data = [
-            'all_total'        => $orders->sum('all_total'),
-            'gross_revenue'    => $orders->sum('gross_revenue'),
-            'payment'          => $payment->sum('price'),
-            'orders'           => $orders->count(),
-            'customers'        => $customers->count(),
-            'category_service' => $category_service,
+            'all_total'         => $orders->sum('all_total'),
+            'gross_revenue'     => $orders->sum('gross_revenue'),
+            'payment'           => $payment->sum('price'),
+            'orders'            => $orders->count(),
+            'customers'         => $customers->count(),
+            'category_service'  => $category_service,
+            'revenue_month'     => $revenue_month,
 //            'category_product' => $category_product,
-            'revenue_month'    => $revenue_month,
         ];
         $products = [
-            'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
-            'all_total'     => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
-            'orders'        => $orders->where('role_type', StatusCode::PRODUCT)->count(),
+//            'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
+            'all_total' => $orders->where('role_type', StatusCode::PRODUCT)->sum('all_total'),
+            'orders' => $orders->where('role_type', StatusCode::PRODUCT)->count(),
         ];
         $services = [
-            'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+//            'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'age'           => $age,
             'all_total'     => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             'combo_total'   => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),
-            'combo_gross'   => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('gross_revenue'),
             'orders'        => $orders2->where('role_type', StatusCode::SERVICE)->count(),
+//            'combo_gross'   => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('gross_revenue'),
         ];
 
         $revenue = self::getRevenueCustomer($input, $payment);
@@ -200,14 +209,14 @@ class StatisticController extends Controller
         $all_payment = $payment->sum('price');
         $list_payment = [
             'money' => $payment2->where('payment_type', 1)->sum('price'),
-            'card'  => $payment3->where('payment_type', 2)->sum('price'),
-            'CK'    => $payment->where('payment_type', 4)->sum('price'),
+            'card' => $payment3->where('payment_type', 2)->sum('price'),
+            'CK' => $payment->where('payment_type', 4)->sum('price'),
         ];
         $wallets = [
             'payment' => $payment_wallet->sum('price'),
-            'orders'  => $wallet->count(),
+            'orders' => $wallet->count(),
             'revenue' => $wallet->sum('order_price'),
-            'used'    => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
+            'used' => $all_payment - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
         ];
 
         if ($request->ajax()) {
@@ -347,9 +356,9 @@ class StatisticController extends Controller
         $list_payment = [
             'money' => $payment2->where('payment_type', 1)->sum('price') + $payment_wallet->where('payment_type',
                     1)->sum('price'),
-            'card'  => $payment3->where('payment_type', 2)->sum('price') + $payment_wallet2->where('payment_type',
+            'card' => $payment3->where('payment_type', 2)->sum('price') + $payment_wallet2->where('payment_type',
                     2)->sum('price'),
-            'CK'    => $payment->where('payment_type', 4)->sum('price') + $payment_wallet3->where('payment_type',
+            'CK' => $payment->where('payment_type', 4)->sum('price') + $payment_wallet3->where('payment_type',
                     4)->sum('price'),
         ];
         $payCurrent = ThuChi::when(isset($input['branch_id']) && $input['branch_id'], function ($query) use ($input) {
@@ -379,12 +388,12 @@ class StatisticController extends Controller
         $list_pay = [
             'money' => $pay2->where('type', 0)->sum('so_tien'),
             //            'card' => $pay3->where('type', 1)->sum('so_tien'),
-            'CK'    => $pay->where('type', 1)->sum('so_tien'),
+            'CK' => $pay->where('type', 1)->sum('so_tien'),
         ];
 
 
         $data = [
-            'payment'        => $all_payment,
+            'payment' => $all_payment,
             'wallet_payment' => $payment_wallet->sum('price'),
         ];
 

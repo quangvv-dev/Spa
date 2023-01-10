@@ -168,7 +168,7 @@
 </div>
 
 <div class="d-none col-xs-none d-md-block">
-    <div class="h4 text-center">BIỂU ĐỒ</div>
+    <div class="h4 text-center">HELLL</div>
 
     <div class="row row-cards">
         <div class="col-md-6">
@@ -267,13 +267,13 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            ['Sản phẩm', {{$products['gross_revenue']}}],
-            ['Dịch vụ', {{$services['gross_revenue']}}],
-            ['Sản phầm & Dịch vụ', {{$services['combo_gross']}}],
+                @foreach($products['age'] as $k =>$item)
+            ['{{$item->name}}', {{$item->price}}],
+            @endforeach
         ]);
 
         var options = {
-            title: 'DOANH THU THEO LOẠI ĐƠN',
+            title: 'DOANH SỐ THEO NHÓM TUỔI',
             width: 500,
             height: 300,
         };
