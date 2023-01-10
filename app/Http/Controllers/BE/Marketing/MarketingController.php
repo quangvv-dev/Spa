@@ -51,63 +51,101 @@ class MarketingController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
-        if (isset($input['location_id'])) {
-            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
-            $input['group_branch'] = $group_branch;
-        }
-        if (Auth::user()->department_id == DepartmentConstant::MARKETING) {
-            $group_branch = Branch::where('location_id', @Auth::user()->branch->location_id)->pluck('id')->toArray();
-            $input['group_branch'] = $group_branch;
-        }
+//        if (isset($input['location_id'])) {
+//            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+//            $input['group_branch'] = $group_branch;
+//        }
+//        if (Auth::user()->department_id == DepartmentConstant::MARKETING) {
+//            $group_branch = Branch::where('location_id', @Auth::user()->branch->location_id)->pluck('id')->toArray();
+//            $input['group_branch'] = $group_branch;
+//        }
 
-        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
-            $input['marketing'] = $item->id;
-            $input['thuc_hien_id'] = $item->id;
-            $params = $input;
-            unset($params['marketing'], $params['branch_id'], $params['location_id']);
+        $marketing = PriceMarketing::search($input)
+            ->select('budget', 'data', 'invoice', 'user_id', DB::raw('sum(budget) as sum_budged'), DB::raw('sum(data) as sum_data'), DB::raw('sum(invoice) as sum_invoice'))
+            ->groupBy('user_id')->with('user')->get()->map(function ($item) use ($input) {
+                $input['marketing'] = $item->user_id;
+                $item->customer = Customer::search1($input)->count();
 
-            $thu_chi = ThuChi::search($params, 'so_tien')->where('status', 1);
-            $customer = Customer::search($input)->select('id');
-            $item->contact = $customer->count();
-            $group_user = $customer->pluck('id')->toArray();
-            $input['group_user'] = $group_user;
+                $item->sum_budged = intval($item->sum_budged);
+                $item->sum_data = intval($item->sum_data);
+                $item->sum_invoice = intval($item->sum_invoice);
+                $order =  Order::search($input);
+                $order2 = clone $order;
+                $order3 = clone $order;
+                $payment = PaymentHistory::search($input, 'price');
+                $payment2 = clone $payment;
+                $payment3 = clone $payment;
 
-            if (count($group_user)) {
-                $schedules = Schedule::search($input)->select('id');
-                $item->schedules = $schedules->count();
-                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            } else {
-                $item->schedules = 0;
-                $item->schedules_den = 0;
-            }
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
-//            $payment = PaymentHistory::search($input, 'price,order_id')->whereIn('order_id', $orders->pluck('id')->toArray());
-            $payment = PaymentHistory::search($input, 'price,order_id');
-            $paymentNew = clone $payment;
-            $paymentNew = $paymentNew->whereHas('order', function ($item) {
-                $item->where('is_upsale', 0);
+                $item->doanh_so = $order3->sum('all_total');
+                $item->doanh_thu = intval($payment3->sum('price'));
+
+                $item->doanh_so_kh_moi = $order->where('is_upsale',0)->sum('all_total');
+                $item->doanh_so_kh_cu = $order2->where('is_upsale',1)->sum('all_total');
+
+
+                $item->doanh_thu_kh_moi = intval($payment->whereHas('order',function ($q){
+                    $q->where('is_upsale', 0);
+                })->sum('price'));
+                $item->doanh_thu_kh_cu = intval($payment2->whereHas('order',function ($q){
+                    $q->where('is_upsale', 1);
+                })->sum('price'));
+
+                return $item;
             });
 
-            unset($input['marketing']);
-            $input['user_id'] = $item->id;
-            $price = PriceMarketing::search($input)->select('budget', 'comment', 'message', \DB::raw('sum(budget) as total_budget'),
-                \DB::raw('sum(comment) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
-            $item->budget = $price->total_budget; //ngân sách
-            $item->comment = $price->total_comment; //comment
-            $item->message = $price->total_message; //tin nhắn
-            $item->orders = $orders->count();
-            $item->all_total = $orders->sum('all_total');
-            $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = $paymentNew->sum('price');
-            $item->paymentAll = $payment->sum('price');
-            $item->nap = $thu_chi->sum('so_tien');
-            return $item;
-        })->sortByDesc('payment')
-            ->filter(function ($qr) {
-                if ($qr->payment > 0) {
-                    return $qr;
-                }
-            });
+//        dd($marketing);
+
+//        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+//            $input['marketing'] = $item->id;
+//            $input['thuc_hien_id'] = $item->id;
+//            $params = $input;
+//            unset($params['marketing'], $params['branch_id'], $params['location_id']);
+//
+//            $thu_chi = ThuChi::search($params, 'so_tien')->where('status', 1);
+//            $customer = Customer::search($input)->select('id');
+//            $item->contact = $customer->count();
+//            $group_user = $customer->pluck('id')->toArray();
+//            $input['group_user'] = $group_user;
+//
+//            if (count($group_user)) {
+//                $schedules = Schedule::search($input)->select('id');
+//                $item->schedules = $schedules->count();
+//                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+//            } else {
+//                $item->schedules = 0;
+//                $item->schedules_den = 0;
+//            }
+//            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+////            $payment = PaymentHistory::search($input, 'price,order_id')->whereIn('order_id', $orders->pluck('id')->toArray());
+//            $payment = PaymentHistory::search($input, 'price,order_id');
+//            $paymentNew = clone $payment;
+//            $paymentNew = $paymentNew->whereHas('order', function ($item) {
+//                $item->where('is_upsale', 0);
+//            });
+//
+//            unset($input['marketing']);
+//            $input['user_id'] = $item->id;
+//            $price = PriceMarketing::search($input)->select('budget', 'data', 'message', \DB::raw('sum(budget) as total_budget'),
+//                \DB::raw('sum(data) as total_comment'), \DB::raw('sum(message) as total_message'))->first();
+//            $item->budget = $price->total_budget; //ngân sách
+//            $item->comment = $price->total_comment; //comment
+//            $item->message = $price->total_message; //tin nhắn
+//            $item->orders = $orders->count();
+//            $item->all_total = $orders->sum('all_total');
+//            $item->gross_revenue = $orders->sum('gross_revenue');
+//            $item->payment = $paymentNew->sum('price');
+//            $item->paymentAll = $payment->sum('price');
+//            $item->nap = $thu_chi->sum('so_tien');
+//            return $item;
+//        })->sortByDesc('payment')
+//            ->filter(function ($qr) {
+//                if ($qr->payment > 0) {
+//                    return $qr;
+//                }
+//            });
+
+//        $marketing = [];
+
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }

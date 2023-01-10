@@ -205,6 +205,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('sales-admin', 'SalesController@adminIndex')->name('report.saleAdmin');
         Route::get('sale-ranking', 'SalesController@ranking')->name('report.saleRanking');
         Route::get('group-sale', 'SalesController@indexGroupCategory')->name('report.groupSale');
+        Route::get('thong-ke', 'SalesController@customReport');
         Route::get('commission', 'CommissionController@statistical')->name('report.commission');
         Route::get('hoa-hong-ctv', 'CommissionController@statisticalCTV');
         Route::get('waiters', 'CommissionController@statisticalWaiters')->name('report.waiters');

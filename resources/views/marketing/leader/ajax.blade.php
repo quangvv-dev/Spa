@@ -1,113 +1,53 @@
 <div class="tableFixHead" id="registration-form">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
-        <tr>
-            <th class="text-center" colspan="8">THÔNG TIN NGUỒN</th>
-            <th class="text-center" colspan="13">THÔNG TIN HIỆU QUẢ MARKETING</th>
-        </tr>
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center">STT</th>
             <th class="text-center">Marketing</th>
-            <th class="text-center">Nạp tiền</th>
-            <th class="text-center">Ngân sách</th>
-            <th class="text-center">Tin nhắn</th>
-            <th class="text-center">Comment</th>
-            <th class="text-center">Data</th>
-            <th class="text-center">Số contact</th>
-            <th class="text-center">Tỷ lệ xin số</th>
-            <th class="text-center">Giá contact</th>
-            <th class="text-center">Lịch hẹn</th>
-            <th class="text-center">Lịch hẹn đến</th>
-            <th class="text-center">Đơn chốt</th>
-            <th class="text-center">Số $/KH đến</th>
-            <th class="text-center no-wrap">Tỷ lệ đến/SĐT</th>
-            <th class="text-center no-wrap">Doanh số</th>
-            <th class="text-center no-wrap">Doanh thu</th>
-            <th class="text-center no-wrap">Chi phí <span class=""><br>KH mới</span></th>
-            <th class="text-center no-wrap">Chi phí <span class=""><br>tổng</span></th>
-            <th class="text-center">Thực thu<span class=""><br>KH mới</span></th>
-            <th class="text-center">Thực thu<span class=""><br>tổng</span></th>
-            {{--<th class="text-center">Doanh thu<span class=""><br>TB/đơn</span></th>--}}
+            <th class="text-center">Tiền/Data</th>
+            <th class="text-center">Tỉ lệ xin số</th>
+            <th class="text-center">Tiền/SDT</th>
+            <th class="text-center">Chi phí/Dthu</th>
+            <th class="text-center">Chi phí/Doanh số</th>
+            <th class="text-center" colspan="2">DS KH</th>
+            <th class="text-center" colspan="2">Doanh thu</th>
         </tr>
         <tr class="number_index">
-            <th class="text-center">(1)</th>
-            <th class="text-center">(2)</th>
-            <th class="text-center">(3)</th>
-            <th class="text-center">(4)</th>
-            <th class="text-center">(5)</th>
-            <th class="text-center">(6)</th>
-            <th class="text-center">(5+6)</th>
-            <th class="text-center">(7)</th>
-            <th class="text-center">(5+6)/(7)</th>
-            <th class="text-center">(8)</th>
-            <th class="text-center">(9)</th>
-            <th class="text-center">(10)</th>
-            <th class="text-center">(11)</th>
-            <th class="text-center">(4)/(10)</th>
-            <th class="text-center">(10)/(7)</th>
-            <th class="text-center">(12)</th>
-            <th class="text-center">(13)</th>
-            <th class="text-center">(3)/(14)</th>
-            <th class="text-center">(3)/(15)</th>
-            <th class="text-center">(14)</th>
-            <th class="text-center">(15)</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-center">KH mới</th>
+            <th class="text-center">KH cũ</th>
+            <th class="text-center">KH mới</th>
+            <th class="text-center">KH cũ</th>
         </tr>
         </thead>
 
         <tbody>
-
-        @if(count($marketing))
-            <tr>
-                <td class="text-center bold" colspan="2">Tổng</td>
-                <td class="text-center bold">{{number_format($marketing->sum('nap'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('budget'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('message'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('comment'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('message')+ $marketing->sum('comment'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('contact'))}}</td>
-                <td class="text-center bold">{{($marketing->sum('message')+ $marketing->sum('comment') >0 && $marketing->sum('contact')>0)?number_format(round(($marketing->sum('message')+ $marketing->sum('comment'))/$marketing->sum('contact'))*100):0}}%</td>
-                <td class="text-center bold">{{!empty($marketing->sum('budget'))&& !empty($marketing->sum('contact'))?number_format(round($marketing->sum('budget')/$marketing->sum('contact'))):0}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('schedules'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('schedules_den'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('orders'))}}</td>
-                <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('budget')) ?number_format($marketing->sum('budget')/$marketing->sum('schedules_den')):0 }}</td>
-                <td class="text-center bold">{{!empty($marketing->sum('schedules_den')) && !empty($marketing->sum('contact')) ?round($marketing->sum('schedules_den')/$marketing->sum('contact')*100,1):0 }}%</td>
-                <td class="text-center bold">{{number_format($marketing->sum('all_total'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('gross_revenue'))}}</td>
-                <td class="text-center bold">{{($marketing->sum('nap') >0 || $marketing->sum('payment')>0)? number_format(round($marketing->sum('nap')/$marketing->sum('payment')*100)):0}}%</td>
-                <td class="text-center bold">{{($marketing->sum('nap') >0 || $marketing->sum('paymentAll')>0)? number_format(round($marketing->sum('nap')/$marketing->sum('paymentAll')*100)):0}}%</td>
-                <td class="text-center bold">{{number_format($marketing->sum('payment'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('paymentAll'))}}</td>
-            </tr>
-            @foreach($marketing as $i => $item)
+            @forelse($marketing as $key=>$item)
                 <tr class="">
-                    <td class="text-center pdr10">{{$i}}</td>
-                    <td class="text-center pdr10">{{$item->full_name}}
-                    <td class="text-center pdr10">{{number_format($item->nap)}}</td> {{--Nạp tiền--}}
-                    <td class="text-center pdr10">{{number_format($item->budget)}}</td> {{--ngân sách--}}
-                    <td class="text-center pdr10">{{number_format($item->message)}}</td> {{--message--}}
-                    <td class="text-center pdr10">{{number_format($item->comment)}}</td> {{--comment--}}
-                    <td class="text-center pdr10">{{number_format($item->message + $item->comment)}}</td> {{--data--}}
-                    <td class="text-center pdr10">{{number_format($item->contact)}}</td>
-                    <td class="text-center pdr10">{{(($item->message + $item->comment) > 0 && $item->contact > 0)?number_format($item->contact):0}}%</td>
-                    <td class="text-center pdr10">{{!empty($item->budget)&& !empty($item->contact)?number_format(round($item->budget/$item->contact)):0}}</td>{{--giá contact--}}
-                    <td class="text-center pdr10">{{number_format($item->schedules)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->schedules_den)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->orders)}}</td>
-                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->budget) ?number_format($item->budget/$item->schedules_den):0 }}</td>
-                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->contact) ?round(($item->schedules_den/$item->contact)*100,1):0}}%</td>
+                    <td class="text-center pdr10">{{$key+1}}</td>
+                    <td class="text-center pdr10">{{@$item->user->full_name}}</td>
+                    <td class="text-center pdr10">{{number_format($item->sum_data > 0 ? $item->sum_budged / $item->sum_data : 0)}}</td>
 
-                    <td class="text-center pdr10">{{number_format($item->all_total)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->gross_revenue)}}</td>
+                    <td class="text-center pdr10">{{$item->sum_data > 0 ? round(($item->customer / $item->sum_data)*100,2) : 0}} %</td>
 
-                    <td class="text-center pdr10">{{($item->nap >0 || $item->payment)? number_format(round($item->nap/$item->payment*100)):0}}%</td>
-                    <td class="text-center pdr10">{{($item->nap >0 || $item->paymentAll)? number_format(round($item->nap/$item->paymentAll*100)):0}}%</td>
-                    <td class="text-center pdr10">{{number_format($item->payment)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->paymentAll)}}</td>
+                    <td class="text-center pdr10">{{$item->customer > 0 ? number_format(round($item->sum_budged / $item->customer,2)) : 0}}</td>
+                    <td class="text-center pdr10">{{$item->doanh_thu > 0 ? number_format(round($item->sum_budged / $item->doanh_thu,2)) : 0}}</td>
+                    <td class="text-center pdr10">{{$item->doanh_so > 0 ? number_format(round($item->sum_budged / $item->doanh_so,2)) : 0}}</td>
+
+
+                    <td class="text-center pdr10">{{number_format($item->doanh_so_kh_moi)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->doanh_so_kh_cu)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->doanh_thu_kh_moi)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->doanh_thu_kh_cu)}}</td>
                 </tr>
-            @endforeach
-        @endif
-
+            @empty
+            @endforelse
         </tbody>
     </table>
 </div>

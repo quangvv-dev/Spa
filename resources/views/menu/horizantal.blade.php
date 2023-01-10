@@ -226,6 +226,8 @@
                                 @if($roleGlobal->permission('report.groupSale'))
                                     <li><a href="{{url('report/group-sale')}}">Doanh số nhóm SP&DV</a></li>
                                 @endif
+                                <li><a href="{{url('report/thong-ke')}}">Thống kê bổ sung</a></li>
+
                             </ul>
                         </li>
 
