@@ -121,6 +121,14 @@ class StatisticController extends Controller
             return $item;
         });
 
+        $job = AgeAndJob::select('id', 'name')->where('type', StatusConstant::ACTIVE)->get()->map(function ($item) use ($input) {
+            $orderArray = Order::searchAll($input)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item) {
+                $qr->where('customer_job', $item->id);
+            });
+            $item->price = $orderArray->sum('all_total');
+            return $item;
+        });
+
         $city = City::select('id', 'name')->get()->map(function ($item) use ($input) {
             $input['city_id'] = $item->id;
             $item->price = Order::searchAll($input)->select('all_total')->sum('all_total');
@@ -182,6 +190,7 @@ class StatisticController extends Controller
         ];
         $services = [
 //            'gross_revenue' => $orders2->where('role_type', StatusCode::SERVICE)->sum('gross_revenue'),
+            'job'           => $job,
             'age'           => $age,
             'all_total'     => $orders2->where('role_type', StatusCode::SERVICE)->sum('all_total'),
             'combo_total'   => $orders_combo->where('role_type', StatusCode::COMBOS)->sum('all_total'),

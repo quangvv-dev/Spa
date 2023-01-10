@@ -168,7 +168,7 @@
 </div>
 
 <div class="d-none col-xs-none d-md-block">
-    <div class="h4 text-center">HELLL</div>
+    <div class="h4 text-center">BIỂU ĐỒ</div>
 
     <div class="row row-cards">
         <div class="col-md-6">
@@ -182,6 +182,9 @@
         </div>
         <div class="col-md-6">
             <div id="piechart-5" style="margin-left: 15px"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="piechart-job" style="margin-left: 15px"></div>
         </div>
         <div class="col-md-6">
             <div id="piechart-6" style="margin-left: 15px"></div>
@@ -279,6 +282,30 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-4'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @foreach($services['job'] as $k =>$item)
+            ['{{$item->name}}', {{$item->price}}],
+            @endforeach
+        ]);
+
+        var options = {
+            title: 'DOANH SỐ THEO NGHỀ NGHIỆP',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-job'));
 
         chart.draw(data, options);
     }
