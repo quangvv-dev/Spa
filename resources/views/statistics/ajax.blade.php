@@ -267,7 +267,7 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @foreach($products['age'] as $k =>$item)
+                @foreach($services['age'] as $k =>$item)
             ['{{$item->name}}', {{$item->price}}],
             @endforeach
         ]);
