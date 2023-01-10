@@ -6,6 +6,7 @@ use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Models\Branch;
+use App\Models\City;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -112,10 +113,9 @@ class StatisticController extends Controller
         $orders_combo = clone $orders;
         $ordersYear = $payment_years->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
-        $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
-            $services = Services::select('id')->where('trademark', $item->id)->pluck('id')->toArray();
-            $input['booking_id'] = $services;
-            $item->price = OrderDetail::search($input)->select('total_price')->sum('total_price');
+        $city = City::select('id', 'name')->get()->map(function ($item) use ($input) {
+            $input['city_id'] = $item->id;
+            $item->price = Order::search($input)->select('all_total')->sum('all_total');
             return $item;
         })->sortByDesc('price')->take(5);
 
@@ -142,7 +142,7 @@ class StatisticController extends Controller
         //END
 //        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
 
-        $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
+        $category_service = OrderDetail::getTotalPriceBookingId($input, StatusCode::SERVICE, 5);
 
         $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'),
             \DB::raw('SUM(gross_revenue) AS revenue'))
@@ -163,8 +163,8 @@ class StatisticController extends Controller
             'payment'          => $payment->sum('price'),
             'orders'           => $orders->count(),
             'customers'        => $customers->count(),
-            //            'category_service' => $category_service,
-            'category_product' => $category_product,
+            'category_service' => $category_service,
+//            'category_product' => $category_product,
             'revenue_month'    => $revenue_month,
         ];
         $products = [
@@ -214,11 +214,11 @@ class StatisticController extends Controller
         if ($request->ajax()) {
             return view('statistics.ajax',
                 compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
-                    'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
+                    'city', 'revenue_gender', 'revenue_year', 'revenue'));
         }
         return view('statistics.index',
             compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
-                'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
+                'city', 'revenue_gender', 'revenue_year', 'revenue'));
     }
 
     /**

@@ -241,7 +241,7 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @foreach($data['category_product'] as $k =>$item)
+                @foreach($data['category_service'] as $k =>$item)
                 @if(!empty($item))
             ['{{$item->service->name}}', {{$item->total}}],
             @endif
@@ -249,7 +249,7 @@
         ]);
 
         var options = {
-            title: 'TOP 5 SẢN PHẨM BÁN CHẠY NHẤT',
+            title: 'TOP 5 DỊCH VỤ DOANH THU CAO NHẤT',
             width: 500,
             height: 300,
         };
@@ -291,15 +291,15 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @if(count($trademark))
-                @foreach($trademark as $item)
+                @if(count($city))
+                @foreach($city as $item)
             ['{{$item->name}}', {{$item->price}}],
             @endforeach
             @endif
         ]);
 
         var options = {
-            title: 'DOANH SỐ 5 NHÀ CUNG CẤP BÁN CHẠY NHẤT',
+            title: 'TOP 5 DOANH SỐ CAO NHẤT',
             width: 500,
             height: 300,
         };
