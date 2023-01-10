@@ -152,8 +152,9 @@ class Order extends Model
                 })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                     $q->whereIn('branch_id', $input['group_branch']);
                 })->when(isset($input['city_id']), function ($q) use ($input) {
-                    $q->whereIn('city_id', $input['city_id']);
-                })->when(isset($input['order_cancel']), function ($query) use ($input) {
+                    $q->where('city_id', $input['city_id']);
+                })
+                ->when(isset($input['order_cancel']), function ($query) use ($input) {
                     $query->onlyTrashed();
                 })->orderByDesc('id');
         }
