@@ -11,6 +11,7 @@ use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\CallCenter;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\GroupComment;
@@ -23,7 +24,9 @@ use App\Services\TaskService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
@@ -113,7 +116,7 @@ class SalesController extends Controller
 
             return $item;
         })->filter(function ($f) {
-            if ($f->customer_new > 0){
+            if ($f->customer_new > 0) {
                 return $f;
             }
         })->sortByDesc('all_payment');
@@ -257,6 +260,63 @@ class SalesController extends Controller
             $q->where('branch_id', $input->branch_id);
         });
     }
+
+    public function customReport(Request $request)
+    {
+
+//        $order = Order::whereNull('city_id')->get()->map(function ($i){
+//            Order::find($i->id)->update(['city_id'=>0]);
+////            return $i;
+//        });
+//        dd($order);
+
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+
+        $branchs = Branch::pluck('name', 'id')->toArray();
+        $marketing = [];
+        $type_search = $request->type_search ? $request->type_search : 1;
+
+        $search = $request->all();
+        $data = [];
+        if ($type_search == 1) { //doanh thu theo tỉnh
+
+            $data = City::select('name', 'id')->get()->map(function ($item) use ($search) {
+                $search['city_id'] = $item->id;
+                $order = Order::searchAll($search);
+                $order1 = clone $order;
+                $order2 = clone $order;
+
+                $array_order = $order2->pluck('id')->toArray();
+
+                $item->so_don = $order->count();
+                $item->doanh_so = $order1->sum('all_total');
+
+                $payment = PaymentHistory::search($search)->whereIn('order_id',$array_order);
+                $payment1 = clone $payment;
+                $item->doanh_thu = $payment->sum('price');
+                $item->so_don_doanh_thu = $payment->count();
+
+                $item->doanh_thu_no = $payment1->where('is_debt', 1)->sum('price');
+                $item->so_don_no = $payment1->where('is_debt', 1)->count();
+
+                return $item;
+            })->sortByDesc('doanh_so');
+            if($request->ajax()){
+                return view('statistics.report_custom.report_city', compact('data'));
+            }
+
+        }
+        if ($type_search == 2) { //doanh thu theo tuổi
+            return view('statistics.report_custom.report_age', compact('data'));
+        }
+        if ($type_search == 3) { //doanh thu theo nghề nghiệp
+            return view('statistics.report_custom.report_job', compact('data'));
+        }
+        return view('statistics.report_custom.thong_ke', compact('branchs', 'marketing','data'));
+    }
+
 
     /**
      * Báo cáo doanh thu admin

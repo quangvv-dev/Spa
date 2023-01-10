@@ -31,7 +31,6 @@ class PaymentHistory extends Model
 
     public static function search($input, $select = '*')
     {
-
         if (isset($input['start_date']) && isset($input['end_date'])) {
             $detail = PaymentHistory::select($select)->whereBetween('payment_date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -49,12 +48,6 @@ class PaymentHistory extends Model
                 $detail = PaymentHistory::select($select)->where('payment_date', getTime(($input['data_time'])))
                     ->with('order')->has('order');
             }
-        }
-        if (!isset($input['start_date']) && !isset($input['end_date']) && !isset($input['data_time'])) {
-            $detail = PaymentHistory::select($select)->whereBetween('created_at', [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ])->with('order')->has('order');
         }
         if (isset($input['group_branch']) && count($input['group_branch'])) {
             $detail = $detail->whereIn('branch_id', $input['group_branch']);
