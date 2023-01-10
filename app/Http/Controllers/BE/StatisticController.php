@@ -116,7 +116,7 @@ class StatisticController extends Controller
             $input['city_id'] = $item->id;
             $item->price = Order::searchAll($input)->select('all_total')->sum('all_total');
             return $item;
-        })->sortByDesc('price')->take(5);
+        })->sortByDesc('price');
 
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
         $payment_wallet = PaymentWallet::search($input, 'price');
