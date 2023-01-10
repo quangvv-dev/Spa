@@ -252,7 +252,7 @@
         ]);
 
         var options = {
-            title: 'TOP 5 DỊCH VỤ DOANH THU CAO NHẤT',
+            title: 'TOP 5 DỊCH VỤ DOANH SỐ CAO NHẤT',
             width: 500,
             height: 300,
         };
