@@ -14,7 +14,6 @@ use App\Models\PaymentHistory;
 use App\Models\PaymentWallet;
 use App\Models\Status;
 use App\Models\ThuChi;
-use App\Models\Trademark;
 use App\Models\WalletHistory;
 use App\User;
 use Illuminate\Http\Request;

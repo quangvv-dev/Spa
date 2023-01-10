@@ -215,6 +215,9 @@ class Order extends Model
                 ->when(isset($input['role_type']), function ($query) use ($input) {
                     $query->where('role_type', $input['role_type']);
                 })
+                ->when(isset($input['city_id']), function ($q) use ($input) {
+                    $q->where('city_id', $input['city_id']);
+                })
                 ->when(isset($input['data_time']), function ($query) use ($input) {
                     $query->when($input['data_time'] == 'TODAY' ||
                         $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
