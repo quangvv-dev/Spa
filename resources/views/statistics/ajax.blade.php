@@ -326,7 +326,7 @@
         ]);
 
         var options = {
-            title: 'TOP 5 DOANH SỐ CAO NHẤT',
+            title: 'TOP 5 TỈNH CÓ DOANH SỐ CAO NHẤT',
             width: 500,
             height: 300,
         };
