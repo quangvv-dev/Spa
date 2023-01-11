@@ -783,10 +783,11 @@ class OrderController extends Controller
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $combo = Services::with('category')->get();
         $role_type = $order->role_type;
-
+        $age_from = AgeAndJob::where('type',0)->pluck('name','id')->prepend('','')->toArray();
+        $customer_job = AgeAndJob::where('type',1)->pluck('name','id')->prepend('','')->toArray();
         return view('order.indexService',
             compact('order', 'spaTherapissts', 'customer_support', 'title', 'customers', 'customer', 'services',
-                'products', 'role_type', 'combo'));
+                'products', 'role_type', 'combo','age_from','customer_job'));
     }
 
     /**
