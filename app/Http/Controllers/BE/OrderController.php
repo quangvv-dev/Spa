@@ -94,7 +94,7 @@ class OrderController extends Controller
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,UserConstant::CSKH,UserConstant::ADMIN])->pluck('full_name',
             'id');
         $title = 'Tạo đơn hàng';
 //        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
@@ -745,7 +745,7 @@ class OrderController extends Controller
         $order = $this->orderService->find($id);
 
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('role', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,UserConstant::CSKH,UserConstant::ADMIN])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
@@ -773,7 +773,7 @@ class OrderController extends Controller
         $order = $this->orderService->find($id);
 
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER])->pluck('full_name',
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,UserConstant::CSKH,UserConstant::ADMIN])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');

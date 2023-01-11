@@ -202,7 +202,7 @@ class OrderService
             'count_day' => $attibutes['count_day'],
             'type' => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
             'all_total' => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount - $order->discount_order,
-            'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
+//            'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
             'created_at' => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
             'city_id' => $attibutes['city_id']
         ];
