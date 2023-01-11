@@ -54,7 +54,8 @@ class PaymentHistory extends Model
         }
         if (!empty($input['branch_id'])) {
             $detail = $detail->where('branch_id', $input['branch_id']);
-        }if (isset($input['is_debt'])) {
+        }
+        if (isset($input['is_debt'])) {
             $detail = $detail->where('is_debt', $input['is_debt']);
         }
         if (!empty($input['payment_type'])) {
@@ -62,30 +63,22 @@ class PaymentHistory extends Model
         }
         if (!empty($input['marketing'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
-                $item->whereHas('customer', function ($q) use ($input) {
-                    $q->where('mkt_id', $input['marketing']);
-                });
+                $item->where('mkt_id', $input['marketing']);
             });
         }
         if (!empty($input['arr_marketing'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
-                $item->whereHas('customer', function ($q) use ($input) {
-                    $q->whereIn('mkt_id', $input['arr_marketing']);
-                });
+                $item->whereIn('mkt_id', $input['arr_marketing']);
             });
         }
         if (!empty($input['carepage_id'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
-                $item->whereHas('customer', function ($q) use ($input) {
-                    $q->where('carepage_id', $input['carepage_id']);
-                });
+                $item->where('carepage_id', $input['carepage_id']);
             });
         }
         if (isset($input['telesales'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
-                $item->whereHas('customer', function ($q) use ($input) {
-                    $q->where('telesales_id', $input['telesales']);
-                });
+                $item->where('telesale_id', $input['telesales']);
             });
         }
 
