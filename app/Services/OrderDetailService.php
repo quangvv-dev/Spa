@@ -79,7 +79,7 @@ class OrderDetailService
                     'quantity'      => isset($data['quantity'][$key]) ? $data['quantity'][$key] : 0,
                     'price'         => replaceNumberFormat($data['price'][$key]),
                     'vat'           => 0,
-                    'address'       => $data['address'],
+//                    'address'       => $data['address'],
                     'number_discount' => replaceNumberFormat($data['number_discount'][$key]),
                     'total_price'   => replaceNumberFormat($data['total_price'][$key]),
                     'updated_at'    => Carbon::now()->format('Y-m-d H:i:s'),
