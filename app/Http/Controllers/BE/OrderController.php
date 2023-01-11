@@ -386,7 +386,7 @@ class OrderController extends Controller
         }
         $group = Category::select('id', 'name')->pluck('name', 'id')->toArray();
         $marketingUsers = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
-        $telesales = User::select('id', 'full_name')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
+        $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
