@@ -8,6 +8,7 @@ use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Models\AgeAndJob;
 use App\Models\Branch;
 use App\Models\CallCenter;
 use App\Models\Category;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\DocBlock\Tags\Source;
 
 class SalesController extends Controller
 {
@@ -309,10 +311,33 @@ class SalesController extends Controller
 
         }
         if ($type_search == 2) { //doanh thu theo tuổi
-            return view('statistics.report_custom.report_age', compact('data'));
+            $age = AgeAndJob::where('type',0)->get();
+            $source = \App\Models\Source::search($search)->get()->map(function ($s) use ($search){
+                $s->age = AgeAndJob::where('type',0)->get()->map(function ($item) use ($search,$s) {
+                    $orderArray = Order::searchAll($search)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item,$s) {
+                        $qr->where('age_from', $item->id)->where('source_fb',$s->id);
+                    });
+                    $item->price = $orderArray->sum('all_total');
+                    return $item;
+                });
+                return $s;
+            });
+//            dd($source);
+            return view('statistics.report_custom.report_age', compact('age','source'));
         }
         if ($type_search == 3) { //doanh thu theo nghề nghiệp
-            return view('statistics.report_custom.report_job', compact('data'));
+            $job = AgeAndJob::where('type',1)->get();
+            $source = \App\Models\Source::search($search)->get()->map(function ($s) use ($search){
+                $s->job = AgeAndJob::where('type',1)->get()->map(function ($item) use ($search,$s) {
+                    $orderArray = Order::searchAll($search)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item,$s) {
+                        $qr->where('customer_job', $item->id)->where('source_fb',$s->id);
+                    });
+                    $item->price = $orderArray->sum('all_total');
+                    return $item;
+                });
+                return $s;
+            });
+            return view('statistics.report_custom.report_job', compact('job','source'));
         }
         return view('statistics.report_custom.thong_ke', compact('branchs', 'marketing','data'));
     }
