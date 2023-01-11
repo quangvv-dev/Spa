@@ -381,7 +381,7 @@ class OrderController extends Controller
         }
         $group = Category::select('id', 'name')->pluck('name', 'id')->toArray();
         $marketingUsers = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
-        $telesales = User::select('id', 'full_name')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
+        $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
@@ -594,7 +594,7 @@ class OrderController extends Controller
 
                                 $task = $this->taskService->create($input);
                                 $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
-                                    $query->where('role', UserConstant::TELESALES)->where('is_leader',
+                                    $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
                                         UserConstant::IS_LEADER);
                                 })->get();
                                 $task->users()->attach($follow);
@@ -726,7 +726,7 @@ class OrderController extends Controller
         $order = $this->orderService->find($id);
 
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('role', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
