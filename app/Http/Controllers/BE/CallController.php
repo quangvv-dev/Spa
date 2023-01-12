@@ -76,12 +76,14 @@ class CallController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param int $phone
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(CallCenter $id)
+    public function show($phone)
     {
+        $data = CallCenter::select('recording_url')->where('dest_number', $phone)->get();
+        return response(['data' => $data]);
     }
 
     /**

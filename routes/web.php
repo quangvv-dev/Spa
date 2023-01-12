@@ -101,6 +101,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('settings/phan-bo-data', 'SettingController@phanbo')->name('settings.phanbo');//Phân bổ data Sale
     Route::post('settings/post', 'SettingController@postPhanBo')->name('settings.postPhanBo');
 
+    Route::get('get-recording-phone/{phone}', 'CallController@show');
+
     //Order
     Route::get('orders/{customer_id?}', 'OrderController@index')->name('orders.create');
     Route::get('orders-service/{customer_id?}', 'OrderController@indexService')->name('ordersService.create');

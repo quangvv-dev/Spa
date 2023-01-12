@@ -160,6 +160,7 @@
         </div>
     </div>
     @include('components.lich_su_tac_nghiep.modal_history_operation')
+    @include('customers.modal_ghi_am')
 @endsection
 @section('_script')
     <script type="text/javascript">
@@ -1378,6 +1379,30 @@
             console.log(345345)
 
         });
+
+        // show ghi âm cuộc gọi
+        $(document).on('click', '.openRecording', function () {
+            let phone = $(this).data('phone');
+            let html = "";
+            $.ajax({
+                url: '/get-recording-phone/' + phone,
+                method: 'get',
+                success: function (response) {
+                    if (response.data.length > 0) {
+                        let recording = response.data;
+                        for (let r = 0; r < recording.length; r++) {
+                            if (recording[r].recording_url != 'None'){
+                                html += `<audio controls>
+                                <source src="`+recording[r].recording_url+`" type="audio/mpeg">
+                                </audio>`;
+                            }
+                        }
+                    }
+                    $('#modalGhiAm .modal-body').html(html);
+                }
+            })
+            $('#modalGhiAm').modal('show');
+        })
 
 
 

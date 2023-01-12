@@ -269,11 +269,8 @@
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}"
                         data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{ $customer->phone }}</a>
-
-                        @if(!empty($customer->call_back))
-                            <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}"
-                                     style="cursor: pointer;color: red !important;"></i></span>
-                        @endif
+                        <span><i class="fas fa-phone openRecording" data-phone="{{$customer->phone}}"
+                                     style="cursor: pointer;color: red !important;" title="Ghi âm"></i></span>
                     </td>
                     <td class="text-center {{in_array(4,$user_filter_grid) ? '':'display-none'}}"
                         style="position: relative;max-width: 146px">
