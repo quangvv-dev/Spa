@@ -23,7 +23,7 @@
                         <input id="reportrange" type="text" class="form-control square">
                     </div>
 
-                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::BAN_GIAM_DOC)
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::BAN_GIAM_DOC && \Illuminate\Support\Facades\Auth::user()->branch_id == NULL)
                         <div class="col-lg-3 col-md-3">
                             {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
                         </div>

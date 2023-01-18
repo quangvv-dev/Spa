@@ -76,7 +76,7 @@ class StatisticController extends Controller
             $input['branch_id'] = 1;
         }
         $user = Auth::user();
-        if($user->department_id != DepartmentConstant::BAN_GIAM_DOC){
+        if($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null)){
             $input['branch_id'] = $user->branch_id;
         }
 
