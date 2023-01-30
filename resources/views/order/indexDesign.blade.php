@@ -25,86 +25,141 @@
             border-radius: 4px;
             display: flex;
             align-items: center;
-            margin-left: 5px;
+            margin-left: 20px;
             justify-content: center;
             float: left;
+            cursor: pointer;
         }
 
+        .icon-plus {
+            border: 1px solid;
+            border-radius: 50%;
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            position: relative;
+        }
+
+        .icon-plus i {
+            position: absolute;
+            top: 18%;
+            left: 18%;
+        }
+
+        .input-custom {
+            border: 1px solid #D4D7E7;
+            border-radius: 8px;
+        }
+
+        .info {
+            background: #E8EAF6;
+            color: #4E4B66;
+            padding: 5px 25px;
+            line-height: 2.5;
+        }
+
+        .info .title {
+            font-weight: 600;
+        }
+        .div-left .date-create{
+            clear: left;
+        }
+        .save{
+            width: 134px;
+            background: #141ED2;
+            border-radius: 8px;
+        }
+        .back{
+            width: 134px;
+            background: #E8EAF6;
+            border-radius: 8px;
+            color: #141ED2;
+        }
+        .bg-primary .custom-th {
+            background: #E8EAF6;
+            color: #4E4B66 !important;
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3>
+                <h3 class="card-title bold">{{$title}}</h3>
             </div>
-            <div class="">
-                <h4>Thông tin khách hàng</h4>
-            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Thông tin khách hàng</h4>
+                    </div>
+                </div>
 
-            @if (isset($order))
-                {!! Form::model($order, array('url' => url('orders/'.$order->id. '/edit'), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
-            @else
-                {!! Form::open(array('url' => route('order-detail.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
-            @endif
-            <div class="col row">
-                @if(isset($customer))
-                    {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control quantity', 'required' => true)) !!}
+                @if (isset($order))
+                    {!! Form::model($order, array('url' => url('orders/'.$order->id. '/edit'), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+                @else
+                    {!! Form::open(array('url' => route('order-detail.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
                 @endif
-                {!! Form::hidden('role_type', isset($order)&&$order->role_type?$order->role_type:\App\Constants\StatusCode::PRODUCT, array('id' => 'role_type')) !!}
-                <div class="col-xs-12 col-md-3">
-                    <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
-                        {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
-                        {!! Form::text('full_name',$customer ? $customer->full_name: null , array('class' => 'form-control full_name', 'required' => true)) !!}
-                        <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
+                <div class="row">
+                    @if(isset($customer))
+                        {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control quantity', 'required' => true)) !!}
+                    @endif
+                    {!! Form::hidden('role_type', isset($order)&&$order->role_type?$order->role_type:\App\Constants\StatusCode::PRODUCT, array('id' => 'role_type')) !!}
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
+                            {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
+                            {!! Form::text('full_name',$customer ? $customer->full_name: null , array('class' => 'form-control full_name input-custom', 'required' => true)) !!}
+                            <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
+                            {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
+                            {!! Form::text('phone', $customer ? $customer->phone: null, array('class' => 'form-control phone input-custom', 'required' => true)) !!}
+                            <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                            {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
+                            {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address input-custom')) !!}
+                            <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                            {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
+                            @if(isset($customer))
+                                <select id="status" class="form-control select2 input-custom" name="status_id"
+                                        required="required"
+                                        data-placeholder="Trạng thái">
+                                    @foreach($status as $key => $value)
+                                        <option value="{{ $key }}" {{ $key == $customer->status_id ? 'selected' : "" }}>{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'required' => true, 'placeholder' => 'Trạng thái')) !!}
+                            @endif
+                            <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-2">
-                    <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
-                        {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                        {!! Form::text('phone', $customer ? $customer->phone: null, array('class' => 'form-control phone', 'required' => true)) !!}
-                        <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
-                    </div>
+                <div class="row">
+                    <h4 class="col-2">Thông tin dịch vụ</h4>
+                    <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red bold d-flex">Thêm dịch vụ
+                            &nbsp;<span class="icon-plus"><i class="fa fa-plus"></i></span></a></div>
+                    <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red bold d-flex">Thêm sản
+                            phẩm &nbsp;<span class="icon-plus"><i class="fa fa-plus"></i></span></a></div>
                 </div>
-                <div class="col-xs-12 col-md-4">
-                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
-                        {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address')) !!}
-                        <span class="help-block">{{ $errors->first('address', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-2">
-                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
-                        @if(isset($customer))
-                            <select id="status" class="form-control select2" name="status_id" required="required"
-                                    data-placeholder="Trạng thái">
-                                @foreach($status as $key => $value)
-                                    <option value="{{ $key }}" {{ $key == $customer->status_id ? 'selected' : "" }}>{{ $value }}</option>
-                                @endforeach
-                            </select>
-                        @else
-                            {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'required' => true, 'placeholder' => 'Trạng thái')) !!}
-                        @endif
-                        <span class="help-block">{{ $errors->first('address', ':message') }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <h4 class="col-2">Thông tin dịch vụ</h4>
-                <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red">(+) Sản phẩm</a></div>
-            </div>
-            <div class="col">
                 <div class="table-responsive">
                     <table class="table card-table table-vcenter text-nowrap table-primary">
-                        <thead class="bg-primary text-white">
+                        <thead class="bg-primary">
                         <tr style="white-space: nowrap">
-                            <th class="text-white text-center">Dịch vụ</th>
-                            <th class="text-white text-center">Số lượng</th>
-                            <th class="text-white text-center">Đơn giá</th>
+                            <th class="custom-th text-center">Dịch vụ</th>
+                            <th class="custom-th text-center">Số lượng</th>
+                            <th class="custom-th text-center">Đơn giá</th>
                             {{--<th class="text-white text-center">VAT(%)</th>--}}
-                            <th class="text-white text-center">CK(%)</th>
-                            <th class="text-white text-center" style="width: 100px">CK(đ)</th>
-                            <th class="text-white text-center" colspan="2">Thành tiền</th>
-                            <th class="text-white text-center"></th>
+                            <th class="custom-th text-center">CK(%)</th>
+                            <th class="custom-th text-center" style="width: 100px">CK(đ)</th>
+                            <th class="custom-th text-center" colspan="2">Thành tiền</th>
+                            <th class="custom-th text-center"></th>
                         </tr>
                         </thead>
                         <tbody class="order">
@@ -136,22 +191,22 @@
                                         </div>
                                     </td>
                                     <td class="text-center" width="50">
-                                        {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                        {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity input-custom', 'required' => true)) !!}
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('price[]', number_format($orderDetail->price), array('class' => 'form-control price', 'required' => true)) !!}
+                                        {!! Form::text('price[]', number_format($orderDetail->price), array('class' => 'form-control price input-custom', 'required' => true)) !!}
                                     </td>
                                     {{--<td class="text-center">--}}
                                     {!! Form::hidden('vat[]', 0, array('class' => 'form-control VAT')) !!}
                                     {{--</td>--}}
                                     <td class="text-center">
-                                        <input type="text" class="form-control CK1">
+                                        <input type="text" class="form-control CK1 input-custom">
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2')) !!}
+                                        {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2 input-custom')) !!}
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total','readonly'=>true)) !!}
+                                        {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                                     </td>
                                     <td class="tc vertical-middle remove_row">
                                         <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
@@ -184,22 +239,22 @@
                                     </div>
                                 </td>
                                 <td class="text-center" width="50">
-                                    {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+                                    {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity input-custom', 'required' => true)) !!}
                                 </td>
                                 <td class="text-center">
-                                    {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+                                    {!! Form::text('price[]', null, array('class' => 'form-control price input-custom', 'required' => true)) !!}
                                 </td>
                                 {{--<td class="text-center">--}}
                                 {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
                                 {{--</td>--}}
                                 <td class="text-center">
-                                    <input type="text" class="form-control CK1" value="0">
+                                    <input type="text" class="form-control CK1 input-custom" value="0">
                                 </td>
                                 <td class="text-center">
-                                    {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                                    {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2 input-custom')) !!}
                                 </td>
                                 <td class="text-center" colspan="2">
-                                    {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+                                    {!! Form::text('total_price[]', null, array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                                 </td>
                                 <td class="tc vertical-middle remove_row">
                                     <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
@@ -207,129 +262,195 @@
                             </tr>
                         @endif
                         </tbody>
-                        <tfoot>
-                        <tr class="">
-                            <td colspan="3">
-                                <div class="row">
-                                    <div class="">
-                                        <h4>Thông tin khác</h4>
-                                        <div class="box-add">
-                                            <div class="btn-icon">
-                                                <i class="fa fa-plus-circle"></i>
-                                                <br>
-                                                Thêm B.Sỹ
-                                            </div>
-                                        </div>
-                                        <div class="box-add">
-                                            <div class="btn-icon">
-                                                <i class="fa fa-plus-circle"></i>
-                                                <br>
-                                                Thêm y tá
-                                            </div>
-                                        </div>
-                                        <div class="box-add">
-                                            <div class="btn-icon">
-                                                <i class="fa fa-plus-circle"></i>
-                                                <br>
-                                                Tư vấn 1
-                                            </div>
-                                        </div>
-                                        <div class="box-add">
-                                            <div class="btn-icon">
-                                                <i class="fa fa-plus-circle"></i>
-                                                <br>
-                                                Tư vấn 2
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        {{--<tfoot>--}}
+                        {{--<tr class="">--}}
+                        {{--<td colspan="3">--}}
+                        {{--<div class="row">--}}
+                        {{--<div class="">--}}
+                        {{--<h4>Thông tin khác</h4>--}}
+                        {{--<div class="box-add">--}}
+                        {{--<div class="btn-icon">--}}
+                        {{--<i class="fa fa-plus-circle"></i>--}}
+                        {{--<br>--}}
+                        {{--Thêm B.Sỹ--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="box-add">--}}
+                        {{--<div class="btn-icon">--}}
+                        {{--<i class="fa fa-plus-circle"></i>--}}
+                        {{--<br>--}}
+                        {{--Thêm y tá--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="box-add">--}}
+                        {{--<div class="btn-icon">--}}
+                        {{--<i class="fa fa-plus-circle"></i>--}}
+                        {{--<br>--}}
+                        {{--Tư vấn 1--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="box-add">--}}
+                        {{--<div class="btn-icon">--}}
+                        {{--<i class="fa fa-plus-circle"></i>--}}
+                        {{--<br>--}}
+                        {{--Tư vấn 2--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
 
-                            </td>
-                            <td colspan="4">
-                                <div class="row">
-                                    <div class="" style="background: #E8EAF6">
-                                        <label >Tạm tính</label>
-                                    </div>
-                                </div>
+                        {{--</td>--}}
+                        {{--<td colspan="4">--}}
+                        {{--<div class="row">--}}
+                        {{--<div class="" style="background: #E8EAF6">--}}
+                        {{--<label >Tạm tính</label>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
 
-                            </td>
-                        </tr>
+                        {{--</td>--}}
+                        {{--</tr>--}}
 
 
-                        <tr>
-                            <td colspan="5">
-                                @if(empty($order))
-                                    <a href="javascript:void(0)" id="get_Voucher" class="right">
-                                        <i class="fa fa-check-square text-primary"></i> Chọn Voucher KM !!!</a>
-                                @endif
-                            </td>
-                            <td colspan="2"></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2" colspan="5">
-                                <div class="col row">
-                                    <input type="hidden" value="0" name="spa_therapisst_id">
-                                    <div class="col-md-5">
-                                        {!! Form::label('support_id', 'Người tư vấn (nếu có)') !!}
-                                        {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
-                                    </div>
-                                    <div class="col-md-5">
-                                        <div
-                                                class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
-                                            {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
-                                            <div class="wd-200 mg-b-30">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">
-                                                            <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
-                                                        </div>
-                                                    </div>
-                                                    {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>
-                            <td class="text-center bold"
-                                id="voucher">{{isset($order)?@number_format($order->discount):0}}</td>
-                            <td><input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden"
-                                       id="discount">
-                                <input value="{{isset($order)?@$order->voucher_id:0}}" name="voucher_id" id="voucher_id"
-                                       type="hidden">
-                            </td>
-                        </tr>
-                        <tr class="bold">
-                            <td class="text-center"><b>Chiết khấu tổng đơn (VNĐ)</b></td>
-                            <td class="text-center">
-                                @if(empty($order))
-                                    <input type="number" max="100" min="0" value="0" id="discount_percent">(%)
-                                @endif
-                            </td>
-                            <td class="text-center"
-                                id="all_discount_order">{{isset($order)?@number_format($order->discount_order):0}}
-                            </td>
-                            <input type="hidden" name="discount_order" id="discount_order" value="0">
+                        {{--<tr>--}}
+                        {{--<td colspan="5">--}}
+                        {{--@if(empty($order))--}}
+                        {{--<a href="javascript:void(0)" id="get_Voucher" class="right">--}}
+                        {{--<i class="fa fa-check-square text-primary"></i> Chọn Voucher KM !!!</a>--}}
+                        {{--@endif--}}
+                        {{--</td>--}}
+                        {{--<td colspan="2"></td>--}}
+                        {{--</tr>--}}
+                        {{--<tr>--}}
+                        {{--<td rowspan="2" colspan="5">--}}
+                        {{--<div class="col row">--}}
+                        {{--<input type="hidden" value="0" name="spa_therapisst_id">--}}
+                        {{--<div class="col-md-5">--}}
+                        {{--{!! Form::label('support_id', 'Người tư vấn (nếu có)') !!}--}}
+                        {{--{!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}--}}
+                        {{--</div>--}}
+                        {{--<div class="col-md-5">--}}
+                        {{--<div--}}
+                        {{--class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">--}}
+                        {{--{!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}--}}
+                        {{--<div class="wd-200 mg-b-30">--}}
+                        {{--<div class="input-group">--}}
+                        {{--<div class="input-group-prepend">--}}
+                        {{--<div class="input-group-text">--}}
+                        {{--<i class="fas fa-calendar tx-16 lh-0 op-6"></i>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--{!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<span class="help-block">{{ $errors->first('created_at', ':message') }}</span>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        {{--</td>--}}
+                        {{--<td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>--}}
+                        {{--<td class="text-center bold"--}}
+                        {{--id="voucher">{{isset($order)?@number_format($order->discount):0}}</td>--}}
+                        {{--<td><input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden"--}}
+                        {{--id="discount">--}}
+                        {{--<input value="{{isset($order)?@$order->voucher_id:0}}" name="voucher_id" id="voucher_id"--}}
+                        {{--type="hidden">--}}
+                        {{--</td>--}}
+                        {{--</tr>--}}
+                        {{--<tr class="bold">--}}
+                        {{--<td class="text-center"><b>Chiết khấu tổng đơn (VNĐ)</b></td>--}}
+                        {{--<td class="text-center">--}}
+                        {{--@if(empty($order))--}}
+                        {{--<input type="number" max="100" min="0" value="0" id="discount_percent">(%)--}}
+                        {{--@endif--}}
+                        {{--</td>--}}
+                        {{--<td class="text-center"--}}
+                        {{--id="all_discount_order">{{isset($order)?@number_format($order->discount_order):0}}--}}
+                        {{--</td>--}}
+                        {{--<input type="hidden" name="discount_order" id="discount_order" value="0">--}}
 
-                        </tr>
-                        <tr class="bold">
-                            <td colspan="5"></td>
-                            <td class="text-center bold">Tổng thanh toán (VNĐ)</td>
-                            <td style="color: red !important;" class="text-center bold"
-                                id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>
-                            <td></td>
-                        </tr>
-                        </tfoot>
+                        {{--</tr>--}}
+                        {{--<tr class="bold">--}}
+                        {{--<td colspan="5"></td>--}}
+                        {{--<td class="text-center bold">Tổng thanh toán (VNĐ)</td>--}}
+                        {{--<td style="color: red !important;" class="text-center bold"--}}
+                        {{--id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>--}}
+                        {{--<td></td>--}}
+                        {{--</tr>--}}
+                        {{--</tfoot>--}}
                     </table>
                 </div>
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <h4>Thông tin khác</h4>
+                    </div>
+                    <div class="col-6 div-left">
+                        <div class="box-add">
+                            <div class="btn-icon">
+                                <i class="fa fa-plus-circle"></i>
+                                <br>
+                                Thêm B.Sỹ
+                            </div>
+                        </div>
+                        <div class="box-add">
+                            <div class="btn-icon">
+                                <i class="fa fa-plus-circle"></i>
+                                <br>
+                                Thêm y tá
+                            </div>
+                        </div>
+                        <div class="box-add">
+                            <div class="btn-icon">
+                                <i class="fa fa-plus-circle"></i>
+                                <br>
+                                Tư vấn 1
+                            </div>
+                        </div>
+                        <div class="box-add">
+                            <div class="btn-icon">
+                                <i class="fa fa-plus-circle"></i>
+                                <br>
+                                Tư vấn 2
+                            </div>
+                        </div>
+                        <div class="row date-create">
+                            <div class="col-6 mt-5">
+                                {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
+                                {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 info">
+                        <div class="row">
+                            <div class="col-6 title">Tạm tính</div>
+                            <div class="col-6 text-right bold">3,500,000</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Khuyến mãi</div>
+                            <div class="col-6 text-right"><a href="">Chọn khuyến mãi</a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Chiết khấu tổng đơn (%)</div>
+                            <div class="col-6 text-right"><input type="number" class="input-custom" style="width: 50px; height: 30px;padding-left: 5px" min="0"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Chiết khấu (VNĐ)</div>
+                            <div class="col-6 text-right bold"><input type="number" class="input-custom" style="width: 100px; height: 30px;padding-left: 5px" min="0"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Tổng thanh toán</div>
+                            <div class="col-6 text-right bold text-danger">3,325,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
 
+                <div class="col bot" style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-success save">Lưu</button>
+                    <a href="{{route('order.list')}}" class="btn btn-danger back">Huỷ</a>
+                </div>
             </div>
-            <div class="col bot" style="margin-top: 10px;">
-                <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('order.list')}}" class="btn btn-danger">Về danh sách</a>
-            </div>
+
             {{ Form::close() }}
 
         </div>
@@ -363,22 +484,22 @@
             </div>
             </td>
             <td class="text-center" width="50">
-            {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
+            {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity input-custom', 'required' => true)) !!}
                 </td>
                 <td class="text-center">
-            {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+            {!! Form::text('price[]', null, array('class' => 'form-control price input-custom', 'required' => true)) !!}
                 </td>
                 {{--<td class="text-center">--}}
                     {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
                     {{--</td>--}}
                 <td class="text-center">
-                    <input type="text" class="form-control CK1" value="0">
+                    <input type="text" class="form-control CK1 input-custom" value="0">
                 </td>
                 <td class="text-center">
-            {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+            {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2 input-custom')) !!}
                 </td>
                 <td class="text-center" colspan="2">
-            {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+            {!! Form::text('total_price[]', null, array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                 </td>
                 <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
             </tr>
