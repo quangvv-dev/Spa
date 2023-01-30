@@ -91,7 +91,7 @@
                     <div class="col-7">{{@number_format($wallets['revenue'])}}</div>
                 </div>
                 <div class="progress progress-sm">
-                    <div class="progress-bar bg-gradient-orange" style="width: 100%"></div>
+                    <div class="progress-bar bg-gradient-orange" style="width: 100%;"></div>
                 </div>
             </div>
         </div>
