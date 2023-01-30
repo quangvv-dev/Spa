@@ -76,10 +76,9 @@ class StatisticController extends Controller
             $input['branch_id'] = 1;
         }
         $user = Auth::user();
-        if($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null)){
+        if($user->department_id != DepartmentConstant::KE_TOAN && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))){
             $input['branch_id'] = $user->branch_id;
         }
-
         $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
             function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
