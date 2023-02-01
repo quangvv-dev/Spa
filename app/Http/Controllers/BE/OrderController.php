@@ -381,7 +381,7 @@ class OrderController extends Controller
         }
         $group = Category::select('id', 'name')->pluck('name', 'id')->toArray();
         $marketingUsers = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
-        $telesales = User::select('id', 'full_name')->whereIn('role', [UserConstant::TELESALES, UserConstant::WAITER])
+        $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
@@ -429,12 +429,12 @@ class OrderController extends Controller
         $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];
         $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
         if (isset($curent_branch) && $curent_branch) {
-            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::DOCTOR])
                 ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
                     $q->where('branch_id', $curent_branch);
                 })->pluck('full_name', 'id');
         } else {
-            $waiters = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id');
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::DOCTOR])->pluck('full_name', 'id');
         }
         $products = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->pluck('name', 'id')->toArray();
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
@@ -594,7 +594,7 @@ class OrderController extends Controller
 
                                 $task = $this->taskService->create($input);
                                 $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
-                                    $query->where('role', UserConstant::TELESALES)->where('is_leader',
+                                    $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
                                         UserConstant::IS_LEADER);
                                 })->get();
                                 $task->users()->attach($follow);
@@ -726,7 +726,7 @@ class OrderController extends Controller
         $order = $this->orderService->find($id);
 
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('role', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
             'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');

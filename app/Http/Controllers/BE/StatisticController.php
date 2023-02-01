@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
@@ -18,6 +19,7 @@ use App\Models\WalletHistory;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use App\Models\Services;
 use App\Models\Schedule;
@@ -72,6 +74,10 @@ class StatisticController extends Controller
 
         if (count($input) == 2) {
             $input['branch_id'] = 1;
+        }
+        $user = Auth::user();
+        if($user->department_id != DepartmentConstant::KE_TOAN && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))){
+            $input['branch_id'] = $user->branch_id;
         }
         $customers = Customer::select('id')->when(isset($input['branch_id']) && $input['branch_id'],
             function ($q) use ($input) {
