@@ -919,7 +919,7 @@
                 let carepage_id = $('.carepage').val();
                 let telesales = $('.telesales').val();
                 let search = $('#search_value').val();
-                let marketing = $('#group_product').val();
+                let marketing = $('#marketing').val();
                 let source = $('#source').val();
                 let gender = $('.gender').val();
                 let branch_id = $('.branch_id').val();
