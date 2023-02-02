@@ -7,10 +7,11 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <select class="image-picker">
+                <select class="image-picker selectDoctor">
                     <optgroup label="PlaceIMG" class="user-list">
+                        <option value=""></option>
                         @forelse($spaTherapissts as $item)
-                            <option data-img-src="{{$item->avatar}}" value="{{$item->id}}">{{$item->full_name}}</option>
+                            <option {{isset($order) && $order->spa_therapisst_id == $item->id ? 'selected' : ''}} data-img-src="{{$item->avatar}}" value="{{$item->id}}">{{$item->full_name}}</option>
                         @empty
                         @endforelse
                     </optgroup>

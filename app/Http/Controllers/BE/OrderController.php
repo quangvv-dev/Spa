@@ -68,9 +68,12 @@ class OrderController extends Controller
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
-        $spaTherapissts=User::select('id','avatar','full_name')->get();
-        $customer_support=User::select('id','avatar','full_name')->get();
+//        $spaTherapissts=User::select('id','avatar','full_name')->get();
+//        $customer_support=User::select('id','avatar','full_name')->get();
 
+        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
+            'id');
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
             'services' => $services,
@@ -128,8 +131,10 @@ class OrderController extends Controller
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
         $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.index',
+        return view('order.indexService',
             compact('title', 'customers', 'customer', 'services', 'products', 'combo'));
+//        return view('order.testService',
+//            compact('title', 'customers', 'customer', 'services', 'products', 'combo'));
     }
 
     public function getInfoService(Request $request)
@@ -745,7 +750,7 @@ class OrderController extends Controller
         $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
         $role_type = $order->role_type;
 
-        return view('order.index',
+        return view('order.indexDesign',
             compact('order', 'title', 'customers', 'customer', 'services',
                 'products', 'role_type', 'combo'));
     }
@@ -773,7 +778,10 @@ class OrderController extends Controller
         $combo = Services::with('category')->get();
         $role_type = $order->role_type;
 
-        return view('order.indexService',
+//        return view('order.indexService',
+//            compact('order', 'title', 'customers', 'customer', 'services',
+//                'products', 'role_type', 'combo'));
+        return view('order.testService',
             compact('order', 'title', 'customers', 'customer', 'services',
                 'products', 'role_type', 'combo'));
     }
