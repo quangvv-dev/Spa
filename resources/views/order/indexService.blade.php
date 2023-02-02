@@ -12,8 +12,100 @@
         td select.form-control {
             font-size: 14px;
         }
-        .width350{
+
+        .width350 {
             max-width: 350px;
+        }
+
+        body {
+            color: #4E4B66;
+        }
+        .pointer{
+            cursor: pointer;
+        }
+
+        .box-add {
+            width: 114px;
+            height: 114px;
+            background: #FFFFFF;
+            border: 1px dashed #D4D7E7;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            justify-content: center;
+            float: left;
+            cursor: pointer;
+        }
+
+        .icon-plus {
+            border: 1px solid #DDDDDD;
+            border-radius: 50%;
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            position: relative;
+        }
+
+        .icon-plus i {
+            position: absolute;
+            top: 16%;
+            left: 16%;
+            color: #3B8FEC;
+        }
+
+        .input-custom {
+            border: 1px solid #D4D7E7;
+            border-radius: 8px;
+        }
+
+        .info {
+            background: #E8EAF6;
+            color: #4E4B66;
+            padding: 5px 25px;
+            line-height: 2.5;
+        }
+
+        .info .title {
+            font-weight: 600;
+        }
+
+        .div-left .date-create {
+            clear: left;
+        }
+
+        .save {
+            width: 134px;
+            background: #141ED2;
+            border-radius: 8px;
+        }
+
+        .back {
+            width: 134px;
+            background: #E8EAF6;
+            border-radius: 8px;
+            color: #141ED2;
+        }
+
+        .bg-primary .custom-th {
+            background: #E8EAF6;
+            color: #4E4B66 !important;
+        }
+
+        .color-h1 {
+            color: #14142B;
+            font-weight: 700;
+        }
+
+        .image_picker_selector .thumbnail{
+            width: 176px;
+            height: 176px;
+            border-radius: 50%;
+        }
+        .image_picker_selector .image_picker_image{
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
         }
     </style>
     <div class="col-md-12 col-lg-12">

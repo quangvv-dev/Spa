@@ -1,4 +1,7 @@
 @extends('layout.app')
+@section('_style')
+    <link href="{{asset('assets/plugins/image-picker/image-picker.css') }}" rel="stylesheet" type="text/css">
+@endsection
 @section('content')
     <style>
         tfoot td {
@@ -17,9 +20,16 @@
             max-width: 350px;
         }
 
+        body {
+            color: #4E4B66;
+        }
+        .pointer{
+            cursor: pointer;
+        }
+
         .box-add {
-            width: 100px;
-            height: 100px;
+            width: 114px;
+            height: 114px;
             background: #FFFFFF;
             border: 1px dashed #D4D7E7;
             border-radius: 4px;
@@ -32,7 +42,7 @@
         }
 
         .icon-plus {
-            border: 1px solid;
+            border: 1px solid #DDDDDD;
             border-radius: 50%;
             display: inline-block;
             width: 22px;
@@ -42,8 +52,9 @@
 
         .icon-plus i {
             position: absolute;
-            top: 18%;
-            left: 18%;
+            top: 16%;
+            left: 16%;
+            color: #3B8FEC;
         }
 
         .input-custom {
@@ -61,34 +72,54 @@
         .info .title {
             font-weight: 600;
         }
-        .div-left .date-create{
+
+        .div-left .date-create {
             clear: left;
         }
-        .save{
+
+        .save {
             width: 134px;
             background: #141ED2;
             border-radius: 8px;
         }
-        .back{
+
+        .back {
             width: 134px;
             background: #E8EAF6;
             border-radius: 8px;
             color: #141ED2;
         }
+
         .bg-primary .custom-th {
             background: #E8EAF6;
             color: #4E4B66 !important;
         }
+
+        .color-h1 {
+            color: #14142B;
+            font-weight: 700;
+        }
+
+        .image_picker_selector .thumbnail{
+            width: 176px;
+            height: 176px;
+            border-radius: 50%;
+        }
+        .image_picker_selector .image_picker_image{
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title bold">{{$title}}</h3>
-            </div>
+            {{--<div class="card-header">--}}
+            {{--<h3 class="bold color-h1">{{$title}}</h3>--}}
+            {{--</div>--}}
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h4>Thông tin khách hàng</h4>
+                        <h4 class="color-h1">Thông tin khách hàng</h4>
                     </div>
                 </div>
 
@@ -142,11 +173,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <h4 class="col-2">Thông tin dịch vụ</h4>
-                    <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red bold d-flex">Thêm dịch vụ
-                            &nbsp;<span class="icon-plus"><i class="fa fa-plus"></i></span></a></div>
-                    <div class="col-md-2"><a href="javascript:void(0)" id="add_row" class="red bold d-flex">Thêm sản
-                            phẩm &nbsp;<span class="icon-plus"><i class="fa fa-plus"></i></span></a></div>
+                    <h4 class="col-2 color-h1">Thông tin dịch vụ</h4>
+                    {{--<div class="col-md-2">--}}
+                        {{--<a href="javascript:void(0)" id="add_row" class="red bold d-flex">Thêm dịch vụ--}}
+                            {{--&nbsp;<span class="icon-plus"><i class="fa fa-plus"></i></span>--}}
+                        {{--</a>--}}
+                    {{--</div>--}}
+                    <div class="col-md-2">
+                        <a href="javascript:void(0)" id="add_row" class="red bold d-flex">Thêm sản phẩm &nbsp;
+                            <span class="icon-plus"><i class="fa fa-plus"></i></span>
+                        </a>
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table card-table table-vcenter text-nowrap table-primary">
@@ -209,7 +246,8 @@
                                         {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                                     </td>
                                     <td class="tc vertical-middle remove_row">
-                                        <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
+                                        {{--<button class='btn btn-secondary'><i class="fa-trash fa"></i></button>--}}
+                                        <img class="pointer" src="{{asset('assets/images/delete.png')}}" alt="">
                                     </td>
                                 </tr>
                             @endforeach
@@ -257,159 +295,40 @@
                                     {!! Form::text('total_price[]', null, array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                                 </td>
                                 <td class="tc vertical-middle remove_row">
-                                    <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
+                                    {{--<button class='btn btn-secondary'><i class="fa-trash fa"></i></button>--}}
+                                    <img class="pointer" src="{{asset('assets/images/delete.png')}}" alt="">
                                 </td>
                             </tr>
                         @endif
                         </tbody>
-                        {{--<tfoot>--}}
-                        {{--<tr class="">--}}
-                        {{--<td colspan="3">--}}
-                        {{--<div class="row">--}}
-                        {{--<div class="">--}}
-                        {{--<h4>Thông tin khác</h4>--}}
-                        {{--<div class="box-add">--}}
-                        {{--<div class="btn-icon">--}}
-                        {{--<i class="fa fa-plus-circle"></i>--}}
-                        {{--<br>--}}
-                        {{--Thêm B.Sỹ--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="box-add">--}}
-                        {{--<div class="btn-icon">--}}
-                        {{--<i class="fa fa-plus-circle"></i>--}}
-                        {{--<br>--}}
-                        {{--Thêm y tá--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="box-add">--}}
-                        {{--<div class="btn-icon">--}}
-                        {{--<i class="fa fa-plus-circle"></i>--}}
-                        {{--<br>--}}
-                        {{--Tư vấn 1--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="box-add">--}}
-                        {{--<div class="btn-icon">--}}
-                        {{--<i class="fa fa-plus-circle"></i>--}}
-                        {{--<br>--}}
-                        {{--Tư vấn 2--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--</td>--}}
-                        {{--<td colspan="4">--}}
-                        {{--<div class="row">--}}
-                        {{--<div class="" style="background: #E8EAF6">--}}
-                        {{--<label >Tạm tính</label>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--</td>--}}
-                        {{--</tr>--}}
-
-
-                        {{--<tr>--}}
-                        {{--<td colspan="5">--}}
-                        {{--@if(empty($order))--}}
-                        {{--<a href="javascript:void(0)" id="get_Voucher" class="right">--}}
-                        {{--<i class="fa fa-check-square text-primary"></i> Chọn Voucher KM !!!</a>--}}
-                        {{--@endif--}}
-                        {{--</td>--}}
-                        {{--<td colspan="2"></td>--}}
-                        {{--</tr>--}}
-                        {{--<tr>--}}
-                        {{--<td rowspan="2" colspan="5">--}}
-                        {{--<div class="col row">--}}
-                        {{--<input type="hidden" value="0" name="spa_therapisst_id">--}}
-                        {{--<div class="col-md-5">--}}
-                        {{--{!! Form::label('support_id', 'Người tư vấn (nếu có)') !!}--}}
-                        {{--{!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}--}}
-                        {{--</div>--}}
-                        {{--<div class="col-md-5">--}}
-                        {{--<div--}}
-                        {{--class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}--}}
-                        {{--<div class="wd-200 mg-b-30">--}}
-                        {{--<div class="input-group">--}}
-                        {{--<div class="input-group-prepend">--}}
-                        {{--<div class="input-group-text">--}}
-                        {{--<i class="fas fa-calendar tx-16 lh-0 op-6"></i>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--{!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<span class="help-block">{{ $errors->first('created_at', ':message') }}</span>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</td>--}}
-                        {{--<td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>--}}
-                        {{--<td class="text-center bold"--}}
-                        {{--id="voucher">{{isset($order)?@number_format($order->discount):0}}</td>--}}
-                        {{--<td><input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden"--}}
-                        {{--id="discount">--}}
-                        {{--<input value="{{isset($order)?@$order->voucher_id:0}}" name="voucher_id" id="voucher_id"--}}
-                        {{--type="hidden">--}}
-                        {{--</td>--}}
-                        {{--</tr>--}}
-                        {{--<tr class="bold">--}}
-                        {{--<td class="text-center"><b>Chiết khấu tổng đơn (VNĐ)</b></td>--}}
-                        {{--<td class="text-center">--}}
-                        {{--@if(empty($order))--}}
-                        {{--<input type="number" max="100" min="0" value="0" id="discount_percent">(%)--}}
-                        {{--@endif--}}
-                        {{--</td>--}}
-                        {{--<td class="text-center"--}}
-                        {{--id="all_discount_order">{{isset($order)?@number_format($order->discount_order):0}}--}}
-                        {{--</td>--}}
-                        {{--<input type="hidden" name="discount_order" id="discount_order" value="0">--}}
-
-                        {{--</tr>--}}
-                        {{--<tr class="bold">--}}
-                        {{--<td colspan="5"></td>--}}
-                        {{--<td class="text-center bold">Tổng thanh toán (VNĐ)</td>--}}
-                        {{--<td style="color: red !important;" class="text-center bold"--}}
-                        {{--id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</td>--}}
-                        {{--<td></td>--}}
-                        {{--</tr>--}}
-                        {{--</tfoot>--}}
                     </table>
                 </div>
                 <div class="row mt-5">
                     <div class="col-12">
-                        <h4>Thông tin khác</h4>
+                        <h4 class="color-h1">Thông tin khác</h4>
                     </div>
                     <div class="col-6 div-left">
+                        {{--<div class="box-add">--}}
+                            {{--<div class="btn-icon user-bac-sy">--}}
+                                {{--<span class="icon-plus"><i class="fa fa-plus"></i></span>--}}
+                                {{--<br>--}}
+                                {{--Thêm B.Sỹ--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="box-add">--}}
+                            {{--<div class="btn-icon">--}}
+                                {{--<span class="icon-plus"><i class="fa fa-plus"></i></span>--}}
+                                {{--<br>--}}
+                                {{--Thêm y tá--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="box-add">
-                            <div class="btn-icon">
-                                <i class="fa fa-plus-circle"></i>
+                            <input type="hidden" value="0" name="spa_therapisst_id">
+                            <input type="hidden" name="support_id" id="support_id">
+                            <div class="btn-icon user-support">
+                                <span class="icon-plus"><i class="fa fa-plus"></i></span>
                                 <br>
-                                Thêm B.Sỹ
-                            </div>
-                        </div>
-                        <div class="box-add">
-                            <div class="btn-icon">
-                                <i class="fa fa-plus-circle"></i>
-                                <br>
-                                Thêm y tá
-                            </div>
-                        </div>
-                        <div class="box-add">
-                            <div class="btn-icon">
-                                <i class="fa fa-plus-circle"></i>
-                                <br>
-                                Tư vấn 1
-                            </div>
-                        </div>
-                        <div class="box-add">
-                            <div class="btn-icon">
-                                <i class="fa fa-plus-circle"></i>
-                                <br>
-                                Tư vấn 2
+                                Chọn tư vấn
                             </div>
                         </div>
                         <div class="row date-create">
@@ -422,29 +341,35 @@
                     <div class="col-6 info">
                         <div class="row">
                             <div class="col-6 title">Tạm tính</div>
-                            <div class="col-6 text-right bold">3,500,000</div>
+                            <div class="col-6 text-right bold tam_tinh">0</div>
                         </div>
                         <div class="row">
                             <div class="col-6 title">Khuyến mãi</div>
-                            <div class="col-6 text-right"><a href="">Chọn khuyến mãi</a></div>
+                            <div class="col-6 text-right"><a href="" id="get_Voucher">Chọn khuyến mãi</a></div>
                         </div>
                         <div class="row">
                             <div class="col-6 title">Chiết khấu tổng đơn (%)</div>
-                            <div class="col-6 text-right"><input type="number" class="input-custom" style="width: 50px; height: 30px;padding-left: 5px" min="0"></div>
+                            <div class="col-6 text-right">
+                                <input id="discount_percent" type="number" class="input-custom" style="width: 50px; height: 30px;padding-left: 5px" min="0" max="100">
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-6 title">Chiết khấu (VNĐ)</div>
-                            <div class="col-6 text-right bold"><input type="number" class="input-custom" style="width: 100px; height: 30px;padding-left: 5px" min="0"></div>
+                            <div class="col-6 text-right bold">
+                                <input id="all_discount_order"  type="text" class="input-custom" style="width: 100px; height: 30px;padding-left: 5px">
+                                <input type="hidden" name="discount_order" id="discount_order" value="0">
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-6 title">Tổng thanh toán</div>
-                            <div class="col-6 text-right bold text-danger">3,325,000</div>
+                            <div class="col-6 text-right bold text-danger" id="sum_total">0</div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
-
+                <input type="hidden" value="0" name="discount">
+                <input type="hidden" value="0" name="voucher_id">
                 <div class="col bot" style="margin-top: 10px;">
                     <button type="submit" class="btn btn-success save">Lưu</button>
                     <a href="{{route('order.list')}}" class="btn btn-danger back">Huỷ</a>
@@ -455,9 +380,13 @@
 
         </div>
     </div>
-    {{--@include('order.modalVoucher')--}}
+    @include('order.modalBacSy')
+    @include('order.modalSupport')
+    @include('order.modalVoucher')
+
 @endsection
 @section('_script')
+    <script src="{{ asset('assets/plugins/image-picker/image-picker.js') }}"></script>
     <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
         var searchParams = new URLSearchParams(window.location.search)
@@ -501,7 +430,9 @@
                 <td class="text-center" colspan="2">
             {!! Form::text('total_price[]', null, array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                 </td>
-                <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
+                <td class="tc vertical-middle remove_row">
+                    <img class="pointer" src="{{asset('assets/images/delete.png')}}" alt="">
+                </td>
             </tr>
 `);
 
@@ -550,6 +481,8 @@
                 value_total += parseInt(replaceNumber($(this).val()));
             });
             $('#sum_total').html(formatNumber(value_total));
+
+            $('.tam_tinh').html(formatNumber(value_total));
         });
         $('#get_Voucher').click(function () {
             let status = $('#status').val();
@@ -688,17 +621,46 @@
             });
         })
         $(document).on('change', '#discount_percent', function (e) {
-            let money = $(this).val() ? $(this).val() : 0;
-            let old_money = $('#discount_order').val();
-            value_total = parseInt(old_money) + parseInt(replaceNumber(value_total));
-            money = parseInt(money) * parseInt(value_total) / 100;
-            $('#discount_order').val(money);
-            $('#all_discount_order').html(formatNumber(money));
-            value_total = replaceNumber(value_total) - money;
+            let money = $(this).val() ? parseInt($(this).val()) : 0;
 
-            console.log(old_money, value_total, 'old');
-            $('#sum_total').html(formatNumber(value_total));
+            let chiet_khau = Math.round((parseInt(money) * value_total) / 100);
+
+            console.log(123123,money,value_total,chiet_khau);
+
+
+
+            $('#discount_order').val(chiet_khau);
+            $('#all_discount_order').val(formatNumber(chiet_khau));
+
+            let sum_total = value_total - chiet_khau;
+
+            $('#sum_total').html(formatNumber(sum_total));
             console.log(money, 'money-discount');
         });
+
+        $(".image-picker").imagepicker({
+            hide_select: false
+        })
+    </script>
+    <script>
+        $(document).on('click','.user-bac-sy',function () {
+            $('#userBacSy').modal('show');
+        })
+        $(document).on('click','.user-support',function () {
+            $('#userSupport').modal('show');
+        })
+
+
+        $(".image-picker").imagepicker({
+            hide_select:true,
+            show_label:true,
+        });
+
+        $(document).on('change','.selectSupport',function () {
+            console.log(11111,$(this).val());
+            let data = $(this).val();
+            $('#support_id').val(data);
+        })
+
     </script>
 @endsection

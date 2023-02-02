@@ -68,12 +68,17 @@ class OrderController extends Controller
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
+        $spaTherapissts=User::select('id','avatar','full_name')->get();
+        $customer_support=User::select('id','avatar','full_name')->get();
+
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
             'services' => $services,
             'status' => $status,
             'order_type' => $order_type,
             'branchs' => $branchs,
+            'customer_support' => $customer_support,
+            'spaTherapissts' => $spaTherapissts
         ]);
     }
 
@@ -89,16 +94,19 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-            'id');
+//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
+//        $spaTherapissts = User::select('id','avatar','full_name')->get();
+//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
+//            'id');
         $title = 'Tạo đơn hàng';
 //        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
 //        $combo = Services::whereIn('type', [StatusCode::PRODUCT, StatusCode::SERVICE])->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
+//        return view('order.indexDesign',
+//            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'products'));
         return view('order.indexDesign',
-            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'products'));
+            compact('title', 'customers', 'customer', 'products'));
     }
 
     /**
@@ -112,16 +120,16 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-            'id');
+//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
+//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
+//            'id');
         $title = 'Tạo đơn hàng';
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
         $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.indexService',
-            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'services', 'products', 'combo'));
+        return view('order.index',
+            compact('title', 'customers', 'customer', 'services', 'products', 'combo'));
     }
 
     public function getInfoService(Request $request)
@@ -725,9 +733,9 @@ class OrderController extends Controller
     {
         $order = $this->orderService->find($id);
 
-        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-            'id');
+//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
+//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
+//            'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
@@ -738,7 +746,7 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.index',
-            compact('order', 'spaTherapissts', 'customer_support', 'title', 'customers', 'customer', 'services',
+            compact('order', 'title', 'customers', 'customer', 'services',
                 'products', 'role_type', 'combo'));
     }
 
@@ -753,9 +761,9 @@ class OrderController extends Controller
     {
         $order = $this->orderService->find($id);
 
-        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-            'id');
+//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
+//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
+//            'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
@@ -766,7 +774,7 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.indexService',
-            compact('order', 'spaTherapissts', 'customer_support', 'title', 'customers', 'customer', 'services',
+            compact('order', 'title', 'customers', 'customer', 'services',
                 'products', 'role_type', 'combo'));
     }
 
