@@ -396,7 +396,7 @@
                 let data_time = $('#btn_choose_time').val();
                 let search = $('#search_value').val();
                 let group = $('#group').val();
-                let marketing = $('#group_product').val();
+                let marketing = $('#marketing').val();
                 let source = $('#source').val();
                 let telesales = $('#telesales_id').val();
                 let branch_id = $('.branch_id').val();
