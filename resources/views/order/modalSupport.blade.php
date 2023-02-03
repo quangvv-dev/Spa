@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <select class="image-picker selectSupport">
-                    <optgroup label="PlaceIMG" class="user-list">
+                    <optgroup label="Chọn tư vấn" class="user-list">
                         <option value=""></option>
                         @forelse($customer_support as $item)
                             <option {{isset($order) && $order->support_id == $item->id ? 'selected' : ''}} data-img-src="{{$item->avatar}}" value="{{$item->id}}">{{$item->full_name}}</option>

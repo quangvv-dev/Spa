@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <select class="image-picker selectDoctor">
-                    <optgroup label="PlaceIMG" class="user-list">
+                    <optgroup label="Chọn bác sỹ" class="user-list">
                         <option value=""></option>
                         @forelse($spaTherapissts as $item)
                             <option {{isset($order) && $order->spa_therapisst_id == $item->id ? 'selected' : ''}} data-img-src="{{$item->avatar}}" value="{{$item->id}}">{{$item->full_name}}</option>

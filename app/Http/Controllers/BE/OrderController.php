@@ -131,7 +131,7 @@ class OrderController extends Controller
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
         $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.indexService',
+        return view('order.testService',
             compact('title', 'customers', 'customer', 'services', 'products', 'combo'));
 //        return view('order.testService',
 //            compact('title', 'customers', 'customer', 'services', 'products', 'combo'));

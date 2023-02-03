@@ -268,8 +268,8 @@
                     <div class="col-6 div-left">
                         {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
                         <input type="hidden" name="spa_therapisst_id" id="spa_therapisst_id" value="{{@$order->spa_therapisst_id}}">
-                        <div class="box-add">
-                            <div class="btn-icon user-bac-sy">
+                        <div class="box-add user-bac-sy">
+                            <div class="btn-icon">
                                 <span class="icon-plus"><i class="fa fa-plus"></i></span>
                                 <br>
                                 Thêm B.Sỹ
@@ -282,9 +282,9 @@
                         {{--Thêm y tá--}}
                         {{--</div>--}}
                         {{--</div>--}}
-                        <div class="box-add">
+                        <div class="box-add user-support">
                             <input type="hidden" name="support_id" id="support_id" value="{{@$order->support_id}}">
-                            <div class="btn-icon user-support">
+                            <div class="btn-icon">
                                 <span class="icon-plus"><i class="fa fa-plus"></i></span>
                                 <br>
                                 Chọn tư vấn
