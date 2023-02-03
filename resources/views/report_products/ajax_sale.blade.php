@@ -42,7 +42,14 @@
             <tr>
                 <td class="text-center"></td>
                 <td class="text-center bold">Tổng cộng</td>
-                <td class="text-center bold">{{$users->sum('call_center')}}</td>
+                <td class="text-center bold">
+                    @php
+                        $hoursAll = floor(($users->sum('history') / 3600));
+                        $minutesAll = floor((($users->sum('history') % 3600)/60));
+                    @endphp
+                    {{$users->sum('call_center')}}<br>
+                    <span class="small-tip">({{($hoursAll > 0 ? $hoursAll . ' giờ ' : '').($minutesAll > 0 ? $minutesAll . ' phút ' : '')}})</span>
+                </td>
                 <td class="text-center bold">{{$users->sum('customer_new')}}</td>
                 <td class="text-center bold">{{$users->sum('tiep_can')}}</td>
                 <td class="text-center bold">{{$users->sum('all_schedules')}}</td>
@@ -61,7 +68,14 @@
                 <tr class="">
                     <td class="text-center pdr10"></td>
                     <td class="text-center pdr10">{{$item->full_name}}
-                    <td class="text-center pdr10">{{number_format($item->call_center)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->call_center)}}
+                        @php
+                            $hours = floor(($item->history / 3600));
+                            $minutes = floor((($item->history % 3600)/60));
+                        @endphp
+                        {{$item->call_center}}<br>
+                        <span class="small-tip">({{($hours > 0 ? $hours . ' giờ ' : '').($minutes > 0 ? $minutes . ' phút ' : '')}})</span>
+                    </td>
                     <td class="text-center pdr10">{{number_format($item->customer_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->tiep_can)}}</td>
                     <td class="text-center pdr10">{{number_format($item->all_schedules)}}</td>

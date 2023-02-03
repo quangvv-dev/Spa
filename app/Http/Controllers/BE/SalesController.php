@@ -94,7 +94,9 @@ class SalesController extends Controller
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';
             if (!empty($item->caller_number)) {
-                $item->call_center = CallCenter::search($input, 'id')->count();
+                $call_center = CallCenter::search($input, 'id,answer_time');
+                $item->history = $call_center->sum('answer_time');
+                $item->call_center = $call_center->where('call_status', 'ANSWERED')->count();
             } else {
                 $item->call_center = 0;
             }
