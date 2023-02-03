@@ -47,7 +47,7 @@
                         $hoursAll = floor(($users->sum('history') / 3600));
                         $minutesAll = floor((($users->sum('history') % 3600)/60));
                     @endphp
-                    {{$users->sum('call_center')}}<br>
+                    {{number_format($users->sum('call_center'))}}<br>
                     <span class="small-tip">({{($hoursAll > 0 ? $hoursAll . ' giờ ' : '').($minutesAll > 0 ? $minutesAll . ' phút ' : '')}})</span>
                 </td>
                 <td class="text-center bold">{{$users->sum('customer_new')}}</td>
@@ -68,12 +68,12 @@
                 <tr class="">
                     <td class="text-center pdr10"></td>
                     <td class="text-center pdr10">{{$item->full_name}}
-                    <td class="text-center pdr10">{{number_format($item->call_center)}}
+                    <td class="text-center pdr10">
                         @php
                             $hours = floor(($item->history / 3600));
                             $minutes = floor((($item->history % 3600)/60));
                         @endphp
-                        {{$item->call_center}}<br>
+                        {{number_format($item->call_center)}}<br>
                         <span class="small-tip">({{($hours > 0 ? $hours . ' giờ ' : '').($minutes > 0 ? $minutes . ' phút ' : '')}})</span>
                     </td>
                     <td class="text-center pdr10">{{number_format($item->customer_new)}}</td>
