@@ -43,10 +43,11 @@ class CallController extends Controller
         $docs = CallCenter::search($input);
         $answers = clone $docs;
         $answers = $answers->where('call_status', 'ANSWERED');
+        $paginate = $request->customPage ?: StatusCode::PAGINATE_20;
 
-        $docs = $docs->paginate(StatusCode::PAGINATE_20);
+        $docs = $docs->paginate($paginate);
         if ($request->ajax()) {
-            return view('call_center.ajax', compact('docs', 'answers'));
+            return view('call_center.ajax', compact('docs', 'answers', 'paginate'));
         }
         return view('call_center.index', compact('title', 'docs', 'answers', 'status'));
     }

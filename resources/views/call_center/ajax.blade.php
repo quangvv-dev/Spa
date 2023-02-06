@@ -76,12 +76,23 @@
         @endif
         </tbody>
     </table>
-    <div class="pull-left">
-        <div class="page-info">
-            {{ 'Tổng số ' . $docs->total() . ' cuộc gọi ' . (request()->search ? 'found' : '') }}
-        </div>
-    </div>
+    {{--<div class="pull-left">--}}
+        {{--<div class="page-info">--}}
+            {{--{{ 'Tổng số ' . $docs->total() . ' cuộc gọi ' . (request()->search ? 'found' : '') }}--}}
+        {{--</div>--}}
+    {{--</div>--}}
     <div class="pull-right">
+        <select id="customPage" style="height: 33px !important;">
+            <option value="20" {{isset($paginate) && $paginate == 20 ? 'selected' : ''}}>20</option>
+            <option value="50" {{isset($paginate) && $paginate == 50 ? 'selected' : ''}}>50</option>
+            <option value="100" {{isset($paginate) && $paginate == 100 ? 'selected' : ''}}>100</option>
+            <option value="200" {{isset($paginate) && $paginate == 300 ? 'selected' : ''}}>300</option>
+        </select>
+        @if($docs->currentPage() == $docs->lastPage())
+            <span>({{$docs->total()}}/{{$docs->total()}})</span>
+        @else
+            <span>({{$docs->currentPage()*$docs->perPage()}}/ {{$docs->total()}})</span>
+        @endif
         {{ $docs->appends(['search' => request()->search ])->links() }}
     </div>
 </div>

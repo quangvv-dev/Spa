@@ -91,6 +91,8 @@
                     <button type="submit" class="btn btn-primary btnSearch"> Tìm kiếm
                     </button>
                 </div>
+                <input type="hidden" value="" class="customPage" name="customPage">
+
                 {{ Form::close() }}
 
             </div>
@@ -134,6 +136,29 @@
             };
         }
 
+        $(document).on('change', '#customPage', function (e) {
+            e.preventDefault();
+            // $('#valuePage').val(pages);
+            // $('.btnSearch').click();
+            let paginate = $(this).val();
+
+            $('.customPage').val(paginate);
+            let telesales = $('#telesales').val();
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+            let call_status = $('#call_status').val();
+            // let branch_id = $('.branch_id').val();
+            let dest_number = $('#dest_number').val();
+            searchAjax({
+                caller_number: telesales,
+                start_date: start_date,
+                end_date: end_date,
+                call_status: call_status,
+                dest_number: dest_number,
+                customPage: paginate
+            });
+
+        })
 
         $(document).on('click', 'a.page-link', function (e) {
             e.preventDefault();
@@ -154,6 +179,7 @@
                 call_status: call_status,
                 page: pages,
                 dest_number: dest_number,
+                customPage: $('.customPage').val()
             });
         });
     </script>
