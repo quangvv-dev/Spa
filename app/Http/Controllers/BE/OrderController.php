@@ -96,14 +96,8 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-//        $spaTherapissts = User::select('id','avatar','full_name')->get();
-//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-//            'id');
         $title = 'Tạo đơn hàng';
-//        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
-//        $combo = Services::whereIn('type', [StatusCode::PRODUCT, StatusCode::SERVICE])->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
 //        return view('order.indexDesign',
 //            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'products'));
@@ -122,9 +116,6 @@ class OrderController extends Controller
     {
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
-//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-//            'id');
         $title = 'Tạo đơn hàng';
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
@@ -736,10 +727,6 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = $this->orderService->find($id);
-
-//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-//            'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
@@ -762,10 +749,6 @@ class OrderController extends Controller
     public function editService($id)
     {
         $order = $this->orderService->find($id);
-
-//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-//            'id');
         $title = 'Cập nhật đơn hàng';
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
