@@ -126,8 +126,8 @@ class OrderController extends Controller
 //        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
 //            'id');
         $title = 'Tạo đơn hàng';
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
-        $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
         return view('order.testService',
@@ -744,8 +744,8 @@ class OrderController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
-        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
         $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
         $role_type = $order->role_type;
 
