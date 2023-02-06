@@ -189,7 +189,7 @@
                     <table class="table card-table table-vcenter text-nowrap table-primary">
                         <thead class="bg-primary">
                         <tr style="white-space: nowrap">
-                            <th class="custom-th text-center">Dịch vụ</th>
+                            <th class="custom-th text-center" width="350px">Sản phẩm</th>
                             <th class="custom-th text-center">Số lượng</th>
                             <th class="custom-th text-center">Đơn giá</th>
                             {{--<th class="text-white text-center">VAT(%)</th>--}}
