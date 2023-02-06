@@ -60,8 +60,8 @@ class OrderController extends Controller
         $this->orderDetailService = $orderDetailService;
         $this->taskService = $taskService;
 
-        $services = Services::where('type', StatusCode::SERVICE)->orderBy('category_id', 'asc')->orderBy('id', 'desc')
-            ->get()->pluck('name', 'id')->prepend('-Chọn dịch vụ-', '');
+//        $services = Services::where('type', StatusCode::SERVICE)->orderBy('category_id', 'asc')->orderBy('id', 'desc')
+//            ->get()->pluck('name', 'id')->prepend('-Chọn dịch vụ-', '');
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
         $order_type = [
             Order::TYPE_ORDER_DEFAULT => 'Đơn thường',
@@ -75,7 +75,7 @@ class OrderController extends Controller
 //        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
-            'services' => $services,
+//            'services' => $services,
             'status' => $status,
             'order_type' => $order_type,
             'branchs' => $branchs,
