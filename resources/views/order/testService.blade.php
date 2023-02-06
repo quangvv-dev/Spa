@@ -1,116 +1,10 @@
 @extends('layout.app')
 @section('_style')
     <link href="{{asset('assets/plugins/image-picker/image-picker.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/order-new-design.css') }}" rel="stylesheet" type="text/css">
 @endsection
 @section('content')
-    <style>
-        tfoot td {
-            border: none !important;
-        }
 
-        td input.form-control {
-            font-size: 14px;
-        }
-
-        td select.form-control {
-            font-size: 14px;
-        }
-
-        .width350 {
-            max-width: 350px;
-        }
-
-        body {
-            color: #4E4B66;
-        }
-        .pointer{
-            cursor: pointer;
-        }
-
-        .box-add {
-            width: 114px;
-            height: 114px;
-            background: #FFFFFF;
-            border: 1px dashed #D4D7E7;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            margin-left: 20px;
-            justify-content: center;
-            float: left;
-            cursor: pointer;
-        }
-
-        .icon-plus {
-            border: 1px solid #DDDDDD;
-            border-radius: 50%;
-            display: inline-block;
-            width: 22px;
-            height: 22px;
-            position: relative;
-        }
-
-        .icon-plus i {
-            position: absolute;
-            top: 16%;
-            left: 16%;
-            color: #3B8FEC;
-        }
-
-        .input-custom {
-            border: 1px solid #D4D7E7;
-            border-radius: 8px;
-        }
-
-        .info {
-            background: #E8EAF6;
-            color: #4E4B66;
-            padding: 5px 25px;
-            line-height: 2.5;
-        }
-
-        .info .title {
-            font-weight: 600;
-        }
-
-        .div-left .date-create {
-            clear: left;
-        }
-
-        .save {
-            width: 134px;
-            background: #141ED2;
-            border-radius: 8px;
-        }
-
-        .back {
-            width: 134px;
-            background: #E8EAF6;
-            border-radius: 8px;
-            color: #141ED2;
-        }
-
-        .bg-primary .custom-th {
-            background: #E8EAF6;
-            color: #4E4B66 !important;
-        }
-
-        .color-h1 {
-            color: #14142B;
-            font-weight: 700;
-        }
-
-        .image_picker_selector .thumbnail{
-            width: 176px;
-            height: 176px;
-            border-radius: 50%;
-        }
-        .image_picker_selector .image_picker_image{
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-        }
-    </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
             {{--<div class="card-header">--}}
@@ -265,7 +159,8 @@
                             <div class="btn-icon">
                                 <span class="icon-plus"><i class="fa fa-plus"></i></span>
                                 <br>
-                                Thêm B.Sỹ
+                                <span class="chon-bac-si">Chọn B.Sĩ</span>
+                                <span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>
                             </div>
                         </div>
                         {{--<div class="box-add">--}}
@@ -280,7 +175,8 @@
                             <div class="btn-icon">
                                 <span class="icon-plus"><i class="fa fa-plus"></i></span>
                                 <br>
-                                Chọn tư vấn
+                                <span class="chon-tu-van">Chọn tư vấn</span>
+                                <span class="small-tip small-tip-custom text-tu-van">{{@$order->support->full_name}}</span>
                             </div>
                         </div>
                         <div class="row date-create">
@@ -343,12 +239,14 @@
 
         </div>
     </div>
+    {{--<input type="hidden" class="data-order" value="{{isset($order) ? }}">--}}
+    <input type="hidden" class="arrBacSy" value="{{$spaTherapissts}}">
+    <input type="hidden" class="arrSupport" value="{{$customer_support}}">
     @include('order.modalBacSy')
     @include('order.modalSupport')
     @include('order.modalVoucher')
 @endsection
 @section('_script')
-    <script src="{{ asset('assets/plugins/image-picker/image-picker.js') }}"></script>
     <script src="{{ asset('js/format-number.js') }}"></script>
     <script>
         var searchParams = new URLSearchParams(window.location.search)
@@ -725,9 +623,6 @@
         });
     </script>
     <script>
-        $(".image-picker").imagepicker({
-            hide_select: false
-        })
 
         $(document).on('click','.user-bac-sy',function () {
             $('#userBacSy').modal('show');
@@ -737,21 +632,23 @@
         })
 
 
-        $(".image-picker").imagepicker({
-            hide_select:true,
-            show_label:true,
-        });
-
-        $(document).on('change','.selectSupport',function () {
-            console.log(11111,$(this).val());
-            let data = $(this).val();
+        $(document).on('click','.selectSupport',function () {
+            console.log(11111,$(this).data('id'));
+            let data = $(this).data('id');
+            let data_name = $(this).data('name');
+            $('.selectSupport .thumbnail').removeClass('selected');
+            $(this).find('.thumbnail').addClass('selected');
             $('#support_id').val(data);
+            $('.text-tu-van').html(data_name);
         })
 
-        $(document).on('change','.selectDoctor',function () {
-            console.log(11111,$(this).val());
-            let data = $(this).val();
+        $(document).on('click','.selectDoctor',function () {
+            let data = $(this).data('id');
+            let data_name = $(this).data('name');
+            $('.selectDoctor .thumbnail').removeClass('selected');
+            $(this).find('.thumbnail').addClass('selected');
             $('#spa_therapisst_id').val(data);
+            $('.text-bac-si').html(data_name);
         })
 
         $(document).on('keyup','#all_discount_order',function () {
@@ -763,8 +660,57 @@
 
             total = total > 0 ? total : 0;
 
+
+            $('#discount_percent').val(0);
             $('#sum_total').html(formatNumber(total))
         })
 
+
+        $( ".quickSearchPageDoctor").keyup(function() {
+            let value = $(this).val();
+            let arr_page1 = $('.arrBacSy').val();
+            arr_page1 = JSON.parse(arr_page1);
+            let selected = $('#spa_therapisst_id').val();
+            doSearch(value,arr_page1,'#userBacSy',selected);
+        });
+
+        $( ".quickSearchPageSupport").keyup(function() {
+            let value = $(this).val();
+            let arr_page1 = $('.arrSupport').val();
+            arr_page1 = JSON.parse(arr_page1);
+            let selected = $('#support_id').val();
+            doSearch(value,arr_page1,'#userSupport',selected);
+        });
+
+
+        let delayTimer;
+        function doSearch(text,arr_page1,classes,selected_id) {
+            clearTimeout(delayTimer);
+
+            delayTimer = setTimeout(function() {
+                html = '';
+                if(arr_page1.length>0){
+                    arr_page1.forEach(f=>{
+                        let re = new RegExp(`${text}`, 'gi');
+                        if (f.full_name.match(re)) {
+                            let avatar = f.avatar ? f.avatar  :'';
+                            let selected = f.id == selected_id ? 'selected' : '';
+                            let select = classes == '#userBacSy' ? 'selectDoctor' : 'selectSupport';
+                            html += `
+                                <li class="`+select+`" data-id='`+f.id+`' data-name="`+f.full_name+`">
+                                    <div class="thumbnail `+selected+`">
+                                        <img class="image_picker_image" src="`+avatar+`">
+                                        <p>`+f.full_name+`</p>
+                                    </div>
+                                </li>
+                            `
+                        }else{
+                            // console.log('ngon ngay1');
+                        }
+                    })
+                    $(classes +' ' + '.image_picker_selector ul').html(html)
+                }
+            }, 500); // Will do the ajax stuff after 1000 ms, or 1 s
+        }
     </script>
 @endsection

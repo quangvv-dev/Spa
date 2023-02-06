@@ -68,11 +68,11 @@ class OrderController extends Controller
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
-//        $spaTherapissts=User::select('id','avatar','full_name')->get();
-//        $customer_support=User::select('id','avatar','full_name')->get();
+        $spaTherapissts=User::select('id','avatar','full_name')->get();
+        $customer_support=User::select('id','avatar','full_name')->get();
 
-        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
+//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->get();
+//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
             'services' => $services,
@@ -735,7 +735,7 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.indexDesign',
-            compact('order', 'title', 'customers', 'customer', 'services',
+            compact('order', 'title', 'customers', 'customer',
                 'products', 'role_type'));
     }
 
