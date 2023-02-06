@@ -99,9 +99,7 @@ class OrderController extends Controller
         $title = 'Tạo đơn hàng';
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $customers = Customer::pluck('full_name', 'id');
-//        return view('order.indexDesign',
-//            compact('title', 'customers', 'customer', 'spaTherapissts', 'customer_support', 'products'));
-        return view('order.indexDesign',
+        return view('order.index',
             compact('title', 'customers', 'customer', 'products'));
     }
 
@@ -121,10 +119,8 @@ class OrderController extends Controller
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
-        return view('order.testService',
+        return view('order.indexService',
             compact('title', 'customers', 'customer', 'services', 'products', 'combo'));
-//        return view('order.testService',
-//            compact('title', 'customers', 'customer', 'services', 'products', 'combo'));
     }
 
     public function getInfoService(Request $request)
@@ -734,7 +730,7 @@ class OrderController extends Controller
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
         $role_type = $order->role_type;
 
-        return view('order.indexDesign',
+        return view('order.index',
             compact('order', 'title', 'customers', 'customer',
                 'products', 'role_type'));
     }
@@ -757,10 +753,7 @@ class OrderController extends Controller
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
         $role_type = $order->role_type;
 
-//        return view('order.indexService',
-//            compact('order', 'title', 'customers', 'customer', 'services',
-//                'products', 'role_type', 'combo'));
-        return view('order.testService',
+        return view('order.indexService',
             compact('order', 'title', 'customers', 'customer', 'services',
                 'products', 'role_type'));
     }

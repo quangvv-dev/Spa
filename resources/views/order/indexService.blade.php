@@ -1,180 +1,93 @@
 @extends('layout.app')
+@section('_style')
+    <link href="{{asset('assets/plugins/image-picker/image-picker.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/order-new-design.css') }}" rel="stylesheet" type="text/css">
+@endsection
 @section('content')
-    <style>
-        tfoot td {
-            border: none !important;
-        }
 
-        td input.form-control {
-            font-size: 14px;
-        }
-
-        td select.form-control {
-            font-size: 14px;
-        }
-
-        .width350 {
-            max-width: 350px;
-        }
-
-        body {
-            color: #4E4B66;
-        }
-        .pointer{
-            cursor: pointer;
-        }
-
-        .box-add {
-            width: 114px;
-            height: 114px;
-            background: #FFFFFF;
-            border: 1px dashed #D4D7E7;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            margin-left: 20px;
-            justify-content: center;
-            float: left;
-            cursor: pointer;
-        }
-
-        .icon-plus {
-            border: 1px solid #DDDDDD;
-            border-radius: 50%;
-            display: inline-block;
-            width: 22px;
-            height: 22px;
-            position: relative;
-        }
-
-        .icon-plus i {
-            position: absolute;
-            top: 16%;
-            left: 16%;
-            color: #3B8FEC;
-        }
-
-        .input-custom {
-            border: 1px solid #D4D7E7;
-            border-radius: 8px;
-        }
-
-        .info {
-            background: #E8EAF6;
-            color: #4E4B66;
-            padding: 5px 25px;
-            line-height: 2.5;
-        }
-
-        .info .title {
-            font-weight: 600;
-        }
-
-        .div-left .date-create {
-            clear: left;
-        }
-
-        .save {
-            width: 134px;
-            background: #141ED2;
-            border-radius: 8px;
-        }
-
-        .back {
-            width: 134px;
-            background: #E8EAF6;
-            border-radius: 8px;
-            color: #141ED2;
-        }
-
-        .bg-primary .custom-th {
-            background: #E8EAF6;
-            color: #4E4B66 !important;
-        }
-
-        .color-h1 {
-            color: #14142B;
-            font-weight: 700;
-        }
-
-        .image_picker_selector .thumbnail{
-            width: 176px;
-            height: 176px;
-            border-radius: 50%;
-        }
-        .image_picker_selector .image_picker_image{
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-        }
-    </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3>
-            </div>
-
+            {{--<div class="card-header">--}}
+            {{--<h3 class="card-title">{{$title}}</h3>--}}
+            {{--</div>--}}
             @if (isset($order))
                 {!! Form::model($order, array('url' => url('orders/'.$order->id. '/edit'), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
                 {!! Form::open(array('url' => route('order-detail.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
-            <div class="col row">
-                @if(isset($customer))
-                    {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control', 'required' => true)) !!}
-                @endif
-                <div class="col-xs-12 col-md-3">
-                    <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
-                        {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
-                        {!! Form::text('full_name',$customer ? $customer->full_name: null , array('class' => 'form-control full_name', 'required' => true)) !!}
-                        <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="color-h1">Thông tin khách hàng</h4>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-2">
-                    <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
-                        {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                        {!! Form::text('phone', $customer ? $customer->phone: null, array('class' => 'form-control phone', 'required' => true)) !!}
-                        <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
+                <div class="row">
+                    @if(isset($customer))
+                        {!! Form::hidden('user_id', $customer->id, array('class' => 'form-control', 'required' => true)) !!}
+                    @endif
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
+                            {!! Form::label('full_name', 'Tên khách hàng', array('class' => ' required')) !!}
+                            {!! Form::text('full_name',$customer ? $customer->full_name: null , array('class' => 'form-control full_name input-custom', 'required' => true)) !!}
+                            <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
+                            {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
+                            {!! Form::text('phone', $customer ? $customer->phone: null, array('class' => 'form-control phone input-custom', 'required' => true)) !!}
+                            <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                            {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
+                            {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address input-custom')) !!}
+                            <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                            {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
+                            @if(isset($customer))
+                                <select id="status" class="form-control select2" name="status_id" required="required"
+                                        data-placeholder="Trạng thái">
+                                    @foreach($status as $key => $value)
+                                        <option
+                                                value="{{ $key }}" {{ $key == $customer->status_id ? 'selected' : "" }}>{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'required' => true, 'placeholder' => 'Trạng thái')) !!}
+                            @endif
+                            <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4">
-                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('address', 'Địa chỉ', array('class' => ' required')) !!}
-                        {!! Form::text('address', $customer ? $customer->address: null, array('class' => 'form-control address')) !!}
-                        <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+
+                <div class="row">
+                    <h4 class="col-2 color-h1">Thông tin dịch vụ</h4>
+                    <div class="col-md-2">
+                        <a href="javascript:void(0)" id="add_row" class="red bold d-flex">Thêm dịch vụ &nbsp;
+                            <span class="icon-plus"><i class="fa fa-plus"></i></span>
+                        </a>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-2">
-                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('status_id', 'Trạng thái', array('class' => ' required')) !!}
-                        @if(isset($customer))
-                            <select id="status" class="form-control select2" name="status_id" required="required"
-                                    data-placeholder="Trạng thái">
-                                @foreach($status as $key => $value)
-                                    <option
-                                        value="{{ $key }}" {{ $key == $customer->status_id ? 'selected' : "" }}>{{ $value }}</option>
-                                @endforeach
-                            </select>
-                        @else
-                            {!! Form::select('status_id', $status, null, array('class' => 'form-control select2','id'=>'status', 'required' => true, 'placeholder' => 'Trạng thái')) !!}
-                        @endif
-                        <span class="help-block">{{ $errors->first('address', ':message') }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
+
+
                 <div class="table-responsive">
                     <table class="table table-vcenter text-nowrap">
-                        <thead class="bg-primary text-white">
+                        <thead class="bg-primary">
                         <tr style="white-space: nowrap">
-                            <th class="text-white text-center" width="250px">Dịch vụ</th>
-                            <th class="text-white text-center">S.buổi | SL</th>
-                            <th class="text-white text-center">Đơn giá</th>
+                            <th class="custom-th text-center" width="350px">Dịch vụ</th>
+                            <th class="custom-th text-center">S.buổi | SL</th>
+                            <th class="custom-th text-center">Đơn giá</th>
                             {{--<th class="text-white text-center">VAT (%)</th>--}}
-                            <th class="text-white text-center">CK(%)</th>
-                            <th class="text-white text-center">CK(đ)</th>
-                            <th class="text-white text-center" colspan="2">Thành tiền</th>
-                            <th class="text-white text-center"></th>
+                            <th class="custom-th text-center">CK(%)</th>
+                            <th class="custom-th text-center">CK(đ)</th>
+                            <th class="custom-th text-center" colspan="2">Thành tiền</th>
+                            <th class="custom-th text-center"></th>
                         </tr>
                         </thead>
                         <tbody class="order">
@@ -187,148 +100,150 @@
                                             <div class="col-xs-12 col-md-10">
                                                 {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                                 <select class="select2 form-control service" required id="service" name="service_id[]">
-                                                        <option>-Chọn dịch vụ-</option>
-                                                        @foreach($combo as $service)
-                                                            <option
+                                                    <option>-Chọn dịch vụ-</option>
+                                                    @foreach($services as $service)
+                                                        <option
                                                                 value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
-                                                                - {{$service->name}}</option>
-                                                        @endforeach
+                                                            - {{$service->name}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <span class="btn btn-default col-md-1 no-padd add_note" style="height:34px; background-color: #ffffff;"> <i
-                                                    class="fa fa-plus font16" aria-hidden="true"></i> </span>
+                                                        class="fa fa-plus font16" aria-hidden="true"></i> </span>
                                             <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú"
                                                       name="service_note[]">{{@$orderDetail->service->description}}</textarea>
                                         </div>
                                     </td>
                                     <td class="text-center" width="50">
                                         @if(@$orderDetail->service->type == \App\Constants\StatusCode::PRODUCT)
-                                            {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity', 'required' => true)) !!}
-                                            {!! Form::hidden('days[]', 0, array('class' => 'form-control', 'required' => true)) !!}
+                                            {!! Form::text('quantity[]', $orderDetail->quantity, array('class' => 'form-control quantity input-custom', 'required' => true)) !!}
+                                            {{--                                            {!! Form::hidden('days[]', 0, array('class' => 'form-control input-custom', 'required' => true)) !!}--}}
                                         @else
-                                            {!! Form::hidden('quantity[]', 0, array('class' => 'form-control quantity', 'required' => true)) !!}
-                                            {!! Form::text('days[]', @$orderDetail->days, array('class' => 'form-control', 'required' => true)) !!}
+                                            {{--                                            {!! Form::hidden('quantity[]', 0, array('class' => 'form-control quantity input-custom', 'required' => true)) !!}--}}
+                                            {!! Form::text('days[]', @$orderDetail->days, array('class' => 'form-control input-custom', 'required' => true)) !!}
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('price[]', number_format($orderDetail->price), array('class' => 'form-control price', 'required' => true)) !!}
+                                        {!! Form::text('price[]', number_format($orderDetail->price), array('class' => 'form-control price input-custom', 'required' => true)) !!}
                                     </td>
                                     {{--<td class="text-center">--}}
-                                        {{--{!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}--}}
+                                    {{--{!! Form::text('vat[]', $orderDetail->vat, array('class' => 'form-control VAT')) !!}--}}
                                     {{--</td>--}}
                                     <td class="text-center">
-                                        <input type="text" class="form-control CK1" value="0">
+                                        <input type="text" class="form-control CK1 input-custom" value="0">
                                     </td>
                                     <td class="text-center">
-                                        {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2')) !!}
+                                        {!! Form::text('number_discount[]', number_format($orderDetail->number_discount), array('class' => 'form-control CK2 input-custom')) !!}
                                     </td>
                                     <td class="text-center" colspan="2">
-                                        {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total','readonly'=>true)) !!}
+                                        {!! Form::text('total_price[]', number_format($orderDetail->total_price), array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                                     </td>
                                     <td class="tc vertical-middle remove_row">
-                                        <button class='btn btn-secondary'><i class="fa-trash fa"></i></button>
+                                        {{--<button class='btn btn-secondary'><i class="fa-trash fa"></i></button>--}}
+                                        <img class="pointer" src="{{asset('assets/images/delete.png')}}" alt="">
                                     </td>
                                 </tr>
                             @endforeach
                         @endif
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td>
-                                @if(request()->get('type')=='combos'||@$role_type ==3)
-                                    <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Dịch vụ</a></div>
-                                    <div class="col-md-12"><a href="javascript:void(0)" id="add_row2" class="red">(+) Sản phẩm</a></div>
-                                @else
-                                    <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Dịch vụ</a></div>
-                                @endif
-                            </td>
-                            <td colspan="5">
-                                @if(empty($order))
-                                    <a href="javascript:void(0)" id="get_Voucher" class="right">
-                                        <i class="fa fa-check-square text-primary"></i> Voucher KM !!!</a>
-                                @endif
-                            </td>
-                            <td colspan="2">
-                                @if(empty($order))
-                                    <a href="javascript:void(0)" id="get_Voucher_Services" class="right">
-                                        <i class="fa fa-check-square text-primary"></i> Voucher dịch vụ !!!</a>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2" colspan="5">
-                                <div class="col row">
-                                    {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
+                    </table>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <h4 class="color-h1">Thông tin khác</h4>
+                    </div>
+                    <div class="col-6 div-left">
+                        {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
+                        <input type="hidden" name="spa_therapisst_id" id="spa_therapisst_id" value="{{@$order->spa_therapisst_id}}">
+                        <div class="box-add user-bac-sy">
+                            <div class="btn-icon">
+                                <span class="icon-plus"><i class="fa fa-plus"></i></span>
+                                <br>
+                                <span class="chon-bac-si">Chọn B.Sĩ</span>
+                                <span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>
+                            </div>
+                        </div>
+                        {{--<div class="box-add">--}}
+                        {{--<div class="btn-icon">--}}
+                        {{--<span class="icon-plus"><i class="fa fa-plus"></i></span>--}}
+                        {{--<br>--}}
+                        {{--Thêm y tá--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        <div class="box-add user-support">
+                            <input type="hidden" name="support_id" id="support_id" value="{{@$order->support_id}}">
+                            <div class="btn-icon">
+                                <span class="icon-plus"><i class="fa fa-plus"></i></span>
+                                <br>
+                                <span class="chon-tu-van">Chọn tư vấn</span>
+                                <span class="small-tip small-tip-custom text-tu-van">{{@$order->support->full_name}}</span>
+                            </div>
+                        </div>
+                        <div class="row date-create">
+                            <div class="col-6 mt-5">
+                                {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
+                                {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 info">
+                        <div class="row">
+                            <div class="col-6 title">Tạm tính</div>
+                            <div class="col-6 text-right bold tam_tinh">0</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Khuyến mãi</div>
+                            <div class="col-6 text-right"><a href="javascript:void(0)" id="get_Voucher">Chọn khuyến mãi</a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Khuyến mãi (dv)</div>
+                            <div class="col-6 text-right"><a href="javascript:void(0)" id="get_Voucher_Services">Chọn khuyến mãi</a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Chiết khấu tổng đơn (%)</div>
+                            <div class="col-6 text-right">
+                                <input id="discount_percent" type="number" class="input-custom" style="width: 50px; height: 30px;padding-left: 5px" min="0" max="100">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Chiết khấu (VNĐ)</div>
+                            <div class="col-6 text-right bold">
+                                <input id="all_discount_order"  type="text" class="input-custom" style="width: 100px; height: 30px;padding-left: 5px" value="{{isset($order)?@number_format($order->discount_order):0}}">
+                                <input type="hidden" name="discount_order" id="discount_order" value="0">
 
-                                    <div class="col-md-4">
-                                        {!! Form::label('spa_therapisst_id', 'Bác sĩ') !!}
-                                        {!! Form::select('spa_therapisst_id', $spaTherapissts, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn kỹ thuật viên')) !!}
-                                    </div>
-                                    <div class="col-md-4">
-                                        {!! Form::label('support_id', 'Người tư vấn (nếu có)') !!}
-                                        {!! Form::select('support_id', $customer_support, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn người tư vấn')) !!}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div
-                                            class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
-                                            {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
-                                            <div class="wd-200 mg-b-30">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">
-                                                            <i class="fas fa-calendar tx-16 lh-0 op-6"></i>
-                                                        </div>
-                                                    </div>
-                                                    {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>
-                            <td class="text-center bold"
-                                id="voucher">{{isset($order)?@number_format($order->discount):0}}</td>
-                            <td><input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden"
+                                <input name="discount" value="{{isset($order)?@$order->discount:0}}" type="hidden"
                                        id="discount">
                                 <input value="{{isset($order)?@$order->voucher_id:0}}" name="voucher_id" id="voucher_id"
                                        type="hidden">
-                            </td>
-                        </tr>
-                        <tr class="bold">
-                            <td class="text-center"><b>Chiết khấu tổng đơn (VNĐ)</b></td>
-                            <td class="text-center">
-                                @if(empty($order))
-                                    <input type="number" max="100" min="0" value="0" id="discount_percent">(%)
-                                @endif
-                            </td>
-                            <td class="text-center"
-                                id="all_discount_order">{{isset($order)?@number_format($order->discount_order):0}}
-                            </td>
-                            <input type="hidden" name="discount_order" id="discount_order" value="0">
-
-                        </tr>
-                        <tr class="bold">
-                            <td colspan="5"></td>
-                            <td class="text-center bold">Tổng thanh toán (VNĐ)</td>
-                            <td class="text-center bold" id="sum_total" style="color: red">
-                                {{isset($order)?@number_format($order->all_total):0}}</td>
-                            <td></td>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 title">Tổng thanh toán</div>
+                            <div class="col-6 text-right bold text-danger" id="sum_total">{{isset($order)?@number_format($order->all_total):0}}</div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-            <div class="col bot" style="margin-top: 10px;">
-                <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('order.list')}}" class="btn btn-danger">Về danh sách</a>
+
+            <div class="card-footer">
+                {{--<div class="col bot" style="margin-top: 10px;">--}}
+                {{--<button type="submit" class="btn btn-success">Lưu</button>--}}
+                {{--<a href="{{route('order.list')}}" class="btn btn-danger">Về danh sách</a>--}}
+                {{--</div>--}}
+                <div class="col bot" style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-success save">Lưu</button>
+                    <a href="{{route('order.list')}}" class="btn btn-danger back">Huỷ</a>
+                </div>
             </div>
             {{ Form::close() }}
 
         </div>
     </div>
+    {{--<input type="hidden" class="data-order" value="{{isset($order) ? }}">--}}
+    <input type="hidden" class="arrBacSy" value="{{$spaTherapissts}}">
+    <input type="hidden" class="arrSupport" value="{{$customer_support}}">
+    @include('order.modalBacSy')
+    @include('order.modalSupport')
     @include('order.modalVoucher')
 @endsection
 @section('_script')
@@ -339,7 +254,7 @@
         var param2 = {{@$role_type?:0}};
         $(document).on('click', '#add_row', function () {
 
-                $('.order').append(`
+            $('.order').append(`
                 <tr>
                     <td class="width350">
                 <div class="row">
@@ -347,34 +262,36 @@
                         <select class="select2 select3 form-control service" required id="service" name="service_id[]">
                             <option>-Chọn dịch vụ-</option>
                             @foreach($services as $service)
-                    <option value="{{@$service->id}}">{{@$service->category->name}} - {{@$service->name}} </option>
+                <option value="{{@$service->id}}">{{@$service->category->name}} - {{@$service->name}} </option>
                             @endforeach
-                    </select>
-                </div>
-                <span class="btn btn-default col-md-1 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
-                <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
-                <div class="row">
-                </td>
-                <td class="text-center" width="50">
-                {!! Form::text('days[]', 0, array('class' => 'form-control', 'required' => true)) !!}
+                </select>
+            </div>
+            <span class="btn btn-default col-md-1 no-padd add_note" style="height:34px; background-color: #ffffff"> <i class="fa fa-plus font16" aria-hidden="true"></i> </span>
+            <textarea class="product_note form-control pt5 italic" style="margin-left: 12px; display: none" placeholder="Ghi chú" name="service_note[]"></textarea>
+            <div class="row">
+            </td>
+            <td class="text-center" width="50">
+{!! Form::text('days[]', 0, array('class' => 'form-control input-custom', 'required' => true)) !!}
                     {!! Form::hidden('quantity[]', 1, array('class' => 'form-control', 'required' => true)) !!}
-                    </td>
-                    <td class="text-center">
-                {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
-                    </td>
-                    {{--<td class="text-center">--}}
-                {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
-                    {{--</td>--}}
-                    <td class="text-center">
-                <input type="text" class="form-control CK1" value="0">
                 </td>
-                    <td class="text-center">
-                {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+                <td class="text-center">
+{!! Form::text('price[]', null, array('class' => 'form-control price input-custom', 'required' => true)) !!}
+                </td>
+{{--<td class="text-center">--}}
+                    {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
+                    {{--</td>--}}
+                <td class="text-center">
+            <input type="text" class="form-control CK1 input-custom" value="0">
+            </td>
+                <td class="text-center">
+{!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2 input-custom')) !!}
+                </td>
+                <td class="text-center" colspan="2">
+{!! Form::text('total_price[]', null, array('class' => 'form-control total input-custom','readonly'=>true)) !!}
+                </td>
+                <td class="tc vertical-middle remove_row">
+                    <img class="pointer" src="{{asset('assets/images/delete.png')}}" alt="">
                     </td>
-                    <td class="text-center" colspan="2">
-                {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
-                    </td>
-                    <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
                 </tr>
 `);
             $('.select3').select2({ //apply select2 to my element
@@ -400,25 +317,27 @@
             </div>
             </td>
             <td class="text-center" width="50">
-            {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity', 'required' => true)) !!}
-                {!! Form::hidden('days[]', 0, array('class' => 'form-control', 'required' => true)) !!}
+            {!! Form::text('quantity[]', 1, array('class' => 'form-control quantity input-custom', 'required' => true)) !!}
+                    {!! Form::hidden('days[]', 0, array('class' => 'form-control', 'required' => true)) !!}
                 </td>
                 <td class="text-center">
-            {!! Form::text('price[]', null, array('class' => 'form-control price', 'required' => true)) !!}
+            {!! Form::text('price[]', null, array('class' => 'form-control price input-custom', 'required' => true)) !!}
                 </td>
                 {{--<td class="text-center">--}}
-            {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
-                {{--</td>--}}
+                    {{--{!! Form::text('vat[]', 0, array('class' => 'form-control VAT')) !!}--}}
+                    {{--</td>--}}
                 <td class="text-center">
-                    <input type="text" class="form-control CK1" value="0">
+                    <input type="text" class="form-control CK1 input-custom" value="0">
                 </td>
                 <td class="text-center">
-            {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2')) !!}
+            {!! Form::text('number_discount[]', 0, array('class' => 'form-control CK2 input-custom')) !!}
                 </td>
                 <td class="text-center" colspan="2">
-            {!! Form::text('total_price[]', null, array('class' => 'form-control total','readonly'=>true)) !!}
+            {!! Form::text('total_price[]', null, array('class' => 'form-control total input-custom','readonly'=>true)) !!}
                 </td>
-                <td class="tc vertical-middle remove_row"><button class='btn btn-secondary'><i class="fa-trash fa"></i></button></td>
+                <td class="tc vertical-middle remove_row">
+                    <img class="pointer" src="{{asset('assets/images/delete.png')}}" alt="">
+                </td>
             </tr>
         `);
 
@@ -456,13 +375,14 @@
 
         $('body').on('keyup', '.price, .VAT, .CK1, .CK2, .quantity', function (e) {
             let target = $(e.target).parent().parent();
-            let quantity = $(target).find('.quantity').val();
+            let quantity = $(this).closest('tr').find('.quantity').val();
             if (quantity == 'NaN' || quantity==undefined) {
                 quantity =1;
             }
             console.log(quantity,'quantity');
             // let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
+
             let CK2 = $(target).find('.CK2').val();
             let CK1 = $(target).find('.CK1').val();
 
@@ -470,17 +390,21 @@
             if (CK1 > 0) {
                 CK2 = CK1 * price * quantity / 100;
             }
+            console.log(12313123,price);
+
             let total_service = parseInt(price)* parseInt(quantity) - parseInt(replaceNumber(CK2));
             console.log(total_service,'quantity');
 
             $(target).find('.price').val(formatNumber(price));
             $(target).find('.CK2').val(formatNumber(CK2));
-            $(target).find('.total').val(formatNumber(total_service));
+            $(this).closest('tr').find('.total').val(formatNumber(total_service));
             value_total = 0;
             $(".total").each(function () {
                 value_total += parseInt(replaceNumber($(this).val()));
             });
+            console.log(11111111,value_total);
             $('#sum_total').html(formatNumber(value_total));
+            $('.tam_tinh').html(formatNumber(value_total));
         });
         $('#get_Voucher').click(function () {
             let status = $('#status').val();
@@ -569,7 +493,7 @@
                             </div>
                         </div>`;
                         } else {
-                        html +=  html += `<div class="header m-t-5">
+                            html +=  html += `<div class="header m-t-5">
                             <ul class="promotionRules col">
                                 <li>
                                     <span class="ruleName"></span><span class="ruleValue">` + item.title + `</span>
@@ -585,7 +509,7 @@
                                 <a href="#" data-id="` + item.id + `" class="btn btn-warning chooseVoucher">Áp dụng</a>
                             </div>
                         </div> `;
-                    }
+                        }
 
 
                     });
@@ -683,17 +607,110 @@
             });
         })
         $(document).on('change', '#discount_percent', function (e) {
-            let money = $(this).val() ? $(this).val() : 0;
-            let old_money = $('#discount_order').val();
-            value_total = parseInt(old_money) + parseInt(replaceNumber(value_total));
-            money = parseInt(money) * parseInt(value_total) / 100;
-            $('#discount_order').val(money);
-            $('#all_discount_order').html(formatNumber(money));
-            value_total = replaceNumber(value_total) - money;
+            let money = $(this).val() ? parseInt($(this).val()) : 0;
 
-            console.log(old_money, value_total, 'old');
-            $('#sum_total').html(formatNumber(value_total));
+            let chiet_khau = Math.round((parseInt(money) * value_total) / 100);
+
+            console.log(123123,money,value_total,chiet_khau);
+
+            $('#discount_order').val(chiet_khau);
+            $('#all_discount_order').val(formatNumber(chiet_khau));
+
+            let sum_total = value_total - chiet_khau;
+
+            $('#sum_total').html(formatNumber(sum_total));
             console.log(money, 'money-discount');
         });
+    </script>
+    <script>
+
+        $(document).on('click','.user-bac-sy',function () {
+            $('#userBacSy').modal('show');
+        })
+        $(document).on('click','.user-support',function () {
+            $('#userSupport').modal('show');
+        })
+
+
+        $(document).on('click','.selectSupport',function () {
+            console.log(11111,$(this).data('id'));
+            let data = $(this).data('id');
+            let data_name = $(this).data('name');
+            $('.selectSupport .thumbnail').removeClass('selected');
+            $(this).find('.thumbnail').addClass('selected');
+            $('#support_id').val(data);
+            $('.text-tu-van').html(data_name);
+        })
+
+        $(document).on('click','.selectDoctor',function () {
+            let data = $(this).data('id');
+            let data_name = $(this).data('name');
+            $('.selectDoctor .thumbnail').removeClass('selected');
+            $(this).find('.thumbnail').addClass('selected');
+            $('#spa_therapisst_id').val(data);
+            $('.text-bac-si').html(data_name);
+        })
+
+        $(document).on('keyup','#all_discount_order',function () {
+            let abc = formatNumber($(this).val());
+            $('#all_discount_order').val(abc);
+
+            $('#discount_order').val(replaceNumber(abc));
+            let total = value_total - replaceNumber(abc);
+
+            total = total > 0 ? total : 0;
+
+
+            $('#discount_percent').val(0);
+            $('#sum_total').html(formatNumber(total))
+        })
+
+
+        $( ".quickSearchPageDoctor").keyup(function() {
+            let value = $(this).val();
+            let arr_page1 = $('.arrBacSy').val();
+            arr_page1 = JSON.parse(arr_page1);
+            let selected = $('#spa_therapisst_id').val();
+            doSearch(value,arr_page1,'#userBacSy',selected);
+        });
+
+        $( ".quickSearchPageSupport").keyup(function() {
+            let value = $(this).val();
+            let arr_page1 = $('.arrSupport').val();
+            arr_page1 = JSON.parse(arr_page1);
+            let selected = $('#support_id').val();
+            doSearch(value,arr_page1,'#userSupport',selected);
+        });
+
+
+        let delayTimer;
+        function doSearch(text,arr_page1,classes,selected_id) {
+            clearTimeout(delayTimer);
+
+            delayTimer = setTimeout(function() {
+                html = '';
+                if(arr_page1.length>0){
+                    arr_page1.forEach(f=>{
+                        let re = new RegExp(`${text}`, 'gi');
+                        if (f.full_name.match(re)) {
+                            let avatar = f.avatar ? f.avatar  :'';
+                            let selected = f.id == selected_id ? 'selected' : '';
+                            let select = classes == '#userBacSy' ? 'selectDoctor' : 'selectSupport';
+                            html += `
+                                <li class="`+select+`" data-id='`+f.id+`' data-name="`+f.full_name+`">
+                                    <div class="thumbnail `+selected+`">
+                                        <img class="image_picker_image" src="`+avatar+`">
+                                        <p>`+f.full_name+`</p>
+                                    </div>
+                                </li>
+                            `
+                        }else{
+                            // console.log('ngon ngay1');
+                        }
+                    })
+                    $(classes +' ' + '.image_picker_selector ul').html(html)
+                }
+            }, 500); // Will do the ajax stuff after 1000 ms, or 1 s
+        }
     </script>
 @endsection
