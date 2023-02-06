@@ -179,13 +179,6 @@
                             <span class="icon-plus"><i class="fa fa-plus"></i></span>
                         </a>
                     </div>
-                    @if(request()->get('type')=='combos'||@$role_type ==3)
-                        <div class="col-md-2">
-                            <a href="javascript:void(0)" id="add_row2" class="red bold d-flex">Thêm sản phẩm &nbsp;
-                                <span class="icon-plus"><i class="fa fa-plus"></i></span>
-                            </a>
-                        </div>
-                    @endif
                 </div>
 
 
@@ -214,7 +207,7 @@
                                                 {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                                 <select class="select2 form-control service" required id="service" name="service_id[]">
                                                     <option>-Chọn dịch vụ-</option>
-                                                    @foreach($combo as $service)
+                                                    @foreach($services as $service)
                                                         <option
                                                                 value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
                                                             - {{$service->name}}</option>

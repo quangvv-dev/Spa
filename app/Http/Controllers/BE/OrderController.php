@@ -744,14 +744,12 @@ class OrderController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
-        $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
-        $combo = Services::where('type', StatusCode::COMBOS)->with('category')->get();
         $role_type = $order->role_type;
 
         return view('order.indexDesign',
             compact('order', 'title', 'customers', 'customer', 'services',
-                'products', 'role_type', 'combo'));
+                'products', 'role_type'));
     }
 
     /**
@@ -772,9 +770,8 @@ class OrderController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
-        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
-        $combo = Services::with('category')->get();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
         $role_type = $order->role_type;
 
 //        return view('order.indexService',
@@ -782,7 +779,7 @@ class OrderController extends Controller
 //                'products', 'role_type', 'combo'));
         return view('order.testService',
             compact('order', 'title', 'customers', 'customer', 'services',
-                'products', 'role_type', 'combo'));
+                'products', 'role_type'));
     }
 
     /**
