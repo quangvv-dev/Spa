@@ -72,8 +72,7 @@ class OrderController extends Controller
 //        $customer_support=User::select('id','avatar','full_name')->get();
 
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->pluck('full_name',
-            'id');
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
             'services' => $services,

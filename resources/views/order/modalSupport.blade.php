@@ -11,7 +11,7 @@
                     <optgroup label="Chọn tư vấn" class="user-list">
                         <option value=""></option>
                         @forelse($customer_support as $item)
-                            <option {{isset($order) && $order->support_id == $item->id ? 'selected' : ''}} data-img-src="{{$item->avatar}}" value="{{$item->id}}">{{$item->full_name}}</option>
+                            <option {{isset($order) && $order->support_id == $item->id ? 'selected' : ''}} data-img-src="{{$item->avatar?:setting('logo_website')}}" value="{{@$item->id}}">{{@$item->full_name}}</option>
                         @empty
                         @endforelse
                         {{--<option data-img-src="https://placeimg.com/220/200/arch" value="2">Cute Kitten 2</option>--}}
