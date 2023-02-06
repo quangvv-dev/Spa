@@ -51,12 +51,17 @@ class CallController extends BaseApiController
 
 
         $isset = CallCenter::where('caller_id', $request->caller_id)->first();
-        if (empty($isset) && $request->call_type != 'INBOUND') {
-            CallCenter::insert($input);
+        if (empty($isset)) {
+            if ($request->call_type != 'INBOUND') {
+                CallCenter::insert($input);
+            } else {
+                return $this->responseApi(ResponseStatusCode::OK, 'CRM NOT SAVE INBOUND', $request->all());
+            }
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $request->all());
+
+        } else {
+            return $this->responseApi(ResponseStatusCode::OK, 'CRM NOT SAVE INBOUND', $request->all());
         }
-
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',$request->all());
-
     }
 
     /**

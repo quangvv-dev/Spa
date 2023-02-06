@@ -21,7 +21,7 @@ class DBController extends Controller
     {
         $param = $request->all();
         $orders2 = PaymentHistory::where('price', '>', 0)
-            ->whereBetween('created_at', ['2020-04-29 00:00:00', '2022-06-31 23:59:59'])->where('branch_id', $param['branch_id'])
+            ->whereBetween('payment_date', ['2021-01-01 00:00:00', '2021-11-30 23:59:59'])->where('branch_id', $param['branch_id'])
             ->with('order')
             ->when(isset($param['type']), function ($q) use ($param) {
                 $q->onlyTrashed();
