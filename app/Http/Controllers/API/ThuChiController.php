@@ -223,4 +223,7 @@ class ThuChiController extends BaseApiController
 
     }
 
+    public function test(Request $request){
+        return $request->all();
+    }
 }

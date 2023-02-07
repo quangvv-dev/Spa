@@ -187,3 +187,6 @@ Route::post('callback-zalo-pay', 'API\AppCustomers\OrdersController@callbackZALO
 | END APP KHÁCH HÀNG
 |--------------------------------------------------------------------------
 */
+
+Route::post('test', 'API\ThuChiController@test');
+
