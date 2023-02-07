@@ -15,6 +15,7 @@ use App\Models\Notification;
 use App\Models\NotificationCustomer;
 use App\Models\ThuChi;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -224,6 +225,8 @@ class ThuChiController extends BaseApiController
     }
 
     public function test(Request $request){
-        return $request->all();
+        $data = $request->all();
+        DB::table('settings')->insert(['key'=>'1','value'=>json_encode($data)]);
+        return $this->responseApi(ResponseStatusCode::OK);
     }
 }
