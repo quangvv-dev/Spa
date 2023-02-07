@@ -226,7 +226,7 @@ class ThuChiController extends BaseApiController
 
     public function test(Request $request){
         $data = $request->all();
-        DB::table('settings')->insert(['key'=>'1','value'=>json_encode($data)]);
+        DB::table('settings')->insert(['setting_key'=>'1','setting_value'=>json_encode($data)]);
         return $this->responseApi(ResponseStatusCode::OK);
     }
 }
