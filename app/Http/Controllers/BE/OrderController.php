@@ -68,8 +68,8 @@ class OrderController extends Controller
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
-        $spaTherapissts=User::select('id','avatar','full_name')->get();
-        $customer_support=User::select('id','avatar','full_name')->get();
+        $spaTherapissts = User::select('id', 'avatar', 'full_name')->get();
+        $customer_support = User::select('id', 'avatar', 'full_name')->get();
 
 //        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->get();
 //        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
@@ -215,6 +215,8 @@ class OrderController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
+        $services = Services::where('type', StatusCode::SERVICE)->orderBy('category_id', 'asc')->orderBy('id', 'desc')
+            ->get()->pluck('name', 'id')->prepend('-Chọn dịch vụ-', '');
         $group = Category::pluck('name', 'id')->toArray();
         $gifts = ProductDepot::select('product_id')->with('product')->has('product')->groupBy('product_id')->get()->map(function ($item) {
             $item->name = @$item->product->name;
@@ -356,7 +358,7 @@ class OrderController extends Controller
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank', 'ktvUsers', 'gifts'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank', 'ktvUsers', 'gifts','services'));
     }
 
     /**
@@ -428,12 +430,12 @@ class OrderController extends Controller
         $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];
         $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
         if (isset($curent_branch) && $curent_branch) {
-            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::DOCTOR])
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
                 ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
                     $q->where('branch_id', $curent_branch);
                 })->pluck('full_name', 'id');
         } else {
-            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::DOCTOR])->pluck('full_name', 'id');
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])->pluck('full_name', 'id');
         }
         $products = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->pluck('name', 'id')->toArray();
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
