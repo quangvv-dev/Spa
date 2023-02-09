@@ -1,6 +1,6 @@
 <script>
     function getMessage(page_id,sender_id,token){
-        let url = 'https://graph.facebook.com/v13.0/'+page_id+'/conversations?fields=messages{message,from,created_time}&user_id='+sender_id+'&access_token='+token;
+        let url = 'https://graph.facebook.com/v16.0/'+page_id+'/conversations?fields=messages{message,from,created_time}&user_id='+sender_id+'&access_token='+token;
         let html = '';
         if(page_id && sender_id && token){
             $.ajax({

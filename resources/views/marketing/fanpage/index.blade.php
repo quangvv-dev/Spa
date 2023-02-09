@@ -107,7 +107,7 @@
 
             if(!used){
                 $.ajax({
-                    url: 'https://graph.facebook.com/v13.0/' + page_id + '/subscribed_apps?&access_token='+ access_token,
+                    url: 'https://graph.facebook.com/v16.0/' + page_id + '/subscribed_apps?&access_token='+ access_token,
                     type: 'DELETE',
                     success: function (req) {
                         hideLoading();
@@ -141,7 +141,7 @@
                 success: function (data) {
                     if (data.used == 1 && data.source_id) {
                         $.ajax({
-                            url: 'https://graph.facebook.com/v13.0/' + page_id + '/subscribed_apps?subscribed_fields=' +fields +'&access_token=' + access_token,
+                            url: 'https://graph.facebook.com/v16.0/' + page_id + '/subscribed_apps?subscribed_fields=' +fields +'&access_token=' + access_token,
                             type: 'POST',
                             success: function (req) {
                                 hideLoading();

@@ -14,7 +14,7 @@ class FanpageService
 
         $token = $request->session()->has('login-facebook1') ? $request->session()->get('login-facebook1')->token : null;
         $method = 'GET';
-        $uri = 'https://graph.facebook.com/v13.0/me/accounts';
+        $uri = 'https://graph.facebook.com/v16.0/me/accounts';
         $field = 'picture,id,name,access_token,tasks';
 
         if (!empty($token)) {
