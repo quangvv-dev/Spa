@@ -25,10 +25,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/webhook', function (req, res) {
-    if (req.query['hub.verify_token'] === '0975091435') {
-        res.send(req.query['hub.challenge']);
+    let challenge = req.query["hub.challenge"];
+    let mode = req.query["hub.mode"];
+    if (mode === "subscribe" && req.query['hub.verify_token'] === '0975091435') {
+        res.status(200).send(challenge);
     }
-    res.send('Error, wrong validation token');
+    // res.send('Error, wrong validation token');
+    res.sendStatus(403);
 });
 
 app.post('/webhook',async function (req, res) {
