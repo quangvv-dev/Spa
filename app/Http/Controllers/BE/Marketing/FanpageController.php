@@ -127,7 +127,6 @@ class FanpageController extends Controller
     public function callbackFB(Request $request)
     {
         $user = Socialite::driver('facebook')->user();
-        dd($user);
         session(['login-facebook1' => $user]);
         return redirect('/marketing/fanpage');
     }
