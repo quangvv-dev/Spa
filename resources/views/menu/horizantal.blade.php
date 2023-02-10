@@ -312,20 +312,17 @@
                 </li>
             @endif
 
-
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
-                   href="#"><i
-                            class="fas fa-cog"></i><span>Cài đặt</span></a>
-                <div class="sub-item">
-                    <ul>
-                        @if($roleGlobal->permission('time-status.index'))
+            @if($roleGlobal->permission('time-status.index'))
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
+                       href="#"><i class="fas fa-cog"></i><span>Cài đặt</span></a>
+                    <div class="sub-item">
+                        <ul>
                             <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
-                        @endif
-
-                    </ul>
-                </div>
-            </li>
+                        </ul>
+                    </div>
+                </li>
+            @endif
 
         </ul>
         <div class="div-info">
