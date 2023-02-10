@@ -201,12 +201,12 @@ return [
         /*
          * Application Service Providers...
          */
+        // Berkayk\OneSignal\OneSignalServiceProvider::class,
+        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-//        Berkayk\OneSignal\OneSignalServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class
 
     ],
@@ -265,7 +265,7 @@ return [
         'Html'      => Collective\Html\HtmlFacade::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
         'Setting'   => anlutro\LaravelSettings\Facade::class,
-        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
+//        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
         'Image'     => Intervention\Image\Facades\Image::class,
 //        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
