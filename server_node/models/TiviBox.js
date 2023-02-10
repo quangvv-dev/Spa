@@ -33,7 +33,7 @@ var TiviBox = {
     },
 
     CreateCustomer: function (source_fb, name, phone, message, user_id, mkt_id, post_id, FB_ID, duplicate, page_id, status, expired_time_boolean, branch_id, created_at, callback) {
-        return db.query("INSERT INTO customers (source_id,source_fb,full_name,phone,gender,message,telesales_id,mkt_id,status_id,fb_name,post_id,FB_ID, page_id,branch_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [18,source_fb, name, phone,0, message, user_id, mkt_id,4,name, post_id, FB_ID, page_id, branch_id, created_at, created_at], callback);
+        return db.query("INSERT INTO customers (source_id,source_fb,full_name,phone,gender,message,telesales_id,mkt_id,status_id,fb_name,post_id,FB_ID, page_id,branch_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [18,source_fb, name, phone,0, message, user_id, mkt_id,1,name, post_id, FB_ID, page_id, branch_id, created_at, created_at], callback);
     },
 
     CreateCustomerGroup: function (customer_id, category_id, created_at,branch_id) {
