@@ -201,7 +201,6 @@ return [
         /*
          * Application Service Providers...
          */
-        Berkayk\OneSignal\OneSignalServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
