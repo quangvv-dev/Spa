@@ -34,18 +34,40 @@ app.get('/webhook', function (req, res) {
     res.sendStatus(403);
 });
 
-app.post('/webhook',async function (req, res) {
+app.post('/webhook', async function (req, res) {
     var entries = req.body.entry;
     res.sendStatus(200);
     for (var entry of entries) {
         var messaging = entry.messaging;
         if (messaging) {
-            for (var message of messaging) {
-                console.log(message, 'Message');
-                if (message.message) {
-                    controller.sendSocketMessages(message, io);
+            // for (var message of messaging) {
+            //     console.log(message, 'Message');
+            //     if (message.message) {
+            //         controller.sendSocketMessages(message, io);
+            //     }
+            // }
+            var senderId = message.sender.id;
+            var recipientId = message.recipient.id;
+            if (message.message) {
+                // controller.sendSocketMessages(message, io);
+                if (message.message.text) {
+                    let text = message.message.text;
+                    text = text.replace(".", "");
+                    text = text.replace("O", "0");
+                    // text = text.replace("o", "0");
+                    let letr = text.match(/\d+/g);
+                    if (!letr) {
+                        return false;
+                    }
+                    letr.every(function (i) {
+                        if (i.length === 10) {
+                            controller.SetCustomers(i, recipientId, message.message.text, senderId);
+                            return false;
+                        }
+                    })
                 }
             }
+
         } else {
 
             var comments = entry.changes;
@@ -53,7 +75,21 @@ app.post('/webhook',async function (req, res) {
             for (var value of comments) {
                 if (value.value.item === 'comment' && value.value.message) {
                     value.type = 'comment';
-                    controller.ChatComment(value,io);
+                    let text2 = value.value.message;
+                    text2 = text2.replace(".", "");
+                    text2 = text2.replace("O", "0");
+                    // text2 = text2.replace("o", "0");
+                    let letr = text2.match(/\d+/g);
+                    if (!letr) {
+                        return false;
+                    }
+                    letr.every(function (i) {
+                        if (i.length === 10) {
+                            controller.SetComment(i, value.value.post_id, value.value.message, value.value.from.name);
+                            return false;
+                        }
+                    })
+                    // controller.ChatComment(value,io);
                 }
                 return false;
             }
@@ -62,8 +98,8 @@ app.post('/webhook',async function (req, res) {
 });
 
 
-function localeTime(){
-    let date =  moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');
+function localeTime() {
+    let date = moment.utc().add(7, 'hours').format('YYYY-MM-DD HH:mm:ss');
     // let stillUtc = moment.utc(date).toDate();
     // let localeTime = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
     return date;
