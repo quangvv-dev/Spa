@@ -267,7 +267,7 @@ return [
         'Setting'   => anlutro\LaravelSettings\Facade::class,
         'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
         'Image'     => Intervention\Image\Facades\Image::class,
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+//        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
