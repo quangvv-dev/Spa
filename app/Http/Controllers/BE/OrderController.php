@@ -68,8 +68,8 @@ class OrderController extends Controller
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
-        $spaTherapissts = User::select('id', 'avatar', 'full_name')->get();
-        $customer_support = User::select('id', 'avatar', 'full_name')->get();
+        $spaTherapissts = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::DOCTOR)->get();
+        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
 
 //        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->get();
 //        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
