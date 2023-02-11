@@ -172,7 +172,10 @@
                         <input type="hidden" name="spa_therapisst_id" id="spa_therapisst_id" value="{{@$order->spa_therapisst_id}}">
                         <div class="box-add user-bac-sy">
                             <div class="btn-icon">
-                                <span class="icon-plus"><i class="fa fa-plus"></i></span>
+                                <span class="icon-plus">
+                                    <i class="fa fa-plus {{isset($order) && $order->spa_therapisst_id ? 'hide' : 'show'}}"></i>
+                                    <i class="fa fa-check {{isset($order) && $order->spa_therapisst_id ? 'show' : 'hide'}}"></i>
+                                </span>
                                 <br>
                                 <span class="chon-bac-si">Chọn B.Sĩ</span>
                                 <span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>
@@ -188,7 +191,11 @@
                         <div class="box-add user-support">
                             <input type="hidden" name="support_id" id="support_id" value="{{@$order->support_id}}">
                             <div class="btn-icon">
-                                <span class="icon-plus"><i class="fa fa-plus"></i></span>
+                                <span class="icon-plus">
+                                    {{--<i class="fa fa-plus"></i>--}}
+                                    <i class="fa fa-plus {{isset($order) && $order->support_id ? 'hide' : 'show'}}"></i>
+                                    <i class="fa fa-check {{isset($order) && $order->support_id ? 'show' : 'hide'}}"></i>
+                                </span>
                                 <br>
                                 <span class="chon-tu-van">Chọn tư vấn</span>
                                 <span class="small-tip small-tip-custom text-tu-van">{{@$order->support->full_name}}</span>
@@ -655,6 +662,10 @@
             $(this).find('.thumbnail').addClass('selected');
             $('#support_id').val(data);
             $('.text-tu-van').html(data_name);
+            if(data){
+                $('.user-support .icon-plus .fa-plus').addClass('hide').removeClass('show');
+                $('.user-support .icon-plus .fa-check').addClass('show').removeClass('hide');
+            }
         })
 
         $(document).on('click','.selectDoctor',function () {
@@ -664,6 +675,10 @@
             $(this).find('.thumbnail').addClass('selected');
             $('#spa_therapisst_id').val(data);
             $('.text-bac-si').html(data_name);
+            if(data){
+                $('.user-bac-sy .icon-plus .fa-plus').addClass('hide').removeClass('show');
+                $('.user-bac-sy .icon-plus .fa-check').addClass('show').removeClass('hide');
+            }
         })
 
         $(document).on('keyup','#all_discount_order',function () {

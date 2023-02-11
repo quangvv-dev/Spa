@@ -56,8 +56,14 @@ ul.thumbnails.image_picker_selector li .thumbnail{
 .icon-plus i {
     position: absolute;
     top: 16%;
-    left: 16%;
+    left: 18%;
     color: #3B8FEC;
+}
+.icon-plus .hide {
+    display: none !important;
+}
+.icon-plus .show {
+    display: block !important;
 }
 
 .input-custom {
@@ -144,3 +150,5 @@ ul.thumbnails.image_picker_selector ul {
     left: 0;
     right: 0;
 }
+
+
