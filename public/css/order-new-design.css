@@ -21,6 +21,10 @@ body {
     cursor: pointer;
 }
 
+ul.thumbnails.image_picker_selector li .thumbnail{
+    padding: 4px !important;
+}
+
 .box-add {
     width: 114px;
     height: 114px;
