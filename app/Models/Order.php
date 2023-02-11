@@ -32,7 +32,7 @@ class Order extends Model
 
     public function paymentHistories()
     {
-        return $this->hasMany(PaymentHistory::class, 'order_id', 'id');
+        return $this->hasMany(PaymentHistory::class, 'order_id', 'id')->orderByDesc('id');
     }
 
     public function historyUpdateOrders()

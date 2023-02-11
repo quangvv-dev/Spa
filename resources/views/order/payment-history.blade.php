@@ -1,6 +1,6 @@
 <h3
     class="bor-bot uppercase font12 mg0 bold padding5">Lịch sử thanh toán</h3></div>
-<div class="col-md-12 no-padd">
+<div class="col-md-12 no-padd" style="height: 400px; overflow-y: scroll">
     <table class="table table-bordered">
         <thead class="b-gray">
         <tr class="bor-bot">
