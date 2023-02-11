@@ -108,7 +108,7 @@
                                                 {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                                 <select class="select2 form-control service" required id="service" name="service_id[]">
                                                     <option>-Chọn dịch vụ-</option>
-                                                    @if($orderDetail->service->type == \App\Constants\StatusCode::PRODUCT)
+                                                    @if(@$orderDetail->service->type == \App\Constants\StatusCode::PRODUCT)
                                                         @foreach($products as $service)
                                                             <option
                                                                     value="{{$service->id}}" {{$service->id == $orderDetail->booking_id ? "selected": ""}} >{{@$service->category->name}}
