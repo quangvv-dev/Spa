@@ -65,6 +65,9 @@ ul.thumbnails.image_picker_selector li .thumbnail{
 .icon-plus .show {
     display: block !important;
 }
+.icon-plus .fa-check.show {
+    color: green !important;
+}
 
 .input-custom {
     border: 1px solid #D4D7E7;
