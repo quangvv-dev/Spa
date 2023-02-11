@@ -31,7 +31,7 @@
                             @forelse($spaTherapissts as $item)
                                 <li class="selectDoctor" data-id="{{$item->id}}" data-name="{{$item->full_name}}">
                                     <div class="thumbnail {{isset($order) && $order->spa_therapisst_id == $item->id ? 'selected' : ''}}">
-                                        <img class="image_picker_image" src="{{$item->avatar}}">
+                                        <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
                                         <p>{{$item->full_name}}</p>
                                     </div>
                                 </li>
