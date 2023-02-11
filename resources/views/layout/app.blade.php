@@ -30,6 +30,15 @@
         color: #fff;
     }
 
+    .modal-header {
+        height: 50px;
+        align-items: center;
+    }
+
+    .modal-header h4 {
+        margin-bottom: 0px !important;
+    }
+
     tr th, td {
         background: #fff;
         border-right: 1px solid #e7effc !important;
@@ -94,14 +103,16 @@
         background: #0fa2e8;
     }
 
-    .modal-header h2,.modal-header h3,.modal-header h4,.modal-header h5,.modal-header button {
+    .modal-header h2, .modal-header h3, .modal-header h4, .modal-header h5, .modal-header button {
         color: #fff !important;
     }
+
     .small-tip {
         font-size: 11px;
         color: #999;
     }
-    a{
+
+    a {
         cursor: pointer;
     }
 </style>
@@ -188,17 +199,18 @@
         </div>
         @php
 
-        @endphp
+                @endphp
 
         @if(setting('expiry') &&  date('Y-m-d')>setting('expiry'))
             <div class="notification-pop">
                 <div class="" style="position: absolute; margin: auto;top:50%;left: 20%;right: 20%">
-                    <marquee> <p style="color: #0aa2e1;font-size: 18px;font-weight: bold;opacity: 0.5"
-                        >Hệ thống của bạn hết hạn ngày {{setting('expiry')}}. Quý khách vui lòng gia hạn gói cước để tiếp tục sử dụng dịch vụ. Xin cảm ơn quý khách !!!</p>
+                    <marquee><p style="color: #0aa2e1;font-size: 18px;font-weight: bold;opacity: 0.5"
+                        >Hệ thống của bạn hết hạn ngày {{setting('expiry')}}. Quý khách vui lòng gia hạn gói cước để
+                            tiếp tục sử dụng dịch vụ. Xin cảm ơn quý khách !!!</p>
                     </marquee>
                 </div>
             </div>
-            @endif
+    @endif
     @include('layout.footer')
     <!-- End Footer-->
     </div>
