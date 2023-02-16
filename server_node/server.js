@@ -38,6 +38,7 @@ app.post('/webhook', async function (req, res) {
     var entries = req.body.entry;
     res.status(200).send("EVENT_RECEIVED");
     for (var entry of entries) {
+        console.log(entry, 'Entry');
         var messaging = entry.messaging;
         if (messaging) {
             for (var message of messaging) {
