@@ -36,11 +36,12 @@ app.get('/webhook', function (req, res) {
 
 app.post('/webhook', async function (req, res) {
     var entries = req.body.entry;
-    res.sendStatus(200);
+    res.status(200).send("EVENT_RECEIVED");
     for (var entry of entries) {
         var messaging = entry.messaging;
         if (messaging) {
             for (var message of messaging) {
+                console.log(message, 'Message');
                 var senderId = message.sender.id;
                 var recipientId = message.recipient.id;
                 if (message.message) {
