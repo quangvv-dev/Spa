@@ -45,9 +45,11 @@ class CallController extends BaseApiController
             ];
 
         } else {
-            $input = $request->only('caller_number', 'dest_number', 'call_status', 'recording_url',
+            $input = $request->only('caller_number', 'dest_number', 'answer_time', 'call_status', 'recording_url',
                 'caller_id', 'call_type', 'start_time');
-            $input['answer_time'] = $request->duration;
+            if (!isset($input['answer_time'])) {
+                $input['answer_time'] = $request->duration;
+            }
         }
 
         $isset = CallCenter::where('caller_id', $request->caller_id)->first();
@@ -55,7 +57,7 @@ class CallController extends BaseApiController
             CallCenter::insert($input);
         }
 
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS',$request->all());
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $request->all());
 
     }
 
