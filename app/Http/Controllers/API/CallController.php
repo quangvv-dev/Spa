@@ -47,7 +47,7 @@ class CallController extends BaseApiController
         } else {
             $input = $request->only('caller_number','answer_time', 'dest_number', 'call_status', 'recording_url',
                 'caller_id', 'call_type', 'start_time');
-            if (!isset($input['answer_time'])){
+            if (empty($input['answer_time'])){
                 $input['answer_time'] = $request->duration;
             }
         }
