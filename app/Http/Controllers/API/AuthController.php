@@ -50,6 +50,39 @@ class AuthController extends BaseApiController
     }
 
     /**
+     * Khóa tài khoản
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function blockUser(Request $request)
+    {
+        $user = User::find($request->jwtUser->id);
+        try {
+            if ($user && $user->active == StatusCode::ON) {
+                $user->active = StatusCode::OFF;
+                $user->save();
+                return response()->json([
+                    'code'    => ResponseStatusCode::OK,
+                    'message' => 'Xóa tài khoản thành công !!',
+                    'data'    => [],
+                ]);
+            } else {
+                return response()->json([
+                    'code'    => ResponseStatusCode::NOT_FOUND,
+                    'message' => 'Không tồn tại tài khoản',
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'message' => __('system.server_error'),
+            ]);
+        }
+    }
+
+    /**
      * Change password
      *
      * @param Request $request

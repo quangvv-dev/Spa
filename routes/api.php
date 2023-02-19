@@ -30,6 +30,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     //Đẩy chợ apple
     Route::get('list-orders', 'AppleController@listOrders');
     Route::post('orders', 'AppleController@storeOrder');
+    Route::post('block-user', 'AuthController@blockUser');
 
     //End đẩy chợ apple
     Route::post('change-password', 'AuthController@changePassword');
