@@ -31,6 +31,8 @@ Route::group(['namespace' => 'API'], function () {
 });
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
+    Route::post('block-user', 'AuthController@blockUser');
+
     Route::post('upload/images', 'BaseApiController@apiUpload');
     //ALBUM
     Route::post('albums', 'AlbumController@store');
