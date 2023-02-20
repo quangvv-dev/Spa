@@ -20,6 +20,7 @@ class AuthController extends BaseApiController
      * Login APP
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
@@ -31,7 +32,8 @@ class AuthController extends BaseApiController
             if (password_verify($request->password, $info->password) != true) {
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Sai mật khẩu');
             } else {
-                if (!in_array($info->department_id,[DepartmentConstant::ADMIN,DepartmentConstant::MARKETING,DepartmentConstant::CARE_PAGE]) ){
+                if (!in_array($info->department_id,
+                    [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING, DepartmentConstant::CARE_PAGE])) {
                     return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản không có quyền');
                 }
                 if ($info->active == StatusCode::ON) {
@@ -40,7 +42,7 @@ class AuthController extends BaseApiController
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
                     $data = [
                         'token' => jwtencode($payload),
-                        'info' => $info,
+                        'info'  => $info,
                     ];
 
                     return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -50,6 +52,40 @@ class AuthController extends BaseApiController
             }
         }
 
+    }
+
+    /**
+     * Khóa tài khoản
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function blockUser(Request $request)
+    {
+        $user = User::find($request->jwtUser->id);
+        try {
+            if ($user && $user->active == StatusCode::ON) {
+                $user->active = StatusCode::OFF;
+                $user->save();
+
+                return response()->json([
+                    'code'    => ResponseStatusCode::OK,
+                    'message' => 'Xóa tài khoản thành công !!',
+                    'data'    => [],
+                ]);
+            } else {
+                return response()->json([
+                    'code'    => ResponseStatusCode::NOT_FOUND,
+                    'message' => 'Không tồn tại tài khoản',
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'message' => __('system.server_error'),
+            ]);
+        }
     }
 
     /**
@@ -67,7 +103,7 @@ class AuthController extends BaseApiController
         $messages = [
             'old_password.required' => 'Vui lòng nhập mật khẩu cũ',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới',
-            'new_password.min' => 'Mật khẩu phải lớn hơn 6 ký tự!',
+            'new_password.min'      => 'Mật khẩu phải lớn hơn 6 ký tự!',
         ];
         if ($user->password != '' || $user->password != null) {
             $validator = Validator::make($request->only('new_password', 'old_password'), [
@@ -82,7 +118,7 @@ class AuthController extends BaseApiController
 
         if ($validator->fails()) {
             return response()->json([
-                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->all(),
             ]);
         }
@@ -93,18 +129,18 @@ class AuthController extends BaseApiController
                     'password' => Hash::make(request('new_password')),
                 ]);
                 return response()->json([
-                    'code' => ResponseStatusCode::OK,
+                    'code'    => ResponseStatusCode::OK,
                     'message' => 'Thay đổi mật khẩu thành công',
                 ]);
             } else {
                 return response()->json([
-                    'code' => ResponseStatusCode::BAD_REQUEST,
+                    'code'    => ResponseStatusCode::BAD_REQUEST,
                     'message' => 'Mật khẩu cũ không đúng',
                 ]);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 'message' => __('system.server_error'),
             ]);
         }
@@ -121,20 +157,20 @@ class AuthController extends BaseApiController
     public function register(Request $request)
     {
         $required = [
-            'password' => ['required', 'string'],
+            'password'  => ['required', 'string'],
             'full_name' => ['required', 'string'],
-            'phone' => ['unique:users', 'regex:/(0)[0-9]{9}/'],
+            'phone'     => ['unique:users', 'regex:/(0)[0-9]{9}/'],
         ];
         $messages = [
             'full_name.required' => 'Chưa nhập tên',
-            'phone.unique' => 'Số điện thoại trùng',
-            'password.required' => 'Chưa nhập mật khẩu',
+            'phone.unique'       => 'Số điện thoại trùng',
+            'password.required'  => 'Chưa nhập mật khẩu',
         ];
 
         $validator = Validator::make($request->all(), $required, $messages);
         if ($validator->fails()) {
             return response()->json([
-                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->first(),
             ]);
         }
@@ -142,19 +178,19 @@ class AuthController extends BaseApiController
         $check_phone = User::where('phone', $request->input('phone'))->first();
         if (isset($check_phone)) {
             return response()->json([
-                'code' => ResponseStatusCode::PHONE_ALREADY_EXIST,
+                'code'    => ResponseStatusCode::PHONE_ALREADY_EXIST,
                 'message' => "Số điện thoại đã tồn tại !!!",
             ]);
         } else {
             $user = User::create([
-                'full_name' => $request->input('full_name'),
-                'phone' => $request->input('phone'),
-                'password' => bcrypt($request->input('password')),
-                'active' => StatusCode::ON,
-                'role' => 11,
+                'full_name'     => $request->input('full_name'),
+                'phone'         => $request->input('phone'),
+                'password'      => bcrypt($request->input('password')),
+                'active'        => StatusCode::ON,
+                'role'          => 11,
                 'department_id' => 5,
-                'branch_id' => 1,
-                'gender' => 1,
+                'branch_id'     => 1,
+                'gender'        => 1,
             ]);
         }
 
@@ -163,13 +199,13 @@ class AuthController extends BaseApiController
             $payload['time'] = strtotime(Date::now());
             $data = [
                 'token' => jwtencode($payload),
-                'info' => $user,
+                'info'  => $user,
             ];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         }
 
         return response()->json([
-            'code' => ResponseStatusCode::NOT_FOUND,
+            'code'    => ResponseStatusCode::NOT_FOUND,
             'message' => 'Đăng ký không thành công !!!',
         ]);
     }
@@ -194,21 +230,21 @@ class AuthController extends BaseApiController
                 }
 
                 return response()->json([
-                    'code' => ResponseStatusCode::OK,
+                    'code'    => ResponseStatusCode::OK,
                     'message' => __('auth.user_view_success'),
-                    'data' => [
+                    'data'    => [
                         'customer' => new UserResource($user),
                     ],
                 ]);
             } else {
                 return response()->json([
-                    'code' => ResponseStatusCode::PHONE_ALREADY_EXIST,
+                    'code'    => ResponseStatusCode::PHONE_ALREADY_EXIST,
                     'message' => __('auth.not_view_user_success'),
                 ]);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 'message' => __('system.server_error'),
             ]);
         }
@@ -227,19 +263,19 @@ class AuthController extends BaseApiController
 //        $regexName = regexName();
         $required = [
             'full_name' => "required|min:2|max:255",
-            'phone' => "required|unique:users,phone,$user->id|regex:/(0)[0-9]{9}/",
+            'phone'     => "required|unique:users,phone,$user->id|regex:/(0)[0-9]{9}/",
         ];
 
         $messages = [
-            'phone.required' => 'Vui lòng nhập số điện thoại',
-            'phone.unique' => __('auth.phone_exists'),
+            'phone.required'     => 'Vui lòng nhập số điện thoại',
+            'phone.unique'       => __('auth.phone_exists'),
             'full_name.required' => 'Nhập tên người dùng',
         ];
 
         $validator = Validator::make($request->all(), $required, $messages);
         if ($validator->fails()) {
             return response()->json([
-                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->first(),
             ]);
         }
@@ -248,7 +284,7 @@ class AuthController extends BaseApiController
 
         if (isset($user_check_phone)) {
             return response()->json([
-                'code' => ResponseStatusCode::PHONE_EXIST,
+                'code'    => ResponseStatusCode::PHONE_EXIST,
                 'message' => __('auth.phone_exists'),
             ]);
         }
@@ -256,28 +292,28 @@ class AuthController extends BaseApiController
 
         $user->update([
             'full_name' => request('full_name'),
-//            'email' => request('email'),
-            'phone' => request('phone'),
-            'gender' => request('gender'),
-//            'avatar' => request('avatar'),
+            //            'email' => request('email'),
+            'phone'     => request('phone'),
+            'gender'    => request('gender'),
+            //            'avatar' => request('avatar'),
         ]);
 
         try {
             if ($user) {
                 return response()->json([
-                    'code' => ResponseStatusCode::OK,
+                    'code'    => ResponseStatusCode::OK,
                     'message' => __('auth.edit_user_success'),
-                    'data' => new UserResource($user)
+                    'data'    => new UserResource($user),
                 ]);
             } else {
                 return response()->json([
-                    'code' => ResponseStatusCode::USER_NOT_EXIST,
+                    'code'    => ResponseStatusCode::USER_NOT_EXIST,
                     'message' => __('auth.not_edit_user_success'),
                 ]);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 'message' => __('system.server_error'),
             ]);
         }
@@ -296,7 +332,7 @@ class AuthController extends BaseApiController
 
     public function testSendSMS(Request $request)
     {
-        $response = self::SendSMS($request->phone,$request->contents);
+        $response = self::SendSMS($request->phone, $request->contents);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
 
     }
@@ -305,33 +341,33 @@ class AuthController extends BaseApiController
     public function SendSMS($phone, $sms_text, $send_after = '')
     {
         $data = [
-            'to' => $phone,
-            'from' => "ROYAL SPA",
-            'message' => $sms_text,
-            'scheduled' => $send_after,//15-01-2019 16:05
-            'requestId' => "",
+            'to'         => $phone,
+            'from'       => "ROYAL SPA",
+            'message'    => $sms_text,
+            'scheduled'  => $send_after,//15-01-2019 16:05
+            'requestId'  => "",
             'useUnicode' => 0,//sử dụng có dấu hay k dấu
-            'type' => 1 // CSKH hay QC
+            'type'       => 1 // CSKH hay QC
         ];
         $data = json_encode((object)$data);
         $base_url = 'http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c24iOiJyb3lhbHNwYSIsInNpZCI6ImFmZTIxOWQ4LTdhM2UtNDA5MS05NjBmLThmZjViNGI4NzRhMiIsIm9idCI6IiIsIm9iaiI6IiIsIm5iZiI6MTU4OTM1NDE4MCwiZXhwIjoxNTg5MzU3NzgwLCJpYXQiOjE1ODkzNTQxODB9.Hx8r30IR1nqAkOClihx0n9upfvgOg1f-E3MwNEwWT-0';
         $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $base_url,
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => $base_url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
+            CURLOPT_ENCODING       => "",
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => $data,
+            CURLOPT_HTTPHEADER     => [
                 "Content-Type: application/json",
-                "token: $token"
-            ),
-        ));
+                "token: $token",
+            ],
+        ]);
         $response = curl_exec($curl);
         curl_close($curl);
 
