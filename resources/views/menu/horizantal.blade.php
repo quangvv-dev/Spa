@@ -218,7 +218,7 @@
                             <ul>
                                 @if($roleGlobal->permission('statistics.index'))
                                     <li><a href="{{url('statistics')}}">Doanh thu</a></li>
-                                    @if(!empty($roleGlobal->branch_id))
+                                    @if(empty($roleGlobal->branch_id))
                                         <li><a href="{{url('chart-revenue')}}">BĐ hệ thống</a></li>
                                         <li><a href="{{route('report.branchs')}}">Nguồn thu từ đơn hệ thống</a></li>
                                     @endif
