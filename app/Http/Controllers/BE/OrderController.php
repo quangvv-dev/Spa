@@ -68,11 +68,15 @@ class OrderController extends Controller
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
-        $spaTherapissts = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::DOCTOR)->get();
-        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
+//        $spaTherapissts = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::DOCTOR)->get();
+//        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
 
-//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->get();
-//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
+        $spaTherapissts = User::get();
+        $customer_support = User::get();
+        $customer_y_ta = User::get();
+
+
+
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
 //            'services' => $services,
@@ -80,7 +84,8 @@ class OrderController extends Controller
             'order_type' => $order_type,
             'branchs' => $branchs,
             'customer_support' => $customer_support,
-            'spaTherapissts' => $spaTherapissts
+            'spaTherapissts' => $spaTherapissts,
+            'customer_y_ta' => $customer_y_ta
         ]);
     }
 
