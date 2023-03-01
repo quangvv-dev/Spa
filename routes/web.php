@@ -287,10 +287,12 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::group(['namespace' => 'ChamCong', 'prefix' => 'approval', 'as' => 'approval.'], function () {
         Route::resource('order', 'OrderController');
         Route::resource('statistic', 'StatisticController');
+        Route::resource('reason', 'ReasonController');
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');
     Route::get('login/facebook/callback', 'Marketing\FanpageController@callbackFB');
     Route::get('remove-account-facebook', 'Marketing\FanpageController@removeAccount')->name('facebook.removeAccount');
 
+//    Route::get('test-cham-cong',)
 });

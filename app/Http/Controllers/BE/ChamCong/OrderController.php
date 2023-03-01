@@ -83,7 +83,7 @@ class OrderController extends Controller
     public function create()
     {
         $time = $this->time;
-        $type = 1;
+        $type = 2;
         if($type == 1){
             return view('cham_cong.order.order_type.don_nghi',compact('time'));
         } else if($type == 2){

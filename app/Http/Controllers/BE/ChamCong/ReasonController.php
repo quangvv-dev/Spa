@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\BE\ChamCong;
 
-use App\Http\Controllers\BE\SettingController;
-use App\Models\Order;
-use Carbon\Carbon;
+use App\Models\Reason;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
-class StatisticController extends Controller
+class ReasonController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +15,8 @@ class StatisticController extends Controller
      */
     public function index()
     {
-        $abc = DB::table('Settings')->get();
-        dd($abc);
-        $end = intval(Carbon::now()->endOfMonth()->format('d'));
-        $docs = Order::paginate(20);
-        return view('cham_cong.statistic.index',compact('end','docs'));
+        $reasons = Reason::all();
+        return view('cham_cong.reason.index',compact('reasons'));
     }
 
     /**
@@ -43,7 +37,9 @@ class StatisticController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Reason::create();
+        return 1;
+//        dd($request->all());
     }
 
     /**
@@ -77,7 +73,8 @@ class StatisticController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Reason::find($id)->update($request->all());
+        return 1;
     }
 
     /**
@@ -88,6 +85,6 @@ class StatisticController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Reason::find($id)->delete();
     }
 }
