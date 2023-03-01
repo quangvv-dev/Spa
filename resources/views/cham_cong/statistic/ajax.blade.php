@@ -47,8 +47,8 @@
     {{--<div class="pull-right">--}}
     {{--{{ $docs->appends(['search' => request()->search ])->links() }}--}}
     {{--</div>--}}
-    <div class="float-right">
-        {{$docs->links()}}
-    </div>
+    {{--<div class="float-right">--}}
+        {{--{{$docs->links()}}--}}
+    {{--</div>--}}
 </div>
 

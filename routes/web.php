@@ -296,4 +296,3 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
 //    Route::get('test-cham-cong',)
 });
-Route::get('approval/store', 'BE\ChamCong\StatisticController@store');
