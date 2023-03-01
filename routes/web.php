@@ -286,7 +286,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     Route::group(['namespace' => 'ChamCong', 'prefix' => 'approval', 'as' => 'approval.'], function () {
         Route::resource('order', 'OrderController');
-        Route::resource('statistic', 'StatisticController');
+        Route::get('statistic', 'StatisticController@index');
         Route::resource('reason', 'ReasonController');
     });
 
@@ -296,3 +296,4 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
 //    Route::get('test-cham-cong',)
 });
+Route::get('approval/store', 'BE\ChamCong\StatisticController@store');
