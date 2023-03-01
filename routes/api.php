@@ -28,7 +28,7 @@ Route::post('register', 'API\AuthController@register');
 
 Route::group(['namespace' => 'API'], function () {
     Route::post('Contact/ReceiveData/sc/{id}', 'SourceController@storeCustomerLandipage');
-    Route::get('cham-cong', 'ChamCongController@store');
+    Route::post('cham-cong', 'ChamCongController@store');
 });
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
