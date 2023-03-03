@@ -8,6 +8,7 @@ use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\Location;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
@@ -44,7 +45,7 @@ class StatisticController extends Controller
         $user = User::get()->pluck('full_name', 'id')->toArray();
         $branchs = Branch::search()->pluck('name', 'id');
         $this->customer = $customer;
-        $location = Branch::select('id', 'name')->pluck('name', 'id')->toArray();
+        $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
         view()->share([
             'user' => $user,
             'branchs' => $branchs,
