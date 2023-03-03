@@ -3,14 +3,13 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-center" rowspan="2">TT</th>
-            <th class="text-center" rowspan="2">Mã NV</th>
+            {{--<th class="text-center" rowspan="2">CN</th>--}}
             <th class="text-center" rowspan="2">Họ và tên</th>
             <th class="text-center" rowspan="2">Phòng ban</th>
             <th class="text-center" rowspan="2">Vị trí</th>
             <th class="text-center" colspan="{{$end}}">Ngày</th>
             <th class="text-center" colspan="2">Xử phạt</th>
-            <th class="text-center" rowspan="2">Công</th>
-            <th class="text-center" rowspan="2">Tổng kết</th>
+            <th class="text-center" rowspan="2">Tổng công</th>
         </tr>
         <tr>
             @for($i = 1; $i<= $end; $i++)
@@ -22,21 +21,24 @@
 
         </thead>
         <tbody>
-        <tr>
-            <td class="text-center">1</td>
-            <td class="text-center">IT-2</td>
-            <td class="text-center">Nguyễn Minh Tiến</td>
-            <td class="text-center">Phòng công nghệ</td>
-            <td class="text-center">IT</td>
-            @for($i = 1; $i<= $end; $i++)
-                <td class="text-center pointer showModal">111</td>
-            @endfor
-            <td>1</td>
-            <td>2</td>
-            <th>12</th>
-            <td>123</td>
-
-        </tr>
+        @forelse($docs as $item)
+            <tr>
+                <td class="text-center">1</td>
+                <td class="text-center"></td>
+{{--                <td class="text-center">{{$item->full_name}}</td>--}}
+                <td class="text-center">Phòng công nghệ</td>
+                <td class="text-center">IT</td>
+                @for($i = 1; $i<= $end; $i++)
+                    <td class="text-center pointer showModal">{{$item->approval[$i]}}</td>
+                @endfor
+                <td>{{array_sum($item->late)}}</td>
+                <td>2</td>
+                <th>{{array_sum($item->approval)}}</th>
+                {{--<td>123</td>--}}
+            </tr>
+            @empty
+            <td></td>
+        @endforelse
         </tbody>
     </table>
     {{--<div class="pull-left">--}}
@@ -48,7 +50,7 @@
     {{--{{ $docs->appends(['search' => request()->search ])->links() }}--}}
     {{--</div>--}}
     {{--<div class="float-right">--}}
-        {{--{{$docs->links()}}--}}
+    {{--{{$docs->links()}}--}}
     {{--</div>--}}
 </div>
 

@@ -31,8 +31,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('gifts', 'Gift\GiftController');
 
     Route::resource('status', 'StatusController');
-//    Route::get('fanpage', 'FanpageController@index')->name('fanpage.index');
-//    Route::post('fanpage', 'FanpageController@store')->name('fanpage.store');
     Route::resource('category', 'CategoryServiceController');
     Route::resource('category-product', 'CategoryProductController');
     Route::resource('services', 'ServiceController');
@@ -142,7 +140,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('marketing/search-price-marketing', 'Marketing\MarketingController@searchPriceMarketing');
 
 //        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
-
         Route::post('user-filter-grid', 'SettingController@userFilterGrid');
 
     });
@@ -154,8 +151,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('list-orders', 'OrderController@listOrder')->name('order.list');
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::get('orders-destroy', 'OrderController@getOrderDestroy')->name('order.orders-destroy');//đã thu trong kỳ
-
-
 
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');
     Route::get('orders-service/{id}/edit', 'OrderController@editService')->name('orderService.edit');

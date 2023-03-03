@@ -8,6 +8,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class StatisticController extends Controller
@@ -17,34 +18,48 @@ class StatisticController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
-        $end = intval(Carbon::now()->endOfMonth()->format('d'));
-        $user = User::select('id', 'full_name', 'approval_code')->get()->map(function ($item) use ($end) {
+        $year = now()->format('Y');
+        if ($request->month) {
+            $end = Carbon::create($year, $request->month)->endOfMonth()->format('d');
+        } else {
+            $end = now()->endOfMonth()->format('d');
+        }
+        $docs = User::select('id', 'full_name', 'approval_code', 'branch_id')->get()->map(function ($item) use ($end, $year, $request) {
             $approval = [];
+            $late = [];
+            $early = [];
             for ($i = 1; $i <= $end; $i++) {
-                $curentDate = Carbon::now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
-                $docs = ChamCong::whereDate('date_time_record', $curentDate)->get()->toArray();
-                if (count($docs) < 2) {
-                    $approval[$i] = 0;
+                $curentDate = $request->month ? Carbon::create($year, $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
+                    : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
 
+                $docs = ChamCong::where('ind_red_id', $item->approval_code)->whereDate('date_time_record', $curentDate)->get()->toArray();
+                if ($item->approval_code) {
+                    if (count($docs) < 2) {
+                        $approval[$i] = 0;
+
+                    } else {
+                        $startDate = new Carbon($docs[0]['date_time_record']);
+                        $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
+                        $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
+                        $approval[$i] = $diff > 9.5 ? 1 : round($diff / 9.5, 2);
+                        $late[] = (strtotime($startDate->format('H:i')) - strtotime('08:00')) / 60;
+                        $early[] = (strtotime($endDate->format('H:i')) - strtotime('17:30')) / 60;
+                    }
                 } else {
-                    $startDate = new Carbon($docs[0]['date_time_record']);
-                    $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
-                    $diff = round((strtotime($startDate) - strtotime($endDate)) / 60 / 60, 1);
-                    $approval[$i] = $diff > 9.5 ? 1 :round($diff / 9.5,2);
+                    $approval[$i] = 0;
                 }
             }
             $item->approval = $approval;
+            $item->late = $late;
             return $item;
         })->filter(function ($fl) {
-            if (!empty($fl->approval_code)){
+            if (!empty($fl->approval_code)) {
                 return $fl;
             }
         });
         return view('cham_cong.statistic.index', compact('end', 'docs'));
-//        return view('cham_cong.statistic.index');
     }
 
     /**
