@@ -70,7 +70,7 @@ class StatisticController extends Controller
         $input = $request->all();
         if (isset($input['location_id'])) {
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
-            $input['group_branch'] = $group_branch;
+            if (count($group_branch)) $input['group_branch'] = $group_branch;
         }
 
         if (count($input) == 2) {
