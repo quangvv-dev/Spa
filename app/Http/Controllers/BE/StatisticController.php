@@ -44,7 +44,7 @@ class StatisticController extends Controller
         $user = User::get()->pluck('full_name', 'id')->toArray();
         $branchs = Branch::search()->pluck('name', 'id');
         $this->customer = $customer;
-        $location = Branch::$location;
+        $location = Branch::select('id', 'name')->pluck('name', 'id')->toArray();
         view()->share([
             'user' => $user,
             'branchs' => $branchs,
