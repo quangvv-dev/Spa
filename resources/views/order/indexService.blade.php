@@ -278,7 +278,7 @@
     {{--<input type="hidden" class="data-order" value="{{isset($order) ? }}">--}}
     <input type="hidden" class="arrBacSy" value="{{$spaTherapissts}}">
     <input type="hidden" class="arrSupport" value="{{$customer_support}}">
-    <input type="hidden" class="arrYTa" value="{{$spaTherapissts}}">
+    <input type="hidden" class="arrYTa" value="{{$customer_y_ta}}">
     @include('order.modalBacSy')
     @include('order.modalSupport')
     @include('order.modalVoucher')
