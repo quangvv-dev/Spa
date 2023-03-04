@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use nusoap_client;
+use function PHPSTORM_META\elementType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Carbon\Carbon;
 use App\Models\Order;
@@ -730,6 +731,43 @@ class Functions
             return 1; // còn hiệu lực OTP 15p
         } else {
             return 0;// OTP hết hiệu lực
+        }
+    }
+
+    public static function returnPercentRoseYta($yta1, $yta2, $type)
+    {
+        if(!$yta1 && !$yta2){
+            return '';
+        }
+        if ($type == 'chinh') {
+            if ($yta1 && $yta2) {
+                return setting('exchange_yta1');
+            } else {
+                return setting('exchange_yta_single');
+            }
+        } else {
+            if(empty($yta2)){
+                return '';
+            }
+            return setting('exchange_yta2');
+        }
+    }
+    public static function returnPercentRoseSupport($tv1, $tv2, $type)
+    {
+        if(!$tv1 && !$tv2){
+            return '';
+        }
+        if ($type == 'chinh') {
+            if ($tv1 && $tv2) {
+                return setting('exchange_support1');
+            } else {
+                return setting('exchange_support_single');
+            }
+        } else {
+            if(empty($tv2)){
+                return '';
+            }
+            return setting('exchange_support2');
         }
     }
 

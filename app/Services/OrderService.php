@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Commission;
 use App\Models\GroupComment;
 use App\Models\Order;
 use App\Helpers\Functions;
@@ -232,6 +233,7 @@ class OrderService
         $order->customer->save();
 
         $paymentHistory->delete();
+        Commission::where('payment_id',$id)->delete();
 
         return $order;
     }
