@@ -167,9 +167,14 @@
                     <div class="col-12">
                         <h4 class="color-h1">Thông tin khác</h4>
                     </div>
+                    <input type="hidden" data-change=".select_doctor" name="spa_therapisst_id" id="spa_therapisst_id" value="{{@$order->supportOrder->doctor_id}}">
+                    <input type="hidden" data-change=".select_yTaChinh" name="yta" id="yta" value="{{@$order->supportOrder->yta1_id}}">
+                    <input type="hidden" data-change=".select_yTaPhu" name="yta2" id="yta2" value="{{@$order->supportOrder->yta2_id}}">
+                    <input type="hidden" data-change=".select_tuVanChinh" name="support_id" id="support_id" value="{{@$order->supportOrder->support1_id}}">
+                    <input type="hidden" data-change=".select_tuVanPhu" name="support_id2" id="support_id2" value="{{@$order->supportOrder->support2_id}}">
+
                     <div class="col-6 div-left">
                         {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
-                        <input type="hidden" name="spa_therapisst_id" id="spa_therapisst_id" value="{{@$order->spa_therapisst_id}}">
                         <div class="box-add user-bac-sy">
                             <div class="btn-icon">
                                 <span class="icon-plus">
@@ -177,9 +182,18 @@
                                     <i class="fa fa-check {{isset($order) && $order->spa_therapisst_id ? 'show' : 'hide'}}"></i>
                                 </span>
                                 <br>
-                                <span class="chon-bac-si">Chọn B.Sĩ</span>
-                                <span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>
+                                <span class="chon-bac-si">Người hỗ trợ</span>
+                                {{--<span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>--}}
                             </div>
+                        </div>
+                        <div class="box-add-custom">
+                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">BS: <span class="select_doctor_showName">{{@$order->supportOrder->doctor->full_name}}</span> <span class="show-commission exchange_doctor">{{@$order->supportOrder->doctor->percent_rose}} %</span></p>
+                            <hr style="padding: 0;margin: 0">
+                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">YTa: <span class="select_yTaChinh_showName">{{@$order->supportOrder->yTaChinh->full_name}}</span> <span class="show-commission exchange_yta1">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'chinh'))}}</span></p>
+                            <p style="margin-bottom: 1px !important;position: relative">Yta: <span class="select_yTaPhu_showName">{{@$order->supportOrder->yTaPhu->full_name}}</span> <span class="show-commission exchange_yta2">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'phu'))}}</span></p>
+                            <hr style="padding: 0;margin: 0">
+                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">TV: <span class="select_tuVanChinh_showName">{{@$order->supportOrder->tuVanChinh->full_name}}</span> <span class="show-commission exchange_support1">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'chinh')}}</span></p>
+                            <p style="margin-bottom: 1px !important;position: relative">TV: <span class="select_tuVanPhu_showName">{{@$order->supportOrder->tuVanPhu->full_name}}</span> <span class="show-commission exchange_support2">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'phu')}}</span></p>
                         </div>
                         {{--<div class="box-add">--}}
                         {{--<div class="btn-icon">--}}
@@ -188,19 +202,19 @@
                         {{--Thêm y tá--}}
                         {{--</div>--}}
                         {{--</div>--}}
-                        <div class="box-add user-support">
-                            <input type="hidden" name="support_id" id="support_id" value="{{@$order->support_id}}">
-                            <div class="btn-icon">
-                                <span class="icon-plus">
+                        {{--<div class="box-add user-support">--}}
+                            {{--<input type="hidden" name="support_id" id="support_id" value="{{@$order->support_id}}">--}}
+                            {{--<div class="btn-icon">--}}
+                                {{--<span class="icon-plus">--}}
                                     {{--<i class="fa fa-plus"></i>--}}
-                                    <i class="fa fa-plus {{isset($order) && $order->support_id ? 'hide' : 'show'}}"></i>
-                                    <i class="fa fa-check {{isset($order) && $order->support_id ? 'show' : 'hide'}}"></i>
-                                </span>
-                                <br>
-                                <span class="chon-tu-van">Chọn tư vấn</span>
-                                <span class="small-tip small-tip-custom text-tu-van">{{@$order->support->full_name}}</span>
-                            </div>
-                        </div>
+                                    {{--<i class="fa fa-plus {{isset($order) && $order->support_id ? 'hide' : 'show'}}"></i>--}}
+                                    {{--<i class="fa fa-check {{isset($order) && $order->support_id ? 'show' : 'hide'}}"></i>--}}
+                                {{--</span>--}}
+                                {{--<br>--}}
+                                {{--<span class="chon-tu-van">Chọn tư vấn</span>--}}
+                                {{--<span class="small-tip small-tip-custom text-tu-van">{{@$order->support->full_name}}</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="row date-create">
                             <div class="col-6 mt-5">
                                 {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
@@ -264,6 +278,7 @@
     {{--<input type="hidden" class="data-order" value="{{isset($order) ? }}">--}}
     <input type="hidden" class="arrBacSy" value="{{$spaTherapissts}}">
     <input type="hidden" class="arrSupport" value="{{$customer_support}}">
+    <input type="hidden" class="arrYTa" value="{{$customer_y_ta}}">
     @include('order.modalBacSy')
     @include('order.modalSupport')
     @include('order.modalVoucher')
@@ -401,7 +416,6 @@
             if (quantity == 'NaN' || quantity==undefined) {
                 quantity =1;
             }
-            console.log(quantity,'quantity');
             // let VAT = $(target).find('.VAT').val();
             let price = $(target).find('.price').val();
 
@@ -412,10 +426,8 @@
             if (CK1 > 0) {
                 CK2 = CK1 * price * quantity / 100;
             }
-            console.log(12313123,price);
 
             let total_service = parseInt(price)* parseInt(quantity) - parseInt(replaceNumber(CK2));
-            console.log(total_service,'quantity');
 
             $(target).find('.price').val(formatNumber(price));
             $(target).find('.CK2').val(formatNumber(CK2));
@@ -424,7 +436,6 @@
             $(".total").each(function () {
                 value_total += parseInt(replaceNumber($(this).val()));
             });
-            console.log(11111111,value_total);
             $('#sum_total').html(formatNumber(value_total));
             $('.tam_tinh').html(formatNumber(value_total));
         });
@@ -494,7 +505,6 @@
             }).done(function (response) {
                 let html = '';
                 let data = response.data;
-                console.log(data);
                 if (data.length > 0) {
                     data.forEach(function (item) {
                         if (item.type == {{\App\Constants\PromotionConstant::PERCENT}}) {
@@ -633,19 +643,22 @@
 
             let chiet_khau = Math.round((parseInt(money) * value_total) / 100);
 
-            console.log(123123,money,value_total,chiet_khau);
-
             $('#discount_order').val(chiet_khau);
             $('#all_discount_order').val(formatNumber(chiet_khau));
 
             let sum_total = value_total - chiet_khau;
 
             $('#sum_total').html(formatNumber(sum_total));
-            console.log(money, 'money-discount');
         });
     </script>
-    <script>
 
+
+
+
+
+
+
+    <script>
         $(document).on('click','.user-bac-sy',function () {
             $('#userBacSy').modal('show');
         })
@@ -654,32 +667,145 @@
         })
 
 
-        $(document).on('click','.selectSupport',function () {
-            console.log(11111,$(this).data('id'));
-            let data = $(this).data('id');
-            let data_name = $(this).data('name');
-            $('.selectSupport .thumbnail').removeClass('selected');
-            $(this).find('.thumbnail').addClass('selected');
-            $('#support_id').val(data);
-            $('.text-tu-van').html(data_name);
-            if(data){
-                $('.user-support .icon-plus .fa-plus').addClass('hide').removeClass('show');
-                $('.user-support .icon-plus .fa-check').addClass('show').removeClass('hide');
-            }
+        $(document).on('click','.tab-bacSy',function () {
+            $('#userBacSy').find('.quickSearchPage').removeClass('active');
+            $('#userBacSy').find('.quickSearchPageDoctor').addClass('active');
+        })
+        $(document).on('click','.tab-yTaChinh',function () {
+            $('#userBacSy').find('.quickSearchPage').removeClass('active');
+            $('#userBacSy').find('.quickSearchPageYTa').addClass('active');
+        })
+        $(document).on('click','.tab-yTaPhu',function () {
+            $('#userBacSy').find('.quickSearchPage').removeClass('active');
+            $('#userBacSy').find('.quickSearchPageYTa2').addClass('active');
+        })
+        $(document).on('click','.tab-tuVanChinh',function () {
+            $('#userBacSy').find('.quickSearchPage').removeClass('active');
+            $('#userBacSy').find('.quickSearchPageSupport').addClass('active');
+        })
+        $(document).on('click','.tab-tuVanChinh2',function () {
+            $('#userBacSy').find('.quickSearchPage').removeClass('active');
+            $('#userBacSy').find('.quickSearchPageSupport2').addClass('active');
         })
 
-        $(document).on('click','.selectDoctor',function () {
-            let data = $(this).data('id');
-            let data_name = $(this).data('name');
-            $('.selectDoctor .thumbnail').removeClass('selected');
-            $(this).find('.thumbnail').addClass('selected');
-            $('#spa_therapisst_id').val(data);
-            $('.text-bac-si').html(data_name);
-            if(data){
+
+
+        $(document).on('click','.select_doctor',function () {
+            let elm = $(this);
+            let hoa_hong = elm.data('percent_rose') + '%';
+            let selected = elm.find('.selected');
+            if(selected.length<1){
+                $('.show-commission.exchange_doctor').html(hoa_hong);
+            } else {
+                $('.show-commission.exchange_doctor').html('');
+            }
+            selectItem('.select_doctor',elm,'#spa_therapisst_id');
+
+            if(elm.data('id')){
                 $('.user-bac-sy .icon-plus .fa-plus').addClass('hide').removeClass('show');
                 $('.user-bac-sy .icon-plus .fa-check').addClass('show').removeClass('hide');
             }
         })
+        $(document).on('click','.select_yTaChinh',function () {
+            let elm = $(this);
+            selectItem('.select_yTaChinh',elm,'#yta');
+            changeRoseYta();
+        })
+        $(document).on('click','.select_yTaPhu',function () {
+            let elm = $(this);
+            let ytaChinh = $('#yta').val();
+            if(!ytaChinh){
+                alertify.error('Vui lòng chọn y tá chính !');
+                return;
+            }
+            selectItem('.select_yTaPhu',elm,'#yta2');
+            changeRoseYta();
+        })
+
+        $(document).on('click','.select_tuVanChinh',function () {
+            let elm = $(this);
+            selectItem('.select_tuVanChinh',elm,'#support_id');
+            changeRoseSupport();
+        })
+
+        $(document).on('click','.select_tuVanPhu',function () {
+            let elm = $(this);
+            let spChinh = $('#support_id').val();
+            if(!spChinh){
+                alertify.error('Vui lòng chọn tư vấn chính !');
+                return;
+            }
+            selectItem('.select_tuVanPhu',elm,'#support_id2');
+            changeRoseSupport();
+        })
+
+        function selectItem(classClick,elm,valueForm){
+            let data_id = elm.data('id');
+            let data_name = elm.data('name');
+
+            let abc = elm.find('.selected');
+
+            let check = classClick == '.select_yTaChinh' || classClick == '.select_tuVanChinh' ? false : true;
+
+            if(abc.length > 0){
+                if(check == true){
+                    $(`[data-change='${classClick}']`).val('').change(); // reset value form
+                    $(`${classClick}_showName`).html('').change();
+                    abc.removeClass('selected');
+                }
+            } else {
+                    $(`${classClick} .thumbnail`).removeClass('selected');
+                    elm.find('.thumbnail').addClass('selected');
+                    $(valueForm).val(data_id);
+                    $(`${classClick}_showName`).html(data_name);
+            }
+        }
+
+        function changeRoseYta(){
+            let is_selected_yta1 = $('#yta').val();
+            let is_selected_yta2 = $('#yta2').val();
+
+            let exchange_yta_single = '{{@number_format(setting('exchange_yta_single'))}}' + 'đ';
+            let exchange_yta1 = '{{@number_format(setting('exchange_yta1'))}}' + 'đ';
+            let exchange_yta2 = '{{@number_format(setting('exchange_yta2'))}}' + 'đ';
+
+            if(is_selected_yta1 && is_selected_yta2){ //trường hợp có 2 y tá hỗ trợ
+                $('.show-commission.exchange_yta1').html(exchange_yta1);
+                $('.show-commission.exchange_yta2').html(exchange_yta2);
+            } else if(is_selected_yta1 && !is_selected_yta2){ // trường hợp chỉ có y tá 1
+                $('.show-commission.exchange_yta1').html(exchange_yta_single);
+                $('.show-commission.exchange_yta2').html('');
+            } else if(!is_selected_yta1 && is_selected_yta2){ // trường hợp chỉ có y tá 2
+                $('.show-commission.exchange_yta1').html('');
+                $('.show-commission.exchange_yta2').html(exchange_yta_single);
+            } else {
+                $('.show-commission.exchange_yta1').html('');
+                $('.show-commission.exchange_yta2').html('');
+            }
+        }
+        function changeRoseSupport(){
+            let is_selected_support1 = $('#support_id').val();
+            let is_selected_support2 = $('#support_id2').val();
+
+            let exchange_support_single = '{{@number_format(setting('exchange_support_single'))}}' + '%';
+            let exchange_support1 = '{{@number_format(setting('exchange_support1'))}}' + '%';
+            let exchange_support2 = '{{@number_format(setting('exchange_support2'))}}' + '%';
+
+            if(is_selected_support1 && is_selected_support2){ //trường hợp có 2 y tá hỗ trợ
+                $('.show-commission.exchange_support1').html(exchange_support1);
+                $('.show-commission.exchange_support2').html(exchange_support2);
+            } else if(is_selected_support1 && !is_selected_support2){ // trường hợp chỉ có y tá 1
+                $('.show-commission.exchange_support1').html(exchange_support_single);
+                $('.show-commission.exchange_support2').html('');
+            } else if(!is_selected_support1 && is_selected_support2){ // trường hợp chỉ có y tá 2
+                $('.show-commission.exchange_support1').html('');
+                $('.show-commission.exchange_support2').html(exchange_support_single);
+            } else {
+                $('.show-commission.exchange_support1').html('');
+                $('.show-commission.exchange_support2').html('');
+            }
+        }
+
 
         $(document).on('keyup','#all_discount_order',function () {
             let abc = formatNumber($(this).val());
@@ -701,20 +827,41 @@
             let arr_page1 = $('.arrBacSy').val();
             arr_page1 = JSON.parse(arr_page1);
             let selected = $('#spa_therapisst_id').val();
-            doSearch(value,arr_page1,'#userBacSy',selected);
+            doSearch(value,arr_page1,'#userBacSy .fade-bacSy',selected,'select_doctor');
         });
-
+        $( ".quickSearchPageYTa").keyup(function() {
+            let value = $(this).val();
+            let arr_page1 = $('.arrBacSy').val();
+            arr_page1 = JSON.parse(arr_page1);
+            let selected = $('#yta').val();
+            doSearch(value,arr_page1,'#userBacSy .fade-yTaChinh',selected,'select_yTaChinh');
+        });
+        $( ".quickSearchPageYTa2").keyup(function() {
+            let value = $(this).val();
+            let arr_page1 = $('.arrBacSy').val();
+            arr_page1 = JSON.parse(arr_page1);
+            let selected = $('#yta2').val();
+            doSearch(value,arr_page1,'#userBacSy .fade-yTaPhu',selected,'select_yTaPhu');
+        });
         $( ".quickSearchPageSupport").keyup(function() {
             let value = $(this).val();
             let arr_page1 = $('.arrSupport').val();
             arr_page1 = JSON.parse(arr_page1);
             let selected = $('#support_id').val();
-            doSearch(value,arr_page1,'#userSupport',selected);
+            doSearch(value,arr_page1,'#userBacSy .fade-tuVanChinh',selected,'select_tuVanChinh');
+        });
+
+        $( ".quickSearchPageSupport2").keyup(function() {
+            let value = $(this).val();
+            let arr_page1 = $('.arrSupport').val();
+            arr_page1 = JSON.parse(arr_page1);
+            let selected = $('#support_id2').val();
+            doSearch(value,arr_page1,'#userBacSy .fade-tuVanPhu',selected,'select_tuVanPhu');
         });
 
 
         let delayTimer;
-        function doSearch(text,arr_page1,classes,selected_id) {
+        function doSearch(text,arr_page1,classHtml,selected_id,classLi) {
             clearTimeout(delayTimer);
 
             delayTimer = setTimeout(function() {
@@ -725,9 +872,8 @@
                         if (f.full_name.match(re)) {
                             let avatar = f.avatar ? f.avatar  :'';
                             let selected = f.id == selected_id ? 'selected' : '';
-                            let select = classes == '#userBacSy' ? 'selectDoctor' : 'selectSupport';
                             html += `
-                                <li class="`+select+`" data-id='`+f.id+`' data-name="`+f.full_name+`">
+                                <li class="`+classLi+`" data-id='`+f.id+`' data-name="`+f.full_name+`">
                                     <div class="thumbnail `+selected+`">
                                         <img class="image_picker_image" src="`+avatar+`">
                                         <p>`+f.full_name+`</p>
@@ -738,7 +884,7 @@
                             // console.log('ngon ngay1');
                         }
                     })
-                    $(classes +' ' + '.image_picker_selector ul').html(html)
+                    $(classHtml + ' ' + '.image_picker_selector ul').html(html)
                 }
             }, 500); // Will do the ajax stuff after 1000 ms, or 1 s
         }

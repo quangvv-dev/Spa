@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
+use App\Models\Commission;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\HistorySms;
@@ -20,6 +21,7 @@ use App\Models\Promotion;
 use App\Models\Services;
 use App\Models\Status;
 use App\Models\Notification;
+use App\Models\SupportOrder;
 use App\Models\Tip;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
@@ -71,8 +73,11 @@ class OrderController extends Controller
         $spaTherapissts = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::DOCTOR)->get();
         $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR,DepartmentConstant::TU_VAN_VIEN])->get();
 
-//        $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->get();
-//        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
+//        $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->get();
+//        $customer_support = User::select('id', 'avatar', 'full_name')->get();
+//        $customer_y_ta = User::select('id', 'avatar', 'full_name')->get();
+
+
         $branchs = Branch::search()->pluck('name', 'id');
         view()->share([
 //            'services' => $services,
@@ -80,7 +85,8 @@ class OrderController extends Controller
             'order_type' => $order_type,
             'branchs' => $branchs,
             'customer_support' => $customer_support,
-            'spaTherapissts' => $spaTherapissts
+            'spaTherapissts' => $spaTherapissts,
+            'customer_y_ta' => $spaTherapissts
         ]);
     }
 
@@ -143,6 +149,7 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+//        dd($request->all());
         $customer = Customer::find($request->user_id);
         $param = $request->all();
 
@@ -163,6 +170,14 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
+            SupportOrder::create([
+                'order_id'=>$order->id,
+                'doctor_id'=>$request->spa_therapisst_id,
+                'yta1_id'=>$request->yta,
+                'yta2_id'=>$request->yta2,
+                'support1_id'=>$request->support_id,
+                'support2_id'=>$request->support_id2,
+            ]);
             $countOrders = Order::select('id')->where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
             if (@$countOrders >= 2) {
                 $customer->old_customer = 1;
@@ -205,6 +220,36 @@ class OrderController extends Controller
             $debug = 'Try catch exception : ' . $e->getMessage() . 'LINE : ___' . $e->getLine() . '___FILE___' . $e->getFile();
             return ApiResult(500, 'Insert failed', null, null, $debug);
         }
+    }
+
+    public function commissionOrder($order_id,$payment_id,$price){
+        $support_orders = SupportOrder::where('order_id',$order_id)->first();
+        $user_doctor = User::find($support_orders->doctor_id);
+        if($user_doctor){
+            $percent_rose = $user_doctor->percent_rose;
+        } else {
+            $percent_rose = 0;
+        }
+
+        $his_payment = PaymentHistory::where('order_id',$order_id)->get();
+        if(count($his_payment) > 1){
+            $data['yta1'] = 0;
+            $data['yta2'] = 0;
+        } else {
+
+            $data['yta1'] = $support_orders->yta1_id?setting('exchange_yta1'):0;
+            $data['yta2'] = $support_orders->yta2_id?setting('exchange_yta2'):0;
+        }
+
+        $data['order_id'] = $order_id;
+        $data['payment_id'] = $payment_id;
+        $data['doctor'] = $support_orders->doctor_id?round(($percent_rose * $price)/100):0;
+
+        $data['support1'] = $support_orders->support1_id?round((setting('exchange_support1') * $price)/100):0;
+        $data['support2'] = $support_orders->support2_id?round((setting('exchange_support2') * $price)/100):0;
+
+        Commission::create($data);
+        return 1;
     }
 
     public function listOrder(Request $request)
@@ -511,6 +556,8 @@ class OrderController extends Controller
                 WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id, $paymentHistory->id);
             }
 
+            self::commissionOrder($paymentHistory->order_id,$paymentHistory->id,$paymentHistory->price);
+
             if (count($check) <= 1 && isset($check2) && count($check2)) {
                 $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
                 foreach ($check2 as $item) {
@@ -785,6 +832,14 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $order = $this->orderService->update($id, $input);
+            $support_order = SupportOrder::where('order_id',$id)->first();
+            $support_order->update([
+                'doctor_id'=>$request->spa_therapisst_id,
+                'yta1_id'=>$request->yta,
+                'yta2_id'=>$request->yta2,
+                'support1_id'=>$request->support_id,
+                'support2_id'=>$request->support_id2,
+            ]);
             if (!$order) {
                 DB::rollBack();
             }

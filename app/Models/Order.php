@@ -55,6 +55,23 @@ class Order extends Model
         return $this->belongsTo(User::class, 'support_id', 'id');
     }
 
+    public function supportOrder()
+    {
+        return $this->hasOne(SupportOrder::class);
+    }
+//    public function yTaChinh(){
+//        return $this->belongsTo(SupportOrder::class,'yta1_id');
+//    }
+//    public function yTaPhu(){
+//        return $this->belongsTo(SupportOrder::class,'yta2_id');
+//    }
+//    public function tuVanChinh(){
+//        return $this->belongsTo(SupportOrder::class,'support1_id');
+//    }
+//    public function tuVanPhu(){
+//        return $this->belongsTo(SupportOrder::class,'support2_id');
+//    }
+
 //    public function paymentHistory()
 //    {
 //        return $this->hasMany(PaymentHistory::class);
