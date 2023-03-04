@@ -870,7 +870,7 @@
                     arr_page1.forEach(f=>{
                         let re = new RegExp(`${text}`, 'gi');
                         if (f.full_name.match(re)) {
-                            let avatar = f.avatar ? f.avatar  :{{setting('logo_website')}};
+                            let avatar = f.avatar ? f.avatar  :'{{setting('logo_website')}}';
                             let selected = f.id == selected_id ? 'selected' : '';
                             html += `
                                 <li class="`+classLi+`" data-id='`+f.id+`' data-name="`+f.full_name+`">
