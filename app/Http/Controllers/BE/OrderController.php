@@ -8,6 +8,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
+use App\Models\Commission;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\HistorySms;
@@ -20,6 +21,7 @@ use App\Models\Promotion;
 use App\Models\Services;
 use App\Models\Status;
 use App\Models\Notification;
+use App\Models\SupportOrder;
 use App\Models\Tip;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
@@ -74,7 +76,6 @@ class OrderController extends Controller
         $spaTherapissts = User::get();
         $customer_support = User::get();
         $customer_y_ta = User::get();
-
 
 
         $branchs = Branch::search()->pluck('name', 'id');
@@ -148,6 +149,7 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+//        dd($request->all());
         $customer = Customer::find($request->user_id);
         $param = $request->all();
 
@@ -168,6 +170,14 @@ class OrderController extends Controller
             if (!$order) {
                 DB::rollBack();
             }
+            SupportOrder::create([
+                'order_id'=>$order->id,
+                'doctor_id'=>$request->spa_therapisst_id,
+                'yta1_id'=>$request->yta,
+                'yta2_id'=>$request->yta2,
+                'support1_id'=>$request->support_id,
+                'support2_id'=>$request->support_id2,
+            ]);
             $countOrders = Order::select('id')->where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
             if (@$countOrders >= 2) {
                 $customer->old_customer = 1;
@@ -210,6 +220,18 @@ class OrderController extends Controller
             $debug = 'Try catch exception : ' . $e->getMessage() . 'LINE : ___' . $e->getLine() . '___FILE___' . $e->getFile();
             return ApiResult(500, 'Insert failed', null, null, $debug);
         }
+    }
+
+    public function commissionOrder($order_id,$payment_id){
+        $data['order_id'] = $order_id;
+        $data['payment_id'] = $payment_id;
+        $data['doctor'] = setting('exchange_doctor');
+        $data['yta1'] = setting('exchange_yta1');
+        $data['yta2'] = setting('exchange_yta2');
+        $data['support1'] = setting('exchange_support1');
+        $data['support2'] = setting('exchange_support2');
+        Commission::create($data);
+        return 1;
     }
 
     public function listOrder(Request $request)
@@ -515,6 +537,8 @@ class OrderController extends Controller
             if (setting('exchange') > 0 && isset($customer->gioithieu) && $customer->gioithieu->id) {
                 WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id, $paymentHistory->id);
             }
+
+            self::commissionOrder($paymentHistory->order_id,$paymentHistory->id);
 
             if (count($check) <= 1 && isset($check2) && count($check2)) {
                 $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
