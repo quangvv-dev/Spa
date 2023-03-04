@@ -82,7 +82,7 @@ class OrderController extends Controller
             'branchs' => $branchs,
             'customer_support' => $customer_support,
             'spaTherapissts' => $spaTherapissts,
-            'customer_y_ta' => $spaTherapissts
+//            'customer_y_ta' => $spaTherapissts
         ]);
     }
 
