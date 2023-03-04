@@ -167,12 +167,11 @@
                     <div class="col-12">
                         <h4 class="color-h1">Thông tin khác</h4>
                     </div>
-
-                    <input type="hidden" data-change=".select_doctor" name="spa_therapisst_id" id="spa_therapisst_id" value="{{@$order->spa_therapisst_id}}">
-                    <input type="hidden" data-change=".select_yTaChinh" name="yta" id="yta" value="{{@$order->spa_therapisst_id}}">
-                    <input type="hidden" data-change=".select_yTaPhu" name="yta2" id="yta2" value="{{@$order->spa_therapisst_id}}">
-                    <input type="hidden" data-change=".select_tuVanChinh" name="support_id" id="support_id" value="{{@$order->support_id}}">
-                    <input type="hidden" data-change=".select_tuVanPhu" name="support_id2" id="support_id2" value="{{@$order->support_id2}}">
+                    <input type="hidden" data-change=".select_doctor" name="spa_therapisst_id" id="spa_therapisst_id" value="{{@$order->supportOrder->doctor_id}}">
+                    <input type="hidden" data-change=".select_yTaChinh" name="yta" id="yta" value="{{@$order->supportOrder->yta1_id}}">
+                    <input type="hidden" data-change=".select_yTaPhu" name="yta2" id="yta2" value="{{@$order->supportOrder->yta2_id}}">
+                    <input type="hidden" data-change=".select_tuVanChinh" name="support_id" id="support_id" value="{{@$order->supportOrder->support1_id}}">
+                    <input type="hidden" data-change=".select_tuVanPhu" name="support_id2" id="support_id2" value="{{@$order->supportOrder->support2_id}}">
 
                     <div class="col-6 div-left">
                         {!! Form::hidden('role_type', @$order->role_type, array('id' => 'role_type')) !!}
@@ -183,18 +182,18 @@
                                     <i class="fa fa-check {{isset($order) && $order->spa_therapisst_id ? 'show' : 'hide'}}"></i>
                                 </span>
                                 <br>
-                                <span class="chon-bac-si">Chọn B.Sĩ</span>
+                                <span class="chon-bac-si">Người hỗ trợ</span>
                                 {{--<span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>--}}
                             </div>
                         </div>
                         <div class="box-add-custom">
-                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">BS: <span class="select_doctor_showName">{{@$order->spaTherapisst->full_name}}</span> <span class="show-commission">{{@number_format(setting('exchange_doctor'))}}</span></p>
+                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">BS: <span class="select_doctor_showName">{{@$order->supportOrder->doctor->full_name}}</span> <span class="show-commission exchange_doctor">{{@$order->supportOrder->doctor->percent_rose}} %</span></p>
                             <hr style="padding: 0;margin: 0">
-                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">YTa: <span class="select_yTaChinh_showName"></span> <span class="show-commission">{{@number_format(setting('exchange_yta1'))}}</span></p>
-                            <p style="margin-bottom: 1px !important;position: relative">Yta: <span class="select_yTaPhu_showName"></span> <span class="show-commission">{{@number_format(setting('exchange_yta2'))}}</span></p>
+                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">YTa: <span class="select_yTaChinh_showName">{{@$order->supportOrder->yTaChinh->full_name}}</span> <span class="show-commission exchange_yta1">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'chinh'))}}</span></p>
+                            <p style="margin-bottom: 1px !important;position: relative">Yta: <span class="select_yTaPhu_showName">{{@$order->supportOrder->yTaPhu->full_name}}</span> <span class="show-commission exchange_yta2">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'phu'))}}</span></p>
                             <hr style="padding: 0;margin: 0">
-                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">TV: <span class="select_tuVanChinh_showName"></span> <span class="show-commission">{{@number_format(setting('exchange_support1'))}}</span></p>
-                            <p style="margin-bottom: 1px !important;position: relative">TV: <span class="select_tuVanPhu_showName"></span> <span class="show-commission">{{@number_format(setting('exchange_support2'))}}</span></p>
+                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">TV: <span class="select_tuVanChinh_showName">{{@$order->supportOrder->tuVanChinh->full_name}}</span> <span class="show-commission exchange_support1">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'chinh')}}</span></p>
+                            <p style="margin-bottom: 1px !important;position: relative">TV: <span class="select_tuVanPhu_showName">{{@$order->supportOrder->tuVanPhu->full_name}}</span> <span class="show-commission exchange_support2">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'phu')}}</span></p>
                         </div>
                         {{--<div class="box-add">--}}
                         {{--<div class="btn-icon">--}}
@@ -693,7 +692,15 @@
 
         $(document).on('click','.select_doctor',function () {
             let elm = $(this);
+            let hoa_hong = elm.data('percent_rose') + '%';
+            let selected = elm.find('.selected');
+            if(selected.length<1){
+                $('.show-commission.exchange_doctor').html(hoa_hong);
+            } else {
+                $('.show-commission.exchange_doctor').html('');
+            }
             selectItem('.select_doctor',elm,'#spa_therapisst_id');
+
             if(elm.data('id')){
                 $('.user-bac-sy .icon-plus .fa-plus').addClass('hide').removeClass('show');
                 $('.user-bac-sy .icon-plus .fa-check').addClass('show').removeClass('hide');
@@ -702,36 +709,100 @@
         $(document).on('click','.select_yTaChinh',function () {
             let elm = $(this);
             selectItem('.select_yTaChinh',elm,'#yta');
+            changeRoseYta();
         })
         $(document).on('click','.select_yTaPhu',function () {
             let elm = $(this);
+            let ytaChinh = $('#yta').val();
+            if(!ytaChinh){
+                alertify.error('Vui lòng chọn y tá chính !');
+                return;
+            }
             selectItem('.select_yTaPhu',elm,'#yta2');
+            changeRoseYta();
         })
 
         $(document).on('click','.select_tuVanChinh',function () {
             let elm = $(this);
             selectItem('.select_tuVanChinh',elm,'#support_id');
+            changeRoseSupport();
         })
 
         $(document).on('click','.select_tuVanPhu',function () {
             let elm = $(this);
+            let spChinh = $('#support_id').val();
+            if(!spChinh){
+                alertify.error('Vui lòng chọn tư vấn chính !');
+                return;
+            }
             selectItem('.select_tuVanPhu',elm,'#support_id2');
+            changeRoseSupport();
         })
+
         function selectItem(classClick,elm,valueForm){
             let data_id = elm.data('id');
-            let data_name = elm.data('name')
+            let data_name = elm.data('name');
 
             let abc = elm.find('.selected');
 
+            let check = classClick == '.select_yTaChinh' || classClick == '.select_tuVanChinh' ? false : true;
+
             if(abc.length > 0){
-                $(`[data-change='${classClick}']`).val('').change(); // reset value form
-                $(`${classClick}_showName`).html('').change();
-                abc.removeClass('selected');
+                if(check == true){
+                    $(`[data-change='${classClick}']`).val('').change(); // reset value form
+                    $(`${classClick}_showName`).html('').change();
+                    abc.removeClass('selected');
+                }
             } else {
-                $(`${classClick} .thumbnail`).removeClass('selected');
-                elm.find('.thumbnail').addClass('selected');
-                $(valueForm).val(data_id);
-                $(`${classClick}_showName`).html(data_name);
+                    $(`${classClick} .thumbnail`).removeClass('selected');
+                    elm.find('.thumbnail').addClass('selected');
+                    $(valueForm).val(data_id);
+                    $(`${classClick}_showName`).html(data_name);
+            }
+        }
+
+        function changeRoseYta(){
+            let is_selected_yta1 = $('#yta').val();
+            let is_selected_yta2 = $('#yta2').val();
+
+            let exchange_yta_single = '{{@number_format(setting('exchange_yta_single'))}}' + 'đ';
+            let exchange_yta1 = '{{@number_format(setting('exchange_yta1'))}}' + 'đ';
+            let exchange_yta2 = '{{@number_format(setting('exchange_yta2'))}}' + 'đ';
+
+            if(is_selected_yta1 && is_selected_yta2){ //trường hợp có 2 y tá hỗ trợ
+                $('.show-commission.exchange_yta1').html(exchange_yta1);
+                $('.show-commission.exchange_yta2').html(exchange_yta2);
+            } else if(is_selected_yta1 && !is_selected_yta2){ // trường hợp chỉ có y tá 1
+                $('.show-commission.exchange_yta1').html(exchange_yta_single);
+                $('.show-commission.exchange_yta2').html('');
+            } else if(!is_selected_yta1 && is_selected_yta2){ // trường hợp chỉ có y tá 2
+                $('.show-commission.exchange_yta1').html('');
+                $('.show-commission.exchange_yta2').html(exchange_yta_single);
+            } else {
+                $('.show-commission.exchange_yta1').html('');
+                $('.show-commission.exchange_yta2').html('');
+            }
+        }
+        function changeRoseSupport(){
+            let is_selected_support1 = $('#support_id').val();
+            let is_selected_support2 = $('#support_id2').val();
+
+            let exchange_support_single = '{{@number_format(setting('exchange_support_single'))}}' + '%';
+            let exchange_support1 = '{{@number_format(setting('exchange_support1'))}}' + '%';
+            let exchange_support2 = '{{@number_format(setting('exchange_support2'))}}' + '%';
+
+            if(is_selected_support1 && is_selected_support2){ //trường hợp có 2 y tá hỗ trợ
+                $('.show-commission.exchange_support1').html(exchange_support1);
+                $('.show-commission.exchange_support2').html(exchange_support2);
+            } else if(is_selected_support1 && !is_selected_support2){ // trường hợp chỉ có y tá 1
+                $('.show-commission.exchange_support1').html(exchange_support_single);
+                $('.show-commission.exchange_support2').html('');
+            } else if(!is_selected_support1 && is_selected_support2){ // trường hợp chỉ có y tá 2
+                $('.show-commission.exchange_support1').html('');
+                $('.show-commission.exchange_support2').html(exchange_support_single);
+            } else {
+                $('.show-commission.exchange_support1').html('');
+                $('.show-commission.exchange_support2').html('');
             }
         }
 

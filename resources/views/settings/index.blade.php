@@ -69,18 +69,24 @@
                                     <hr class="mt-2 mb-2">
                                     <div class="col row">
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="">
+                                                <h5 style="color: #e10a46">Trường hợp 1 y tá phụ trách</h5>
+                                            </div>
                                             <div class="form-group">
-                                                {!! Form::label('exchange_yta_single', 'Hoa hồng y tá làm 1 mình', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('exchange_yta_single', 'Hoa hồng y tá', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('exchange_yta_single',@@number_format(setting('exchange_yta_single')), array('class' => 'form-control number')) !!}
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="">
+                                                <h5 style="color: #e10a46">Trường hợp 2 y tá phụ trách</h5>
+                                            </div>
                                             <div class="form-group">
-                                                {!! Form::label('exchange_yta1', 'Hoa hồng y tá 1', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('exchange_yta1', 'Hoa hồng y tá chính', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('exchange_yta1',@@number_format(setting('exchange_yta1')), array('class' => 'form-control number')) !!}
                                             </div>
                                             <div class="form-group">
-                                                {!! Form::label('exchange_yta2', 'Hoa hồng y tá 2', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('exchange_yta2', 'Hoa hồng y tá phụ', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('exchange_yta2',@@number_format(setting('exchange_yta2')), array('class' => 'form-control number')) !!}
                                             </div>
                                         </div>
@@ -88,18 +94,24 @@
                                     <hr class="mt-2 mb-2">
                                     <div class="col row">
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="">
+                                                <h5 style="color: #e10a46">Trường hợp 1 tư vấn phụ trách</h5>
+                                            </div>
                                             <div class="form-group">
-                                                {!! Form::label('exchange_support_single', '% Hoa hồng tư vấn 1 mình', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('exchange_support_single', '% Hoa hồng tư vấn', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('exchange_support_single',@@number_format(setting('exchange_support_single')), array('class' => 'form-control number')) !!}
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="">
+                                                <h5 style="color: #e10a46">Trường hợp 2 tư vấn phụ trách</h5>
+                                            </div>
                                             <div class="form-group">
-                                                {!! Form::label('exchange_support1', '% Hoa hồng tư vấn 1', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('exchange_support1', '% Hoa hồng tư vấn chính', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('exchange_support1',@@number_format(setting('exchange_support1')), array('class' => 'form-control number')) !!}
                                             </div>
                                             <div class="form-group">
-                                                {!! Form::label('exchange_support2', '% Hoa hồng tư vấn 2', array('class' => 'control-label required')) !!}
+                                                {!! Form::label('exchange_support2', '% Hoa hồng tư vấn phụ', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('exchange_support2',@@number_format(setting('exchange_support2')), array('class' => 'form-control number')) !!}
                                             </div>
                                         </div>

@@ -16,11 +16,11 @@ class CreateSupportOrdersTable extends Migration
         Schema::create('support_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('order_id');
-            $table->integer('doctor_id')->comment('id bác sĩ')->nullable();
-            $table->integer('yta1_id')->comment('id y tá 1')->nullable();
-            $table->integer('yta2_id')->comment('id y tá 2')->nullable();
-            $table->integer('support1_id')->comment('id tư vấn 1')->nullable();
-            $table->integer('support2_id')->comment('id tư vấn 2')->nullable();
+            $table->integer('doctor_id')->comment('id bác sĩ')->default(0)->nullable();
+            $table->integer('yta1_id')->comment('id y tá 1')->default(0)->nullable();
+            $table->integer('yta2_id')->comment('id y tá 2')->default(0)->nullable();
+            $table->integer('support1_id')->comment('id tư vấn 1')->default(0)->nullable();
+            $table->integer('support2_id')->comment('id tư vấn 2')->default(0)->nullable();
             $table->timestamps();
         });
     }
