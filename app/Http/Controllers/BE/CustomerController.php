@@ -272,7 +272,7 @@ class CustomerController extends Controller
             $request->merge(['telesales_id' => Auth::user()->id]);
         }
         $input['type_ctv'] = $request->type_ctv == 'on' ? 1 : 0;
-
+        $input['ngay_sale_nhan_data'] = Carbon::now()->format('Y-m-d H:i:s');
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
@@ -397,8 +397,6 @@ class CustomerController extends Controller
             return view('customers.order', compact('orders', 'waiters', 'tips'));
         }
         //END
-
-
 
 
         return view('customers.view_account',
@@ -1017,9 +1015,10 @@ class CustomerController extends Controller
         }
     }
 
-    public function historyStatus(Request $request){
+    public function historyStatus(Request $request)
+    {
 //        $customer = Customer::find($request->customer_id);
-        $history_new = HistoryWork::where('customer_id',$request->customer_id)->with('status_old','status_new','user')->orderByDesc('created_at')->get();
+        $history_new = HistoryWork::where('customer_id', $request->customer_id)->with('status_old', 'status_new', 'user')->orderByDesc('created_at')->get();
 //        $arr_customer = Customer::where('phone',$customer->phone)->where('id','<>',$request->customer_id)->orderByDesc('id')->get();
         $data['history_new'] = $history_new;
 //        $data['arr_customer'] = $arr_customer;
