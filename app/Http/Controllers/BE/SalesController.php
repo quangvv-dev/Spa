@@ -297,7 +297,7 @@ class SalesController extends Controller
                 $item->so_don = $order->count();
                 $item->doanh_so = $order1->sum('all_total');
 
-                $payment = PaymentHistory::search($search)->whereIn('order_id',$array_order);
+                $payment = PaymentHistory::search($search)->whereIn('order_id', $array_order);
                 $payment1 = clone $payment;
                 $item->doanh_thu = $payment->sum('price');
                 $item->so_don_doanh_thu = $payment->count();
@@ -307,17 +307,17 @@ class SalesController extends Controller
 
                 return $item;
             })->sortByDesc('doanh_so');
-            if($request->ajax()){
+            if ($request->ajax()) {
                 return view('statistics.report_custom.report_city', compact('data'));
             }
 
         }
         if ($type_search == 2) { //doanh thu theo tuổi
-            $age = AgeAndJob::where('type',0)->get();
-            $source = \App\Models\Source::search($search)->get()->map(function ($s) use ($search){
-                $s->age = AgeAndJob::where('type',0)->get()->map(function ($item) use ($search,$s) {
-                    $orderArray = Order::searchAll($search)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item,$s) {
-                        $qr->where('age_from', $item->id)->where('source_fb',$s->id);
+            $age = AgeAndJob::where('type', 0)->get();
+            $source = \App\Models\Source::search($search)->get()->map(function ($s) use ($search) {
+                $s->age = AgeAndJob::where('type', 0)->get()->map(function ($item) use ($search, $s) {
+                    $orderArray = Order::searchAll($search)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item, $s) {
+                        $qr->where('age_from', $item->id)->where('source_fb', $s->id);
                     });
                     $item->price = $orderArray->sum('all_total');
                     return $item;
@@ -325,23 +325,23 @@ class SalesController extends Controller
                 return $s;
             });
 //            dd($source);
-            return view('statistics.report_custom.report_age', compact('age','source'));
+            return view('statistics.report_custom.report_age', compact('age', 'source'));
         }
         if ($type_search == 3) { //doanh thu theo nghề nghiệp
-            $job = AgeAndJob::where('type',1)->get();
-            $source = \App\Models\Source::search($search)->get()->map(function ($s) use ($search){
-                $s->job = AgeAndJob::where('type',1)->get()->map(function ($item) use ($search,$s) {
-                    $orderArray = Order::searchAll($search)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item,$s) {
-                        $qr->where('customer_job', $item->id)->where('source_fb',$s->id);
+            $job = AgeAndJob::where('type', 1)->get();
+            $source = \App\Models\Source::search($search)->get()->map(function ($s) use ($search) {
+                $s->job = AgeAndJob::where('type', 1)->get()->map(function ($item) use ($search, $s) {
+                    $orderArray = Order::searchAll($search)->select('all_total', 'member_id')->whereHas('customer', function ($qr) use ($item, $s) {
+                        $qr->where('customer_job', $item->id)->where('source_fb', $s->id);
                     });
                     $item->price = $orderArray->sum('all_total');
                     return $item;
                 });
                 return $s;
             });
-            return view('statistics.report_custom.report_job', compact('job','source'));
+            return view('statistics.report_custom.report_job', compact('job', 'source'));
         }
-        return view('statistics.report_custom.thong_ke', compact('branchs', 'marketing','data'));
+        return view('statistics.report_custom.thong_ke', compact('branchs', 'marketing', 'data'));
     }
 
 
@@ -378,9 +378,13 @@ class SalesController extends Controller
             $params = $request->all();
             $params['telesales'] = $item->id;
             $payment = PaymentHistory::search($params, 'price');
+            $payment2 = clone $payment;
 
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $payment->sum('price');
+            $item->upsales = $payment2->whereHas('order', function ($query) {
+                $query->where('is_upsale', OrderConstant::IS_UPSALE);
+            })->sum('price');
             $item->the_rest = $payment->where('is_debt', OrderConstant::TRUE_DEBT)->sum('price');
             $item->orders = $orders->count(); // HV chốt
             return $item;
