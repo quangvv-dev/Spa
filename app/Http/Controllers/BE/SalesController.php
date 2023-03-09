@@ -388,8 +388,6 @@ class SalesController extends Controller
             $item->the_rest = $payment->where('is_debt', OrderConstant::TRUE_DEBT)->sum('price');
             $item->orders = $orders->count(); // HV chốt
             return $item;
-        })->filter(function ($f) {
-            if ($f->all_total > 0) return $f;
         })->sortByDesc('gross_revenue');
 
         if ($request->ajax()) {
