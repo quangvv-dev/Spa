@@ -390,7 +390,7 @@ class SalesController extends Controller
             return $item;
         })->filter(function ($f) {
             if ($f->all_total > 0) return $f;
-        })->sortByDesc('all_total');
+        })->sortByDesc('gross_revenue');
 
         if ($request->ajax()) {
             return view('sale.admin.ajax', compact('users'));
