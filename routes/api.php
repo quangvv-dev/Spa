@@ -12,12 +12,12 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('test-firebase_token', 'API\ThuChiController@testSendFirebase');
 Route::post('callcenter/hangup', 'API\CallController@hangUp');//Api dành cho 3CX
 
 Route::post('callcenter/crmSendCallLog', 'API\CallController@hangUp');//api dành cho GTC Telecom
 Route::post('callcenter/crmSendIncomingCall', 'API\CallController@inComing');//api dành cho GTC Telecom
 Route::post('callcenter/callOut', 'API\CallController@callOut');//api dành cho GTC Telecom
-
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -53,7 +53,6 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('sent-test-sms', 'AuthController@testSendSMS');
 
     Route::post('update-firebase_token', 'ThuChiController@updateDevicesToken');
-    Route::post('test-firebase_token', 'ThuChiController@testSendFirebase');
 
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('get-profile', 'AuthController@getProfile');

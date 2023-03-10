@@ -72,11 +72,15 @@ class OrderController extends Controller
         ];
 
         $spaTherapissts = User::select('id', 'avatar', 'full_name','percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->get();
-        $customer_support = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::TU_VAN_VIEN)->get();
+
+//        $customer_support = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::TU_VAN_VIEN)->get();
+        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR,DepartmentConstant::TU_VAN_VIEN])->get();
 
 //        $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->get();
 //        $customer_support = User::select('id', 'avatar', 'full_name')->get();
 //        $customer_y_ta = User::select('id', 'avatar', 'full_name')->get();
+
+
 
 
         $branchs = Branch::search()->pluck('name', 'id');
@@ -91,7 +95,6 @@ class OrderController extends Controller
         ]);
     }
 
-//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
 
     /**
      * Display orders
@@ -178,6 +181,7 @@ class OrderController extends Controller
                 'yta2_id'=>$request->yta2,
                 'support1_id'=>$request->support_id,
                 'support2_id'=>$request->support_id2,
+                'branch_id' => $param['branch_id']
             ]);
             $countOrders = Order::select('id')->where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
             if (@$countOrders >= 2) {
@@ -249,6 +253,7 @@ class OrderController extends Controller
         $data['support1'] = $support_orders->support1_id?round((setting('exchange_support1') * $price)/100):0;
         $data['support2'] = $support_orders->support2_id?round((setting('exchange_support2') * $price)/100):0;
 
+        $data['branch_id'] = $support_orders->branch_id;
         CommissionEmployee::create($data);
         return 1;
     }

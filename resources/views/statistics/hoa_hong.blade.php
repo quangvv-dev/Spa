@@ -318,7 +318,7 @@
     <!-- Modal -->
     <div class="modal fade" id="modalMultiPage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Danh sách đơn</h5>
@@ -332,13 +332,15 @@
                             <tr>
                                 <td class="text-center">STT</td>
                                 <td class="text-center">Số điện thoại</td>
-                                <td class="text-center">Tổng tiền</td>
+                                <td class="text-center">KH thanh toán</td>
+                                <td class="text-center">Hoa hồng</td>
                                 <td class="text-center">Ngày</td>
                             </tr>
                             <tbody class="listOrder">
                                 <tr>
                                     <td class="text-center">1</td>
                                     <td class="text-center">3245345</td>
+                                    <td class="text-center">100000</td>
                                     <td class="text-center">100000</td>
                                     <td class="text-center">14/05/2022</td>
                                 </tr>
@@ -366,12 +368,14 @@
                 url:`/ajax/report/detail-hoa-hong/${user_id}`,
                 success:function (data) {
                     let html = '';
+                    console.log(11111,data);
                     if(data && data.length > 0){
                         data.forEach((f,i)=>{
                             html += `
                                 <tr>
                                     <td class="text-center">${i+1}</td>
                                     <td class="text-center">${f.order.customer.phone}</td>
+                                    <td class="text-center">${formatNumber(f.order.gross_revenue)}</td>
                                     <td class="text-center">${formatNumber(f.price)}</td>
                                     <td class="text-center">${f.created_at}</td>
                                 </tr>
