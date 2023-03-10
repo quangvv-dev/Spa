@@ -6,11 +6,9 @@ use App\Helpers\Functions;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class Commission extends Model
+class CommissionEmployee extends Model
 {
-    protected $guarded = ['id'];
-    protected $table = 'commissions';
-    public $timestamps = 'true';
+    protected $guarded = [];
 
     public function orders()
     {

@@ -33,4 +33,8 @@ class SupportOrder extends Model
     {
         return $this->belongsTo(User::class, 'support2_id');
     }
+
+    public function order(){
+        return $this->belongsTo(Order::class);
+    }
 }

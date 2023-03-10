@@ -9,6 +9,7 @@ use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Commission;
+use App\Models\CommissionEmployee;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\HistorySms;
@@ -70,12 +71,12 @@ class OrderController extends Controller
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
-//        $spaTherapissts = User::select('id', 'avatar', 'full_name','percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->get();
-//        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR])->get();
+        $spaTherapissts = User::select('id', 'avatar', 'full_name','percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->get();
+        $customer_support = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::TU_VAN_VIEN)->get();
 
-        $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->get();
-        $customer_support = User::select('id', 'avatar', 'full_name')->get();
-        $customer_y_ta = User::select('id', 'avatar', 'full_name')->get();
+//        $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->get();
+//        $customer_support = User::select('id', 'avatar', 'full_name')->get();
+//        $customer_y_ta = User::select('id', 'avatar', 'full_name')->get();
 
 
         $branchs = Branch::search()->pluck('name', 'id');
@@ -248,7 +249,7 @@ class OrderController extends Controller
         $data['support1'] = $support_orders->support1_id?round((setting('exchange_support1') * $price)/100):0;
         $data['support2'] = $support_orders->support2_id?round((setting('exchange_support2') * $price)/100):0;
 
-        Commission::create($data);
+        CommissionEmployee::create($data);
         return 1;
     }
 

@@ -268,6 +268,7 @@
                                     <li><a href="{{url('report/commission')}}">Báo cáo KTV</a></li>
                                 @endif
                                 <li><a href="/report/hoa-hong-ctv">Hoa hồng CTV</a></li>
+                                <li><a href="/report/hoa-hong">Hoa hồng nhân viên</a></li>
                             </ul>
                         </li>
 

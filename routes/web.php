@@ -142,6 +142,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 //        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
         Route::post('user-filter-grid', 'SettingController@userFilterGrid');
 
+        Route::get('report/detail-hoa-hong/{user_id}', 'CommissionController@detailHoaHong');
     });
 
     Route::resource('rules', 'RuleController');//Automation
@@ -187,6 +188,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('group-sale', 'SalesController@indexGroupCategory')->name('report.groupSale');
         Route::get('commission', 'CommissionController@statistical')->name('report.commission');
         Route::get('hoa-hong-ctv', 'CommissionController@statisticalCTV');
+        Route::get('hoa-hong', 'CommissionController@statisticalRose');
         Route::get('waiters', 'CommissionController@statisticalWaiters')->name('report.waiters');
         Route::get('tasks', 'TaskController@statistical')->name('report.tasks');
         Route::get('branchs', 'Branch\BranchController@index')->name('report.branchs');
