@@ -296,9 +296,12 @@
                     </div>
                     @if($check_admin)
                         <div class="col-lg-2 col-md-6">
-                            {!! Form::select('searchUser', [1=>'Bác sĩ',2=>'Tư vấn',3=>'Lễ tân - Kỹ thuật viên'], null, array('class' => 'form-control', 'placeholder'=>'Tất cả',)) !!}
+                            {!! Form::select('searchUser', [\App\Constants\DepartmentConstant::DOCTOR=>'Bác sĩ',\App\Constants\DepartmentConstant::TU_VAN_VIEN=>'Tư vấn',\App\Constants\DepartmentConstant::WAITER=>'Lễ tân',\App\Constants\DepartmentConstant::TECHNICIANS=>'Kỹ thuật viên'], null, array('class' => 'form-control', 'placeholder'=>'Tất cả',)) !!}
                         </div>
                     @endif
+                    <div class="col-lg-2 col-md-6">
+                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control', 'placeholder'=>'Chọn chi nhánh',)) !!}
+                    </div>
                     <button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm</button>
                 </div>
                 <div class="heading-elements">

@@ -258,15 +258,16 @@ class CommissionController extends Controller
         return view('waiters.index', compact('users'));
     }
 
-    public function statisticalCTV(Request $request){
-        if(!$request->start_date){
+    public function statisticalCTV(Request $request)
+    {
+        if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
 
         $request['start_date'] = "21-06-2021";
 
-        $ctv = Customer::select('id','full_name','is_gioithieu')->where('type_ctv',1)->get()->map(function ($item) use ($request){
-            $orders = Order::where('member_id',$item->id)
+        $ctv = Customer::select('id', 'full_name', 'is_gioithieu')->where('type_ctv', 1)->get()->map(function ($item) use ($request) {
+            $orders = Order::where('member_id', $item->id)
                 ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
                     $q->whereBetween('created_at', [
                         Functions::yearMonthDay($request['start_date']) . " 00:00:00",
@@ -277,23 +278,24 @@ class CommissionController extends Controller
             $orders1 = $orders1->pluck('id')->toArray();
             $item->doanh_so = $orders->sum('all_total');
 
-            $item->doanh_thu = PaymentHistory::whereIn('order_id',$orders1)->sum('price');
+            $item->doanh_thu = PaymentHistory::whereIn('order_id', $orders1)->sum('price');
 
-            $item->doanh_thu_ctv = HistoryWalletCtv::where('customer_id',$item->id)->sum('price');
+            $item->doanh_thu_ctv = HistoryWalletCtv::where('customer_id', $item->id)->sum('price');
 
             $item->total_khach_gt = Customer::whereBetween('created_at', [
                 Functions::yearMonthDay($request['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($request['end_date']) . " 23:59:59",
-            ])->where('is_gioithieu',$item->id)->count();
+            ])->where('is_gioithieu', $item->id)->count();
 
             return $item;
         });
-        return view('statistics.hoa_hong_ctv',compact('ctv'));
+        return view('statistics.hoa_hong_ctv', compact('ctv'));
     }
 
 
-    public function statisticalRose(Request $request){
-        if(!$request->start_date){
+    public function statisticalRose(Request $request)
+    {
+        if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
 
@@ -314,76 +316,69 @@ class CommissionController extends Controller
         $paginate = 20;
         $current_user = Auth::user();
 
-        $check_bac_si = $current_user->department_id == DepartmentConstant::DOCTOR ? true : false;
-        $check_tu_van = $current_user->department_id == DepartmentConstant::TU_VAN_VIEN ? true : false;
-        $check_le_tan = in_array($current_user->department_id,[DepartmentConstant::WAITER, DepartmentConstant::TECHNICIANS]) ? true : false;
-
         if ($current_user->department_id == DepartmentConstant::ADMIN) {
             $check_admin = 1;
+            $users = User::whereIn('department_id', [DepartmentConstant::DOCTOR, DepartmentConstant::TU_VAN_VIEN, UserConstant::WAITER, DepartmentConstant::TECHNICIANS])
+                ->when(isset($request->searchUser) && $request->searchUser, function ($q) use ($request) {
+                    $q->where('department_id', $request->searchUser);
+                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                })->paginate($paginate);
         } else {
             $check_admin = 0;
+            $users = User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id', $request->searchUser)->paginate($paginate);
         }
 
-        $users =  User::paginate($paginate);
-
-        if($check_bac_si || $request->searchUser == 1){ // bác sĩ, y tá
-            $users = User::select('id', 'avatar', 'full_name','percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->paginate($paginate);
-        }
-        else if($check_tu_van || $request->searchUser == 2){ //tư vấn
-            $users = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::TU_VAN_VIEN)->paginate($paginate);
-        }
-        else if($check_le_tan || $request->searchUser == 3){ //lễ tân, kỹ thuật viên
-            $users = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [UserConstant::WAITER,DepartmentConstant::TECHNICIANS])->paginate($paginate);
-        }
-
-        $users = $users->setCollection($users->getCollection()->map(function ($item) use ($request){
+        $users = $users->setCollection($users->getCollection()->map(function ($item) use ($request) {
             $price = 0;
             $count = 0;
-           $commisson = CommissionEmployee::whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-               ->with('supportOrder')->whereHas('supportOrder',function ($qr) use ($item){
-                   $qr->where('doctor_id',$item->id)->orWhere('yta1_id',$item->id)->orWhere('yta2_id',$item->id)->orWhere('support1_id',$item->id)->orWhere('support2_id',$item->id);
-               })->get();
-           foreach ($commisson as $i){
-               if ($item->id == $i->supportOrder->doctor_id){
-                   $price += $i->doctor;
-                   $count++;
-               }elseif ($item->id == $i->supportOrder->yta1_id){
-                   $price += $i->yta1;
-                   $count++;
-               }elseif ($item->id == $i->supportOrder->yta2_id){
-                   $price += $i->yta2;
-                   $count++;
-               }elseif ($item->id == $i->supportOrder->support1_id){
-                   $price += $i->support1;
-                   $count++;
-               }elseif ($item->id == $i->supportOrder->support2_id){
-                   $price += $i->support1;
-                   $count++;
-               }
-           }
-           $item->price_rose = $price;
-           $item->count = $count;
-           return $item;
+            $commisson = CommissionEmployee::whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                ->with('supportOrder')->whereHas('supportOrder', function ($qr) use ($item) {
+                    $qr->where('doctor_id', $item->id)->orWhere('yta1_id', $item->id)->orWhere('yta2_id', $item->id)->orWhere('support1_id', $item->id)->orWhere('support2_id', $item->id);
+                })->get();
+            foreach ($commisson as $i) {
+                if ($item->id == $i->supportOrder->doctor_id) {
+                    $price += $i->doctor;
+                    $count++;
+                } elseif ($item->id == $i->supportOrder->yta1_id) {
+                    $price += $i->yta1;
+                    $count++;
+                } elseif ($item->id == $i->supportOrder->yta2_id) {
+                    $price += $i->yta2;
+                    $count++;
+                } elseif ($item->id == $i->supportOrder->support1_id) {
+                    $price += $i->support1;
+                    $count++;
+                } elseif ($item->id == $i->supportOrder->support2_id) {
+                    $price += $i->support1;
+                    $count++;
+                }
+            }
+            $item->price_rose = $price;
+            $item->count = $count;
+            return $item;
         }));
 
-        if($request->ajax()){
-            return view('statistics.hoa_hong_ajax',compact('users'));
+        $branchs = Branch::pluck('name', 'id')->toArray();
+        if ($request->ajax()) {
+            return view('statistics.hoa_hong_ajax', compact('users'));
         }
-        return view('statistics.hoa_hong',compact('users','check_admin'));
+        return view('statistics.hoa_hong', compact('users', 'check_admin', 'branchs'));
     }
 
-    public function detailHoaHong($user_id){
-        $support_order = SupportOrder::where('doctor_id',$user_id)->orWhere('yta1_id',$user_id)->orWhere('yta2_id',$user_id)->orWhere('support1_id',$user_id)->orWhere('support2_id',$user_id)->with('order.customer')->get()->map(function($m) use ($user_id){
-            if ($user_id == $m->doctor_id){
-                $m->price = CommissionEmployee::where('order_id',$m->order_id)->select('*', \DB::raw('SUM(doctor) AS all_doctor'))->groupBy('order_id')->first()->all_doctor;
-            }elseif ($user_id == $m->yta1_id){
-                $m->price = CommissionEmployee::where('order_id',$m->order_id)->select('*', \DB::raw('SUM(yta1) AS all_yta1'))->groupBy('order_id')->first()->all_yta1;
-            }elseif ($user_id == $m->yta2_id){
-                $m->price = CommissionEmployee::where('order_id',$m->order_id)->select('*', \DB::raw('SUM(yta2) AS all_yta2'))->groupBy('order_id')->first()->all_yta2;
-            }elseif ($user_id == $m->support1_id){
-                $m->price = CommissionEmployee::where('order_id',$m->order_id)->select('*', \DB::raw('SUM(support1) AS all_support1'))->groupBy('order_id')->first()->all_support1;
-            }elseif ($user_id == $m->support2_id){
-                $m->price = CommissionEmployee::where('order_id',$m->order_id)->select('*', \DB::raw('SUM(support2) AS all_support2'))->groupBy('order_id')->first()->all_support2;
+    public function detailHoaHong($user_id)
+    {
+        $support_order = SupportOrder::where('doctor_id', $user_id)->orWhere('yta1_id', $user_id)->orWhere('yta2_id', $user_id)->orWhere('support1_id', $user_id)->orWhere('support2_id', $user_id)->with('order.customer')->get()->map(function ($m) use ($user_id) {
+            if ($user_id == $m->doctor_id) {
+                $m->price = CommissionEmployee::where('order_id', $m->order_id)->select('*', \DB::raw('SUM(doctor) AS all_doctor'))->groupBy('order_id')->first()->all_doctor;
+            } elseif ($user_id == $m->yta1_id) {
+                $m->price = CommissionEmployee::where('order_id', $m->order_id)->select('*', \DB::raw('SUM(yta1) AS all_yta1'))->groupBy('order_id')->first()->all_yta1;
+            } elseif ($user_id == $m->yta2_id) {
+                $m->price = CommissionEmployee::where('order_id', $m->order_id)->select('*', \DB::raw('SUM(yta2) AS all_yta2'))->groupBy('order_id')->first()->all_yta2;
+            } elseif ($user_id == $m->support1_id) {
+                $m->price = CommissionEmployee::where('order_id', $m->order_id)->select('*', \DB::raw('SUM(support1) AS all_support1'))->groupBy('order_id')->first()->all_support1;
+            } elseif ($user_id == $m->support2_id) {
+                $m->price = CommissionEmployee::where('order_id', $m->order_id)->select('*', \DB::raw('SUM(support2) AS all_support2'))->groupBy('order_id')->first()->all_support2;
             }
             return $m;
         });
