@@ -35,6 +35,7 @@ class CommissionController extends Controller
     {
         $this->middleware('permission:report.commission', ['only' => ['statistical']]);
         $this->middleware('permission:report.waiters', ['only' => ['statisticalWaiters']]);
+        $this->middleware('permission:report.hoa-hong', ['only' => ['statisticalRose']]);
         $this->commissionService = $commissionService;
         $branchs = Branch::search()->pluck('name', 'id');
         $location = Branch::$location;

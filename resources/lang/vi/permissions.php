@@ -26,6 +26,7 @@ return [
     "statistics.index"         => "Doanh thu",
     "report.groupSale"         => "Doanh thu nhóm sản phẩm & Dịch vụ",
     "report.sale"              => "Xếp hạng Telesales",
+    "report.hoa-hong"          => "Thống kê hoa hồng",
     "sms.history"              => "Tin nhắn đã gửi",
     //Quyền nâng cao
     'marketing.seeding_number' => "Kho số seeding",
