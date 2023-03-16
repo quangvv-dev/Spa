@@ -111,12 +111,14 @@
                         {{--<a class="nav-link" href="#">Đính kèm</a>--}}
                     {{--</nav>--}}
                 {{--</div>--}}
-                <div class="row">
+                <form action="{{route('approval.order.store')}}" method="post">
+                    @csrf
+                    <input type="hidden" name="type" value="0">
+                    <div class="row">
                     <div class="col-12">
                         <div class="form-body disabled-done" style="pointer-events: auto; opacity: 1;">
                             <div class="form-section">
                                 <div class="detail-section-title">Thông tin chung</div>
-
                                 <div class="form-section-content" style="">
                                     <div class="form-group form-small">
                                         <div class="row form-group-body">
@@ -124,24 +126,11 @@
                                                  style="padding-right: 5px;">
                                                 <label class="form-group-label required">Lý do</label>
                                                 <form>
-                                                    <select name="reason" class="form-control select2">
-                                                        <option></option>
-                                                        <option value="4">Nghỉ ốm</option>
-                                                        <option value="5">Nghỉ thai sản</option>
-                                                        <option value="22">Nghỉ không lương</option>
-                                                        <option value="24">Nghỉ phép năm</option>
-                                                        <option value="32">Nghỉ khác</option>
-                                                        <option value="34">Nghỉ con ốm</option>
-                                                        <option value="35">Nghỉ dưỡng sức sau ốm đau</option>
-                                                        <option value="36">Nghỉ hội nghị, học tập</option>
-                                                        <option value="37">Nghỉ dưỡng sức sau thai sản</option>
-                                                        <option value="38">Nghỉ dưỡng sức sau điều trị thương tật,
-                                                            tai nạn
-                                                        </option>
-                                                        <option value="39">Nghỉ bù</option>
-                                                        <option value="40">Nghỉ tai nạn</option>
-                                                        <option value="41">Nghỉ công tác</option>
-                                                        <option value="42">Ngày nghỉ hàng tuần theo chế độ</option>
+                                                    <select name="reason_id" class="form-control select2">
+                                                        @forelse($reasons as $item)
+                                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                                            @empty
+                                                        @endforelse
                                                     </select>
                                                 </form>
                                             </div>
@@ -165,9 +154,9 @@
                                                                         giờ</label>
                                                                     {{--<input placeholder="hh:mm" class="form-control"--}}
                                                                            {{--autocomplete="off">--}}
-                                                                    <select name="" id="" class="form-control">
+                                                                    <select name="time_to" id="" class="form-control">
                                                                         @forelse($time as $key=> $item)
-                                                                            <option value="{{$key}}">{{$item}}</option>
+                                                                            <option value="{{$item}}">{{$key}}</option>
                                                                         @empty
                                                                         @endforelse
                                                                     </select>
@@ -186,9 +175,9 @@
                                                                         giờ</label>
                                                                     {{--<input placeholder="hh:mm" class="form-control"--}}
                                                                            {{--autocomplete="off">--}}
-                                                                    <select name="" id="" class="form-control">
+                                                                    <select name="time_end" id="" class="form-control">
                                                                         @forelse($time as $key=> $item)
-                                                                            <option value="{{$key}}">{{$item}}</option>
+                                                                            <option value="{{$item}}">{{$key}}</option>
                                                                         @empty
                                                                         @endforelse
                                                                     </select>
@@ -199,7 +188,7 @@
                                                                     {{--<input class="form-control" autocomplete="off"--}}
                                                                            {{--placeholder="dd/mm/yyyy">--}}
                                                                     <input class="form-control" id="search" autocomplete="off"
-                                                                           data-toggle="datepicker" placeholder="dd/mm/yyyy" name="date"
+                                                                           data-toggle="datepicker" placeholder="dd/mm/yyyy" name="date_end"
                                                                            type="text">
                                                                 </div>
                                                             </div>
@@ -218,27 +207,13 @@
                                 <div>
                                     <div class="form-group form-input form-group-select">
                                         <label class="form-group-label required">Người duyệt 1</label>
-                                        <form>
-                                            <select name="app_approval_ids[]"
+                                            <select name="accept_id"
                                                     class="form-control select2">
-                                                <option xs-empty-option="true"></option>
-                                                <option value="1">Admin</option>
-                                                <option value="3">Lê Thị Thanh Hằng</option>
-                                                <option value="8">Liêu Văn Ninh</option>
-                                                <option value="12">Phạm Thị Khánh Ly</option>
-                                                <option value="14">Ma Khắc Quang</option>
-                                                <option value="16">Hoàng Thị Nhung</option>
-                                                <option value="17">Nguyễn Hữu An</option>
-                                                <option value="87">Nguyễn Đức Toàn</option>
-                                                <option value="130">Nguyễn Trung Hiếu</option>
-                                                <option value="199">Hoàng Diệu Linh</option>
-                                                <option value="214">Nguyễn Thị Vân Anh</option>
-                                                <option value="224">Nguyễn Thị Như Quỳnh</option>
-                                                <option value="300">Vi Văn Giang</option>
-                                                <option value="475">Nguyễn Thúy Hằng</option>
-                                                <option value="586">Nguyễn Hoàng Thanh Thảo</option>
+                                                @forelse($user_accept as $item)
+                                                    <option value="{{$item->id}}">{{$item->full_name}}</option>
+                                                @empty
+                                                @endforelse
                                             </select>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -250,7 +225,7 @@
                                 <div class="form-group form-input form-small form-group-editor form-group-control">
                                     <label class="form-group-label">Mô tả</label>
                                     <textarea style="flex-grow:1;max-width:100%"
-                                              name="desc" placeholder="Nhập mô tả"
+                                              name="description" placeholder="Nhập mô tả"
                                               class="form-control"></textarea>
                                 </div>
                             </div>
@@ -258,16 +233,19 @@
                     </div>
                     <div class="card-footer">
                         <div class="form-group form-buttons">
-                            <button class="btn disabled-done">Cập nhật</button>
-                            <div class="btn btn-default" rel="cancel">Hủy bỏ</div>
+                            <button class="btn btn-primary">Cập nhật</button>
+                            <div class="btn btn-secondary" rel="cancel">Hủy bỏ</div>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
         <!-- table-responsive -->
     </div>
     </div>
+    <input type="hidden" class="orderId" value="{{$id}}">
+
 @endsection
 @section('_script')
     <script>

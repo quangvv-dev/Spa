@@ -111,114 +111,101 @@
                 {{--<a class="nav-link" href="#">Đính kèm</a>--}}
                 {{--</nav>--}}
                 {{--</div>--}}
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-body disabled-done" style="pointer-events: auto; opacity: 1;">
-                            <div class="form-section">
-                                <div class="detail-section-title">Thông tin chung</div>
+                <form action="{{route('approval.order.store')}}" method="post">
+                    @csrf
+                        <input type="hidden" name="type" value="1">
+                        <div class="row">
+                        <div class="col-12">
+                            <div class="form-body disabled-done" style="pointer-events: auto; opacity: 1;">
+                                <div class="form-section">
+                                    <div class="detail-section-title">Thông tin chung</div>
 
-                                <div class="form-group form-small" style="padding-right: 0px;">
-                                    <div class="row form-group-body">
-                                        <div class="form-group form-input form-group-control col-4">
-                                            <label class="form-group-label required">Ngày</label>
-                                            {{--<input placeholder="dd/mm/yyyy" class="form-control"--}}
-                                            {{--autocomplete="off">--}}
-                                            <input class="form-control" id="search" autocomplete="off"
-                                                   data-toggle="datepicker" placeholder="dd/mm/yyyy" name="date"
-                                                   type="text">
+                                    <div class="form-group form-small" style="padding-right: 0px;">
+                                        <div class="row form-group-body">
+                                            <div class="form-group form-input form-group-control col-4">
+                                                <label class="form-group-label required">Ngày</label>
+                                                {{--<input placeholder="dd/mm/yyyy" class="form-control"--}}
+                                                {{--autocomplete="off">--}}
+                                                <input class="form-control" id="search" autocomplete="off"
+                                                       data-toggle="datepicker" placeholder="dd/mm/yyyy" name="date" required
+                                                       type="text">
+                                            </div>
+                                            <div class="form-group form-input form-group-control col-4">
+                                                <label class="form-group-label required">Giờ</label>
+                                                {{--<input placeholder="hh:mm" class="form-control"--}}
+                                                {{--autocomplete="off">--}}
+                                                <select name="time_to" id="" class="form-control" required>
+                                                    <option value=""></option>
+                                                    @forelse($time as $key=> $item)
+                                                        <option value="{{$item}}">{{$key}}</option>
+                                                    @empty
+                                                    @endforelse
+                                                </select>
+                                                {{--<input class="form-control" autocomplete="off" data-toggle="datepicker-hm" placeholder="dd/mm/yyyy" name="date" type="text">--}}
+
+                                            </div>
+                                            <div class="form-group form-input disabled-done form-group-control col-4"
+                                                 style="padding-left: 5px;">
+                                                <label class="form-group-label">Ca</label>
+                                                <input type="text" class="form-control" readonly="">
+                                            </div>
+
+                                            <div class="form-group form-input form-group-select form-group-control col-8"
+                                                 style="padding-right: 5px;">
+                                                <label class="form-group-label required">Lý do</label>
+                                                    <select name="reason_id" class="form-control select2" required>
+                                                        @forelse($reasons as $item)
+                                                        <option value="{{$item->id}}">{{$item->name}} (Tối đa {{$item->count}} lần / Tháng)</option>
+                                                            @empty
+                                                        @endforelse
+                                                    </select>
+                                            </div>
+                                            <div class="form-group form-input disabled-done form-group-control col-4"
+                                                 style="padding-left: 5px;">
+                                                <label class="form-group-label">Phạt tiền</label>
+                                                <input type="text" class="form-control" readonly="" value="Không">
+                                            </div>
                                         </div>
-                                        <div class="form-group form-input form-group-control col-4">
-                                            <label class="form-group-label required">Giờ</label>
-                                            {{--<input placeholder="hh:mm" class="form-control"--}}
-                                            {{--autocomplete="off">--}}
-                                            <select name="" id="" class="form-control">
-                                                @forelse($time as $key=> $item)
-                                                    <option value="{{$key}}">{{$item}}</option>
+
+                                    </div>
+                                    <div class="form-group form-input form-group-select">
+                                        <label class="form-group-label required">Người duyệt 1</label>
+                                            <select name="accept_id" class="form-control select2" required>
+                                                @forelse($user_accept as $item)
+                                                    <option value="{{$item->id}}">{{$item->full_name}}</option>
                                                 @empty
                                                 @endforelse
                                             </select>
-                                            {{--<input class="form-control" autocomplete="off" data-toggle="datepicker-hm" placeholder="dd/mm/yyyy" name="date" type="text">--}}
-
-                                        </div>
-                                        <div class="form-group form-input disabled-done form-group-control col-4"
-                                             style="padding-left: 5px;">
-                                            <label class="form-group-label">Ca</label>
-                                            <input type="text" class="form-control" readonly="">
-                                        </div>
-
-                                        <div class="form-group form-input form-group-select form-group-control col-8"
-                                             style="padding-right: 5px;">
-                                            <label class="form-group-label required">Lý do</label>
-                                            <form>
-                                                <select name="reason" class="form-control select2">
-                                                    <option></option>
-                                                    <option value="1">Máy chấm công hỏng (Tối đa 2 lần / Tuần)</option>
-                                                    <option value="1">Công tác (Tối đa 2 lần / Tháng)</option>
-                                                    <option value="1">Quên chốt vân tay (Tối đa 1 lần / Tuần)</option>
-                                                    <option value="1">Chưa có mã vân tay (Tối đa 1 lần / Tuần)</option>
-                                                    <option value="1">Lý do khác (Tối đa 1 lần / Tháng)</option>
-                                                </select>
-                                            </form>
-                                        </div>
-                                        <div class="form-group form-input disabled-done form-group-control col-4"
-                                             style="padding-left: 5px;">
-                                            <label class="form-group-label">Phạt tiền</label>
-                                            <input type="text" class="form-control" readonly="" value="Có">
-                                        </div>
                                     </div>
-
                                 </div>
-                                <div class="form-group form-input form-group-select">
-                                    <label class="form-group-label required">Người duyệt 1</label>
-                                    <form>
-                                        <select name="app_approval_ids[]"
-                                                class="form-control select2">
-                                            <option xs-empty-option="true"></option>
-                                            <option value="1">Admin</option>
-                                            <option value="3">Lê Thị Thanh Hằng</option>
-                                            <option value="8">Liêu Văn Ninh</option>
-                                            <option value="12">Phạm Thị Khánh Ly</option>
-                                            <option value="14">Ma Khắc Quang</option>
-                                            <option value="16">Hoàng Thị Nhung</option>
-                                            <option value="17">Nguyễn Hữu An</option>
-                                            <option value="87">Nguyễn Đức Toàn</option>
-                                            <option value="130">Nguyễn Trung Hiếu</option>
-                                            <option value="199">Hoàng Diệu Linh</option>
-                                            <option value="214">Nguyễn Thị Vân Anh</option>
-                                            <option value="224">Nguyễn Thị Như Quỳnh</option>
-                                            <option value="300">Vi Văn Giang</option>
-                                            <option value="475">Nguyễn Thúy Hằng</option>
-                                            <option value="586">Nguyễn Hoàng Thanh Thảo</option>
-                                        </select>
-                                    </form>
+                            </div>
+
+
+                            <div class="form-group form-small form-small-custom" v="form.group">
+                                <div class="row form-group-body">
+                                    <div class="form-group form-input form-small form-group-editor form-group-control">
+                                        <label class="form-group-label">Mô tả</label>
+                                        <textarea style="flex-grow:1;max-width:100%"
+                                                  name="description" placeholder="Nhập mô tả"
+                                                  class="form-control"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="form-group form-small form-small-custom" v="form.group">
-                            <div class="row form-group-body">
-                                <div class="form-group form-input form-small form-group-editor form-group-control">
-                                    <label class="form-group-label">Mô tả</label>
-                                    <textarea style="flex-grow:1;max-width:100%"
-                                              name="desc" placeholder="Nhập mô tả"
-                                              class="form-control"></textarea>
-                                </div>
+                        <div class="card-footer">
+                            <div class="form-group form-buttons">
+                                <button class="btn btn-primary">Cập nhật</button>
+                                <div class="btn btn-secondary" rel="cancel">Hủy bỏ</div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <div class="form-group form-buttons">
-                            <button class="btn disabled-done">Cập nhật</button>
-                            <div class="btn btn-default" rel="cancel">Hủy bỏ</div>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         <!-- table-responsive -->
     </div>
     </div>
+    <input type="hidden" class="orderId" value="{{$id}}">
 @endsection
 @section('_script')
     <script>

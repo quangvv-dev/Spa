@@ -25,7 +25,6 @@
         .beacon-green, .beacon-red {
             opacity: 0.8;
             width: 120px;
-            border: 1px solid #36c870;
             color: #fff !important;
             border-radius: 4px;
             font-size: .8em;
@@ -77,7 +76,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Danh sách đơn từ</h3></br>
+                <h3 class="card-title">Chi tiết đơn</h3></br>
                 {{--<form action="{{url()->current()}}" method="get" id="gridForm">--}}
                 {{--<div class="ml-5">--}}
                 {{--<input type="text" class="form-control" style="height: 33px;" placeholder="Tìm kiếm">--}}
@@ -88,39 +87,46 @@
             <div id="registration-form">
                 <div class="mt-3 mb-3">
                     <nav class="nav">
-                        <a class="nav-link active" href="#">Chi tiết</a>
-                        <a class="nav-link" href="#">Đơn khác</a>
-                        <a class="nav-link" href="#">Đính kèm</a>
+                        {{--<a class="nav-link active" href="#">Chi tiết</a>--}}
+                        {{--<a class="nav-link" href="#">Đơn khác</a>--}}
+                        {{--<a class="nav-link" href="#">Đính kèm</a>--}}
                     </nav>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="detail-section">
-                            <div class="detail-section-title">Thông tin chung</div>
+                            <div class="detail-section-title"
+                                 style="display: flex;align-items: center;justify-content: space-between;">Thông tin
+                                chung
+                                @if($order->status === 0)
+                                    <button class="btn btn-primary acceptOrder">Duyệt đơn</button>
+                                @endif
+                            </div>
                             <div class="detail-section-content">
                                 <div class="detail-group-field">
-                                    <div class="detail-row row" v="detailField">
+                                    <div class="detail-row row">
                                         <div class="col-5">
                                             <div class="detail-label">Họ và tên</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content"><a
-                                                        href="/personnel-profile-profile/view?ID=375">Nguyễn
-                                                    Minh Tiến</a></div>
+                                            <div class="detail-content">
+                                                <a href="">{{@$order->user->full_name}}</a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="detail-row row" v="detailField">
+                                    <div class="detail-row row">
                                         <div class="col-5">
                                             <div class="detail-label">Phòng ban</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content"><span
-                                                        title="HÀ NỘI › Phòng Công nghệ">Phòng Công nghệ</span></div>
+                                            <div class="detail-content">
+                                                <span title="">{{@$order->user->department->name}}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="detail-group-field">
-                                    <div class="detail-row row" v="detailField">
+                                    <div class="detail-row row">
                                         <div class="col-5">
                                             <div class="detail-label">Vị trí</div>
                                         </div>
@@ -128,7 +134,7 @@
                                             <div class="detail-content"></div>
                                         </div>
                                     </div>
-                                    <div class="detail-row row" v="detailField">
+                                    <div class="detail-row row">
                                         <div class="col-5">
                                             <div class="detail-label">Chức vụ</div>
                                         </div>
@@ -138,35 +144,20 @@
                                     </div>
                                 </div>
                                 <div class="detail-group-field">
-                                    <div class="detail-row row" v="detailField">
-                                        <div class="col-5">
-                                            <div class="detail-label">Lý do</div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="detail-content">Nghỉ ốm</div>
-                                        </div>
-                                    </div>
-                                    <div class="detail-row row" v="detailField">
-                                        <div class="col-5">
-                                            <div class="detail-label">Tính công</div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="detail-content">Không</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="detail-group-field">
-                                    <div class="detail-row row" v="detailField">
+                                    <div class="detail-row row">
                                         <div class="col-5">
                                             <div class="detail-label">Trạng thái</div>
                                         </div>
                                         <div class="col-7">
                                             <div class="detail-content">
-                                                <div class="beacon-green" style="opacity:0.8;width:120px">Đã duyệt</div>
+                                                <div class="{{$order->status==1 ? "beacon-green" : ($order->status==0 ? "beacon-red" : 'beacon-red')}}"
+                                                     style="opacity:0.8;width:120px">
+                                                    {{$order->status==1 ? "Đã duyệt" : ($order->status==0 ? "Chờ duyệt" : 'Không duyệt')}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="detail-row row" v="detailField">
+                                    <div class="detail-row row">
                                         <div class="col-5">
                                             <div class="detail-label">Ý kiến người duyệt</div>
                                         </div>
@@ -176,12 +167,12 @@
                                     </div>
                                 </div>
                                 <div class="detail-group-field">
-                                    <div class="detail-row row" v="detailField" style="width: 100%;">
+                                    <div class="detail-row row" style="width: 100%;">
                                         <div class="col-12">
                                             <div class="detail-label">Mô tả</div>
                                         </div>
-                                        <div class="col-12">
-                                            <div class="detail-content"></div>
+                                        <div class="col-12 mt-2">
+                                            <div class="detail-content">{{$order->description}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -203,44 +194,31 @@
 
                                         <div class="table-body draggable-done" _n="body" draggable="false"
                                              _draggable="true">
-                                            <div class="table-pages hidden" _n="page">
-                                                <div class="table-tool" title="Phóng to, thu nhỏ"></div>
-                                                <div class="table-btn-setting" _n="btnSetting"></div>
-                                                <div style="flex-grow: 1"></div>
-                                                <div class="table-page-title" _n="pageTitle"></div>
-                                                <div class="table-page-action table-page-jump" _n="pageJump"
-                                                     title="Chọn trang"><i class="icon-search"></i></div>
-                                                <a class="table-page-action table-page-prev icon-caret-left"
-                                                   _n="pagePrev"></a>
-                                                <a class="table-page-action table-page-next icon-caret-right"
-                                                   _n="pageNext"></a>
-                                            </div>
-                                            <table _n="table" class="table-done" remove-node-monitor="1"
-                                                   add-node-monitor="1" style="table-layout: auto; width: 100%;">
+                                            <table class="table-done" style="table-layout: auto; width: 100%;">
                                                 <colgroup></colgroup>
                                                 <tbody>
                                                 <tr class="table-row-header" r="0">
                                                     <td class="_s _r0 _c0 _r0c0 __r0 __c0"
-                                                        style="width: 27%; min-width: 283.844px;">Bắt đầu
+                                                        style="width: 27%; min-width: 283.844px;">Ngày chốt
                                                     </td>
                                                     <td class="_s _r0 _c1 _r0c1 __r0 __c1"
-                                                        style="width: 26%; min-width: 278.188px;">Kết thúc
+                                                        style="width: 26%; min-width: 278.188px;">Thời gian
                                                     </td>
                                                     <td style="text-align: center; width: 20%; min-width: 218.875px;"
-                                                        class="_s _r0 _c2 _r0c2 __r0 __c2">Số ngày
+                                                        class="_s _r0 _c2 _r0c2 __r0 __c2">Lý do
                                                     </td>
                                                     <td style="text-align: center; min-width: 259.781px;"
-                                                        class="_s _r0 _c3 _r0c3 __r0 __c3">Thời gian theo ca
+                                                        class="_s _r0 _c3 _r0c3 __r0 __c3">Phạt tiền
                                                     </td>
                                                 </tr>
                                                 <tr class="table-row-body" r="1">
-                                                    <td class="_s _r1 _c0 _r1c0 __r1 __c0">08:30 13/02/2023</td>
-                                                    <td class="_s _r1 _c1 _r1c1 __r1 __c1">18:00 14/02/2023</td>
-                                                    <td style="text-align:center" class="_s _r1 _c2 _r1c2 __r1 __c2"> 1
-                                                        ngày 9.5 giờ
+                                                    <td class="_s _r1 _c0 _r1c0 __r1 __c0">{{\Carbon\Carbon::parse($order->date)->format('d-m-Y')}}</td>
+                                                    <td class="_s _r1 _c1 _r1c1 __r1 __c1">{{$order->TimeText}}</td>
+                                                    <td style="text-align:center" class="_s _r1 _c2 _r1c2 __r1 __c2">
+                                                        {{@$order->reason->name}}
                                                     </td>
-                                                    <td style="text-align:center" class="_s _r1 _c3 _r1c3 __r1 __c3">2
-                                                        (ngày)
+                                                    <td style="text-align:center" class="_s _r1 _c3 _r1c3 __r1 __c3">
+                                                        {{@$order->phat_tien == 0 ? 'Không' : 'Có'}}
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -258,8 +236,35 @@
             <!-- table-responsive -->
         </div>
     </div>
+    @include('cham_cong.order.modal_accept')
 @endsection
 @section('_script')
     <script>
+
+        $(document).on('click', '.acceptOrder', function () {
+            $('#myModalDuyet').modal('show');
+        })
+
+        $(document).on('click', '.submitAccept', function () {
+            let favorite = [$('orderId').val()];
+            let type = 1; // đơn checkin
+
+            // console.log(222222,favorite);return
+            $.ajax({
+                url: '/approval/update-array-order',
+                method: 'put',
+                data: {
+                    array_id: favorite,
+                    type: type
+                },
+                success: function (data) {
+                    if (data) {
+                        alertify.success('Cập nhật thành công !')
+                    } else {
+                        alertify.error('Cập nhật không thành công !')
+                    }
+                }
+            })
+        })
     </script>
 @endsection

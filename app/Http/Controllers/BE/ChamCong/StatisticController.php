@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\DB;
 
 class StatisticController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:approval', ['only' => ['index','store','update','destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

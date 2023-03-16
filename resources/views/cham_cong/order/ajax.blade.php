@@ -1,9 +1,7 @@
-<div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th ><input type="checkbox" id="checkAll"/></th>
-            <th class="text-center">Người tạo</th>
+            <th><input type="checkbox" id="checkAll"/></th>
             <th class="text-center">Mã NV</th>
             <th class="text-center">Họ và tên</th>
             <th class="text-center">Trạng thái</th>
@@ -15,28 +13,26 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td><input type="checkbox" getdataitem></td>
-            <td class="text-center">
-                <a href="https://adamgroup.1office.vn/approval-approval/list?menu=all&amp;v=list&amp;tab=all&amp;created_by_id=269">
-                    <div class="users-summary" v="users" n="1">
-                        <img class="userlink lazy-photo online" uid="269" src="https://adamgroup.1office.vn/packages/4x/style/images/letters/t.png" title="Online lúc 14:36:11">
-                    </div>
-                </a>
-            </td>
-            <td class="text-center">IT-2</td>
-            <td class="text-center">Nguyễn Minh Tiến</td>
-            <td class="text-center">
-                <a href="https://adamgroup.1office.vn/approval-approval/list?menu=all&amp;v=list&amp;tab=all&amp;app_approval_status=APPROVED">
-                    <div class="beacon-green" style="opacity:0.8;width:120px">Đã duyệt</div>
-                </a>
-            </td>
-            <td class="text-center">Đơn xin nghỉ</td>
-            <td class="text-center">Phòng công nghệ</td>
-            <td class="text-center">IT</td>
-            <td class="text-center">Nghỉ ốm</td>
-            <td class="text-center">15/02/2023</td>
-        </tr>
+        @forelse($docs as $item)
+            <tr>
+                <td><input type="checkbox" getdataitem value="{{$item->id}}"></td>
+                <td class="text-center"></td>
+                <td class="text-center"><a href="/approval/order/show/{{$item->id}}/{{$item->type}}">{{@$item->user->full_name}}</a></td>
+                <td class="text-center">
+                    <a href="">
+                        <div class="{{$item->status==1 ? "beacon-green" : ($item->status==0 ? "beacon-red" : 'beacon-red')}}" style="opacity:0.8;width:120px">
+                            {{$item->status==1 ? "Đã duyệt" : ($item->status==0 ? "Chờ duyệt" : 'Không duyệt')}}
+                        </div>
+                    </a>
+                </td>
+                <td class="text-center">{{$item->type==0 ? "Đơn nghỉ" : 'Đơn check-in/check-out'}}</td>
+                <td class="text-center">{{@$item->user->department->name}}</td>
+                <td class="text-center"></td>
+                <td class="text-center">{{@$item->reason->name}}</td>
+                <td class="text-center">{{$item->created_at}}</td>
+            </tr>
+        @empty
+        @endforelse
         </tbody>
     </table>
     {{--<div class="pull-left">--}}
@@ -50,5 +46,4 @@
     <div class="float-right">
         {{$docs->links()}}
     </div>
-</div>
 

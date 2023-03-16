@@ -13,6 +13,7 @@
                             <th class="text-white">STT</th>
                             <th class="text-white text-center">Lý do</th>
                             <th class="text-white text-center">Số lần / tháng</th>
+                            <th class="text-white text-center">Phạt tiền</th>
                             <th class="text-white text-center">Type</th>
                             <th class="text-center nowrap">
                                 <a id="add_new_reason" style="cursor: pointer"><i class="fa fa-plus"></i> Thêm</a>
@@ -27,8 +28,14 @@
                                 <td class="text-center"><input type="text" class="form-control count" value="{{$item->count}}"></td>
                                 <td>
                                     <select name="" id="" class="form-control type">
-                                        <option value="0">Đơn Nghỉ</option>
-                                        <option value="1">Đơn Checkin/Checkout</option>
+                                        <option value="0" {{$item->type == 0 ? 'selected' : ''}}>Đơn Nghỉ</option>
+                                        <option value="1" {{$item->type == 1 ? 'selected' : ''}}>Đơn Checkin/Checkout</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="" id="" class="form-control phat_tien">
+                                        <option value="0" {{$item->phat_tien == 0 ? 'selected' : ''}}>Không</option>
+                                        <option value="1" {{$item->phat_tien == 1 ? 'selected' : ''}}>Có</option>
                                     </select>
                                 </td>
                                 <td class="text-center">
@@ -69,6 +76,8 @@
             let data = {
                 name: $(this).closest('tr').find('.name').val(),
                 count: $(this).closest('tr').find('.count').val(),
+                type: $(this).closest('tr').find('.type').val(),
+                phat_tien: $(this).closest('tr').find('.phat_tien').val(),
             }
             $.ajax({
                 url: `/approval/reason/${id}`,
@@ -85,5 +94,7 @@
                 }
             })
         })
+
+
     </script>
 @endsection

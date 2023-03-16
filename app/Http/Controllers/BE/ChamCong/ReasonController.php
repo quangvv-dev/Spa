@@ -8,6 +8,11 @@ use App\Http\Controllers\Controller;
 
 class ReasonController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:approval', ['only' => ['index','store','update','destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +42,7 @@ class ReasonController extends Controller
      */
     public function store(Request $request)
     {
-        Reason::create();
+        Reason::create($request->all());
         return 1;
 //        dd($request->all());
     }

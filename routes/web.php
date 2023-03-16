@@ -283,6 +283,10 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
     Route::group(['namespace' => 'ChamCong', 'prefix' => 'approval', 'as' => 'approval.'], function () {
         Route::resource('order', 'OrderController');
+        Route::get('order/create/{type}', 'OrderController@createOrder');
+        Route::get('order/show/{id}/{type}', 'OrderController@showDetail');
+        Route::put('update-order','OrderController@accept');
+        Route::put('update-array-order','OrderController@acceptArrayOrder');
         Route::get('statistic', 'StatisticController@index');
         Route::resource('reason', 'ReasonController');
     });
