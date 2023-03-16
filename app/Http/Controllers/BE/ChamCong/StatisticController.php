@@ -30,7 +30,7 @@ class StatisticController extends Controller
         } else {
             $end = now()->endOfMonth()->format('d');
         }
-        $docs = User::select('id', 'full_name', 'approval_code', 'branch_id')->get()->map(function ($item) use ($end, $year, $request) {
+        $docs = User::select('id', 'full_name', 'approval_code', 'branch_id', 'department_id')->get()->map(function ($item) use ($end, $year, $request) {
             $approval = [];
             $late = [];
             $early = [];

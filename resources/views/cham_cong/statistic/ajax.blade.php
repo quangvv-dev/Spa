@@ -24,10 +24,10 @@
         @forelse($docs as $item)
             <tr>
                 <td class="text-center">1</td>
-                <td class="text-center"></td>
+                <td class="text-center">{{$item->full_name}}</td>
 {{--                <td class="text-center">{{$item->full_name}}</td>--}}
-                <td class="text-center">Phòng công nghệ</td>
-                <td class="text-center">IT</td>
+                <td class="text-center">{{@$item->department->name}}</td>
+                <td class="text-center"></td>
                 @for($i = 1; $i<= $end; $i++)
                     <td class="text-center pointer showModal">{{$item->approval[$i]}}</td>
                 @endfor
