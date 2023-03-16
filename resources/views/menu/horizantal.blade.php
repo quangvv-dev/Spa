@@ -322,6 +322,8 @@
                     <div class="sub-item">
                         <ul>
                             <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
+                            <li><a href="{{url('approval/statistic')}}">Chấm công</a></li>
+                            <li><a href="{{url('approval/order')}}">Đơn từ</a></li>
                         </ul>
                     </div>
                 </li>
