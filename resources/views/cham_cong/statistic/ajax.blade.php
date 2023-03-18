@@ -22,14 +22,14 @@
         </thead>
         <tbody>
         @forelse($docs as $item)
-            <tr>
+            <tr data-id="{{$item->id}}">
                 <td class="text-center">1</td>
                 <td class="text-center">{{$item->full_name}}</td>
 {{--                <td class="text-center">{{$item->full_name}}</td>--}}
                 <td class="text-center">{{@$item->department->name}}</td>
                 <td class="text-center"></td>
                 @for($i = 1; $i<= $end; $i++)
-                    <td class="text-center pointer showModal">{{$item->approval[$i]}}</td>
+                    <td class="text-center pointer showModal" data-date="{{$i}}">{{$item->approval[$i]}}</td>
                 @endfor
                 <td>{{array_sum($item->late)}}</td>
                 <td>2</td>

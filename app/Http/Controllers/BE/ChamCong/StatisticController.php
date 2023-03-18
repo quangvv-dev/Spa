@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BE\ChamCong;
 
+use App\Helpers\Functions;
 use App\Http\Controllers\BE\SettingController;
 use App\Models\ChamCong;
 use App\User;
@@ -15,8 +16,9 @@ class StatisticController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:approval', ['only' => ['index','store','update','destroy']]);
+        $this->middleware('permission:approval', ['only' => ['index', 'store', 'update', 'destroy']]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -63,6 +65,7 @@ class StatisticController extends Controller
                 return $fl;
             }
         });
+//        dd($docs);
         return view('cham_cong.statistic.index', compact('end', 'docs'));
     }
 
@@ -133,5 +136,22 @@ class StatisticController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getDetail(Request $request)
+    {
+        $user = User::select('id','approval_code','full_name','department_id')->where('id', $request->user_id)->with(['department',
+            'donTu' => function ($query) use ($request) {
+                $query->where('date', Functions::yearMonthDay($request['date']))->with('reason');
+            },
+            'chamCong' => function ($query) use ($request) {
+                $query->whereBetween('date_time_record', [
+                    Functions::yearMonthDay($request['date']) . " 00:00:00",
+                    Functions::yearMonthDay($request['date']) . " 23:59:59",
+                ]);
+            }
+
+        ])->first();
+        return $user;
     }
 }

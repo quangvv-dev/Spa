@@ -205,7 +205,6 @@
         <!-- table-responsive -->
     </div>
     </div>
-    <input type="hidden" class="orderId" value="{{$id}}">
 @endsection
 @section('_script')
     <script>

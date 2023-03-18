@@ -265,6 +265,8 @@
             <!-- table-responsive -->
         </div>
     </div>
+    <input type="hidden" class="orderId" value="{{@$id}}">
+
     @include('cham_cong.order.modal_accept')
 @endsection
 @section('_script')
@@ -274,7 +276,7 @@
         })
 
         $(document).on('click','.submitAccept',function () {
-            let favorite = [$('orderId').val()];
+            let favorite = [$('.orderId').val()];
             let type = 0; //đơn nghỉ
 
             $.ajax({

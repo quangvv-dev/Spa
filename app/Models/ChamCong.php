@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class ChamCong extends Model
@@ -11,5 +12,8 @@ class ChamCong extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'name_machine', 'name_machine');
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

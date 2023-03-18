@@ -5,7 +5,9 @@ namespace App;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Models\Branch;
+use App\Models\ChamCong;
 use App\Models\Department;
+use App\Models\DonTu;
 use App\Models\Location;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -129,5 +131,13 @@ class User extends Authenticatable
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function chamCong(){
+        return $this->hasMany(ChamCong::class,'ind_red_id','approval_code');
+    }
+
+    public function donTu(){
+        return $this->hasMany(DonTu::class);
     }
 }
