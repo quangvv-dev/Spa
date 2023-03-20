@@ -15,11 +15,27 @@
             @endforeach
         </select>
     </div>
+    {{--<div class="col-md-2 col-xs-12">--}}
+        {{--<select name="gender" class="form-control gender">--}}
+            {{--<option value="">Giới tính</option>--}}
+            {{--<option value="0">Nữ</option>--}}
+            {{--<option value="1">Nam</option>--}}
+        {{--</select>--}}
+    {{--</div>--}}
     <div class="col-md-2 col-xs-12">
-        <select name="gender" class="form-control gender">
-            <option value="">Giới tính</option>
-            <option value="0">Nữ</option>
-            <option value="1">Nam</option>
+        <select name="age_from" class="form-control">
+            <option value="">Chọn độ tuổi</option>
+            @foreach($age_from as $k=> $item)
+                <option value="{{$k}}">{{$item}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-2 col-xs-12">
+        <select name="customer_job" class="form-control">
+            <option value="">Chọn nghề nghiệp</option>
+            @foreach($customer_job as $k=> $item)
+                <option value="{{$k}}">{{$item}}</option>
+            @endforeach
         </select>
     </div>
 

@@ -208,13 +208,14 @@ class CustomerController extends Controller
         } else {
             $user_filter_grid = array_keys($user_filter_list);
         }
-
+        $age_from = AgeAndJob::where('type',0)->pluck('name','id')->prepend('','')->toArray();
+        $customer_job = AgeAndJob::where('type',1)->pluck('name','id')->prepend('','')->toArray();
 
         if ($request->ajax()) {
             return view('customers.ajax', compact('customers', 'statuses', 'rank', 'birthday', 'user_filter_list', 'user_filter_grid', 'customer_group', 'customer_expired'));
         }
 
-        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday', 'user_filter_grid', 'user_filter_list', 'customer_group', 'customer_expired'));
+        return view('customers.index', compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday', 'user_filter_grid', 'user_filter_list', 'customer_group', 'customer_expired','age_from','customer_job'));
     }
 
     /**
