@@ -312,6 +312,7 @@ class CustomerController extends Controller
      */
     public function show(Request $request, $id)
     {
+
         $title = 'Trao đổi';
         $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer')->findOrFail($id);
         $curent_branch = Auth::user()->branch_id ? Auth::user()->branch_id : '';
@@ -398,7 +399,6 @@ class CustomerController extends Controller
         }
         //END
 
-
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
                 'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'departments', 'history', 'wallet',
@@ -415,10 +415,12 @@ class CustomerController extends Controller
     public function edit(Customer $customer)
     {
         $user['birthday'] = Functions::dayMonthYear($customer->birthday);
+        $age_from = AgeAndJob::where('type',0)->pluck('name','id')->prepend('','')->toArray();
+        $customer_job = AgeAndJob::where('type',1)->pluck('name','id')->prepend('','')->toArray();
         $categories = Category::get();
         $categoryId = $customer->categories()->get()->pluck('id')->toArray();
         $title = 'Sửa khách hàng';
-        return view('customers._form', compact('customer', 'title', 'categories', 'categoryId'));
+        return view('customers._form', compact('customer', 'title', 'categories', 'categoryId','age_from','customer_job'));
     }
 
     /**
