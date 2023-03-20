@@ -108,6 +108,10 @@ class Customer extends Model
                 $query->where('source_id', $conditions['source']);
             })->when(isset($conditions['gender']), function ($query) use ($conditions) {
                 $query->where('gender', $conditions['gender']);
+            })->when(isset($conditions['age_from']), function ($query) use ($conditions) {
+                $query->where('age_from', $conditions['age_from']);
+            })->when(isset($conditions['customer_job']), function ($query) use ($conditions) {
+                $query->where('customer_job', $conditions['customer_job']);
             })->when(isset($conditions['call_back']), function ($query) {
                 $params = [
                     'date_from' => Carbon::now()->format('Y-m-d'),
