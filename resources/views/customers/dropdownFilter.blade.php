@@ -39,9 +39,9 @@
         </select>
     </div>
 
-    <div class="col-md-2">
-        {!! Form::select('location_id',$location, null, array('class' => 'form-control location','placeholder'=>'Cụm khu vực')) !!}
-    </div>
+    {{--<div class="col-md-2">--}}
+        {{--{!! Form::select('location_id',$location, null, array('class' => 'form-control location','placeholder'=>'Cụm khu vực')) !!}--}}
+    {{--</div>--}}
     {{--<div class="col-md-2 col-xs-12">--}}
         {{--<select name="carepage_id" class="form-control carepage">--}}
             {{--<option value="">Người tạo</option>--}}
