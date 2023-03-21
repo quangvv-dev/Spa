@@ -60,46 +60,45 @@ class OrderController extends Controller
         $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
         $this->middleware('permission:order.orders-destroy', ['only' => ['order.orders-destroy']]);
 
-        $this->middleware('permission:order.list', ['only' => ['index','indexService']]);
-        $this->middleware('permission:order.edit', ['only' => ['edit','editService']]);
+        $this->middleware('permission:order.list', ['only' => ['index', 'indexService']]);
+        $this->middleware('permission:order.edit', ['only' => ['edit', 'editService']]);
         $this->middleware('permission:order.add', ['only' => ['store']]);
         $this->middleware('permission:order.delete', ['only' => ['destroy']]);
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
         $this->taskService = $taskService;
 
-//        $services = Services::where('type', StatusCode::SERVICE)->orderBy('category_id', 'asc')->orderBy('id', 'desc')
-//            ->get()->pluck('name', 'id')->prepend('-Chọn dịch vụ-', '');
         $status = Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id');
         $order_type = [
             Order::TYPE_ORDER_DEFAULT => 'Đơn thường',
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
 
-        $spaTherapissts = User::select('id', 'avatar', 'full_name','percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->get();
-
-//        $customer_support = User::select('id', 'avatar', 'full_name')->where('department_id', DepartmentConstant::TU_VAN_VIEN)->get();
-        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR,DepartmentConstant::TU_VAN_VIEN])->get();
-
-//        $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->get();
-//        $customer_support = User::select('id', 'avatar', 'full_name')->get();
-//        $customer_y_ta = User::select('id', 'avatar', 'full_name')->get();
-
-
-
-
+        $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->get();
+//        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR,DepartmentConstant::TU_VAN_VIEN])->get();
         $branchs = Branch::search()->pluck('name', 'id');
+
         view()->share([
-//            'services' => $services,
             'status' => $status,
             'order_type' => $order_type,
             'branchs' => $branchs,
-            'customer_support' => $customer_support,
+//            'customer_support' => $customer_support,
             'spaTherapissts' => $spaTherapissts,
             'customer_y_ta' => $spaTherapissts
         ]);
     }
 
+    public function getCustomerSupport($customer)
+    {
+        if (Auth::user()->branch_id) {
+            $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER, DepartmentConstant::DOCTOR, DepartmentConstant::TU_VAN_VIEN])
+                ->where('branch_id', Auth::user()->branch_id)->get();
+        } else {
+            $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER, DepartmentConstant::DOCTOR, DepartmentConstant::TU_VAN_VIEN])
+                ->where('branch_id', $customer->branch_id)->get();
+        }
+        return $customer_support;
+    }
 
     /**
      * Display orders
@@ -113,9 +112,11 @@ class OrderController extends Controller
         $customer = Customer::find($customerId);
         $title = 'Tạo đơn hàng';
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
+        $customer_support = self::getCustomerSupport($customer);
+
         $customers = Customer::pluck('full_name', 'id');
         return view('order.index',
-            compact('title', 'customers', 'customer', 'products'));
+            compact('title', 'customers', 'customer', 'products', 'customer_support'));
     }
 
     /**
@@ -134,8 +135,9 @@ class OrderController extends Controller
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $combo = Services::with('category')->withTrashed()->get();
         $customers = Customer::pluck('full_name', 'id');
+        $customer_support = self::getCustomerSupport($customer);
         return view('order.indexService',
-            compact('title', 'customers', 'customer', 'services', 'products', 'combo'));
+            compact('title', 'customers', 'customer', 'services', 'products', 'combo','customer_support'));
     }
 
     public function getInfoService(Request $request)
@@ -158,7 +160,6 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-//        dd($request->all());
         $customer = Customer::find($request->user_id);
         $param = $request->all();
 
@@ -180,12 +181,12 @@ class OrderController extends Controller
                 DB::rollBack();
             }
             SupportOrder::create([
-                'order_id'=>$order->id,
-                'doctor_id'=>$request->spa_therapisst_id,
-                'yta1_id'=>$request->yta,
-                'yta2_id'=>$request->yta2,
-                'support1_id'=>$request->support_id,
-                'support2_id'=>$request->support_id2,
+                'order_id' => $order->id,
+                'doctor_id' => $request->spa_therapisst_id,
+                'yta1_id' => $request->yta,
+                'yta2_id' => $request->yta2,
+                'support1_id' => $request->support_id,
+                'support2_id' => $request->support_id2,
                 'branch_id' => $param['branch_id']
             ]);
             $countOrders = Order::select('id')->where('member_id', $customer->id)->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])->count();
@@ -232,31 +233,32 @@ class OrderController extends Controller
         }
     }
 
-    public function commissionOrder($order_id,$payment_id,$price){
-        $support_orders = SupportOrder::where('order_id',$order_id)->first();
+    public function commissionOrder($order_id, $payment_id, $price)
+    {
+        $support_orders = SupportOrder::where('order_id', $order_id)->first();
         $user_doctor = User::find($support_orders->doctor_id);
-        if($user_doctor){
+        if ($user_doctor) {
             $percent_rose = $user_doctor->percent_rose;
         } else {
             $percent_rose = 0;
         }
 
-        $his_payment = PaymentHistory::where('order_id',$order_id)->get();
-        if(count($his_payment) > 1){
+        $his_payment = PaymentHistory::where('order_id', $order_id)->get();
+        if (count($his_payment) > 1) {
             $data['yta1'] = 0;
             $data['yta2'] = 0;
         } else {
 
-            $data['yta1'] = $support_orders->yta1_id?setting('exchange_yta1'):0;
-            $data['yta2'] = $support_orders->yta2_id?setting('exchange_yta2'):0;
+            $data['yta1'] = $support_orders->yta1_id ? setting('exchange_yta1') : 0;
+            $data['yta2'] = $support_orders->yta2_id ? setting('exchange_yta2') : 0;
         }
 
         $data['order_id'] = $order_id;
         $data['payment_id'] = $payment_id;
-        $data['doctor'] = $support_orders->doctor_id?round(($percent_rose * $price)/100):0;
+        $data['doctor'] = $support_orders->doctor_id ? round(($percent_rose * $price) / 100) : 0;
 
-        $data['support1'] = $support_orders->support1_id?round((setting('exchange_support1') * $price)/100):0;
-        $data['support2'] = $support_orders->support2_id?round((setting('exchange_support2') * $price)/100):0;
+        $data['support1'] = $support_orders->support1_id ? round((setting('exchange_support1') * $price) / 100) : 0;
+        $data['support2'] = $support_orders->support2_id ? round((setting('exchange_support2') * $price) / 100) : 0;
 
         $data['branch_id'] = $support_orders->branch_id;
         CommissionEmployee::create($data);
@@ -414,7 +416,7 @@ class OrderController extends Controller
         }
 
         return view('order-details.index',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank', 'ktvUsers', 'gifts','services'));
+            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank', 'ktvUsers', 'gifts', 'services'));
     }
 
     /**
@@ -567,7 +569,7 @@ class OrderController extends Controller
                 WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id, $paymentHistory->id);
             }
 
-            self::commissionOrder($paymentHistory->order_id,$paymentHistory->id,$paymentHistory->price);
+            self::commissionOrder($paymentHistory->order_id, $paymentHistory->id, $paymentHistory->price);
 
             if (count($check) <= 1 && isset($check2) && count($check2)) {
                 $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
@@ -788,11 +790,11 @@ class OrderController extends Controller
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
+        $customer_support = self::getCustomerSupport($customer);
         $role_type = $order->role_type;
 
-        return view('order.index',
-            compact('order', 'title', 'customers', 'customer',
-                'products', 'role_type'));
+        return view('order.index', compact('order', 'title', 'customers', 'customer',
+                'products', 'role_type','customer_support'));
     }
 
     /**
@@ -811,11 +813,11 @@ class OrderController extends Controller
         $customer = Customer::where('id', $customerId)->first();
         $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
+        $customer_support = self::getCustomerSupport($customer);
         $role_type = $order->role_type;
 
-        return view('order.indexService',
-            compact('order', 'title', 'customers', 'customer', 'services',
-                'products', 'role_type'));
+        return view('order.indexService', compact('order', 'title', 'customers', 'customer', 'services',
+                'products', 'role_type','customer_support'));
     }
 
     /**
@@ -843,13 +845,13 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $order = $this->orderService->update($id, $input);
-            $support_order = SupportOrder::where('order_id',$id)->first();
+            $support_order = SupportOrder::where('order_id', $id)->first();
             $support_order->update([
-                'doctor_id'=>$request->spa_therapisst_id,
-                'yta1_id'=>$request->yta,
-                'yta2_id'=>$request->yta2,
-                'support1_id'=>$request->support_id,
-                'support2_id'=>$request->support_id2,
+                'doctor_id' => $request->spa_therapisst_id,
+                'yta1_id' => $request->yta,
+                'yta2_id' => $request->yta2,
+                'support1_id' => $request->support_id,
+                'support2_id' => $request->support_id2,
             ]);
             if (!$order) {
                 DB::rollBack();
