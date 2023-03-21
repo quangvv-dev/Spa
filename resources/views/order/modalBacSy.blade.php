@@ -66,7 +66,7 @@
                                 <ul>
                                     @forelse($spaTherapissts as $item)
                                         <li class="select_doctor" data-id="{{$item->id}}" data-name="{{$item->full_name}}" data-percent_rose="{{$item->percent_rose}}">
-                                            <div class="thumbnail {{isset($order) && $order->supportOrder->doctor_id == $item->id ? 'selected' : ''}}">
+                                            <div class="thumbnail {{isset($order) && @$order->supportOrder->doctor_id == $item->id ? 'selected' : ''}}">
                                                 <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
                                                 <p>{{$item->full_name}}</p>
                                             </div>
@@ -83,7 +83,7 @@
                                 <ul>
                                     @forelse($spaTherapissts as $item)
                                         <li class="select_yTaChinh" data-id="{{$item->id}}" data-name="{{$item->full_name}}">
-                                            <div class="thumbnail {{isset($order) && $order->supportOrder->yta1_id == $item->id ? 'selected' : ''}}">
+                                            <div class="thumbnail {{isset($order) && @$order->supportOrder->yta1_id == $item->id ? 'selected' : ''}}">
                                                 <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
                                                 <p>{{$item->full_name}}</p>
                                             </div>
@@ -99,7 +99,7 @@
                                 <ul>
                                     @forelse($spaTherapissts as $item)
                                         <li class="select_yTaPhu" data-id="{{$item->id}}" data-name="{{$item->full_name}}">
-                                            <div class="thumbnail {{isset($order) && $order->supportOrder->yta2_id == $item->id ? 'selected' : ''}}">
+                                            <div class="thumbnail {{isset($order) && @$order->supportOrder->yta2_id == $item->id ? 'selected' : ''}}">
                                                 <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
                                                 <p>{{$item->full_name}}</p>
                                             </div>
@@ -115,7 +115,7 @@
                                 <ul>
                                     @forelse($customer_support as $item)
                                         <li class="select_tuVanChinh" data-id="{{$item->id}}" data-name="{{$item->full_name}}">
-                                            <div class="thumbnail {{isset($order) && $order->supportOrder->support1_id == $item->id ? 'selected' : ''}}">
+                                            <div class="thumbnail {{isset($order) && @$order->supportOrder->support1_id == $item->id ? 'selected' : ''}}">
                                                 <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
                                                 <p>{{$item->full_name}}</p>
                                             </div>
@@ -132,7 +132,7 @@
                                 <ul>
                                     @forelse($customer_support as $item)
                                         <li class="select_tuVanPhu" data-id="{{$item->id}}" data-name="{{$item->full_name}}">
-                                            <div class="thumbnail {{isset($order) && $order->supportOrder->support2_id == $item->id ? 'selected' : ''}}">
+                                            <div class="thumbnail {{isset($order) && @$order->supportOrder->support2_id == $item->id ? 'selected' : ''}}">
                                                 <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
                                                 <p>{{$item->full_name}}</p>
                                             </div>
