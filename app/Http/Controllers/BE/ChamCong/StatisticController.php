@@ -16,7 +16,12 @@ class StatisticController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:approval', ['only' => ['index', 'store', 'update', 'destroy']]);
+//        $this->middleware('permission:approval', ['only' => ['index', 'store', 'update', 'destroy']]);
+
+        $this->middleware('permission:cham_cong.list', ['only' => ['index']]);
+//        $this->middleware('permission:cham_cong.edit', ['only' => ['editOrder']]);
+//        $this->middleware('permission:cham_cong.add', ['only' => ['createOrder']]);
+//        $this->middleware('permission:cham_cong.delete', ['only' => ['destroy']]);
     }
 
     /**

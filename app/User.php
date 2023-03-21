@@ -50,7 +50,8 @@ class User extends Authenticatable
         'is_leader',
         'branch_id',
         'caller_number',
-        'location_id'
+        'location_id',
+        'approval_code'
     ];
 
     /**

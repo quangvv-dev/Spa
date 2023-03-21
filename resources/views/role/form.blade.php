@@ -191,13 +191,13 @@
                        value="time-status.index" {{@$doc && $doc->hasAccess('time-status.index') ? 'checked' : ''}}>
             </td>
         </tr>
-        <tr>
-            <td>QL chấm công</td>
-            <td>
-                <input type="checkbox" id="input12" name="permissions[]"
-                       value="approval" {{@$doc && $doc->hasAccess('approval') ? 'checked' : ''}}>
-            </td>
-        </tr>
+        {{--<tr>--}}
+            {{--<td>QL chấm công</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input12" name="permissions[]"--}}
+                       {{--value="approval" {{@$doc && $doc->hasAccess('approval') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+        {{--</tr>--}}
         </tbody>
     </table>
 
