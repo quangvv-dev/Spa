@@ -31,6 +31,11 @@ class RoleController extends Controller
         'combos',
         'schedules',
         'status',
+        'order',
+        'thu-chi',
+        'source',
+        'cham_cong',
+        'don_tu'
     ];
     protected $report = [
         'statistics.index',

@@ -59,6 +59,11 @@ class OrderController extends Controller
     {
         $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
         $this->middleware('permission:order.orders-destroy', ['only' => ['order.orders-destroy']]);
+
+        $this->middleware('permission:order.list', ['only' => ['index','indexService']]);
+        $this->middleware('permission:order.edit', ['only' => ['edit','editService']]);
+        $this->middleware('permission:order.add', ['only' => ['store']]);
+        $this->middleware('permission:order.delete', ['only' => ['destroy']]);
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
         $this->taskService = $taskService;

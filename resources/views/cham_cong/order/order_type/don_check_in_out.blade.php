@@ -95,7 +95,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Tạo mới đơn checkin/out</h3></br>
+                <h3 class="card-title">{{isset($order) ? 'Cập nhật đơn checkin/out' :'Tạo mới đơn checkin/out'}}</h3></br>
                 {{--<form action="{{url()->current()}}" method="get" id="gridForm">--}}
                 {{--<div class="ml-5">--}}
                 {{--<input type="text" class="form-control" style="height: 33px;" placeholder="Tìm kiếm">--}}
@@ -111,8 +111,11 @@
                 {{--<a class="nav-link" href="#">Đính kèm</a>--}}
                 {{--</nav>--}}
                 {{--</div>--}}
-                <form action="{{route('approval.order.store')}}" method="post">
+                <form action="{{isset($order) ? url('/approval/order/'.$order->id) : route('approval.order.store')}}" method="post">
                     @csrf
+                    @if(isset($order))
+                        @method('put')
+                    @endif
                         <input type="hidden" name="type" value="1">
                         <div class="row">
                         <div class="col-12">
@@ -128,7 +131,7 @@
                                                 {{--autocomplete="off">--}}
                                                 <input class="form-control" id="search" autocomplete="off"
                                                        data-toggle="datepicker" placeholder="dd/mm/yyyy" name="date" required
-                                                       type="text">
+                                                       type="text" value="{{isset($order) ? \Carbon\Carbon::parse($order->date)->format('d/m/Y') : ''}}">
                                             </div>
                                             <div class="form-group form-input form-group-control col-4">
                                                 <label class="form-group-label required">Giờ</label>
@@ -137,7 +140,7 @@
                                                 <select name="time_to" id="" class="form-control" required>
                                                     <option value=""></option>
                                                     @forelse($time as $key=> $item)
-                                                        <option value="{{$item}}">{{$key}}</option>
+                                                        <option {{isset($order) && $order->time_to == $item ? 'selected' : ''}} value="{{$item}}">{{$key}}</option>
                                                     @empty
                                                     @endforelse
                                                 </select>
@@ -155,7 +158,7 @@
                                                 <label class="form-group-label required">Lý do</label>
                                                     <select name="reason_id" class="form-control select2" required>
                                                         @forelse($reasons as $item)
-                                                        <option value="{{$item->id}}">{{$item->name}} (Tối đa {{$item->count}} lần / Tháng)</option>
+                                                        <option {{isset($order) && $order->reason_id == $item->id ? 'selected' : ''}} value="{{$item->id}}">{{$item->name}} (Tối đa {{$item->count}} lần / Tháng)</option>
                                                             @empty
                                                         @endforelse
                                                     </select>
@@ -172,7 +175,7 @@
                                         <label class="form-group-label required">Người duyệt 1</label>
                                             <select name="accept_id" class="form-control select2" required>
                                                 @forelse($user_accept as $item)
-                                                    <option value="{{$item->id}}">{{$item->full_name}}</option>
+                                                    <option {{isset($order) && $order->accept_id == $item->id ? 'selected' : ''}} value="{{$item->id}}">{{$item->full_name}}</option>
                                                 @empty
                                                 @endforelse
                                             </select>
@@ -187,7 +190,7 @@
                                         <label class="form-group-label">Mô tả</label>
                                         <textarea style="flex-grow:1;max-width:100%"
                                                   name="description" placeholder="Nhập mô tả"
-                                                  class="form-control"></textarea>
+                                                  class="form-control">{{isset($order) ? $order->description : ''}}</textarea>
                                     </div>
                                 </div>
                             </div>

@@ -284,6 +284,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::group(['namespace' => 'ChamCong', 'prefix' => 'approval', 'as' => 'approval.'], function () {
         Route::resource('order', 'OrderController');
         Route::get('order/create/{type}', 'OrderController@createOrder');
+        Route::get('order/edit/{order_id}', 'OrderController@editOrder');
         Route::get('order/show/{id}/{type}', 'OrderController@showDetail');
         Route::put('update-order','OrderController@accept');
         Route::put('update-array-order','OrderController@acceptArrayOrder');

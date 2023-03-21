@@ -13,6 +13,7 @@ use App\Models\DonTu;
 use App\Models\Order;
 use App\Models\Reason;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,11 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->time = ChamCongConstant::HOURS;
+
+        $this->middleware('permission:don_tu.list', ['only' => ['index']]);
+        $this->middleware('permission:don_tu.edit', ['only' => ['editOrder']]);
+        $this->middleware('permission:don_tu.add', ['only' => ['createOrder']]);
+        $this->middleware('permission:don_tu.delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -140,7 +146,13 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $data['date'] = Carbon::createFromFormat('d/m/Y',$request->date)->format('Y-m-d');
+        if ($request->date_end) {
+            $data['date_end'] = Carbon::createFromFormat('d/m/Y',$request->date_end)->format('Y-m-d');
+        }
+        DonTu::find($id)->update($data);
+        return back();
     }
 
     /**
@@ -151,7 +163,8 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DonTu::find($id)->delete();
+        return 1;
     }
 
     public function createOrder($type)
@@ -173,11 +186,14 @@ class OrderController extends Controller
     public function showDetail($id, $type)
     {
         $order = DonTu::find($id);
+        if(!$order){
+            return redirect(route('approval.order.index'));
+        }
         if ($type == OrderConstant::TYPE_DON_NGHI) {
-            return view('cham_cong.order.detail.detail_don_nghi', compact('order','id'));
+            return view('cham_cong.order.detail.detail_don_nghi', compact('order'));
         }
         if ($type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) {
-            return view('cham_cong.order.detail.detail_checkin', compact('order','id'));
+            return view('cham_cong.order.detail.detail_checkin', compact('order'));
         }
     }
 
@@ -214,6 +230,20 @@ class OrderController extends Controller
                 }
             }
             return 1;
+        }
+    }
+
+    public function editOrder($order_id)
+    {
+        $order = DonTu::find($order_id);
+        $time = $this->time;
+        $user_accept = User::where('department_id', DepartmentConstant::ADMIN)->select('full_name', 'id')->get();
+        if ($order->type == OrderConstant::TYPE_DON_NGHI) { //đơn nghỉ
+            $reasons = Reason::where('type', 0)->get();
+            return view('cham_cong.order.order_type.don_nghi', compact('time', 'user_accept', 'reasons','order'));
+        } else if ($order->type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) { //đơn checkin
+            $reasons = Reason::where('type', 1)->get();
+            return view('cham_cong.order.order_type.don_check_in_out', compact('time', 'user_accept', 'reasons','order'));
         }
     }
 }

@@ -53,75 +53,75 @@
             </tr>
 
         @endforeach
-        <tr>
-            <td>QL đơn hàng</td>
-            <td>
-                <input type="checkbox" id="input171" name="permissions[]"
-                       value="order.list" {{@$doc && $doc->hasAccess('order.list') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input173" name="permissions[]"
-                       value="order.edit" {{@$doc && $doc->hasAccess('order.edit') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input172" name="permissions[]"
-                       value="order.add" {{@$doc && $doc->hasAccess('order.add') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input174" name="permissions[]"
-                       value="order.delete" {{@$doc && $doc->hasAccess('order.delete') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="group17"
-                       onclick="checkAll('group17', 'input17')">
-            </td>
-        </tr>
-        <tr>
-            <td>QL thu chi</td>
-            <td>
-                <input type="checkbox" id="input181" name="permissions[]"
-                       value="thu-chi.list" {{@$doc && $doc->hasAccess('thu-chi.list') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input183" name="permissions[]"
-                       value="thu-chi.edit" {{@$doc && $doc->hasAccess('thu-chi.edit') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input182" name="permissions[]"
-                       value="thu-chi.add" {{@$doc && $doc->hasAccess('thu-chi.add') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input184" name="permissions[]"
-                       value="thu-chi.delete" {{@$doc && $doc->hasAccess('thu-chi.delete') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="group18"
-                       onclick="checkAll('group18', 'input18')">
-            </td>
-        </tr>
-        <tr>
-            <td>QL nguồn dữ liệu</td>
-            <td>
-                <input type="checkbox" id="input191" name="permissions[]"
-                       value="source.list" {{@$doc && $doc->hasAccess('source.list') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input192" name="permissions[]"
-                       value="source.edit" {{@$doc && $doc->hasAccess('source.edit') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input193" name="permissions[]"
-                       value="source.add" {{@$doc && $doc->hasAccess('source.add') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="input194" name="permissions[]"
-                       value="source.delete" {{@$doc && $doc->hasAccess('source.delete') ? 'checked' : ''}}>
-            </td>
-            <td>
-                <input type="checkbox" id="group19"
-                       onclick="checkAll('group19', 'input19')">
-            </td>
-        </tr>
+        {{--<tr>--}}
+            {{--<td>QL đơn hàng</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input171" name="permissions[]"--}}
+                       {{--value="order.list" {{@$doc && $doc->hasAccess('order.list') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input173" name="permissions[]"--}}
+                       {{--value="order.edit" {{@$doc && $doc->hasAccess('order.edit') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input172" name="permissions[]"--}}
+                       {{--value="order.add" {{@$doc && $doc->hasAccess('order.add') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input174" name="permissions[]"--}}
+                       {{--value="order.delete" {{@$doc && $doc->hasAccess('order.delete') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="group17"--}}
+                       {{--onclick="checkAll('group17', 'input17')">--}}
+            {{--</td>--}}
+        {{--</tr>--}}
+        {{--<tr>--}}
+            {{--<td>QL thu chi</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input181" name="permissions[]"--}}
+                       {{--value="thu-chi.list" {{@$doc && $doc->hasAccess('thu-chi.list') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input183" name="permissions[]"--}}
+                       {{--value="thu-chi.edit" {{@$doc && $doc->hasAccess('thu-chi.edit') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input182" name="permissions[]"--}}
+                       {{--value="thu-chi.add" {{@$doc && $doc->hasAccess('thu-chi.add') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input184" name="permissions[]"--}}
+                       {{--value="thu-chi.delete" {{@$doc && $doc->hasAccess('thu-chi.delete') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="group18"--}}
+                       {{--onclick="checkAll('group18', 'input18')">--}}
+            {{--</td>--}}
+        {{--</tr>--}}
+        {{--<tr>--}}
+            {{--<td>QL nguồn dữ liệu</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input191" name="permissions[]"--}}
+                       {{--value="source.list" {{@$doc && $doc->hasAccess('source.list') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input192" name="permissions[]"--}}
+                       {{--value="source.edit" {{@$doc && $doc->hasAccess('source.edit') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input193" name="permissions[]"--}}
+                       {{--value="source.add" {{@$doc && $doc->hasAccess('source.add') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="input194" name="permissions[]"--}}
+                       {{--value="source.delete" {{@$doc && $doc->hasAccess('source.delete') ? 'checked' : ''}}>--}}
+            {{--</td>--}}
+            {{--<td>--}}
+                {{--<input type="checkbox" id="group19"--}}
+                       {{--onclick="checkAll('group19', 'input19')">--}}
+            {{--</td>--}}
+        {{--</tr>--}}
         </tbody>
     </table>
 

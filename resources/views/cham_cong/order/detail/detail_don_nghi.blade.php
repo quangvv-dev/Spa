@@ -96,9 +96,20 @@
                     <div class="col-12">
                         <div class="detail-section">
                             <div class="detail-section-title" style="display: flex;align-items: center;justify-content: space-between;">Thông tin chung
-                                @if($order->status === 0)
-                                    <button class="btn btn-primary acceptOrder">Duyệt đơn</button>
-                                @endif
+                                <div class="">
+                                    @if($order->status === 0)
+                                        @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
+                                            <button class="btn btn-primary acceptOrder">Duyệt đơn</button>
+                                        @endif
+                                        @if(\Illuminate\Support\Facades\Auth::id() == $order->user_id)
+                                            <a href="/approval/order/edit/{{$order->id}}">
+                                                <button class="btn btn-secondary">Sửa</button>
+                                            </a>
+                                            <button class="btn btn-danger delete" data-id="{{$order->id}}" data-url="/approval/order/{{$order->id}}">Xoá</button>
+                                        @endif
+                                    @endif
+
+                                </div>
                             </div>
                             <div class="detail-section-content">
                                 <div class="detail-group-field">
@@ -147,7 +158,7 @@
                                             <div class="detail-label">Lý do</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content">Nghỉ ốm</div>
+                                            <div class="detail-content">{{@$order->reason->name}}</div>
                                         </div>
                                     </div>
                                     <div class="detail-row row" v="detailField">
@@ -265,7 +276,7 @@
             <!-- table-responsive -->
         </div>
     </div>
-    <input type="hidden" class="orderId" value="{{@$id}}">
+    <input type="hidden" class="orderId" value="{{$order->id}}">
 
     @include('cham_cong.order.modal_accept')
 @endsection
@@ -288,9 +299,10 @@
                 },
                 success:function (data) {
                     if(data){
-                        alertify.success('Cập nhật thành công !')
+                        alertify.success('Cập nhật thành công !');
+                        location.reload();
                     } else {
-                        alertify.error('Cập nhật không thành công !')
+                        alertify.error('Cập nhật không thành công !');
                     }
                 }
             })

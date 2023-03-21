@@ -19,6 +19,11 @@ return [
     "promotions"               => "QL VOURCHER khuyến mại",
     "package"                  => "QL GÓI NẠP VÍ",
     "status"                   => "QL CRM",
+    "order"                    => "QL đơn hàng",
+    "thu-chi"                  => "QL thu chi",
+    "source"                   => "QL nguồn dữ liệu",
+    "cham_cong"                => "QL Chấm công",
+    "don_tu"                   => "QL Đơn từ",
     // Thống kê
     "report.tasks"             => "Hiệu quả công việc",
     "report.commission"        => "Báo cáo KTV",

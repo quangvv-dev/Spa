@@ -95,7 +95,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Tạo mới đơn xin nghỉ</h3></br>
+                <h3 class="card-title">{{isset($order) ? 'Cập nhật đơn xin nghỉ' :'Tạo mới đơn xin nghỉ'}}</h3></br>
                 {{--<form action="{{url()->current()}}" method="get" id="gridForm">--}}
                 {{--<div class="ml-5">--}}
                 {{--<input type="text" class="form-control" style="height: 33px;" placeholder="Tìm kiếm">--}}
@@ -111,8 +111,11 @@
                         {{--<a class="nav-link" href="#">Đính kèm</a>--}}
                     {{--</nav>--}}
                 {{--</div>--}}
-                <form action="{{route('approval.order.store')}}" method="post">
+                <form action="{{isset($order) ? url('/approval/order/'.$order->id) : route('approval.order.store')}}" method="post">
                     @csrf
+                    @if(isset($order))
+                        @method('put')
+                    @endif
                     <input type="hidden" name="type" value="0">
                     <div class="row">
                     <div class="col-12">
@@ -128,7 +131,7 @@
                                                 <form>
                                                     <select name="reason_id" class="form-control select2">
                                                         @forelse($reasons as $item)
-                                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                                        <option {{isset($order) && $order->reason_id == $item->id ? 'selected' : ''}} value="{{$item->id}}">{{$item->name}}</option>
                                                             @empty
                                                         @endforelse
                                                     </select>
@@ -156,7 +159,7 @@
                                                                            {{--autocomplete="off">--}}
                                                                     <select name="time_to" id="" class="form-control">
                                                                         @forelse($time as $key=> $item)
-                                                                            <option value="{{$item}}">{{$key}}</option>
+                                                                            <option {{isset($order) && $order->time_to == $item ? 'selected' : ''}} value="{{$item}}">{{$key}}</option>
                                                                         @empty
                                                                         @endforelse
                                                                     </select>
@@ -168,7 +171,7 @@
                                                                            {{--autocomplete="off">--}}
                                                                     <input class="form-control" id="search" autocomplete="off"
                                                                            data-toggle="datepicker" placeholder="dd/mm/yyyy" name="date"
-                                                                           type="text">
+                                                                           type="text" value="{{isset($order) ? \Carbon\Carbon::parse($order->date)->format('d/m/Y') : ''}}">
                                                                 </div>
                                                                 <div class="form-group form-input form-group-control col-3">
                                                                     <label class="form-group-label required">Đến
@@ -177,7 +180,7 @@
                                                                            {{--autocomplete="off">--}}
                                                                     <select name="time_end" id="" class="form-control">
                                                                         @forelse($time as $key=> $item)
-                                                                            <option value="{{$item}}">{{$key}}</option>
+                                                                            <option {{isset($order) && $order->time_end == $item ? 'selected' : ''}} value="{{$item}}">{{$key}}</option>
                                                                         @empty
                                                                         @endforelse
                                                                     </select>
@@ -189,7 +192,7 @@
                                                                            {{--placeholder="dd/mm/yyyy">--}}
                                                                     <input class="form-control" id="search" autocomplete="off"
                                                                            data-toggle="datepicker" placeholder="dd/mm/yyyy" name="date_end"
-                                                                           type="text">
+                                                                           type="text" value="{{isset($order) ? \Carbon\Carbon::parse($order->date_end)->format('d/m/Y') : ''}}">
                                                                 </div>
                                                             </div>
 
@@ -210,7 +213,7 @@
                                             <select name="accept_id"
                                                     class="form-control select2">
                                                 @forelse($user_accept as $item)
-                                                    <option value="{{$item->id}}">{{$item->full_name}}</option>
+                                                    <option {{isset($order) && $order->accept_id == $item->id ? 'selected' : ''}} value="{{$item->id}}">{{$item->full_name}}</option>
                                                 @empty
                                                 @endforelse
                                             </select>
@@ -226,7 +229,7 @@
                                     <label class="form-group-label">Mô tả</label>
                                     <textarea style="flex-grow:1;max-width:100%"
                                               name="description" placeholder="Nhập mô tả"
-                                              class="form-control"></textarea>
+                                              class="form-control">{{isset($order) ? $order->description : ''}}</textarea>
                                 </div>
                             </div>
                         </div>
