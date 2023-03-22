@@ -24,6 +24,7 @@ return [
     "source"                   => "QL nguồn dữ liệu",
     "cham_cong"                => "QL Chấm công",
     "don_tu"                   => "QL Đơn từ",
+    "reason"                   => "Lý do nghỉ/checkin-out",
     // Thống kê
     "report.tasks"             => "Hiệu quả công việc",
     "report.commission"        => "Báo cáo KTV",

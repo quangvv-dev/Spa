@@ -13,8 +13,8 @@
                             <th class="text-white">STT</th>
                             <th class="text-white text-center">Lý do</th>
                             <th class="text-white text-center">Số lần / tháng</th>
-                            <th class="text-white text-center">Phạt tiền</th>
                             <th class="text-white text-center">Type</th>
+                            <th class="text-white text-center">Phạt tiền</th>
                             <th class="text-center nowrap">
                                 <a id="add_new_reason" style="cursor: pointer"><i class="fa fa-plus"></i> Thêm</a>
                             </th>

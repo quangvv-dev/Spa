@@ -35,7 +35,8 @@ class RoleController extends Controller
         'thu-chi',
         'source',
         'cham_cong',
-        'don_tu'
+        'don_tu',
+        'reason'
     ];
     protected $report = [
         'statistics.index',

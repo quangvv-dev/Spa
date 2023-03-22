@@ -10,7 +10,10 @@ class ReasonController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:approval', ['only' => ['index','store','update','destroy']]);
+        $this->middleware('permission:reason.list', ['only' => ['index']]);
+        $this->middleware('permission:reason.edit', ['only' => ['update']]);
+        $this->middleware('permission:reason.add', ['only' => ['store']]);
+        $this->middleware('permission:reason.delete', ['only' => ['destroy']]);
     }
 
     /**

@@ -42,9 +42,9 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if (!$request->start_date) {
-            Functions::addSearchDateFormat($request, 'd-m-Y');
-        }
+//        if (!$request->start_date) {
+//            Functions::addSearchDateFormat($request, 'd-m-Y');
+//        }
         $param = $request->all();
         if ($user->department_id == DepartmentConstant::ADMIN) {
             $docs = DonTu::when(isset($param['start_date']) && isset($param['end_date']), function ($q) use ($param) {
