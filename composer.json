@@ -12,6 +12,7 @@
         "anlutro/l4-settings": "^0.8.3",
         "barryvdh/laravel-dompdf": "^0.8.4",
         "berkayk/onesignal-laravel": "^1.0",
+        "brokenice/laravel-mysql-partition": "^1.1",
         "doctrine/dbal": "^2.9",
         "econea/nusoap": "^0.9.6",
         "fideloper/proxy": "^4.0",
@@ -21,7 +22,7 @@
         "laravelcollective/html": "^5.8.0",
         "maatwebsite/excel": "^2.1",
         "predis/predis": "^1.1",
-        "tungltdev/laravel-jwt": "*",
+        "laravel/socialite": "^4.1",
         "tungltdev/laravel-settings": "*"
     },
     "require-dev": {

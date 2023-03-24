@@ -789,7 +789,7 @@ class OrderController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $customer_support = self::getCustomerSupport($customer);
         $role_type = $order->role_type;
 
@@ -811,8 +811,8 @@ class OrderController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $customerId = $order->member_id;
         $customer = Customer::where('id', $customerId)->first();
-        $services = Services::where('type', StatusCode::SERVICE)->with('category')->withTrashed()->get();
-        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->withTrashed()->get();
+        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
+        $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
         $customer_support = self::getCustomerSupport($customer);
         $role_type = $order->role_type;
 
@@ -841,18 +841,19 @@ class OrderController extends Controller
 //        }
         $customer = Customer::find($request->user_id);
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
-
         DB::beginTransaction();
         try {
             $order = $this->orderService->update($id, $input);
             $support_order = SupportOrder::where('order_id', $id)->first();
-            $support_order->update([
-                'doctor_id' => $request->spa_therapisst_id,
-                'yta1_id' => $request->yta,
-                'yta2_id' => $request->yta2,
-                'support1_id' => $request->support_id,
-                'support2_id' => $request->support_id2,
-            ]);
+            if (!empty($support_order)){
+                $support_order->update([
+                    'doctor_id' => $request->spa_therapisst_id,
+                    'yta1_id' => $request->yta,
+                    'yta2_id' => $request->yta2,
+                    'support1_id' => $request->support_id,
+                    'support2_id' => $request->support_id2,
+                ]);
+            }
             if (!$order) {
                 DB::rollBack();
             }
