@@ -745,13 +745,33 @@
 
             let abc = elm.find('.selected');
 
-            let check = classClick == '.select_yTaChinh' || classClick == '.select_tuVanChinh' ? false : true;
+            let check = classClick == '.select_yTaChinh' || classClick == '.select_tuVanChinh' ? true : false;
 
             if(abc.length > 0){
-                if(check == true){
+                if(check == false){
                     $(`[data-change='${classClick}']`).val('').change(); // reset value form
                     $(`${classClick}_showName`).html('').change();
                     abc.removeClass('selected');
+                } else { //trường hợp click y tá, hỗ trợ chính thì check xem có tồn tại y tá, hỗ trợ phụ k?
+                    let check_child = null;
+                    if(classClick == '.select_yTaChinh'){
+                        check_child = $("#yta2").val();
+                    } else if(classClick == '.select_tuVanChinh'){
+                        check_child = $("#support_id2").val();
+                    }
+                    if(!check_child){ // nếu k có child thì được reset parent
+                        $(`[data-change='${classClick}']`).val('').change(); // reset value form
+                        $(`${classClick}_showName`).html('').change();
+                        abc.removeClass('selected');
+                    } else {
+                        if(classClick == '.select_yTaChinh'){
+                            alertify.warning('Tồn tại y tá phụ, không được huỷ');
+                        }
+                        if(classClick == '.select_tuVanChinh'){
+                            alertify.warning('Tồn tại tư vấn phụ, không được huỷ');
+                        }
+                    }
+
                 }
             } else {
                     $(`${classClick} .thumbnail`).removeClass('selected');
@@ -775,9 +795,6 @@
             } else if(is_selected_yta1 && !is_selected_yta2){ // trường hợp chỉ có y tá 1
                 $('.show-commission.exchange_yta1').html(exchange_yta_single);
                 $('.show-commission.exchange_yta2').html('');
-            } else if(!is_selected_yta1 && is_selected_yta2){ // trường hợp chỉ có y tá 2
-                $('.show-commission.exchange_yta1').html('');
-                $('.show-commission.exchange_yta2').html(exchange_yta_single);
             } else {
                 $('.show-commission.exchange_yta1').html('');
                 $('.show-commission.exchange_yta2').html('');
@@ -797,9 +814,6 @@
             } else if(is_selected_support1 && !is_selected_support2){ // trường hợp chỉ có y tá 1
                 $('.show-commission.exchange_support1').html(exchange_support_single);
                 $('.show-commission.exchange_support2').html('');
-            } else if(!is_selected_support1 && is_selected_support2){ // trường hợp chỉ có y tá 2
-                $('.show-commission.exchange_support1').html('');
-                $('.show-commission.exchange_support2').html(exchange_support_single);
             } else {
                 $('.show-commission.exchange_support1').html('');
                 $('.show-commission.exchange_support2').html('');
