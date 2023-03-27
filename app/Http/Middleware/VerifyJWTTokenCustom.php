@@ -26,12 +26,7 @@ class VerifyJWTTokenCustom
             ]);
         } else {
             try {
-                $version = (float)substr(PHP_VERSION, 0, 3);
-                if ($version < 7.4) {
-                    $request->jwtUser = jwtDecode($jwt, array('HS256'));// phiên bản php 7.4 thì string || 7.2 thì array
-                } else {
-                    $request->jwtUser = jwtDecode($jwt, 'HS256');// phiên bản php 7.4 thì string || 7.2 thì array
-                }
+                $request->jwtUser = jwtDecode($jwt, 'HS256');// phiên bản php 7.4 thì string || 7.2 thì array
             } catch (\Exception $e) {
                 return response()->json([
                     'code' => ResponseStatusCode::BAD_REQUEST,
