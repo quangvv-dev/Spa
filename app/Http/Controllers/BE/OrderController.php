@@ -882,6 +882,8 @@ class OrderController extends Controller
     {
         if ($request->hasFile('file')) {
             Excel::load($request->file('file')->getRealPath(), function ($render) {
+                dd($render);
+
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
                     $row['doanh_so'] = str_replace(',', '', $row['doanh_so']);
