@@ -10,7 +10,6 @@
 /.vagrant
 .env
 .composer*
-/bootstrap
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
