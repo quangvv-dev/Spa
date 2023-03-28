@@ -137,7 +137,7 @@ class OrderController extends Controller
         $customers = Customer::pluck('full_name', 'id');
         $customer_support = self::getCustomerSupport($customer);
         return view('order.indexService',
-            compact('title', 'customers', 'customer', 'services', 'products', 'combo','customer_support'));
+            compact('title', 'customers', 'customer', 'services', 'products', 'combo', 'customer_support'));
     }
 
     public function getInfoService(Request $request)
@@ -236,32 +236,35 @@ class OrderController extends Controller
     public function commissionOrder($order_id, $payment_id, $price)
     {
         $support_orders = SupportOrder::where('order_id', $order_id)->first();
-        $user_doctor = User::find($support_orders->doctor_id);
-        if ($user_doctor) {
-            $percent_rose = $user_doctor->percent_rose;
-        } else {
-            $percent_rose = 0;
+        if ($support_orders) {
+            $user_doctor = User::find($support_orders->doctor_id);
+            if ($user_doctor) {
+                $percent_rose = $user_doctor->percent_rose;
+            } else {
+                $percent_rose = 0;
+            }
+
+            $his_payment = PaymentHistory::where('order_id', $order_id)->get();
+            if (count($his_payment) > 1) {
+                $data['yta1'] = 0;
+                $data['yta2'] = 0;
+            } else {
+
+                $data['yta1'] = $support_orders->yta1_id ? setting('exchange_yta1') : 0;
+                $data['yta2'] = $support_orders->yta2_id ? setting('exchange_yta2') : 0;
+            }
+
+            $data['order_id'] = $order_id;
+            $data['payment_id'] = $payment_id;
+            $data['doctor'] = $support_orders->doctor_id ? round(($percent_rose * $price) / 100) : 0;
+
+            $data['support1'] = $support_orders->support1_id ? round((setting('exchange_support1') * $price) / 100) : 0;
+            $data['support2'] = $support_orders->support2_id ? round((setting('exchange_support2') * $price) / 100) : 0;
+
+            $data['branch_id'] = $support_orders->branch_id;
+            CommissionEmployee::create($data);
         }
 
-        $his_payment = PaymentHistory::where('order_id', $order_id)->get();
-        if (count($his_payment) > 1) {
-            $data['yta1'] = 0;
-            $data['yta2'] = 0;
-        } else {
-
-            $data['yta1'] = $support_orders->yta1_id ? setting('exchange_yta1') : 0;
-            $data['yta2'] = $support_orders->yta2_id ? setting('exchange_yta2') : 0;
-        }
-
-        $data['order_id'] = $order_id;
-        $data['payment_id'] = $payment_id;
-        $data['doctor'] = $support_orders->doctor_id ? round(($percent_rose * $price) / 100) : 0;
-
-        $data['support1'] = $support_orders->support1_id ? round((setting('exchange_support1') * $price) / 100) : 0;
-        $data['support2'] = $support_orders->support2_id ? round((setting('exchange_support2') * $price) / 100) : 0;
-
-        $data['branch_id'] = $support_orders->branch_id;
-        CommissionEmployee::create($data);
         return 1;
     }
 
@@ -794,7 +797,7 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.index', compact('order', 'title', 'customers', 'customer',
-                'products', 'role_type','customer_support'));
+            'products', 'role_type', 'customer_support'));
     }
 
     /**
@@ -817,7 +820,7 @@ class OrderController extends Controller
         $role_type = $order->role_type;
 
         return view('order.indexService', compact('order', 'title', 'customers', 'customer', 'services',
-                'products', 'role_type','customer_support'));
+            'products', 'role_type', 'customer_support'));
     }
 
     /**
@@ -845,7 +848,7 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->update($id, $input);
             $support_order = SupportOrder::where('order_id', $id)->first();
-            if (!empty($support_order)){
+            if (!empty($support_order)) {
                 $support_order->update([
                     'doctor_id' => $request->spa_therapisst_id,
                     'yta1_id' => $request->yta,
