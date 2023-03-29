@@ -54,7 +54,7 @@
                         @foreach($new as $item)
                     {
                         'id': '{{$item->id}}',
-                        'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:"/assets/images/brand/logo.png"}}"> <span style="color:{{@$color[@$item->customer->status_id]}}">{{$item->name}}</span>',
+                        'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:setting('logo_website')}}"> <span style="color:{{@$color[@$item->customer->status_id]}}">{{$item->name}}</span>',
 
                     },
                     @endforeach
@@ -71,7 +71,7 @@
                     @foreach($done as $item)
                     {
                         'id': '{{$item->id}}',
-                        'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
+                        'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:setting('logo_website')}}"> {{$item->name}}',
 
                     },
                     @endforeach
@@ -89,7 +89,7 @@
                     @foreach($fail as $item)
                         {
                             'id': '{{$item->id}}',
-                            'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:"/assets/images/brand/logo.png"}}"> {{$item->name}}',
+                            'title': '<img class="img-card" src="{{isset($item->user)?@$item->user->avatar:setting('logo_website')}}"> {{$item->name}}',
 
                         },
                     @endforeach
