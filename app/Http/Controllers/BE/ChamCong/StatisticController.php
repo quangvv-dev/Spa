@@ -159,4 +159,9 @@ class StatisticController extends Controller
         ])->first();
         return $user;
     }
+
+
+    public function history(){
+        return view('cham_cong.statistic.history');
+    }
 }

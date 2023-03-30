@@ -289,6 +289,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::put('update-order','OrderController@accept');
         Route::put('update-array-order','OrderController@acceptArrayOrder');
         Route::get('statistic', 'StatisticController@index');
+        Route::get('history', 'StatisticController@history');
         Route::get('get-detail-cham-cong','StatisticController@getDetail');
         Route::resource('reason', 'ReasonController');
     });

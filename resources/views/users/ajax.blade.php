@@ -9,6 +9,7 @@
             <th class="text-white text-center">Phòng ban</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Chi nhánh</th>
+            <th class="text-white text-center">Chi nhánh</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
