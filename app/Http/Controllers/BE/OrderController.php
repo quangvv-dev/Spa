@@ -542,6 +542,7 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
+        $cskh = User::select('id')->where('department_id',UserConstant::CSKH)->pluck('id')->toArray();
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
@@ -881,9 +882,8 @@ class OrderController extends Controller
     public function importDataByExcel(Request $request)
     {
         if ($request->hasFile('file')) {
+            dd($request->file('file')->getRealPath());
             Excel::load($request->file('file')->getRealPath(), function ($render) {
-                dd($render);
-
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
                     $row['doanh_so'] = str_replace(',', '', $row['doanh_so']);
