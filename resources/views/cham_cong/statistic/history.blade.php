@@ -106,6 +106,7 @@
             width: 0px;
             transition: width 0.3s linear;
         }
+
         .datepicker-container.show {
             /*min-width: 300px;*/
             width: 300px;
@@ -175,6 +176,9 @@
             color: rgb(78, 52, 46);
             background: #ddd;
         }
+        .padding-bot10{
+            padding-bottom: 10px;
+        }
     </style>
 
     <div class="col-md-12 col-lg-12">
@@ -187,12 +191,12 @@
                         <input type="text" class="form-control" style="height: 33px;" placeholder="Tìm kiếm">
                     </div>
                 </form>
-
+                <input type="hidden" class="data" value="{{json_encode($approval)}}">
 
                 <div class="select">
-                    <button class="btn btn-small btn-primary showMonth">Chọn</button>
+                    <button class="btn btn-small btn-primary showMonth"><i class="fa fa-wallet"></i></button>
                     <div class="datepicker-container pop-box pop-box-click pop-box-contextmenu"
-                         style="z-index: 1000000000;max-height: 469px;overflow: hidden;position: absolute;right: -14%;left: -344%;top: 54px;">
+                         style="z-index: 1000000000;max-height: 469px;overflow: hidden;position: absolute;right: -14%;left: -185px;top: 54px;">
                         <div style="display:flex;flex-direction:column;justify-content:stretch">
                             <div class="datepicker-header">
                                 <!--<div class="datepicker-header-btn icon-caret-left" prev="1"></div>-->
@@ -274,21 +278,49 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content modal-sm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Chấm công</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <div class="row padding-bot10">
+                        <div class="col-6 bold">Tổng cộng</div>
+                        <div class="col-6 bold approvalCurrent text-right">1</div>
+                    </div>
+                    <div class="row padding-bot10">
+                        <div class="col-6 ">Tổng giờ làm</div>
+                        <div class="col-6 timeWorkCurrent text-right">1</div>
+                    </div>
+                    <div class="row padding-bot10">
+                        <div class="col-6 ">Chốt vân tay</div>
+                        <div class="col-6 historChotCurrent text-right">1</div>
+                    </div>
+                    <div class="row padding-bot10">
+                        <div class="col-6 bold">Ca làm việc</div>
+                        <div class="col-6"></div>
+                    </div>
+                    <div class="row padding-bot10">
+                        <div class="col-6 ">- Thời gian</div>
+                        <div class="col-6 text-right">08:30 - 18:00</div>
+                    </div>
+                    <div class="row padding-bot10">
+                        <div class="col-6 ">- Số giờ</div>
+                        <div class="col-6 timeWorkCurrent text-right">1</div>
+                    </div>
+                    <div class="row padding-bot10">
+                        <div class="col-6">- Số công</div>
+                        <div class="col-6 approvalCurrent text-right">1</div>
+                    </div>
+                    <div class="row padding-bot10">
+                        <div class="col-6 ">- Chốt vân tay</div>
+                        <div class="col-6 timeCurrent text-right">1</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -303,6 +335,8 @@
         let date = new Date(),
             currYear = date.getFullYear(),
             currMonth = date.getMonth();
+        let base = $('.data').val();
+        base = JSON.parse(base);
 
         let currentCheckedMonth = currMonth;
         let currentCheckedYear = currYear;
@@ -317,7 +351,6 @@
                 lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // lấy ngày cuối cùng của tháng trước
             let liTag = "";
 
-
             for (let i = firstDayofMonth - 1; i > 0; i--) { // creating li of previous month last days
                 liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
             }
@@ -325,18 +358,19 @@
                 // adding active class to li if the current day, month, and year matched
                 let isToday = i === date.getDate() && currMonth === new Date().getMonth()
                 && currYear === new Date().getFullYear() ? "active" : "";
+            // <input class="currentDateCalendar" type="hidden" value="${i < 10 ?  '0'+i : i}">
                 liTag += `
                     <li class="${isToday} ${i}">
                         <div class="abc">
-                            <div style="position:absolute;top:6px;right:6px;font-size:0.7em;color:#333">${i}/03</div>
-                            <div style="color:#777">1</div>
-                            <div style="font-size:0.8em;padding-bottom:5px" title="Thời gian thực tế">08:30 - 18:00</div>
-                            <div style="font-size:0.8em;" title="CAIT">CAIT</div>
-                            <div style="font-size:0.8em;padding-bottom:5px">
+                            <div class="currentDateCalendar" style="position:absolute;top:6px;right:6px;font-size:0.7em;color:#333">${i < 10 ?  '0'+i : i}/${(currMonth+1) < 10 ?  '0'+(currMonth+1) : (currMonth+1)}</div>
+                            <div style="${base[i].off == 0 ? 'color:#777' : 'color:red'}">${base[i].off == 0 ? base[i].approval : 'Nghỉ'}</div>
+                            <div style="font-size:0.8em;padding-bottom:5px" title="Thời gian thực tế">${base[i].time}</div>
+                            <!--<div style="font-size:0.8em;" title="CAIT">CAIT</div>-->
+                            <div style="font-size:0.8em;padding-bottom:5px;${!base[i].donTu ? 'display:none' : ''}">
                                 <div style="padding:2px;display:flex;justify-content:space-between;font-size:85%"
                                      title="Đơn quên checkin/out">
-                                    <div style="font-size:80%"><span class="icon-realtime-protection"></span></div>
-                                    <div style="padding-left:3px;">08:30</div>
+                                    <div ><span class="fa fa-check-circle"></span></div>
+                                    <div style="padding-left:3px;">${base[i].donTu}</div>
                                 </div>
                             </div>
                         </div>
@@ -386,7 +420,16 @@
             currMonth = abc - 1;
             currentCheckedMonth = abc - 1;
             currentCheckedYear = currYear;
-            renderCalendar();
+
+            $.ajax({
+                url: "{{ url('/approval/history') }}",
+                method: "get",
+                data: {year: currentCheckedYear,month:abc}
+            }).done(function (data) {
+                base = data;
+                renderCalendar();
+            });
+
             $('.datepicker-table .selected').removeClass('selected');
             $(this).addClass('selected');
         })
@@ -403,6 +446,19 @@
         }
 
         $(document).on('click', '.abc', function () {
+            let resutl = $(this).closest('.abc').find('.currentDateCalendar').html();
+            let currentDateTime = resutl+'/'+currYear;
+            $.ajax({
+                url: "{{ url('/approval/show-history') }}",
+                method: "get",
+                data: {date: currentDateTime}
+            }).done(function (data) {
+                $('.approvalCurrent').html(data.approval);
+                $('.timeWorkCurrent').html(data.time_work);
+                $('.historChotCurrent').html(data.history_chot);
+                $('.timeCurrent').html(data.time);
+            });
+            $('#exampleModalLabel').html('Chấm công, ngày '+currentDateTime);
             $('#exampleModal').modal('show');
         })
     </script>

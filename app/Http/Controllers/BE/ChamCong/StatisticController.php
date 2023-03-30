@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\BE\ChamCong;
 
+use App\Constants\ChamCongConstant;
+use App\Constants\StatusCode;
+use App\Constants\StatusConstant;
+use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\BE\SettingController;
 use App\Models\ChamCong;
@@ -9,6 +13,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
@@ -145,10 +150,9 @@ class StatisticController extends Controller
 
     public function getDetail(Request $request)
     {
-        $user = User::select('id','approval_code','full_name','department_id')->where('id', $request->user_id)->with(['department',
-            'donTu' => function ($query) use ($request) {
-                $query->where('date', Functions::yearMonthDay($request['date']))->with('reason');
-            },
+        $user = User::select('id', 'approval_code', 'full_name', 'department_id')->where('id', $request->user_id)->with(['department', 'donTu' => function ($query) use ($request) {
+            $query->where('date', Functions::yearMonthDay($request['date']))->with('reason');
+        },
             'chamCong' => function ($query) use ($request) {
                 $query->whereBetween('date_time_record', [
                     Functions::yearMonthDay($request['date']) . " 00:00:00",
@@ -160,8 +164,74 @@ class StatisticController extends Controller
         return $user;
     }
 
+    public function showHistory(Request $request)
+    {
+        $approval_code = Auth::user()->approval_code?:'HN1';
+        $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
+        $docs = ChamCong::where('approval_code', $approval_code)->whereDate('date_time_record', $date)->get()->toArray();
+        if (count($docs) < 2) {
+            $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
+            $machineStart = isset($docs[0]) && $docs[0]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
+            $approval = [
+                'approval' => 0,
+                'time_work' => 0,
+                'history_chot' => !empty($startDate) ? ($startDate->format('H:i').$machineStart): '-',
+                'time' => !empty($startDate) ? $startDate->format('H:i'): '-',
+            ];
+        } else {
+            $startDate = new Carbon($docs[0]['date_time_record']);
+            $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
+            $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
+            $machineStart = $docs[0]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
+            $machineEnd = $docs[count($docs) - 1]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
+            $approval = [
+                'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
+                'time_work' => round($diff - 1.5, 2),
+                'history_chot' => $startDate->format('H:i') . $machineStart . '<br>' . $endDate->format('H:i') . $machineEnd,
+                'time' => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
+            ];
 
-    public function history(){
-        return view('cham_cong.statistic.history');
+        }
+
+        return $approval;
+    }
+
+    public function history(Request $request)
+    {
+        $year = isset($request->year)?$request->year:Carbon::now()->format('Y');
+        $approval = [];
+        $approval_code = Auth::user()->approval_code?:'HN1';
+        $end = now()->endOfMonth()->format('d');
+        for ($i = 1; $i <= $end; $i++) {
+            $curentDate = isset($request->month) ? Carbon::create($year, $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
+                : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
+            $docs = ChamCong::where('approval_code', $approval_code)->whereDate('date_time_record', $curentDate)->get()->toArray();
+            $curentDay = now()->format('d');
+            if (count($docs) < 2) {
+                $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
+                $approval[$i] = [
+                    'approval' => 0,
+                    'time' => !empty($startDate) ? $startDate->format('H:i') . ' - Không có' : '',
+                    'donTu' => '',
+                ];
+                $approval[$i]['off'] = ($curentDay > $i && $approval[$i]['approval'] == 0) ? 1 : 0;
+            } else {
+                $startDate = new Carbon($docs[0]['date_time_record']);
+                $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
+                $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
+                $check = $docs[0]['type'] == UserConstant::ACTIVE ? $startDate->format('H:i') : ($docs[count($docs) - 1]['type'] == UserConstant::ACTIVE ? $endDate->format('H:i') : '');
+                $approval[$i] = [
+                    'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
+                    'time' => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
+                    'donTu' => $check,
+                ];
+                $approval[$i]['off'] = ($curentDay > $i && $approval[$i]['approval'] == 0) ? 1 : 0;
+
+            }
+        }
+        if ($request->ajax()){
+            return $approval;
+        }
+        return view('cham_cong.statistic.history', compact('approval'));
     }
 }
