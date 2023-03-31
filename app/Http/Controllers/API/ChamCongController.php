@@ -24,6 +24,7 @@ class ChamCongController extends BaseApiController
                     'machine_number' => $item['MachineNumber'],
                     'date_time_record' => $date,
                     'ind_red_id' => $item['IndRedID'],
+                    'approval_code' => $data['NameMachine'].'.'.$item['IndRedID'],
                     'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                     'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                 ];

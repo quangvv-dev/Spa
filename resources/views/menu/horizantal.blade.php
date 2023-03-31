@@ -324,6 +324,8 @@
                             <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
                             <li><a href="{{url('approval/statistic')}}">Chấm công</a></li>
                             <li><a href="{{url('approval/history')}}">Lịch sử chấm công</a></li>
+                            <li><a href="{{url('approval/history-import-salary')}}">Nhập bảng lương</a></li>
+                            <li><a href="{{url('approval/salary')}}">Bảng lương</a></li>
                             <li><a href="{{url('approval/order')}}">Đơn từ</a></li>
                             <li><a href="{{url('approval/reason')}}">Lý do đơn từ</a></li>
                         </ul>

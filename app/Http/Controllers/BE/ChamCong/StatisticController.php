@@ -9,6 +9,8 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\BE\SettingController;
 use App\Models\ChamCong;
+use App\Models\HistoryImportSalary;
+use App\Models\Salary;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,6 +18,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Excel;
 
 class StatisticController extends Controller
 {
@@ -234,4 +237,64 @@ class StatisticController extends Controller
         }
         return view('cham_cong.statistic.history', compact('approval'));
     }
+
+
+
+
+
+
+    public function importSalary(Request $request){
+
+//        dd(date($request->date));
+//        dd(date("m",strtotime(date($request->date))));
+        if(!$request->date || !$request->name || !$request->file){
+            return redirect()->back()->with('status', 'Vui lòng điền đủ thông tin');
+        }
+        $date = explode('-',$request->date);
+        $month = $date[0];
+        $year = $date[1];
+
+        if ($request->hasFile('file')) {
+            $data['name'] = $request->name;
+            $data['user_id'] = Auth::id();
+            $history = HistoryImportSalary::create($data);
+
+            Excel::selectSheets('Sheet1')->load($request->file('file')->getRealPath(), function ($render) use ($month,$year,$history){
+                $result = $render->toArray();
+                $lastrow = $render->noHeading()->toArray();
+                $theFirstRow = $lastrow[0];
+                foreach ($result as $k => $row){
+                    if (!$row['ma_nhan_vien']){
+                        break;
+                    }
+                    $key = $theFirstRow;
+                    $value = array_values($row);
+                    $input['approval_code'] = $row['ma_nhan_vien'];
+                    $input['all_total'] = $row['tong_tien'];
+//                    $input['key'] = $theFirstRow;
+//                    $input['value'] = array_values($row);
+                    $input['data'] = json_encode(['key'=>$key,'value'=>$value]);
+                    $input['month'] = $month;
+                    $input['year'] = $year;
+                    $input['history_import_salary_id'] = $history->id;
+                    Salary::create($input);
+                }
+            });
+
+
+            return redirect()->back()->with('status', 'Tải bảng lương thành công');
+        }
+
+        return redirect()->back()->with('status', 'Đã có lỗi xảy ra');
+    }
+    public function salary(){
+        $docs = [];
+        return view('cham_cong.salary.index',compact('docs'));
+    }
+    public function historyImportSalary(){
+        $docs = HistoryImportSalary::orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+        return view('cham_cong.salary.history',compact('docs'));
+    }
+
+
 }

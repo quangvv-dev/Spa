@@ -292,6 +292,11 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('history', 'StatisticController@history');
         Route::get('show-history', 'StatisticController@showHistory');
         Route::get('get-detail-cham-cong','StatisticController@getDetail');
+
+        Route::post('import-salary', 'StatisticController@importSalary');
+        Route::get('salary', 'StatisticController@salary');
+        Route::get('history-import-salary', 'StatisticController@historyImportSalary');
+
         Route::resource('reason', 'ReasonController');
     });
 

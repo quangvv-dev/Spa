@@ -9,7 +9,7 @@
             <th class="text-white text-center">Phòng ban</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Chi nhánh</th>
-            <th class="text-white text-center">Chi nhánh</th>
+            <th class="text-white text-center">Mã chấm công</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -24,6 +24,7 @@
                     <td class="text-center">{{ @$user->department->name}}</td>
                     <td class="text-center">{{ $user->role_text }}</td>
                     <td class="text-center">{{ isset($user->branch)?$user->branch->name:'Tất cả chi nhánh'}}</td>
+                    <td class="text-center">{{ $user->approval_code }}</td>
                     <td class="text-center">
                         <a title="sửa tài khoản" class="btn" href="{{ route('users.edit', $user->id) }}"><i
                                 class="fas fa-edit"></i></a>
