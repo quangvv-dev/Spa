@@ -83,10 +83,10 @@
                         @forelse($docs as $key=> $item)
                             <tr>
                                 <td>{{$key+1}}</td>
-                                <td>{{$item->name}}</td>
+                                <td><a href="/approval/detail-history-salary/{{$item->id}}">{{$item->name}}</a></td>
                                 <td>
                                     <div class="{{$item->status == 0 ? 'beacon-red' : 'beacon-green'}}" style="opacity:0.8;width:120px">
-                                        {{$item->status == 0 ? 'Huỷ' : 'Thành công'}}
+                                        {{$item->status == 0 ? 'Huỷ' : 'Đã chuyển'}}
                                     </div>
                                 </td>
                                 <td>

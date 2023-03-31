@@ -238,11 +238,6 @@ class StatisticController extends Controller
         return view('cham_cong.statistic.history', compact('approval'));
     }
 
-
-
-
-
-
     public function importSalary(Request $request){
 
 //        dd(date($request->date));
@@ -287,13 +282,40 @@ class StatisticController extends Controller
 
         return redirect()->back()->with('status', 'Đã có lỗi xảy ra');
     }
-    public function salary(){
-        $docs = [];
-        return view('cham_cong.salary.index',compact('docs'));
+
+    public function salary(Request $request){
+        $month = $request->month ?: 3;
+        $year = $request->year?:2023;
+        if($request->user_id){
+            $approval_code = User::find($request->user_id)->approval_code;
+        } else {
+            $approval_code = Auth::user()->approval_code;
+        }
+        $docs = Salary::where('approval_code',$approval_code)->where('month',$month)->where('year',$year)->first();
+        if($docs){
+            $key = json_decode($docs->data)->key;
+            $value = json_decode($docs->data)->value;
+        } else {
+            $key = [];
+            $value = [];
+        }
+        if($request->ajax()){
+            return view('cham_cong.salary.ajax',compact('docs','key','value'));
+        }
+        return view('cham_cong.salary.index',compact('docs','key','value'));
     }
     public function historyImportSalary(){
         $docs = HistoryImportSalary::orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
         return view('cham_cong.salary.history',compact('docs'));
+    }
+
+    public function detailHistory($id){
+        $docs =  Salary::where('history_import_salary_id',$id)->with('historySalary')->get()->map(function ($item){
+            $item['key'] = json_decode($item->data)->key;
+            $item['value'] = json_decode($item->data)->value;
+            return $item;
+        });
+        return view('cham_cong.salary.detail_history',compact('docs'));
     }
 
 

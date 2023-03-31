@@ -1,59 +1,210 @@
 @extends('layout.app')
 @section('content')
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+
+        .wrapper header {
+            display: flex;
+            align-items: center;
+            padding: 25px 30px 10px;
+            justify-content: space-between;
+        }
+
+        header .icons span {
+            height: 38px;
+            width: 38px;
+            margin: 0 1px;
+            cursor: pointer;
+            color: #878787;
+            text-align: center;
+            line-height: 38px;
+            font-size: 1.9rem;
+            user-select: none;
+            border-radius: 50%;
+        }
+
+        .icons span:last-child {
+            margin-right: -10px;
+        }
+
+        .calendar ul {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            text-align: center;
+            margin-bottom: 0px;
+        }
+
+
+        .calendar li {
+            color: #333;
+            width: calc(100% / 7);
+            font-size: 1.07rem;
+        }
+
+        .calendar .weeks li {
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .calendar .days li {
+            z-index: 1;
+            cursor: pointer;
+            position: relative;
+            padding-bottom: 7%;
+            background: rgb(255, 255, 255);
+        }
+
+        .days li.inactive {
+            color: #aaa;
+        }
+
+        .days li.active {
+            /*color: #fff;*/
+            background: antiquewhite;
+        }
+
+        .days li::before {
+            position: absolute;
+            content: "";
+            left: 50%;
+            top: 50%;
+            height: 40px;
+            width: 40px;
+            z-index: -1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .card-body ul li {
+            border: 1px solid #ccc;
+        }
+
+        .datepicker-container {
+            /*min-width: 300px;*/
+            width: 0px;
+            transition: width 0.3s linear;
+        }
+
+        .datepicker-container.show {
+            /*min-width: 300px;*/
+            width: 300px;
+        }
+
+        .pop-box {
+            background: #fff !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .1);
+        }
+
+        .datepicker-header {
+            display: flex;
+            align-items: center;
+            background: rgb(78, 52, 46);
+            color: #fff;
+            flex-direction: row;
+            user-select: none;
+        }
+
+
+        .datepicker-table {
+            width: 100%;
+        }
+
+        .datepicker-date-slot, .datepicker-month-slot, .datepicker-year-slot {
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .datepicker-date-slot:hover, .datepicker-month-slot:hover, .datepicker-year-slot:hover {
+            background: #f7f8f9;
+            cursor: pointer;
+        }
+
+        .datepicker-header-title {
+            flex-grow: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .material-symbols-rounded {
+            cursor: pointer;
+        }
+        .select {
+            position: absolute;
+            right: 10px;
+        }
+
+        .datepicker-table .selected {
+            color: rgb(78, 52, 46);
+            background: #ddd;
+        }
+        p{
+            font-size: 14px;
+            color: #050505;
+            min-height: 22px;
+            border-bottom: 1px solid;
+            font-weight: 500;
+        }
+        .col-6-custom{
+            padding: 0;
+        }
+    </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Danh sách</h3></br>
-                <form action="{{url()->current()}}" method="get" id="gridForm">
-                    <div class="ml-5">
-                        <input type="text" class="form-control" style="height: 33px;" placeholder="Tìm kiếm">
+                <h3 class="card-title">Bảng lương <span class="month-year">02/2023</span></h3></br>
+                <div class="select">
+                    <button class="btn btn-small btn-primary showMonth"><i class="fa fa-wallet"></i></button>
+                    <div class="datepicker-container pop-box pop-box-click pop-box-contextmenu"
+                         style="z-index: 1000000000;max-height: 469px;overflow: hidden;position: absolute;right: -14%;left: -185px;top: 54px;">
+                        <div style="display:flex;flex-direction:column;justify-content:stretch">
+                            <div class="datepicker-header">
+                                <!--<div class="datepicker-header-btn icon-caret-left" prev="1"></div>-->
+                                <span id="prev" class="material-symbols-rounded">chevron_left</span>
+                                <div class="datepicker-header-title">2023</div>
+                                <!--<div class="datepicker-header-btn icon-caret-right" next="1"></div>-->
+                                <span id="next" class="material-symbols-rounded">chevron_right</span>
+                            </div>
+                            <div class="datepicker-container-table">
+                                <table class="datepicker-table">
+                                    <thead></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="datepicker-month-slot datepicker-month-visible 1">01</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 2">02</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 3 selected">03</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="datepicker-month-slot datepicker-month-visible 4">04</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 5">05</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 6">06</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="datepicker-month-slot datepicker-month-visible 7">07</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 8">08</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 9">09</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="datepicker-month-slot datepicker-month-visible 10">10</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 11">11</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 12">12</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </form>
-                <div class="col">
-                    <a 1="" title="Upload Data" style="position: absolute;right: 0%" href="#" data-toggle="modal" data-target="#myModal">
-                        <i class="fas fa-cloud-upload-alt"></i></a>
-                    <a 1="" title="Tải data" style="position: absolute;right: 3%" class="download" data-value="dowload" href="javascript:void(0)"><i class="fas fa-cloud-download-alt"></i></a>
                 </div>
+
             </div>
             <div id="registration-form">
-                {{--<div class="mt-3 mb-3">--}}
-                {{--<nav class="nav">--}}
-                {{--<a class="nav-link active" href="#">Tất cả (11)</a>--}}
-                {{--<a class="nav-link" href="#">Chờ duyệt (12)</a>--}}
-                {{--<a class="nav-link" href="#">Đã duyệt (45)</a>--}}
-                {{--<a class="nav-link" href="#">Không duyệt</a>--}}
-                {{--</nav>--}}
-                {{--</div>--}}
                 <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap table-primary">
-                        <thead class="bg-primary text-white">
-                        <tr>
-                            <th>Đi muộn</th>
-                            <th>về sớm</th>
-                        </tr>
-
-                        </thead>
-                        <tbody>
-                        @forelse($docs as $item)
-                            <tr data-id="{{$item->id}}">
-                                <td class="text-center">1</td>
-                                <td class="text-center">{{$item->full_name}}</td>
-                                {{--                <td class="text-center">{{$item->full_name}}</td>--}}
-                                <td class="text-center">{{@$item->department->name}}</td>
-                                <td class="text-center"></td>
-                                @for($i = 1; $i<= $end; $i++)
-                                    <td class="text-center pointer showModal" data-date="{{$i}}">{{$item->approval[$i]}}</td>
-                                @endfor
-                                <td>{{array_sum($item->late)}}</td>
-                                <td>2</td>
-                                <th>{{array_sum($item->approval)}}</th>
-                                {{--<td>123</td>--}}
-                            </tr>
-                        @empty
-                            <td></td>
-                        @endforelse
-                        </tbody>
-                    </table>
+                    @include('cham_cong.salary.ajax')
                 </div>
 
 
@@ -65,167 +216,51 @@
 @endsection
 @section('_script')
     <script>
-        $(function () {
-            $(".draggable").draggable();
-        });
-        $(document).on('click', '#checkAll', function () {
-            if (this.checked) {
-                $('input:checkbox[getdataitem]').not(this).prop('checked', true);
-            } else {
-                $('input:checkbox[getdataitem]').not(this).prop('checked', false);
-            }
-        })
+        let date = new Date(),
+            currYear = date.getFullYear(),
+            currMonth = date.getMonth();
 
+        $('.month-year').html(`${currMonth+1}/${currYear}`);
+        $(document).on('click', '.datepicker-month-visible', function () {
+            let month = $(this).html();
+            let abc = parseInt(month);
+            currMonth = abc - 1;
+            currentCheckedMonth = abc - 1;
+            currentCheckedYear = currYear;
 
-        // let array_HOURS = [{
-        //     '00:00': 0,
-        //     '00:30': 0.5,
-        //     '01:00':1,
-        //     '01:30':1.5,
-        //     '02:00':2,
-        //     '02:30':2.5,
-        //     '03:00':3,
-        //     '03:30':3.5,
-        //     '04:00':4,
-        //     '04:30':4.5,
-        //     '05:00':5,
-        //     '05:30':5.5,
-        //     '06:00':6,
-        //     '06:30':6.5,
-        //     '07:00':7,
-        //     '07:30':7.5,
-        //     '08:00':8,
-        //     '08:30':8.5,
-        //     '09:00':9,
-        //     '09:30':9.5,
-        //     '10:00':10,
-        //     '10:30':10.5,
-        //     '11:00':11,
-        //     '11:30':11.5,
-        //     '12:00':12,
-        //     '12:30':12.5,
-        //     '13:00':13,
-        //     '13:30':13.5,
-        //     '14:00':14,
-        //     '14:30':14.5,
-        //     '15:00':15,
-        //     '15:30':15.5,
-        //     '16:00':16,
-        //     '16:30':16.5,
-        //     '17:00':17,
-        //     '17:30':17.5,
-        //     '18:00':18,
-        //     '18:30':18.5,
-        //     '19:00':19,
-        //     '19:30':19.5,
-        //     '20:00':20,
-        //     '20:30':20.5,
-        //     '21:00':21,
-        //     '21:30':21.5,
-        //     '22:00':22,
-        //     '22:30':22.5,
-        //     '23:00':23,
-        //     '23:30':23.5
-        // }];
+            $('.month-year').html(`${abc}/${currYear}`);
 
-        $(document).on('click','.showModal',function () {
-            let dt = new Date();
-            let elm = $(this);
-            let month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
-            let date1 = elm.data('date') <10 ? '0'+ elm.data('date') :  elm.data('date');
-            let date = `${date1}-${month}-${dt.getFullYear()}`;
-            let date_check  =  `${dt.getFullYear()}-${month}-${date1} 13:30:00`; //giờ ca chiều
-            let user_id = elm.closest('tr').data('id');
-
-            let cong = elm.html();
-            let cong_an = cong > 0.8 ? 1 : 0;
             $.ajax({
-                url:'/approval/get-detail-cham-cong',
-                data:{
-                    date: date,
-                    user_id: user_id
-                },
+                url: "{{ url('/approval/salary') }}",
+                data: {year: currentCheckedYear,month:abc},
                 success:function (data) {
-                    if(data){
-                        $('#myModal .full_name').html(`${data.full_name}, Ngày ${date}`)
-
-                        let date_text = '';
-                        let time = '';
-                        if(data.cham_cong.length > 0){
-                            let date_to = data.cham_cong[0].date_time_record;
-                            let date_end = data.cham_cong[data.cham_cong.length-1].date_time_record;
-                            date_text = `${date_to} - ${date_end}`;
-                            let time1 = Date.parse(date_to);
-                            let time2 = Date.parse(date_end);
-                            let time_check = Date.parse(date_check);
-                            let time3 = '';
-                            if(time2 > time_check){ //nếu chấm lần 2 vào ca chiều thì trừ đi 1.5 giờ
-                                time3 = (time2-time1)/1000 - 5400;
-                            } else {
-                                time3 = (time2-time1)/1000;
-                            }
-                            let gio = Math.floor(time3/3600);
-                            let phut = Math.floor((time3%3600)/60);
-                            time = `${gio} giờ ${phut} phút`;
-                        }
-                        let department = data.department ? data.department.name : '';
-                        $('.cong').html(cong);
-                        $('.cong-an').html(cong_an);
-                        $('.ma-cham-cong').html(data.approval_code);
-                        $('.department').html(department);
-                        $('.chot-van-tay').html(date_text);
-                        $('.time').html(time);
-
-
-                        //Đơn từ
-                        if(data.don_tu.length > 0){
-                            let html = '';
-                            data.don_tu.forEach(item=>{
-                                let type = item.type == 0 ? 'Đơn nghỉ' : 'Đơn checkin/out';
-                                let hours = array_HOURS[0][item.time_to];
-                                let text = '';
-                                if(item.type == 0){ //đơn nghỉ
-                                    let hours_end = array_HOURS[0][item.time_end];
-                                    text = `${hours} ${formatDate(item.date)} - ${hours_end} ${formatDate(item.date_end)}`
-                                } else {
-                                    text = `${hours} (${item.reason.name})`
-                                }
-
-                                html+= `
-                                    ${type} : ${text}
-                                    </br>
-                                `
-                            })
-
-                            $('#myModal #nav-don-tu').html(html);
-                        }
-                        else {
-                            $('#myModal #nav-don-tu').html('');
-                        }
-
-
-                        //Chốt vân tay
-
-                        if(data.cham_cong.length > 0){
-                            let html = '';
-                            data.cham_cong.forEach(item=>{
-                                let type = item.type == 0 ? '(máy)' : '(đơn)';
-                                html+= `
-                                    ${item.date_time_record} ${type}, mã máy: ${item.name_machine}
-                                    </br>
-                                `
-                            })
-
-                            $('#myModal #nav-cham-cong').html(html);
-                        } else {
-                            $('#myModal #nav-cham-cong').html('');
-                        }
-
-                    }
+                    $('.table-responsive').html(data);
                 }
             })
 
-            $('#myModal').modal('show');
+            $('.datepicker-table .selected').removeClass('selected');
+            $(this).addClass('selected');
         })
+        $(document).on('click', '.showMonth', function () {
+            $('.datepicker-container').toggleClass('show');
+        })
+
+        $(document).on('click', '#prev', function () {
+            currYear = currYear - 1;
+            $('.datepicker-header-title').html(currYear);
+            selectedMonth();
+        })
+        $(document).on('click', '#next', function () {
+            currYear = currYear + 1;
+            $('.datepicker-header-title').html(currYear);
+            selectedMonth();
+        })
+        function selectedMonth() {
+            $('.datepicker-table .selected').removeClass('selected');
+            if (currYear == currentCheckedYear) {
+                let monthChecked = currentCheckedMonth + 1;
+                $(`.datepicker-table .${monthChecked}`).addClass('selected');
+            }
+        }
     </script>
 @endsection
