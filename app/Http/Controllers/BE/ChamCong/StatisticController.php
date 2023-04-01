@@ -45,7 +45,7 @@ class StatisticController extends Controller
         } else {
             $end = now()->endOfMonth()->format('d');
         }
-        $docs = User::select('id', 'full_name', 'approval_code', 'branch_id', 'department_id')->get()->map(function ($item) use ($end, $year, $request) {
+        $docs = User::select('id', 'full_name', 'approval_code', 'department_id')->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
             $approval = [];
             $late = [];
             $early = [];
@@ -53,7 +53,7 @@ class StatisticController extends Controller
                 $curentDate = $request->month ? Carbon::create($year, $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
                     : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
 
-                $docs = ChamCong::where('ind_red_id', $item->approval_code)->whereDate('date_time_record', $curentDate)->get()->toArray();
+                $docs = ChamCong::select('date_time_record')->where('ind_red_id', $item->approval_code)->whereDate('date_time_record', $curentDate)->get()->toArray();
                 if ($item->approval_code) {
                     if (count($docs) < 2) {
                         $approval[$i] = 0;
