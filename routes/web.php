@@ -296,6 +296,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('import-salary', 'StatisticController@importSalary');
         Route::get('salary', 'StatisticController@salary');
         Route::get('history-import-salary', 'StatisticController@historyImportSalary');
+        Route::delete('delete-history-salary/{id}', 'StatisticController@deleteImportSalary');
         Route::get('detail-history-salary/{id}', 'StatisticController@detailHistory');
 
         Route::resource('reason', 'ReasonController');

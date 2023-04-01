@@ -36,7 +36,10 @@ class RoleController extends Controller
         'source',
         'cham_cong',
         'don_tu',
-        'reason'
+        'reason',
+        'history_approval',
+        'salary',
+        'history_salary',
     ];
     protected $report = [
         'statistics.index',

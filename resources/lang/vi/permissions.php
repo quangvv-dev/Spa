@@ -25,6 +25,9 @@ return [
     "cham_cong"                => "QL Chấm công",
     "don_tu"                   => "QL Đơn từ",
     "reason"                   => "Lý do nghỉ/checkin-out",
+    "history_approval"         => "Lịch sử chấm công",
+    "salary"                   => "Chi tiết bảng lương",
+    "history_salary"           => "Lịch sử import lương",
     // Thống kê
     "report.tasks"             => "Hiệu quả công việc",
     "report.commission"        => "Báo cáo KTV",

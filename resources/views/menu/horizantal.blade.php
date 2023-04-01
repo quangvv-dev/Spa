@@ -322,11 +322,24 @@
                     <div class="sub-item">
                         <ul>
                             <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
-                            <li><a href="{{url('approval/statistic')}}">Chấm công</a></li>
-                            <li><a href="{{url('approval/history')}}">Lịch sử chấm công</a></li>
-                            <li><a href="{{url('approval/history-import-salary')}}">Nhập bảng lương</a></li>
-                            <li><a href="{{url('approval/salary')}}">Bảng lương</a></li>
-                            <li><a href="{{url('approval/order')}}">Đơn từ</a></li>
+                            @if($roleGlobal->permission('cham_cong.list'))
+                                <li><a href="{{url('approval/statistic')}}">Chấm công</a></li>
+                            @endif
+                            @if($roleGlobal->permission('history_approval.list'))
+                                <li><a href="{{url('approval/history')}}">Lịch sử chấm công</a></li>
+                            @endif
+
+                            @if($roleGlobal->permission('history_salary.list'))
+                                <li><a href="{{url('approval/history-import-salary')}}">Nhập bảng lương</a></li>
+                            @endif
+
+                            @if($roleGlobal->permission('salary.list'))
+                                <li><a href="{{url('approval/salary')}}">Bảng lương</a></li>
+                            @endif
+                            @if($roleGlobal->permission('don_tu.list'))
+                                <li><a href="{{url('approval/order')}}">Đơn từ</a></li>
+                            @endif
+
                             <li><a href="{{url('approval/reason')}}">Lý do đơn từ</a></li>
                         </ul>
                     </div>

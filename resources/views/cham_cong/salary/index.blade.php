@@ -153,6 +153,11 @@
         .col-6-custom{
             padding: 0;
         }
+        @media only screen and (max-width: 1365px) {
+            .col-6-custom p{
+                font-size: 13px;
+            }
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -177,7 +182,7 @@
                                     <tr>
                                         <td class="datepicker-month-slot datepicker-month-visible 1">01</td>
                                         <td class="datepicker-month-slot datepicker-month-visible 2">02</td>
-                                        <td class="datepicker-month-slot datepicker-month-visible 3 selected">03</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 3">03</td>
                                     </tr>
                                     <tr>
                                         <td class="datepicker-month-slot datepicker-month-visible 4">04</td>
@@ -219,6 +224,8 @@
         let date = new Date(),
             currYear = date.getFullYear(),
             currMonth = date.getMonth();
+
+        $(`.datepicker-table .${currMonth + 1}`).addClass('selected');
 
         $('.month-year').html(`${currMonth+1}/${currYear}`);
         $(document).on('click', '.datepicker-month-visible', function () {

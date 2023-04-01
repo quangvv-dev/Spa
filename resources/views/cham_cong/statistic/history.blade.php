@@ -212,7 +212,7 @@
                                     <tr>
                                         <td class="datepicker-month-slot datepicker-month-visible 1">01</td>
                                         <td class="datepicker-month-slot datepicker-month-visible 2">02</td>
-                                        <td class="datepicker-month-slot datepicker-month-visible 3 selected">03</td>
+                                        <td class="datepicker-month-slot datepicker-month-visible 3">03</td>
                                     </tr>
                                     <tr>
                                         <td class="datepicker-month-slot datepicker-month-visible 4">04</td>
@@ -338,6 +338,8 @@
         let base = $('.data').val();
         base = JSON.parse(base);
 
+        $(`.datepicker-table .${currMonth + 1}`).addClass('selected');
+
         let currentCheckedMonth = currMonth;
         let currentCheckedYear = currYear;
 
@@ -354,6 +356,7 @@
             for (let i = firstDayofMonth - 1; i > 0; i--) { // creating li of previous month last days
                 liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
             }
+
             for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
                 // adding active class to li if the current day, month, and year matched
                 let isToday = i === date.getDate() && currMonth === new Date().getMonth()

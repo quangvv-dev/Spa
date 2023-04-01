@@ -204,7 +204,12 @@ class StatisticController extends Controller
         $year = isset($request->year)?$request->year:Carbon::now()->format('Y');
         $approval = [];
         $approval_code = Auth::user()->approval_code?:'HN1';
-        $end = now()->endOfMonth()->format('d');
+
+        if($request->month){
+            $end = Carbon::create($year, $request->month)->endOfMonth()->format('d');
+        } else {
+            $end = now()->endOfMonth()->format('d');
+        }
         for ($i = 1; $i <= $end; $i++) {
             $curentDate = isset($request->month) ? Carbon::create($year, $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
                 : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
@@ -284,8 +289,9 @@ class StatisticController extends Controller
     }
 
     public function salary(Request $request){
-        $month = $request->month ?: 3;
-        $year = $request->year?:2023;
+        $month = $request->month ?: date('m');
+        $year = $request->year?:date('Y');
+
         if($request->user_id){
             $approval_code = User::find($request->user_id)->approval_code;
         } else {
@@ -316,6 +322,12 @@ class StatisticController extends Controller
             return $item;
         });
         return view('cham_cong.salary.detail_history',compact('docs'));
+    }
+
+    public function deleteImportSalary($id){
+        HistoryImportSalary::find($id)->update(['status'=>0]);
+        Salary::where('history_import_salary_id',$id)->delete();
+        return 1;
     }
 
 

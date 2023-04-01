@@ -22,7 +22,6 @@
         .beacon-green,.beacon-red {
             opacity: 0.8;
             width: 120px;
-            border: 1px solid #36c870;
             color: #fff!important;
             border-radius:4px;
             font-size: .8em;
@@ -32,9 +31,11 @@
         }
         .beacon-green{
             background: #49CE7E;
+            border: 1px solid #36c870;
         }
         .beacon-red {
             background: #FB5E5A;
+            border: 1px solid #FB5E5A;
         }
         .nav-link.active{
             font-weight: bold !important;
@@ -91,7 +92,7 @@
                                 </td>
                                 <td>
                                     @if($item->status == 1)
-                                        <button class="btn btn-sm btn-danger destroy" title="Huỷ bảng lương">Huỷ</button>
+                                        <button data-id="{{$item->id}}" class="btn btn-sm btn-danger destroy" title="Huỷ bảng lương">Huỷ</button>
                                     @endif
                                 </td>
                             </tr>
@@ -119,7 +120,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="{{url('/approval/import-salary')}}" accept-charset="UTF-8" id="fvalidate" enctype="multipart/form-data" autocomplete="off"><input name="_token" type="hidden" value="yLACOlxlQB9ZaPJ1gQSVkUSjh9RZ6Rpu3rf3xz1M">
-
+                        @csrf
                         <div class="row">
                             <div class="col-12">
                                 <label for="">Tên bảng lương</label>
@@ -162,20 +163,6 @@
                 zIndex: 2048
 
             });
-            // // $('[data-toggle="datepicker-hm"]').datepicker({
-            // //     format: 'h:i',
-            // //     autoHide: true,
-            // //     zIndex: 2048,
-            // // });
-            // $('.datepicker').datepicker('setDate', 'now');
-            // $.fn.datepicker.dates['en'] = {
-            //     months: ["Tháng Một", "Tháng Hai", "Tháng Ba", "Tháng Tư", "Tháng Năm", "Tháng Sáu", "Tháng Bảy", "Tháng Tám", "Tháng Chín", "Tháng Mười", "Tháng Mười Một", "Tháng Mười Hai"],
-            //     monthsShort: ["Thg 1", "Thg 2", "Thg 3", "Thg 4", "Thg 5", "Thg 6", "Thg 7", "Thg 8", "Thg 9", "Thg 10", "Thg 11", "Thg 12"],
-            //     today: "Today",
-            //     clear: "Clear",
-            //     titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
-            //     weekStart: 0,
-            // };
         });
         $(function () {
             $(".draggable").draggable();
@@ -188,57 +175,6 @@
             }
         })
 
-
-        // let array_HOURS = [{
-        //     '00:00': 0,
-        //     '00:30': 0.5,
-        //     '01:00':1,
-        //     '01:30':1.5,
-        //     '02:00':2,
-        //     '02:30':2.5,
-        //     '03:00':3,
-        //     '03:30':3.5,
-        //     '04:00':4,
-        //     '04:30':4.5,
-        //     '05:00':5,
-        //     '05:30':5.5,
-        //     '06:00':6,
-        //     '06:30':6.5,
-        //     '07:00':7,
-        //     '07:30':7.5,
-        //     '08:00':8,
-        //     '08:30':8.5,
-        //     '09:00':9,
-        //     '09:30':9.5,
-        //     '10:00':10,
-        //     '10:30':10.5,
-        //     '11:00':11,
-        //     '11:30':11.5,
-        //     '12:00':12,
-        //     '12:30':12.5,
-        //     '13:00':13,
-        //     '13:30':13.5,
-        //     '14:00':14,
-        //     '14:30':14.5,
-        //     '15:00':15,
-        //     '15:30':15.5,
-        //     '16:00':16,
-        //     '16:30':16.5,
-        //     '17:00':17,
-        //     '17:30':17.5,
-        //     '18:00':18,
-        //     '18:30':18.5,
-        //     '19:00':19,
-        //     '19:30':19.5,
-        //     '20:00':20,
-        //     '20:30':20.5,
-        //     '21:00':21,
-        //     '21:30':21.5,
-        //     '22:00':22,
-        //     '22:30':22.5,
-        //     '23:00':23,
-        //     '23:30':23.5
-        // }];
 
         $(document).on('click','.showModal',function () {
             let dt = new Date();
@@ -338,6 +274,25 @@
             })
 
             $('#myModal').modal('show');
+        })
+
+        $(document).on('click','.destroy',function () {
+            let id = $(this).data('id');
+            swal({
+                title: 'Bạn có muốn huỷ bảng lương ?',
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-danger waves-effect waves-light',
+                confirmButtonText: 'OK'
+            }, function () {
+                $.ajax({
+                    type: 'Delete',
+                    url:`/approval/delete-history-salary/${id}`,
+                    success: function (res) {
+                        window.location.reload();
+                    }
+                })
+            })
         })
     </script>
 @endsection

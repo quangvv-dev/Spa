@@ -2,15 +2,15 @@
     <div class="col-4"></div>
     <div class="col-4">
         <div class="row">
-            <div class="col-6 col-6-custom text-left">
+            <div class="col-8 col-6-custom text-left">
                 @forelse($key as $item)
                     <p>{{$item}}</p>
                 @empty
-                    <p>Không có dữ liệu</p>
+                    <span>Không có dữ liệu</span>
                 @endforelse
             </div>
 
-            <div class="col-6 col-6-custom text-right">
+            <div class="col-4 col-6-custom text-right">
                 @forelse($value as $item)
                     <p>{{is_integer($item) ? number_format($item): $item }}</p>
                 @empty
