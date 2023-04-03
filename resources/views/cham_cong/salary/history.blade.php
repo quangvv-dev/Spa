@@ -74,9 +74,10 @@
                     <table class="table card-table table-vcenter text-nowrap table-primary">
                         <thead class="bg-primary text-white">
                         <tr>
-                            <th class="text-center">TT</th>
+                            <th class="text-center" style="width: 40px">TT</th>
                             <th class="text-center">Tên</th>
                             <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Chi nhánh</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
@@ -90,6 +91,8 @@
                                         {{$item->status == 0 ? 'Huỷ' : 'Đã chuyển'}}
                                     </div>
                                 </td>
+                                <td>{{@$item->branch->name}}</td>
+
                                 <td>
                                     @if($item->status == 1)
                                         <button data-id="{{$item->id}}" class="btn btn-sm btn-danger destroy" title="Huỷ bảng lương">Huỷ</button>
@@ -123,14 +126,25 @@
                         @csrf
                         <div class="row">
                             <div class="col-12">
-                                <label for="">Tên bảng lương</label>
+                                <label for="" class="required">Tên bảng lương</label>
                                 <input type="text" name="name" class="form-control">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <label for="">Chọn tháng</label>
+                                <label for="" class="required">Chọn tháng</label>
                                 <input class="form-control datepicker" autocomplete="off" data-toggle="datepicker" placeholder="mm/yyyy" name="date" type="text" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="" class="required">Chọn chi nhánh</label>
+                                <select name="branch_id" id="" class="form-control select2">
+                                    @forelse($branches as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @empty
+                                    @endforelse
+                                </select>
                             </div>
                         </div>
                         <div class="row">

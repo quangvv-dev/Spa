@@ -8,6 +8,7 @@ use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\BE\SettingController;
+use App\Models\Branch;
 use App\Models\ChamCong;
 use App\Models\HistoryImportSalary;
 use App\Models\Salary;
@@ -244,10 +245,9 @@ class StatisticController extends Controller
     }
 
     public function importSalary(Request $request){
-
 //        dd(date($request->date));
 //        dd(date("m",strtotime(date($request->date))));
-        if(!$request->date || !$request->name || !$request->file){
+        if(!$request->date || !$request->name || !$request->file || !$request->branch_id){
             return redirect()->back()->with('status', 'Vui lòng điền đủ thông tin');
         }
         $date = explode('-',$request->date);
@@ -257,6 +257,7 @@ class StatisticController extends Controller
         if ($request->hasFile('file')) {
             $data['name'] = $request->name;
             $data['user_id'] = Auth::id();
+            $data['branch_id'] = $request->branch_id;
             $history = HistoryImportSalary::create($data);
 
             Excel::selectSheets('Sheet1')->load($request->file('file')->getRealPath(), function ($render) use ($month,$year,$history){
@@ -311,8 +312,9 @@ class StatisticController extends Controller
         return view('cham_cong.salary.index',compact('docs','key','value'));
     }
     public function historyImportSalary(){
+        $branches = Branch::select('name','id')->get();
         $docs = HistoryImportSalary::orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
-        return view('cham_cong.salary.history',compact('docs'));
+        return view('cham_cong.salary.history',compact('docs','branches'));
     }
 
     public function detailHistory($id){
