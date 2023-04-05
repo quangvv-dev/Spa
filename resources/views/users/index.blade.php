@@ -19,6 +19,7 @@
                         @endforelse
                     </select>
                 </div>
+                @if(empty(\Illuminate\Support\Facades\Auth::user()->branch_id))
                 <div class="col-xs-12 col-md-2">
                     <select id="branch" name="branch_id" class="form-control">
                         <option value="">Tất cả chi nhánh</option>
@@ -28,6 +29,7 @@
                         @endforelse
                     </select>
                 </div>
+                @endif
             </div>
             <div id="registration-form">
                 @include('users.ajax')

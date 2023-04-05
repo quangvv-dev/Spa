@@ -12,6 +12,7 @@ use App\Services\UserService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 
@@ -52,6 +53,10 @@ class UserController extends Controller
     {
         $department = Department::select('id', 'name')->pluck('name', 'id')->toArray();
         $input = $request->all();
+        $branch_id = Auth::user()->branch_id;
+        if (!empty($branch_id)) {
+            $input['branch_id'] = $branch_id;
+        }
         $users = User::search($input);
         $title = 'Quản lý người dùng';
 
