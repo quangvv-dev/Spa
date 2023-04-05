@@ -29,6 +29,28 @@
                         <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                     </div>
                 </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
+                        {!! Form::label('name_display', 'Tên hiển thị export', array('class' => '')) !!}
+                        {!! Form::text('name_display', null, array('class' => 'form-control')) !!}
+                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
+                        {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
+                        <select id="role" name="branch_id" class="form-control select2">
+                            <option value="">Tất cả chi nhánh</option>
+                            @forelse($branchs as $k => $item)
+                                <option
+                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
+                                </option>
+                            @empty
+                            @endforelse
+                        </select>
+                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                    </div>
+                </div>
                 {{--<div class="col-xs-12 col-md-6">--}}
                     {{--<div class="form-group required {{ $errors->has('email') ? 'has-error' : '' }}">--}}
                         {{--{!! Form::label('email', 'Email', array('class' => ' required')) !!}--}}
@@ -104,22 +126,23 @@
                     </div>
                     <input type="hidden" name="is_leader" value="0">
 
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-                            {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
-                            <select id="role" name="branch_id" class="form-control select2">
-                                <option value="">Tất cả chi nhánh</option>
-                                @forelse($branchs as $k => $item)
-                                    <option
-                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
-                                    </option>
-                                @empty
-                                @endforelse
-                            </select>
-                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                        </div>
-                    </div>
+
                 @endif
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group">
+                        {!! Form::label('location_id', 'Chọn cụm', array('class' => '')) !!}
+                        <select name="location_id" class="form-control select2">
+                            <option value="">Chọn cụm</option>
+                            @forelse($location as $k => $item)
+                                <option
+                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
+                                </option>
+                            @empty
+                            @endforelse
+                        </select>
+                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
+                    </div>
+                </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                         {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
@@ -140,21 +163,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group">
-                        {!! Form::label('location_id', 'Chọn cụm', array('class' => '')) !!}
-                        <select name="location_id" class="form-control select2">
-                            <option value="">Chọn cụm</option>
-                            @forelse($location as $k => $item)
-                                <option
-                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
-                                </option>
-                            @empty
-                            @endforelse
-                        </select>
-                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                    </div>
-                </div>
+
 
             </div>
             <div class="col" style="margin-bottom: 10px;">
