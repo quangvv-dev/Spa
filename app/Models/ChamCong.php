@@ -14,6 +14,6 @@ class ChamCong extends Model
         return $this->belongsTo(Branch::class, 'name_machine', 'name_machine');
     }
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'approval_code','approval_code');
     }
 }

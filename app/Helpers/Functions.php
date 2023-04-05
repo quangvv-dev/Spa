@@ -393,6 +393,11 @@ class Functions
         return \Carbon\Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
     }
 
+    public static function getTime($date)
+    {
+        return \Carbon\Carbon::parse($date)->format('H:i:s');
+    }
+
     /**
      * SMS VMG BRANDNAME
      *

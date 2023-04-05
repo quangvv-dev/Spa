@@ -300,6 +300,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('detail-history-salary/{id}', 'StatisticController@detailHistory');
 
         Route::resource('reason', 'ReasonController');
+
+        Route::get('export-data-approval','StatisticController@exportDataApproval');
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');

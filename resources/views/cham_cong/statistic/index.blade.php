@@ -1,5 +1,9 @@
 @extends('layout.app')
 @section('content')
+    <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+
     <style>
         .txt-dotted {
             border: 1px solid transparent;
@@ -7,62 +11,200 @@
             width: 100%;
             padding: 0px;
         }
+
         .users-summary {
             display: inline-block;
             width: 30px;
             height: 30px;
         }
-        .users-summary .userlink{
+
+        .users-summary .userlink {
             background: rgb(230, 230, 230);
             overflow: hidden;
             text-indent: -10000px;
             border-radius: 50%;
             margin-left: 0;
         }
-        .beacon-green,.beacon-red {
+
+        .beacon-green, .beacon-red {
             opacity: 0.8;
             width: 120px;
             border: 1px solid #36c870;
-            color: #fff!important;
-            border-radius:4px;
+            color: #fff !important;
+            border-radius: 4px;
             font-size: .8em;
             display: inline-flex;
             padding: 5px 10px;
             justify-content: center;
         }
-        .beacon-green{
+
+        .beacon-green {
             background: #49CE7E;
         }
+
         .beacon-red {
             background: #FB5E5A;
         }
-        .nav-link.active{
+
+        .nav-link.active {
             font-weight: bold !important;
         }
-        .pointer{
+
+        .pointer {
             cursor: pointer;
+        }
+        .datepicker-container {
+            /*min-width: 300px;*/
+            width: 0px;
+            transition: width 0.3s linear;
+        }
+
+        .datepicker-container.show {
+            /*min-width: 300px;*/
+            width: 300px;
+        }
+
+        .pop-box {
+            background: #fff !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .1);
+        }
+
+        .datepicker-header {
+            display: flex;
+            align-items: center;
+            background: rgb(78, 52, 46);
+            color: #fff;
+            flex-direction: row;
+            user-select: none;
+        }
+
+
+        .datepicker-table {
+            width: 100%;
+        }
+
+        .datepicker-date-slot, .datepicker-month-slot, .datepicker-year-slot {
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .datepicker-date-slot:hover, .datepicker-month-slot:hover, .datepicker-year-slot:hover {
+            background: #f7f8f9;
+            cursor: pointer;
+        }
+
+        .datepicker-header-title {
+            flex-grow: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .material-symbols-rounded {
+            cursor: pointer;
+        }
+
+        .abc {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column
+        }
+
+        .select {
+            position: relative;
+        }
+
+        .datepicker-table .selected {
+            color: rgb(78, 52, 46);
+            background: #ddd;
+        }
+        .padding-bot10{
+            padding-bottom: 10px;
         }
 
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Danh sách</h3></br>
-                <form action="{{url()->current()}}" method="get" id="gridForm">
-                    <div class="ml-5">
-                        <input type="text" class="form-control" style="height: 33px;" placeholder="Tìm kiếm">
-                    </div>
-                </form>
+            <form action="{{url()->current()}}" method="get" id="gridForm">
 
-            </div>
+                <div class="card-header">
+                    <div class="row" style="width: 100%;">
+                        <h4 class="col-lg-2">Danh sách</h4>
+                        <input type="hidden" class="value-month" name="month">
+                        <input type="hidden" class="value-year" name="year">
+                        <div class="select">
+                            <button class="btn btn-small btn-primary showMonth"><i class="fa fa-wallet"></i></button>
+                            <div class="datepicker-container pop-box pop-box-click pop-box-contextmenu"
+                                 style="z-index: 1000000000;max-height: 469px;overflow: hidden;position: absolute;right: -14%;left: -185px;top: 54px;">
+                                <div style="display:flex;flex-direction:column;justify-content:stretch">
+                                    <div class="datepicker-header">
+                                        <!--<div class="datepicker-header-btn icon-caret-left" prev="1"></div>-->
+                                        <span id="prev" class="material-symbols-rounded">chevron_left</span>
+                                        <div class="datepicker-header-title">2023</div>
+                                        <!--<div class="datepicker-header-btn icon-caret-right" next="1"></div>-->
+                                        <span id="next" class="material-symbols-rounded">chevron_right</span>
+                                    </div>
+                                    <div class="datepicker-container-table">
+                                        <table class="datepicker-table">
+                                            <thead></thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="datepicker-month-slot datepicker-month-visible 1">01</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 2">02</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 3">03</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="datepicker-month-slot datepicker-month-visible 4">04</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 5">05</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 6">06</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="datepicker-month-slot datepicker-month-visible 7">07</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 8">08</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 9">09</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="datepicker-month-slot datepicker-month-visible 10">10</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 11">11</td>
+                                                <td class="datepicker-month-slot datepicker-month-visible 12">12</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            {!! Form::select('branch_id', $branches, null, array('class' => 'form-control branch_id', 'placeholder'=>'Chọn chi nhánh',)) !!}
+                        </div>
+
+                        {{--<button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm</button>--}}
+                    </div>
+                    <div class="col">
+                        {{--<a 1="" title="Upload Data" style="position: absolute;right: 0%" href="#" data-toggle="modal" data-target="#myModal">--}}
+                        {{--<i class="fas fa-cloud-upload-alt"></i></a>--}}
+                        <a 1="" title="Tải data" style="position: absolute;right: 3%" class="download"
+                           data-value="download" href="javascript:void(0)"><i class="fas fa-cloud-download-alt"></i></a>
+                    </div>
+                </div>
+            </form>
             <div id="registration-form">
                 {{--<div class="mt-3 mb-3">--}}
-                    {{--<nav class="nav">--}}
-                        {{--<a class="nav-link active" href="#">Tất cả (11)</a>--}}
-                        {{--<a class="nav-link" href="#">Chờ duyệt (12)</a>--}}
-                        {{--<a class="nav-link" href="#">Đã duyệt (45)</a>--}}
-                        {{--<a class="nav-link" href="#">Không duyệt</a>--}}
-                    {{--</nav>--}}
+                {{--<nav class="nav">--}}
+                {{--<a class="nav-link active" href="#">Tất cả (11)</a>--}}
+                {{--<a class="nav-link" href="#">Chờ duyệt (12)</a>--}}
+                {{--<a class="nav-link" href="#">Đã duyệt (45)</a>--}}
+                {{--<a class="nav-link" href="#">Không duyệt</a>--}}
+                {{--</nav>--}}
                 {{--</div>--}}
                 @include('cham_cong.statistic.ajax')
             </div>
@@ -72,6 +214,8 @@
     @include('cham_cong.statistic.modal')
 @endsection
 @section('_script')
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
     <script>
         $(function () {
             $(".draggable").draggable();
@@ -84,96 +228,44 @@
             }
         })
 
-
-        // let array_HOURS = [{
-        //     '00:00': 0,
-        //     '00:30': 0.5,
-        //     '01:00':1,
-        //     '01:30':1.5,
-        //     '02:00':2,
-        //     '02:30':2.5,
-        //     '03:00':3,
-        //     '03:30':3.5,
-        //     '04:00':4,
-        //     '04:30':4.5,
-        //     '05:00':5,
-        //     '05:30':5.5,
-        //     '06:00':6,
-        //     '06:30':6.5,
-        //     '07:00':7,
-        //     '07:30':7.5,
-        //     '08:00':8,
-        //     '08:30':8.5,
-        //     '09:00':9,
-        //     '09:30':9.5,
-        //     '10:00':10,
-        //     '10:30':10.5,
-        //     '11:00':11,
-        //     '11:30':11.5,
-        //     '12:00':12,
-        //     '12:30':12.5,
-        //     '13:00':13,
-        //     '13:30':13.5,
-        //     '14:00':14,
-        //     '14:30':14.5,
-        //     '15:00':15,
-        //     '15:30':15.5,
-        //     '16:00':16,
-        //     '16:30':16.5,
-        //     '17:00':17,
-        //     '17:30':17.5,
-        //     '18:00':18,
-        //     '18:30':18.5,
-        //     '19:00':19,
-        //     '19:30':19.5,
-        //     '20:00':20,
-        //     '20:30':20.5,
-        //     '21:00':21,
-        //     '21:30':21.5,
-        //     '22:00':22,
-        //     '22:30':22.5,
-        //     '23:00':23,
-        //     '23:30':23.5
-        // }];
-
-        $(document).on('click','.showModal',function () {
+        $(document).on('click', '.showModal', function () {
             let dt = new Date();
             let elm = $(this);
             let month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
-            let date1 = elm.data('date') <10 ? '0'+ elm.data('date') :  elm.data('date');
+            let date1 = elm.data('date') < 10 ? '0' + elm.data('date') : elm.data('date');
             let date = `${date1}-${month}-${dt.getFullYear()}`;
-            let date_check  =  `${dt.getFullYear()}-${month}-${date1} 13:30:00`; //giờ ca chiều
+            let date_check = `${dt.getFullYear()}-${month}-${date1} 13:30:00`; //giờ ca chiều
             let user_id = elm.closest('tr').data('id');
 
             let cong = elm.html();
             let cong_an = cong > 0.8 ? 1 : 0;
             $.ajax({
-                url:'/approval/get-detail-cham-cong',
-                data:{
+                url: '/approval/get-detail-cham-cong',
+                data: {
                     date: date,
                     user_id: user_id
                 },
-                success:function (data) {
-                    if(data){
+                success: function (data) {
+                    if (data) {
                         $('#myModal .full_name').html(`${data.full_name}, Ngày ${date}`)
 
                         let date_text = '';
                         let time = '';
-                        if(data.cham_cong.length > 0){
+                        if (data.cham_cong.length > 0) {
                             let date_to = data.cham_cong[0].date_time_record;
-                            let date_end = data.cham_cong[data.cham_cong.length-1].date_time_record;
+                            let date_end = data.cham_cong[data.cham_cong.length - 1].date_time_record;
                             date_text = `${date_to} - ${date_end}`;
                             let time1 = Date.parse(date_to);
                             let time2 = Date.parse(date_end);
                             let time_check = Date.parse(date_check);
                             let time3 = '';
-                            if(time2 > time_check){ //nếu chấm lần 2 vào ca chiều thì trừ đi 1.5 giờ
-                                time3 = (time2-time1)/1000 - 5400;
+                            if (time2 > time_check) { //nếu chấm lần 2 vào ca chiều thì trừ đi 1.5 giờ
+                                time3 = (time2 - time1) / 1000 - 5400;
                             } else {
-                                time3 = (time2-time1)/1000;
+                                time3 = (time2 - time1) / 1000;
                             }
-                            let gio = Math.floor(time3/3600);
-                            let phut = Math.floor((time3%3600)/60);
+                            let gio = Math.floor(time3 / 3600);
+                            let phut = Math.floor((time3 % 3600) / 60);
                             time = `${gio} giờ ${phut} phút`;
                         }
                         let department = data.department ? data.department.name : '';
@@ -186,39 +278,38 @@
 
 
                         //Đơn từ
-                        if(data.don_tu.length > 0){
+                        if (data.don_tu.length > 0) {
                             let html = '';
-                            data.don_tu.forEach(item=>{
+                            data.don_tu.forEach(item => {
                                 let type = item.type == 0 ? 'Đơn nghỉ' : 'Đơn checkin/out';
                                 let hours = array_HOURS[0][item.time_to];
                                 let text = '';
-                                if(item.type == 0){ //đơn nghỉ
+                                if (item.type == 0) { //đơn nghỉ
                                     let hours_end = array_HOURS[0][item.time_end];
                                     text = `${hours} ${formatDate(item.date)} - ${hours_end} ${formatDate(item.date_end)}`
                                 } else {
                                     text = `${hours} (${item.reason.name})`
                                 }
 
-                                html+= `
+                                html += `
                                     ${type} : ${text}
                                     </br>
                                 `
                             })
 
                             $('#myModal #nav-don-tu').html(html);
-                        }
-                        else {
+                        } else {
                             $('#myModal #nav-don-tu').html('');
                         }
 
 
                         //Chốt vân tay
 
-                        if(data.cham_cong.length > 0){
+                        if (data.cham_cong.length > 0) {
                             let html = '';
-                            data.cham_cong.forEach(item=>{
+                            data.cham_cong.forEach(item => {
                                 let type = item.type == 0 ? '(máy)' : '(đơn)';
-                                html+= `
+                                html += `
                                     ${item.date_time_record} ${type}, mã máy: ${item.name_machine}
                                     </br>
                                 `
@@ -235,5 +326,77 @@
 
             $('#myModal').modal('show');
         })
+
+        $(document).on('click', '.download', function () {
+            let month = $('.value-month').val();
+            let year = $('.value-year').val();
+            let branch_id = $('.branch_id').val();
+            let url = location.origin + `/approval/export-data-approval?month=${month}&year=${year}&branch_id=${branch_id}`;
+            // location.href = url;
+            window.open(url, '_blank');
+        })
+
+        let date = new Date(),
+            currYear = date.getFullYear(),
+            currMonth = date.getMonth();
+
+        let currentCheckedMonth = currMonth;
+        let currentCheckedYear = currYear;
+
+        $(`.datepicker-table .${currMonth + 1}`).addClass('selected');
+
+        $(document).on('click', '#prev', function () {
+            currYear = currYear - 1;
+            $('.datepicker-header-title').html(currYear);
+            selectedMonth();
+        })
+        $(document).on('click', '#next', function () {
+            currYear = currYear + 1;
+            $('.datepicker-header-title').html(currYear);
+            selectedMonth();
+        })
+
+        function selectedMonth() {
+            $('.datepicker-table .selected').removeClass('selected');
+            if (currYear == currentCheckedYear) {
+                let monthChecked = currentCheckedMonth + 1;
+                $(`.datepicker-table .${monthChecked}`).addClass('selected');
+            }
+        }
+
+        $(document).on('change','.branch_id',function () {
+            $('#gridForm').submit();
+        })
+        $(document).on('click', '.datepicker-month-visible', function () {
+            let month = $(this).html();
+            let abc = parseInt(month);
+            currMonth = abc - 1;
+            currentCheckedMonth = abc - 1;
+            currentCheckedYear = currYear;
+            $('.datepicker-table .selected').removeClass('selected');
+            $(this).addClass('selected');
+            $('.value-month').val(abc);
+            $('.value-year').val(currYear);
+            $('.datepicker-container').removeClass('show');
+            $('#gridForm').submit();
+
+
+            {{--$.ajax({--}}
+                {{--url: "{{ url('/approval/history') }}",--}}
+                {{--method: "get",--}}
+                {{--data: {year: currentCheckedYear,month:abc}--}}
+            {{--}).done(function (data) {--}}
+                {{--base = data;--}}
+                {{--renderCalendar();--}}
+            {{--});--}}
+
+
+        })
+        $(document).on('click', '.showMonth', function (e) {
+            e.preventDefault();
+            $('.datepicker-container').toggleClass('show');
+        })
+
+
     </script>
 @endsection

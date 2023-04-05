@@ -10,6 +10,7 @@ use App\Helpers\Functions;
 use App\Http\Controllers\BE\SettingController;
 use App\Models\Branch;
 use App\Models\ChamCong;
+use App\Models\Department;
 use App\Models\HistoryImportSalary;
 use App\Models\Salary;
 use App\User;
@@ -40,13 +41,17 @@ class StatisticController extends Controller
      */
     public function index(Request $request)
     {
-        $year = now()->format('Y');
+        $year = $request->year ?: now()->format('Y');
+
         if ($request->month) {
             $end = Carbon::create($year, $request->month)->endOfMonth()->format('d');
         } else {
             $end = now()->endOfMonth()->format('d');
         }
-        $docs = User::select('id', 'full_name', 'approval_code', 'department_id')->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
+        $docs = User::select('id', 'full_name', 'approval_code', 'department_id')
+            ->when(isset($request->branch_id),function ($q) use ($request){
+                $q->where('branch_id',$request->branch_id);
+            })->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
             $approval = [];
             $late = [];
             $early = [];
@@ -80,7 +85,11 @@ class StatisticController extends Controller
             }
         });
 //        dd($docs);
-        return view('cham_cong.statistic.index', compact('end', 'docs'));
+        if($request->ajax()){
+            return view('cham_cong.statistic.ajax', compact('end', 'docs'));
+        }
+        $branches = Branch::pluck('name','id')->toArray();
+        return view('cham_cong.statistic.index', compact('end', 'docs','branches'));
     }
 
     /**
@@ -332,5 +341,97 @@ class StatisticController extends Controller
         return 1;
     }
 
+    public function exportDataApproval(Request $request){
+        $year = $request->year ?: now()->format('Y');
+
+        if ($request->month) {
+            $end = Carbon::create($year, $request->month)->endOfMonth()->format('d');
+            $current_month = $request->month;
+        } else {
+            $end = now()->endOfMonth()->format('d');
+            $current_month = date('m');
+        }
+
+        $date_start = Functions::createYearMonthDay('01'.'-'.$current_month.'-'.$year) . " 00:00:00";
+        $date_end = Functions::createYearMonthDay($end.'-'.$current_month.'-'.$year) . " 23:59:59";
+        if($request->branch_id){
+            $array_approval_code = User::where('branch_id',$request->branch_id)->whereNotNull('approval_code')->pluck('approval_code')->toArray();
+        } else {
+            $array_approval_code = [];
+        }
+
+        $data = ChamCong::select('name_machine','date_time_record','type','approval_code')
+            ->when(isset($date_start) && isset($date_end), function ($q) use ($date_start,$date_end) {
+                $q->whereBetween('date_time_record', [$date_start,$date_end]);
+            })->when(count($array_approval_code),function ($q) use ($array_approval_code){
+                $q->whereIn('approval_code',$array_approval_code);
+            })->get()->map(function ($m){
+                $user = User::where('approval_code',$m->approval_code)->first();
+                if($user){
+                    $m->name_display = $user->name_display;
+                    $m->vi_tri = $user->is_leader == 1 ? 'Trưởng phòng' : 'Nhân viên';
+                    $department = Department::find($user->department_id);
+                    if($department){
+                        $m->department_name = $department->name;
+                    } else {
+                        $m->department_name = '';
+                    }
+                    $branch = Branch::find($user->branch_id);
+                    if($branch){
+                        $m->branch_name = $branch->name;
+                    } else {
+                        $m->branch_name = '';
+                    }
+                }else {
+                    $m->name_display = '';
+                    $m->department_name = '';
+                    $m->vi_tri = '';
+                    $m->branch_name = '';
+                }
+                $m->date = Functions::dayMonthYear($m->date_time_record);
+                $m->time = Functions::getTime($m->date_time_record);
+                $m->type = $m->type == 0 ? 'Máy chấm công' : 'Đơn từ';
+                return $m;
+            })->sortBy('department_name')->sortBy('name_display');
+
+        Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($data){
+            $excel->sheet('Sheet 1', function ($sheet)  use ($data){
+                $sheet->cell('A1:I1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->freezeFirstRow();
+                $sheet->row(1, [
+                    'Mã',
+                    'Họ tên',
+                    'Vị trí',
+                    'Phòng ban',
+                    'Ngày chốt',
+                    'Giờ chốt',
+                    'Nguồn',
+                    'Mã máy chấm công',
+                    'CN'
+                ]);
+                if(count($data)){
+                    $i = 1;
+                    foreach ($data as $item){
+                        $i++;
+                        $sheet->row($i, [
+                            $item->approval_code,
+                            $item->name_display,
+                            $item->vi_tri,
+                            $item->department_name,
+                            $item->date,
+                            $item->time,
+                            $item->type,
+                            $item->name_machine,
+                            $item->branch_name
+                        ]);
+                    }
+                }
+
+            });
+        })->export('xlsx');
+    }
 
 }
