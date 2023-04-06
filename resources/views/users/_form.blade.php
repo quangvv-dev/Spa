@@ -39,7 +39,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
                         {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
-                        <select id="role" name="branch_id" class="form-control select2">
+                        <select id="branch_id" name="branch_id" class="form-control select2">
                             <option value="">Tất cả chi nhánh</option>
                             @forelse($branchs as $k => $item)
                                 <option
