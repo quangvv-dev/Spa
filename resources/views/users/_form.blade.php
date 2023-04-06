@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-                        {!! Form::label('name_display', 'Tên hiển thị export', array('class' => '')) !!}
+                        {!! Form::label('name_display', 'Tên xuất báo cáo', array('class' => '')) !!}
                         {!! Form::text('name_display', null, array('class' => 'form-control')) !!}
                         <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                     </div>
@@ -81,7 +81,7 @@
                         <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-6 col-md-3">
+                <div class="col-xs-4 col-md-3">
                     <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
                         {!! Form::label('', 'Mã máy tổng đài (nếu có)') !!}
                         <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}"
@@ -89,8 +89,15 @@
                         <span class="help-block">{{ $errors->first('caller_number', ':message') }}</span>
                     </div>
                 </div>
+                <div class="col-xs-4 col-md-3">
+                    <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
+                        {!! Form::label('', 'Mã máy tổng đài (nếu có)') !!}
+                        <input type="text" id="code" class="form-control" value="{{isset($user)?@$user->code:''}}"
+                        <span class="help-block">{{ $errors->first('code', ':message') }}</span>
+                    </div>
+                </div>
 
-                <div class="col-xs-6 col-md-3">
+                <div class="col-xs-4 col-md-3">
                     <div class="form-group required {{ $errors->has('approval_code') ? 'has-error' : '' }}">
                         {!! Form::label('', 'Mã chấm công (nếu có)') !!}
                         <input type="text" id="approval_code" class="form-control" value="{{isset($user)?@$user->approval_code:''}}"
