@@ -63,7 +63,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
                        href="{!! route('customers.index') !!}"><i
-                                class="fas fa-users"></i><span>Quản lý khách hàng</span></a>
+                                class="fas fa-users"></i><span>Khách hàng</span></a>
                 </li>
             @endif
             <li class="nav-item with-sub">
@@ -135,7 +135,7 @@
             </li>
             <li class="nav-item with-sub">
                 <a class="nav-link {{ Request::is('category*')||Request::is('orders-payment')||Request::is('list-orders*')||Request::is('combos*')||Request::is('services*')||Request::is('products*')||Request::is('category-product*') ? 'active' : '' }}"
-                   href="#"><i class="fas fa-newspaper"></i><span>Quản lý bán hàng</span></a>
+                   href="#"><i class="fas fa-newspaper"></i><span>Bán hàng</span></a>
                 <div class="sub-item">
                     <ul>
                         <li class="sub-with-sub">
