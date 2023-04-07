@@ -21,7 +21,7 @@
 
                 <div class="col-12">
                     {!! Form::label('chanel', 'Kênh quảng cáo', array('class' => 'control-label')) !!}
-                    <select name="chanel" class="select2 form-control">
+                    <select name="chanel" class="select2 form-control chanel-source">
                         <option value="1">Google Ads</option>
                         <option value="2">Facebook Ads</option>
                         <option value="3">Zalo Ads</option>

@@ -123,6 +123,7 @@ class LandipageController extends Controller
     public function update(Request $request, $id)
     {
 //        dd($request->all());
+        $data = $request->all();
         $source = Source::find($id);
         $data['name'] = $request->name;
         if($request->category_id){
