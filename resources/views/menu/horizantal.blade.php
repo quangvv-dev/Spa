@@ -315,13 +315,14 @@
                 </li>
             @endif
 
-            @if($roleGlobal->permission('time-status.index'))
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
-                       href="#"><i class="fas fa-cog"></i><span>Cài đặt</span></a>
+                       href="#"><i class="fas fa-cog"></i><span>Chấm công</span></a>
                     <div class="sub-item">
                         <ul>
+                            @if($roleGlobal->permission('time-status.index'))
                             <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
+                            @endif
                             @if($roleGlobal->permission('cham_cong.list'))
                                 <li><a href="{{url('approval/statistic')}}">Chấm công</a></li>
                             @endif
@@ -344,7 +345,6 @@
                         </ul>
                     </div>
                 </li>
-            @endif
 
         </ul>
         <div class="div-info">
