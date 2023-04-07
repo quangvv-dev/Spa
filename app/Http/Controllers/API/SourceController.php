@@ -17,21 +17,21 @@ class SourceController extends Controller
         try {
             $source = Source::find($id);
             $customer_search = Customer::where('phone', $request->phone)->orderByDesc('updated_at')->first();
-            if ($customer_search){
+            if ($customer_search) {
                 return response()->json([
-                    'code'     => 200,
+                    'code' => 200,
                     'messages' => 'Khách hàng đã tồn tại',
                 ]);
             }
             if (empty($source) || empty($source->accept)) {
                 return response()->json([
-                    'code'     => 404,
+                    'code' => 404,
                     'messages' => 'NOT FOUND SOURCE',
                 ]);
             }
             if (empty($request->phone) || empty($request->name)) {
                 return response()->json([
-                    'code'     => 400,
+                    'code' => 400,
                     'messages' => 'NOT FOND PHONE OR NAME',
                 ]);
             }
@@ -42,13 +42,13 @@ class SourceController extends Controller
             $data['source_fb'] = $source->id;
             $data['status_id'] = Functions::getStatusWithCode('moi');
             $data['mkt_id'] = $source->mkt_id;
-            $data['telesales_id'] = $sales[$source->position];
+            $data['telesales_id'] = count($sales) > 2 ? $sales[$source->position] : $sales[0];
             $data['gender'] = 0;
             $data['branch_id'] = $source->branch_id;
             $data['full_name'] = $request->name;
-            if (is_array($request->message)){
+            if (is_array($request->message)) {
                 $data['description'] = implode("||", $request->message);
-            }else{
+            } else {
                 $data['description'] = $request->message;
             }
 
@@ -84,22 +84,22 @@ class SourceController extends Controller
                         [
                             'customer_id' => $cusstomer->id,
                             'category_id' => $item,
-                            'branch_id'   => $source->branch_id,
-                            'created_at'   => Carbon::now()->format('Y-m-d h:i:s'),
-                            'updated_at'   => Carbon::now()->format('Y-m-d h:i:s')
+                            'branch_id' => $source->branch_id,
+                            'created_at' => Carbon::now()->format('Y-m-d h:i:s'),
+                            'updated_at' => Carbon::now()->format('Y-m-d h:i:s')
                         ]
                     );
                 }
             }
-            $cusstomer->update(['account_code'=>'KH'.$cusstomer->id]);
+            $cusstomer->update(['account_code' => 'KH' . $cusstomer->id]);
             return response()->json([
-                'code'     => 200,
+                'code' => 200,
                 'messages' => 'SUCCESS',
             ]);
 
         } catch (\Exception $exception) {
             return response()->json([
-                'code'     => 401,
+                'code' => 401,
                 'messages' => $exception->getMessage(),
             ]);
         }

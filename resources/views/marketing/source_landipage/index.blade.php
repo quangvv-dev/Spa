@@ -110,7 +110,6 @@
             form.attr('method', 'POST');
             $('#myModalLabel').html('Cập nhật nguồn').change();
             $('#validateForm').append('<input name="_method" class="_method" type="hidden" value="PUT" />');
-
             $('#name').val(item.name);
             $('.url_source').val(item.url_source);
             $('.category_id').val(JSON.parse(item.category_id)).change();
