@@ -2,7 +2,7 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-white">ID</th>
+            <th class="text-white">Mã NV</th>
             <th class="text-white text-center">Họ tên</th>
             <th class="text-white text-center">Số điện thoại</th>
             <th class="text-white text-center">Cụm</th>
@@ -18,7 +18,7 @@
         @if (count($users))
             @foreach($users as $user)
                 <tr>
-                    <th scope="row">{{ $user->id }}</th>
+                    <th scope="row">{{ $user->code }}</th>
                     <td class="text-center">{{ $user->full_name }}</td>
                     <td class="text-center">{{ $user->phone }}</td>
                     <td class="text-center">{{ @$user->location->name }}</td>
