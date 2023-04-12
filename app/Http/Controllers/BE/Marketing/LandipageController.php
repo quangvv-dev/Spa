@@ -80,7 +80,7 @@ class LandipageController extends Controller
 //        } else {
 //            $data['sale_id'] = json_encode($request->sale_id);
 //        }
-        $data['sale_id'] = json_encode($request->sale_id);
+        $data['sale_id'] = $request->sale_id ? json_encode($request->sale_id) : null;
         $data['mkt_id'] = Auth::user()->id;
         $data['category_id'] = json_encode($request->category_id);
         $data['type'] = StatusConstant::TYPE_CONNECT_LADIPAGE;

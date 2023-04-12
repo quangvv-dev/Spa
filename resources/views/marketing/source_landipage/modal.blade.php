@@ -15,7 +15,7 @@
                     {!! Form::text('name', null, array('class' => 'form-control square name','required'=>true)) !!}
                 </div>
                 <div class="col-12">
-                    {!! Form::label('url_source', 'Url nguồn dữ liệu', array('class' => 'control-label')) !!}
+                    {!! Form::label('url_source', 'Url nguồn dữ liệu', array('class' => 'control-label required')) !!}
                     {!! Form::text('url_source', null, array('class' => 'form-control url_source','required'=>true)) !!}
                 </div>
 
@@ -34,8 +34,8 @@
                     {!! Form::select('sale_id[]', $sales,null, array('class' => 'select2 form-control sale_id','multiple'=>true)) !!}
                 </div>
                 <div class="col-12">
-                    {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => 'control-label')) !!}
-                    {!! Form::select('category_id[]', $categories,null, array('class' => 'select2 form-control category_id','multiple'=>true)) !!}
+                    {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => 'control-label required')) !!}
+                    {!! Form::select('category_id[]', $categories,null, array('class' => 'select2 form-control category_id','required'=>true,'multiple'=>true)) !!}
                 </div>
                 <div class="col-12">
                     {!! Form::label('branch_id', 'Chọn chi nhánh', array('class' => 'control-label required')) !!}
