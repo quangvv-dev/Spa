@@ -31,7 +31,7 @@
 
                 <div class="col-12">
                     {!! Form::label('sale_id', 'Ưu tiên sale', array('class' => 'control-label')) !!}
-                    {!! Form::select('sale_id[]', $sales,null, array('class' => 'select2 form-control sale_id','multiple'=>true)) !!}
+                    {!! Form::select('sale_id[]', $sales,null, array('class' => 'select2 form-control sale_id','required'=>true,'multiple'=>true)) !!}
                 </div>
                 <div class="col-12">
                     {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => 'control-label required')) !!}
