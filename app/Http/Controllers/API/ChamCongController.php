@@ -23,7 +23,7 @@ class ChamCongController extends BaseApiController
             $isset = ChamCong::where('name_machine', $data['NameMachine'])->where('ind_red_id', $item['IndRedID'])->where('date_time_record', $date)->first();
             $approval_code = $data['NameMachine'].'.'.$item['IndRedID'];
 
-            if(in_array($approval_code,$array_approval_code)){
+//            if(in_array($approval_code,$array_approval_code)){
                 if (empty($isset)) {
                     $input[] = [
                         'name_machine' => $data['NameMachine'],
@@ -35,7 +35,7 @@ class ChamCongController extends BaseApiController
                         'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                     ];
                 }
-            }
+//            }
 
         }
         ChamCong::insert($input);
