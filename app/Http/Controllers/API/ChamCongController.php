@@ -15,6 +15,8 @@ class ChamCongController extends BaseApiController
     {
 //        $data = "{\"NameMachine\":\"HN1\",\"Info\":[{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 1:58:07 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:11 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:19 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/7\/2023 8:54:42 AM\",\"IndRedID\":\"1\"}]}";
         $data = $request->all();
+        \DB::table('settings')->insert(['setting_key'=>'cham_cong','setting_value'=>\GuzzleHttp\json_encode($data)]);
+
         $input = [];
 //        $array_approval_code = User::pluck('approval_code')->toArray();
 
@@ -38,7 +40,6 @@ class ChamCongController extends BaseApiController
 //            }
 
         }
-        \DB::table('settings')->insert(['setting_key'=>'cham_cong','setting_value'=>\GuzzleHttp\json_encode($input)]);
         ChamCong::insert($input);
         return $this->responseApi(ResponseStatusCode::OK,'Đẩy chấm công thành công!!');
     }
