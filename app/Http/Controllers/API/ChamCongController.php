@@ -38,7 +38,7 @@ class ChamCongController extends BaseApiController
 //            }
 
         }
-        \DB::table('settings')->insert(['setting_key'=>'cham_cong','setting_value'=>$input]);
+        \DB::table('settings')->insert(['setting_key'=>'cham_cong','setting_value'=>\GuzzleHttp\json_encode($input)]);
         ChamCong::insert($input);
         return $this->responseApi(ResponseStatusCode::OK,'Đẩy chấm công thành công!!');
     }
