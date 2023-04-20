@@ -24,7 +24,7 @@ class ChamCongController extends BaseApiController
                 $item['IndRedID'])->where('date_time_record', $date)->first();
             $approval_code = $data['NameMachine'] . '.' . $item['IndRedID'];
 
-            if (in_array($approval_code, $array_approval_code)) {
+            if (in_array($approval_code, array_values($array_approval_code))) {
                 if (empty($isset)) {
                     $input[] = [
                         'name_machine'     => $data['NameMachine'],
