@@ -310,7 +310,7 @@
                             data.cham_cong.forEach(item => {
                                 let type = item.type == 0 ? '(máy)' : '(đơn)';
                                 html += `
-                                    ${item.date_time_record} ${type}, mã máy: ${item.name_machine}
+                                    <span class="bold">${item.date_time_record} ${type}, mã máy: ${item.name_machine}</span>
                                     </br>
                                 `
                             })

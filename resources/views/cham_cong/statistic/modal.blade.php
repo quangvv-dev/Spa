@@ -17,18 +17,18 @@
                 <hr style="margin-top: 1rem;margin-bottom: 1rem;">
                 <div class="content tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        <p>Công làm việc trong ngày: <span class="cong"></span></p>
-                        <p>Công ăn trong ngày: <span class="cong-an"></span></p>
+                        <p>Công làm việc trong ngày: <span class="cong bold"></span></p>
+                        <p>Công ăn trong ngày: <span class="cong-an bold"></span></p>
                         <p>Thông tin nhân sự</p>
-                        <p>Mã: <span class="ma-cham-cong"></span></p>
+                        <p>Mã: <span class="ma-cham-cong bold"></span></p>
                         {{--<p>Vị trí: Media</p>--}}
-                        <p>Phòng ban: <span class="department"></span></p>
+                        <p>Phòng ban: <span class="department bold"></span></p>
                         {{--<p>Ca làm việc</p>--}}
                         {{--<p>Tên ca: Ca Hành chính</p>--}}
                         {{--<p>Mã ca: HC</p>--}}
                         {{--<p>Thời gian: 08:00- 17:30</p>--}}
-                        <p>Chốt vân tay: <span class="chot-van-tay"></span></p>
-                        <p>Số giờ: <span class="time"></span></p>
+                        <p>Chốt vân tay: <span class="chot-van-tay bold"></span></p>
+                        <p>Số giờ: <span class="time bold"></span></p>
                         {{--<p>Số công được tính: 0.9888</p>--}}
                         {{--<p>Công ăn được tính: 0</p>--}}
                     </div>

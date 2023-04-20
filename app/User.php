@@ -137,7 +137,7 @@ class User extends Authenticatable
     }
 
     public function chamCong(){
-        return $this->hasMany(ChamCong::class,'ind_red_id','approval_code');
+        return $this->hasMany(ChamCong::class,'approval_code','approval_code');
     }
 
     public function donTu(){
