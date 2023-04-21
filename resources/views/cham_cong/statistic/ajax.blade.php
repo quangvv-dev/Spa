@@ -31,8 +31,8 @@
                 @for($i = 1; $i<= $end; $i++)
                     <td class="text-center pointer showModal" data-date="{{$i}}">{{$item->approval[$i]}}</td>
                 @endfor
-                <td>{{array_sum($item->late)}}</td>
-                <td>2</td>
+                <td>{{ abs(array_sum($item->late))}}</td>
+                <td>{{abs(array_sum($item->early))}}</td>
                 <th>{{array_sum($item->approval)}}</th>
                 {{--<td>123</td>--}}
             </tr>

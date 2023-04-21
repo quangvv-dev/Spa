@@ -18,11 +18,16 @@ class ChamCongController extends BaseApiController
         $data = $request->all();
         $input = [];
         $array_approval_code = User::select('approval_code')->whereNotNull('approval_code')->pluck('approval_code')->toArray();
-
         foreach ($data['Info'] as $item) {
-            $date = Carbon::parse($item['DateTimeRecord'])->format('Y-m-d H:i:s');
-            $isset = ChamCong::where('name_machine', $data['NameMachine'])->where('ind_red_id',
-                $item['IndRedID'])->where('date_time_record', $date)->first();
+            if (str_contains($item['DateTimeRecord'], 'SA') || str_contains($item['DateTimeRecord'], 'CH')){
+                $date = str_replace('SA','AM',$item['DateTimeRecord']);
+                $date = str_replace('CH','PM',$date);
+                $date = date_create_from_format('d/m/Y g:i:s A',$date)->format('Y-m-d H:i:s');
+            }else{
+                $date = Carbon::parse($item['DateTimeRecord'])->format('Y-m-d H:i:s');
+            }
+            $isset = ChamCong::where('name_machine', $data['NameMachine'])->where('ind_red_id', $item['IndRedID'])
+                ->where('date_time_record', $date)->first();
             $approval_code = $data['NameMachine'] . '.' . $item['IndRedID'];
 
             if (in_array($approval_code, array_values($array_approval_code))) {

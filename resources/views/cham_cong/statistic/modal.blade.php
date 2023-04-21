@@ -27,7 +27,7 @@
                         {{--<p>Tên ca: Ca Hành chính</p>--}}
                         {{--<p>Mã ca: HC</p>--}}
                         {{--<p>Thời gian: 08:00- 17:30</p>--}}
-                        <p>Chốt vân tay: <span class="chot-van-tay bold"></span></p>
+                        <p>Chốt vân tay: <span class="chot-van-tay"></span></p>
                         <p>Số giờ: <span class="time bold"></span></p>
                         {{--<p>Số công được tính: 0.9888</p>--}}
                         {{--<p>Công ăn được tính: 0</p>--}}
