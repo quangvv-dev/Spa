@@ -130,6 +130,7 @@ class GiftController extends Controller
             $params = [
                 'branch_id' => $gift->branch_id,
                 'product_id' => $gift->product_id,
+                'customer' => $gift->product_id,
             ];
             $doc = HistoryDepot::search($params)->where('status', OrderConstant::TANG_KHACH)->first();
             $productDepot = ProductDepot::search($params)->first();
@@ -137,7 +138,9 @@ class GiftController extends Controller
                 $productDepot->quantity = $productDepot->quantity - $gift->quantity;
                 $productDepot->save();
             }
-            $doc->delete();
+            if (isset($doc)){
+                $doc->delete();
+            }
             $gift->delete();
 
         } else {
