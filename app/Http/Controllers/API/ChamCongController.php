@@ -14,6 +14,7 @@ class ChamCongController extends BaseApiController
     public function store(Request $request)
     {
 //        $data = "{\"NameMachine\":\"HN1\",\"Info\":[{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 1:58:07 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:11 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:19 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/7\/2023 8:54:42 AM\",\"IndRedID\":\"1\"}]}";
+        \DB::table('settings')->insert(['setting_key'=>'chamcong','setting_value'=>json_encode($request->all())]);
         $data = $request->all();
         $input = [];
         $array_approval_code = User::select('approval_code')->whereNotNull('approval_code')->pluck('approval_code')->toArray();
