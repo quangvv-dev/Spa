@@ -388,7 +388,7 @@ class StatisticController extends Controller
                 $m->time = Functions::getTime($m->date_time_record);
                 $m->type = $m->type == 0 ? 'Máy chấm công' : 'Đơn từ';
                 return $m;
-            })->sortBy('department_name')->sortBy('name_display')->sortBy('date')->sortBy('id');
+            })->sortBy('name_display')->sortBy('date')->sortBy('department_name')->sortBy('id');
 
         Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($data){
             $excel->sheet('Sheet 1', function ($sheet)  use ($data){
