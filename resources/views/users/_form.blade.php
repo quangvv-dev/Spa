@@ -93,7 +93,7 @@
                     <div class="col-xs-4 col-md-4">
                         <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
                             {!! Form::label('', 'Mã NV') !!}
-                            <input type="text" id="code" class="form-control" value="{{isset($user)?@$user->code:''}}"
+                            <input type="text" name="code" class="form-control" value="{{isset($user)?@$user->code:''}}">
                             <span class="help-block">{{ $errors->first('code', ':message') }}</span>
                         </div>
                     </div>
