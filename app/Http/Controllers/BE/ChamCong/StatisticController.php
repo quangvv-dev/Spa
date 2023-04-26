@@ -361,7 +361,7 @@ class StatisticController extends Controller
                 $q->whereBetween('date_time_record', [$date_start,$date_end]);
             })->when(count($array_approval_code),function ($q) use ($array_approval_code){
                 $q->whereIn('approval_code',$array_approval_code);
-            })->get()->map(function ($m){
+            })->with('user')->get()->map(function ($m){
                 $user = User::where('approval_code',$m->approval_code)->first();
                 if($user){
                     $m->name_display = $user->name_display;
@@ -388,7 +388,7 @@ class StatisticController extends Controller
                 $m->time = Functions::getTime($m->date_time_record);
                 $m->type = $m->type == 0 ? 'Máy chấm công' : 'Đơn từ';
                 return $m;
-            })->sortBy('department_name')->sortBy('name_display');
+            })->sortBy('department_name')->sortBy('name_display')->sortBy('date')->sortBy('id');
 
         Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($data){
             $excel->sheet('Sheet 1', function ($sheet)  use ($data){
@@ -399,6 +399,7 @@ class StatisticController extends Controller
                 $sheet->freezeFirstRow();
                 $sheet->row(1, [
                     'Mã',
+                    'Mã NV',
                     'Họ tên',
                     'Vị trí',
                     'Phòng ban',
@@ -414,6 +415,7 @@ class StatisticController extends Controller
                         $i++;
                         $sheet->row($i, [
                             $item->approval_code,
+                            @$item->user->code,
                             $item->name_display,
                             $item->vi_tri,
                             $item->department_name,
