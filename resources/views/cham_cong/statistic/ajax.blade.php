@@ -25,18 +25,18 @@
             <tr data-id="{{$item->id}}">
                 <td class="text-center">1</td>
                 <td class="text-center">{{$item->full_name}}</td>
-{{--                <td class="text-center">{{$item->full_name}}</td>--}}
+                {{--                <td class="text-center">{{$item->full_name}}</td>--}}
                 <td class="text-center">{{@$item->department->name}}</td>
                 <td class="text-center"></td>
                 @for($i = 1; $i<= $end; $i++)
                     <td class="text-center pointer showModal" data-date="{{$i}}">{{$item->approval[$i]}}</td>
                 @endfor
-                <td>{{ abs(array_sum($item->late))}}</td>
-                <td>{{abs(array_sum($item->early))}}</td>
+                <td>{{array_sum($item->late) >0 ? array_sum($item->late) : 0}}</td>
+                <td>{{array_sum($item->early) >0 ? array_sum($item->early) : 0}}</td>
                 <th>{{array_sum($item->approval)}}</th>
                 {{--<td>123</td>--}}
             </tr>
-            @empty
+        @empty
             <td></td>
         @endforelse
         </tbody>
