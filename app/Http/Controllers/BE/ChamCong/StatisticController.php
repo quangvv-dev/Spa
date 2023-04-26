@@ -361,7 +361,7 @@ class StatisticController extends Controller
                 $q->whereBetween('date_time_record', [$date_start,$date_end]);
             })->when(count($array_approval_code),function ($q) use ($array_approval_code){
                 $q->whereIn('approval_code',$array_approval_code);
-            })->with('user')->get()->map(function ($m){
+            })->orderBy('approval_code')->orderBy('date_time_record')->get()->map(function ($m){
                 $user = User::where('approval_code',$m->approval_code)->first();
                 if($user){
                     $m->name_display = $user->name_display;
@@ -388,8 +388,7 @@ class StatisticController extends Controller
                 $m->time = Functions::getTime($m->date_time_record);
                 $m->type = $m->type == 0 ? 'Máy chấm công' : 'Đơn từ';
                 return $m;
-            })->sortBy('name_display')->sortBy('date_time_record')->sortBy('id')->sortBy('department_name');
-
+            });
         Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($data){
             $excel->sheet('Sheet 1', function ($sheet)  use ($data){
                 $sheet->cell('A1:I1', function ($row) {
