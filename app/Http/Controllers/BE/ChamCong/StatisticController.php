@@ -391,7 +391,7 @@ class StatisticController extends Controller
             });
         Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($data){
             $excel->sheet('Sheet 1', function ($sheet)  use ($data){
-                $sheet->cell('A1:I1', function ($row) {
+                $sheet->cell('A1:J1', function ($row) {
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
