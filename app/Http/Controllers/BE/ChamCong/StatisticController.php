@@ -356,7 +356,7 @@ class StatisticController extends Controller
             $array_approval_code = [];
         }
 
-        $data = ChamCong::select('name_machine','date_time_record','type','approval_code')
+        $data = ChamCong::select('id','name_machine','date_time_record','type','approval_code')
             ->when(isset($date_start) && isset($date_end), function ($q) use ($date_start,$date_end) {
                 $q->whereBetween('date_time_record', [$date_start,$date_end]);
             })->when(count($array_approval_code),function ($q) use ($array_approval_code){
@@ -388,7 +388,7 @@ class StatisticController extends Controller
                 $m->time = Functions::getTime($m->date_time_record);
                 $m->type = $m->type == 0 ? 'Máy chấm công' : 'Đơn từ';
                 return $m;
-            })->sortBy('name_display')->sortBy('date')->sortBy('department_name')->sortBy('id');
+            })->sortBy('name_display')->sortBy('date_time_record')->sortBy('id')->sortBy('department_name');
 
         Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($data){
             $excel->sheet('Sheet 1', function ($sheet)  use ($data){
