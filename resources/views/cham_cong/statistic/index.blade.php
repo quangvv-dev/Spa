@@ -119,6 +119,23 @@
             flex-direction: column
         }
 
+        th.text-center{
+            position: sticky;
+            top: 0;
+        }
+        th.text-center.bottom-th{
+            top: 37px;
+        }
+        .bottom-th{
+            top: 40px;
+        }
+        table.table.card-table.table-vcenter.text-nowrap.table-primary{
+            position: relative;
+        }
+        .table-responsive{
+            height: 80vh;
+        }
+
         .select {
             position: relative;
         }
@@ -198,14 +215,6 @@
                 </div>
             </form>
             <div id="registration-form">
-                {{--<div class="mt-3 mb-3">--}}
-                {{--<nav class="nav">--}}
-                {{--<a class="nav-link active" href="#">Tất cả (11)</a>--}}
-                {{--<a class="nav-link" href="#">Chờ duyệt (12)</a>--}}
-                {{--<a class="nav-link" href="#">Đã duyệt (45)</a>--}}
-                {{--<a class="nav-link" href="#">Không duyệt</a>--}}
-                {{--</nav>--}}
-                {{--</div>--}}
                 @include('cham_cong.statistic.ajax')
             </div>
             <!-- table-responsive -->

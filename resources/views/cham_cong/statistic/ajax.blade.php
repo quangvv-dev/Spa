@@ -4,16 +4,16 @@
         <tr>
             <th class="text-center" rowspan="2">TT</th>
             {{--<th class="text-center" rowspan="2">CN</th>--}}
-            <th class="text-center" rowspan="2">Họ và tên</th>
-            <th class="text-center" rowspan="2">Phòng ban</th>
-            <th class="text-center" rowspan="2">Vị trí</th>
+            <th class="text-center" rowspan="2" style="left: 0;z-index: 100">Họ và tên</th>
+            <th class="text-center" rowspan="2" style="left: 221px;z-index: 101">Phòng ban</th>
+            <th class="text-center" rowspan="2" style="left: 342px;z-index: 102">Vị trí</th>
             <th class="text-center" colspan="{{$end}}">Ngày</th>
             <th class="text-center" colspan="2">Xử phạt</th>
             <th class="text-center" rowspan="2">Tổng công</th>
         </tr>
         <tr>
             @for($i = 1; $i<= $end; $i++)
-                <th class="text-center">{{$i < 10 ? '0'.$i :$i}}</th>
+                <th class="text-center bottom-th">{{$i < 10 ? '0'.$i :$i}}</th>
             @endfor
             <th>Đi muộn</th>
             <th>về sớm</th>
@@ -21,9 +21,9 @@
 
         </thead>
         <tbody>
-        @forelse($docs as $item)
+        @forelse($docs as $key => $item)
             <tr data-id="{{$item->id}}">
-                <td class="text-center">1</td>
+                <td class="text-center">{{$k+1}}</td>
                 <td class="text-center">{{$item->full_name}}</td>
                 {{--                <td class="text-center">{{$item->full_name}}</td>--}}
                 <td class="text-center">{{@$item->department->name}}</td>
