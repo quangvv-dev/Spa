@@ -23,7 +23,7 @@
         <tbody>
         @forelse($docs as $key => $item)
             <tr data-id="{{$item->id}}">
-                <td class="text-center">{{$k+1}}</td>
+                <td class="text-center">{{$key+1}}</td>
                 <td class="text-center">{{$item->full_name}}</td>
                 {{--                <td class="text-center">{{$item->full_name}}</td>--}}
                 <td class="text-center">{{@$item->department->name}}</td>
