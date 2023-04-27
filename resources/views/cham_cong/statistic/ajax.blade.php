@@ -33,7 +33,7 @@
                 @endfor
                 <td>{{array_sum($item->late) >0 ? array_sum($item->late) : 0}}</td>
                 <td>{{array_sum($item->early) >0 ? array_sum($item->early) : 0}}</td>
-                <th>{{array_sum($item->approval)}}</th>
+                <th class="bold">{{array_sum($item->approval)}}</th>
                 {{--<td>123</td>--}}
             </tr>
         @empty
