@@ -4,7 +4,7 @@
         <tr>
             <th class="text-center" rowspan="2">TT</th>
             {{--<th class="text-center" rowspan="2">CN</th>--}}
-            <th class="text-center" rowspan="2" style="left: 0;z-index: 100">Họ và tên</th>
+            <th class="text-center" rowspan="2" style="left: 0;z-index: 101">Họ và tên</th>
             <th class="text-center" rowspan="2" style="left: 221px;z-index: 101">Phòng ban</th>
             <th class="text-center" rowspan="2" style="left: 342px;z-index: 102">Vị trí</th>
             <th class="text-center" colspan="{{$end}}">Ngày</th>
