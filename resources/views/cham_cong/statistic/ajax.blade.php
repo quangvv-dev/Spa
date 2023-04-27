@@ -15,8 +15,8 @@
             @for($i = 1; $i<= $end; $i++)
                 <th class="text-center bottom-th">{{$i < 10 ? '0'.$i :$i}}</th>
             @endfor
-            <th>Đi muộn</th>
-            <th>về sớm</th>
+            <th class="text-center bottom-th">Đi muộn</th>
+            <th class="text-center bottom-th">về sớm</th>
         </tr>
 
         </thead>
