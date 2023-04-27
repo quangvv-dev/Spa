@@ -25,8 +25,8 @@
             <tr data-id="{{$item->id}}">
                 <td class="text-center">{{$key+1}}</td>
                 <td class="text-center" style="left: 0;z-index: 100;position: sticky">{{$item->full_name}}</td>
-                <td class="text-center" style="left: 0;z-index: 100;position: sticky">{{@$item->department->name}}</td>
-                <td class="text-center" style="left: 0;z-index: 100;position: sticky"></td>
+                <td class="text-center" style="left: 221px;z-index: 100;position: sticky">{{@$item->department->name}}</td>
+                <td class="text-center" style="left: 342px;z-index: 100;position: sticky"></td>
                 @for($i = 1; $i<= $end; $i++)
                     <td class="text-center pointer showModal" data-date="{{$i}}">{{$item->approval[$i]}}</td>
                 @endfor
