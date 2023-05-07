@@ -264,7 +264,6 @@ class StatisticController extends Controller
             $data['user_id'] = Auth::id();
             $data['branch_id'] = $request->branch_id;
             $history = HistoryImportSalary::create($data);
-
             Excel::selectSheets('Sheet1')->load($request->file('file')->getRealPath(), function ($render) use ($month,$year,$history){
                 $result = $render->toArray();
                 $lastrow = $render->noHeading()->toArray();

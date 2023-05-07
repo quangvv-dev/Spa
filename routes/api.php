@@ -83,6 +83,13 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('status-customers', 'CustomerController@statusCustomer');
     Route::get('group-customers', 'CustomerController@groupCustomer');
     Route::get('source-customers', 'CustomerController@sourceCustomer');
+//    begin chấm công
+    Route::get('salary', 'ChamCongController@salary');
+    Route::get('approval-history', 'ChamCongController@history');
+    Route::get('approval-history-detail', 'ChamCongController@showHistory');
+
+//end chấm công
+
 
     Route::group(['prefix' => 'revenue'], function () {
         Route::get('customers', 'RevenueController@index');

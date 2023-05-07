@@ -213,17 +213,19 @@ class OrderController extends Controller
                 if($don_tu->status === 0){ //đơn chưa duyệt
                     if ($don_tu->type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) {
                         $user = User::find($don_tu->user_id);
-                        $branch = Branch::find($user->branch_id);
-                        $approval_code = $user->approval_code;
+                        $cham_cong = ChamCong::where('approval_code', $user->approval_code)->first();
                         $key = array_search($don_tu->time_to, ChamCongConstant::HOURS);
-
                         $time = $don_tu->date . ' ' . $key;
-                        ChamCong::create([
-                            'name_machine' => $branch->name_machine,
-                            'machine_number' => 1,
+                        ChamCong::insert([
+                            'name_machine'     => $cham_cong->name_machine ?: 'HN',
+                            'machine_number'   => 1,
+                            'approval_code'   => $user->approval_code,
                             'date_time_record' => $time,
-                            'ind_red_id' => $approval_code,
-                            'type' => 1
+                            'ind_red_id'       => explode('.',$user->approval_code),
+                            'type'             => 1,
+                            'created_at'       => $time,
+                            'updated_at'       => $time,
+
                         ]);
                     }
                     $don_tu->update(['status' => OrderConstant::DUYET]);
