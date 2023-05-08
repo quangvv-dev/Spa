@@ -83,11 +83,12 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('status-customers', 'CustomerController@statusCustomer');
     Route::get('group-customers', 'CustomerController@groupCustomer');
     Route::get('source-customers', 'CustomerController@sourceCustomer');
-//    begin chấm công
+//    begin chấm công & đơn từ & lịch hẹn (newest)
     Route::get('salary', 'ChamCongController@salary');
     Route::get('approval-history', 'ChamCongController@history');
     Route::get('approval-history-detail', 'ChamCongController@showHistory');
-
+    Route::get('admin/schedules', 'SchedulesController@index');
+    Route::get('admin/status-schedules', 'SchedulesController@statusSchedules');
 //end chấm công
 
 
