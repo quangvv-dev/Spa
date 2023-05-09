@@ -163,13 +163,13 @@ class StatisticController extends Controller
     {
         $user = User::select('id', 'approval_code', 'full_name', 'department_id')->where('id', $request->user_id)->with(['department', 'donTu' => function ($query) use ($request) {
             $query->where('date', Functions::yearMonthDay($request['date']))->with('reason');
-        },
-            'chamCong' => function ($query) use ($request) {
-                $query->whereDate('date_time_record', Functions::yearMonthDay($request['date']));
-                return $query;
-            }
-
-        ])->first();
+        }, 'chamCong' => function ($query) use ($request) {
+            $query->whereBetWeen('date_time_record', [
+                Functions::yearMonthDay($request['date']) . ' 00:00:00',
+                Functions::yearMonthDay($request['date']) . '23:59:59',
+            ]);
+            return $query;
+            }])->first();
         return $user;
     }
 
