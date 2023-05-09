@@ -240,7 +240,8 @@
         $(document).on('click', '.showModal', function () {
             let dt = new Date();
             let elm = $(this);
-            let month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
+            // let month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
+            let month = $('.datepicker-month-visible.selected').html();
             let date1 = elm.data('date') < 10 ? '0' + elm.data('date') : elm.data('date');
             let date = `${date1}-${month}-${dt.getFullYear()}`;
             let date_check = `${dt.getFullYear()}-${month}-${date1} 13:30:00`; //giờ ca chiều
