@@ -101,7 +101,8 @@ class ChamCongController extends BaseApiController
                 $curentDate)->get()->toArray();
             if (count($docs) < 2) {
                 $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
-                $approval[$i] = [
+                $approval[] = [
+                    'day'     => $i,
                     'approval' => 0,
                     'time'     => !empty($startDate) ? $startDate->format('H:i') . ' - Không có' : '',
                     'donTu'    => '',
@@ -111,7 +112,8 @@ class ChamCongController extends BaseApiController
                 $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
                 $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
                 $check = $docs[0]['type'] == UserConstant::ACTIVE ? $startDate->format('H:i') : ($docs[count($docs) - 1]['type'] == UserConstant::ACTIVE ? $endDate->format('H:i') : '');
-                $approval[$i] = [
+                $approval[] = [
+                    'day'     => $i,
                     'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
                     'time'     => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
                     'donTu'    => $check,
