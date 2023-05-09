@@ -165,8 +165,8 @@ class StatisticController extends Controller
             $query->where('date', Functions::yearMonthDay($request['date']))->with('reason');
         }, 'chamCong' => function ($query) use ($request) {
             $query->whereBetWeen('date_time_record', [
-                Functions::yearMonthDay($request['date']) . ' 00:00:00',
-                Functions::yearMonthDay($request['date']) . '23:59:59',
+                Functions::createYearMonthDay($request['date']) . ' 00:00:00',
+                Functions::createYearMonthDay($request['date']) . '23:59:59',
             ]);
             return $query;
             }])->first();
