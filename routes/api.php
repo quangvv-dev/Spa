@@ -89,6 +89,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('approval-history-detail', 'ChamCongController@showHistory');
     Route::get('admin/schedules', 'SchedulesController@index');
     Route::get('admin/status-schedules', 'SchedulesController@statusSchedules');
+    Route::get('approval-orders', 'ChamCong\OrderController@index');
 //end chấm công
 
 
