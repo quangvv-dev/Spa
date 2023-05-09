@@ -24,6 +24,8 @@ class OrderResource extends JsonResource
             'description' => @$this->description,
             'date'        => @$this->date,
             'date_end'    => @$this->date_end,
+            'reason_id'   => @$this->reason_id,
+            'accept_id'   => @$this->accept_id,
             'time_to'     => !empty($this->time_to) ? array_search($this->time_to, ChamCongConstant::HOURS) : '',
             'time_end'    => !empty($this->time_end) ? array_search($this->time_end, ChamCongConstant::HOURS) : '',
         ];

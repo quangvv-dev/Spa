@@ -26,10 +26,13 @@ class OrderConstant
     const WALLET_TYPE_MONEY = 3;// Rút tiền từ ví ctv
 
 
+    // Trạng thái cho đơn từ
     const TYPE_DON_NGHI = 0;
     const TYPE_DON_CHECKIN_CHECKOUT = 1;
 
     const CHO_DUYET = 0; //đơn chờ duyệt
     const DUYET = 1;    //đơn đã duyệt
     const KHONG_DUYET = 2; //đơn không duyệt
+
+
 }

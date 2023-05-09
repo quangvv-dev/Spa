@@ -28,7 +28,7 @@ Route::post('register', 'API\AuthController@register');
 
 Route::group(['namespace' => 'API'], function () {
     Route::post('Contact/ReceiveData/sc/{id}', 'SourceController@storeCustomerLandipage');
-    Route::post('cham-cong', 'ChamCongController@store');
+    Route::post('cham-cong', 'ChamCong\ChamCongController@store');
 });
 
 Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], function () {
@@ -84,14 +84,18 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('group-customers', 'CustomerController@groupCustomer');
     Route::get('source-customers', 'CustomerController@sourceCustomer');
 //    begin chấm công & đơn từ & lịch hẹn (newest)
-    Route::get('salary', 'ChamCongController@salary');
-    Route::get('approval-history', 'ChamCongController@history');
-    Route::get('approval-history-detail', 'ChamCongController@showHistory');
+    Route::get('salary', 'ChamCong\ChamCongController@salary');
+    Route::get('approval-history', 'ChamCong\ChamCongController@history');
+    Route::get('approval-history-detail', 'ChamCong\ChamCongController@showHistory');
     Route::get('admin/schedules', 'SchedulesController@index');
     Route::get('admin/status-schedules', 'SchedulesController@statusSchedules');
     Route::get('approval-orders', 'ChamCong\OrderController@index');
+    Route::post('approval-orders', 'ChamCong\OrderController@store');
+    Route::put('approval-orders/{id}', 'ChamCong\OrderController@update');
+    Route::get('approval-reason', 'ChamCong\OrderController@getListReason');
+    Route::get('approval-accept', 'ChamCong\OrderController@getListAccept');
+    Route::get('approval-hours', 'ChamCong\OrderController@getListHours');
 //end chấm công
-
 
     Route::group(['prefix' => 'revenue'], function () {
         Route::get('customers', 'RevenueController@index');

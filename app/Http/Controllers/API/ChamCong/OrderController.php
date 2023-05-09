@@ -7,16 +7,15 @@ use App\Constants\DepartmentConstant;
 use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
-use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\ChamCong\OrderResource;
 use App\Models\ChamCong;
 use App\Models\DonTu;
 use App\Models\Reason;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends BaseApiController
 {
@@ -32,157 +31,139 @@ class OrderController extends BaseApiController
      * Display a listing of the resource.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         $user = $request->jwtUser;
-
         $param = $request->all();
         if ($user->department_id == DepartmentConstant::ADMIN) {
-            $docs = DonTu::when(isset($param['start_date']) && isset($param['end_date']), function ($q) use ($param) {
-                $q->whereBetween('created_at', [
-                    Functions::yearMonthDay($param['start_date']) . " 00:00:00",
-                    Functions::yearMonthDay($param['end_date']) . " 23:59:59",
-                ]);
-            })->when(isset($param['searchName']) && $param['searchName'], function ($q) use ($param) {
-                $q->whereHas('user', function ($qr) use ($param) {
-                    $qr->where('full_name', 'like', '%' . $param['searchName'] . '%');
-                });
-            })->when(isset($param['department_id']) && $param['department_id'], function ($q) use ($param) {
-                $q->whereHas('user', function ($qr) use ($param) {
-                    $qr->where('department_id', $param['department_id']);
-                });
-            })->when(isset($param['status']), function ($q) use ($param) {
-                $q->where('status', $param['status']);
-            })->where(function ($q) use ($user, $param) {
+            $docs = DonTu::search($param)->where(function ($q) use ($user, $param) {
                 $q->where('user_id', $user->id)->orWhere('accept_id', $user->id);
             })->orderBy('status')->orderByDesc('id');
-//            $count = $docs->count();
-            $docs = $docs->paginate(StatusCode::PAGINATE_20);
         } else {
-            $docs = DonTu::where('user_id', $user->id)->orderByDesc('id');
-//            $count = $docs->count();
-            $docs = $docs->paginate(StatusCode::PAGINATE_20);
+            $docs = DonTu::where('user_id', $user->id)->when(isset($param['type']), function ($q) use ($param) {
+                $q->where('type', $param['type']);
+            })->orderByDesc('id');
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', OrderResource::collection($docs));
+        $clone = clone $docs;
+        $clone = $clone->groupBy('status')->select(DB::raw('COUNT(id) as count'), 'status')->get()->map(function ($item
+        ) {
+            $item->name = $item->status == 1 ? "Đã duyệt" : ($item->status == 0 ? "Chờ duyệt" : 'Không duyệt');
+            return $item;
+        });
+        $docs = $docs->paginate(StatusCode::PAGINATE_20);
+        $data = [
+            'status'  => $clone,
+            'records' => OrderResource::collection($docs),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+    }
+
+    public function getListReason(Request $request)
+    {
+        $validate = ['type' => "required"];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        if ($request->type == OrderConstant::TYPE_DON_NGHI) {
+            $reasons = Reason::select('id', 'name', 'phat_tien')->where('type', OrderConstant::TYPE_DON_NGHI)->get();
+        } else {
+            $reasons = Reason::select('id', 'name', 'phat_tien')->where('type',
+                OrderConstant::TYPE_DON_CHECKIN_CHECKOUT)->get();
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $reasons);
+    }
+
+    public function getListAccept(Request $request)
+    {
+        $users = User::select('id', 'full_name')->where('department_id', DepartmentConstant::ADMIN)->get();
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
 
     /**
      * Show the form for creating a new resource.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function getListHours(Request $request)
     {
-
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $this->time);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-//        dd($request->all());
-
-        $data = $request->all();
-        $date = date_create($request->date);
-        $data['date'] = date_format($date, "Y-m-d");
-
-        if ($request->date_end) {
-            $date2 = date_create($request->date_end);
-            $data['date_end'] = date_format($date2, "Y-m-d");
+        if ($request->type == OrderConstant::TYPE_DON_NGHI) {
+            $validate = [
+                'date'      => "required",
+                'date_end'  => "required",
+                'time_to'   => "required",
+                'time_end'  => "required",
+                'reason_id' => "required",
+                'accept_id' => "required",
+            ];
+        } else {
+            $validate = [
+                'date'      => "required",
+                'time_to'   => "required",
+                'reason_id' => "required",
+                'accept_id' => "required",
+            ];
         }
+        $user = $request->jwtUser;
+        $request->merge(['user_id' => $user->id, 'status' => OrderConstant::CHO_DUYET]);
 
-        $data['user_id'] = Auth::id();
-        DonTu::create($data);
-        return redirect(route('approval.order.index'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return view('cham_cong.order.detail.');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $data = $request->all();
+        $approval_order = DonTu::create($data);
+        return $this->responseApi(ResponseStatusCode::OK, 'Tạo mới đơn thành công', new OrderResource($approval_order));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $data['date'] = Carbon::createFromFormat('d/m/Y',$request->date)->format('Y-m-d');
-        if ($request->date_end) {
-            $data['date_end'] = Carbon::createFromFormat('d/m/Y',$request->date_end)->format('Y-m-d');
+        $approval_order = DonTu::find($id);
+        if (empty($approval_order) || $approval_order->status != OrderConstant::CHO_DUYET) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Đơn đã được duyệt không thể chỉnh sửa !!');
         }
-        DonTu::find($id)->update($data);
-        return back();
+        $data = $request->all();
+        $approval_order->update($data);
+        return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Cập nhật đơn thành công !!',
+            new OrderResource($approval_order));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         DonTu::find($id)->delete();
         return 1;
-    }
-
-    public function createOrder($type)
-    {
-        $time = $this->time;
-        $type = isset($type) && $type ? $type : 1;
-        $user_accept = User::where('department_id', DepartmentConstant::ADMIN)->select('full_name', 'id')->get();
-
-        if ($type == 1) { //đơn nghỉ
-            $reasons = Reason::where('type', 0)->get();
-            return view('cham_cong.order.order_type.don_nghi', compact('time', 'user_accept', 'reasons'));
-        } else if ($type == 2) { //đơn checkin
-            $reasons = Reason::where('type', 1)->get();
-            return view('cham_cong.order.order_type.don_check_in_out', compact('time', 'user_accept', 'reasons'));
-
-        }
-    }
-
-    public function showDetail($id, $type)
-    {
-        $order = DonTu::find($id);
-        if(!$order){
-            return redirect(route('approval.order.index'));
-        }
-        if ($type == OrderConstant::TYPE_DON_NGHI) {
-            return view('cham_cong.order.detail.detail_don_nghi', compact('order'));
-        }
-        if ($type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) {
-            return view('cham_cong.order.detail.detail_checkin', compact('order'));
-        }
     }
 
     public function accept(Request $request)
@@ -198,7 +179,7 @@ class OrderController extends BaseApiController
         } else { //duyệt
             foreach ($request->array_id as $item) {
                 $don_tu = DonTu::find($item);
-                if($don_tu->status === 0){ //đơn chưa duyệt
+                if ($don_tu->status === 0) { //đơn chưa duyệt
                     if ($don_tu->type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) {
                         $user = User::find($don_tu->user_id);
                         $cham_cong = ChamCong::where('approval_code', $user->approval_code)->first();
@@ -207,9 +188,9 @@ class OrderController extends BaseApiController
                         ChamCong::insert([
                             'name_machine'     => $cham_cong->name_machine ?: 'HN',
                             'machine_number'   => 1,
-                            'approval_code'   => $user->approval_code,
+                            'approval_code'    => $user->approval_code,
                             'date_time_record' => $time,
-                            'ind_red_id'       => explode('.',$user->approval_code),
+                            'ind_red_id'       => explode('.', $user->approval_code),
                             'type'             => 1,
                             'created_at'       => $time,
                             'updated_at'       => $time,
@@ -230,10 +211,11 @@ class OrderController extends BaseApiController
         $user_accept = User::where('department_id', DepartmentConstant::ADMIN)->select('full_name', 'id')->get();
         if ($order->type == OrderConstant::TYPE_DON_NGHI) { //đơn nghỉ
             $reasons = Reason::where('type', 0)->get();
-            return view('cham_cong.order.order_type.don_nghi', compact('time', 'user_accept', 'reasons','order'));
-        } else if ($order->type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) { //đơn checkin
+            return view('cham_cong.order.order_type.don_nghi', compact('time', 'user_accept', 'reasons', 'order'));
+        } elseif ($order->type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) { //đơn checkin
             $reasons = Reason::where('type', 1)->get();
-            return view('cham_cong.order.order_type.don_check_in_out', compact('time', 'user_accept', 'reasons','order'));
+            return view('cham_cong.order.order_type.don_check_in_out',
+                compact('time', 'user_accept', 'reasons', 'order'));
         }
     }
 }

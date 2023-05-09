@@ -173,11 +173,11 @@ class OrderController extends Controller
         $type = isset($type) && $type ? $type : 1;
         $user_accept = User::where('department_id', DepartmentConstant::ADMIN)->select('full_name', 'id')->get();
 
-        if ($type == 1) { //đơn nghỉ
-            $reasons = Reason::where('type', 0)->get();
+        if ($type == OrderConstant::TYPE_DON_NGHI) { //đơn nghỉ
+            $reasons = Reason::where('type', OrderConstant::TYPE_DON_NGHI)->get();
             return view('cham_cong.order.order_type.don_nghi', compact('time', 'user_accept', 'reasons'));
-        } else if ($type == 2) { //đơn checkin
-            $reasons = Reason::where('type', 1)->get();
+        } else if ($type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) { //đơn checkin
+            $reasons = Reason::where('type', OrderConstant::TYPE_DON_CHECKIN_CHECKOUT)->get();
             return view('cham_cong.order.order_type.don_check_in_out', compact('time', 'user_accept', 'reasons'));
 
         }

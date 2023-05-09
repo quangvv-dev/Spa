@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\ChamCong;
 
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
+use App\Http\Controllers\API\BaseApiController;
 use App\Models\ChamCong;
 use App\Models\Salary;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\DocBlock\Description;
 
 class ChamCongController extends BaseApiController
 {

@@ -21,6 +21,11 @@ class SchedulesController extends BaseApiController
 {
     public function index(Request $request)
     {
+        $validate = ['start_date' => "required", 'end_date' => "required"];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
         $user = $request->jwtUser;
         $params = $request->all();
         $params['branch_id'] = $user->branch_id;
