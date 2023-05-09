@@ -61,4 +61,16 @@ class SchedulesController extends BaseApiController
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
+    public function update(Request $request)
+    {
+        if ($request->note) {
+            $note = str_replace("\r\n", ' ', $request->note);
+            $note = str_replace("\n", ' ', $note);
+            $note = str_replace('"', ' ', $note);
+            $note = str_replace("'", ' ', $note);
+            $request->merge(['note' => $note]);
+        }
+        $data = Schedule::with('customer')->find($request->id);
+        $data->update($request->except('id', 'format_date'));
+    }
 }

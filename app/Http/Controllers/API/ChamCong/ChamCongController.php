@@ -107,6 +107,8 @@ class ChamCongController extends BaseApiController
                     'approval' => 0,
                     'time'     => !empty($startDate) ? $startDate->format('H:i') . ' - Không có' : '',
                     'donTu'    => '',
+                    'late'    => 0,
+                    'early'    => 0,
                     'full_day' => $year . '-' . $curentMonth . '-' . ($i < 10 ? '0' . $i : $i),
                 ];
             } else {
@@ -114,16 +116,31 @@ class ChamCongController extends BaseApiController
                 $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
                 $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
                 $check = $docs[0]['type'] == UserConstant::ACTIVE ? $startDate->format('H:i') : ($docs[count($docs) - 1]['type'] == UserConstant::ACTIVE ? $endDate->format('H:i') : '');
+                $late = (strtotime($startDate->format('H:i')) - strtotime('08:00')) / 60;
+                $early = (strtotime('17:30') - strtotime($endDate->format('H:i'))) / 60;
+
                 $approval[] = [
                     'day'      => $i,
                     'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
                     'time'     => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
                     'donTu'    => $check,
+                    'late'  => $late > 0 ? $late : 0,
+                    'early' => $early > 0 ? $early : 0,
                     'full_day' => $year . '-' . $curentMonth . '-' . ($i < 10 ? '0' . $i : $i),
                 ];
             }
         }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $approval);
+        $total = collect($approval);
+        $data = [
+            'total'  => [
+                'approval' => $total->sum('approval'),
+                'early'    => $total->sum('early'),
+                'late'     => $total->sum('late'),
+            ],
+            'record' => $approval,
+        ];
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
     public function showHistory(Request $request)
@@ -135,15 +152,16 @@ class ChamCongController extends BaseApiController
             $approval_code = User::find($user->id)->approval_code;
         }
 //        $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
-        $docs = ChamCong::where('approval_code', $approval_code)->whereDate('date_time_record', $request->date)->get()->toArray();
+        $docs = ChamCong::where('approval_code', $approval_code)->whereDate('date_time_record',
+            $request->date)->get()->toArray();
         if (count($docs) < 2) {
             $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
             $machineStart = isset($docs[0]) && $docs[0]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
             $approval = [
-                'approval' => 0,
-                'time_work' => 0,
-                'history_chot' => !empty($startDate) ? ($startDate->format('H:i').$machineStart): '-',
-                'time' => !empty($startDate) ? $startDate->format('H:i'): '-',
+                'approval'     => 0,
+                'time_work'    => 0,
+                'history_chot' => !empty($startDate) ? ($startDate->format('H:i') . $machineStart) : '-',
+                'time'         => !empty($startDate) ? $startDate->format('H:i') : '-',
             ];
         } else {
             $startDate = new Carbon($docs[0]['date_time_record']);
@@ -152,10 +170,10 @@ class ChamCongController extends BaseApiController
             $machineStart = $docs[0]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
             $machineEnd = $docs[count($docs) - 1]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
             $approval = [
-                'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
-                'time_work' => round($diff - 1.5, 2),
+                'approval'     => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
+                'time_work'    => round($diff - 1.5, 2),
                 'history_chot' => $startDate->format('H:i') . $machineStart . ' - ' . $endDate->format('H:i') . $machineEnd,
-                'time' => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
+                'time'         => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
             ];
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $approval);

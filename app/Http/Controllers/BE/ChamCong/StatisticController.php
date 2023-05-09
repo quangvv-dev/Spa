@@ -68,15 +68,15 @@ class StatisticController extends Controller
                         $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
                         $approval[$i] = $diff > 9.5 ? 1 : round($diff / 9.5, 2);
                         $late[] = (strtotime($startDate->format('H:i')) - strtotime('08:00')) / 60;
-                        $early[] = (strtotime($endDate->format('H:i')) - strtotime('17:30')) / 60;
+                        $early[] = (strtotime('17:30') - strtotime($endDate->format('H:i'))) / 60;
                     }
                 } else {
                     $approval[$i] = 0;
                 }
             }
             $item->approval = $approval;
-            $item->late = $late;
-            $item->early = $early;
+            $item->late = $late > 0 ? $late : 0;
+            $item->early = $early > 0 ? $early : 0;
             return $item;
         })->filter(function ($fl) {
             if (!empty($fl->approval_code)) {
