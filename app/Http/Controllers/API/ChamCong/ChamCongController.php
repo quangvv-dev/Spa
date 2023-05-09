@@ -93,6 +93,7 @@ class ChamCongController extends BaseApiController
         } else {
             $end = now()->endOfMonth()->format('d');
         }
+        $curentMonth = $request->month < 10 ? '0' . $request->month : $request->month;
         for ($i = 1; $i <= $end; $i++) {
             $curentDate = isset($request->month) ? Carbon::create($year,
                 $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
@@ -102,10 +103,11 @@ class ChamCongController extends BaseApiController
             if (count($docs) < 2) {
                 $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
                 $approval[] = [
-                    'day'     => $i,
+                    'day'      => $i,
                     'approval' => 0,
                     'time'     => !empty($startDate) ? $startDate->format('H:i') . ' - Không có' : '',
                     'donTu'    => '',
+                    'full_day' => $year . '-' . $curentMonth . '-' . ($i < 10 ? '0' . $i : $i),
                 ];
             } else {
                 $startDate = new Carbon($docs[0]['date_time_record']);
@@ -113,10 +115,11 @@ class ChamCongController extends BaseApiController
                 $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
                 $check = $docs[0]['type'] == UserConstant::ACTIVE ? $startDate->format('H:i') : ($docs[count($docs) - 1]['type'] == UserConstant::ACTIVE ? $endDate->format('H:i') : '');
                 $approval[] = [
-                    'day'     => $i,
+                    'day'      => $i,
                     'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
                     'time'     => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
                     'donTu'    => $check,
+                    'full_day' => $year . '-' . $curentMonth . '-' . ($i < 10 ? '0' . $i : $i),
                 ];
             }
         }
