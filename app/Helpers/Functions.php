@@ -464,12 +464,10 @@ class Functions
         ]);
         $response = curl_exec($curl);
         curl_close($curl);
-
         $error_code = !empty(json_decode($response)) ? json_decode($response)->errorCode : 404;
+        \DB::table('settings')->insert(['setting_key' => 'logSms', 'setting_value' => json_encode($error_code)]);
         if ($error_code == '000') {
             return 1;
-        }else{
-            \DB::table('settings')->insert(['setting_key' => 'logSms', 'setting_value' => json_encode($error_code)]);
         }
     }
 
