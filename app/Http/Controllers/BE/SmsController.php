@@ -151,7 +151,7 @@ class SmsController extends Controller
                         $body = new VietnamCharsetConversion();
                         $body = $body->convert($text);
                         $body = Functions::vi_to_en($body);
-                        $err = Functions::sendSmsV3($item, trim($body));
+                        $err = Functions::sendSmsV3('0975091435', trim($body));
                         if (isset($err) && $err) {
                             $number++;
                             $input['phone'] = $item;

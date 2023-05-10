@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="col bot" style="margin-top: 5px">
-                    <button type="button" class="btn btn-primary" id="click-sent">Gửi tin</button>
+                    <button type="submit" class="btn btn-primary">Gửi tin</button>
                 </div>
             </div>
         </div>
