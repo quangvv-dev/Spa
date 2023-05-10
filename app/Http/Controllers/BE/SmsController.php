@@ -151,7 +151,7 @@ class SmsController extends Controller
                         $body = new VietnamCharsetConversion();
                         $body = $body->convert($text);
                         $body = Functions::vi_to_en($body);
-                        $err = Functions::sendSmsV3('0975091435', trim($body));
+                        $err = Functions::sendSmsV3($item, trim($body));
                         if (isset($err) && $err) {
                             $number++;
                             $input['phone'] = $item;
@@ -185,7 +185,7 @@ class SmsController extends Controller
             $body = replaceVariable($request->sms_group, @$customer->name, '', @$branch->name, @$branch->phone, @$branch->address);
             $body = Functions::vi_to_en($body);
             try {
-                $err = Functions::sendSmsV3($phone, $body);
+                $err = Functions::sendSmsV3($phone, trim($body));
                 if (isset($err) && $err) {
                     $input['phone'] = $customer->phone;
                     $input['campaign_id'] = $request->campaign_id ?: 0;
@@ -329,7 +329,7 @@ class SmsController extends Controller
                     $input['full_name'] = @$arr_name[$key];
                     $body = Functions::replaceTextForUser($input,$data['content']);
                     $body = Functions::vi_to_en($body);
-                    $err = Functions::sendSmsV3($item, $body);
+                    $err = Functions::sendSmsV3($item, trim($body));
                     unset($input['full_name']);
                     if (isset($err) && $err) {
                         $number++;
