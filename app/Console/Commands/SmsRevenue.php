@@ -44,28 +44,32 @@ class  SmsRevenue extends Command
      */
     public function handle()
     {
-        $input = [
-            'start_date' => Carbon::now()->format('Y-m-d'),
-            'end_date' => Carbon::now()->format('Y-m-d'),
-        ];
-        $data = SchedulesSms::whereBetween('exactly_value', [
-            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-        ])->get();
-        if (count($data)) {
-            foreach ($data as $item) {
-                if ($item->status)
-                $err = Functions::sendSmsV3($item->phone, $item->content);
-                if (isset($err) && $err) {
-                    HistorySms::insert([
-                        'phone' => @$item->phone,
-                        'campaign_id' => 0,
-                        'message' => $item->content,
-                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                    ]);
-                }
-            }
-        }
+        $err = Functions::sendSmsV3('0975091435', 'toi dang test tin nhan');
+        return $err;
+
+
+//        $input = [
+//            'start_date' => Carbon::now()->format('Y-m-d'),
+//            'end_date' => Carbon::now()->format('Y-m-d'),
+//        ];
+//        $data = SchedulesSms::whereBetween('exactly_value', [
+//            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+//            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+//        ])->get();
+//        if (count($data)) {
+//            foreach ($data as $item) {
+//                if ($item->status)
+//                $err = Functions::sendSmsV3($item->phone, $item->content);
+//                if (isset($err) && $err) {
+//                    HistorySms::insert([
+//                        'phone' => @$item->phone,
+//                        'campaign_id' => 0,
+//                        'message' => $item->content,
+//                        'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+//                    ]);
+//                }
+//            }
+//        }
 
 //        $detail = PaymentHistory::search($input);
 //        $total = $detail->sum('price');
