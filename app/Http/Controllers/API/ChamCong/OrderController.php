@@ -43,9 +43,7 @@ class OrderController extends BaseApiController
                 $q->where('user_id', $user->id)->orWhere('accept_id', $user->id);
             })->orderBy('status')->orderByDesc('id');
         } else {
-            $docs = DonTu::where('user_id', $user->id)->when(isset($param['type']), function ($q) use ($param) {
-                $q->where('type', $param['type']);
-            })->orderByDesc('id');
+            $docs = DonTu::search($param)->where('user_id', $user->id)->orderByDesc('id');
         }
         $clone = clone $docs;
         $clone = $clone->groupBy('status')->select(DB::raw('COUNT(id) as count'), 'status')->get()->map(function ($item
