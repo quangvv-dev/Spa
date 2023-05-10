@@ -7,6 +7,7 @@ use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
+use App\Http\Resources\SchedulesResource;
 use App\Models\ChamCong;
 use App\Models\Salary;
 use App\Models\Schedule;
@@ -26,17 +27,18 @@ class SchedulesController extends BaseApiController
         if (!empty($this->error)) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
         }
+        $request->merge(['type' => 'list_schedules']);
         $user = $request->jwtUser;
-        $params = $request->all();
+        $params = $request->except('type');
         $params['branch_id'] = $user->branch_id;
         if (empty($request->start_date) || empty($request->end_date)) {
             $params['start_date'] = Carbon::now()->format('Y-m-d');
             $params['end_date'] = $params['start_date'];
         }
         $docs = Schedule::search($params)->has('customer')->with('customer:id,full_name,phone', 'creator:id,full_name')
-            ->select('id', 'creator_id', 'user_id', 'date', 'note', 'status',
-                'branch_id')->paginate(StatusCode::PAGINATE_20);
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $docs);
+            ->select('id', 'creator_id', 'user_id', 'date', 'note', 'status','time_from','time_to','user_id', 'branch_id')
+            ->paginate(StatusCode::PAGINATE_20);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', SchedulesResource::collection($docs));
     }
 
     public function statusSchedules()
@@ -61,6 +63,7 @@ class SchedulesController extends BaseApiController
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
+
     public function update(Request $request)
     {
         if ($request->note) {

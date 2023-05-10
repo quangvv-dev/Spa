@@ -15,19 +15,34 @@ class SchedulesResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($request->type = "detail_schedules"){
+        if ($request->type == "detail_schedules"){
             return [
-                'id'                => @$this->id,
-                'note'              => @$this->note,
-                'date'              => @date('d/m/Y',strtotime($this->date)),
-                'time_from'         => @$this->time_from,
-                'time_to'           => @$this->time_to,
-                'branch_id'         => @$this->branch_id,
-                'branch_name'       => @$this->branch->name,
-                'branch_phone'      => @$this->branch->phone,
-                'branch_address'    => @$this->branch->address,
+                'id'             => @$this->id,
+                'note'           => @$this->note,
+                'date'           => @date('d/m/Y', strtotime($this->date)),
+                'time_from'      => @$this->time_from,
+                'time_to'        => @$this->time_to,
+                'branch_id'      => @$this->branch_id,
+                'branch_name'    => @$this->branch->name,
+                'branch_phone'   => @$this->branch->phone,
+                'branch_address' => @$this->branch->address,
             ];
-        }else{
+        }elseif ($request->type == "list_schedules"){
+            return [
+                'id'           => @$this->id,
+                'note'         => @$this->note,
+                'date'         => @$this->date,
+                'time_from'    => @$this->time_from,
+                'time_to'      => @$this->time_to,
+                'status'       => @$this->status,
+                'branch_id'    => @$this->branch_id,
+                'user_id'      => @$this->user_id,
+                'user_name'    => @$this->customer->full_name,
+                'user_phone'   => @$this->customer->phone,
+                'creator_id'   => @$this->creator_id,
+                'creator_name' => @$this->creator->full_name,
+            ];
+        } else{
             return [
                 'id'               => @$this->id,
                 'full_name'        => @$this->full_name,
