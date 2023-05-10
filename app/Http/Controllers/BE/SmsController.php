@@ -12,6 +12,7 @@ use App\Models\CustomerGroup;
 use App\Models\HistorySms;
 use App\Models\OrderDetail;
 use App\Models\Status;
+use App\VietnamCharsetConversion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
@@ -141,13 +142,16 @@ class SmsController extends Controller
                 })
                 ->pluck('phone', 'full_name')->toArray();
             $number = 0;
+            $total = [];
             if (count($users)) {
                 foreach ($users as $key => $item) {
                     if (strlen($item) == 10) {
 //                        $phone = Functions::convertPhone($item);
-                        $body = replaceVariable($request->sms_group, $key, '', @$branch->name, @$branch->phone, @$branch->address);
+                        $text = replaceVariable($request->sms_group, $key, '', @$branch->name, @$branch->phone, @$branch->address);
+                        $body = new VietnamCharsetConversion();
+                        $body = $body->convert($text);
                         $body = Functions::vi_to_en($body);
-                        $err = Functions::sendSmsV3($item, $body);
+                        $err = Functions::sendSmsV3($item, trim($body));
                         if (isset($err) && $err) {
                             $number++;
                             $input['phone'] = $item;
