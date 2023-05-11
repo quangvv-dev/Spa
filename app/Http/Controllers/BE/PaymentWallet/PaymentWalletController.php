@@ -98,9 +98,9 @@ class PaymentWalletController extends Controller
             $order->save();
             $customer = Customer::find($order->customer_id);
             if ($order->gross_revenue < $order->order_price) {
-                $customer->wallet = $customer->wallet + $request->gross_revenue;
-            } elseif ($order->gross_revenue >= $order->order_price) {
-                $customer->wallet = $customer->wallet + $request->gross_revenue + ($order->price - $order->order_price);
+                $customer->wallet = (int)$customer->wallet + (int)$request->gross_revenue;
+            } else {
+                $customer->wallet = (int)$customer->wallet + (int)$request->gross_revenue + (int)($order->price - $order->order_price >0 ?$order->price - $order->order_price:0);
             }
             $customer->save();
         }

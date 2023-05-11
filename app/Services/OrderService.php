@@ -229,12 +229,11 @@ class OrderService
         } else {
             $point = $order->customer->wallet + $paymentHistory->price;
         }
+        $paymentHistory->delete();
+        CommissionEmployee::where('payment_id',$id)->delete();
 
         $order->customer->wallet = $point;
         $order->customer->save();
-
-        $paymentHistory->delete();
-        CommissionEmployee::where('payment_id',$id)->delete();
 
         return $order;
     }
