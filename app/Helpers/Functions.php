@@ -467,7 +467,7 @@ class Functions
         $response = curl_exec($curl);
         curl_close($curl);
         $error_code = !empty(json_decode($response)) ? json_decode($response)->errorCode : 404;
-        \DB::table('settings')->insert(['setting_key' => 'logSms', 'setting_value' => $response]);
+//        \DB::table('settings')->insert(['setting_key' => 'logSms', 'setting_value' => $response]);
         if ($error_code == '000') {
             return 1;
         }
