@@ -35,4 +35,5 @@ class MenuConstant
     const CHAM_CONG = 6.1;
     const DON_TU = 6.3;
     const LICH_HEN = 7;
+    const ALBUM_KH = 8;
 }
