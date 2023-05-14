@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Constants\DepartmentConstant;
+use App\Constants\MenuConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
@@ -347,7 +348,7 @@ class AuthController extends BaseApiController
             'scheduled'  => $send_after,//15-01-2019 16:05
             'requestId'  => "",
             'useUnicode' => 0,//sử dụng có dấu hay k dấu
-            'type'       => 1 // CSKH hay QC
+            'type'       => 1, // CSKH hay QC
         ];
         $data = json_encode((object)$data);
         $base_url = 'http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
@@ -372,5 +373,142 @@ class AuthController extends BaseApiController
         curl_close($curl);
 
         return json_decode($response);
+    }
+
+    public function menuPermission()
+    {
+        $data = [
+            [
+                'menu_code'  => MenuConstant::THONG_KE,
+                'department' => [DepartmentConstant::ADMIN],
+            ],
+            [
+                'menu_code'  => MenuConstant::DOANH_THU,
+                'department' => [DepartmentConstant::ADMIN],
+            ],
+            [
+                'menu_code'  => MenuConstant::DOANH_THU_THEO_NHOM,
+                'department' => [DepartmentConstant::ADMIN],
+            ],
+            [
+                'menu_code'  => MenuConstant::THONG_KE_NGUON,
+                'department' => [DepartmentConstant::ADMIN],
+            ],
+            [
+                'menu_code'  => MenuConstant::BAO_CAO_MKT,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],
+            ],
+            [
+                'menu_code'  => MenuConstant::BAO_CAO_SALE,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
+            ],
+            [
+                'menu_code'  => MenuConstant::THONG_KE_SP_KHO,
+                'department' => [DepartmentConstant::ADMIN],
+            ],
+            [
+                'menu_code'  => MenuConstant::THONG_KE_LICH_HEN,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG,
+                'department' => [
+                    DepartmentConstant::ADMIN,
+                    DepartmentConstant::TELESALES,
+                    DepartmentConstant::MARKETING,
+                    DepartmentConstant::WAITER,
+                    DepartmentConstant::TU_VAN_VIEN,
+                    DepartmentConstant::TECHNICIANS,
+                ],
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG_SALE,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG_MKT,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG_CAREPAGE,
+                'department' => [
+                    DepartmentConstant::ADMIN,
+                    DepartmentConstant::CARE_PAGE,
+                    DepartmentConstant::MARKETING,
+                ],
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG_LETAN,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::WAITER],
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG_KTV,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TECHNICIANS],
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG_TVV,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TU_VAN_VIEN],
+            ],
+            [
+                'menu_code'  => MenuConstant::BAN_HANG,
+                'department' => [
+                    DepartmentConstant::ADMIN,
+                    DepartmentConstant::TELESALES,
+                    DepartmentConstant::MARKETING,
+                ],
+            ],
+            [
+                'menu_code'  => MenuConstant::QL_TONG_DAI,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
+            ],
+            [
+                'menu_code'  => MenuConstant::DS_DON_HANG,
+                'department' => [
+                    DepartmentConstant::ADMIN,
+                    DepartmentConstant::TELESALES,
+                    DepartmentConstant::MARKETING,
+                ],
+            ],
+            [
+                'menu_code'  => MenuConstant::CONG_VIEC_CSKH,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
+            ],
+            [
+                'menu_code'  => MenuConstant::DANH_SACH_KH,
+                'department' => [
+                    DepartmentConstant::ADMIN,
+                    DepartmentConstant::TELESALES,
+                    DepartmentConstant::MARKETING,
+                    DepartmentConstant::CARE_PAGE,
+                    DepartmentConstant::WAITER,
+                ],
+            ],
+            [
+                'menu_code'  => MenuConstant::DANH_SACH_DUYET_CHI,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN],
+            ],
+            [
+                'menu_code'  => MenuConstant::NHAN_SU,
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            ],
+            [
+                'menu_code'  => MenuConstant::BANG_LUONG,
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            ],
+            [
+                'menu_code'  => MenuConstant::CHAM_CONG,
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            ],
+            [
+                'menu_code'  => MenuConstant::DON_TU,
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            ],
+            [
+                'menu_code'  => MenuConstant::LICH_HEN,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES, DepartmentConstant::WAITER],
+            ],
+        ];
+
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 }
