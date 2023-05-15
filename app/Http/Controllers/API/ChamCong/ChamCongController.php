@@ -26,6 +26,8 @@ class ChamCongController extends BaseApiController
                 $date = str_replace('SA', 'AM', $item['DateTimeRecord']);
                 $date = str_replace('CH', 'PM', $date);
                 $date = date_create_from_format('d/m/Y g:i:s A', $date)->format('Y-m-d H:i:s');
+            }elseif (str_contains($item['DateTimeRecord'], 'AM') || str_contains($item['DateTimeRecord'], 'PM')) {
+                $date = date_create_from_format('d/m/Y g:i:s A', $item['DateTimeRecord'])->format('Y-m-d H:i:s');
             } else {
                 $date = Carbon::parse($item['DateTimeRecord'])->format('Y-m-d H:i:s');
             }

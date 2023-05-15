@@ -151,18 +151,15 @@ class StatisticController extends Controller
 
         $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
 
-        $revenue_month = Order::select('payment_date', \DB::raw('SUM(all_total) AS total'),
-            \DB::raw('SUM(gross_revenue) AS revenue'))
-            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+
+        $revenue_month = PaymentHistory::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
-            })
-            ->whereBetween('created_at', [
+            })->whereBetween('created_at', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ])
-            ->whereNotNull('payment_date')->orderBy('payment_date', 'asc')->groupBy('payment_date')->get();
+            ])->select('payment_date','branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')->get();
 
         $data = [
             'all_total' => $orders->sum('all_total'),

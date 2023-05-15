@@ -96,4 +96,28 @@ class PaymentHistory extends Model
 
         return $detail;
     }
+
+    public function getOrderMonthAttribute()
+    {
+        $order = Order::select('all_total')
+            ->whereBetween('created_at', [$this->payment_date . " 00:00:00",$this->payment_date . " 23:59:59"])
+            ->where('branch_id', $this->branch_id)->sum('all_total');
+        return $order;
+    }
+
+    public function getWalletMonthAttribute()
+    {
+        $order = WalletHistory::select('order_price')
+            ->whereBetween('created_at', [$this->payment_date . " 00:00:00",$this->payment_date . " 23:59:59"])
+            ->where('branch_id', $this->branch_id)->sum('order_price');
+        return $order;
+    }
+
+    public function getPaymentWalletMonthAttribute()
+    {
+        $order = PaymentWallet::select('price')
+            ->whereBetween('payment_date', [$this->payment_date . " 00:00:00",$this->payment_date . " 23:59:59"])
+            ->where('branch_id', $this->branch_id)->sum('price');
+        return $order;
+    }
 }

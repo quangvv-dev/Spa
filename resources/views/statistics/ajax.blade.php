@@ -363,9 +363,9 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Ngày', 'Doanh số', 'Doanh thu'],
+            ['Ngày','Doanh số','Doanh thu'],
                 @foreach($data['revenue_month'] as $k =>$item)
-            ['{{substr($item->payment_date, -2)}}', {{$item->total}},{{$item->revenue}}],
+            ['{{substr($item->payment_date, -2)}}',{{$item->order_month + $item->wallet_month}},{{$item->payment_revenue + $item->payment_wallet_month}}],
             @endforeach
         ]);
         var options = {
