@@ -156,10 +156,28 @@ class StatisticController extends Controller
                 $q->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
-            })->whereBetween('created_at', [
+            })->whereBetween('payment_date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ])->select('payment_date','branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')->get();
+            ])->select('payment_date','branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')
+            ->get()->map(function ($item) use ($request){
+                $item->wallet_month = WalletHistory::select('order_price')
+                    ->whereBetween('created_at', [$item->payment_date . " 00:00:00",$item->payment_date . " 23:59:59"])
+                    ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    })->sum('order_price');
+                $item->payment_wallet_month = PaymentWallet::select('price')
+                    ->whereBetween('payment_date', [$item->payment_date . " 00:00:00",$item->payment_date . " 23:59:59"])
+                    ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    })->sum('price');
+                $item->order_month = Order::select('all_total')
+                    ->whereBetween('created_at', [$item->payment_date . " 00:00:00",$item->payment_date . " 23:59:59"])
+                    ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    })->sum('all_total');
+                return $item;
+            });
 
         $data = [
             'all_total' => $orders->sum('all_total'),

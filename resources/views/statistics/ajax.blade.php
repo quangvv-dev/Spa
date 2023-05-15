@@ -365,6 +365,7 @@
         var data = google.visualization.arrayToDataTable([
             ['Ngày','Doanh số','Doanh thu'],
                 @foreach($data['revenue_month'] as $k =>$item)
+            {{$item->wallet_month}}
             ['{{substr($item->payment_date, -2)}}',{{$item->order_month + $item->wallet_month}},{{$item->payment_revenue + $item->payment_wallet_month}}],
             @endforeach
         ]);
