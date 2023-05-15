@@ -51,7 +51,7 @@ class OrderController extends BaseApiController
             $item->name = $item->status == 1 ? "Đã duyệt" : ($item->status == 0 ? "Chờ duyệt" : 'Không duyệt');
             return $item;
         });
-        $docs = $docs->paginate(StatusCode::PAGINATE_20);
+        $docs = $docs->orderByDesc('date')->paginate(StatusCode::PAGINATE_20);
         $data = [
             'status'  => $clone,
             'records' => OrderResource::collection($docs),

@@ -18,6 +18,6 @@ class DepartmentConstant
     const CSKH = 4;//TƯ VẤN VIÊN CSKH
     const TU_VAN_VIEN = 7;//TƯ VẤN VIÊN CSKH
     const KE_TOAN = 8; //KE TOÁN
-    const CARE_PAGE = 9;
-    const DOCTOR = 10;
+    const CARE_PAGE = 9;//care page
+    const DOCTOR = 10; // bac sy
 }

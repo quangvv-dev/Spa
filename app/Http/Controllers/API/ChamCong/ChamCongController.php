@@ -117,7 +117,7 @@ class ChamCongController extends BaseApiController
                 $startDate = new Carbon($docs[0]['date_time_record']);
                 $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
                 $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
-                $check = $docs[0]['type'] == UserConstant::ACTIVE ? $startDate->format('H:i') : ($docs[count($docs) - 1]['type'] == UserConstant::ACTIVE ? $endDate->format('H:i') : '');
+                $check = $docs[0]['type'] == UserConstant::ACTIVE ? 'in' : ($docs[count($docs) - 1]['type'] == UserConstant::ACTIVE ? 'out' : '');
                 $late = (strtotime($startDate->format('H:i')) - strtotime('08:00')) / 60;
                 $early = (strtotime('17:30') - strtotime($endDate->format('H:i'))) / 60;
 
@@ -158,7 +158,7 @@ class ChamCongController extends BaseApiController
             $request->date)->get()->toArray();
         if (count($docs) < 2) {
             $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
-            $machineStart = isset($docs[0]) && $docs[0]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
+            $machineStart = isset($docs[0]) && $docs[0]['type'] == StatusConstant::ACTIVE ? 'in' : '';
             $approval = [
                 'approval'     => 0,
                 'time_work'    => 0,
