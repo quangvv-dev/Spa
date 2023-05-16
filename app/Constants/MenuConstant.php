@@ -32,7 +32,7 @@ class MenuConstant
     const DANH_SACH_DUYET_CHI = 5;
     const NHAN_SU = 6;
     const BANG_LUONG = 6.1;
-    const CHAM_CONG = 6.1;
+    const CHAM_CONG = 6.2;
     const DON_TU = 6.3;
     const LICH_HEN = 7;
     const ALBUM_KH = 8;
