@@ -208,7 +208,7 @@ class WalletsController extends BaseApiController
                 ->with('service:id,name')->get();
             $data->rose_price = $history->price;
             $data->type = 1;
-            $data->info = $raw;
+            $data->detail = $raw;
         }
 
         return $this->responseApi(ResponseStatusCode::OK, "SUCCESS", $data);
