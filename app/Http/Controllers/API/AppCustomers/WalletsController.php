@@ -11,6 +11,10 @@ use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Models\Customer;
 use App\Models\HistoryWalletCtv;
 use App\Models\NotificationCustomer;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\PaymentHistory;
+use App\Models\Services;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -184,15 +188,29 @@ class WalletsController extends BaseApiController
     public function show($id)
     {
         $history = HistoryWalletCtv::find($id);
-        $data = [
-            'id'          => $history->id,
-            'customer_id' => $history->customer_id,
-            'price'       => $history->price,
-            'type'        => $history->type,
-            'status'      => $history->status,
-            'description' => $history->description,
-            'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
-        ];
+        if (isset($history) && $history->type == 2) {
+            $data = [
+                'id'          => $history->id,
+                'customer_id' => $history->customer_id,
+                'price'       => $history->price,
+                'type'        => $history->type,
+                'status'      => $history->status,
+                'description' => $history->description,
+                'created_at'  => date('d-m-Y H:s', strtotime($history->created_at)),
+            ];
+        } elseif (isset($history) && $history->type == 1) {
+            $data = PaymentHistory::join('orders as o', 'o.id', '=', 'payment_histories.order_id')
+                ->join('order_detail as od', 'od.order_id', '=', 'o.id')
+                ->where('payment_histories.id', $history->payment_history_id)
+                ->select('o.all_total', 'o.gross_revenue', 'o.the_rest', 'payment_histories.price as payment_price',
+                    'payment_histories.payment_date', 'o.id')->first();
+            $raw = OrderDetail::select('booking_id', 'total_price')->where('order_id', $data->id)->withTrashed()
+                ->with('service:id,name')->get();
+            $data->rose_price = $history->price;
+            $data->type = 1;
+            $data->info = $raw;
+        }
+
         return $this->responseApi(ResponseStatusCode::OK, "SUCCESS", $data);
     }
 }
