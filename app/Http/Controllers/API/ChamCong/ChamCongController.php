@@ -21,7 +21,7 @@ class ChamCongController extends BaseApiController
         $data = $request->all();
         $input = [];
         $array_approval_code = User::select('approval_code')->whereNotNull('approval_code')->pluck('approval_code')->toArray();
-        foreach ($data['Info'] as $item) {
+        foreach ($data['Info'] as $k => $item) {
             if (str_contains($item['DateTimeRecord'], 'SA') || str_contains($item['DateTimeRecord'], 'CH')) {
                 $date = str_replace('SA', 'AM', $item['DateTimeRecord']);
                 $date = str_replace('CH', 'PM', $date);
@@ -36,6 +36,7 @@ class ChamCongController extends BaseApiController
             $approval_code = $data['NameMachine'] . '.' . $item['IndRedID'];
 
             if (in_array($approval_code, array_values($array_approval_code))) {
+                $k ++;
                 if (empty($isset)) {
                     $input[] = [
                         'name_machine'     => $data['NameMachine'],
@@ -47,6 +48,9 @@ class ChamCongController extends BaseApiController
                         'updated_at'       => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                     ];
                 }
+            }
+            if ($k > 500) {
+                break;
             }
         }
         ChamCong::insert($input);
