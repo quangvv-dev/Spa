@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('active_app')->comment('hiển thị app hoặc không')->after('wallet_ctv')
+            $table->integer('active_app')->comment('hiển thị app hoặc không')->after('wallet_ctv')
                 ->default(\App\Constants\UserConstant::ACTIVE);
         });
     }
