@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\AppCustomers;
 
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
+use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
 use App\Http\Resources\AppCustomers\CustomerResource;
@@ -50,7 +51,7 @@ class AuthController extends BaseApiController
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
                 $data = [
                     'token' => jwtEncode($payload),
-                    'info' => new CustomerResource($info),
+                    'info'  => new CustomerResource($info),
                 ];
                 return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
             }
@@ -76,11 +77,14 @@ class AuthController extends BaseApiController
                 if (empty($info)) {
                     return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'SĐT chưa được đăng ký');
                 } else {
+                    if ($info->active_app == UserConstant::INACTIVE) {
+                        return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản đã bị khóa');
+                    }
                     $payload = $info->toArray();
                     $payload['time'] = strtotime(Date::now());
                     $data = [
                         'token' => jwtencode($payload),
-                        'info' => new CustomerResource($info),
+                        'info'  => new CustomerResource($info),
                     ];
                     return $this->responseApi(ResponseStatusCode::OK, 'Đăng nhập thành công', $data);
                 }
@@ -123,7 +127,7 @@ class AuthController extends BaseApiController
     public function forgotPassword(Request $request)
     {
         $validate = [
-            'phone' => "required",
+            'phone'    => "required",
             'password' => "required",
         ];
         $this->validator($request, $validate);
@@ -159,7 +163,7 @@ class AuthController extends BaseApiController
         $messages = [
             'old_password.required' => 'Vui lòng nhập mật khẩu cũ',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới',
-            'new_password.min' => 'Mật khẩu phải lớn hơn 6 ký tự!',
+            'new_password.min'      => 'Mật khẩu phải lớn hơn 6 ký tự!',
         ];
 
         if ($user->password != '' || $user->password != null) {
@@ -175,7 +179,7 @@ class AuthController extends BaseApiController
 
         if ($validator->fails()) {
             return response()->json([
-                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->all(),
             ]);
         }
@@ -229,7 +233,7 @@ class AuthController extends BaseApiController
             if ($customer->is_gioithieu) {
                 $data = [
                     'full_name' => $customer->gioithieu->full_name,
-                    'phone' => $customer->gioithieu->phone,
+                    'phone'     => $customer->gioithieu->phone,
                 ];
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Khách hàng đã nhập người giới thiệu',
                     $data);
@@ -251,6 +255,7 @@ class AuthController extends BaseApiController
      * Lấy OTP
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getOtp(Request $request)
@@ -262,7 +267,8 @@ class AuthController extends BaseApiController
         }
         $device = Otp::where('deviceId', $request->deviceId)->count();
         if ($device > 5) {
-            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mỗi ngày thiết bị được yêu cầu OTP không quá 5 lần !');
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST,
+                'Mỗi ngày thiết bị được yêu cầu OTP không quá 5 lần !');
         }
         $data = Otp::where('phone', $request->phone)->first();
         $otp = Functions::generateRandomNumber();
@@ -270,16 +276,17 @@ class AuthController extends BaseApiController
         if (empty($data)) {
             $err = Functions::sendSmsV3($request->phone, @$text);
             Otp::create([
-                'phone' => $request->phone,
-                'otp' => $otp,
-                'count' => 1,
+                'phone'    => $request->phone,
+                'otp'      => $otp,
+                'count'    => 1,
                 'deviceId' => $request->deviceId,
             ]);
         } else {
             $check = Functions::checkExpiredOtp($data);
             if ($data->count < 6) {
                 if ($check == 1) {
-                    return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'OTP chưa hết hiệu lực 15 phút. Vui lòng kiểm tra tin nhắn !');
+                    return $this->responseApi(ResponseStatusCode::BAD_REQUEST,
+                        'OTP chưa hết hiệu lực 15 phút. Vui lòng kiểm tra tin nhắn !');
                 } else {
                     $err = Functions::sendSmsV3($request->phone, @$text);
                     $data->otp = $otp;
@@ -287,7 +294,8 @@ class AuthController extends BaseApiController
                     $data->save();
                 }
             } else {
-                return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mỗi ngày SĐT được yêu cầu OTP không quá 5 lần !');
+                return $this->responseApi(ResponseStatusCode::BAD_REQUEST,
+                    'Mỗi ngày SĐT được yêu cầu OTP không quá 5 lần !');
             }
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', [$err]);
@@ -308,7 +316,7 @@ class AuthController extends BaseApiController
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->first(),
             ]);
         }
@@ -370,9 +378,9 @@ class AuthController extends BaseApiController
     {
         $validate = [
             'full_name' => "required",
-            'phone' => "required",
+            'phone'     => "required",
             'branch_id' => "required",
-            'otp' => "required",
+            'otp'       => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -384,7 +392,7 @@ class AuthController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
         }
         $check = Functions::checkExpiredOtp($otp);
-        if ($check == 0){
+        if ($check == 0) {
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Mã OTP chưa đúng !');
         }
 
@@ -403,7 +411,7 @@ class AuthController extends BaseApiController
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
         $data = [
             'token' => jwtencode($payload),
-            'info' => new CustomerResource($customer),
+            'info'  => new CustomerResource($customer),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
@@ -423,10 +431,31 @@ class AuthController extends BaseApiController
                 CustomerGroup::create([
                     'customer_id' => $customer_id,
                     'category_id' => $item->id,
-                    'branch_id' => $branch_id,
-                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                    'branch_id'   => $branch_id,
+                    'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
                 ]);
             }
+        }
+    }
+
+    public function inactiveApp(Request $request)
+    {
+        $validate = [
+            'status' => "required|in:1,0",
+        ];
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+
+        $info = $request->jwtUser;
+        $customer = Customer::find($info->id);
+        if ($customer) {
+            $customer->active_app = $request->status;
+            $customer->save();
+            return $this->responseApi(ResponseStatusCode::OK, 'Tài khoản đã khoá thành công');
+        } else {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Không tồn tại khách hàng');
         }
     }
 }

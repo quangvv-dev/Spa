@@ -40,7 +40,7 @@ class  OTPRefresh extends Command
      */
     public function handle()
     {
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-        DB::table('otps')->update(['count' => 0, 'updated_at' => $now]);
+//        Otp::truncate();
+        DB::table('otps')->truncate();
     }
 }

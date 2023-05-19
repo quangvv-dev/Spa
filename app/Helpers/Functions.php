@@ -730,8 +730,7 @@ class Functions
      */
     public static function checkExpiredOtp($otp)
     {
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-        $now = strtotime($now);
+        $now = Carbon::now()->timestamp;
         $to = strtotime($otp->updated_at);
         $distance = round(($now - $to) / 60);
         if ($distance < 16) {
