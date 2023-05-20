@@ -184,6 +184,7 @@ class OrderController extends Controller
 
     public function showDetail($id, $type)
     {
+        $type = isset($type) && $type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT ? OrderConstant::TYPE_DON_CHECKIN_CHECKOUT : OrderConstant::TYPE_DON_NGHI;
         $order = DonTu::find($id);
         if(!$order){
             return redirect(route('approval.order.index'));
