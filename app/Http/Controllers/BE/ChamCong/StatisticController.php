@@ -62,7 +62,7 @@ class StatisticController extends Controller
                 $curentDate = $request->month ? Carbon::create($year, $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
                     : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
                 $docs = ChamCong::select('date_time_record')->where('approval_code', $item->approval_code)->whereDate('date_time_record', $curentDate)
-                    ->orderByAsc('date_time_record')->get()->toArray();
+                    ->orderBy('date_time_record')->get()->toArray();
                 if ($item->approval_code) {
                     if (count($docs) < 2) {
                         $approval[$i] = 0;
