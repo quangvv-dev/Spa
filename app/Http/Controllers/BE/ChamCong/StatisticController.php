@@ -161,14 +161,15 @@ class StatisticController extends Controller
 
     public function getDetail(Request $request)
     {
-        $user = User::select('id', 'approval_code', 'full_name', 'department_id')->where('id', $request->user_id)->with(['department', 'donTu' => function ($query) use ($request) {
-            $query->where('date', Functions::yearMonthDay($request['date']))->with('reason');
-        }, 'chamCong' => function ($query) use ($request) {
-            $query->whereBetWeen('date_time_record', [
-                Functions::createYearMonthDay($request['date']) . ' 00:00:00',
-                Functions::createYearMonthDay($request['date']) . '23:59:59',
-            ]);
+        $user = User::where('id', $request->user_id)->with(['department', 'donTu' => function ($query) use ($request) {
+            $query->where('date', Carbon::createFromFormat('d-m-Y',$request['date'])->format('Y-m-d'))->with('reason');
             return $query;
+        }, 'chamCong' => function ($query2) use ($request) {
+            $query2->whereBetWeen('date_time_record', [
+                Functions::createYearMonthDay($request['date']) . ' 00:00:00',
+                Functions::createYearMonthDay($request['date']) . ' 23:59:59',
+            ]);
+            return $query2;
             }])->first();
         return $user;
     }

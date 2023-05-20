@@ -136,11 +136,13 @@ class User extends Authenticatable
         return $this->belongsTo(Location::class);
     }
 
-    public function chamCong(){
-        return $this->hasMany(ChamCong::class,'approval_code','approval_code');
+    public function chamCong()
+    {
+        return $this->hasMany(ChamCong::class, 'approval_code', 'approval_code');
     }
 
-    public function donTu(){
+    public function donTu()
+    {
         return $this->hasMany(DonTu::class);
     }
 }
