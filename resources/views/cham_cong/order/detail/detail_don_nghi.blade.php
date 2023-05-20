@@ -95,7 +95,9 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="detail-section">
-                            <div class="detail-section-title" style="display: flex;align-items: center;justify-content: space-between;">Thông tin chung
+                            <div class="detail-section-title"
+                                 style="display: flex;align-items: center;justify-content: space-between;">Thông tin
+                                chung
                                 <div class="">
                                     @if($order->status === 0)
                                         @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
@@ -105,7 +107,9 @@
                                             <a href="/approval/order/edit/{{$order->id}}">
                                                 <button class="btn btn-secondary">Sửa</button>
                                             </a>
-                                            <button class="btn btn-danger delete" data-id="{{$order->id}}" data-url="/approval/order/{{$order->id}}">Xoá</button>
+                                            <button class="btn btn-danger delete" data-id="{{$order->id}}"
+                                                    data-url="/approval/order/{{$order->id}}">Xoá
+                                            </button>
                                         @endif
                                     @endif
 
@@ -118,7 +122,7 @@
                                             <div class="detail-label">Họ và tên</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content">
+                                            <div class="detail-content bold">
                                                 <a href="">{{@$order->user->full_name}}</a>
                                             </div>
                                         </div>
@@ -128,7 +132,7 @@
                                             <div class="detail-label">Phòng ban</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content">
+                                            <div class="detail-content bold">
                                                 <span title="">{{@$order->user->department->name}}</span>
                                             </div>
                                         </div>
@@ -137,18 +141,22 @@
                                 <div class="detail-group-field">
                                     <div class="detail-row row" v="detailField">
                                         <div class="col-5">
-                                            <div class="detail-label">Vị trí</div>
+                                            <div class="detail-label">Chức vụ</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content"></div>
+                                            <div class="detail-content bold">
+                                                {{@$order->user->roles->name}}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="detail-row row" v="detailField">
                                         <div class="col-5">
-                                            <div class="detail-label">Chức vụ</div>
+                                            <div class="detail-label">Loại đơn</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content"></div>
+                                            <div class="detail-content bold">
+                                               Đơn xin nghỉ
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -158,7 +166,7 @@
                                             <div class="detail-label">Lý do</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content">{{@$order->reason->name}}</div>
+                                            <div class="detail-content bold">{{@$order->reason->name}}</div>
                                         </div>
                                     </div>
                                     <div class="detail-row row" v="detailField">
@@ -166,7 +174,7 @@
                                             <div class="detail-label">Tính công</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content">Không</div>
+                                            <div class="detail-content bold">Không</div>
                                         </div>
                                     </div>
                                 </div>
@@ -176,20 +184,13 @@
                                             <div class="detail-label">Trạng thái</div>
                                         </div>
                                         <div class="col-7">
-                                            <div class="detail-content">
-                                                <div class="{{$order->status==1 ? "beacon-green" : ($order->status==0 ? "beacon-red" : 'beacon-red')}}"
-                                                     style="opacity:0.8;width:120px">
+                                            <div class="detail-content bold">
+                                                <div
+                                                    class="{{$order->status==1 ? "beacon-green" : ($order->status==0 ? "beacon-red" : 'beacon-red')}}"
+                                                    style="opacity:0.8;width:120px">
                                                     {{$order->status==1 ? "Đã duyệt" : ($order->status==0 ? "Chờ duyệt" : 'Không duyệt')}}
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="detail-row row" v="detailField">
-                                        <div class="col-5">
-                                            <div class="detail-label">Ý kiến người duyệt</div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="detail-content"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +200,7 @@
                                             <div class="detail-label">Mô tả</div>
                                         </div>
                                         <div class="col-12 mt-2">
-                                            <div class="detail-content">{{$order->description}}</div>
+                                            <div class="detail-content" style="color: black">{{$order->description}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -209,8 +210,9 @@
                             <div class="detail-section-title">Chi tiết</div>
                             <div class="detail-section-content">
                                 <div class="detail-group-field">
-                                    <div class="table pop-done pop-control pop-control-contextmenu pop-connect table-align-complete"
-                                         v="table" style="width: 60%;">
+                                    <div
+                                        class="table pop-done pop-control pop-control-contextmenu pop-connect table-align-complete"
+                                        v="table" style="width: 60%;">
                                         <div class="table-header hidden" _n="header">
 
 
