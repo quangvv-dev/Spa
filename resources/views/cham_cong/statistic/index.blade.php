@@ -201,7 +201,7 @@
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-6">
-                            {!! Form::select('branch_id', $branches, null, array('class' => 'form-control branch_id', 'placeholder'=>'Chọn chi nhánh',)) !!}
+                            {!! Form::select('branch_id', $branches, 1, array('class' => 'form-control branch_id', 'placeholder'=>'Chọn chi nhánh',)) !!}
                         </div>
 
                         {{--<button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm</button>--}}

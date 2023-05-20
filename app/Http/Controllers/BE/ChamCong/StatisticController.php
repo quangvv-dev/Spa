@@ -41,6 +41,9 @@ class StatisticController extends Controller
      */
     public function index(Request $request)
     {
+        if (!count($request->all())) {
+            $request->merge(['branch_id' => 1]);
+        }
         $year = $request->year ?: now()->format('Y');
 
         if ($request->month) {
@@ -59,7 +62,7 @@ class StatisticController extends Controller
                 $curentDate = $request->month ? Carbon::create($year, $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
                     : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
                 $docs = ChamCong::select('date_time_record')->where('approval_code', $item->approval_code)->whereDate('date_time_record', $curentDate)
-                    ->orderByDesc('date_time_record')->get()->toArray();
+                    ->orderByAsc('date_time_record')->get()->toArray();
                 if ($item->approval_code) {
                     if (count($docs) < 2) {
                         $approval[$i] = 0;
