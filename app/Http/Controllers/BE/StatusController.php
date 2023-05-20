@@ -21,7 +21,7 @@ class StatusController extends Controller
         $this->middleware('permission:status.delete', ['only' => ['destroy']]);
 
         $types_pluck = [
-            '' => '-Chọn loại nhớm-',
+            '' => '-Chọn loại nhóm-',
             StatusCode::SOURCE_CUSTOMER => 'Nguồn khách hàng',
             StatusCode::RELATIONSHIP => 'Mối quan hệ',
             StatusCode::BRANCH => 'Chi nhánh',

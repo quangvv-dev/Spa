@@ -71,10 +71,10 @@
                         @endif
 
 
-                        <a href="/approval/order/create/1">
+                        <a href="/approval/order/create/0">
                             <button class="btn btn-secondary mr-1"><i class="fa fa-plus"></i> Đơn nghỉ</button>
                         </a>
-                        <a href="/approval/order/create/2">
+                        <a href="/approval/order/create/1">
                             <button class="btn btn-primary"><i class="fa fa-plus"></i> Đơn checkin/checkout</button>
                         </a>
                     </nav>

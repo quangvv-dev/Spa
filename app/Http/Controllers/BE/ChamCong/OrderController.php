@@ -179,7 +179,6 @@ class OrderController extends Controller
         } else if ($type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) { //đơn checkin
             $reasons = Reason::where('type', OrderConstant::TYPE_DON_CHECKIN_CHECKOUT)->get();
             return view('cham_cong.order.order_type.don_check_in_out', compact('time', 'user_accept', 'reasons'));
-
         }
     }
 

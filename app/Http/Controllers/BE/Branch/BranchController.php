@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\PaymentHistory;
 use App\Models\PaymentWallet;
 use App\Models\Schedule;
+use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -108,9 +109,11 @@ class BranchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function source()
     {
-        //
+        $source = Status::select('id','name')->where('type',StatusCode::SOURCE_CUSTOMER)->get();
+
+        dd($source);
     }
 
     /**
