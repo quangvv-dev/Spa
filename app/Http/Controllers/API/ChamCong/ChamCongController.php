@@ -105,7 +105,7 @@ class ChamCongController extends BaseApiController
                 $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
                 : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
             $docs = ChamCong::where('approval_code', $approval_code)->whereDate('date_time_record',
-                $curentDate)->get()->toArray();
+                $curentDate)->orderBy('date_time_record')->get()->toArray();
             if (count($docs) < 2) {
                 $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
                 $approval[] = [
@@ -159,7 +159,7 @@ class ChamCongController extends BaseApiController
         }
 //        $date = Carbon::createFromFormat('d/m/Y', $request->date)->format('Y-m-d');
         $docs = ChamCong::where('approval_code', $approval_code)->whereDate('date_time_record',
-            $request->date)->get()->toArray();
+            $request->date)->orderBy('date_time_record')->get()->toArray();
         if (count($docs) < 2) {
             $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
             $machineStart = isset($docs[0]) && $docs[0]['type'] == StatusConstant::ACTIVE ? 'in' : '';
