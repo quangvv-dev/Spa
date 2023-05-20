@@ -170,7 +170,7 @@ class OrderController extends Controller
     public function createOrder($type)
     {
         $time = $this->time;
-        $type = isset($type) && $type ? $type : 1;
+        $type = isset($type) && $type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT ? OrderConstant::TYPE_DON_CHECKIN_CHECKOUT : OrderConstant::TYPE_DON_NGHI;
         $user_accept = User::where('department_id', DepartmentConstant::ADMIN)->select('full_name', 'id')->get();
 
         if ($type == OrderConstant::TYPE_DON_NGHI) { //đơn nghỉ
