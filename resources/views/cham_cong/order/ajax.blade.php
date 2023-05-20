@@ -7,7 +7,7 @@
             <th class="text-center">Trạng thái</th>
             <th class="text-center">Loại đơn</th>
             <th class="text-center">Phòng ban</th>
-            <th class="text-center">Vị trí</th>
+            <th class="text-center">Chức vụ</th>
             <th class="text-center">Lý do</th>
             <th class="text-center">Ngày tạo</th>
         </tr>
@@ -25,9 +25,9 @@
                         </div>
                     </a>
                 </td>
-                <td class="text-center">{{$item->type==0 ? "Đơn nghỉ" : 'Đơn check-in/check-out'}}</td>
+                <td class="text-center bold">{{$item->type==0 ? "Đơn nghỉ" : 'Đơn check-in/check-out'}}</td>
                 <td class="text-center">{{@$item->user->department->name}}</td>
-                <td class="text-center"></td>
+                <td class="text-center">{{@$item->user->roles->name}}</td>
                 <td class="text-center">{{@$item->reason->name}}</td>
                 <td class="text-center">{{$item->created_at}}</td>
             </tr>
