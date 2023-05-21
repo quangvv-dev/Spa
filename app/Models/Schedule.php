@@ -193,6 +193,8 @@ class Schedule extends Model
         }
         if (!empty($request['category'])) {
             $docs = $docs->where('category_id', $request['category']);
+        }if (!empty($request['status_id'])) {
+            $docs = $docs->where('status', $request['status_id']);
         }
         if (!empty($request['customer'])) {
             $param = $request['customer'];
