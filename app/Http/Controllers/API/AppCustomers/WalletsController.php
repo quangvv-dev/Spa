@@ -188,6 +188,7 @@ class WalletsController extends BaseApiController
     public function show($id)
     {
         $history = HistoryWalletCtv::find($id);
+        $data =[];
         if (isset($history) && $history->type == 3) {
             $data = [
                 'id'          => $history->id,
@@ -210,7 +211,6 @@ class WalletsController extends BaseApiController
             $data->type = 1;
             $data->detail = $raw;
         }
-
         return $this->responseApi(ResponseStatusCode::OK, "SUCCESS", $data);
     }
 }
