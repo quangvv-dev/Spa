@@ -18,6 +18,9 @@ class OrderResource extends JsonResource
         return [
             'id'          => $this->id,
             'full_name'   => @$this->user->full_name,
+            'code'        => @$this->user->code,
+            'department'  => @$this->user->department->name,
+            'role'        => @$this->user->roles->name,
             'status_text' => @$this->status == 1 ? "Đã duyệt" : ($this->status == 0 ? "Chờ duyệt" : 'Không duyệt'),
             'status'      => $this->status,
             'title'       => $this->type == 0 ? "Đơn nghỉ" : 'Đơn check-in/check-out',
@@ -25,6 +28,7 @@ class OrderResource extends JsonResource
             'date'        => @$this->date,
             'date_end'    => @$this->date_end,
             'reason_id'   => @$this->reason_id,
+            'reason_text' => @$this->reason->name,
             'accept_id'   => @$this->accept_id,
             'time_to'     => !empty($this->time_to) ? array_search($this->time_to, ChamCongConstant::HOURS) : '',
             'time_end'    => !empty($this->time_end) ? array_search($this->time_end, ChamCongConstant::HOURS) : '',
