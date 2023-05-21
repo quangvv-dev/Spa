@@ -35,6 +35,8 @@ class SchedulesController extends BaseApiController
             $params['start_date'] = Carbon::now()->format('Y-m-d');
             $params['end_date'] = $params['start_date'];
         }
+        unset($params['status']);
+        $params['search'] = isset($request->status) ? $request->status : '';
         $docs = Schedule::search($params)->has('customer')->with('customer:id,full_name,phone', 'creator:id,full_name')
             ->select('id', 'creator_id', 'user_id', 'date', 'note', 'status','time_from','time_to','user_id', 'branch_id')
             ->paginate(StatusCode::PAGINATE_20);
