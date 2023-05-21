@@ -30,7 +30,7 @@ class SchedulesController extends BaseApiController
         $request->merge(['type' => 'list_schedules']);
         $user = $request->jwtUser;
         $params = $request->except('type');
-        $params['branch_id'] = $user->branch_id;
+        $params['branch_id'] = isset($request->branch_id) ? $request->branch_id : $user->branch_id;
         if (empty($request->start_date) || empty($request->end_date)) {
             $params['start_date'] = Carbon::now()->format('Y-m-d');
             $params['end_date'] = $params['start_date'];
@@ -75,5 +75,6 @@ class SchedulesController extends BaseApiController
         }
         $data = Schedule::with('customer')->find($request->id);
         $data->update($request->except('id', 'format_date'));
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS');
     }
 }
