@@ -33,10 +33,10 @@ class AuthController extends BaseApiController
             if (password_verify($request->password, $info->password) != true) {
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Sai mật khẩu');
             } else {
-                if (!in_array($info->department_id,
-                    [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING, DepartmentConstant::CARE_PAGE])) {
-                    return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản không có quyền');
-                }
+//                if (!in_array($info->department_id,
+//                    [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING, DepartmentConstant::CARE_PAGE])) {
+//                    return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản không có quyền');
+//                }
                 if ($info->active == StatusCode::ON) {
                     $payload = $info->toArray();
                     $payload['time'] = strtotime(Date::now());
