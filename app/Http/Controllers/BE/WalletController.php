@@ -70,7 +70,7 @@ class WalletController extends Controller
             'user_id'     => Auth::user()->id,
             'price'       => $package->price,
             'order_price' => $package->order_price,
-            'branch_id'   => $customer->branch_id,
+            'branch_id'   => !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id,
             'source_id'   => $customer->source_id,
         ];
         $wallet = $this->walletService->create($input);
