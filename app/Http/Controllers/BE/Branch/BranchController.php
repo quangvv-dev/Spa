@@ -128,7 +128,7 @@ class BranchController extends Controller
     public function source(Request $request)
     {
         $input = $request->all();
-        $users = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
+//        $users = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
         $users = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get()->map(function ($item) use ($request,$input) {
 //        foreach ($users as $item) {
             $data_new = Customer::select('id')->whereBetween('created_at', [
@@ -178,26 +178,27 @@ class BranchController extends Controller
             ->when(!empty($input['branch_id']), function ($query) use ($input) {
                 $query->where('payment_wallets.branch_id', $input['branch_id']);
             }); // đã thu trong kỳ ví
-            $walletAllTotal = WalletHistory::select('wallet_histories.order_price')
-                ->join('customers as c', 'wallet_histories.customer_id', '=', 'c.id')
-                ->whereBetween('wallet_histories.created_at', [
-                    Functions::yearMonthDay($request->start_date) . " 00:00:00",
-                    Functions::yearMonthDay($request->end_date) . " 23:59:59",
-                ])->where('c.source_id', $item->id)
-                ->when(!empty($input['branch_id']), function ($query) use ($input) {
-                    $query->where('wallet_histories.branch_id', $input['branch_id']);
-                });
 
-        $item->payment_wallet = $wallet->sum('payment_wallets.price');
-        $detail = PaymentHistory::join('orders as o', 'o.id', '=', 'payment_histories.order_id')
-            ->join('customers as c', 'c.id', '=', 'o.member_id')->select('payment_histories.price')
-            ->whereBetween('payment_histories.payment_date', [
+        $walletAllTotal = WalletHistory::select('wallet_histories.order_price')
+            ->join('customers as c', 'wallet_histories.customer_id', '=', 'c.id')
+            ->whereBetween('wallet_histories.created_at', [
                 Functions::yearMonthDay($request->start_date) . " 00:00:00",
                 Functions::yearMonthDay($request->end_date) . " 23:59:59",
             ])->where('c.source_id', $item->id)
             ->when(!empty($input['branch_id']), function ($query) use ($input) {
-                $query->where('payment_histories.branch_id', $input['branch_id']);
-            })->select('payment_histories.price');//đã thu trong kỳ
+                $query->where('wallet_histories.branch_id', $input['branch_id']);
+            });
+
+        $item->payment_wallet = $wallet->sum('payment_wallets.price');
+            $detail = PaymentHistory::join('orders as o', 'o.id', '=', 'payment_histories.order_id')
+                ->join('customers as c', 'c.id', '=', 'o.member_id')->select('payment_histories.price')
+                ->whereBetween('payment_histories.payment_date', [
+                    Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                    Functions::yearMonthDay($request->end_date) . " 23:59:59",
+                ])->where('c.source_id', $item->id)
+                ->when(!empty($input['branch_id']), function ($query) use ($input) {
+                    $query->where('payment_histories.branch_id', $input['branch_id']);
+                })->select('payment_histories.price');//đã thu trong kỳ
         $detail_new = clone $detail;
         $item->detail_new = $detail_new->where('o.is_upsale', OrderConstant::NON_UPSALE)->sum('price');
         $item->customer_new = $data_new->count();
