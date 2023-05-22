@@ -128,9 +128,7 @@ class BranchController extends Controller
     public function source(Request $request)
     {
         $input = $request->all();
-//        $users = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
         $users = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get()->map(function ($item) use ($request,$input) {
-//        foreach ($users as $item) {
             $data_new = Customer::select('id')->whereBetween('created_at', [
                 Functions::yearMonthDay($request->start_date) . " 00:00:00",
                 Functions::yearMonthDay($request->end_date) . " 23:59:59",
@@ -214,7 +212,6 @@ class BranchController extends Controller
         $item->payment_used = $detail->where('payment_histories.payment_type', 3)->sum('payment_histories.price');//thanh toán điểm
             return $item;
         })->sortByDesc('all_payment');
-//    }
         if ($request->ajax()) {
             return view('branch.source.ajax', compact('users'));
         }
