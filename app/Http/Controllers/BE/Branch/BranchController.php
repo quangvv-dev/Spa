@@ -14,6 +14,7 @@ use App\Models\PaymentHistory;
 use App\Models\PaymentWallet;
 use App\Models\Schedule;
 use App\Models\Status;
+use App\Models\WalletHistory;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -167,7 +168,7 @@ class BranchController extends Controller
             ->where('c.old_customer', OrderConstant::NON_UPSALE)->count();
         $item->schedules_new = $schedules_new->where('c.old_customer', OrderConstant::NON_UPSALE)->count();
 
-        $wallet = PaymentWallet::select('payment_wallets.price',DB::raw('SUM(wh.order_price) as order_price'))->join('wallet_histories as wh', 'wh.id', '=',
+        $wallet = PaymentWallet::select('payment_wallets.price')->join('wallet_histories as wh', 'wh.id', '=',
             'payment_wallets.order_wallet_id')
             ->join('customers as c', 'wh.customer_id', '=', 'c.id')
             ->whereBetween('payment_wallets.payment_date', [
@@ -177,6 +178,16 @@ class BranchController extends Controller
             ->when(!empty($input['branch_id']), function ($query) use ($input) {
                 $query->where('payment_wallets.branch_id', $input['branch_id']);
             }); // đã thu trong kỳ ví
+            $walletAllTotal = WalletHistory::select('wallet_histories.order_price')
+                ->join('customers as c', 'wallet_histories.customer_id', '=', 'c.id')
+                ->whereBetween('wallet_histories.created_at', [
+                    Functions::yearMonthDay($request->start_date) . " 00:00:00",
+                    Functions::yearMonthDay($request->end_date) . " 23:59:59",
+                ])->where('c.source_id', $item->id)
+                ->when(!empty($input['branch_id']), function ($query) use ($input) {
+                    $query->where('wallet_histories.branch_id', $input['branch_id']);
+                });
+
         $item->payment_wallet = $wallet->sum('payment_wallets.price');
         $detail = PaymentHistory::join('orders as o', 'o.id', '=', 'payment_histories.order_id')
             ->join('customers as c', 'c.id', '=', 'o.member_id')->select('payment_histories.price')
@@ -197,14 +208,10 @@ class BranchController extends Controller
         $item->payment_revenue = $orders->sum('orders.gross_revenue');
         $item->payment_new = $order_new->sum('orders.gross_revenue');//da thu trong ky
         $item->payment_old = $order_old->sum('orders.gross_revenue'); //da thu trong ky
-        $item->revenue_total = $order_new->sum('orders.all_total') + $order_old->sum('orders.all_total') + $wallet->sum('order_price');
+        $item->revenue_total = (int)$order_new->sum('orders.all_total') + (int)$order_old->sum('orders.all_total') + (int)$walletAllTotal->sum('wallet_histories.order_price');
         $item->all_payment = $detail->sum('payment_histories.price');
         $item->payment_used = $detail->where('payment_histories.payment_type', 3)->sum('payment_histories.price');//thanh toán điểm
             return $item;
-        })->filter(function ($it) {
-            if ($it->all_payment > 0) {
-                return $it;
-            }
         })->sortByDesc('all_payment');
 //    }
         if ($request->ajax()) {
