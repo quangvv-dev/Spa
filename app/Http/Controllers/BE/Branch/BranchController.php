@@ -17,6 +17,7 @@ use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 
@@ -166,7 +167,7 @@ class BranchController extends Controller
             ->where('c.old_customer', OrderConstant::NON_UPSALE)->count();
         $item->schedules_new = $schedules_new->where('c.old_customer', OrderConstant::NON_UPSALE)->count();
 
-        $wallet = PaymentWallet::select('payment_wallets.price')->join('wallet_histories as wh', 'wh.id', '=',
+        $wallet = PaymentWallet::select('payment_wallets.price',DB::raw('SUM(wh.order_price) as order_price'))->join('wallet_histories as wh', 'wh.id', '=',
             'payment_wallets.order_wallet_id')
             ->join('customers as c', 'wh.customer_id', '=', 'c.id')
             ->whereBetween('payment_wallets.payment_date', [
@@ -196,7 +197,7 @@ class BranchController extends Controller
         $item->payment_revenue = $orders->sum('orders.gross_revenue');
         $item->payment_new = $order_new->sum('orders.gross_revenue');//da thu trong ky
         $item->payment_old = $order_old->sum('orders.gross_revenue'); //da thu trong ky
-        $item->revenue_total = $order_new->sum('orders.all_total') + $order_old->sum('orders.all_total');
+        $item->revenue_total = $order_new->sum('orders.all_total') + $order_old->sum('orders.all_total') + $wallet->sum('order_price');
         $item->all_payment = $detail->sum('payment_histories.price');
         $item->payment_used = $detail->where('payment_histories.payment_type', 3)->sum('payment_histories.price');//thanh toán điểm
             return $item;
