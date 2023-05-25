@@ -303,11 +303,11 @@ class StatisticController extends Controller
         $year = $request->year?:date('Y');
 
         if($request->user_id){
-            $approval_code = User::find($request->user_id)->approval_code;
+            $user_code = User::find($request->user_id)->code;
         } else {
-            $approval_code = Auth::user()->approval_code;
+            $user_code = Auth::user()->code;
         }
-        $docs = Salary::where('approval_code',$approval_code)->where('month',$month)->where('year',$year)->first();
+        $docs = Salary::where('approval_code',$user_code)->where('month',$month)->where('year',$year)->first();
         if($docs){
             $key = json_decode($docs->data)->key;
             $value = json_decode($docs->data)->value;
