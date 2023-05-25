@@ -63,11 +63,11 @@ class ChamCongController extends BaseApiController
         $year = $request->year ?: date('Y');
         $user = $request->jwtUser;
         if ($user->approval_code) {
-            $approval_code = $user->approval_code;
+            $user_code = $user->code;
         } else {
-            $approval_code = User::find($user->id)->approval_code;
+            $user_code = User::find($user->id)->code;
         }
-        $docs = Salary::where('approval_code', $approval_code)->where('month', $month)->where('year', $year)->first();
+        $docs = Salary::where('approval_code', $user_code)->where('month', $month)->where('year', $year)->first();
         if ($docs) {
             $data = [
                 'title' => json_decode($docs->data)->key,
