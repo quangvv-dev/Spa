@@ -381,42 +381,42 @@ class AuthController extends BaseApiController
             [
                 'menu_code'  => MenuConstant::THONG_KE,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu' => 'THỐNG KÊ'
+                'name_menu'  => 'THỐNG KÊ',
             ],
             [
                 'menu_code'  => MenuConstant::DOANH_THU,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu' => 'DOANH THU'
+                'name_menu'  => 'DOANH THU',
             ],
             [
                 'menu_code'  => MenuConstant::DOANH_THU_THEO_NHOM,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu' => 'DOANH THU THEO NHÓM'
+                'name_menu'  => 'DOANH THU THEO NHÓM',
             ],
             [
                 'menu_code'  => MenuConstant::THONG_KE_NGUON,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu' => 'THỐNG KÊ NGUỒN'
+                'name_menu'  => 'THỐNG KÊ NGUỒN',
             ],
             [
                 'menu_code'  => MenuConstant::BAO_CAO_MKT,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],
-                'name_menu' => 'BÁO CÁO MARKETING'
+                'name_menu'  => 'BÁO CÁO MARKETING',
             ],
             [
                 'menu_code'  => MenuConstant::BAO_CAO_SALE,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu' => 'BÁO CÁO TELESALES'
+                'name_menu'  => 'BÁO CÁO TELESALES',
             ],
             [
                 'menu_code'  => MenuConstant::THONG_KE_SP_KHO,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu' => 'THỐNG KÊ SẢN PHẨM KHO'
+                'name_menu'  => 'THỐNG KÊ SẢN PHẨM KHO',
             ],
             [
                 'menu_code'  => MenuConstant::THONG_KE_LICH_HEN,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu' => 'THỐNG KÊ LỊCH HẸN'
+                'name_menu'  => 'THỐNG KÊ LỊCH HẸN',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG,
@@ -428,17 +428,17 @@ class AuthController extends BaseApiController
                     DepartmentConstant::TU_VAN_VIEN,
                     DepartmentConstant::TECHNICIANS,
                 ],
-                'name_menu' => 'XẾP HẠNG'
+                'name_menu'  => 'XẾP HẠNG',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG_SALE,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu' => 'XẾP HẠNG TELESALES'
+                'name_menu'  => 'XẾP HẠNG TELESALES',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG_MKT,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],
-                'name_menu' => 'XẾP HẠNG MARKETING'
+                'name_menu'  => 'XẾP HẠNG MARKETING',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG_CAREPAGE,
@@ -447,22 +447,22 @@ class AuthController extends BaseApiController
                     DepartmentConstant::CARE_PAGE,
                     DepartmentConstant::MARKETING,
                 ],
-                'name_menu' => 'XẾP HẠNG CAREPAGE'
+                'name_menu'  => 'XẾP HẠNG CAREPAGE',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG_LETAN,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::WAITER],
-                'name_menu' => 'XẾP HẠNG LỄ TÂN'
+                'name_menu'  => 'XẾP HẠNG LỄ TÂN',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG_KTV,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TECHNICIANS],
-                'name_menu' => 'XẾP HẠNG KỸ THUÂT VIÊN'
+                'name_menu'  => 'XẾP HẠNG KỸ THUÂT VIÊN',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG_TVV,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TU_VAN_VIEN],
-                'name_menu' => 'XẾP HẠNG TƯ VẤN VIÊN'
+                'name_menu'  => 'XẾP HẠNG TƯ VẤN VIÊN',
             ],
             [
                 'menu_code'  => MenuConstant::BAN_HANG,
@@ -471,12 +471,12 @@ class AuthController extends BaseApiController
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::MARKETING,
                 ],
-                'name_menu' => 'BÁN HÀNG'
+                'name_menu'  => 'BÁN HÀNG',
             ],
             [
                 'menu_code'  => MenuConstant::QL_TONG_DAI,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu' => 'QL TỔNG ĐÀI'
+                'name_menu'  => 'QL TỔNG ĐÀI',
             ],
             [
                 'menu_code'  => MenuConstant::DS_DON_HANG,
@@ -485,12 +485,12 @@ class AuthController extends BaseApiController
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::MARKETING,
                 ],
-                'name_menu' => 'DS ĐƠN HÀNG'
+                'name_menu'  => 'DS ĐƠN HÀNG',
             ],
             [
                 'menu_code'  => MenuConstant::CONG_VIEC_CSKH,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu' => 'CÔNG VIỆC CSKH'
+                'name_menu'  => 'CÔNG VIỆC CSKH',
             ],
             [
                 'menu_code'  => MenuConstant::DANH_SACH_KH,
@@ -501,41 +501,47 @@ class AuthController extends BaseApiController
                     DepartmentConstant::CARE_PAGE,
                     DepartmentConstant::WAITER,
                 ],
-                'name_menu' => 'DANH SÁCH KHÁCH HÀNG'
+                'name_menu'  => 'DANH SÁCH KHÁCH HÀNG',
             ],
             [
                 'menu_code'  => MenuConstant::DANH_SACH_DUYET_CHI,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN],
-                'name_menu' => 'DANH SÁCH DUYỆT CHI'
+                'name_menu'  => 'DANH SÁCH DUYỆT CHI',
             ],
             [
                 'menu_code'  => MenuConstant::NHAN_SU,
-                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                'name_menu' => 'NHÂN SỰ'
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                'name_menu'  => 'NHÂN SỰ',
             ],
             [
                 'menu_code'  => MenuConstant::BANG_LUONG,
-                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                'name_menu' => 'BẢNG LƯƠNG'
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                'name_menu'  => 'BẢNG LƯƠNG',
             ],
             [
                 'menu_code'  => MenuConstant::CHAM_CONG,
-                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                'name_menu' => 'CHẤM CÔNG'
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                'name_menu'  => 'CHẤM CÔNG',
             ],
             [
                 'menu_code'  => MenuConstant::DON_TU,
-                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                'name_menu' => 'ĐƠN TỪ'
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                'name_menu'  => 'ĐƠN TỪ',
             ],
             [
                 'menu_code'  => MenuConstant::LICH_HEN,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES, DepartmentConstant::WAITER],
-                'name_menu' => 'LỊCH HẸN'
-            ],[
+                'name_menu'  => 'LỊCH HẸN',
+            ],
+            [
                 'menu_code'  => MenuConstant::ALBUM_KH,
-                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES, DepartmentConstant::WAITER],
-                'name_menu' => 'ALBUM KHÁCH HÀNG'
+                'department' => [
+                    DepartmentConstant::ADMIN,
+                    DepartmentConstant::TELESALES,
+                    DepartmentConstant::WAITER,
+                    DepartmentConstant::TECHNICIANS,
+                ],
+                'name_menu'  => 'ALBUM KHÁCH HÀNG',
             ],
         ];
 
