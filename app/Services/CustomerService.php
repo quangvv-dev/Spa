@@ -52,6 +52,7 @@ class CustomerService
 
     public function create($input)
     {
+
         if ($input['mkt_id'] === null) {
             $userLogin = Auth::user()->id;
             $input['mkt_id'] = $userLogin;
@@ -66,8 +67,8 @@ class CustomerService
 
     public function data($input)
     {
-        @$date = Functions::yearMonthDay($input['birthday']);
-        $input['birthday'] = isset($date) && $date ? $date : '';
+//        @$date = Functions::yearMonthDay($input['birthday']);
+//        $input['birthday'] = isset($date) && $date ? $date : '';
         if (!empty($input['image'])) {
             $input['avatar'] = $this->fileUpload->uploadUserImage($input['image']);
         }

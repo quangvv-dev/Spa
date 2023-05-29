@@ -246,7 +246,6 @@ class CustomerController extends Controller
             $request->merge(['telesales_id' => Auth::user()->id]);
         }
         $input['type_ctv'] = $request->type_ctv == 'on' ? 1 : 0;
-
         $customer = $this->customerService->create($input);
         $this->update_code($customer);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
