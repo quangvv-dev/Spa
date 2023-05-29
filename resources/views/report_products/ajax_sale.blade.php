@@ -47,7 +47,7 @@
             <th class="text-center">(5)</th>
             <th class="text-center">(6)</th>
             <th class="text-center">(6.1)</th>
-            <th class="text-center">(5)/(3)</th>
+            <th class="text-center">(5)/(4)</th>
             <th class="text-center">(6)/(5)</th>
             <th class="text-center">(6.1)/(6)</th>
             <th class="text-center">(6.1)/(3)</th>
@@ -143,8 +143,8 @@
         <tr>
             <td class="text-center"></td>
             <td class="text-center bold">Tổng cộng</td>
-            <td class="text-center bold">{{@number_format($customer_new)}}</td>
             <td class="text-center bold">{{@number_format($users->sum('call_center'))}}</td>
+            <td class="text-center bold">{{@number_format($customer_new)}}</td>
             {{--<td class="text-center bold">{{@number_format($comment_new)}}</td>--}}
             <td class="text-center bold">{{@number_format($schedules_new)}}</td>
             <td class="text-center bold">{{@number_format($all_schedules_den)}}</td>
