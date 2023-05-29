@@ -67,8 +67,12 @@ class CustomerService
 
     public function data($input)
     {
-//        @$date = Functions::yearMonthDay($input['birthday']);
-//        $input['birthday'] = isset($date) && $date ? $date : '';
+
+        if (empty($input['birthday'])) {
+            unset($input['birthday']);
+        }else{
+            $input['birthday'] = @Functions::yearMonthDay($input['birthday']);
+        }
         if (!empty($input['image'])) {
             $input['avatar'] = $this->fileUpload->uploadUserImage($input['image']);
         }
