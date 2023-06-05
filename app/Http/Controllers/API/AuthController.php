@@ -327,7 +327,7 @@ class AuthController extends BaseApiController
      */
     public function branch(Request $request)
     {
-        $user = $request->jwtUser;
+        $user = User::find($request->jwtUser->id);
         if (!empty($user->branch_id)) {
             $branchs = Branch::select('id', 'name')->find($user->branch_id);
         } else {
