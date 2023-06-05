@@ -325,9 +325,14 @@ class AuthController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function branch()
+    public function branch(Request $request)
     {
-        $branchs = Branch::select('id', 'name')->get();
+        $user = $request->jwtUser;
+        if (!empty($user->branch_id)) {
+            $branchs = Branch::select('id', 'name')->find($user->branch_id);
+        } else {
+            $branchs = Branch::select('id', 'name')->get();
+        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $branchs);
     }
 
