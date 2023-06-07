@@ -13,4 +13,5 @@ class ScheduleConstant
     const DEN_MUA = 3;
     const CHUA_MUA = 4;
     const HUY = 5;
+    const QUA_HAN = 6;
 }

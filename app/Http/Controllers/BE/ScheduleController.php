@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE;
 
 use App\Constants\DepartmentConstant;
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
@@ -44,10 +45,11 @@ class ScheduleController extends Controller
 
         $color = [
 //            1 => 'Chưa qua',
-            2 => 'Đặt lịch',
-            3 => 'Đến/mua',
-            4 => 'Đến/chưa mua',
-            5 => 'Hủy lịch',
+            ScheduleConstant::DAT_LICH => 'Đặt lịch',
+            ScheduleConstant::DEN_MUA => 'Đến/mua',
+            ScheduleConstant::CHUA_MUA => 'Đến/chưa mua',
+            ScheduleConstant::HUY => 'Hủy lịch',
+            ScheduleConstant::QUA_HAN => 'Quá hạn',
 //            6 => 'Tất cả',
         ];
         view()->share([
