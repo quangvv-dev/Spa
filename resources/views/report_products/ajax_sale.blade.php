@@ -105,8 +105,8 @@
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ? round($item->schedules_den/$item->customer_new*100,1):0}}%</td>
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->schedules_new) ? round($item->schedules_den/$item->schedules_new*100,1):0}}%</td>
 
-                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->become_buy >0 ?round(($item->become_buy/$item->schedules_new)*100,1):0}}</td>
-                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->not_buy >0 ?round(($item->not_buy/$item->schedules_new)*100,1):0}}</td>
+                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->become_buy >0 ?round(($item->become_buy/$item->schedules_new)*100,1):0}}%</td>
+                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->not_buy >0 ?round(($item->not_buy/$item->schedules_new)*100,1):0}}%</td>
 
                     <td class="text-center pdr10">{{$item->order_new>0&&$item->schedules_den >0 ?round(($item->order_new/$item->schedules_den)*100,1):0}}%</td>
                     <td class="text-center pdr10">{{$item->order_new>0 && $item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100,1):0}}%</td>
@@ -133,8 +133,8 @@
             <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($customer_new)?round($all_schedules_den/$customer_new*100,1):0}}%</td>
             <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($schedules_new)?round($all_schedules_den/$schedules_new*100,1):0}}%</td>
 
-            <td class="text-center bold">{{!empty($schedules_new)&& !empty($users->sum('become_buy'))?round($users->sum('become_buy')/$schedules_new*100,1):0}}</td>
-            <td class="text-center bold">{{!empty($schedules_new)&& !empty($users->sum('not_buy'))?round($users->sum('not_buy')/$schedules_new*100,1):0}}</td>
+            <td class="text-center bold">{{!empty($schedules_new)&& !empty($users->sum('become_buy'))?round($users->sum('become_buy')/$schedules_new*100,1):0}}%</td>
+            <td class="text-center bold">{{!empty($schedules_new)&& !empty($users->sum('not_buy'))?round($users->sum('not_buy')/$schedules_new*100,1):0}}%</td>
 
             <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($order_new)?round($order_new/$all_schedules_den*100,1):0}}%</td>
             <td class="text-center bold">{{!empty($customer_new)&& !empty($order_new)?round($order_new/$customer_new*100,1):0}}%</td>
