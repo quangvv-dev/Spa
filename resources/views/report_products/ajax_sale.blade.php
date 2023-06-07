@@ -47,8 +47,8 @@
             <th class="text-center">(5)/(4)</th>
             <th class="text-center">(8)/(5)</th>
             <th class="text-center">(8)/(3)</th>
-            <th class="text-center">(8)/(3)1</th>
-            <th class="text-center">(8)/(3)2</th>
+            <th class="text-center">(6)/(4)</th>
+            <th class="text-center">(7)/(4)</th>
             <th class="text-center">(12)/(8)</th>
             <th class="text-center">(9)</th>
             <th class="text-center">(10)</th>
