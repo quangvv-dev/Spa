@@ -105,8 +105,8 @@
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ? round($item->schedules_den/$item->customer_new*100,1):0}}%</td>
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->schedules_new) ? round($item->schedules_den/$item->schedules_new*100,1):0}}%</td>
 
-                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->become_buy >0 ?round(($item->become_buy/$item->schedules_new)*100,1):0}}% đến mua</td>
-                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->not_buy >0 ?round(($item->not_buy/$item->schedules_new)*100,1):0}}% đến k mua</td>
+                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->become_buy >0 ?round(($item->become_buy/$item->schedules_new)*100,1):0}}</td>
+                    <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->not_buy >0 ?round(($item->not_buy/$item->schedules_new)*100,1):0}}</td>
 
                     <td class="text-center pdr10">{{$item->order_new>0&&$item->schedules_den >0 ?round(($item->order_new/$item->schedules_den)*100,1):0}}%</td>
                     <td class="text-center pdr10">{{$item->order_new>0 && $item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100,1):0}}%</td>
@@ -138,8 +138,8 @@
 
             <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($order_new)?round($order_new/$all_schedules_den*100,1):0}}%</td>
             <td class="text-center bold">{{!empty($customer_new)&& !empty($order_new)?round($order_new/$customer_new*100,1):0}}%</td>
-            <td class="text-center bold">{{!empty($all_detail_new)&& !empty($order_new)?number_format($all_detail_new/$order_new):0}}</td>
 
+            <td class="text-center bold">{{!empty($all_detail_new)&& !empty($order_new)?number_format($all_detail_new/$order_new):0}}</td>
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>
             <td class="text-center bold">{{@number_format($payment_new)}}</td>
             <td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>
