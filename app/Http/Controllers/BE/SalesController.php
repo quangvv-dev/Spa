@@ -82,9 +82,9 @@ class SalesController extends Controller
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
-            $orders2 = clone $orders;
+//            $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
+//            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             if ($item->caller_number) {
                 $paramsCenter = [
@@ -125,6 +125,8 @@ class SalesController extends Controller
                 ->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count();
+            $item->become_buy = $schedules_den->where('status',ScheduleConstant::DEN_MUA)->count();
+            $item->not_buy = $item->schedules_den - $item->become_buy;
             $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
                 $qr->where('old_customer', 0);
             })->count();
@@ -138,14 +140,14 @@ class SalesController extends Controller
             $item->detail_new = $detail->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
-            $item->detail_old = $detailOld->whereHas('order', function ($qr) {
-                $qr->where('is_upsale', OrderConstant::IS_UPSALE);
-            })->sum('price');
+//            $item->detail_old = $detailOld->whereHas('order', function ($qr) {
+//                $qr->where('is_upsale', OrderConstant::IS_UPSALE);
+//            })->sum('price');
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
-            $item->order_old = $order_old->count();
+//            $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('all_total');
-            $item->revenue_old = $order_old->sum('all_total');
+//            $item->revenue_old = $order_old->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');
 //            $item->payment_old = $order_old->sum('gross_revenue');
@@ -260,18 +262,11 @@ class SalesController extends Controller
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->groupBy('order_id');
 
-            $comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->whereIn('customer_id', $data_new)->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                });
-
-            $item->comment_new = self::searchBranch($comment, $request)->get()->count();// trao doi moi
-
             $item->customer_new = count($data_new);
             $item->order_new = $detail_new->get()->count();
-            $item->order_old = $detail->get()->sum('COUNTS') - $detail_new->get()->sum('COUNTS');
+//            $item->order_old = $detail->get()->sum('COUNTS') - $detail_new->get()->sum('COUNTS');
             $item->revenue_new = $detail_new->get()->sum('all_total');
-            $item->revenue_old = $detail->groupBy('order_id')->get()->sum('all_total') - $item->revenue_new;
+//            $item->revenue_old = $detail->groupBy('order_id')->get()->sum('all_total') - $item->revenue_new;
             $item->revenue_total = $detail->groupBy('order_id')->get()->sum('all_total');
             return $item;
         })->sortByDesc('revenue_total')->filter(function ($item) {

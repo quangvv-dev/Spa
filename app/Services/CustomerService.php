@@ -67,10 +67,9 @@ class CustomerService
 
     public function data($input)
     {
-
         if (empty($input['birthday'])) {
             unset($input['birthday']);
-        }else{
+        } else {
             $input['birthday'] = @Functions::yearMonthDay($input['birthday']);
         }
         if (!empty($input['image'])) {
