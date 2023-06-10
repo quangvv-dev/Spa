@@ -254,13 +254,12 @@ class StatisticController extends Controller
         return view('cham_cong.statistic.history', compact('approval'));
     }
 
-    public function importSalary(Request $request){
-//        dd(date($request->date));
-//        dd(date("m",strtotime(date($request->date))));
-        if(!$request->date || !$request->name || !$request->file || !$request->branch_id){
+    public function importSalary(Request $request)
+    {
+        if (!$request->date || !$request->name || !$request->file || !$request->branch_id) {
             return redirect()->back()->with('status', 'Vui lòng điền đủ thông tin');
         }
-        $date = explode('-',$request->date);
+        $date = explode('-', $request->date);
         $month = $date[0];
         $year = $date[1];
 
@@ -269,12 +268,12 @@ class StatisticController extends Controller
             $data['user_id'] = Auth::id();
             $data['branch_id'] = $request->branch_id;
             $history = HistoryImportSalary::create($data);
-            Excel::selectSheets('Sheet1')->load($request->file('file')->getRealPath(), function ($render) use ($month,$year,$history){
-                $result = $render->toArray();
-                $lastrow = $render->noHeading()->toArray();
+            Excel::load($request->file('file')->getRealPath(), function ($render) use ($month, $year, $history) {
+                $result = $render->toArray()[0];
+                $lastrow = $render->noHeading()->toArray()[0];
                 $theFirstRow = $lastrow[0];
-                foreach ($result as $k => $row){
-                    if (!$row['ma_nhan_vien']){
+                foreach ($result as $k => $row) {
+                    if (!$row['ma_nhan_vien']) {
                         break;
                     }
                     $key = $theFirstRow;
@@ -283,7 +282,7 @@ class StatisticController extends Controller
                     $input['all_total'] = $row['tong_tien'];
 //                    $input['key'] = $theFirstRow;
 //                    $input['value'] = array_values($row);
-                    $input['data'] = json_encode(['key'=>$key,'value'=>$value]);
+                    $input['data'] = json_encode(['key' => $key, 'value' => $value]);
                     $input['month'] = $month;
                     $input['year'] = $year;
                     $input['history_import_salary_id'] = $history->id;
