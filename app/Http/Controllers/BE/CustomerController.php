@@ -253,6 +253,48 @@ class CustomerController extends Controller
         $time = Customer::timeExpired($customer->status_id);
         $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
         $customer->update($time);
+        $rule_output = RuleOutput::where('event', 'create_customer')->first();
+        if (!empty($rule_output)) {
+            $rule = $rule_output->rules;
+            $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
+            $rule_status = Functions::checkRuleStatusCustomer($config);
+            foreach (array_values($rule_status) as $k1 => $item) {
+                $list_status = $item->configs->group;
+                if (in_array($customer->status_id, $list_status)) {
+                    $sms_ws = Functions::checkRuleSms($config);
+                    if (count($sms_ws)) {
+                        foreach (@array_values($sms_ws) as $k2 => $sms) {
+                            $input_raw['full_name'] = @$customer->full_name;
+                            $exactly_value = Functions::getExactlyTime($sms);
+                            $text = $sms->configs->content;
+//                                $phone = Functions::convertPhone(@$customer->phone);
+                            $text = Functions::replaceTextForUser($input_raw, $text);
+                            $text = Functions::vi_to_en($text);
+                            if (empty($exactly_value)) {
+                                $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
+                                if (isset($err) && $err) {
+                                    HistorySms::insert([
+                                        'phone'       => @$customer->phone,
+                                        'campaign_id' => 0,
+                                        'message'     => $text,
+                                        'created_at'  => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                        'updated_at'  => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                    ]);
+                                }
+                            } else {
+                                SchedulesSms::create([
+                                    'phone'           => $customer->phone,
+                                    'content'         => @$text,
+                                    'exactly_value'   => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                    'status_customer' => @$customer->status_id,
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return redirect('customers/' . $customer->id)->with('status', 'Tạo người dùng thành công');
     }
 

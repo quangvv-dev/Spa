@@ -269,8 +269,10 @@ class StatisticController extends Controller
             $data['branch_id'] = $request->branch_id;
             $history = HistoryImportSalary::create($data);
             Excel::load($request->file('file')->getRealPath(), function ($render) use ($month, $year, $history) {
+
                 $result = $render->toArray()[0];
                 $lastrow = $render->noHeading()->toArray()[0];
+                dd($lastrow,$result);
                 $theFirstRow = $lastrow[0];
                 foreach ($result as $k => $row) {
                     if (!$row['ma_nhan_vien']) {
