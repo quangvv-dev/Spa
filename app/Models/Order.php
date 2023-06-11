@@ -82,9 +82,7 @@ class Order extends Model
                     });
                 })
                 ->when(isset($input['telesales']), function ($query) use ($input) {
-                    $query->whereHas('customer', function ($q) use ($input) {
-                        $q->where('telesales_id', $input['telesales']);
-                    });
+                    $query->where('telesale_id', $input['telesales']);
                 })
                 ->when(isset($input['marketing']), function ($query) use ($input) {
                     $query->whereHas('customer', function ($q) use ($input) {

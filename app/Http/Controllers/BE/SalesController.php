@@ -148,18 +148,16 @@ class SalesController extends Controller
             $params['telesales'] = $item->id;
 
             if (!isset($request->doanh_so_doanh_thu) || $request->doanh_so_doanh_thu == 0) {
-                $item->gross_revenue = Order::search($params)->sum('all_total');
+                $item->gross_revenue = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+                    ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                    ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                        $q->whereIn('branch_id', $request->group_branch);
+                    })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    })->with('orderDetails')->where('telesale_id', $item->id)->sum('all_total');
             } else {
                 $item->gross_revenue = PaymentHistory::search($params, 'price')->sum('price');
             }
-
-//            if (isset($params['is_upsale'])) {
-//                $item->gross_revenue = $detail->whereHas('order', function ($qr)use ($params) {
-//                    $qr->where('is_upsale', $params['is_upsale']);
-//                })->sum('price');
-//            } else {
-//                $item->gross_revenue = $detail->sum('price');
-//            }
             return $item;
         })->sortByDesc('gross_revenue')->toArray();
 
@@ -372,9 +370,7 @@ class SalesController extends Controller
                     $q->whereIn('branch_id', $request->group_branch);
                 })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                     $q->where('branch_id', $request->branch_id);
-                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
-                    $qr->where('telesales_id', $item->id);
-                });
+                })->with('orderDetails')->where('telesale_id', $item->id);
             $params = $request->all();
             $params['telesales'] = $item->id;
             $payment = PaymentHistory::search($params, 'price');

@@ -295,7 +295,7 @@
                             <input id="reportrange" type="text" class="form-control square">
                         </div>
                         <div class="col-lg-2 col-md-6">
-                            {!! Form::select('doanh_so_doanh_thu', [0=>'Doanh số',1=>'Doanh thu'], null, array('class' => 'form-control',)) !!}
+                            {!! Form::select('doanh_so_doanh_thu', [0=>'Doanh số',1=>'Thực thu'], null, array('class' => 'form-control',)) !!}
                         </div>
 
                         <button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm</button>
