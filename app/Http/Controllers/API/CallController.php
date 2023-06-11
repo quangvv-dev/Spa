@@ -15,7 +15,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class ! extends BaseApiController
+class CallController extends BaseApiController
 {
 
 
@@ -37,20 +37,20 @@ class ! extends BaseApiController
             $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
             $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
             $input = [
-                'caller_id' => $request->CallId,
-                'call_type' => $direction,
-                'start_time' => $request->CallDate . ' ' . $request->CallDateTimeStart,
+                'caller_id'     => $request->CallId,
+                'call_type'     => $direction,
+                'start_time'    => $request->CallDate . ' ' . $request->CallDateTimeStart,
                 'caller_number' => $request->ExtensionNumber,
-                'dest_number' => str_replace('+84', '0', $request->PhoneNumber),
-                'answer_time' => $request->Duration,
-                'call_status' => $status,
+                'dest_number'   => str_replace('+84', '0', $request->PhoneNumber),
+                'answer_time'   => $request->Duration,
+                'call_status'   => $status,
                 'recording_url' => $request->RecordingPath,
             ];
 
         } else {
-            $input = $request->only('caller_number','answer_time', 'dest_number', 'call_status', 'recording_url',
+            $input = $request->only('caller_number', 'answer_time', 'dest_number', 'call_status', 'recording_url',
                 'caller_id', 'call_type', 'start_time');
-            if (!isset($input['answer_time'])){
+            if (!isset($input['answer_time'])) {
                 $input['answer_time'] = $request->duration;
             }
         }
@@ -158,7 +158,8 @@ class ! extends BaseApiController
     public function getEmployeeCall(Request $request)
     {
         if ($request->type == 'all_sale') {
-            $data = User::select('id', 'full_name', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)->get();
+            $data = User::select('id', 'full_name', 'caller_number')->where('department_id',
+                DepartmentConstant::TELESALES)->get();
         } else {
             $data = User::select('id', 'full_name', 'caller_number')->where('caller_number', '!=', '')->get();
             if (count($data) <= 0) {
