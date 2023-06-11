@@ -15,7 +15,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class CallController extends BaseApiController
+class ! extends BaseApiController
 {
 
 
@@ -59,7 +59,7 @@ class CallController extends BaseApiController
         if (empty($isset)) {
             if ($request->call_type != 'INBOUND') {
                 $call_exits = CallCenter::where('dest_number', $input['dest_number'])->exists();
-                if (!$call_exits) {
+                if (!$call_exits && !empty(setting('miss_call_sms'))) {
                     $text = Functions::vi_to_en(setting('miss_call_sms'));
                     $err = Functions::sendSmsV3($input['dest_number'], @$text);
                     if (isset($err) && $err) {
