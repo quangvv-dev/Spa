@@ -307,7 +307,9 @@ class SmsController extends Controller
      */
     public function saveSmsSchedules(Request $request)
     {
-        setting(['sms_schedules' => $request->sms_schedules])->save();
+        foreach ($request->except('_token') as $key => $part) {
+            setting([$key => $part])->save();
+        }
         return back()->with('status', 'LƯU NỘI DUNG THÀNH CÔNG !!!');
     }
 

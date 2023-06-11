@@ -6,10 +6,13 @@ use App\Constants\DepartmentConstant;
 use App\Constants\ResponseStatusCode;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Http\Resources\CallCenterResource;
 use App\Models\CallCenter;
+use App\Models\HistorySms;
 use App\Models\Post;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CallController extends BaseApiController
@@ -55,6 +58,20 @@ class CallController extends BaseApiController
         $isset = CallCenter::where('caller_id', $request->caller_id)->first();
         if (empty($isset)) {
             if ($request->call_type != 'INBOUND') {
+                $call_exits = CallCenter::where('dest_number', $input['dest_number'])->exists();
+                if (!$call_exits) {
+                    $text = Functions::vi_to_en(setting('miss_call_sms'));
+                    $err = Functions::sendSmsV3($input['dest_number'], @$text);
+                    if (isset($err) && $err) {
+                        HistorySms::insert([
+                            'phone'       => $input['dest_number'],
+                            'campaign_id' => 0,
+                            'message'     => $text,
+                            'created_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
+                            'updated_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
+                        ]);
+                    }
+                }
                 CallCenter::insert($input);
             } else {
                 return $this->responseApi(ResponseStatusCode::OK, 'CRM NOT SAVE INBOUND', $request->all());

@@ -35,12 +35,13 @@
                     <div class="tabs-menu1 ">
                         <!-- Tabs -->
                         <ul class="nav panel-tabs">
-                            <li class=""><a href="#tab5" class=""
-                                            data-toggle="tab">Chiến dịch nhắn tin</a>
+                            <li class="">
+                                <a href="#tab5" class="" data-toggle="tab">Chiến dịch nhắn tin</a>
                             </li>
                             <li><a href="#tab7" class="" data-toggle="tab">Gửi tin chiến dịch</a></li>
                             <li><a href="#tab9" class="active" data-toggle="tab">Gửi tin hàng loạt</a></li>
-                            <li><a href="#tab8" class="" data-toggle="tab">Tin báo lịch hẹn</a></li>
+                            <li><a href="#tab8" class="" data-toggle="tab">Nhắc báo lịch hẹn</a></li>
+                            <li><a href="#tab6" class="" data-toggle="tab">Nhắc báo cuộc gọi lỡ</a></li>
                         </ul>
                     </div>
                 </div>
@@ -57,6 +58,9 @@
                         </div>
                         <div class="tab-pane active" id="tab9">
                             @include('sms.sms_multiple')
+                        </div>
+                        <div class="tab-pane" id="tab6">
+                            @include('sms.miss_call')
                         </div>
                     </div>
                 </div>
