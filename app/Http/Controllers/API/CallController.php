@@ -17,8 +17,6 @@ use Illuminate\Http\Request;
 
 class CallController extends BaseApiController
 {
-
-
     /**
      * Update Post
      *

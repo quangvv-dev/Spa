@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusConstant;
 use App\Models\Customer;
+use App\Models\Schedule;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class CheckExpired extends Command
@@ -41,7 +44,10 @@ class CheckExpired extends Command
     {
         $search['expired_time_boolean'] = [StatusConstant::CHUA_QUA_HAN];
         $search['date_check_expired'] = date('Y-m-d H:i:s');
-        Customer::search1($search)->update(['expired_time_boolean'=>StatusConstant::QUA_HAN,'expired_time'=>null]);
+        Customer::search1($search)->update(['expired_time_boolean' => StatusConstant::QUA_HAN, 'expired_time' => null]);
+
+        Schedule::where('status', ScheduleConstant::DAT_LICH)->where('date', Carbon::yesterday()->format('Y-m-d'))
+            ->update(['status' => ScheduleConstant::QUA_HAN]);
         return 1;
     }
 }
