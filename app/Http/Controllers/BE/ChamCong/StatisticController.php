@@ -272,7 +272,6 @@ class StatisticController extends Controller
 
                 $result = $render->toArray()[0];
                 $lastrow = $render->noHeading()->toArray()[0];
-                dd($lastrow,$result);
                 $theFirstRow = $lastrow[0];
                 foreach ($result as $k => $row) {
                     if (!$row['ma_nhan_vien']) {
