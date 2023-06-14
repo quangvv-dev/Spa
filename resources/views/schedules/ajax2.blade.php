@@ -77,17 +77,19 @@
                                         @case(1)
                                     color: '#63cff9',
                                     @break
-                                        @case(2)
+                                        @case(\App\Constants\ScheduleConstant::DAT_LICH)
                                     color: '#dccf34',
                                     @break
-                                        @case(3)
+                                        @case(\App\Constants\ScheduleConstant::DEN_MUA)
                                     color: '#d03636',
                                     @break
-                                        @case(4)
+                                        @case(\App\Constants\ScheduleConstant::CHUA_MUA)
                                     color: '#4bcc4b',
                                     @break
-                                        @case(5)
+                                        @case(\App\Constants\ScheduleConstant::HUY)
                                     color: '#808080',
+                                    @case(\App\Constants\ScheduleConstant::QUA_HAN)
+                                    color: '#f36a26',
                                     @break
                                         @endswitch
                                         {{--url: '{{url('schedules/'.$item->user_id)}}',--}}
@@ -178,7 +180,7 @@
                                         @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::WAITER)
                                             {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                                         @else
-                                            {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                                            {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch',6 => 'Quá hạn'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                                         @endif
                                     </div>
                                     <div class="col-md-6">
