@@ -175,7 +175,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
-                                        {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch',6 => 'Quá hạn'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                                        @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::WAITER)
+                                            {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                                        @else
+                                            {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch'), null, array('class' => 'form-control','id'=>'update_status')) !!}
+                                        @endif
                                     </div>
                                     <div class="col-md-6">
                                         {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
