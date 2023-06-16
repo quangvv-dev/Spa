@@ -17,43 +17,46 @@ class ChamCongController extends BaseApiController
     public function store(Request $request)
     {
 //        $data = "{\"NameMachine\":\"HN1\",\"Info\":[{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 1:58:07 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:11 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:19 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/7\/2023 8:54:42 AM\",\"IndRedID\":\"1\"}]}";
-        \DB::table('settings')->insert(['setting_key' => 'chamcong', 'setting_value' => json_encode($request->all())]);
+//        \DB::table('settings')->insert(['setting_key' => 'chamcong', 'setting_value' => json_encode($request->all())]);
         $data = $request->all();
         $input = [];
         $array_approval_code = User::select('approval_code')->whereNotNull('approval_code')->pluck('approval_code')->toArray();
-        foreach ($data['Info'] as $k => $item) {
-            if (str_contains($item['DateTimeRecord'], 'SA') || str_contains($item['DateTimeRecord'], 'CH')) {
-                $date = str_replace('SA', 'AM', $item['DateTimeRecord']);
-                $date = str_replace('CH', 'PM', $date);
-                $date = date_create_from_format('d/m/Y g:i:s A', $date)->format('Y-m-d H:i:s');
-            }elseif (str_contains($item['DateTimeRecord'], 'AM') || str_contains($item['DateTimeRecord'], 'PM')) {
-                $date = date_create_from_format('d/m/Y g:i:s A', $item['DateTimeRecord'])->format('Y-m-d H:i:s');
-            } else {
-                $date = Carbon::parse($item['DateTimeRecord'])->format('Y-m-d H:i:s');
+        $collect = array_reverse($data['Info']);
+        $i = 0;
+        foreach (array_chunk($collect,300) as $k => $item) {
+            if ($k == 10){
+                return $this->responseApi(ResponseStatusCode::OK, 'Đẩy chấm công thành công!!');
             }
-            $isset = ChamCong::where('name_machine', $data['NameMachine'])->where('ind_red_id', $item['IndRedID'])
-                ->where('date_time_record', $date)->first();
-            $approval_code = $data['NameMachine'] . '.' . $item['IndRedID'];
-
-            if (in_array($approval_code, array_values($array_approval_code))) {
-                $k ++;
-                if (empty($isset)) {
-                    $input[] = [
-                        'name_machine'     => $data['NameMachine'],
-                        'machine_number'   => $item['MachineNumber'],
-                        'date_time_record' => $date,
-                        'ind_red_id'       => $item['IndRedID'],
-                        'approval_code'    => $approval_code,
-                        'created_at'       => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                        'updated_at'       => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                    ];
+            foreach ($item as $vl){
+                if (str_contains($vl['DateTimeRecord'], 'SA') || str_contains($vl['DateTimeRecord'], 'CH')) {
+                    $date = str_replace('SA', 'AM', $vl['DateTimeRecord']);
+                    $date = str_replace('CH', 'PM', $date);
+                    $date = date_create_from_format('d/m/Y g:i:s A', $date)->format('Y-m-d H:i:s');
+                }elseif (str_contains($vl['DateTimeRecord'], 'AM') || str_contains($vl['DateTimeRecord'], 'PM')) {
+                    $date = date_create_from_format('d/m/Y g:i:s A', $vl['DateTimeRecord'])->format('Y-m-d H:i:s');
+                } else {
+                    $date = Carbon::createFromFormat('d/m/Y H:i:s',$vl['DateTimeRecord'])->format('Y-m-d H:i:s');
+                }
+                $isset = ChamCong::where('name_machine', $data['NameMachine'])->where('ind_red_id', $vl['IndRedID'])
+                    ->where('date_time_record', $date)->first();
+                $approval_code = $data['NameMachine'] . '.' . $vl['IndRedID'];
+                if (in_array($approval_code, array_values($array_approval_code))) {
+                    $i ++;
+                    if (empty($isset)) {
+                        $input[] = [
+                            'name_machine'     => $data['NameMachine'],
+                            'machine_number'   => $vl['MachineNumber'],
+                            'date_time_record' => $date,
+                            'ind_red_id'       => $vl['IndRedID'],
+                            'approval_code'    => $approval_code,
+                            'created_at'       => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                            'updated_at'       => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                        ];
+                    }
                 }
             }
-            if ($k > 500) {
-                break;
-            }
+            ChamCong::insert($input);
         }
-        ChamCong::insert($input);
         return $this->responseApi(ResponseStatusCode::OK, 'Đẩy chấm công thành công!!');
     }
 
