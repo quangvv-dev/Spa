@@ -123,6 +123,9 @@
                             case 5:
                                 var col = '#808080'
                                 break;
+                                case 6:
+                                var col = '#f36a26'
+                                break;
                             default:
                             // code block
                         }
@@ -338,6 +341,8 @@
                     return '#4bcc4b'
                 else if (status == 5)
                     return '#808080'
+                else if (status == 6)
+                    return '#f36a26'
                 else
                     return ''
 
