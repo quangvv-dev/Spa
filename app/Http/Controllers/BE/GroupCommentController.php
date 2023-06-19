@@ -55,7 +55,7 @@ class GroupCommentController extends Controller
      */
     public function index2(Request $request, $id)
     {
-        $customer = Customer::with('telesale', 'source_customer', 'orders','categories','fanpage')->find($id);
+        $customer = Customer::with('telesale', 'source_customer', 'orders','categories','fanpage','cskh')->find($id);
         $orderRevenue = number_format($customer->orders->sum('gross_revenue'));
 
         $groupComments = GroupComment::with('user', 'customer')

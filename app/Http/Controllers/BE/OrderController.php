@@ -211,17 +211,21 @@ class OrderController extends Controller
         if (@$countOrders >= 2) {
             $customer->old_customer = 1;
             $order->is_upsale = 1;
-            if (!empty($customer->branch->location_id) && empty($customer->cskh_id)) {
-                $position = PositionCskh::firstOrCreate(['location_id' => $customer->branch->location_id]);
-                $old_position = isset($position->position) ? $position->position : 0;
-                $cskh = User::select('id')->where('location_id', $customer->branch->location_id)->where('department_id',
-                    DepartmentConstant::CSKH)->pluck('id')->toArray();
+            $order->cskh_id = $customer->cskh_id;
+        }
+        if (!empty($customer->branch->location_id) && empty($customer->cskh_id)) {
+            $position = PositionCskh::firstOrCreate(['location_id' => $customer->branch->location_id]);
+            $old_position = isset($position->position) ? $position->position : 0;
+            $cskh = User::select('id')->where('location_id', $customer->branch->location_id)->where('department_id',
+                DepartmentConstant::CSKH)->pluck('id')->toArray();
+            if (count($cskh)){
                 $position->position = (count($cskh) - 1) == $old_position ? 0 : $old_position + 1;
                 $customer->cskh_id = $cskh[$old_position];
+                $position->save();
             }
+        }
             $customer->save();
             $order->save();
-        }
 
         if ($order->discount > 0) {
             $promotion = Promotion::find($order->voucher_id);

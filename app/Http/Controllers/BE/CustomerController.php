@@ -132,9 +132,11 @@ class CustomerController extends Controller
         if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
             unset($input['branch_id']);
         }
+        $input['cskh_id'] = Auth::user()->department_id == DepartmentConstant::CSKH ? Auth::user()->id : null;
         $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
+
         $customers = Customer::search($input);
         $birthday = clone $customers;
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();

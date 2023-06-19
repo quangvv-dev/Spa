@@ -232,6 +232,9 @@
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Người phụ trách:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
                             </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">CSKH:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->cskh->full_name }}</p>
+                            </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm giới tính:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
                             </div>

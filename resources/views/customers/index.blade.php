@@ -174,7 +174,6 @@
                         $('#view_chat .chat-sender_id').val('');
                         $('#view_chat .chat-token').val('');
                     }
-                    console.log(data.customer.categories, 'dadada');
                     let category = '';
 
                     data.customer.categories.forEach(function (item) {
@@ -202,8 +201,8 @@
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
                         <a class="bold blue uppercase user-name" href="javascript:void(0);" style="margin-left: 5px">
-                            <span>` + (data.customer.fb_name ? data.customer.fb_name : data.customer.full_name) + `</span><br>
-                            <span>@` + (data.customer.telesale ? data.customer.telesale.full_name : "") + `</span>
+                            <span>@` + (data.customer.telesale ? data.customer.telesale.full_name : "") + `</span></br>
+                            <span>Cskh: ` + (data.customer.cskh ? data.customer.cskh.full_name : "") + `</span>
                             </a>
                         </div>
 

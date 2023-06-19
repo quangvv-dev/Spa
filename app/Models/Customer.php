@@ -94,6 +94,8 @@ class Customer extends Model
                 $query->where('mkt_id', $conditions['marketing']);
             })->when(isset($conditions['arr_marketing']), function ($query) use ($conditions) {
                 $query->whereIn('mkt_id', $conditions['arr_marketing']);
+            })->when(!empty($conditions['cskh_id']), function ($query) use ($conditions) {
+                $query->where('cskh_id', $conditions['cskh_id']);
             })->when(isset($conditions['carepage_id']), function ($query) use ($conditions) {
                 $query->where('carepage_id', $conditions['carepage_id']);
             })->when(isset($conditions['source_fb']), function ($query) use ($conditions) {
@@ -473,6 +475,11 @@ class Customer extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+
+    public function cskh()
+    {
+        return $this->belongsTo(User::class,'cskh_id');
     }
 
     public function fanpage()
