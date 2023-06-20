@@ -193,6 +193,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('tasks', 'TaskController@statistical')->name('report.tasks');
         Route::get('branchs', 'Branch\BranchController@index')->name('report.branchs');
         Route::get('branch-sources', 'Branch\BranchController@source')->name('report.branch-source');
+        Route::get('cskh', 'Cskh\CskhController@ranking')->name('report.cskh');
     });
     Route::resource('promotions', 'PromotionController');
     Route::resource('trademark', 'TrademarkController');

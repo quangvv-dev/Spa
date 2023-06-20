@@ -221,6 +221,7 @@ class OrderController extends Controller
             if (count($cskh)){
                 $position->position = (count($cskh) - 1) == $old_position ? 0 : $old_position + 1;
                 $customer->cskh_id = $cskh[$old_position];
+                $customer->ngay_sale_nhan_data = now()->format('Y-m-d');
                 $position->save();
             }
         }

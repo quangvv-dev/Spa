@@ -38,7 +38,7 @@ class CommissionController extends Controller
         $this->middleware('permission:report.hoa-hong', ['only' => ['statisticalRose']]);
         $this->commissionService = $commissionService;
         $branchs = Branch::search()->pluck('name', 'id');
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         view()->share([
             'branchs' => $branchs,
             'location' => $location,

@@ -29,7 +29,7 @@ class BranchController extends Controller
     public function __construct()
     {
         $branch= Branch::select('id','name')->pluck('name','id')->toArray();
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         view()->share([
             'location' => $location,
             'branch'   => $branch,

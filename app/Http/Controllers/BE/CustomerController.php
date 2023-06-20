@@ -94,7 +94,7 @@ class CustomerController extends Controller
             OrderConstant::THE_REST => 'Còn nợ',
             OrderConstant::NONE_REST => 'Đã thanh toán',
         ];
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         view()->share([
             'the_rest' => $the_rest,
             'status' => $status,

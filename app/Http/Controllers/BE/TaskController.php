@@ -50,7 +50,7 @@ class TaskController extends Controller
     {
         $color = Status::where('type',StatusCode::RELATIONSHIP)->pluck('color','id')->toArray();
         $branchs = Branch::pluck('name', 'id')->toArray();
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }

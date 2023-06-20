@@ -129,6 +129,8 @@ class Order extends Model
                 })
                 ->when(isset($input['member_id']), function ($query) use ($input) {
                     $query->where('member_id', $input['member_id']);
+                }) ->when(isset($input['cskh_id']), function ($query) use ($input) {
+                    $query->where('cskh_id', $input['cskh_id']);
                 })
                 ->when(isset($input['role_type']), function ($query) use ($input) {
                     $query->where('role_type', $input['role_type']);

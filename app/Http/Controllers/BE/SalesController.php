@@ -37,7 +37,7 @@ class SalesController extends Controller
     {
         $this->middleware('permission:report.groupSale', ['only' => ['indexGroupCategory']]);
         $this->middleware('permission:report.sale', ['only' => ['index']]);
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         $branchs = Branch::pluck('name', 'id');
         view()->share([
             'location' => $location,
@@ -230,7 +230,7 @@ class SalesController extends Controller
 
         $branchs = Branch::search()->pluck('name', 'id');
 
-        $location = Branch::$location;
+        $location = Branch::getLocation();
 
         $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name', 'id')->toArray();
         $users = Category::where('type', $type)->get()->map(function ($item) use ($request, $type) {

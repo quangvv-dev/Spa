@@ -59,6 +59,7 @@ class Customer extends Model
 
 
     use SoftDeletes;
+
     protected $guarded = ['id'];
 
     const VIP_STATUS = 10000000;
@@ -125,7 +126,8 @@ class Customer extends Model
                         $q->whereBetween('created_at', getTime(($conditions['data_time'])));
                     });
             })->when(isset($conditions['start_date']) && isset($conditions['end_date']), function ($q) use ($conditions) {
-                $q->whereBetween('created_at', [
+                $date = isset($conditions['search_date']) && $conditions['search_date'] == 'ngay_sale_nhan_data' ? 'ngay_sale_nhan_data' : 'created_at';
+                $q->whereBetween($date, [
                     Functions::yearMonthDay($conditions['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($conditions['end_date']) . " 23:59:59",
                 ]);
@@ -479,7 +481,7 @@ class Customer extends Model
 
     public function cskh()
     {
-        return $this->belongsTo(User::class,'cskh_id');
+        return $this->belongsTo(User::class, 'cskh_id');
     }
 
     public function fanpage()

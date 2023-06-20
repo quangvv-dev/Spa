@@ -29,7 +29,7 @@ class CarepageController extends Controller
     {
         $this->middleware('permission:carepage.index', ['only' => ['index','ranking']]);
         $branchs = Branch::search()->pluck('name', 'id');
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         view()->share([
             'branchs' => $branchs,
             'location' => $location,

@@ -30,7 +30,7 @@ class MarketingController extends Controller
     {
         $this->middleware('permission:carepage.index', ['only' => ['index']]);
         $branchs = Branch::search()->pluck('name', 'id');
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         view()->share([
             'branchs' => $branchs,
             'location' => $location,

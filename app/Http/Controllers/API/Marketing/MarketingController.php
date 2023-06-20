@@ -34,7 +34,7 @@ class MarketingController extends BaseApiController
     public function __construct()
     {
         $branchs = Branch::search()->pluck('name', 'id');
-        $location = Branch::$location;
+        $location = Branch::getLocation();
         view()->share([
             'branchs' => $branchs,
             'location' => $location,

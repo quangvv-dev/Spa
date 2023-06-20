@@ -149,19 +149,20 @@ if (!function_exists('fcmSendCloudMessage')) {
 //        $notification_id = null,
         $notification_type = 'notification',
         $push_data = []
-    ) {
+    )
+    {
         //$deviceToken truyền mảng device hoặc 1 chuỗi device hoặc là 1 topic  ( '/topics/all' )
         $url = 'https://fcm.googleapis.com/fcm/send';
         $serverKey = 'AAAAF9wozSE:APA91bFIdVNVGsGWhXu85hu6_JBfd17AOMqsvFgtOhgMzzdlbi9CVeBMEuY_mtkB1ay3pMmxptMCuR70y5vXe-Hw7wnn-XoTik5CSnhqt2zGFf5CBRdyXCk5gHB1TeChISjyIOnwnZa2';
         $fields = [
-            'priority'     => 'high',
+            'priority' => 'high',
             'time_to_live' => 60 * 60 * 24,
         ];
         if (!empty($push_data)) {
             $fields['data'] = $push_data;
         }
         $fields['notification'] = [
-            "body"  => $body,
+            "body" => $body,
             "title" => $title,
             "sound" => "default",
             "badge" => "1",
@@ -170,7 +171,7 @@ if (!function_exists('fcmSendCloudMessage')) {
         ];
         // cấu hình android
         $fields['android'] = [
-            'ttl'          => 3600 * 1000,
+            'ttl' => 3600 * 1000,
             'notification' => [
                 'color' => '#f45342'
                 //'icon'  => 'stock_ticker_update',
@@ -255,6 +256,11 @@ function saveImage($url, $saveTo, $name)
     return $code == 200 ? $name : null;
 }
 
+function getLocation()
+{
+    return \App\Models\Location::get()->pluck('name', 'id');
+}
+
 function distance($lat1, $lon1, $lat2, $lon2, $unit)
 {
     $theta = $lon1 - $lon2;
@@ -273,5 +279,5 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit)
             return $miles;
         }
     }
-
 }
+

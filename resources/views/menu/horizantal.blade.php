@@ -258,6 +258,7 @@
                         <li class="sub-with-sub">
                             <a href="#">Phòng ban khác</a>
                             <ul>
+                                <li><a href="{{url('report/cskh')}}">Xếp hạng CSKH</a></li>
                                 @if($roleGlobal->permission('carepage.index'))
                                     <li><a href="{{url('marketing/carepage-ranking')}}">Xếp hạng CarePage</a></li>
                                     <li><a href="{{url('marketing/carepage')}}">Báo cáo DT CarePage</a></li>

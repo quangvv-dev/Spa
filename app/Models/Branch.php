@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use Illuminate\Database\Eloquent\Model;
 
 class Branch extends Model
@@ -10,15 +11,14 @@ class Branch extends Model
     protected $guarded = ['id'];
     protected $table = 'branchs';
 
-    public static $location = [
-        StatusCode::CUM_MIEN_BAC    => 'Miền Bắc',
-//        StatusCode::CUM_MIEN_TRUNG  => 'Cụm Miền Trung',
-        StatusCode::CUM_MIEN_NAM    => 'Miền Nam'
-    ];
-
     public static function search()
     {
         $data = self::get();
         return $data;
+    }
+
+    public static function getLocation()
+    {
+        return \App\Models\Location::get()->pluck('name', 'id');
     }
 }
