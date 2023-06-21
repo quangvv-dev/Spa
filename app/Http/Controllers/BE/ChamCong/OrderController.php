@@ -205,7 +205,7 @@ class OrderController extends Controller
     public function acceptArrayOrder(Request $request)
     {
         if ($request->type == 2) { //không duyệt
-            DonTu::whereIn('id', $request->array_id)->update(['status' => 2]);
+            DonTu::whereIn('id', array_values($request->array_id))->update(['status' => 2]);
             return 1;
         } else { //duyệt
             foreach (array_values($request->array_id) as $item) {
@@ -221,7 +221,7 @@ class OrderController extends Controller
                             'machine_number'   => 1,
                             'approval_code'   => $user->approval_code,
                             'date_time_record' => $time,
-                            'ind_red_id'       => explode('.',$user->approval_code),
+                            'ind_red_id'       => explode('.',$user->approval_code)[1],
                             'type'             => 1,
                             'created_at'       => $time,
                             'updated_at'       => $time,
