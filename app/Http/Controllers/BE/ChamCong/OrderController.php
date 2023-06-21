@@ -208,7 +208,7 @@ class OrderController extends Controller
             DonTu::whereIn('id', $request->array_id)->update(['status' => 2]);
             return 1;
         } else { //duyệt
-            foreach ($request->array_id as $item) {
+            foreach (array_values($request->array_id) as $item) {
                 $don_tu = DonTu::find($item);
                 if($don_tu->status === 0){ //đơn chưa duyệt
                     if ($don_tu->type == OrderConstant::TYPE_DON_CHECKIN_CHECKOUT) {
@@ -225,7 +225,6 @@ class OrderController extends Controller
                             'type'             => 1,
                             'created_at'       => $time,
                             'updated_at'       => $time,
-
                         ]);
                     }
                     $don_tu->update(['status' => OrderConstant::DUYET]);

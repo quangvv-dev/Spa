@@ -62,7 +62,7 @@ class CustomerController extends Controller
      */
     public function __construct(CustomerService $customerService, TaskService $taskService)
     {
-        $this->middleware('permission:customers.list', ['only' => ['index']]);
+        $this->middleware('permission:customers.list',['only' => ['index']]);
         $this->middleware('permission:customers.edit', ['only' => ['edit']]);
         $this->middleware('permission:customers.add', ['only' => ['create']]);
         $this->middleware('permission:customers.delete', ['only' => ['destroy']]);
