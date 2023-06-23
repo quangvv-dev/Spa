@@ -385,6 +385,8 @@
                 let source = $('#source').val();
                 let telesales = $('#telesales').val();
                 let branch_id = $('.branch_id').val();
+                let cskh = $('.cskh').val();
+
                 $('#status').val(status);
                 $('#birthday_tab').val('');
                 let data = {
@@ -398,6 +400,7 @@
                     marketing: marketing,
                     branch_id: branch_id,
                     location_id: location,
+                    cskh_id: cskh,
                 };
 
                 searchAjax(data);
@@ -446,6 +449,8 @@
                 let location = $('.location').val();
                 const start_date = $('.filter_start_date').val();
                 const end_date = $('.filter_end_date').val();
+                let cskh = $('.cskh').val();
+
                 $('.filter_start_date').val('');
                 $('.filter_end_date').val('');
                 let data = {
@@ -462,6 +467,7 @@
                     location_id: location,
                     start_date: start_date,
                     end_date: end_date,
+                    cskh_id: cskh,
                 };
                 searchAjax(data);
             });
@@ -488,6 +494,7 @@
                 let branch_id = $('.branch_id').val();
                 let source = $('.source').val();
                 let group = $('.group').val();
+                let cskh = $('.cskh').val();
                 let telesales = $('.telesales').val();
                 let search = $('#search_value').val();
                 $('#branch_id').val(branch_id);
@@ -498,7 +505,6 @@
                 $('#birthday_tab').val('');
                 let data_time = $('#btn_choose_time').val();
                 let status = $('#status').val();
-console.log(call_back,'123123');
                 let data = {
                     marketing: marketing,
                     call_back: call_back,
@@ -511,7 +517,8 @@ console.log(call_back,'123123');
                     search: search,
                     status: status,
                     source: source,
-                    branch_id: branch_id
+                    branch_id: branch_id,
+                    cskh_id: cskh
                 };
                 searchAjax(data);
 
@@ -531,6 +538,7 @@ console.log(call_back,'123123');
                 let branch_id = $('.branch_id').val();
                 let gender = $('.gender').val();
                 let location = $('.location').val();
+                let cskh = $('.cskh').val();
 
                 let data = {
                     carepage_id: carepage_id,
@@ -544,6 +552,7 @@ console.log(call_back,'123123');
                     source: source,
                     branch_id: branch_id,
                     location_id: location,
+                    cskh_id: cskh,
                 };
                 searchAjax(data);
 
@@ -896,6 +905,7 @@ console.log(call_back,'123123');
                 let btn_choose_time = $('#btn_choose_time').val();
                 let birthday = $('#birthday_tab').val();
                 let location = $('.location').val();
+                let cskh = $('.cskh').val();
 
                 $.ajax({
                     url: '{{ url()->current() }}',
@@ -914,7 +924,8 @@ console.log(call_back,'123123');
                         status: status,
                         data_time: btn_choose_time,
                         birthday: birthday,
-                        branch_id: branch_id
+                        branch_id: branch_id,
+                        cskh_id: cskh
                     },
                 }).done(function (data) {
                     $('#registration-form').html(data);
@@ -1049,44 +1060,6 @@ console.log(call_back,'123123');
                     })
                 })
             });
-            // anheasy
-            // $('.table-responsive .table-primary').floatThead({
-            //     top: 196,
-            //     scrollContainer: function ($table) {
-            //         return $table.closest('');
-            //     },
-            //     position: 'absolute'
-            // });
-            // $('.table-ajax .table-primary').floatThead({
-            //     top: 196,
-            //     position: 'absolute'
-            // });
-
-            {{--window.onload = function (e) {--}}
-                {{--$('html, body').animate({scrollTop: '1000px'}, 200);--}}
-                {{--$.ajax({--}}
-                    {{--url: '{{ url()->current() }}',--}}
-                    {{--method: "get",--}}
-                    {{--data: {--}}
-                        {{--page: 1,--}}
-                    {{--},--}}
-                {{--}).done(function (data) {--}}
-                    {{--$('#registration-form').html(data);--}}
-                {{--}).fail(function () {--}}
-                    {{--alert('Articles could not be loaded.');--}}
-                {{--});--}}
-            {{--}--}}
-
-            // $(window).on("scroll", function (e) {
-            //     if ($(window).scrollTop() >= 66) {
-            //         $('.search-box').addClass('searchbox-sticky');
-            //         $('.filter-box').addClass('filterbox-sticky');
-            //     } else {
-            //         $('.search-box').removeClass('searchbox-sticky');
-            //         $('.filter-box').removeClass('filterbox-sticky');
-            //     }
-            // });
-            // end anheasy
 
             $(document).on('click', '#change_relations', function () {
                 $('#updateRelation').modal("show");
