@@ -36,7 +36,7 @@ class CskhController extends Controller
         }
         $users = User::select('id','full_name')->where('department_id', DepartmentConstant::CSKH)->get()->map(function ($item) use ($input) {
             $input['cskh_id'] = $item->id;
-            $input['search_date'] = 'ngay_sale_nhan_data';
+            $input['search_date'] = 'time_move_cskh';
             $customer = Customer::search($input);
             if ($item->caller_number) {
                 $input_call = [

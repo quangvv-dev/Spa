@@ -126,7 +126,7 @@ class Customer extends Model
                         $q->whereBetween('created_at', getTime(($conditions['data_time'])));
                     });
             })->when(isset($conditions['start_date']) && isset($conditions['end_date']), function ($q) use ($conditions) {
-                $date = isset($conditions['search_date']) && $conditions['search_date'] == 'ngay_sale_nhan_data' ? 'ngay_sale_nhan_data' : 'created_at';
+                $date = isset($conditions['search_date']) ? $conditions['search_date'] : 'created_at';
                 $q->whereBetween($date, [
                     Functions::yearMonthDay($conditions['start_date']) . " 00:00:00",
                     Functions::yearMonthDay($conditions['end_date']) . " 23:59:59",
