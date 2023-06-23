@@ -50,8 +50,7 @@ class ProcessChamCong implements ShouldQueue
             } else {
                 $date = Carbon::createFromFormat('d/m/Y H:i:s',$vl['DateTimeRecord'])->format('Y-m-d H:i:s');
             }
-            $isset = ChamCong::where('name_machine', $this->data)->where('ind_red_id', $vl['IndRedID'])
-                ->where('date_time_record', $date)->first();
+            $isset = ChamCong::where('name_machine', $this->data)->where('date_time_record','like', $date)->first();
             $approval_code = $this->data . '.' . $vl['IndRedID'];
             if (in_array($approval_code, array_values($array_approval_code))) {
                 $i ++;

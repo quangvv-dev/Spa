@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Http\Controllers\Controller;
+use App\Models\ChamCong;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Helpers\Functions;
@@ -19,7 +20,13 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
-
+       $c = ChamCong::select('id',\DB::raw('COUNT(id) as count'))->groupBy('date_time_record','name_machine')->having('count','>',1)->get();
+        if (count($c)){
+            foreach ($c as $item){
+                ChamCong::find($item->id)->delete();
+            }
+        }
+        return 1;
 //        $param = $request->all();
 //        $orders2 = PaymentHistory::where('price', '>', 0)
 //            ->whereBetween('payment_date', ['2021-01-01 00:00:00', '2021-11-30 23:59:59'])->where('branch_id', $param['branch_id'])
