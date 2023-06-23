@@ -476,12 +476,12 @@ class Customer extends Model
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+        return $this->belongsTo(Branch::class);
     }
 
     public function cskh()
     {
-        return $this->belongsTo(User::class, 'cskh_id');
+        return $this->belongsTo(User::class);
     }
 
     public function fanpage()

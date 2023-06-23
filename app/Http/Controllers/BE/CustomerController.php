@@ -21,7 +21,6 @@ use App\Models\Department;
 use App\Models\Genitive;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
-
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\PackageWallet;
@@ -169,6 +168,7 @@ class CustomerController extends Controller
             12=>'DV liên quan',
             13=>'Nhóm tính cách',
             14=>'Người tạo',
+            25=>'CSKH',
             15=>'Lịch hẹn',
             16=>'Ngày sinh',
             17=>'MKT Phụ trách',

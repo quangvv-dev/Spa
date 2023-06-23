@@ -196,37 +196,6 @@
             @empty
 
             @endforelse
-
-
-
-            {{--<th ><input type="checkbox" class="selectall myCheck"/></th>--}}
-            {{--<th class="text-white text-center">STT</th>--}}
-            {{--<th class="text-white text-center">Ngày tạo KH</th>--}}
-            {{--<th class="text-white text-center">Họ tên</th>--}}
-            {{--<th class="text-white text-center">SĐT</th>--}}
-            {{--@if(\Illuminate\Support\Facades\Auth::user()->department_id == 3)--}}
-                {{--<th class="text-white text-center" style="min-width: 130px">Tin nhắn</th>--}}
-            {{--@endif--}}
-            {{--<th class="text-white text-center">Nhóm KH</th>--}}
-            {{--<th class="text-white text-center">Trạng Thái</th>--}}
-            {{--<th class="text-white text-center">Người phụ trách</th>--}}
-            {{--<th class="text-white text-center mota" style="min-width: 121px;z-index: 1">Mô tả</th>--}}
-            {{--<th class="text-white text-center">T/g tác nghiệp</th>--}}
-            {{--<th class="text-white text-center">Chuyển về TP</th>--}}
-            {{--<th class="text-white text-center">C.Nhánh</th>--}}
-            {{--<th class="text-white text-center">DV liên quan</th>--}}
-            {{--<th class="text-white text-center">Nhóm tính cách</th>--}}
-            {{--<th class="text-white text-center">Người tạo</th>--}}
-            {{--<th class="text-white text-center">Lich Hẹn</th>--}}
-            {{--<th class="text-white text-center">Ngày sinh</th>--}}
-            {{--<th class="text-white text-center">MKT phụ trách</th>--}}
-            {{--<th class="text-white text-center">Nguồn KH</th>--}}
-            {{--<th class="text-white text-center">Link FB</th>--}}
-            {{--<th class="text-white text-center">Giới tính</th>--}}
-            {{--<th class="text-white text-center">Số đơn</th>--}}
-            {{--<th class="text-white text-center">Tổng doanh thu</th>--}}
-            {{--<th class="text-white text-center">Đã thanh toán</th>--}}
-            {{--<th class="text-white text-center">Còn lại</th>--}}
             <th class="text-white text-center">Chỉnh sửa</th>
         </tr>
         </thead>
@@ -288,6 +257,7 @@
                     </td>
                     <td class="text-center genitive-db {{in_array(13,$user_filter_grid) ? '':'display-none'}}" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>
                     <td class="text-center {{in_array(14,$user_filter_grid) ? '':'display-none'}}">{{@$customer->carepage->full_name}}</td>
+                    <td class="text-center {{in_array(25,$user_filter_grid) ? '':'display-none'}}">{{@$customer->cskh->full_name}}</td>
                     <td class="text-center {{in_array(15,$user_filter_grid) ? '':'display-none'}}" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
                     </td>
