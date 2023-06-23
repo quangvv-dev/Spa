@@ -479,7 +479,7 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location,.carepage, .call_back', delay(function () {
+            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location,.carepage, .call_back,.cskh', delay(function () {
                 let marketing = $('.group-product').val();
                 let call_back = $('.call_back').val();
                 let carepage_id = $('.carepage').val();
