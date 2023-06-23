@@ -587,7 +587,6 @@ class Functions
 
     public static function paginationArray($page, $temp, $paginate = StatusCode::PAGINATE_10)
     {
-//        krsort($temp);
         if ($page && $page > 1) {
             $temp = array_slice($temp, $paginate * ($page - 1) + 1, $paginate);
         } else {
