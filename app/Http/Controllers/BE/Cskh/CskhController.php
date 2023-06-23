@@ -34,8 +34,8 @@ class CskhController extends Controller
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = count($group_branch) ? $group_branch : [0];
         }
-        $user = User::where('department_id', DepartmentConstant::CSKH)->get()->map(function ($item) use ($input) {
-            $input['cskh'] = $item->id;
+        $users = User::where('department_id', DepartmentConstant::CSKH)->get()->map(function ($item) use ($input) {
+            $input['cskh_id'] = $item->id;
             $input['search_date'] = 'ngay_sale_nhan_data';
             $customer = Customer::search($input);
             if ($item->caller_number) {
@@ -47,17 +47,17 @@ class CskhController extends Controller
                 ];
             }
             $item->phone = $customer->count();
-            $item->phone = $customer->count();
             $item->call = isset($input_call) ? CallCenter::search($input_call, 'id')->count() : 0;
             $orders = Order::search($input);
+            $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
             $item->payment = PaymentHistory::search($input)->sum('price');
             return $item;
         });
         if ($request->ajax()) {
-            return view('cskh.ajax');
+            return view('cskh.ajax','users');
         }
-        return view('cskh.index');
+        return view('cskh.index',compact('users'));
     }
 }

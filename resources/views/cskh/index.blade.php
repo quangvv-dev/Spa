@@ -43,7 +43,6 @@
                 <div class="card-header row">
 
                     {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-lg-12', 'id'=> 'gridForm','role'=>'form')) !!}
-
                     <div class="row">
                         <div class="col-md-4">
                             <input type="hidden" name="start_date" id="start_date">
