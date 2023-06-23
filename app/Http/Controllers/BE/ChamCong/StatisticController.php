@@ -172,7 +172,7 @@ class StatisticController extends Controller
             $query2->whereBetWeen('date_time_record', [
                 Functions::createYearMonthDay($request['date']) . ' 00:00:00',
                 Functions::createYearMonthDay($request['date']) . ' 23:59:59',
-            ]);
+            ])->orderBy('date_time_record');
             return $query2;
             }])->first();
         return $user;
