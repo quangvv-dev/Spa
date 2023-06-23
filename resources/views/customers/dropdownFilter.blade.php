@@ -34,4 +34,12 @@
             @endforeach
         </select>
     </div>
+    <div class="col-md-2 col-xs-12">
+        <select name="cskh_id" class="form-control carepage">
+            <option value="">Cskh phụ trách</option>
+            @foreach($cskh as $k=> $item)
+                <option value="{{$item->id}}">{{ $item->full_name}}</option>
+            @endforeach
+        </select>
+    </div>
 </div>

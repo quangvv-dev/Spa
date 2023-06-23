@@ -104,6 +104,7 @@ class CustomerController extends Controller
             'marketingUsers' => $marketingUsers,
             'genitives' => $genitives,
             'location' => $location,
+            'cskh' => User::select('id','full_name')->where('department_id', DepartmentConstant::CSKH)->get()
         ]);
     }
 
