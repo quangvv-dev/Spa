@@ -101,8 +101,7 @@ class Customer extends Model
                 $query->where('carepage_id', $conditions['carepage_id']);
             })->when(isset($conditions['source_fb']), function ($query) use ($conditions) {
                 $query->where('source_fb', $conditions['source_fb']);
-            })
-            ->when(isset($conditions['source']), function ($query) use ($conditions) {
+            })->when(isset($conditions['source']), function ($query) use ($conditions) {
                 $query->where('source_id', $conditions['source']);
             })->when(isset($conditions['gender']), function ($query) use ($conditions) {
                 $query->where('gender', $conditions['gender']);
