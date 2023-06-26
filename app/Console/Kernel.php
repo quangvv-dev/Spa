@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('update:status')->daily();
         $schedule->command('update:customer_status')->daily();
-//        $schedule->command('update:status_task')->daily();
+        $schedule->command('notification:schedules_quahan')->daily();
         $schedule->command('delete:task')->dailyAt('07:00');
         $schedule->command('sms:revenue')->dailyAt('07:00');
         $schedule->command('job:action')->dailyAt('08:00');

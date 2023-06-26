@@ -23,4 +23,6 @@ class NotificationConstant
     const TIN_QC = 7;//TIN GỬI HÀNG LOẠT
     const RUT_TIEN = 8;//RÚT tiền done
 
+    const SCHEDULE_QUA_HAN = 9;//dành cho admin thông báo lịch hẹn quá hạn
+
 }
