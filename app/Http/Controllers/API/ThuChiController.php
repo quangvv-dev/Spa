@@ -211,7 +211,7 @@ class ThuChiController extends BaseApiController
             ]);
         }
         fcmSendCloudMessage([$request->devices_token], "🗓 Bạn có lịch hẹn lúc 15:00 hôm nay !!!", 'Chạm để xem', 'notification',
-            ['type' => NotificationConstant::LICH_HEN,'schedule_id'=>9477]);
+            ['type' => NotificationConstant::SCHEDULE_QUA_HAN,'schedule_id'=>9477]);
 //        $result = NotificationCustomer::create([
 //            'customer_id'   => 93811,
 //            'title'     => '🏵️🏵️🏵️ TRẺ HÓA LÁ VÀNG 24K, liên tục gây sốt',

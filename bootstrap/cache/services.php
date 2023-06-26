@@ -41,12 +41,13 @@
     37 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
     38 => 'Laravel\\Socialite\\SocialiteServiceProvider',
     39 => 'Tungltdev\\LaravelSettings\\SettingsServiceProvider',
-    40 => 'App\\Providers\\BroadcastServiceProvider',
+    40 => 'Tungltdev\\LARAVEL\\JWT\\JwtAuthTokenProvider',
     41 => 'App\\Providers\\AppServiceProvider',
     42 => 'App\\Providers\\AuthServiceProvider',
     43 => 'App\\Providers\\EventServiceProvider',
     44 => 'App\\Providers\\RouteServiceProvider',
-    45 => 'Intervention\\Image\\ImageServiceProvider',
+    45 => 'Berkayk\\OneSignal\\OneSignalServiceProvider',
+    46 => 'Intervention\\Image\\ImageServiceProvider',
   ),
   'eager' => 
   array (
@@ -72,12 +73,13 @@
     19 => 'Tungltdev\\LaravelSettings\\SettingsServiceProvider',
     20 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
     21 => 'Tungltdev\\LaravelSettings\\SettingsServiceProvider',
-    22 => 'App\\Providers\\BroadcastServiceProvider',
+    22 => 'Tungltdev\\LARAVEL\\JWT\\JwtAuthTokenProvider',
     23 => 'App\\Providers\\AppServiceProvider',
     24 => 'App\\Providers\\AuthServiceProvider',
     25 => 'App\\Providers\\EventServiceProvider',
     26 => 'App\\Providers\\RouteServiceProvider',
-    27 => 'Intervention\\Image\\ImageServiceProvider',
+    27 => 'Berkayk\\OneSignal\\OneSignalServiceProvider',
+    28 => 'Intervention\\Image\\ImageServiceProvider',
   ),
   'deferred' => 
   array (

@@ -12,6 +12,7 @@ use App\Models\Department;
 use App\Models\Location;
 use App\Models\Role;
 use App\Models\Schedule;
+use App\Models\TeamMember;
 use App\Services\UserService;
 use App\User;
 use Carbon\Carbon;
@@ -178,5 +179,54 @@ class UserController extends Controller
             return $result->id == $request->id ? 'true' : 'false';
         }
         return 'true';
+    }
+
+    /**
+     * Lấy ds nhân viên tuộc phòng ban
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+//    public function getAllUserDepartment(Request $request)
+//    {
+//        $search['searchDepartment'] = $request->department;
+//        $user = $this->user->getAll($search)->get();
+//        return response()->json([
+//            'user' => $user
+//        ]);
+//    }
+
+    /**
+     * get list user role sale
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllUserDepartmentNotTeam(Request $request)
+    {
+        $team_member = TeamMember::all()->pluck('user_id')->toArray();
+        $user = User::where('department_id',$request->department)->whereNotIn('id', $team_member)->get();
+        return response()->json([
+            'user' => $user
+        ]);
+    }
+
+
+    /**
+     * get danh sách user trong team chọn và user chưa có trong team nào.
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllUserDepartmentTeam(Request $request)
+    {
+        $user_team_member_id = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
+        $user_team = User::whereIn('id', $user_team_member_id)->get();
+        $team_member = TeamMember::all()->pluck('user_id')->toArray();
+        $user = User::where('department_id',$request->department)->whereNotIn('id', $team_member)->get();
+        $user = $user->merge($user_team);
+        return response()->json([
+            'user' => $user
+        ]);
     }
 }

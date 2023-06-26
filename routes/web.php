@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('combos', 'CombosController');
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
+    Route::resource('teams', 'TeamController');
     Route::resource('tips', 'PaymentWallet\TipController');
     Route::get('tips-export', 'PaymentWallet\TipController@exportData');
 //    Route::resource('users', 'UserController')->middleware('admin');
@@ -143,6 +144,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('user-filter-grid', 'SettingController@userFilterGrid');
 
         Route::get('report/detail-hoa-hong/{user_id}', 'CommissionController@detailHoaHong');
+
+        Route::get('get-all-user-department-not-team', 'UserController@getAllUserDepartmentNotTeam');
+        Route::get('get-all-user-department-team', 'UserController@getAllUserDepartmentTeam');
     });
 
     Route::resource('rules', 'RuleController');//Automation
