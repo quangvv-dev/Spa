@@ -80,14 +80,16 @@ return [
     |
 	|
 	*/
-    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','EYNZLCMUOZSLXLELATOJMFADBNHWCOSF'),
-    'VNP_TMN_CODE' => env('VNP_TMN_CODE','7GAY9V0X'),
-    'VNP_URL' => env('VNP_URL','http://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
-    'VNP_RETURN_URL' => env('VNP_RETURN_URL','https://thammyroyal.adamtech.vn/vnpay'),
+    'VNP_HASH_SECRET' => env('VNP_HASHSECRET', 'EYNZLCMUOZSLXLELATOJMFADBNHWCOSF'),
+    'VNP_TMN_CODE' => env('VNP_TMN_CODE', '7GAY9V0X'),
+    'VNP_URL' => env('VNP_URL', 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
+    'VNP_RETURN_URL' => env('VNP_RETURN_URL', 'https://thammyroyal.adamtech.vn/vnpay'),
 
-    'ZALOPAY_APP_ID'=>env('ZALOPAY_APP_ID',2554),
-    'ZALOPAY_KEY1'=>env('ZALOPAY_APP_ID','sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn'),
-    'ZALOPAY_KEY2'=>env('ZALOPAY_APP_ID','trMrHtvjo6myautxDUiAcYsVtaeQ8nhf'),
+    'ZALOPAY_APP_ID' => env('ZALOPAY_APP_ID', 2554),
+    'ZALOPAY_KEY1' => env('ZALOPAY_APP_ID', 'sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn'),
+    'ZALOPAY_KEY2' => env('ZALOPAY_APP_ID', 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf'),
+
+    'SERVER_KEY_FIREBASE' => env('SERVER_KEY_FIREBASE', 'AAAAF9wozSE:APA91bFIdVNVGsGWhXu85hu6_JBfd17AOMqsvFgtOhgMzzdlbi9CVeBMEuY_mtkB1ay3pMmxptMCuR70y5vXe-Hw7wnn-XoTik5CSnhqt2zGFf5CBRdyXCk5gHB1TeChISjyIOnwnZa2'),
 
 //    'VNP_HASH_SECRET' => env('VNP_HASHSECRET','EYNZLCMUOZSLXLELATOJMFADBNHWCOSF'),
 //    'VNP_TMN_CODE' => env('VNP_TMN_CODE','7GAY9V0X'),
