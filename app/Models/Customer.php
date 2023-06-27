@@ -148,8 +148,9 @@ class Customer extends Model
         $user = Auth::user();
         $data = self::latest();
         if ($user->department_id == DepartmentConstant::TELESALES) {
-            if ($user->is_leader == UserConstant::IS_LEADER) {
-                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            $member = checkTeamLead();
+            if (!empty($user->isLeader) && !empty($member)) {
+                $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON) {
                     $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');

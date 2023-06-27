@@ -55,4 +55,5 @@ return [
     'report.waiters'           => "Báo cáo lễ tân",
     'carepage.index'           => "Báo cáo CarePage",
     'order.orders-destroy'     => "Đơn hàng đã bị xoá",
+    'teams'                    => "QL đội nhóm",
 ];

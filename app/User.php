@@ -10,6 +10,7 @@ use App\Models\Department;
 use App\Models\DonTu;
 use App\Models\Location;
 use App\Models\Role;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -130,6 +131,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
+
     public function location()
     {
         return $this->belongsTo(Location::class);
@@ -143,5 +145,10 @@ class User extends Authenticatable
     public function donTu()
     {
         return $this->hasMany(DonTu::class);
+    }
+
+    public function isLeader()
+    {
+        return $this->hasOne(Team::class, 'leader_id', 'id');
     }
 }

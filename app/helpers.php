@@ -140,6 +140,14 @@ if (!function_exists('checkRoleAlready')) {
     }
 }
 
+if (!function_exists('checkTeamLead')) {
+    function checkTeamLead()
+    {
+        $user = \App\Models\Team::where('leader_id', \Illuminate\Support\Facades\Auth::user()->id)->with('teamMembers')->first();
+        return isset($user->teamMembers) ? $user->teamMembers->pluck('user_id')->toArray() : [];
+    }
+}
+
 if (!function_exists('fcmSendCloudMessage')) {
     function fcmSendCloudMessage(
         $deviceToken = "",

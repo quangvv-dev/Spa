@@ -40,6 +40,7 @@ class RoleController extends Controller
         'history_approval',
         'salary',
         'history_salary',
+        'teams',
     ];
     protected $report = [
         'statistics.index',

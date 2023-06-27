@@ -54,7 +54,6 @@
                 }
             }).done(function (data) {
                 $('#registration-form').html(data);
-
             });
         });
         $(document).on('change', '#branch', function () {

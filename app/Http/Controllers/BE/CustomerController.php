@@ -120,6 +120,7 @@ class CustomerController extends Controller
     {
         $input = $request->all();
         $checkRole = checkRoleAlready();
+
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         } elseif (count($input) < 1) {
