@@ -55,7 +55,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
 
     Route::post('update-firebase_token', 'ThuChiController@updateDevicesToken');
 
-    Route::post('change-password', 'AuthController@changePassword');
+    Route::post('change-password-user', 'AuthController@changePassword');
     Route::get('get-profile', 'AuthController@getProfile');
     Route::post('change-profile', 'AuthController@changeProfile');
 
@@ -116,13 +116,6 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
 Route::post('/check-unique-users', 'BE\UserController@checkUnique');
 Route::post('/check-unique-customers', 'BE\CustomerController@checkUniquePhone');
 Route::post('/check-unique-code-orders', 'BE\OrderController@checkUniqueCode');
-//Route::get('/statistics', 'API\StatisticController@index');
-//Route::get('/statistics-all', 'API\StatisticController@getAllBranch');
-//Route::get('/sales', 'API\StatisticController@sales');
-//Route::get('/sales-with-branch', 'API\StatisticController@saleWithBranch');
-//Route::get('/campaigns', 'API\StatisticController@campaign');
-//Route::get('/campaign-with-branch', 'API\StatisticController@campaignWithBranch');
-//Route::get('tab-schedules', 'API\RevenueController@tabSchedules');
 
 Route::get('/task-schedules', 'API\StatisticController@TaskScheduleSale');
 //Post customers

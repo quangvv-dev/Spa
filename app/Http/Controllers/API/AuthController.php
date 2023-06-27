@@ -100,7 +100,6 @@ class AuthController extends BaseApiController
     {
 
         $user = User::find($request->jwtUser->id);
-
         $messages = [
             'old_password.required' => 'Vui lòng nhập mật khẩu cũ',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới',
