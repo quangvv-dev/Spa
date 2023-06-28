@@ -657,7 +657,6 @@ class OrderController extends Controller
                             foreach ($jobs as $job) {
                                 if ($job->configs->type_job && @$job->configs->type_job == 'cskh') {
                                     $user_id = $customer->cskh_id;
-                                    $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
                                     $rule->save();
                                     $type = StatusCode::CSKH;
                                     $prefix = "CSKH ";
