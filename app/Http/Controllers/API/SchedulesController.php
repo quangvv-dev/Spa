@@ -62,6 +62,10 @@ class SchedulesController extends BaseApiController
                 'id'   => ScheduleConstant::HUY,
                 'name' => 'Hủy',
             ],
+            [
+                'id'   => ScheduleConstant::QUA_HAN,
+                'name' => 'Quá hạn',
+            ],
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
