@@ -584,7 +584,6 @@ class OrderController extends Controller
 
     public function payment(Request $request, $id)
     {
-        $cskh = User::select('id')->where('department_id', UserConstant::CSKH)->pluck('id')->toArray();
         DB::beginTransaction();
         try {
             $input = $request->except('customer_id');
@@ -656,15 +655,15 @@ class OrderController extends Controller
                         $jobs = Functions::checkRuleJob($config);
                         if (count($jobs) && $order->role_type != StatusCode::PRODUCT) { //add thêm role type
                             foreach ($jobs as $job) {
-                                if ($job->configs->type_job && @$job->configs->type_job == 'cskh' && count($cskh)) {
-                                    $user_id = !empty($cskh[$rule->position]) ? $cskh[$rule->position] : 0;
+                                if ($job->configs->type_job && @$job->configs->type_job == 'cskh') {
+                                    $user_id = $customer->cskh_id;
                                     $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
                                     $rule->save();
                                     $type = StatusCode::CSKH;
                                     $prefix = "CSKH ";
                                 } else {
                                     $user_id = @$customer->telesales_id;
-                                    $type = StatusCode::CSKH;
+                                    $type = StatusCode::GOI_LAI;
                                     $prefix = "Gọi lại ";
                                 }
 
@@ -685,7 +684,7 @@ class OrderController extends Controller
                                     'date_from'   => Carbon::now()->addDays($day)->format('Y-m-d'),
                                     'time_from'   => '07:00',
                                     'time_to'     => '21:00',
-                                    'code'        => 'CSKH',
+                                    'code'        => $prefix,
                                     'user_id'     => @$user_id,
                                     'all_day'     => 'on',
                                     'priority'    => 1,
@@ -708,7 +707,7 @@ class OrderController extends Controller
                                         UserConstant::IS_LEADER);
                                 })->get();
                                 $task->users()->attach($follow);
-                                $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
+                                $title = $task->type == StatusCode::GOI_LAI ? '💬💬💬 Bạn có công việc gọi điện mới !'
                                     : '📅📅📅 Bạn có công việc chăm sóc mới !';
                                 Notification::insert([
                                     'title'      => $title,
