@@ -245,7 +245,7 @@
                                 <p class="word-wrap"> &nbsp;{{ $customer->birthday }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Mối quan hệ:</p>
-                                <p class="word-wrap"> &nbsp;{{ $customer->status->name }}</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->status->name }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Ngày tạo:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->created_at }}</p>
