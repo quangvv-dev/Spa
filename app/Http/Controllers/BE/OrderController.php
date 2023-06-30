@@ -656,7 +656,7 @@ class OrderController extends Controller
                         if (count($jobs) && $order->role_type != StatusCode::PRODUCT) { //add thêm role type
                             foreach ($jobs as $job) {
                                 if ($job->configs->type_job && @$job->configs->type_job == 'cskh') {
-                                    $user_id = $customer->cskh_id;
+                                    $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
                                     $rule->save();
                                     $type = StatusCode::CSKH;
                                     $prefix = "CSKH ";
