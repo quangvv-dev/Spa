@@ -733,7 +733,6 @@ class CustomerController extends Controller
             $check2 = RuleOutput::where('event', 'change_relation')->first();
 
             if ($customer->status_id != $before->status_id && isset($check2) && $check2) {
-                $cskh = User::select('id')->where('department_id', UserConstant::PHONG_CSKH)->pluck('id')->toArray();
                 $rule = $check2->rules;
                 $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
                 $rule_status = Functions::checkRuleStatusCustomer($config);
@@ -775,9 +774,9 @@ class CustomerController extends Controller
 
                         if (count($jobs)) {
                             foreach ($jobs as $job) {
-                                if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh' && count($cskh)) {
+                                if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh') {
                                     $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
-                                    $rule->position = ($rule->position + 1) < count($cskh) ? $rule->position + 1 : 0;
+                                    $rule->position = 0;
                                     $rule->save();
                                     $type = StatusCode::CSKH;
                                     $prefix = "CSKH ";
