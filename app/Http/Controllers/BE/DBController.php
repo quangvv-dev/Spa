@@ -20,12 +20,17 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
-       $c = ChamCong::select('id',\DB::raw('COUNT(id) as count'))->groupBy('date_time_record','name_machine')->having('count','>',1)->get();
-        if (count($c)){
-            foreach ($c as $item){
-                ChamCong::find($item->id)->delete();
+        $c = PaymentHistory::select('payment_histories.id', 'payment_histories.is_debt', \DB::raw('MONTH(payment_histories.payment_date) as month'), \DB::raw('MONTH(o.created_at) as m_created'))
+            ->whereDate('payment_histories.payment_date','>=', $request->date)
+            ->join('orders as o', 'o.id', '=', 'payment_histories.order_id')->get()->chunk(300);
+        foreach ($c as $item) {
+            foreach ($item as $i) {
+                if ($i->month != $i->m_created) {
+                    $i->is_debt = 1;
+                }
             }
         }
+
         return 1;
 //        $param = $request->all();
 //        $orders2 = PaymentHistory::where('price', '>', 0)

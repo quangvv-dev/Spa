@@ -1,13 +1,6 @@
 <div style="width: 100%; overflow: auto;margin-top: 20px;height: 900px;" class="tableFixHead">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
-{{--        <tr>--}}
-{{--            <th class="text-center" colspan="1">STT</th>--}}
-{{--            <th class="text-center" colspan="1">SALE</th>--}}
-{{--            <th class="text-center" colspan="1"></th>--}}
-{{--            <th class="text-center" colspan="18">KHÁCH HÀNG MỚI</th>--}}
-{{--            <th class="text-center" colspan="3">KHÁCH HÀNG CŨ</th>--}}
-{{--        </tr>--}}
         <tr class="tr1" style="text-transform:unset">
             <th class="text-center"></th>
             <th class="text-center">Nhân viên</th>
@@ -114,7 +107,7 @@
 
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
                     <td class="text-center pdr10">{{number_format($item->payment_new)}}</td>
-                    <td class="text-center pdr10">{{number_format($item->detail_new - $item->payment_new)}}</td>
+                    <td class="text-center pdr10">{{number_format($item->is_debt)}}</td>
                     <td class="text-center pdr10">{{number_format($item->detail_new)}}</td>
                 </tr>
             @endforeach
@@ -142,7 +135,7 @@
             <td class="text-center bold">{{!empty($all_detail_new)&& !empty($order_new)?number_format($all_detail_new/$order_new):0}}</td>
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>
             <td class="text-center bold">{{@number_format($payment_new)}}</td>
-            <td class="text-center bold">{{@number_format($all_detail_new - $payment_new)}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('is_debt'))}}</td>
             <td class="text-center bold">{{@number_format($all_detail_new)}}</td>
         </tr>
 

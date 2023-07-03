@@ -82,9 +82,7 @@ class SalesController extends Controller
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
-//            $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-//            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             if ($item->caller_number) {
                 $paramsCenter = [
@@ -94,23 +92,11 @@ class SalesController extends Controller
                     'end_date' => $request->end_date,
                 ];
 
-                $callCenter = CallCenter::search($paramsCenter,'id')->count();
+                $callCenter = CallCenter::search($paramsCenter, 'id')->count();
                 $item->call_center = $callCenter;
             } else {
                 $item->call_center = 0;
             }
-
-
-//            $group_comment = GroupComment::select('id')->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-//                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-//                    $q->whereIn('branch_id', $request->group_branch);
-//                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-//                    $q->where('branch_id', $request->branch_id);
-//                });
-//            $comment_new = clone $group_comment;
-
-//            $item->comment_new = $group_comment->whereIn('customer_id', $order_new->pluck('member_id')->toArray())->get()->count();// trao doi moi
-//            $item->comment_old = $group_comment->whereIn('customer_id', $order_old->pluck('member_id')->toArray())->count(); // trao doi cu
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -125,7 +111,7 @@ class SalesController extends Controller
                 ->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count();
-            $item->become_buy = $schedules_den->where('status',ScheduleConstant::DEN_MUA)->count();
+            $item->become_buy = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
             $item->not_buy = $item->schedules_den - $item->become_buy;
             $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
                 $qr->where('old_customer', 0);
@@ -135,26 +121,15 @@ class SalesController extends Controller
             $request->merge(['telesales' => $item->id]);
             $params = $request->all();
             $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-            $detailOld = clone $detail;
-//            $item->all_payment = $detail->sum('price');
             $item->detail_new = $detail->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
-//            $item->detail_old = $detailOld->whereHas('order', function ($qr) {
-//                $qr->where('is_upsale', OrderConstant::IS_UPSALE);
-//            })->sum('price');
+            $item->is_debt = $detail->where('is_debt', StatusCode::OFF)->sum('price');
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
-//            $item->order_old = $order_old->count();
             $item->revenue_new = $order_new->sum('all_total');
-//            $item->revenue_old = $order_old->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');
-//            $item->payment_old = $order_old->sum('gross_revenue');
-//            $item->payment_revenue = isset($orders->paymentHistory)?$orders->paymentHistory->sum('gross_revenue'):0;
-//            $item->payment_new = isset($order_new->paymentHistory)?$order_new->paymentHistory->sum('gross_revenue'):0;
-//            $item->payment_old = isset($order_old->paymentHistory)?$order_old->paymentHistory->sum('gross_revenue'):0;
-//            $item->revenue_total = $order_new->sum('all_total') + $order_old->sum('all_total');
 
             return $item;
         })->sortByDesc('all_payment');
