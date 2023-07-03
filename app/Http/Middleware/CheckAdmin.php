@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Middleware;
+use App\Constants\DepartmentConstant;
 use App\Constants\UserConstant;
 use Closure;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ class CheckAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->role != UserConstant::ADMIN) {
+        if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
             return redirect('/customers');
         }
         return $next($request);

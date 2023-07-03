@@ -91,5 +91,20 @@
 
             });
         });
+
+        $(document).on('change', '.check', function () {
+            let value = this.checked ? 1 : 0;
+            console.log(value);
+            $.ajax({
+                url: "/ajax/active-user/" + $(this).data('id'),
+                type: 'POST',
+                data: {
+                    active: value,
+                    // _token: 'I2oyUkzbxy2pMyZfs6idnBIxPoSnFo7CzQmY15xr',
+                }
+            }).done(function (data) {
+                alertify.success('Cập nhật tk thành công !');
+            });
+        })
     </script>
 @endsection

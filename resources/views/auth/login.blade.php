@@ -40,15 +40,12 @@
 <body class="login-img bg-gradient">
 <!-- Header Background Animation-->
 <div id="particles-js"  class=""></div>
-<div id="global-loader" ><div class="showbox"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div></div>
 <div class="page">
     <div class="page-single">
         <div class="container">
             <div class="row">
                 <div class="col col-login mx-auto">
-{{--                    <div class="text-center mb-6 ">--}}
-{{--                        <img src="assets/images/brand/logo_login.png" class="h-6" alt="">--}}
-{{--                    </div>--}}
+
                     @if ($errors->has('phone') || $errors->has('password'))
                         <div class="alert alert-danger" role="alert" style="font-size: 14px">
                             {{ $errors->first() }}

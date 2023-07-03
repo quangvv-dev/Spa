@@ -3,19 +3,15 @@
 namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
-use App\Constants\DepartmentConstant;
-use App\Constants\NotificationConstant;
-use App\Constants\ScheduleConstant;
+use App\Constants\StatusCode;
 use App\Http\Requests\UserRequest;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Location;
 use App\Models\Role;
-use App\Models\Schedule;
 use App\Models\TeamMember;
 use App\Services\UserService;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -205,7 +201,7 @@ class UserController extends Controller
     public function getAllUserDepartmentNotTeam(Request $request)
     {
         $team_member = TeamMember::all()->pluck('user_id')->toArray();
-        $user = User::where('department_id',$request->department)->whereNotIn('id', $team_member)->get();
+        $user = User::where('department_id', $request->department)->whereNotIn('id', $team_member)->where('active', StatusCode::ON)->get();
         return response()->json([
             'user' => $user
         ]);
@@ -221,12 +217,20 @@ class UserController extends Controller
     public function getAllUserDepartmentTeam(Request $request)
     {
         $user_team_member_id = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
-        $user_team = User::whereIn('id', $user_team_member_id)->get();
+        $user_team = User::whereIn('id', $user_team_member_id)->where('active', StatusCode::ON)->get();
         $team_member = TeamMember::all()->pluck('user_id')->toArray();
-        $user = User::where('department_id',$request->department)->whereNotIn('id', $team_member)->get();
+        $user = User::where('department_id', $request->department)->whereNotIn('id', $team_member)->where('active', StatusCode::ON)->get();
         $user = $user->merge($user_team);
         return response()->json([
             'user' => $user
+        ]);
+    }
+
+    public function activeUser(Request $request, $id)
+    {
+        User::find($id)->update($request->only('active'));
+        return response()->json([
+            'code' => 200
         ]);
     }
 }

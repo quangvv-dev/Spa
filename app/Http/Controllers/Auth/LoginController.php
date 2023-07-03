@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Constants\StatusCode;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -29,7 +31,12 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        return redirect('/customers');
+        if ($user->active == StatusCode::ON) {
+            return redirect('/customers');
+        } else {
+            Auth::logout();
+            return back()->with('danger', 'Tài khoản bị khóa vui lòng liên hệ Admin!');
+        }
     }
 
     /**

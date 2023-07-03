@@ -140,13 +140,13 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::post('marketing/add-line-price-marketing', 'Marketing\MarketingController@addLinePriceMarketing');
         Route::get('marketing/search-price-marketing', 'Marketing\MarketingController@searchPriceMarketing');
 
-//        Route::delete('marketing/price-marketing', 'Marketing\MarketingController@destroy');
         Route::post('user-filter-grid', 'SettingController@userFilterGrid');
-
         Route::get('report/detail-hoa-hong/{user_id}', 'CommissionController@detailHoaHong');
 
         Route::get('get-all-user-department-not-team', 'UserController@getAllUserDepartmentNotTeam');
         Route::get('get-all-user-department-team', 'UserController@getAllUserDepartmentTeam');
+
+        Route::post('active-user/{id}', 'UserController@activeUser');
     });
 
     Route::resource('rules', 'RuleController');//Automation
@@ -265,26 +265,26 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('get-data-form-customer', 'ChatController@getDataFormCustomer');
         Route::post('create-customer', 'ChatController@createCustomer');
 
-        Route::resource('setting-quick-reply','SettingChatController');
+        Route::resource('setting-quick-reply', 'SettingChatController');
         Route::get('setting-quick-reply/{page_id}/create', 'SettingChatController@create');
         Route::post('setting-quick-reply/{page_id}/create', 'SettingChatController@insertSettingChat');
         Route::post('setting-quick-reply/sync/{page_id}', 'SettingChatController@syncQuick');
         Route::put('setting-quick-reply/{page_id}/setting/{id}', 'SettingChatController@updateSettingChat');
-        Route::post('setting-quick-reply/test','SettingChatController@test');
-        Route::post('setting-quick-reply/delete-image','SettingChatController@deleteImage');
-        Route::post('setting-quick-reply/import/{page_id}','SettingChatController@importExcel');
+        Route::post('setting-quick-reply/test', 'SettingChatController@test');
+        Route::post('setting-quick-reply/delete-image', 'SettingChatController@deleteImage');
+        Route::post('setting-quick-reply/import/{page_id}', 'SettingChatController@importExcel');
         Route::get('get-quick-reply/{page_id}', 'SettingChatController@getQuickReply');
 
         //Chat multi_page
-        Route::get('get-data-group/{group_id}','ChatController@getDataGroup');
-        Route::post('add-group','ChatController@addGroup');
-        Route::put('update-group','ChatController@updateGroup');
-        Route::delete('delete-group/{id}','ChatController@deleteGroup');
-        Route::post('create-comment-customer','ChatController@createCommentCustomer');
+        Route::get('get-data-group/{group_id}', 'ChatController@getDataGroup');
+        Route::post('add-group', 'ChatController@addGroup');
+        Route::put('update-group', 'ChatController@updateGroup');
+        Route::delete('delete-group/{id}', 'ChatController@deleteGroup');
+        Route::post('create-comment-customer', 'ChatController@createCommentCustomer');
 
     });
     Route::group(['namespace' => 'Setting', 'prefix' => 'settings', 'as' => 'settings.'], function () {
-        Route::resource('time-status','TimeStatusController');
+        Route::resource('time-status', 'TimeStatusController');
     });
 
     Route::group(['namespace' => 'ChamCong', 'prefix' => 'approval', 'as' => 'approval.'], function () {
@@ -292,12 +292,12 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('order/create/{type}', 'OrderController@createOrder');
         Route::get('order/edit/{order_id}', 'OrderController@editOrder');
         Route::get('order/show/{id}/{type}', 'OrderController@showDetail');
-        Route::put('update-order','OrderController@accept');
-        Route::put('update-array-order','OrderController@acceptArrayOrder');
+        Route::put('update-order', 'OrderController@accept');
+        Route::put('update-array-order', 'OrderController@acceptArrayOrder');
         Route::get('statistic', 'StatisticController@index');
         Route::get('history', 'StatisticController@history');
         Route::get('show-history', 'StatisticController@showHistory');
-        Route::get('get-detail-cham-cong','StatisticController@getDetail');
+        Route::get('get-detail-cham-cong', 'StatisticController@getDetail');
 
         Route::post('import-salary', 'StatisticController@importSalary');
         Route::get('salary', 'StatisticController@salary');
@@ -307,7 +307,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
         Route::resource('reason', 'ReasonController');
 
-        Route::get('export-data-approval','StatisticController@exportDataApproval');
+        Route::get('export-data-approval', 'StatisticController@exportDataApproval');
     });
 
     Route::get('login/facebook', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');
