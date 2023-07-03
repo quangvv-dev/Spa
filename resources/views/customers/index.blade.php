@@ -408,11 +408,41 @@
 
             $(document).on('click', '.limiting', function () {
                 let limit = $(this).data('limit');
+                let marketing = $('.group-product').val();
+                let call_back = $('.call_back').val();
+                let carepage_id = $('.carepage').val();
+                let gender = $('.gender').val();
+                let location = $('.location').val();
+                let branch_id = $('.branch_id').val();
+                let source = $('.source').val();
+                let group = $('.group').val();
+                let cskh = $('.cskh').val();
+                let telesales = $('.telesales').val();
+                let search = $('#search_value').val();
+                $('#branch_id').val(branch_id);
+                $('#source').val(source);
+                $('#group').val(group);
+                $('#group_product').val(marketing);
+                $('#telesales').val(telesales);
                 $('#birthday_tab').val('');
+                let data_time = $('#btn_choose_time').val();
+                let status = $('#status').val();
                 let data = {
+                    marketing: marketing,
+                    call_back: call_back,
+                    carepage_id: carepage_id,
+                    gender: gender,
+                    location_id: location,
+                    group: group,
+                    telesales: telesales,
+                    data_time: data_time,
+                    search: search,
+                    status: status,
+                    source: source,
+                    branch_id: branch_id,
+                    cskh_id: cskh,
                     limit: limit
                 };
-
                 searchAjax(data);
             });
 
