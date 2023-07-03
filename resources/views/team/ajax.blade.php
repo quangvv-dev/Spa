@@ -25,11 +25,11 @@
                         :($item->department_id==\App\Constants\DepartmentConstant::MARKETING?'Marketing'
                         :($item->department_id==\App\Constants\DepartmentConstant::CSKH?'CSKH':''))}}
                     </td>
-                    <td class="text-center">{{$item->code}}</td>
-                    <td class="text-center">{{$item->name}}</td>
-                    <td class="text-center">{{$item->user->full_name}}</td>
-                    <td class="text-center">{{$item->getNameUser()}}</td>
-                    <td class="text-center">{{$item->created_at}}</td>
+                    <td class="text-center">{{@$item->code}}</td>
+                    <td class="text-center">{{@$item->name}}</td>
+                    <td class="text-center">{{@$item->user->full_name}}</td>
+                    <td class="text-center">{{@$item->getNameUser()}}</td>
+                    <td class="text-center">{{@$item->created_at}}</td>
                     <td class="text-center">
                         <a class="action-control edit" href="javascript:void(0)"
                            data-team="{{$item}}"
