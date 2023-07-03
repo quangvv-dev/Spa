@@ -17,7 +17,7 @@ class CallController extends Controller
 
     public function __construct()
     {
-        $telesales = User::whereNotNull('caller_number')->pluck('full_name', 'caller_number');
+        $telesales = User::whereNotNull('caller_number')->where('active', StatusCode::ON)->pluck('full_name', 'caller_number');
         $this->middleware('permission:call-center', ['only' => ['index']]);
 
         view()->share([

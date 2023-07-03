@@ -75,11 +75,12 @@ class CustomerController extends Controller
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->pluck('name',
             'id')->toArray();// nguồn KH
         $branchs = Branch::search()->pluck('name', 'id');// chi nhánh
-        $marketingUsers = User::whereIn('department_id', [DepartmentConstant::MARKETING])->select('full_name',
-            'id')->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::whereIn('department_id', [DepartmentConstant::MARKETING])->where('active', StatusCode::ON)
+            ->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $genitives = Genitive::select('id', 'name')->pluck('name', 'id')->toArray();
         $telesales = [];
-        User::select('id', 'department_id', 'full_name')->get()->map(function ($item) use (&$telesales) {
+        User::select('id', 'department_id', 'full_name')->where('active', StatusCode::ON)->get()
+            ->map(function ($item) use (&$telesales) {
             if ($item->department_id == DepartmentConstant::WAITER) {
                 $telesales['Lễ Tân'][$item->full_name] = $item->id;
             } elseif ($item->department_id == DepartmentConstant::TELESALES) {
@@ -104,7 +105,7 @@ class CustomerController extends Controller
             'marketingUsers' => $marketingUsers,
             'genitives' => $genitives,
             'location' => $location,
-            'cskh' => User::select('id', 'full_name')->where('department_id', DepartmentConstant::CSKH)->get(),
+            'cskh' => User::select('id', 'full_name')->where('department_id', DepartmentConstant::CSKH)->where('active', StatusCode::ON)->get(),
         ]);
     }
 
@@ -135,8 +136,8 @@ class CustomerController extends Controller
             unset($input['branch_id'], $input['cskh_id']);
         }
 
-        $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->select('full_name',
-            'id')->pluck('full_name', 'id')->toArray();
+        $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->where('active', StatusCode::ON)
+            ->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
 
@@ -156,34 +157,7 @@ class CustomerController extends Controller
 
         $url = '/customers';
         $user = Auth::user();
-        $user_filter_list = [
-            0 => 'STT',
-            1 => 'Ngày tạo KH',
-            2 => 'Họ tên',
-            3 => 'SĐT',
-            4 => 'Tin nhắn',
-            5 => 'Nhóm KH',
-            6 => 'Trạng thái',
-            7 => 'Người phụ trách',
-            8 => 'Mô tả',
-            9 => 'T/G tác nghiệp',
-            10 => 'Chuyển về TP',
-            11 => 'C.Nhánh',
-            12 => 'DV liên quan',
-            13 => 'Nhóm tính cách',
-            14 => 'Người tạo',
-            25 => 'CSKH',
-            15 => 'Lịch hẹn',
-            16 => 'Ngày sinh',
-            17 => 'MKT Phụ trách',
-            18 => 'Nguồn KH',
-            19 => 'Linh FB',
-            20 => 'Giới tính',
-            21 => 'Số đơn',
-            22 => 'Tổng doanh thu',
-            23 => 'Đã thanh toán',
-            24 => 'Còn lại',
-        ];
+        $user_filter_list = Customer::grid_display;
         $user_filter_grid = UserFilterGrid::select('fields')->where('user_id', $user->id)->where('url', $url)->first();
         if ($user_filter_grid) {
             $user_filter_grid = json_decode($user_filter_grid->fields);
@@ -214,7 +188,7 @@ class CustomerController extends Controller
     public function createGroup()
     {
         $title = 'Thêm mới khách hàng';
-        $user_sale = User::where('department_id', DepartmentConstant::TELESALES);
+        $user_sale = User::where('department_id', DepartmentConstant::TELESALES)->where('active', StatusCode::ON);
         $sale = $user_sale->pluck('id')->toArray();
         $name = $user_sale->pluck('full_name')->toArray();
         $sale_name = '';
@@ -341,12 +315,13 @@ class CustomerController extends Controller
         $curent_branch = Auth::user()->branch_id ? Auth::user()->branch_id : '';
         if (isset($customer) && $customer) {
             $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
+                ->where('active', StatusCode::ON)
                 ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
                     $q->where('branch_id', $curent_branch);
                 })->pluck('full_name', 'id');
         } else {
-            $waiters = User::whereIn('department_id',
-                [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])->pluck('full_name', 'id');
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
+                ->where('active', StatusCode::ON)->pluck('full_name', 'id');
         }
         $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [
             0,
@@ -354,14 +329,14 @@ class CustomerController extends Controller
         ];
         $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
 
-        $staff = User::where('department_id', '<>', DepartmentConstant::ADMIN)->get()->pluck('full_name',
+        $staff = User::where('department_id', '<>', DepartmentConstant::ADMIN)->where('active', StatusCode::ON)->get()->pluck('full_name',
             'id')->toArray();
         $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
         $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
         //Task
         $input['type'] = $request->type ?: 'qf1';
         $type = Task::TYPE;
-        $users = User::pluck('full_name', 'id');
+        $users = User::where('active', StatusCode::ON)->pluck('full_name', 'id');
         $customers = Customer::find($id);
         $customers = [
             $customers->id => $customers->full_name,
@@ -819,12 +794,10 @@ class CustomerController extends Controller
                                 ];
 
                                 $task = $this->taskService->create($input);
-                                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function (
-                                    $query
-                                ) {
+                                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
                                     $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
                                         UserConstant::IS_LEADER);
-                                })->get();
+                                })->where('active', StatusCode::ON)->get();
                                 $task->users()->attach($follow);
                                 $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
                                     : '📅📅📅 Bạn có công việc chăm sóc mới !';
@@ -992,9 +965,8 @@ class CustomerController extends Controller
 
         $customer = Customer::with('telesale')->where('id', $id)->first();
 
-        $telesales = User::whereIn('role',
-            [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get();
-
+        $telesales = User::whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])
+            ->where('active', StatusCode::ON)->get();
         return [
             'customer' => $customer,
             'data' => $telesales,

@@ -8,7 +8,6 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Category;
-use App\Models\Commission;
 use App\Models\CommissionEmployee;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -17,7 +16,6 @@ use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
-use App\Models\Position;
 use App\Models\PositionCskh;
 use App\Models\ProductDepot;
 use App\Models\Promotion;
@@ -316,10 +314,10 @@ class OrderController extends Controller
             $item->name = @$item->product->name;
             return $item;
         })->pluck('name', 'product_id')->toArray();
-        $marketingUsers = User::where('department_id', DepartmentConstant::MARKETING)->pluck('full_name',
-            'id')->toArray();
-        $ktvUsers = User::where('department_id', DepartmentConstant::TECHNICIANS)->pluck('full_name', 'id')->toArray();
-        $telesales = User::where('department_id', DepartmentConstant::TELESALES)->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::where('department_id', DepartmentConstant::MARKETING)->where('active', StatusCode::ON)
+            ->pluck('full_name', 'id')->toArray();
+        $ktvUsers = User::where('department_id', DepartmentConstant::TECHNICIANS)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
+        $telesales = User::where('department_id', DepartmentConstant::TELESALES)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
         if ($check_null == StatusCode::NOT_NULL) {
@@ -478,10 +476,9 @@ class OrderController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $group = Category::select('id', 'name')->pluck('name', 'id')->toArray();
-        $marketingUsers = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
-        $telesales = User::select('id', 'full_name')->whereIn('department_id',
-            [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
-            ->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::select('id', 'full_name')->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
+        $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
+            ->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name',
             'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
@@ -526,19 +523,17 @@ class OrderController extends Controller
     public function show($id)
     {
         $curent_branch = Auth::user()->branch_id ? Auth::user()->branch_id : '';
-        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [
-            0,
-            @$customer->branch->location_id,
-        ];
+        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];
         $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
         if (isset($curent_branch) && $curent_branch) {
             $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
+                ->where('active', StatusCode::ON)
                 ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
                     $q->where('branch_id', $curent_branch);
                 })->pluck('full_name', 'id');
         } else {
-            $waiters = User::whereIn('department_id',
-                [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])->pluck('full_name', 'id');
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
+                ->where('active', StatusCode::ON)->pluck('full_name', 'id');
         }
         $products = Services::select('id', 'name')->where('type', StatusCode::PRODUCT)->pluck('name', 'id')->toArray();
         $order = Order::with('customer', 'orderDetails', 'paymentHistories')->findOrFail($id);
@@ -699,12 +694,10 @@ class OrderController extends Controller
                                 ];
 
                                 $task = $this->taskService->create($input);
-                                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function (
-                                    $query
-                                ) {
+                                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
                                     $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
                                         UserConstant::IS_LEADER);
-                                })->get();
+                                })->where('active', StatusCode::ON)->get();
                                 $task->users()->attach($follow);
                                 $title = $task->type == StatusCode::GOI_LAI ? '💬💬💬 Bạn có công việc gọi điện mới !'
                                     : '📅📅📅 Bạn có công việc chăm sóc mới !';
