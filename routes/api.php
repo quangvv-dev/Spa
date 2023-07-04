@@ -99,6 +99,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('approval-hours', 'ChamCong\OrderController@getListHours');
 //end chấm công
 
+    // Doanh thu app thống kê
     Route::group(['prefix' => 'revenue'], function () {
         Route::get('customers', 'RevenueController@index');
         Route::get('orders', 'RevenueController@orders');

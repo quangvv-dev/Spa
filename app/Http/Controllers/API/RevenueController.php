@@ -166,7 +166,7 @@ class RevenueController extends BaseApiController
             ];
         } elseif ($request->type_api == 3) {
             $payment = PaymentHistory::search($input, 'price');
-
+            $is_debt = clone $payment;
             if (isset($input_old['start_date']) && isset($input_old['end_date'])) {
                 $payment_old = PaymentHistory::search($input_old, 'price');
             }
@@ -175,14 +175,14 @@ class RevenueController extends BaseApiController
             $data = [
                 'percent' => !empty($payment->sum('price')) && !empty($payment_old) ? round(($payment->sum('price') - $payment_old) / $payment_old * 100,
                     2) : 0,
-                'gross_revenue' => $orders->sum('gross_revenue'),
                 //                'wallet' => $wallet->sum('order_price'),
                 'wallet' => $payment_wallet->sum('price'),
-                'thu_no' => $payment->sum('price') - $orders->sum('gross_revenue'),
+                'thu_no' => $is_debt->where('is_debt', StatusCode::ON)->sum('price'),
                 'con_no' => $orders->sum('all_total') - $orders->sum('gross_revenue'),
             ];
             $total_payment = $payment->sum('price');
             $wallet_used = $payment->where('payment_type', 3)->sum('price');
+            $data['gross_revenue'] = $total_payment - $data['thu_no'];
             $data['payment'] = $total_payment + $payment_wallet->sum('price') - $wallet_used;
 
         } elseif ($request->type_api == 4) {
