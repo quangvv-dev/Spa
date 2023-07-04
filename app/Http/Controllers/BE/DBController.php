@@ -27,6 +27,7 @@ class DBController extends Controller
             foreach ($item as $i) {
                 if ($i->month != $i->m_created) {
                     $i->is_debt = 1;
+                    $i->save();
                 }
             }
         }
