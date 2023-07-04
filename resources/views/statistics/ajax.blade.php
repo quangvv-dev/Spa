@@ -111,7 +111,7 @@
                     <div class="col-12 row">
                         <div class="title col-5">Thu nợ:</div>
                         <div
-                            class="col-7">{{$data['payment']>$data['gross_revenue'] ? number_format($data['payment']-$data['gross_revenue']):0}}</div>
+                            class="col-7">{{number_format($data['is_debt'])}}</div>
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Nạp ví:</div>

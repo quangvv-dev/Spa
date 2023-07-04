@@ -70,7 +70,7 @@ class StatisticController extends Controller
         $input = $request->all();
         if (isset($input['location_id'])) {
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
-            $input['group_branch'] = count($group_branch)?$group_branch:[0];
+            $input['group_branch'] = count($group_branch) ? $group_branch : [0];
         }
 
         if (count($input) == 2) {
@@ -112,6 +112,7 @@ class StatisticController extends Controller
         ])->with('order')->has('order');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
+        $payment_isdebt = clone $payment;
         $payment_years = clone $payment_All;
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
@@ -153,26 +154,26 @@ class StatisticController extends Controller
 
 
         $revenue_month = PaymentHistory::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-                $q->where('branch_id', $input['branch_id']);
-            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-                $q->whereIn('branch_id', $input['group_branch']);
-            })->whereBetween('payment_date', [
-                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-            ])->select('payment_date','branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')
-            ->get()->map(function ($item) use ($request){
+            $q->where('branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('branch_id', $input['group_branch']);
+        })->whereBetween('payment_date', [
+            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+        ])->select('payment_date', 'branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')
+            ->get()->map(function ($item) use ($request) {
                 $item->wallet_month = WalletHistory::select('order_price')
-                    ->whereBetween('created_at', [$item->payment_date . " 00:00:00",$item->payment_date . " 23:59:59"])
+                    ->whereBetween('created_at', [$item->payment_date . " 00:00:00", $item->payment_date . " 23:59:59"])
                     ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
                     })->sum('order_price');
                 $item->payment_wallet_month = PaymentWallet::select('price')
-                    ->whereBetween('payment_date', [$item->payment_date . " 00:00:00",$item->payment_date . " 23:59:59"])
+                    ->whereBetween('payment_date', [$item->payment_date . " 00:00:00", $item->payment_date . " 23:59:59"])
                     ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
                     })->sum('price');
                 $item->order_month = Order::select('all_total')
-                    ->whereBetween('created_at', [$item->payment_date . " 00:00:00",$item->payment_date . " 23:59:59"])
+                    ->whereBetween('created_at', [$item->payment_date . " 00:00:00", $item->payment_date . " 23:59:59"])
                     ->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
                         $q->where('branch_id', $request->branch_id);
                     })->sum('all_total');
@@ -183,6 +184,7 @@ class StatisticController extends Controller
             'all_total' => $orders->sum('all_total'),
             'gross_revenue' => $orders->sum('gross_revenue'),
             'payment' => $payment->sum('price'),
+            'is_debt' => $payment_isdebt->where('is_debt', StatusCode::ON)->sum('price'),
             'orders' => $orders->count(),
             'customers' => $customers->count(),
             //            'category_service' => $category_service,
