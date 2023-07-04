@@ -182,7 +182,7 @@ class RevenueController extends BaseApiController
             ];
             $total_payment = $payment->sum('price');
             $wallet_used = $payment->where('payment_type', 3)->sum('price');
-            $data['gross_revenue'] = $total_payment - $data['thu_no'];
+            $data['gross_revenue'] = $total_payment - $wallet_used - $data['thu_no'];
             $data['payment'] = $total_payment + $payment_wallet->sum('price') - $wallet_used;
 
         } elseif ($request->type_api == 4) {

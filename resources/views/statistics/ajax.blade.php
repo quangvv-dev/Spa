@@ -106,7 +106,7 @@
                 <div class="row">
                     <div class="col-12 row">
                         <div class="title col-5">Doanh thu:</div>
-                        <div class="col-7">{{@number_format($data['payment'] - $data['is_debt'])}}</div>
+                        <div class="col-7">{{@number_format($data['payment'] - $wallets['used'] - $data['is_debt'])}}</div>
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Thu nợ:</div>
