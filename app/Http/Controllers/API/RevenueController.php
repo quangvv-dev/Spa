@@ -401,10 +401,16 @@ class RevenueController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
         } elseif ($request->type_api == 7) {
-            $customers = Customer::orderByDesc('id');
-            $data = Customer::applySearchConditions($customers, $input)->select('id', 'status_id',
-                \DB::raw('COUNT(ID) AS total'))->groupBy('status_id')->with('status')->get()->sortByDesc('total');
-            $data = ChartResource::collection($data);
+
+            $data = Customer::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('customers.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+            })->when(isset($input['branch_id']), function ($query) use ($input) {
+                $query->where('customers.branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('customers.branch_id', $input['group_branch']);
+            })->join('status as s','s.id','customers.status_id')->select(
+                DB::raw('COUNT(customers.id) AS total'),'s.name as name')
+                ->groupBy('customers.status_id')->orderByDesc('total')->get();
 
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
