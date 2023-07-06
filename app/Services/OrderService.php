@@ -13,6 +13,7 @@ use App\Constants\StatusCode;
 use App\Models\ProductDepot;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
@@ -230,11 +231,25 @@ class OrderService
             $point = $order->customer->wallet + $paymentHistory->price;
         }
         $paymentHistory->delete();
-        CommissionEmployee::where('payment_id',$id)->delete();
+        CommissionEmployee::where('payment_id', $id)->delete();
 
         $order->customer->wallet = $point;
         $order->customer->save();
 
         return $order;
+    }
+
+    public function revenueGenderWithOrders($input)
+    {
+        return Order::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('orders.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        })->when(isset($input['branch_id']), function ($query) use ($input) {
+            $query->where('orders.branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('orders.branch_id', $input['group_branch']);
+        })->join('customers as c','c.id','orders.member_id')->select(
+            DB::raw('SUM(gross_revenue) as all_total'),
+            DB::raw("(CASE WHEN c.gender='0' THEN 'Nữ' ELSE 'Nam' END) as name"))
+            ->groupBy('c.gender')->get();
     }
 }

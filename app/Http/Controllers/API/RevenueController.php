@@ -23,6 +23,7 @@ use App\Models\Services;
 use App\Models\Status;
 use App\Models\ThuChi;
 use App\Models\WalletHistory;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 use App\Constants\ResponseStatusCode;
 use Illuminate\Support\Facades\Date;
@@ -37,9 +38,9 @@ class RevenueController extends BaseApiController
      *
      * @param Customer $customer
      */
-    public function __construct()
+    public function __construct(OrderService $orderService)
     {
-        //code
+        $this->orderService = $orderService;
     }
 
     /**
@@ -374,34 +375,7 @@ class RevenueController extends BaseApiController
             ];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 5) {
-            $data = Order::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('orders.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-            })->when(isset($input['branch_id']), function ($query) use ($input) {
-                $query->where('orders.branch_id', $input['branch_id']);
-            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-                $q->whereIn('orders.branch_id', $input['group_branch']);
-            })->join('customers as c','c.id','orders.member_id')->select(
-                DB::raw('SUM(gross_revenue) as all_total'),
-                DB::raw("(CASE WHEN c.gender='0' THEN 'Nữ' ELSE 'Nam' END) as name"))
-                ->groupBy('c.gender')->get();
-//            $revenue_gender = [];
-//            $orders = Order::returnRawData($input)->get();
-//            if (count($orders)) {
-//                foreach ($orders as $k => $item) {
-//
-//                    if (isset($item->customer)) {
-//                        $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
-//                    }
-//                }
-//                if (count($revenue_gender)) {
-//                    foreach ($revenue_gender as $k => $item) {
-//                        $data[] = [
-//                            'name' => ($k == 0) ? 'Nữ' : 'Nam',
-//                            'all_total' => array_sum($item),
-//                        ];
-//                    }
-//                }
-//            }
+            $data = $this->orderService->revenueGenderWithOrders($input);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         } elseif ($request->type_api == 6) {
             $payment = PaymentHistory::search($input, 'price');
@@ -538,14 +512,14 @@ class RevenueController extends BaseApiController
         }
         $request->merge(['type_api' => 'all_branch']);
         $input = $request->except('type_api');
-        $data = Branch::select('id','name')->get()->map(function ($item) use ($input){
+        $data = Branch::select('id', 'name')->get()->map(function ($item) use ($input) {
             $input['branch_id'] = $item->id;
             $payment = PaymentHistory::search($input, 'price');
             $payment_wallet = PaymentWallet::search($input, 'price');
             $thu = $payment->sum('price') + $payment_wallet->sum('price');
             $chi = ThuChi::search($input)->where('status', UserConstant::ACTIVE)->sum('so_tien');
-            $item->total = (int) $thu;
-            $item->revenue = (int) $chi;
+            $item->total = (int)$thu;
+            $item->revenue = (int)$chi;
             $item->payment = (int)$thu - (int)$chi;
             return $item;
         })->sortByDesc('payment');
