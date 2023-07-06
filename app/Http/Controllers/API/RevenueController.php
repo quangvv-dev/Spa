@@ -24,6 +24,7 @@ use App\Models\Status;
 use App\Models\ThuChi;
 use App\Models\WalletHistory;
 use App\Services\CustomerService;
+use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use App\Constants\ResponseStatusCode;
@@ -39,10 +40,11 @@ class RevenueController extends BaseApiController
      *
      * @param Customer $customer
      */
-    public function __construct(OrderService $orderService, CustomerService $customer)
+    public function __construct(OrderService $orderService, CustomerService $customer,OrderDetailService $orderDetailService)
     {
         $this->orderService = $orderService;
         $this->customer = $customer;
+        $this->orderDetail = $orderDetailService;
     }
 
     /**
@@ -295,22 +297,8 @@ class RevenueController extends BaseApiController
         $input = $request->all();
         $data = [];
         if ($request->type_api == 1) {
-            $sources = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
-            $order_detail = OrderDetail::search($input, 'total_price');
-            $statusRevenues = [];
-            foreach ($sources as $source) {
-                $price = clone $order_detail;
-                $price = $price->whereHas('user', function ($qr) use ($source) {
-                    $qr->where('source_id', $source->id);
-                });
-                if ((int)$price->sum('total_price') > 0) {
-                    $statusRevenues[] = [
-                        'revenue' => (int)$price->sum('total_price'),
-                        'name' => $source->name,
-                    ];
-                }
-            }
-            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($statusRevenues));
+            $statusRevenues = $this->orderDetail->revenueWithSource($input);
+            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $statusRevenues);
         } elseif ($request->type_api == 2) {
 
             $category = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get()->map(function ($item) use ($input) {
