@@ -433,21 +433,16 @@ class RevenueController extends BaseApiController
             $request->merge(['group_branch' => $group_branch]);
         }
         $input = $request->all();
-        $ordersYear = Order::select('gross_revenue')->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+        $ordersYear = Order::select(\DB::raw('SUM(gross_revenue) as all_total'),\DB::raw('MONTH(created_at) month'))->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
             $q->where('branch_id', $input['branch_id']);
         })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('branch_id', $input['group_branch']);
-        })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
-
-        for ($i = 1; $i <= 12; $i++) {
-            $newOrder = clone $ordersYear;
-            $newOrder = $newOrder->whereMonth('created_at', $i)->sum('gross_revenue');
-            $data[] = [
-                'month' => 'T' . $i,
-                'all_total' => (int)$newOrder,
-            ];
-        }
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+        })->whereYear('created_at', Date::now('Asia/Ho_Chi_Minh')->format('Y'))
+        ->groupBy('month')->get()->map(function ($item){
+            $item->month = 'T'.$item->month;
+            return $item;
+        });
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $ordersYear);
 
     }
 
