@@ -23,6 +23,7 @@ use App\Models\Services;
 use App\Models\Status;
 use App\Models\ThuChi;
 use App\Models\WalletHistory;
+use App\Services\CustomerService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use App\Constants\ResponseStatusCode;
@@ -38,9 +39,10 @@ class RevenueController extends BaseApiController
      *
      * @param Customer $customer
      */
-    public function __construct(OrderService $orderService)
+    public function __construct(OrderService $orderService, CustomerService $customer)
     {
         $this->orderService = $orderService;
+        $this->customer = $customer;
     }
 
     /**
@@ -377,6 +379,7 @@ class RevenueController extends BaseApiController
         } elseif ($request->type_api == 5) {
             $data = $this->orderService->revenueGenderWithOrders($input);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+
         } elseif ($request->type_api == 6) {
             $payment = PaymentHistory::search($input, 'price');
             $paymentNew = clone $payment;
@@ -401,17 +404,7 @@ class RevenueController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
         } elseif ($request->type_api == 7) {
-
-            $data = Customer::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('customers.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-            })->when(isset($input['branch_id']), function ($query) use ($input) {
-                $query->where('customers.branch_id', $input['branch_id']);
-            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-                $q->whereIn('customers.branch_id', $input['group_branch']);
-            })->join('status as s','s.id','customers.status_id')->select(
-                DB::raw('COUNT(customers.id) AS total'),'s.name as name')
-                ->groupBy('customers.status_id')->orderByDesc('total')->get();
-
+            $data = $this->customer->countWithStatus($input);
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
 
         } elseif ($request->type_api == 8) {
@@ -423,7 +416,6 @@ class RevenueController extends BaseApiController
                 [
                     'name' => 'Thực thu',
                     'all_total' => (int)$thu,
-
                 ],
                 [
                     'name' => 'Chi',

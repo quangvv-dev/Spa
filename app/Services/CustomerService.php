@@ -14,6 +14,7 @@ use App\Helpers\Functions;
 use App\Models\Customer;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomerService
 {
@@ -112,5 +113,17 @@ class CustomerService
         $code = 'KH' . $customer_id;
         $customer->update(['account_code' => $code]);
         return $customer;
+    }
+
+    public function countWithStatus($input){
+        return Customer::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('customers.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        })->when(isset($input['branch_id']), function ($query) use ($input) {
+            $query->where('customers.branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('customers.branch_id', $input['group_branch']);
+        })->join('status as s', 's.id', 'customers.status_id')->select(
+            DB::raw('COUNT(customers.id) AS total'), 's.name as name')
+            ->groupBy('customers.status_id')->orderByDesc('total')->get();
     }
 }
