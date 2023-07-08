@@ -276,7 +276,7 @@ class StatisticController extends Controller
                     $key = $theFirstRow;
                     $value = array_values($row);
                     $input['approval_code'] = $row['ma_nhan_vien'];
-                    $input['all_total'] = $row['tong_cong'];
+                    $input['all_total'] = $row['tong_tien'];
 //                    $input['key'] = $theFirstRow;
 //                    $input['value'] = array_values($row);
                     $input['data'] = json_encode(['key' => $key, 'value' => $value]);
