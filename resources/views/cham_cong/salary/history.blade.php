@@ -156,7 +156,7 @@
                             </div>
                             <div class="col-md-12" style="padding-top: 10px">
                                 <button type="submit" class="btn btn-success">Lưu</button>
-                                <a href="http://spa.test/default/data-orders-default.xlsx" style="color: #ffffff" class="btn btn-warning">Mẫu
+                                <a href="{{asset('default/Mau_Upload_Bang_Luong.xlsx')}}" style="color: #ffffff" class="btn btn-warning">Mẫu
                                     upload</a>
                             </div>
                         </div>
