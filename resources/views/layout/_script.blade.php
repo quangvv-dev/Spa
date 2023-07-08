@@ -56,22 +56,22 @@
             x.play();
         }
 
-        $.ajax({
-            type: 'GET',
-            url: '/ajax/count-notifications',
-            data: {
-                user_id:{{\Illuminate\Support\Facades\Auth::user()->id}}
-            },
-            success: function (data) {
-                if (data) {
-                    var row = $('body').find('.badge.badge-danger.badge-pill');
-                    var row2 = $('body').find('.dropdown-item.text-center.text-dark');
-                    row.html(data);
-                    row2.html(data + ' thông báo mới');
-                    $('#check_notify').val(data);
-                }
-            }
-        })
+        {{--$.ajax({--}}
+        {{--    type: 'GET',--}}
+        {{--    url: '/ajax/count-notifications',--}}
+        {{--    data: {--}}
+        {{--        user_id:{{\Illuminate\Support\Facades\Auth::user()->id}}--}}
+        {{--    },--}}
+        {{--    success: function (data) {--}}
+        {{--        if (data) {--}}
+        {{--            var row = $('body').find('.badge.badge-danger.badge-pill');--}}
+        {{--            var row2 = $('body').find('.dropdown-item.text-center.text-dark');--}}
+        {{--            row.html(data);--}}
+        {{--            row2.html(data + ' thông báo mới');--}}
+        {{--            $('#check_notify').val(data);--}}
+        {{--        }--}}
+        {{--    }--}}
+        {{--})--}}
 
         $('body').delegate('.detail-timeline', 'click', function () {
             var id = $(this).data('id');
@@ -95,29 +95,29 @@
         var callAjax = function () {
 
             var check = $('#check_notify').val();
-            $.ajax({
-                type: 'GET',
-                url: '/ajax/count-notifications',
-                // timeout: 3000,//60 second timeout
-                data: {
-                    user_id:{{\Illuminate\Support\Facades\Auth::user()->id}}
-                },
-                success: function (data) {
-                    if (data) {
-                        var row = $('body').find('.badge.badge-danger.badge-pill');
-                        var row2 = $('body').find('.dropdown-item.text-center.text-dark');
-                        row2.html(data + ' Thông báo mới');
-                        row.html(data);
-                        // console.log(data, check,'so sanh');
-                        if (data != check) {
-                            $('#btn_audio').click();
-                            $('#check_notify').val(data);
-                        } else {
-                            $('#check_notify').val(data);
-                        }
-                    }
-                }
-            })
+            {{--$.ajax({--}}
+            {{--    type: 'GET',--}}
+            {{--    url: '/ajax/count-notifications',--}}
+            {{--    // timeout: 3000,//60 second timeout--}}
+            {{--    data: {--}}
+            {{--        user_id:{{\Illuminate\Support\Facades\Auth::user()->id}}--}}
+            {{--    },--}}
+            {{--    success: function (data) {--}}
+            {{--        if (data) {--}}
+            {{--            var row = $('body').find('.badge.badge-danger.badge-pill');--}}
+            {{--            var row2 = $('body').find('.dropdown-item.text-center.text-dark');--}}
+            {{--            row2.html(data + ' Thông báo mới');--}}
+            {{--            row.html(data);--}}
+            {{--            // console.log(data, check,'so sanh');--}}
+            {{--            if (data != check) {--}}
+            {{--                $('#btn_audio').click();--}}
+            {{--                $('#check_notify').val(data);--}}
+            {{--            } else {--}}
+            {{--                $('#check_notify').val(data);--}}
+            {{--            }--}}
+            {{--        }--}}
+            {{--    }--}}
+            {{--})--}}
         }
         setInterval(callAjax, 60000);
 

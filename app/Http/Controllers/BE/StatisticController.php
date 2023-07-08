@@ -17,6 +17,8 @@ use App\Models\Status;
 use App\Models\ThuChi;
 use App\Models\Trademark;
 use App\Models\WalletHistory;
+use App\Services\OrderDetailService;
+use App\Services\OrderService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -37,14 +39,16 @@ class StatisticController extends Controller
      *
      * @param Customer $customer
      */
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer, OrderDetailService $orderDetailService, OrderService $orderService)
     {
         $this->middleware('permission:statistics.index', ['only' => ['index']]);
         $this->middleware('permission:statistics.taskSchedules', ['only' => ['taskSchedules']]);
 
-        $user = User::get()->pluck('full_name', 'id')->toArray();
+        $user = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
         $branchs = Branch::search()->pluck('name', 'id');
         $this->customer = $customer;
+        $this->orderDetail = $orderDetailService;
+        $this->orderService = $orderService;
         $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
         view()->share([
             'user' => $user,
@@ -112,55 +116,24 @@ class StatisticController extends Controller
         ])->with('order')->has('order');
         $payment2 = clone $payment;
         $payment3 = clone $payment;
+        $paymentMonth = clone $payment;
         $payment_isdebt = clone $payment;
         $payment_years = clone $payment_All;
         $orders = Order::returnRawData($input);
         $orders2 = clone $orders;
-        $orders3 = clone $orders;
         $orders_combo = clone $orders;
         $ordersYear = $payment_years->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
-        $trademark = Trademark::select('id', 'name')->get()->map(function ($item) use ($input) {
-            $services = Services::select('id')->where('trademark', $item->id)->pluck('id')->toArray();
-            $input['booking_id'] = $services;
-            $item->price = OrderDetail::search($input)->select('total_price')->sum('total_price');
-            return $item;
-        })->sortByDesc('price')->take(5);
+        $trademark = $this->orderDetail->revenueWithTrademark($input)->take(5);
 
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
         $payment_wallet = PaymentWallet::search($input, 'price');
-        $arr = Services::getIdServiceType();
-        $input['list_booking'] = $arr;
         //Status Revuenue
-        $sources = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get();
-        $order_detail = OrderDetail::search($input, 'total_price');
-        $statusRevenues = [];
-        foreach ($sources as $source) {
-            $price = clone $order_detail;
-            $price = $price->whereHas('user', function ($qr) use ($source) {
-                $qr->where('source_id', $source->id);
-            });
-            if ((int)$price->sum('total_price') > 0) {
-                $statusRevenues[] = [
-                    'revenue' => (int)$price->sum('total_price'),
-                    'name' => $source->name,
-                ];
-            }
-        }
+        $statusRevenues = $this->orderDetail->revenueWithSource($input);
         //END
-//        $category_service = Category::getTotalPrice($input, StatusCode::SERVICE, 5);
+        $category_product = $this->orderDetail->revenueWithService($input)->take(5);
 
-        $category_product = OrderDetail::getTotalPriceBookingId($input, StatusCode::PRODUCT, 5);
-
-
-        $revenue_month = PaymentHistory::when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-            $q->where('branch_id', $input['branch_id']);
-        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-            $q->whereIn('branch_id', $input['group_branch']);
-        })->whereBetween('payment_date', [
-            Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-            Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-        ])->select('payment_date', 'branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')
+        $revenue_month = $paymentMonth->select('payment_date', 'branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')
             ->get()->map(function ($item) use ($request) {
                 $item->wallet_month = WalletHistory::select('order_price')
                     ->whereBetween('created_at', [$item->payment_date . " 00:00:00", $item->payment_date . " 23:59:59"])
@@ -206,22 +179,9 @@ class StatisticController extends Controller
 
         $revenue = self::getRevenueCustomer($input, $payment);
 
-        $revenue_gender = [];
-        $orders3 = $orders3->get();
-        if (count($orders3)) {
-            foreach ($orders3 as $item) {
-                if (isset($item->customer)) {
-                    $revenue_gender[$item->customer->gender][] = !empty($item->gross_revenue) ? $item->gross_revenue : 0;
-                }
-            }
-        }
+        $revenue_gender = $this->orderService->revenueGenderWithOrders($input);
 
-        $revenue_year = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $newOrder = clone $ordersYear;
-            $newOrder = $newOrder->whereMonth('payment_date', $i)->sum('price');
-            $revenue_year[$i] = $newOrder;
-        }
+        $revenue_year = $ordersYear->select(\DB::raw('SUM(price) as all_total'),\DB::raw('MONTH(payment_date) month'))->groupBy('month')->get();
         $all_payment = $payment->sum('price');
         $list_payment = [
             'money' => $payment2->where('payment_type', 1)->sum('price'),

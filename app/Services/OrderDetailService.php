@@ -119,15 +119,42 @@ class OrderDetailService
 
     public function revenueWithSource($input)
     {
-      return $this->orderDetail->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+        return $this->orderDetail->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('order_detail.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
         })->when(isset($input['branch_id']), function ($query) use ($input) {
             $query->where('order_detail.branch_id', $input['branch_id']);
         })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('order_detail.branch_id', $input['group_branch']);
-        })->join('customers as c','c.id','order_detail.user_id')->join('status as s','c.source_id','s.id')
-          ->select(
-            DB::raw('SUM(order_detail.total_price) as revenue'),'s.name as name')
+        })->join('customers as c', 'c.id', 'order_detail.user_id')->join('status as s', 'c.source_id', 's.id')
+            ->select(
+                DB::raw('SUM(order_detail.total_price) as revenue'), 's.name as name')
             ->groupBy('c.source_id')->get();
+    }
+
+    public function revenueWithTrademark($input)
+    {
+        return $this->orderDetail->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('order_detail.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        })->when(isset($input['branch_id']), function ($query) use ($input) {
+            $query->where('order_detail.branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('order_detail.branch_id', $input['group_branch']);
+        })->join('services as s', 's.id', 'order_detail.booking_id')->join('trademarks as t', 't.id', 's.trademark')
+            ->select(DB::raw('SUM(order_detail.total_price) as price'), 't.name as name')
+            ->groupBy('s.trademark')->orderByDesc('price')->get();
+    }
+
+    public function revenueWithService($input, $type = StatusCode::PRODUCT)
+    {
+        return $this->orderDetail->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('order_detail.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+        })->when(isset($input['branch_id']), function ($query) use ($input) {
+            $query->where('order_detail.branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('order_detail.branch_id', $input['group_branch']);
+        })->join('services as s', 's.id', 'order_detail.booking_id')
+            ->select(DB::raw('SUM(order_detail.total_price) as total'), 's.name as name')
+            ->where('s.type', $type)
+            ->groupBy('s.id')->orderByDesc('total')->get();
     }
 }

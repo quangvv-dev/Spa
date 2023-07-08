@@ -243,7 +243,7 @@
             ['Task', 'Hours per Day'],
                 @foreach($data['category_product'] as $k =>$item)
                 @if(!empty($item))
-            ['{{$item->service->name}}', {{$item->total}}],
+            ['{{$item->name}}', {{$item->total}}],
             @endif
             @endforeach
         ]);
@@ -291,8 +291,8 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @if(count($trademark))
-                @foreach($trademark as $item)
+            @if(count($trademark))
+            @foreach($trademark as $item)
             ['{{$item->name}}', {{$item->price}}],
             @endforeach
             @endif
@@ -319,7 +319,7 @@
             ['Task', 'Hours per Day'],
                 @if(count($revenue_gender))
                 @foreach($revenue_gender as $k => $item)
-            ['{{$k==0?"NỮ":'NAM'}}', {{@array_sum($item)}}],
+            ['{{$item['name']}}', {{$item['all_total']}}],
             @endforeach
             @endif
         ]);
@@ -390,7 +390,7 @@
         var data = google.visualization.arrayToDataTable([
             ['Ngày', 'Thực thu'],
                 @foreach($revenue_year as $k =>$item)
-            ['{{'Tháng '.$k}}', {{$item}}],
+            ['{{'Tháng '.$item->month}}', {{$item->all_total}}],
             @endforeach
         ]);
         var options = {
