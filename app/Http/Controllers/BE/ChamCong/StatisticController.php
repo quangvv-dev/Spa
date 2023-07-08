@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\BE\ChamCong;
 
-use App\Constants\ChamCongConstant;
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
-use App\Http\Controllers\BE\SettingController;
 use App\Models\Branch;
 use App\Models\ChamCong;
 use App\Models\Department;
@@ -18,7 +16,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Excel;
 
@@ -269,9 +266,8 @@ class StatisticController extends Controller
             $data['branch_id'] = $request->branch_id;
             $history = HistoryImportSalary::create($data);
             Excel::load($request->file('file')->getRealPath(), function ($render) use ($month, $year, $history) {
-
-                $result = $render->toArray()[0];
-                $lastrow = $render->noHeading()->toArray()[0];
+                $result = $render->toArray();
+                $lastrow = $render->noHeading()->toArray();
                 $theFirstRow = $lastrow[0];
                 foreach ($result as $k => $row) {
                     if (!$row['ma_nhan_vien']) {
@@ -280,7 +276,7 @@ class StatisticController extends Controller
                     $key = $theFirstRow;
                     $value = array_values($row);
                     $input['approval_code'] = $row['ma_nhan_vien'];
-                    $input['all_total'] = $row['tong_tien'];
+                    $input['all_total'] = $row['tong_cong'];
 //                    $input['key'] = $theFirstRow;
 //                    $input['value'] = array_values($row);
                     $input['data'] = json_encode(['key' => $key, 'value' => $value]);
