@@ -46,6 +46,7 @@ class ChartController extends Controller
             $list_payment = [
                 'money' => $payment2->where('payment_type', 1)->sum('price'),
                 'card' => $payment3->where('payment_type', 2)->sum('price'),
+                'CK' => $payment->where('payment_type', 4)->sum('price'),
             ];
             $wallets = [
                 'revenue' => $wallet->sum('order_price'),
