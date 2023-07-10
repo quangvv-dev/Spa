@@ -33,6 +33,8 @@ class ChartController extends Controller
         foreach ($branch as $item) {
             $input['branch_id'] = $item->id;
             $payment = PaymentHistory::search($input, 'price');
+            $payment2 = clone $payment;
+            $payment3 = clone $payment;
             $orders = Order::returnRawData($input);
             $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
 
@@ -41,9 +43,13 @@ class ChartController extends Controller
                 'gross_revenue' => $orders->sum('gross_revenue'),
                 'payment' => $payment->sum('price'),
             ];
+            $list_payment = [
+                'money' => $payment2->where('payment_type', 1)->sum('price'),
+                'card' => $payment3->where('payment_type', 2)->sum('price'),
+            ];
             $wallets = [
                 'revenue' => $wallet->sum('order_price'),
-                'used' => $data['payment'] - $payment->where('payment_type', 3)->sum('price'),
+                'used' => $data['payment'] - $list_payment['money'] - $list_payment['card'] - $list_payment['CK'],
             ];
             $result[] = [
                 'branch' => $item->name,
