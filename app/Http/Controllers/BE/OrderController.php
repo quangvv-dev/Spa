@@ -206,7 +206,7 @@ class OrderController extends Controller
         ]);
         $countOrders = Order::select('id')->where('member_id', $customer->id)->whereIn('role_type',
             [StatusCode::COMBOS, StatusCode::SERVICE])->count();
-        if (@$countOrders >= 2) {
+        if (@$countOrders > 1) {
             $customer->old_customer = 1;
             $order->is_upsale = 1;
             $order->cskh_id = $customer->cskh_id;
