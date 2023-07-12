@@ -87,13 +87,13 @@ $('#reportrange1').daterangepicker({
         customRangeLabel: "Tùy chỉnh",
         weekLabel: "Tuần",
         daysOfWeek: [
+            "CN",
             "T2",
             "T3",
             "T4",
             "T5",
             "T6",
             "T7",
-            "CN"
         ],
         monthNames: [
             "Tháng 1",
