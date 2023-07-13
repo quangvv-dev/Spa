@@ -140,9 +140,6 @@
                     <tr style="margin-top: 10px">
                         <td><p></p><p></p></td>
                     </tr>
-                    {{--<tr>--}}
-                    {{--<td style="border-bottom:dotted 1px !important;" colspan="4"></td>--}}
-                    {{--</tr>--}}
                     <tr>
                         <td colspan="4">
                             <div class="text-center"><b>CÁM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></div>
@@ -152,6 +149,11 @@
                     </tr>
                     </tfoot>
                 </table>
+                @if(!empty($linkQr))
+                    <div style="display: flex;justify-content: center">
+                        <img width="65%" src="{{$linkQr}}" alt="">
+                    </div>
+                @endif
             </div>
             @else
             <td class="text-center">Chưa thanh toán đơn hàng</td>
@@ -160,7 +162,7 @@
     </div>
 </div>
 <script>
-    window.print();
+    // window.print();
 </script>
 </body>
 </html>

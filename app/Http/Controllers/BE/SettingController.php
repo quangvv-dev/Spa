@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\BE;
 
+use App\Components\Filesystem\Filesystem;
+use App\Constants\BankContants;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
-use App\Components\Filesystem\Filesystem;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Location;
+use App\Models\PaymentBank;
 use App\Models\Status;
 use App\Models\UserFilterGrid;
 use App\User;
@@ -37,10 +39,11 @@ class SettingController extends Controller
     public function index()
     {
         $branchs = Branch::get();
-//        $location = Branch::$location;
-        $location = Location::pluck('name','id')->toArray();
+        $location = Location::pluck('name', 'id')->toArray();
         $locations = Location::all();
-        return view('settings.index', compact('branchs', 'location', 'locations'));
+        $banks = PaymentBank::all();
+        $banks_code = BankContants::bank;
+        return view('settings.index', compact('branchs', 'location', 'locations', 'banks', 'banks_code'));
     }
 
     public function storeBranch()
@@ -51,11 +54,34 @@ class SettingController extends Controller
         ]);
     }
 
+    public function storeBank()
+    {
+        PaymentBank::create([
+            'bank_code' => 'ICB',
+            'account_number' => '110',
+            'account_name' => 'NGUYEN VAN A',
+            'branch_id' => '1',
+        ]);
+    }
+
+    public function deleteBank(PaymentBank $bank)
+    {
+        $bank->delete();
+        return 1;
+    }
+
     public function updateBranch(Request $request, Branch $id)
     {
         $branch = $id;
         $input = $request->all();
         $branch->update($input);
+        return 1;
+    }
+
+    public function updateBank(Request $request, PaymentBank $bank)
+    {
+        $input = $request->all();
+        $bank->update($input);
         return 1;
     }
 
@@ -152,18 +178,21 @@ class SettingController extends Controller
 
     }
 
-    public function storeLocation(Request $request){
-        Location::create(['name'=>'Tên cụm']);
+    public function storeLocation(Request $request)
+    {
+        Location::create(['name' => 'Tên cụm']);
         return 1;
     }
 
-    public function updateLocation(Request $request,$id){
+    public function updateLocation(Request $request, $id)
+    {
         Location::find($id)->update($request->all());
         return 1;
     }
 
-    public function deleteLocation($id){
-        if($id <=3 ){
+    public function deleteLocation($id)
+    {
+        if ($id <= 3) {
             return 0;
         } else {
             Location::find($id)->delete();
@@ -171,7 +200,8 @@ class SettingController extends Controller
         }
     }
 
-    public function userFilterGrid(Request $request){
+    public function userFilterGrid(Request $request)
+    {
         $user = Auth::user();
         $data = $request->all();
         $data['user_id'] = $user->id;
