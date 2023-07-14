@@ -36,6 +36,7 @@ class HistoryDepotController extends Controller
             OrderConstant::NHAP_KHO => 'Nhập kho',
             OrderConstant::XUAT_KHO => 'Xuất kho',
             OrderConstant::TIEU_HAO => 'Vật phẩm tiêu hao',
+            OrderConstant::KHACH_TRA_HANG => 'Khách trả hàng',
             OrderConstant::HONG_VO => 'Hàng rơi, hỏng',
             OrderConstant::TANG_KHACH => 'Chi nhánh tặng khách',
         ];
@@ -96,7 +97,7 @@ class HistoryDepotController extends Controller
                 if (isset($doc) && $doc) {
                     if (empty($request->quantity[$key]))
                         return redirect(route('depots.history.index'))->with('waring', 'Chưa điền số tiền');
-                    if ($input['status'] == OrderConstant::NHAP_KHO && !empty($request->quantity[$key])) {
+                    if ($input['status'] == (OrderConstant::NHAP_KHO || OrderConstant::KHACH_TRA_HANG) && !empty($request->quantity[$key])) {
                         $doc->quantity = $doc->quantity + (int)$request->quantity[$key];
                     } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO, OrderConstant::TANG_KHACH]) && !empty($request->quantity[$key])) {
                         $doc->quantity = $doc->quantity - (int)$request->quantity[$key];

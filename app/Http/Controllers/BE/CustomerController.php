@@ -220,7 +220,7 @@ class CustomerController extends Controller
             $customer_gioithieu = Customer::where('phone', $input['is_gioithieu'])->first();
             $input['is_gioithieu'] = isset($customer_gioithieu) && $customer_gioithieu ? $customer_gioithieu->id : 0;
         }
-        $input['mkt_id'] = $request->mkt_id;
+        $input['mkt_id'] = $request->mkt_id?:Auth::user()->id;
         $input['image'] = $request->image;
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;
