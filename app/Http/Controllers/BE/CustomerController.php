@@ -135,12 +135,11 @@ class CustomerController extends Controller
         if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
             unset($input['branch_id'], $input['cskh_id']);
         }
-
+        $input['marketing'] = empty($input['marketing']) ? (Auth::user()->department_id == DepartmentConstant::SEEDING ? Auth::user()->id : null) : $input['marketing'];
         $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->where('active', StatusCode::ON)
             ->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
         $statuses = Status::getRelationshipByCustomer($input);
         $page = $request->page;
-
         $customers = Customer::search($input);
         $birthday = clone $customers;
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
@@ -220,7 +219,7 @@ class CustomerController extends Controller
             $customer_gioithieu = Customer::where('phone', $input['is_gioithieu'])->first();
             $input['is_gioithieu'] = isset($customer_gioithieu) && $customer_gioithieu ? $customer_gioithieu->id : 0;
         }
-        $input['mkt_id'] = $request->mkt_id?:Auth::user()->id;
+        $input['mkt_id'] = $request->mkt_id ?: Auth::user()->id;
         $input['image'] = $request->image;
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;

@@ -20,4 +20,7 @@ class DepartmentConstant
     const KE_TOAN = 8; //KE TOÁN
     const CARE_PAGE = 9;//care page
     const DOCTOR = 10; // bac sy
+    const NHAN_SU = 11;
+    const AN_NINH = 12;
+    const SEEDING = 13;
 }
