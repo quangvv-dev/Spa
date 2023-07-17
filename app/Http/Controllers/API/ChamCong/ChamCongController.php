@@ -23,7 +23,7 @@ class ChamCongController extends BaseApiController
 
         $collect = array_reverse($data['Info']);
         foreach (array_chunk($collect,300) as $k => $item) {
-            if ($k == 15) {
+            if ($k == 10) {
                 return $this->responseApi(ResponseStatusCode::OK, 'Đẩy chấm công thành công!!');
             }
             ProcessChamCong::dispatch($data['NameMachine'], $item)->delay(now()->addSeconds(5));
