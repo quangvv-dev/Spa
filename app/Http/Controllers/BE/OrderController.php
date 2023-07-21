@@ -737,8 +737,8 @@ class OrderController extends Controller
             }
             DB::commit();
             Functions::updateRank($customer->id);
-//            ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
-//                ->delay(now()->addSeconds(5));
+            ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
+                ->delay(now()->addSeconds(5));
             // gửi zalo zns
             return $order; //comment
         } catch (\Exception $e) {
