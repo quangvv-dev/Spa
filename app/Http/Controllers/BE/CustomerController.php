@@ -340,7 +340,6 @@ class CustomerController extends Controller
         $customers = [
             $customers->id => $customers->full_name,
         ];
-        $priority = Task::PRIORITY;
         $tasks = Task::where('customer_id', $id)->orderBy('id', 'DESC')->get();
         $taskStatus = TaskStatus::with('tasks')->get();
         $status = TaskStatus::pluck('name', 'id')->toArray();
@@ -403,7 +402,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'customer_post', 'type', 'users', 'customers', 'priority', 'status', 'departments', 'history', 'wallet',
+                'customer_post', 'type', 'users', 'customers', 'status', 'departments', 'history', 'wallet',
                 'package', 'call_center', 'orders', 'tips'));
     }
 

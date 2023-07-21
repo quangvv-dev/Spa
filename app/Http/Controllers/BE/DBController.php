@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Http\Controllers\Controller;
+use App\Jobs\ZaloZns;
 use App\Models\ChamCong;
 use App\Models\Customer;
 use App\Models\Order;
@@ -20,6 +21,8 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
+//        ZaloZns::dispatch('0975091435', ['customer_name' => "ANH QUANG", 'order_code' => 'DH11234'])
+//            ->delay(now()->addSeconds(5));
         $c = PaymentHistory::select('payment_histories.id', 'payment_histories.is_debt', \DB::raw('MONTH(payment_histories.payment_date) as month'), \DB::raw('MONTH(o.created_at) as m_created'))
             ->whereDate('payment_histories.payment_date','>=', $request->date)
             ->join('orders as o', 'o.id', '=', 'payment_histories.order_id')->get()->chunk(300);

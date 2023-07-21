@@ -288,4 +288,15 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit)
         }
     }
 }
+if (!function_exists('GuzzleHttpCall')) {
+    function GuzzleHttpCall($path, $method = 'get', $header = [], $post_data = [])
+    {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->$method($path, [
+            'headers' => $header,
+            'json' => $post_data,
+        ]);
+        return json_decode($response->getBody());
+    }
+}
 

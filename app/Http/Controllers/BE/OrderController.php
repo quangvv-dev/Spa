@@ -6,6 +6,7 @@ use App\Constants\DepartmentConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Jobs\ZaloZns;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\CommissionEmployee;
@@ -578,8 +579,8 @@ class OrderController extends Controller
         $payment = PaymentHistory::where('order_id', $order->id)->latest()->first();
         $bank = PaymentBank::where('branch_id', $order->branch_id)->first();
 
-        $linkQr = !empty($bank)?'https://img.vietqr.io/image/' . $bank->bank_code . '-' . $bank->account_number . '-qr_only.jpg?amount=' .
-            $payment->price . '&addInfo=' . 'Thanh toan dh ' . $order->code . '&accountName=' . $bank->account_name: '';
+        $linkQr = !empty($bank) ? 'https://img.vietqr.io/image/' . $bank->bank_code . '-' . $bank->account_number . '-qr_only.jpg?amount=' .
+            $payment->price . '&addInfo=' . 'Thanh toan dh ' . $order->code . '&accountName=' . $bank->account_name : '';
         return view('order.order-pdf', compact('order', 'payment', 'linkQr'));
     }
 
@@ -735,8 +736,10 @@ class OrderController extends Controller
                 }
             }
             DB::commit();
-
             Functions::updateRank($customer->id);
+//            ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
+//                ->delay(now()->addSeconds(5));
+            // gửi zalo zns
             return $order; //comment
         } catch (\Exception $e) {
 //            DB::rollBack();
