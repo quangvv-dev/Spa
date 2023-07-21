@@ -33,6 +33,9 @@ class ZaloZns implements ShouldQueue
      */
     public function handle()
     {
+        if (empty(config('partners.zalo_zns.template_id'))) {
+            return false;
+        }
         $newPhone = substr_replace($this->phone, "84", 0, 1);
         $response = GuzzleHttpCall(config('partners.zalo_zns.url'), 'post',
             ['access_token' => config('partners.zalo_zns.access_token')]

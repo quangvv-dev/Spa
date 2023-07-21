@@ -631,6 +631,8 @@ class OrderController extends Controller
             self::commissionOrder($paymentHistory->order_id, $paymentHistory->id, $paymentHistory->price);
 
             if (count($check) <= 1 && isset($check2) && count($check2)) {
+                ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
+                    ->delay(now()->addSeconds(5));
                 $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
                 foreach ($check2 as $item) {
                     if (@$item->rules->status == StatusCode::ON) {
@@ -737,8 +739,6 @@ class OrderController extends Controller
             }
             DB::commit();
             Functions::updateRank($customer->id);
-            ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
-                ->delay(now()->addSeconds(5));
             // gửi zalo zns
             return $order; //comment
         } catch (\Exception $e) {

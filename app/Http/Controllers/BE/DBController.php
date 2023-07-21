@@ -21,20 +21,20 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
-//        ZaloZns::dispatch('0975091435', ['customer_name' => "ANH QUANG", 'order_code' => 'DH11234'])
-//            ->delay(now()->addSeconds(5));
-        $c = PaymentHistory::select('payment_histories.id', 'payment_histories.is_debt', \DB::raw('MONTH(payment_histories.payment_date) as month'), \DB::raw('MONTH(o.created_at) as m_created'))
-            ->whereDate('payment_histories.payment_date','>=', $request->date)
-            ->join('orders as o', 'o.id', '=', 'payment_histories.order_id')->get()->chunk(300);
-        foreach ($c as $item) {
-            foreach ($item as $i) {
-                if ($i->month != $i->m_created) {
-                    $i->is_debt = 1;
-                    $i->save();
-                }
-            }
-        }
-
+        ZaloZns::dispatch('0975091435', ['customer_name' => "ANH SỸ", 'order_code' => 'DH11234'])
+            ->delay(now()->addSeconds(5));
+//        $c = PaymentHistory::select('payment_histories.id', 'payment_histories.is_debt', \DB::raw('MONTH(payment_histories.payment_date) as month'), \DB::raw('MONTH(o.created_at) as m_created'))
+//            ->whereDate('payment_histories.payment_date','>=', $request->date)
+//            ->join('orders as o', 'o.id', '=', 'payment_histories.order_id')->get()->chunk(300);
+//        foreach ($c as $item) {
+//            foreach ($item as $i) {
+//                if ($i->month != $i->m_created) {
+//                    $i->is_debt = 1;
+//                    $i->save();
+//                }
+//            }
+//        }
+//
         return 1;
 //        $param = $request->all();
 //        $orders2 = PaymentHistory::where('price', '>', 0)
