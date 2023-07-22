@@ -36,10 +36,10 @@
     </table>
     <div class="pull-left">
         <div class="page-info">
-            {{ 'Tổng số ' . $schedules->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+            {{ count($schedules) ?'Tổng số ' . $schedules->total() . ' bản ghi ' . (request()->search ? 'found' : ''):'' }}
         </div>
     </div>
     <div class="pull-right">
-        {{ $schedules->appends(['search' => request()->search ])->links() }}
+        {{count($schedules) ? $schedules->appends(['search' => request()->search ])->links() :''}}
     </div>
 </div>

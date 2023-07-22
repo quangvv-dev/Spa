@@ -317,36 +317,25 @@ class CustomerController extends Controller
                 ->where('active', StatusCode::ON)
                 ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
                     $q->where('branch_id', $curent_branch);
-                })->pluck('full_name', 'id');
+                })->select('full_name', 'id')->pluck('full_name', 'id');
         } else {
             $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
-                ->where('active', StatusCode::ON)->pluck('full_name', 'id');
+                ->where('active', StatusCode::ON)->select('full_name', 'id')->pluck('full_name', 'id');
         }
-        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [
-            0,
-            @$customer->branch->location_id,
-        ];
-        $tips = Tip::whereIn('location_id', $location)->pluck('name', 'id')->toArray();
+        $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];
+        $tips = Tip::whereIn('location_id', $location)->select('name', 'id')->pluck('name', 'id')->toArray();
 
-        $staff = User::where('department_id', '<>', DepartmentConstant::ADMIN)->where('active', StatusCode::ON)->get()->pluck('full_name',
+        $staff = User::select('full_name', 'id')->where('department_id', '<>', DepartmentConstant::ADMIN)->where('active', StatusCode::ON)->pluck('full_name',
             'id')->toArray();
-        $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
-        $docs = Model::where('customer_id', $id)->orderBy('id', 'desc')->get();
+        $docs = Model::where('customer_id', $id)->orderByDesc('id')->paginate(10);
         //Task
         $input['type'] = $request->type ?: 'qf1';
-        $type = Task::TYPE;
-        $users = User::where('active', StatusCode::ON)->pluck('full_name', 'id');
+//        $users = User::select('full_name', 'id')->where('active', StatusCode::ON)->pluck('full_name', 'id');
         $customers = Customer::find($id);
-        $customers = [
-            $customers->id => $customers->full_name,
-        ];
-        $tasks = Task::where('customer_id', $id)->orderBy('id', 'DESC')->get();
-        $taskStatus = TaskStatus::with('tasks')->get();
-        $status = TaskStatus::pluck('name', 'id')->toArray();
-//        $progress = Task::PROGRESS;
-        $departments = Department::pluck('name', 'id');
         //EndTask
         //History SMS
+        $tasks=[];
+        $schedules=[];
         $history = [];
         $customer_post = [];
         $wallet = [];
@@ -370,6 +359,7 @@ class CustomerController extends Controller
             return view('wallet.history', compact('wallet', 'package'));
         }
         if ($request->schedules) {
+            $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
             return view('schedules.index', compact('schedules', 'id', 'staff'));
         }
 
@@ -379,8 +369,7 @@ class CustomerController extends Controller
         }
 
         if ($request->tasks) {
-            $tasks = Task::where('customer_id',
-                $request->tasks)->orderByDesc('date_from')->paginate(StatusCode::PAGINATE_20);
+            $tasks = Task::where('customer_id', $request->tasks)->orderByDesc('date_from')->paginate(StatusCode::PAGINATE_20);
             return view('tasks._form', compact('tasks'));
         }
 
@@ -401,8 +390,8 @@ class CustomerController extends Controller
         //END
 
         return view('customers.view_account',
-            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks', 'taskStatus',
-                'customer_post', 'type', 'users', 'customers', 'status', 'departments', 'history', 'wallet',
+            compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks',
+                'customer_post', 'customers', 'history', 'wallet',
                 'package', 'call_center', 'orders', 'tips'));
     }
 
