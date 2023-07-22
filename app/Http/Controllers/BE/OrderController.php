@@ -219,7 +219,7 @@ class OrderController extends Controller
                 $old_position = isset($position->position) ? $position->position : 0;
                 $cskh = User::select('id')->where('location_id', $customer->branch->location_id)->where('department_id',
                     DepartmentConstant::CSKH)->pluck('id')->toArray();
-                if (count($cskh)) {
+                if (count($cskh) && !empty($position)) {
                     $position->position = (count($cskh) - 1) == $old_position ? 0 : $old_position + 1;
                     $customer->cskh_id = $cskh[$old_position];
                     $customer->time_move_cskh = now();
