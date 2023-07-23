@@ -133,7 +133,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $input = $request->except('image');
+        $input = $request->except('image','confirm_password');
         $input['image'] = $request->image;
         $input['password'] = $request->password;
 
