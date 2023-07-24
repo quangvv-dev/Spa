@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('update:status')->daily();
+        $schedule->command('command:save-zalo-token')->daily();
         $schedule->command('update:customer_status')->daily();
         $schedule->command('notification:schedules_quahan')->daily();
         $schedule->command('delete:task')->dailyAt('07:00');

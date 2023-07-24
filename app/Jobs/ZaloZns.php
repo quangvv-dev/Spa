@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\TokenZalOa;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -33,12 +34,13 @@ class ZaloZns implements ShouldQueue
      */
     public function handle()
     {
-        if (empty(config('partners.zalo_zns.template_id'))) {
+        $oa = TokenZalOa::first();
+        if (empty(config('partners.zalo_zns.template_id')) || empty($oa)) {
             return false;
         }
         $newPhone = substr_replace($this->phone, "84", 0, 1);
         $response = GuzzleHttpCall(config('partners.zalo_zns.url'), 'post',
-            ['access_token' => config('partners.zalo_zns.access_token')]
+            ['access_token' => $oa->access_token]
             , ['tracking_id' => 'development', 'phone' => $newPhone, 'template_id' => config('partners.zalo_zns.template_id')
                 , 'template_data' => $this->data]);
         if ($response->error == 0) {
