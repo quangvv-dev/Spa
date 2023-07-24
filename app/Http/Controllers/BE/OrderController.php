@@ -630,110 +630,112 @@ class OrderController extends Controller
 
             self::commissionOrder($paymentHistory->order_id, $paymentHistory->id, $paymentHistory->price);
 
-            if (count($check) <= 1 && isset($check2) && count($check2)) {
+            if (count($check) <= 1) {
                 ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
                     ->delay(now()->addSeconds(5));
-                $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
-                foreach ($check2 as $item) {
-                    if (@$item->rules->status == StatusCode::ON) {
-                        $rule = $item->rules;
-                        $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
-                        $sms_ws = Functions::checkRuleSms($config);
-                        if (count($sms_ws)) {
-                            foreach ($sms_ws as $sms) {
-                                $input_raw['branch'] = @$check3->order->branch->name;
-                                $input_raw['phoneBranch'] = @$check3->order->branch->phone;
-                                $input_raw['addressBranch'] = @$check3->order->branch->address;
-                                $input_raw['full_name'] = @$check3->order->customer->full_name;
-                                $input_raw['phone'] = @$check3->order->customer->phone;
-                                $exactly_value = Functions::getExactlyTime($sms);
-                                $text = $sms->configs->content;
-                                $phone = Functions::convertPhone($input_raw['phone']);
-                                $text = Functions::replaceTextForUser($input_raw, $text);
-                                $text = Functions::vi_to_en($text);
-                                try {
-                                    $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
-                                    if (isset($err) && $err) {
-                                        HistorySms::insert([
-                                            'phone' => $input_raw['phone'],
-                                            'campaign_id' => 0,
-                                            'message' => $text,
-                                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                            'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
-                                        ]);
+                if (isset($check2) && count($check2)){
+                    $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
+                    foreach ($check2 as $item) {
+                        if (@$item->rules->status == StatusCode::ON) {
+                            $rule = $item->rules;
+                            $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
+                            $sms_ws = Functions::checkRuleSms($config);
+                            if (count($sms_ws)) {
+                                foreach ($sms_ws as $sms) {
+                                    $input_raw['branch'] = @$check3->order->branch->name;
+                                    $input_raw['phoneBranch'] = @$check3->order->branch->phone;
+                                    $input_raw['addressBranch'] = @$check3->order->branch->address;
+                                    $input_raw['full_name'] = @$check3->order->customer->full_name;
+                                    $input_raw['phone'] = @$check3->order->customer->phone;
+                                    $exactly_value = Functions::getExactlyTime($sms);
+                                    $text = $sms->configs->content;
+                                    $phone = Functions::convertPhone($input_raw['phone']);
+                                    $text = Functions::replaceTextForUser($input_raw, $text);
+                                    $text = Functions::vi_to_en($text);
+                                    try {
+                                        $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
+                                        if (isset($err) && $err) {
+                                            HistorySms::insert([
+                                                'phone' => $input_raw['phone'],
+                                                'campaign_id' => 0,
+                                                'message' => $text,
+                                                'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                                'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                            ]);
+                                        }
+                                    } catch (Exception $exception) {
+
                                     }
-                                } catch (Exception $exception) {
 
                                 }
-
                             }
-                        }
-                        $jobs = Functions::checkRuleJob($config);
-                        if (count($jobs) && $order->role_type != StatusCode::PRODUCT) { //add thêm role type
-                            foreach ($jobs as $job) {
-                                if ($job->configs->type_job && @$job->configs->type_job == 'cskh') {
-                                    $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
-                                    $rule->save();
-                                    $type = StatusCode::CSKH;
-                                    $prefix = "CSKH ";
-                                } else {
-                                    $user_id = @$customer->telesales_id;
-                                    $type = StatusCode::GOI_LAI;
-                                    $prefix = "Gọi lại ";
-                                }
-
-                                $day = $job->configs->delay_value;
-                                $sms_content = $job->configs->sms_content;
-                                $category = @$customer->categories;
-                                $text_category = [];
-                                if (count($category)) {
-                                    foreach ($category as $item) {
-                                        $text_category[] = $item->name;
+                            $jobs = Functions::checkRuleJob($config);
+                            if (count($jobs) && $order->role_type != StatusCode::PRODUCT) { //add thêm role type
+                                foreach ($jobs as $job) {
+                                    if ($job->configs->type_job && @$job->configs->type_job == 'cskh') {
+                                        $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
+                                        $rule->save();
+                                        $type = StatusCode::CSKH;
+                                        $prefix = "CSKH ";
+                                    } else {
+                                        $user_id = @$customer->telesales_id;
+                                        $type = StatusCode::GOI_LAI;
+                                        $prefix = "Gọi lại ";
                                     }
+
+                                    $day = $job->configs->delay_value;
+                                    $sms_content = $job->configs->sms_content;
+                                    $category = @$customer->categories;
+                                    $text_category = [];
+                                    if (count($category)) {
+                                        foreach ($category as $item) {
+                                            $text_category[] = $item->name;
+                                        }
+                                    }
+                                    $text_order = "Ngày tạo đơn: " . $check3->order->created_at . ' Đơn hàng: ' . number_format($check3->order->all_total) . " Đã thanh toán: "
+                                        . number_format($check3->order->gross_revenue) . " Còn nợ : " . number_format($check3->order->the_rest)
+                                        . "--Các dịch vụ :" . @str_replace('<br>', "|", @$check3->order->service_text);
+                                    $input = [
+                                        'customer_id' => @$customer->id,
+                                        'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                        'time_from' => '07:00',
+                                        'time_to' => '21:00',
+                                        'code' => $prefix,
+                                        'user_id' => @$user_id,
+                                        'all_day' => 'on',
+                                        'priority' => 1,
+                                        'branch_id' => @$check3->order->branch_id,
+                                        'type' => $type,
+                                        'sms_content' => Functions::vi_to_en($sms_content),
+                                        'name' => $prefix . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",",
+                                                $text_category) . ' ,' . @$check3->order->branch->name,
+                                        'description' => $text_order . "--" . replaceVariable($sms_content,
+                                                @$check3->order->customer->full_name, @$check3->order->customer->phone,
+                                                @$check3->order->branch->name, @$check3->order->branch->phone,
+                                                @$check3->order->branch->address),
+                                    ];
+
+                                    $task = $this->taskService->create($input);
+                                    $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
+                                        $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
+                                            UserConstant::IS_LEADER);
+                                    })->where('active', StatusCode::ON)->get();
+                                    $task->users()->attach($follow);
+                                    $title = $task->type == StatusCode::GOI_LAI ? '💬💬💬 Bạn có công việc gọi điện mới !'
+                                        : '📅📅📅 Bạn có công việc chăm sóc mới !';
+                                    Notification::insert([
+                                        'title' => $title,
+                                        'user_id' => $task->user_id,
+                                        'type' => $task->type,
+                                        'task_id' => $task->id,
+                                        'status' => NotificationConstant::HIDDEN,
+                                        'created_at' => $task->date_from . ' ' . $task->time_from,
+                                        'data' => json_encode((array)['task_id' => $task->id]),
+                                    ]);
                                 }
-                                $text_order = "Ngày tạo đơn: " . $check3->order->created_at . ' Đơn hàng: ' . number_format($check3->order->all_total) . " Đã thanh toán: "
-                                    . number_format($check3->order->gross_revenue) . " Còn nợ : " . number_format($check3->order->the_rest)
-                                    . "--Các dịch vụ :" . @str_replace('<br>', "|", @$check3->order->service_text);
-                                $input = [
-                                    'customer_id' => @$customer->id,
-                                    'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
-                                    'time_from' => '07:00',
-                                    'time_to' => '21:00',
-                                    'code' => $prefix,
-                                    'user_id' => @$user_id,
-                                    'all_day' => 'on',
-                                    'priority' => 1,
-                                    'branch_id' => @$check3->order->branch_id,
-                                    'type' => $type,
-                                    'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => $prefix . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",",
-                                            $text_category) . ' ,' . @$check3->order->branch->name,
-                                    'description' => $text_order . "--" . replaceVariable($sms_content,
-                                            @$check3->order->customer->full_name, @$check3->order->customer->phone,
-                                            @$check3->order->branch->name, @$check3->order->branch->phone,
-                                            @$check3->order->branch->address),
-                                ];
-
-                                $task = $this->taskService->create($input);
-                                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
-                                    $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
-                                        UserConstant::IS_LEADER);
-                                })->where('active', StatusCode::ON)->get();
-                                $task->users()->attach($follow);
-                                $title = $task->type == StatusCode::GOI_LAI ? '💬💬💬 Bạn có công việc gọi điện mới !'
-                                    : '📅📅📅 Bạn có công việc chăm sóc mới !';
-                                Notification::insert([
-                                    'title' => $title,
-                                    'user_id' => $task->user_id,
-                                    'type' => $task->type,
-                                    'task_id' => $task->id,
-                                    'status' => NotificationConstant::HIDDEN,
-                                    'created_at' => $task->date_from . ' ' . $task->time_from,
-                                    'data' => json_encode((array)['task_id' => $task->id]),
-                                ]);
                             }
-                        }
 
+                        }
                     }
                 }
             }
