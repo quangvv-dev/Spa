@@ -245,7 +245,7 @@ class OrderController extends Controller
                 $orders2 = $orders->with('historyUpdateOrders')->get();
                 Excel::create('Đơn hàng (' . date("d/m/Y") . ')', function ($excel) use ($orders2) {
                     $excel->sheet('Sheet 1', function ($sheet) use ($orders2) {
-                        $sheet->cell('A1:P1', function ($row) {
+                        $sheet->cell('A1:L1', function ($row) {
                             $row->setBackground('#008686');
                             $row->setFontColor('#ffffff');
                         });
@@ -265,7 +265,7 @@ class OrderController extends Controller
                             'Khuyến mại (voucher)',
                             'Hình thức thanh toán',
                             'Ngày thanh toán',
-                            'Người lên đơn',
+                            'Sale lên đơn',
                             'KTV liệu trình',
                             'Buổi còn lại',
                             'Dịch vụ',
@@ -315,7 +315,7 @@ class OrderController extends Controller
                                     @number_format($ex->discount),
                                     $payment_type,
                                     $date,
-                                    @$ex->customer->marketing->full_name,
+                                    @$ex->customer->telesale->full_name,
                                     count($ktv) ? implode("||", $ktv) : '',
                                     $ex->count_day,
                                     count($service) ? implode("||", $service) : '',
@@ -525,7 +525,6 @@ class OrderController extends Controller
             $check = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->get();
             $check2 = RuleOutput::where('event', 'add_order')->groupBy('rule_id')->whereIn('category_id',
                 $group_customer)->get();
-
 
             if (setting('exchange') > 0 && isset($customer->gioithieu) && $customer->gioithieu->id) {
                 WalletService::exchangeWalletCtv($paymentHistory->price, $customer->gioithieu->id, $paymentHistory->id);
