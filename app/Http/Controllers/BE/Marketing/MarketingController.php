@@ -77,15 +77,13 @@ class MarketingController extends Controller
                 $item->schedules = 0;
                 $item->schedules_den = 0;
             }
+            $input['is_upsale'] = 0;
             $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
             $payment = PaymentHistory::search($input, 'price,order_id');
             $paymentNew = clone $payment;
             $paymentNew = $paymentNew->whereHas('order', function ($item) {
                 $item->where('is_upsale', 0);
             });
-
-            unset($input['marketing']);
-            $input['user_id'] = $item->id;
             $item->orders = $orders->count();
             $item->all_total = $orders->sum('all_total');
             $item->gross_revenue = $orders->sum('gross_revenue');
@@ -94,10 +92,10 @@ class MarketingController extends Controller
             return $item;
         })->sortByDesc('payment')
             ->filter(function ($qr) {
-            if ($qr->payment > 0){
-                return $qr;
-            }
-        });
+                if ($qr->payment > 0) {
+                    return $qr;
+                }
+            });
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
@@ -118,7 +116,7 @@ class MarketingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -129,7 +127,7 @@ class MarketingController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -179,7 +177,7 @@ class MarketingController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function addLinePriceMarketing(Request $request)
@@ -223,8 +221,8 @@ class MarketingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -235,7 +233,7 @@ class MarketingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
