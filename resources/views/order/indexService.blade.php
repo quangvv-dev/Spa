@@ -183,7 +183,7 @@
                                 </span>
                                 <br>
                                 <span class="chon-bac-si">Người hỗ trợ</span>
-                                {{--<span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>--}}
+{{--                                <span class="small-tip small-tip-custom text-bac-si">{{@$order->spaTherapisst->full_name}}</span>--}}
                             </div>
                         </div>
                         <div class="box-add-custom">

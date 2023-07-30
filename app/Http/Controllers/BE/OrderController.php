@@ -82,14 +82,14 @@ class OrderController extends Controller
 
         $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id',
             DepartmentConstant::DOCTOR)->get();
-        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR,DepartmentConstant::TU_VAN_VIEN])->get();
+//        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR,DepartmentConstant::TU_VAN_VIEN])->get();
         $branchs = Branch::search()->pluck('name', 'id');
 
         view()->share([
             'status' => $status,
             'order_type' => $order_type,
             'branchs' => $branchs,
-            'customer_support' => $customer_support,
+//            'customer_support' => $customer_support,
             'spaTherapissts' => $spaTherapissts,
             'customer_y_ta' => $spaTherapissts,
         ]);
@@ -99,17 +99,17 @@ class OrderController extends Controller
     {
         if (Auth::user()->branch_id) {
             $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [
-                DepartmentConstant::TECHNICIANS,
-                UserConstant::WAITER,
-                DepartmentConstant::DOCTOR,
+//                DepartmentConstant::TECHNICIANS,
+//                UserConstant::WAITER,
+//                DepartmentConstant::DOCTOR,
                 DepartmentConstant::TU_VAN_VIEN,
             ])
                 ->where('branch_id', Auth::user()->branch_id)->get();
         } else {
             $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [
-                DepartmentConstant::TECHNICIANS,
-                UserConstant::WAITER,
-                DepartmentConstant::DOCTOR,
+//                DepartmentConstant::TECHNICIANS,
+//                UserConstant::WAITER,
+//                DepartmentConstant::DOCTOR,
                 DepartmentConstant::TU_VAN_VIEN,
             ])
                 ->where('branch_id', $customer->branch_id)->get();
