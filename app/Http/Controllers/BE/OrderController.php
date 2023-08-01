@@ -220,8 +220,8 @@ class OrderController extends Controller
                 $cskh = User::select('id')->where('location_id', $customer->branch->location_id)->where('department_id',
                     DepartmentConstant::CSKH)->pluck('id')->toArray();
                 if (count($cskh) && !empty($position)) {
-                    $position->position = (count($cskh) - 1) <= $old_position  ? 0 : $old_position + 1;
-                    $customer->cskh_id = !empty($cskh[$old_position]) ?$cskh[$old_position]:$cskh[0];
+                    $position->position = (count($cskh) - 1) <= $old_position ? 0 : $old_position + 1;
+                    $customer->cskh_id = !empty($cskh[$old_position]) ? $cskh[$old_position] : $cskh[0];
                     $customer->time_move_cskh = now();
                     $position->save();
                 }
@@ -485,6 +485,25 @@ class OrderController extends Controller
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name',
             'id')->toArray();// nguồn KH
         $check_null = $this->checkNull($request);
+
+//        $docs = PaymentHistory::join('orders as o', 'payment_histories.order_id', '=', 'o.id')->
+//        join('customers as c', 'o.member_id', '=', 'c.id')->join('order_detail as od', 'od.order_id', '=', 'o.id')
+//            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+//                $q->whereBetween('payment_histories.payment_date', [
+//                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+//                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+//                ]);
+//            })->when(isset($input['source_id']) && $input['source_id'], function ($q) use ($input) {
+//                $q->where('c.source_id', $input['source_id']);
+//            })->when(isset($input['telesales']) && $input['telesales'], function ($q) use ($input) {
+//                $q->where('o.telesale_id', $input['telesales']);
+//            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+//                $q->where('payment_histories.branch_id', $input['branch_id']);
+//            })->when(isset($input['payment_type']) && $input['payment_type'], function ($q) use ($input) {
+//                $q->where('payment_histories.branch_id', $input['branch_id']);
+//            });
+
+
         if ($check_null == StatusCode::NOT_NULL) {
             $detail = PaymentHistory::search($input);
             View::share([
@@ -633,7 +652,7 @@ class OrderController extends Controller
             if (count($check) <= 1) {
                 ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
                     ->delay(now()->addSeconds(5));
-                if (isset($check2) && count($check2)){
+                if (isset($check2) && count($check2)) {
                     $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
                     foreach ($check2 as $item) {
                         if (@$item->rules->status == StatusCode::ON) {
