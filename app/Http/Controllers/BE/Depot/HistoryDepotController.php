@@ -82,7 +82,7 @@ class HistoryDepotController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -97,16 +97,16 @@ class HistoryDepotController extends Controller
                 if (isset($doc) && $doc) {
                     if (empty($request->quantity[$key]))
                         return redirect(route('depots.history.index'))->with('waring', 'Chưa điền số tiền');
-                    if ($input['status'] == (OrderConstant::NHAP_KHO || OrderConstant::KHACH_TRA_HANG) && !empty($request->quantity[$key])) {
-                        $doc->quantity = $doc->quantity + (int)$request->quantity[$key];
+                    if (in_array($input['status'], [OrderConstant::NHAP_KHO, OrderConstant::KHACH_TRA_HANG]) && !empty($request->quantity[$key])) {
+                        $doc->quantity = (int)$doc->quantity + (int)$request->quantity[$key];
                     } elseif (in_array($input['status'], [OrderConstant::XUAT_KHO, OrderConstant::HONG_VO, OrderConstant::TIEU_HAO, OrderConstant::TANG_KHACH]) && !empty($request->quantity[$key])) {
-                        $doc->quantity = $doc->quantity - (int)$request->quantity[$key];
+                        $doc->quantity = (int)$doc->quantity - (int)$request->quantity[$key];
                     }
                     $doc->save();
                     $this->historyDepot->create($input);
                 } else {
                     ///check chưa nhập
-                    if ($input['status'] == OrderConstant::NHAP_KHO && !empty($request->quantity[$key])) {
+                    if (in_array($input['status'], [OrderConstant::NHAP_KHO, OrderConstant::KHACH_TRA_HANG]) && !empty($request->quantity[$key])) {
                         ProductDepot::create([
                             'branch_id' => $request->branch_id,
                             'product_id' => $input['product_id'],
@@ -131,7 +131,7 @@ class HistoryDepotController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -142,7 +142,7 @@ class HistoryDepotController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -153,8 +153,8 @@ class HistoryDepotController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -165,7 +165,7 @@ class HistoryDepotController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

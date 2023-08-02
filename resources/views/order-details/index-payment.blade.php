@@ -69,6 +69,9 @@
                 <div class="col-md-2">
                     {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
                 </div>
+                <div class="col-md-2">
+                    {!! Form::select('source_id', $source, null, array('class' => 'form-control','id'=>'source', 'placeholder'=>'Nguồn')) !!}
+                </div>
                 @if(empty($checkRole))
                     <div class="col-md-2">
                         {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
