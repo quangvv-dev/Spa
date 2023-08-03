@@ -61,37 +61,47 @@
                 <div class="col">
                 </div>
             </div>
+
             <div class="card-header">
-                {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row col', 'id'=> 'gridForm','role'=>'form')) !!}
-                <div class="col-md-2">
-                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
-                </div>
-                <div class="col-md-2">
-                    {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
-                </div>
-                <div class="col-md-2">
-                    {!! Form::select('source_id', $source, null, array('class' => 'form-control','id'=>'source', 'placeholder'=>'Nguồn')) !!}
-                </div>
-                @if(empty($checkRole))
+                {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col', 'id'=> 'gridForm','role'=>'form')) !!}
+                <div class="row">
                     <div class="col-md-2">
-                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                        {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                     </div>
-                @endif
-                <div class="col-md-3">
-                    <input type="hidden" name="start_date" id="start_date">
-                    <input type="hidden" name="end_date" id="end_date">
-                    <input id="reportrange" type="text" class="form-control square">
+                    <div class="col-md-2">
+                        {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
+                    </div>
+                    @if(empty($checkRole))
+                        <div class="col-md-2">
+                            {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                        </div>
+                    @endif
+                    <div class="col-lg-2">
+                        {!! Form::select('source_id', $source, null, array('class' => 'form-control','id'=>'source', 'placeholder'=>'Nguồn')) !!}
+                    </div>
+                    <div class="col-md-2">
+                        <input type="hidden" name="start_date" id="start_date">
+                        <input type="hidden" name="end_date" id="end_date">
+                        <input id="reportrange" type="text" class="form-control square">
+                    </div>
+                    <input type="hidden" name="page" value="1" id="page">
+                    <div class="col-lg-1 col-md-6">
+                        <button type="submit" class="btn btn-primary"> Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a style="display: none" href="#" class="angleDoubleUp">
+                                    <i class="fa fa-angle-double-up"></i></a></li>
+                            <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
+                        </ul>
+                    </div>
                 </div>
-                <input type="hidden" name="page" value="1" id="page">
-
-                <div class="col-lg-2 col-md-6">
-                    <button type="submit" class="btn btn-primary"> Tìm kiếm
-                    </button>
-                </div>
+                    @include('order-details.dropdownFilter')
                 {{ Form::close() }}
-
-
             </div>
+
+
             <div id="registration-form">
                 @include('order-details.ajax-payment')
             </div>

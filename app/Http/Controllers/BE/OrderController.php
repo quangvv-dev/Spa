@@ -478,67 +478,51 @@ class OrderController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        $group = Category::select('id', 'name')->pluck('name', 'id')->toArray();
         $marketingUsers = User::select('id', 'full_name')->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
-        $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name',
-            'id')->toArray();// nguồn KH
-        $check_null = $this->checkNull($request);
+        $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
 
-//        $docs = PaymentHistory::join('orders as o', 'payment_histories.order_id', '=', 'o.id')->
-//        join('customers as c', 'o.member_id', '=', 'c.id')->join('order_detail as od', 'od.order_id', '=', 'o.id')
-//            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-//                $q->whereBetween('payment_histories.payment_date', [
-//                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-//                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-//                ]);
-//            })->when(isset($input['source_id']) && $input['source_id'], function ($q) use ($input) {
-//                $q->where('c.source_id', $input['source_id']);
-//            })->when(isset($input['telesales']) && $input['telesales'], function ($q) use ($input) {
-//                $q->where('o.telesale_id', $input['telesales']);
-//            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
-//                $q->where('payment_histories.branch_id', $input['branch_id']);
-//            })->when(isset($input['payment_type']) && $input['payment_type'], function ($q) use ($input) {
-//                $q->where('payment_histories.branch_id', $input['branch_id']);
-//            });
-
-
-        if ($check_null == StatusCode::NOT_NULL) {
-            $detail = PaymentHistory::search($input);
-            View::share([
-                'allTotal' => $detail->sum('price'),
-            ]);
-            $detail = $detail->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
-            View::share([
-                'allTotalPage' => $detail->sum('price'),
-            ]);
-
-        } else {
-            $input = [
-                'start_date' => Carbon::now()->startOfMonth()->format('Y-m-d'),
-                'end_date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
-            ];
-            $detail = PaymentHistory::search($input);
+        $orders = PaymentHistory::join('orders as o', 'payment_histories.order_id', '=', 'o.id')->
+        join('customers as c', 'o.member_id', '=', 'c.id')->join('order_detail as od', 'od.order_id', '=', 'o.id')
+            ->join('users as u', 'u.id', '=', 'o.telesale_id')
+            ->join('users as owner', 'owner.id', '=', 'o.owner_id')
+            ->join('users as marketing', 'marketing.id', '=', 'o.mkt_id')
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('payment_histories.payment_date', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            })->when(isset($input['source_id']) && $input['source_id'], function ($q) use ($input) {
+                $q->where('c.source_id', $input['source_id']);
+            })->when(isset($input['telesales']) && $input['telesales'], function ($q) use ($input) {
+                $q->where('o.telesale_id', $input['telesales']);
+            })->when(isset($input['mkt_id']) && $input['mkt_id'], function ($q) use ($input) {
+                $q->where('o.mkt_id', $input['mkt_id']);
+            })->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('payment_histories.branch_id', $input['branch_id']);
+            })->when(isset($input['is_upsale']), function ($q) use ($input) {
+                $q->where('o.is_upsale', $input['is_upsale']);
+            })->when(isset($input['payment_type']) && $input['payment_type'], function ($q) use ($input) {
+                $q->where('payment_histories.branch_id', $input['branch_id']);
+            })->select('o.created_at','payment_histories.payment_date','payment_histories.order_id','o.code','c.full_name'
+            ,'c.phone','payment_histories.price','payment_histories.id','u.full_name as telesale_name','payment_histories.payment_type'
+            ,'owner.full_name as owner_name');
 
             View::share([
-                'allTotal' => $detail->sum('price'),
+                'allTotal' => $orders->sum('payment_histories.price'),
             ]);
-            $detail = $detail->paginate(StatusCode::PAGINATE_20);
+            $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
-                'allTotalPage' => $detail->sum('price'),
+                'allTotalPage' => $orders->sum('price'),
             ]);
-        }
-
-        $rank = $detail->firstItem();
-        $orders = $detail;
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax-payment',
-                compact('orders', 'title', 'rank'))->render());
+                compact('orders'))->render());
         }
 
         return view('order-details.index-payment',
-            compact('orders', 'title', 'group', 'marketingUsers', 'telesales', 'source', 'rank'));
+            compact('orders', 'title', 'marketingUsers', 'telesales', 'source'));
     }
 
 

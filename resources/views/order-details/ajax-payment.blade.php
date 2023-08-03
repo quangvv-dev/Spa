@@ -17,19 +17,19 @@
         </thead>
         <tbody>
         @if (count($orders))
-            @foreach($orders as $order)
+            @foreach($orders as $k => $order)
                 <tr>
-                    <td class="text-center">{{ $rank++ }}</td>
-                    <td class="text-center">{{ isset($order->order) ? @date("d-m-Y", strtotime($order->order->created_at)) : '' }}</td>
+                    <td class="text-center">{{ $k+1 }}</td>
+                    <td class="text-center">{{ !empty($order->created_at) ? @date("d-m-Y", strtotime($order->created_at)) : '' }}</td>
                     <td class="text-center">{{ isset($order->payment_date) ? date("d-m-Y", strtotime($order->payment_date)) : '' }}</td>
-                    <td class="text-center"><a href="{{isset($order->order)?route('order.show',$order->order_id):'#'}}">{{isset($order->order) ? $order->order->code:' ' }}</a></td>
-                    <td class="text-center">{{isset($order->order) && isset($order->order->customer) ? @$order->order->customer->full_name :''}}</td>
-                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer) ? @$order->order->customer->phone :''}}</td>
+                    <td class="text-center"><a href="{{isset($order->order)?route('order.show',$order->order_id):'#'}}">{{@$order->code}}</a></td>
+                    <td class="text-center">{{@$order->full_name}}</td>
+                    <td class="text-center">{{@$order->phone}}</td>
                     <td class="text-center">{!! isset($order->order) && !empty($order->order->service_text) ? @$order->order->service_text :'' !!}</td>
                     <td class="text-center">{{ @number_format($order->price) }}</td>
-                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->telesale)? @$order->order->customer->telesale->full_name:'' }}</td>
+                    <td class="text-center">{{ $order->telesale_name }}</td>
                     <td class="text-center">{{ isset($order->payment_type) ? $order->name_payment_type:' ' }}</td>
-                    <td class="text-center">{{ isset($order->order)&& isset($order->order->owner)? @$order->order->owner->full_name:'' }}</td>
+                    <td class="text-center">{{ $order->owner_name }}</td>
                 </tr>
             @endforeach
             <tr class="fixed2">
