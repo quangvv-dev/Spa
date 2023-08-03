@@ -478,7 +478,7 @@ class OrderController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        $marketingUsers = User::select('id', 'full_name')->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::select('id', 'full_name')->where('department_id',DepartmentConstant::MARKETING)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
