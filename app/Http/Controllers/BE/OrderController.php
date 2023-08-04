@@ -512,9 +512,9 @@ class OrderController extends Controller
             View::share([
                 'allTotal' => $orders->sum('payment_histories.price'),
             ]);
-            $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
+            $orders2 = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
-                'allTotalPage' => $orders->sum('price'),
+                'allTotalPage' => $orders2->sum('price'),
             ]);
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax-payment',
@@ -522,7 +522,7 @@ class OrderController extends Controller
         }
 
         return view('order-details.index-payment',
-            compact('orders', 'title', 'marketingUsers', 'telesales', 'source'));
+            compact('$orders2', 'title', 'marketingUsers', 'telesales', 'source'));
     }
 
 

@@ -16,8 +16,8 @@
         </tr>
         </thead>
         <tbody>
-        @if (count($orders))
-            @foreach($orders as $k => $order)
+        @if (count($orders2))
+            @foreach($orders2 as $k => $order)
                 <tr>
                     <td class="text-center">{{ $k+1 }}</td>
                     <td class="text-center">{{ !empty($order->created_at) ? @date("d-m-Y", strtotime($order->created_at)) : '' }}</td>
