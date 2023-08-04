@@ -73,6 +73,16 @@ class PaymentHistory extends Model
                 });
             });
         }
+        if (!empty($input['source_id'])) {
+            $detail = $detail->whereHas('order', function ($qr) use ($input) {
+                $qr->where('source_id', $input['source_id']);
+            });
+        }
+        if (isset($input['is_upsale'])) {
+            $detail = $detail->whereHas('order', function ($qr) use ($input) {
+                $qr->where('is_upsale', $input['is_upsale']);
+            });
+        }
         if (!empty($input['cskh_id'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
                 $item->where('cskh_id', $input['cskh_id']);
