@@ -518,11 +518,11 @@ class OrderController extends Controller
             ]);
         if ($request->ajax()) {
             return Response::json(view('order-details.ajax-payment',
-                compact('orders'))->render());
+                compact('orders2'))->render());
         }
 
         return view('order-details.index-payment',
-            compact('$orders2', 'title', 'marketingUsers', 'telesales', 'source'));
+            compact('orders2', 'title', 'marketingUsers', 'telesales', 'source'));
     }
 
 
