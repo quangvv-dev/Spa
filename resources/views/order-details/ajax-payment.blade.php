@@ -68,11 +68,11 @@
     </table>
     <div class="pull-left">
         <div class="page-info">
-            {{ 'Tổng số ' . $orders->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+            {{ 'Tổng số ' . $orders2->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
         </div>
     </div>
     <div class="pull-right">
-        {{ $orders->appends(['search' => request()->search ])->links() }}
+        {{ $orders2->appends(['search' => request()->search ])->links() }}
     </div>
 </div>
 @include('order-details.order-detail-modal')
