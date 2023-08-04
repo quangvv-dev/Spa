@@ -483,8 +483,8 @@ class OrderController extends Controller
             ->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
 
-        $orders = PaymentHistory::join('orders as o', 'payment_histories.order_id', '=', 'o.id')->
-        join('customers as c', 'o.member_id', '=', 'c.id')->join('order_detail as od', 'od.order_id', '=', 'o.id')
+        $orders = PaymentHistory::join('orders as o', 'payment_histories.order_id', '=', 'o.id')
+            ->join('customers as c', 'o.member_id', '=', 'c.id')->join('order_detail as od', 'od.order_id', '=', 'o.id')
             ->join('users as u', 'u.id', '=', 'o.telesale_id')
             ->join('users as owner', 'owner.id', '=', 'o.owner_id')
             ->join('users as marketing', 'marketing.id', '=', 'o.mkt_id')
@@ -505,7 +505,7 @@ class OrderController extends Controller
                 $q->where('o.is_upsale', $input['is_upsale']);
             })->when(isset($input['payment_type']) && $input['payment_type'], function ($q) use ($input) {
                 $q->where('payment_histories.branch_id', $input['branch_id']);
-            })->select('o.created_at','payment_histories.payment_date','payment_histories.order_id','o.code','c.full_name'
+            })->groupBy('payment_histories.id')->select('o.created_at','payment_histories.payment_date','payment_histories.order_id','o.code','c.full_name'
             ,'c.phone','payment_histories.price','payment_histories.id','u.full_name as telesale_name','payment_histories.payment_type'
             ,'owner.full_name as owner_name');
 
