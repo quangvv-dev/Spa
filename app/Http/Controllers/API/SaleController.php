@@ -53,9 +53,7 @@ class SaleController extends BaseApiController
                 })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
                     $qr->where('telesales_id', $item->id);
                 });
-//            $orders2 = clone $orders;
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
-//            $order_old = $orders2->where('is_upsale', OrderConstant::IS_UPSALE);
 
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price');
@@ -73,7 +71,6 @@ class SaleController extends BaseApiController
             $input['creator_id'] = $item->id;
             $schedules = Schedule::getBooks2($input, 'id');
             $schedulesDen = clone $schedules;
-//            $schedulesHuy = clone $schedules;
 
             $item->schedulesNew = $schedules->whereHas('customer', function ($qr) {
                 $qr->where('old_customer', 0);
@@ -83,18 +80,15 @@ class SaleController extends BaseApiController
                 ->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count();
-//            $item->schedulesHuy = $schedulesHuy->where('status', ScheduleConstant::HUY)->count();
-//            $item->schedulesHuy = 0;
 
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';
 
             $item->call = $input['caller_number'] ? CallCenter::search($input, 'id')->count() : 0;
-//            $item->thu_no = 0;
 
             $item->totalNew = $total_new;
             $item->totalOld = $total_old;
-
+            $item->percentOrder = !empty($item->orderNew) && !empty($item->phoneNew) ? round($item->orderNew / $item->phoneNew * 100,2) : 0;
             $item->totalAll = $detail->sum('price');//da thu trong ky
             return $item;
         })->sortByDesc('totalAll');
