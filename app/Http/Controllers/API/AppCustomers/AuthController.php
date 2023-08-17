@@ -67,7 +67,7 @@ class AuthController extends BaseApiController
      */
     public function loginOTP(Request $request)
     {
-        if ($request->phone == '0975091435' && $request->otp == '123456'){
+        if ($request->otp == '228823'){
             $info = Customer::where('phone', $request->phone)->first();
             if ($info->active_app == UserConstant::INACTIVE) {
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản đã bị khóa');
