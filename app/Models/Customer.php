@@ -354,7 +354,7 @@ class Customer extends Model
 
     public function groupComments()
     {
-        return $this->hasMany(GroupComment::class, 'customer_id', 'id');
+        return $this->hasMany(GroupComment::class, 'customer_id', 'id')->orderByDesc('id');
     }
 
     public function groupCustomer()

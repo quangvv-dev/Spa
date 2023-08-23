@@ -13,7 +13,6 @@ use App\Models\Category;
 use App\Models\Commission;
 use App\Models\HistoryUpdateOrder;
 use App\Models\Order;
-
 use App\Models\OrderDetail;
 use App\User;
 use Illuminate\Http\Request;
@@ -161,6 +160,12 @@ class OrderController extends BaseApiController
 
     public function therapy(Order $order)
     {
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', TherapyResource::collection($order->historyUpdateOrders));
+        $therapy = $order->historyUpdateOrders()->paginate(StatusCode::PAGINATE_10);
+        $data = [
+            'currentPage' => $therapy->currentPage(),
+            'lastPage'    => $therapy->lastPage(),
+            'record'      => TherapyResource::collection($therapy),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 }

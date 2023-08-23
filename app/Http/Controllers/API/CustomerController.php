@@ -211,7 +211,13 @@ class CustomerController extends BaseApiController
 
     public function orders(Request $request, Customer $customer)
     {
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', OrderResource::collection($customer->orders));
+        $orders = $customer->orders()->paginate(StatusCode::PAGINATE_10);
+        $data = [
+            'currentPage' => $orders->currentPage(),
+            'lastPage'    => $orders->lastPage(),
+            'record'      => OrderResource::collection($orders),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
 }
