@@ -7,6 +7,7 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Resources\OrderDetailResource;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\TherapyResource;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Commission;
@@ -156,5 +157,10 @@ class OrderController extends BaseApiController
         $data = collect($docs)->sortBy('gross_revenue')->reverse()->toArray();
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($data));
+    }
+
+    public function therapy(Order $order)
+    {
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', TherapyResource::collection($order->historyUpdateOrders));
     }
 }

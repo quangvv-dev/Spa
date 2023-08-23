@@ -34,8 +34,11 @@ class OrderResource extends JsonResource
                 'id'            => @$this->id,
                 'name'          => @$this->customer->full_name,
                 'phone'         => @$this->customer->phone,
+                'service_text'  => @str_replace('<br>', ' ,', $this->service_text),
                 'total'         => @$this->all_total,
                 'gross_revenue' => !empty($this->gross_revenue) ? $this->gross_revenue : 0,
+                'is_therapy'    => $this->count_day > 0,
+                'created_at'    => date('d-m-Y H:i', strtotime($this->created_at)),
                 'the_rest'      => !empty($this->the_rest) ? $this->the_rest : 0,
             ];
         }

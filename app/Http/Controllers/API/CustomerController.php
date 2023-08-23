@@ -7,6 +7,7 @@ use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Http\Resources\AppCustomers\CustomerResource;
 use App\Http\Resources\ChartResource;
+use App\Http\Resources\OrderResource;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Customer;
@@ -33,6 +34,7 @@ class CustomerController extends BaseApiController
      * Danh sách album
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -68,14 +70,14 @@ class CustomerController extends BaseApiController
     public function store(Request $request)
     {
         $validate = [
-            'phone' => "required",
-            'full_name' => "required",
-            'gender' => "required",
+            'phone'        => "required",
+            'full_name'    => "required",
+            'gender'       => "required",
             'telesales_id' => "required",
-            'status_id' => "required",
-            'source_id' => "required",
-            'group_id' => "required",
-            'branch_id' => "required",
+            'status_id'    => "required",
+            'source_id'    => "required",
+            'group_id'     => "required",
+            'branch_id'    => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -83,9 +85,9 @@ class CustomerController extends BaseApiController
         }
         $customer = $request->jwtUser;
         $request->merge([
-            'fb_name' => $request->full_name,
+            'fb_name'   => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
-            'type' => 'full_data',
+            'type'      => 'full_data',
         ]);
 
         $input = $request->except(['group_id']);
@@ -106,13 +108,14 @@ class CustomerController extends BaseApiController
      * cập nhật thu chi
      *
      * @param $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
         $request->merge([
             'full_name' => str_replace("'", "", $request->full_name),
-            'type' => 'full_data',
+            'type'      => 'full_data',
         ]);
         $input = $request->except('group_id');
         $customer = $this->customerService->update($input, $id);
@@ -145,6 +148,7 @@ class CustomerController extends BaseApiController
      * Thống kê nhân viên
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function revenueSourceCustomer(Request $request)
@@ -161,39 +165,53 @@ class CustomerController extends BaseApiController
             $data = Customer::applySearchConditions($customers, $input)->select('id', 'source_id',
                 \DB::raw('COUNT(ID) AS total'))->groupBy('source_id')->whereHas('source_customer')->get()
                 ->sortByDesc('total');
-        } else if (isset($input['type']) && $input['type'] == 2) {
-            $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
-                $payment_wallet = PaymentWallet::search($input, 'price')->whereHas('order_wallet',function ($it) use ($item){
-                    $it->where('source_id', $item->id);
-                })->sum('price');
-                $payment_All = PaymentHistory::search($input,'price')->whereHas('order',function ($it) use ($item){
-                    $it->where('source_id', $item->id);
-                });
-                $price = $payment_All->sum('price');
-                $score = $payment_All->where('payment_type', 3)->sum('price');
-
-                $item->total = $price + $payment_wallet - $score;
-                return $item;
-            })->filter(function ($fl) {
-                if ($fl->total > 0) {
-                    return $fl;
-                }
-            })->sortByDesc('total');
         } else {
-            $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function ($item) use ($input) {
-                $orders = Order::returnRawData($input)->select('id')->whereHas('customer', function ($it) use ($item) {
-                    $it->where('source_id', $item->id);
-                })->count();
-                $item->total = $orders;
-                return $item;
-            })->filter(function ($fl) {
-                if ($fl->total > 0) {
-                    return $fl;
-                }
-            })->sortByDesc('total');
+            if (isset($input['type']) && $input['type'] == 2) {
+                $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function (
+                    $item
+                ) use ($input) {
+                    $payment_wallet = PaymentWallet::search($input, 'price')->whereHas('order_wallet',
+                        function ($it) use ($item) {
+                            $it->where('source_id', $item->id);
+                        })->sum('price');
+                    $payment_All = PaymentHistory::search($input, 'price')->whereHas('order',
+                        function ($it) use ($item) {
+                            $it->where('source_id', $item->id);
+                        });
+                    $price = $payment_All->sum('price');
+                    $score = $payment_All->where('payment_type', 3)->sum('price');
+
+                    $item->total = $price + $payment_wallet - $score;
+                    return $item;
+                })->filter(function ($fl) {
+                    if ($fl->total > 0) {
+                        return $fl;
+                    }
+                })->sortByDesc('total');
+            } else {
+                $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get()->map(function (
+                    $item
+                ) use ($input) {
+                    $orders = Order::returnRawData($input)->select('id')->whereHas('customer',
+                        function ($it) use ($item) {
+                            $it->where('source_id', $item->id);
+                        })->count();
+                    $item->total = $orders;
+                    return $item;
+                })->filter(function ($fl) {
+                    if ($fl->total > 0) {
+                        return $fl;
+                    }
+                })->sortByDesc('total');
+            }
         }
         $response = ChartResource::collection($data);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $response);
+    }
+
+    public function orders(Request $request, Customer $customer)
+    {
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', OrderResource::collection($customer->orders));
     }
 
 }

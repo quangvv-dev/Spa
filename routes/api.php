@@ -44,8 +44,9 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     // HỒ sơ khách hàng full
     Route::group(['prefix' => 'preview'], function () {
         Route::get('customers', 'AlbumController@index');
+        Route::get('orders/{customer}', 'CustomerController@orders');
+        Route::get('therapy/{order}', 'OrderController@therapy');
     });
-    Route::get('pre/{id}', 'AlbumController@show');
 
     //THU CHI
     Route::get('pay', 'ThuChiController@index');

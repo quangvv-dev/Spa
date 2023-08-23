@@ -11,6 +11,11 @@ class HistoryUpdateOrder extends Model
 {
     protected $guarded = ['id'];
 
+    public const TYPE = [
+        0 => 'Trừ liệu trình',
+        1 => 'Đã bảo hành',
+        2 => 'Đang bảo lưu',
+    ];
 
     public function user()
     {
