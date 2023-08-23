@@ -41,6 +41,12 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::delete('albums/{id}', 'AlbumController@delete');
     Route::get('albums', 'AlbumController@index');
     Route::get('albums/{id}', 'AlbumController@show');
+    // HỒ sơ khách hàng full
+    Route::group(['prefix' => 'preview'], function () {
+        Route::get('customers', 'AlbumController@index');
+    });
+    Route::get('pre/{id}', 'AlbumController@show');
+
     //THU CHI
     Route::get('pay', 'ThuChiController@index');
     Route::post('pay/{id}', 'ThuChiController@update');

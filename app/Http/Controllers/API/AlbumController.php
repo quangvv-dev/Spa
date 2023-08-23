@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Constants\ResponseStatusCode;
 use App\Http\Resources\AlbumResource;
+use App\Http\Resources\ChamCong\CustomerResource;
 use App\Models\Album;
 use App\Models\Customer;
 use Carbon\Carbon;
@@ -103,17 +104,11 @@ class AlbumController extends BaseApiController
             ]);
         }
         $input = $request->all();
-        $customer = Customer::select('id', 'full_name', 'phone', 'branch_id')->where('phone', $input['phone'])->first();
-        if (isset($customer) && $customer) {
-            $data = [
-                'customer_id' => $customer->id,
-                'name' => $customer->full_name,
-                'phone' => $customer->phone,
-                'branch_id' => $customer->branch_id,
-            ];
-            return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+        $customer = Customer::where('phone', $input['phone'])->first();
+        if (empty($customer)){
+            return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND');
         }
-        return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND CUSTOMER ALBUM');
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new CustomerResource($customer));
 
     }
 
