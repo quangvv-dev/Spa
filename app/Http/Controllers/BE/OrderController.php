@@ -100,14 +100,14 @@ class OrderController extends Controller
         if (Auth::user()->branch_id) {
             $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [
                 DepartmentConstant::TECHNICIANS,
-                DepartmentConstant::DOCTOR,
+//                DepartmentConstant::DOCTOR,
                 DepartmentConstant::TU_VAN_VIEN,
             ])
                 ->where('branch_id', Auth::user()->branch_id)->get();
         } else {
             $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [
                 DepartmentConstant::TECHNICIANS,
-                DepartmentConstant::DOCTOR,
+//                DepartmentConstant::DOCTOR,
                 DepartmentConstant::TU_VAN_VIEN,
             ])
                 ->where('branch_id', $customer->branch_id)->get();
