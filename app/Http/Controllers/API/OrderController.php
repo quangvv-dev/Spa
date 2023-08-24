@@ -158,9 +158,10 @@ class OrderController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', array_values($data));
     }
 
-    public function therapy(Order $order)
+    public function therapy(Request $request, Order $order)
     {
-        $therapy = $order->historyUpdateOrders()->paginate(StatusCode::PAGINATE_10);
+        $therapy = $order->historyUpdateOrders()->orderByDesc(isset($request->sort) ? $request->sort : 'created_at')
+            ->paginate(StatusCode::PAGINATE_10);
         $data = [
             'currentPage' => $therapy->currentPage(),
             'lastPage'    => $therapy->lastPage(),
