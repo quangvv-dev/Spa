@@ -78,6 +78,7 @@ class OrderController extends BaseApiController
         $input = $request->all();
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TECHNICIANS])
+            ->where('active',StatusCode::ON)
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
@@ -132,6 +133,7 @@ class OrderController extends BaseApiController
         $input = $request->all();
         $docs = [];
         $data = User::select('id', 'full_name', 'avatar')->where('department_id', UserConstant::PHONG_TVV)
+            ->where('active',StatusCode::ON)
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
             })->get();

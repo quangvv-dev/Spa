@@ -37,7 +37,8 @@ class SaleController extends BaseApiController
         }
         $input = $request->all();
 
-        $users = User::select('id', 'full_name', 'avatar', 'caller_number')->whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
+        $users = User::select('id', 'full_name', 'avatar', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)
+            ->where('active', StatusCode::ON)->get()->map(function ($item) use ($request, $input) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                     $q->where('branch_id', $input['branch_id']);
@@ -106,8 +107,8 @@ class SaleController extends BaseApiController
     public function saleToiUu(Request $request)
     {
         $input = $request->all();
-        $users = User::select('id', 'full_name', 'avatar')->whereIn('role', [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->get()->map(function ($item) use ($request, $input) {
-
+        $users = User::select('id', 'full_name', 'avatar')->where('department_id', DepartmentConstant::TELESALES)
+            ->where('active', StatusCode::ON)->get()->map(function ($item) use ($request, $input) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
             $orders = Order::select('id')->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
                 ->whereHas('customer', function ($qr) use ($item) {
@@ -158,7 +159,7 @@ class SaleController extends BaseApiController
         }
         $response = [];
         $input = $request->all();
-        $sale = User::select('id')->where('department_id', DepartmentConstant::TELESALES)
+        $sale = User::select('id')->where('department_id', DepartmentConstant::TELESALES)->where('active', StatusCode::ON)
             ->when(isset($input['sale_id']) && $input['sale_id'], function ($query) use ($input) {
                 $query->where('id', $input['sale_id']);
             })->pluck('id')->toArray();
