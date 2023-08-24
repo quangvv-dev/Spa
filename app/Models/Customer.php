@@ -265,9 +265,9 @@ class Customer extends Model
         return $this->belongsToMany(Category::class, 'customer_groups', 'customer_id', 'category_id');
     }
 
-    public function orders()
+    public function orders($sort = 'created_at')
     {
-        return $this->hasMany(Order::class, 'member_id', 'id')->orderBy('created_at', 'DESC');
+        return $this->hasMany(Order::class, 'member_id', 'id')->orderByDesc($sort);
     }
 
     public function order_detail()

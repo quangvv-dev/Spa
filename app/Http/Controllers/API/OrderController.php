@@ -160,8 +160,7 @@ class OrderController extends BaseApiController
 
     public function therapy(Request $request, Order $order)
     {
-        $therapy = $order->historyUpdateOrders()->orderByDesc(isset($request->sort) ? $request->sort : 'created_at')
-            ->paginate(StatusCode::PAGINATE_10);
+        $therapy = $order->historyUpdateOrders(isset($request->sort) ? $request->sort : 'all_total')->paginate(StatusCode::PAGINATE_10);
         $data = [
             'currentPage' => $therapy->currentPage(),
             'lastPage'    => $therapy->lastPage(),

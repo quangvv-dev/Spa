@@ -211,7 +211,7 @@ class CustomerController extends BaseApiController
 
     public function orders(Request $request, Customer $customer)
     {
-        $orders = $customer->orders()->paginate(StatusCode::PAGINATE_10);
+        $orders = $customer->orders(isset($request->sort) ? $request->sort : 'created_at')->paginate(StatusCode::PAGINATE_10);
         $data = [
             'currentPage' => $orders->currentPage(),
             'lastPage'    => $orders->lastPage(),
