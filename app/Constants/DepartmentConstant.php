@@ -23,4 +23,5 @@ class DepartmentConstant
     const NHAN_SU = 11;
     const AN_NINH = 12;
     const SEEDING = 13;
+    const Y_TA = 14;
 }

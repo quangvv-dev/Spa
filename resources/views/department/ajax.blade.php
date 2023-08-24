@@ -19,7 +19,7 @@
                         <a title="Tạo chức vụ" href="{{url('position/'.$s->id)}}"><i class="fas fa-user-plus"></i></a>
                         <a title="Chỉnh sửa" class="btn" href="{{ url('department/' . $s->id . '/edit') }}"><i
                                 class="fas fa-edit"></i></a>
-                        @if(!$s->childRelation->count() && $s->id>13)
+                        @if(!$s->childRelation->count() && $s->id>\App\Constants\DepartmentConstant::Y_TA)
                             <a title="Xóa" class="btn delete" href="javascript:void(0)"
                                data-url="{{ url('department/' . $s->id) }}"><i class="fas fa-trash-alt"></i></a>
                         @endif

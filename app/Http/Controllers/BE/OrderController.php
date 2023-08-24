@@ -79,19 +79,14 @@ class OrderController extends Controller
             Order::TYPE_ORDER_DEFAULT => 'Đơn thường',
             Order::TYPE_ORDER_ADVANCE => 'Liệu trình',
         ];
-
-        $spaTherapissts = User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id',
-            DepartmentConstant::DOCTOR)->get();
-//        $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,DepartmentConstant::DOCTOR,DepartmentConstant::TU_VAN_VIEN])->get();
         $branchs = Branch::search()->pluck('name', 'id');
 
         view()->share([
             'status' => $status,
             'order_type' => $order_type,
             'branchs' => $branchs,
-//            'customer_support' => $customer_support,
-            'spaTherapissts' => $spaTherapissts,
-            'customer_y_ta' => $spaTherapissts,
+            'spaTherapissts' => User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->get(),
+            'customer_y_ta' => User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id', DepartmentConstant::Y_TA)->get(),
         ]);
     }
 
