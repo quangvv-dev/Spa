@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::put('orders/{id}/edit', 'OrderController@update')->name('order.update');
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
     Route::get('wallet-pdf/{id}', 'PaymentWallet\PaymentWalletController@pdf');
+    Route::get('contact-pdf/{id}', 'Contact\ContactController@show');
 
     Route::get('commission/{id}', 'CommissionController@index')->name('commission.index');
     Route::post('commission/{id}', 'CommissionController@store')->name('commission.store');
