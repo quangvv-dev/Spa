@@ -81,7 +81,7 @@
                         <ul class="thumbnails image_picker_selector">
                             <li class="group">
                                 <ul>
-                                    @forelse($spaTherapissts as $item)
+                                    @forelse($customer_y_ta as $item)
                                         <li class="select_yTaChinh" data-id="{{$item->id}}" data-name="{{$item->full_name}}">
                                             <div class="thumbnail {{isset($order) && @$order->supportOrder->yta1_id == $item->id ? 'selected' : ''}}">
                                                 <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
@@ -97,7 +97,7 @@
                     <div class="tab-pane fade fade-yTaPhu" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"><ul class="thumbnails image_picker_selector">
                             <li class="group">
                                 <ul>
-                                    @forelse($spaTherapissts as $item)
+                                    @forelse($customer_y_ta as $item)
                                         <li class="select_yTaPhu" data-id="{{$item->id}}" data-name="{{$item->full_name}}">
                                             <div class="thumbnail {{isset($order) && @$order->supportOrder->yta2_id == $item->id ? 'selected' : ''}}">
                                                 <img class="image_picker_image" src="{{$item->avatar?:setting('logo_website')}}">
