@@ -47,6 +47,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
         Route::get('orders/{customer}', 'CustomerController@orders');
         Route::get('therapy/{order}', 'OrderController@therapy');
         Route::get('group-comment/{customer}', 'GroupCommentController@index');
+        Route::post('group-comment/{customer}', 'GroupCommentController@store');
     });
 
     //THU CHI
