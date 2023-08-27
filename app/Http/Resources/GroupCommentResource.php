@@ -22,7 +22,7 @@ class GroupCommentResource extends JsonResource
             'user_name'   => @$this->user->full_name,
             'messages'    => @$this->messages,
             'created_at'  => @$this->created_at,
-            'images'      => $this->images,
+            'images'      => $this->image,
         ];
     }
 }
