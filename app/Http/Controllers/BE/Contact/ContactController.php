@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE\Contact;
 
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
+use App\Model\Contact;
 use App\Models\CallCenter;
 use App\User;
 use Illuminate\Http\Request;
@@ -17,7 +18,8 @@ class ContactController extends Controller
 
     public function __construct()
     {
-        $telesales = User::whereNotNull('caller_number')->where('active', StatusCode::ON)->pluck('full_name', 'caller_number');
+        $telesales = User::whereNotNull('caller_number')->where('active', StatusCode::ON)->pluck('full_name',
+            'caller_number');
         $this->middleware('permission:call-center', ['only' => ['index']]);
 
         view()->share([
@@ -49,8 +51,8 @@ class ContactController extends Controller
         return view('call_center.index', compact('title', 'docs', 'answers'));
     }
 
-    public function show()
+    public function show(Contact $contact)
     {
-        return view('order.contact-pdf');
+        return view('order.contact-pdf', compact('contact'));
     }
 }

@@ -83,37 +83,37 @@
 <div class="content">
     <div class="flex">
         <label for="" style="width: 120px;">Hồ sơ mã số: </label>
-        <div><input type="text"></div>
+        <div><input type="text" value="{{$contact->code}}"></div>
 
     </div>
     <div class="flex">
         <div class="flex" style="width: 60%;">
             <label for="" style="width: 205px;">Họ tên khách hàng:</label>
-            <div><input type="text"></div>
+            <div><input type="text" value="{{$contact->full_name}}"></div>
         </div>
         <div class="flex" style="width: 40%;margin-left: 20px;">
             <label for="" style="width: 155px;">Số điện thoại:</label>
-            <div><input type="text"></div>
+            <div><input type="text" value="{{$contact->phone}}"></div>
         </div>
     </div>
     <div class="flex">
         <div class="flex" style="width: 60%;">
             <label for="" style="width: 85px;">Địa chỉ:</label>
-            <div><input type="text"></div>
+            <div><input type="text" value="{{$contact->address}}"></div>
         </div>
         <div class="flex" style="width: 40%;margin-left: 20px;">
             <label for="" style="width: 120px;">Số CCCD:</label>
-            <div><input type="text"></div>
+            <div><input type="text" value="{{$contact->cccd}}"></div>
         </div>
     </div>
     <div class="flex">
         <div class="flex" style="width: 60%;">
             <label for="" style="width: 180px;">Dịch vụ áp dụng:</label>
-            <div><input type="text"></div>
+            <div><input type="text" value="{{$contact->service}}"></div>
         </div>
         <div class="flex" style="width: 40%;margin-left: 20px;position: relative;">
             <label for="" style="width: 250px;">Thời gian áp dụng:</label>
-            <div><input type="text" style="width: 55%;"></div>
+            <div><input type="text" value="{{$contact->warranty_number}}" style="width: 55%;"></div>
             <span style="position: absolute;right: 10%;">
                     Tháng
                 </span>
@@ -122,30 +122,30 @@
     </div>
     <div class="flex">
         <label for="" style="width: 203px;">Ngày bắt đầu điều trị:</label>
-        <div><input type="text"></div>
+        <div><input type="text" value="{{date('d/m/Y',strtotime($contact->date))}}"></div>
     </div>
     <div class="flex">
         <label for="" style="width: 180px;">Tình trạng ban đầu:</label>
-        <div><input type="text"></div>
+        <div><input type="text" value="{{$contact->before}}"></div>
     </div>
     <div class="flex">
         <label for="" style="width: 212px;">Tình trạng sau điều trị:</label>
-        <div><input type="text"></div>
+        <div><input type="text" value="{{$contact->after}}"></div>
     </div>
     <div class="flex">
         <label for="" style="width: 145px;">Chi phí điều trị:</label>
-        <div><input type="text"></div>
+        <div><input type="text" value="{{number_format($contact->price)}}"></div>
     </div>
     <div class="flex">
         <label for="" style="width: 100px;">- Hiệu quả:</label>
-        <div><input type="text"></div>
+        <div><input type="text" value="{{$contact->result}}"></div>
     </div>
     <div>
         <label for="">- Thời gian tái khám: theo lời dặn của Điều trị viên</label>
     </div>
     <div class="flex">
         <label for="" style="width: 200px;">- Thời gian bảo hành:</label>
-        <div><input type="text"></div>
+        <div><input type="text" value="{{$contact->warranty_time}}"></div>
     </div>
     <div style="font-size: 20px;font-weight: bold;margin-top: 15px;">YÊU CẦU</div>
 
