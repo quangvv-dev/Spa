@@ -103,9 +103,13 @@ class MarketingController extends BaseApiController
             $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
             $payment = PaymentHistory::search($input, 'price', 'order_id')->get();
             $item->orders = $orders->count();
+            $item->percent_order = !empty($item->contact) ? round($item->orders / $item->contact, 2) * 100 : 0;
+            $item->percent_schedules = !empty($item->contact) ? round($item->schedules / $item->contact, 2) * 100 : 0;
             $item->all_total = (int)$orders->sum('all_total');
             $item->gross_revenue = (int)$orders->sum('gross_revenue');
             $item->payment = $payment->sum('price');
+            $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) * 100 : 0;
+
             return $item;
         })->sortByDesc('payment')->filter(function ($q) {
             if ((int)$q->payment > 0) {
