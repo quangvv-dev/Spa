@@ -9,6 +9,8 @@ use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Http\Resources\UserResource;
 use App\Models\Branch;
+use App\Models\Source;
+use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -549,6 +551,12 @@ class AuthController extends BaseApiController
             ],
         ];
 
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+    }
+
+    public function source()
+    {
+        $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 }

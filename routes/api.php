@@ -49,8 +49,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
         Route::get('group-comment/{customer}', 'GroupCommentController@index');
         Route::post('group-comment/{customer}', 'GroupCommentController@store');
         Route::delete('group-comment/{comment}', 'GroupCommentController@destroy');
-//        Route::get('contact', 'Contact\ContactController@index');
-//        Route::post('contact', 'Contact\ContactController@store');
+        Route::get('source', 'AuthController@source');
         Route::apiResource('contact', 'Contact\ContactController');
     });
 
