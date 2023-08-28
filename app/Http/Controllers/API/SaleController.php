@@ -57,16 +57,9 @@ class SaleController extends BaseApiController
             $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
 
             $input['telesales'] = $item->id;
-            $detail = PaymentHistory::search($input, 'price');
-            $detail_total = clone $detail;
-            $detail2 = clone $detail;
-            $total_new = $detail_total->whereHas('order', function ($qr) {
-                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-            })->sum('price');
-            $total_old = $detail2->whereHas('order', function ($qr) {
-                $qr->where('is_upsale', OrderConstant::IS_UPSALE);
-            })->sum('price');
-
+            $detail = PaymentHistory::search($input, 'price')->whereHas('order', function ($qr) {
+                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+                })->sum('price');
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
             $input['creator_id'] = $item->id;
@@ -87,10 +80,9 @@ class SaleController extends BaseApiController
 
             $item->call = $input['caller_number'] ? CallCenter::search($input, 'id')->count() : 0;
 
-            $item->totalNew = $total_new;
-            $item->totalOld = $total_old;
+            $item->totalNew = $detail;
+            $item->avg = !empty($item->orderNew) ? round($item->totalNew / $item->orderNew) : 0;
             $item->percentOrder = !empty($item->orderNew) && !empty($item->phoneNew) ? round($item->orderNew / $item->phoneNew * 100,2) : 0;
-            $item->totalAll = $detail->sum('price');//da thu trong ky
             return $item;
         })->sortByDesc('totalAll');
 

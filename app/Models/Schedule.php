@@ -176,6 +176,10 @@ class Schedule extends Model
         }
         $docs->when(isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
+        })->when(isset($request['marketing']), function ($q) use ($request) {
+            $q->whereHas('customer', function ($q) use ($request) {
+                $q->where('mkt_id', $request['marketing']);
+            });
         })->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
             $q->whereBetween('date', [
                 Functions::yearMonthDay($request['start_date']) . ' 00:00',
@@ -200,7 +204,6 @@ class Schedule extends Model
             $param = $request['customer'];
             $docs->whereHas('customer', function ($q) use ($param) {
                 $q->where('phone', $param);
-//                $q->where('phone', 'like', '%' . $param . '%');
             });
         }
         if (!empty($request['status'])) {

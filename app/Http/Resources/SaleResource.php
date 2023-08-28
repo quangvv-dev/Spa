@@ -23,12 +23,10 @@ class SaleResource extends JsonResource
             'orderNew'     => $this->orderNew,
             'schedulesNew' => $this->schedulesNew,
             'schedules'    => $this->schedules,
-            //            'schedulesHuy'  => $this->schedulesHuy,
             'call'         => $this->call,
             'percentOrder' => $this->percentOrder,
             'totalNew'     => $this->totalNew,
-            'totalOld'     => $this->totalOld,
-            'totalAll'     => $this->totalAll,
+            'avg'          => $this->avg,
         ];
     }
 }

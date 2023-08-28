@@ -29,8 +29,7 @@ class ZaloZns implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
+     * @return bool
      */
     public function handle()
     {

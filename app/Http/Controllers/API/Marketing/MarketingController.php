@@ -60,12 +60,10 @@ class MarketingController extends BaseApiController
             $customer = Customer::searchApi($input)->select('id');
             $item->contact = $customer->count();
             $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
-            unset($input['marketing']);
-            $input['user_id'] = $item->id;
-            $price = PriceMarketing::search($input)->select('budget', \DB::raw('sum(budget) as total_budget'))->first();
-            $item->budget = $price->total_budget; //ngân sách
             $item->orders = $orders->count();
             $item->gross_revenue = $orders->sum('gross_revenue');
+            $input['marketing'] = $item->id;
+            $item->schedules = Schedule::search($input)->count();
             return $item;
         })->sortByDesc('gross_revenue');
 
