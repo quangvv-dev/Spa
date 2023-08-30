@@ -16,17 +16,18 @@ class SaleResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'           => $this->id,
-            'full_name'    => $this->full_name,
-            'avatar'       => $this->avatar,
-            'phoneNew'     => $this->phoneNew,
-            'orderNew'     => $this->orderNew,
-            'schedulesNew' => $this->schedulesNew,
-            'schedules'    => $this->schedules,
-            'call'         => $this->call,
-            'percentOrder' => $this->percentOrder,
-            'totalNew'     => $this->totalNew,
-            'avg'          => $this->avg,
+            'id'               => $this->id,
+            'full_name'        => $this->full_name,
+            'avatar'           => $this->avatar,
+            'phoneNew'         => $this->phoneNew,
+            'orderNew'         => $this->orderNew,
+            'schedulesNew'     => $this->schedulesNew,
+            'schedules_mua'    => $this->schedules_mua,
+            'schedules_failed' => $this->schedules_failed,
+            'call'             => $this->call,
+            'percentOrder'     => $this->percentOrder,
+            'totalNew'         => $this->totalNew,
+            'avg'              => $this->avg,
         ];
     }
 }

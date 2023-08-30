@@ -69,7 +69,6 @@ class SaleController extends BaseApiController
             $schedules_den = clone $schedules;
             $item->schedulesNew = $schedules->count();
 
-
             $item->schedules_mua = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
             $item->schedules_failed = $schedules->where('status', ScheduleConstant::CHUA_MUA)->count();
 
