@@ -63,17 +63,15 @@ class SaleController extends BaseApiController
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
             $input['creator_id'] = $item->id;
-            $schedules = Schedule::getBooks2($input, 'id');
-            $schedulesDen = clone $schedules;
-
-            $item->schedulesNew = $schedules->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 0);
-            })->count();
-
-            $item->schedules = $schedulesDen->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
-                ->whereHas('customer', function ($qr) {
+            $schedules = Schedule::getBooks2($input, 'id')->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
-                })->count();
+                });
+            $schedules_den = clone $schedules;
+            $item->schedulesNew = $schedules->count();
+
+
+            $item->schedules_mua = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
+            $item->schedules_failed = $schedules->where('status', ScheduleConstant::CHUA_MUA)->count();
 
             $input['caller_number'] = $item->caller_number;
             $input['call_status'] = 'ANSWERED';

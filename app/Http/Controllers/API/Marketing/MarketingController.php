@@ -108,7 +108,7 @@ class MarketingController extends BaseApiController
             $item->all_total = (int)$orders->sum('all_total');
             $item->gross_revenue = (int)$orders->sum('gross_revenue');
             $item->payment = $payment->sum('price');
-            $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) * 100 : 0;
+            $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) : 0;
 
             return $item;
         })->sortByDesc('payment')->filter(function ($q) {
