@@ -27,7 +27,7 @@ class SaleResource extends JsonResource
             'call'             => $this->call,
             'percentOrder'     => $this->percentOrder,
             'totalNew'         => $this->totalNew,
-            'the_rest'         => 0,
+            'the_rest'         => @$this->the_rest,
             'avg'              => $this->avg,
         ];
     }
