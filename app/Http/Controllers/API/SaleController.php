@@ -59,7 +59,7 @@ class SaleController extends BaseApiController
             $input['telesales'] = $item->id;
             $detail = PaymentHistory::search($input, 'price')->whereHas('order', function ($qr) {
                     $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-                })->sum('price');
+                });
             $item->phoneNew = $data_new->get()->count();
             $item->orderNew = $order_new->count();
             $input['creator_id'] = $item->id;
@@ -77,7 +77,8 @@ class SaleController extends BaseApiController
 
             $item->call = $input['caller_number'] ? CallCenter::search($input, 'id')->count() : 0;
 
-            $item->totalNew = $detail;
+            $item->totalNew = $detail->sum('price');
+            $item->the_rest = $detail->where('is_debt', StatusCode::ON)->sum('price');
             $item->avg = !empty($item->orderNew) ? round($item->totalNew / $item->orderNew) : 0;
             $item->percentOrder = !empty($item->orderNew) && !empty($item->phoneNew) ? round($item->orderNew / $item->phoneNew * 100,2) : 0;
             return $item;

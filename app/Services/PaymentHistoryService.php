@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\Functions;
@@ -19,8 +20,9 @@ class PaymentHistoryService
         $data['gross_revenue'] = str_replace(',', '', $data['gross_revenue']);
         $grossRevenue = self::checkGrossRevenue($id, $data['gross_revenue']);
 
-        if (empty($data) && is_array($data) == false)
+        if (empty($data) && is_array($data) == false) {
             return false;
+        }
 
         $input = [
             'order_id'     => $id,
@@ -28,7 +30,8 @@ class PaymentHistoryService
             'price'        => $grossRevenue,
             'payment_date' => Functions::yearMonthDay($data['payment_date']),
             'description'  => $data['description'],
-            'payment_type' => $data['payment_type']
+            'payment_type' => $data['payment_type'],
+            'is_debt'      => $data['is_debt'],
         ];
 
         return PaymentHistory::create($input);
