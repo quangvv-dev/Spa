@@ -70,7 +70,7 @@
         <img src="{{!empty(setting('logo_website')) ? setting('logo_website'):'/assets/images/brand/logo.png'}}" alt="" class="logo">
     </div>
     <div class="right">
-        <div class="title">VIỆN THẨM MỸ QUỐC TẾ ROYAL</div>
+        <div class="title" style="text-transform:uppercase">{!! !empty(setting('title_website'))?setting('title_website'): 'VIỆN THẨM MỸ QUỐC TẾ ROYAL'!!}</div>
         <div class="">Hotline: <span>1900.299.268</span></div>
         <div class="">Website: <span>vienthammyroyal.vn</span></div>
     </div>
@@ -176,13 +176,13 @@
         KHÁCH HÀNG <br>
         <span class="small-tip">(Ký và ghi rõ họ tên)</span>
     </div>
-    <div class="right" style="width: 60%;">
-        ĐẠI DIỆN VIỆN THẨM MỸ QUỐC TẾ ROYAL <br>
+    <div class="right" style="width: 60%;text-transform:uppercase">
+        ĐẠI DIỆN VIỆN {!! !empty(setting('title_website'))?setting('title_website'): 'VIỆN THẨM MỸ QUỐC TẾ ROYAL'!!} <br>
         <span class="small-tip">(Ký và ghi rõ họ tên)</span>
     </div>
 </div>
 <div class="" style="position: absolute;bottom: 0;text-align: center;left: 10%;">
-    <i>CẢM ƠN QUÝ KHÁCH ĐÃ TIN TƯỞNG LỰA CHỌN VIỆN THẨM MỸ QUỐC TẾ ROYAL</i>
+    <i style="text-transform:uppercase">CẢM ƠN QUÝ KHÁCH ĐÃ TIN TƯỞNG LỰA CHỌN {!! !empty(setting('title_website'))?setting('title_website'): 'VIỆN THẨM MỸ QUỐC TẾ ROYAL'!!}</i>
 </div>
 </body>
 <script>
