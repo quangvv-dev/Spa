@@ -185,4 +185,7 @@
     <i>CẢM ƠN QUÝ KHÁCH ĐÃ TIN TƯỞNG LỰA CHỌN VIỆN THẨM MỸ QUỐC TẾ ROYAL</i>
 </div>
 </body>
+<script>
+    window.print();
+</script>
 </html>

@@ -11,6 +11,7 @@ use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\CustomerPost;
 use App\Helpers\Functions;
+use App\Model\Contact;
 use App\Models\Album;
 use App\Models\Branch;
 use App\Models\CallCenter;
@@ -330,7 +331,6 @@ class CustomerController extends Controller
         $docs = Model::where('customer_id', $id)->orderByDesc('id')->paginate(10);
         //Task
         $input['type'] = $request->type ?: 'qf1';
-//        $users = User::select('full_name', 'id')->where('active', StatusCode::ON)->pluck('full_name', 'id');
         $customers = Customer::find($id);
         //EndTask
         //History SMS
@@ -342,6 +342,7 @@ class CustomerController extends Controller
         $package = [];
         $orders = [];
         $call_center = [];
+        $contacts = [];
         if ($request->history_sms) {
             $history = HistorySms::where('phone',
                 $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
@@ -372,6 +373,10 @@ class CustomerController extends Controller
             $tasks = Task::where('customer_id', $request->tasks)->orderByDesc('date_from')->paginate(StatusCode::PAGINATE_20);
             return view('tasks._form', compact('tasks'));
         }
+        if ($request->contact) {
+            $contacts = Contact::where('customer_id',$request->contact)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            return view('customers._include.contact', compact('contacts'));
+        }
 
         if ($request->albums) {
             $albums = Album::where('customer_id', $request->albums)->first();
@@ -391,7 +396,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks',
-                'customer_post', 'customers', 'history', 'wallet',
+                'customer_post', 'customers', 'history', 'wallet','contacts',
                 'package', 'call_center', 'orders', 'tips'));
     }
 

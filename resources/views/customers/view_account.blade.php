@@ -303,12 +303,12 @@
                                                    data-toggle="tab">Tổng đài</a></li>
                                             <li><a href="#tab13" id="click_tab_13" data-id="{{$customer->id}}"
                                                    data-toggle="tab">ALBUMS</a></li>
+                                            <li><a href="#tab14" id="click_tab_14" data-id="{{$customer->id}}"
+                                                   data-toggle="tab">Hợp đồng</a></li>
                                             <li>
                                                 <input type="hidden" class="chat-page_id" value="{{@$customer->page_id}}">
                                                 <input type="hidden" class="chat-sender_id" value="{{@$customer->FB_ID}}">
                                                 <input type="hidden" class="chat-token" value="{{@$customer->fanpage->access_token}}">
-                                                {{--<a href="#tab14" id="click_tab_14" data-id="{{$customer->id}}"--}}
-                                                   {{--data-toggle="tab">Hội thoại FB</a>--}}
                                             </li>
                                         </ul>
                                     </div>
@@ -396,7 +396,6 @@
 
                                             </div>
                                             <div id="order_customer">
-                                                {{--@include('customers.order')--}}
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="tab7">
@@ -445,9 +444,9 @@
                                         <div class="tab-pane" id="tabGift">
                                             @include('gifts.ajax')
                                         </div>
-                                        {{--<div class="tab-pane" id="tab14">--}}
-                                            {{--@include('message_fb.index')--}}
-                                        {{--</div>--}}
+                                        <div class="tab-pane" id="tab14">
+                                            @include('customers._include.contact')
+                                        </div>
 
                                     </div>
                                 </div>
@@ -527,11 +526,6 @@
             }).done(function (data) {
                 $('#tab7').html(data);
             });
-            // $('[data-toggle="datepicker"]').datepicker({
-            //     format: 'dd-mm-yyyy',
-            //     autoHide: true,
-            //     zIndex: 2048,
-            // });
         })
         $(document).on('click', '.name-task', function () {
             $('#modalUpdateTask').modal('show');
@@ -561,7 +555,18 @@
             }).done(function (data) {
                 $('#order_customer').html(data);
             });
-        })
+        });
+        $(document).on('click', '#click_tab_14', function () {
+            const id = $(this).data('id');
+            $('#tab14').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+            $.ajax({
+                url: "{{url()->current() }}",
+                method: "get",
+                data: {contact: id}
+            }).done(function (data) {
+                $('#tab14').html(data);
+            });
+        });
 
         $(document).on('click', '#click_tab_gift', function () {
             const id = $(this).data('id');

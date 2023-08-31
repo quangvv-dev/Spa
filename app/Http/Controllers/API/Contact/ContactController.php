@@ -51,7 +51,7 @@ class ContactController extends BaseApiController
      */
     public function index(Request $request)
     {
-        $data = $this->contact->getAll($request->except('limit', 'page'))
+        $data = $this->contact->getAll($request->except('limit', 'page'))->orderByDesc('id')
             ->paginate(!empty($params->limit) ? $params->limit : StatusCode::PAGINATE_20);
         return $this->responseApi(ResponseStatusCode::OK, 'Success', $data);
     }
