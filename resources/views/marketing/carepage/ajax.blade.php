@@ -55,7 +55,7 @@
                     <td class="text-center pdr10">{{number_format($item->schedules)}}</td>
                     <td class="text-center pdr10">{{number_format($item->orders)}}</td>
                     <td class="text-center pdr10">{{!empty($item->contact) ?round(($item->orders/$item->contact)*100,1):0}}%</td>
-                    <td class="text-center pdr10">{{empty($item->contact) ?round(($item->schedules/$item->contact)*100,1):0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->contact) ?round(($item->schedules/$item->contact)*100,1):0}}%</td>
                     <td class="text-center pdr10">{{number_format($item->all_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->gross_revenue)}}</td>
                     <td class="text-center pdr10">{{number_format(($item->payment > $item->gross_revenue)?$item->payment - $item->gross_revenue:0)}}</td>
