@@ -47,7 +47,7 @@
 {{--                <td class="text-center bold">{{number_format($marketing->sum('gross_revenue'))}}</td>--}}
 {{--                <td class="text-center bold">{{((int)$marketing->sum('payment') > (int)$marketing->sum('gross_revenue'))?number_format((int)$marketing->sum('payment') - (int)$marketing->sum('gross_revenue'),0):0}}</td>--}}
                 <td class="text-center bold">{{number_format($marketing->sum('payment'))}}</td>
-                <td class="text-center bold">{{number_format($marketing->sum('avg'))}}</td>
+                <td class="text-center bold">{{number_format(!empty($marketing->sum('orders')) ? round($marketing->sum('payment') / $marketing->sum('orders'), 2) : 0)}}</td>
             </tr>
             @foreach($marketing as $i => $item)
                 <tr class="">

@@ -112,7 +112,7 @@ class MarketingController extends BaseApiController
             });
 //            $item->gross_revenue = (int)$orders->sum('gross_revenue');
             $item->payment = $payment->sum('price');
-            $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) : 0;
+            $item->avg = !empty($item->orders) ? round($item->payment / $item->orders, 2) : 0;
 
             return $item;
         })->sortByDesc('payment');
