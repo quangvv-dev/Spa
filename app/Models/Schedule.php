@@ -190,6 +190,13 @@ class Schedule extends Model
             $q->whereHas('customer', function ($q) use ($request) {
                 $q->where('old_customer', $request['is_upsale']);
             });
+        })->when(isset($request['date_customers']), function ($q) use ($request) {
+            $q->whereHas('customer', function ($q) use ($request) {
+                $q->whereBetween('created_at', [
+                    Functions::yearMonthDay($request['start_date']) . ' 00:00',
+                    Functions::yearMonthDay($request['end_date']) . ' 23:59',
+                ]);
+            });
         });
         if (!empty($request['search'])) {
             $docs = $docs->whereIn('status', $request['search']);
