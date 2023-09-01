@@ -77,7 +77,7 @@ class CarepageController extends Controller
                 $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
                     $item->where('is_upsale', OrderConstant::NON_UPSALE);
                 });
-                $item->gross_revenue = $payment->sum('price');
+                $item->gross_revenue = (int)$orders->sum('gross_revenue');
                 $item->payment = $payment->sum('price');
                 $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) : 0;
                 return $item;
