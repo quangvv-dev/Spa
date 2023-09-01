@@ -27,7 +27,7 @@ class CarepageResource extends JsonResource
             'gross_revenue'     => @(int)$this->gross_revenue,
             'payment'           => @$this->payment,
             'avg'               => @$this->avg,
-            'the_rest'          => @0,
+            'the_rest'          => $this->payment - $this->gross_revenue,
             'percent_order'     => @$this->percent_order,
             'percent_schedules' => @$this->percent_schedules,
         ];
