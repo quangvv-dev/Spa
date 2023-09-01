@@ -41,7 +41,7 @@
                 <td class="text-center bold">{{number_format($marketing->sum('all_total'))}}</td>
                 <td class="text-center bold">{{number_format($marketing->sum('gross_revenue'))}}</td>
 {{--                <td class="text-center bold">{{number_format($marketing->sum('payment'))}}</td>--}}
-                <td class="text-center bold">{{number_format(!empty($marketing->sum('orders')) ?round($marketing->sum('gross_revenue')/$marketing->sum('orders')*100,1):0)}}</td>
+                <td class="text-center bold">{{number_format(!empty($marketing->sum('orders')) ?round($marketing->sum('gross_revenue')/$marketing->sum('orders'),1):0)}}</td>
             </tr>
             @foreach($marketing as $i => $item)
                 <tr class="">
