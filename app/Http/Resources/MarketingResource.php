@@ -22,8 +22,8 @@ class MarketingResource extends JsonResource
             'contact'          => @$this->contact,
             'orders'           => @(int)$this->orders,
             'schedules'        => @(int)$this->schedules,
-            'percent_schedule' => !empty($this->contact) ? round($this->schedules / $this->contact, 2) * 100 : 0,
-            'percent_order'    => !empty($this->contact) ? round($this->orders / $this->contact, 2) * 100 : 0,
+            'percent_schedule' => !empty($this->contact) ? round($this->schedules / $this->contact *100, 2) : 0,
+            'percent_order'    => !empty($this->contact) ? round($this->orders / $this->contact * 100, 2) : 0,
             'avg'              => !empty($this->orders) ? round($this->gross_revenue / $this->orders, 2) : 0,
             'gross_revenue'    => @$this->gross_revenue,
         ];
