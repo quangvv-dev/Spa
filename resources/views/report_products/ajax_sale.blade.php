@@ -16,8 +16,8 @@
             <th class="text-center">% Đến/lịch hẹn</th>
             <th class="text-center">% Mua/lịch hẹn</th>
             <th class="text-center">% K.mua/lịch hẹn</th>
-            <th class="text-center">% Chốt đơn /khách đến</th>
-            <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn /SĐT</span></th>
+            <th class="text-center">% Chốt <span class=""><br>/khách đến</span></th>
+            <th class="text-center">%<span class=""><br>Chốt /SĐT</span></th>
             <th class="text-center">TB đơn</th>
             <th class="text-center">Doanh số</th>
             <th class="text-center">Doanh thu</th>
