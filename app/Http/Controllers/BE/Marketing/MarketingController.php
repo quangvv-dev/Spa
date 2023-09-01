@@ -242,8 +242,8 @@ class MarketingController extends Controller
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $input['is_upsale'] = OrderConstant::NON_UPSALE;
-            $data = Order::searchAll($input)->select('gross_revenue');
-            $item->gross_revenue = $data->sum('gross_revenue');
+            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+            $item->gross_revenue = $orders->sum('gross_revenue');
             return $item;
         })->sortByDesc('gross_revenue')->toArray();
 
