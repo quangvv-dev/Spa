@@ -66,7 +66,10 @@ class MarketingController extends Controller
                 $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
                 $item->orders = $orders->count();
                 $item->all_total = $orders->sum('all_total');
-                $item->gross_revenue = $orders->sum('gross_revenue');
+                $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
+                    $item->where('is_upsale', OrderConstant::NON_UPSALE);
+                });
+                $item->gross_revenue = $payment->sum('price');
                 $input['marketing'] = $item->id;
                 $input['is_upsale'] = OrderConstant::NON_UPSALE;
                 $input['date_customers'] = OrderConstant::NON_UPSALE;
@@ -77,7 +80,9 @@ class MarketingController extends Controller
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
-//        $payment = PaymentHistory::search($input, 'price,order_id');
+//        $payment = PaymentHistory::search($input, 'price,order_id')whereHas('order', function ($item) {
+////            $item->where('is_upsale', 0);
+////        });
 //        $paymentNew = clone $payment;
 //        $paymentNew = $paymentNew->whereHas('order', function ($item) {
 //            $item->where('is_upsale', 0);
@@ -242,8 +247,10 @@ class MarketingController extends Controller
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $input['is_upsale'] = OrderConstant::NON_UPSALE;
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
-            $item->gross_revenue = $orders->sum('gross_revenue');
+            $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
+                $item->where('is_upsale', OrderConstant::NON_UPSALE);
+            });
+            $item->gross_revenue = $payment->sum('price');
             return $item;
         })->sortByDesc('gross_revenue')->toArray();
 

@@ -108,7 +108,10 @@ class MarketingController extends BaseApiController
             $item->percent_order = !empty($item->contact) ? round($item->orders / $item->contact, 2) * 100 : 0;
             $item->percent_schedules = !empty($item->contact) ? round($item->schedules / $item->contact, 2) * 100 : 0;
             $item->all_total = (int)$orders->sum('all_total');
-            $item->gross_revenue = (int)$orders->sum('gross_revenue');
+            $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
+                $item->where('is_upsale', OrderConstant::NON_UPSALE);
+            });
+            $item->gross_revenue = $payment->sum('price');
             $item->payment = $payment->sum('price');
             $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) : 0;
 
