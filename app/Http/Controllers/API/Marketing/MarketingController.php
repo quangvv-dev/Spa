@@ -62,7 +62,10 @@ class MarketingController extends BaseApiController
             $input['is_upsale'] = OrderConstant::NON_UPSALE;
             $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
             $item->orders = $orders->count();
-            $item->gross_revenue = $orders->sum('gross_revenue');
+            $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
+                $item->where('is_upsale', OrderConstant::NON_UPSALE);
+            });
+            $item->gross_revenue = $payment->sum('price');
             $input['marketing'] = $item->id;
             $input['date_customers'] = OrderConstant::NON_UPSALE;
             $item->schedules = Schedule::search($input)->count();
