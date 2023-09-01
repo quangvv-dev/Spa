@@ -11,15 +11,15 @@
             <th class="text-center">Khách đến mua</th>
             <th class="text-center">Khách đến k.mua</th>
             <th class="text-center">Đơn chốt</th>
-            <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
-            <th class="text-center">Tỷ lệ đến/SĐT</th>
-            <th class="text-center">Tỷ lệ đến/lịch hẹn</th>
-            <th class="text-center">% Đến mua/lịch hẹn</th>
-            <th class="text-center">% Đến k.mua/lịch hẹn</th>
-            <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
+            <th class="text-center">%<span class=""><br>Chốt lịch</span></th>
+{{--            <th class="text-center">Tỷ lệ đến/SĐT</th>--}}
+            <th class="text-center">% Đến/lịch hẹn</th>
+            <th class="text-center">% Mua/lịch hẹn</th>
+            <th class="text-center">% K.mua/lịch hẹn</th>
+            <th class="text-center">% Chốt đơn /khách đến</th>
             <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn /SĐT</span></th>
             <th class="text-center">TB đơn</th>
-            <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
+            <th class="text-center">Doanh số</th>
             <th class="text-center">Doanh thu</th>
             <th class="text-center no-wrap">Thu nợ</th>
             <th class="text-center no-wrap">Thực thu</th>
@@ -36,7 +36,7 @@
             <th class="text-center">(7)</th>
             <th class="text-center">(8)</th>
             <th class="text-center">(8.1)</th>
-            <th class="text-center">(5)/(3)</th>
+{{--            <th class="text-center">(5)/(3)</th>--}}
             <th class="text-center">(5)/(4)</th>
             <th class="text-center">(6)/(4)</th>
             <th class="text-center">(7)/(4)</th>
@@ -95,7 +95,7 @@
                     <td class="text-center pdr10">{{$item->not_buy}}</td>
                     <td class="text-center pdr10">{{$item->order_new}}</td>
                     <td class="text-center pdr10">{{!empty($item->schedules_new) && !empty($item->customer_new) ?round(($item->schedules_new/$item->customer_new)*100,1):0}}%</td>
-                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ? round($item->schedules_den/$item->customer_new*100,1):0}}%</td>
+{{--                    <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->customer_new) ? round($item->schedules_den/$item->customer_new*100,1):0}}%</td>--}}
                     <td class="text-center pdr10">{{!empty($item->schedules_den) && !empty($item->schedules_new) ? round($item->schedules_den/$item->schedules_new*100,1):0}}%</td>
 
                     <td class="text-center pdr10">{{$item->schedules_new> 0 && $item->become_buy >0 ?round(($item->become_buy/$item->schedules_new)*100,1):0}}%</td>
@@ -123,7 +123,7 @@
             <td class="text-center bold">{{@number_format($users->sum('not_buy'))}}</td>
             <td class="text-center bold">{{@number_format($order_new)}}</td>
             <td class="text-center bold">{{!empty($schedules_new)&& !empty($customer_new)?round($schedules_new/$customer_new*100,1):0}}%</td>
-            <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($customer_new)?round($all_schedules_den/$customer_new*100,1):0}}%</td>
+{{--            <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($customer_new)?round($all_schedules_den/$customer_new*100,1):0}}%</td>--}}
             <td class="text-center bold">{{!empty($all_schedules_den)&& !empty($schedules_new)?round($all_schedules_den/$schedules_new*100,1):0}}%</td>
 
             <td class="text-center bold">{{!empty($schedules_new)&& !empty($users->sum('become_buy'))?round($users->sum('become_buy')/$schedules_new*100,1):0}}%</td>
