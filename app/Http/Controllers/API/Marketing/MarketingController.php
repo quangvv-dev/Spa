@@ -97,10 +97,10 @@ class MarketingController extends BaseApiController
             if (count($group_user)) {
                 $schedules = Schedule::search($input)->select('id');
                 $item->schedules = $schedules->count();
-                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+//                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
             } else {
                 $item->schedules = 0;
-                $item->schedules_den = 0;
+//                $item->schedules_den = 0;
             }
             $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
             $item->orders = $orders->count();
@@ -110,7 +110,7 @@ class MarketingController extends BaseApiController
             $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
                 $item->where('is_upsale', OrderConstant::NON_UPSALE);
             });
-            $item->gross_revenue = (int)$orders->sum('gross_revenue');
+//            $item->gross_revenue = (int)$orders->sum('gross_revenue');
             $item->payment = $payment->sum('price');
             $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) : 0;
 
