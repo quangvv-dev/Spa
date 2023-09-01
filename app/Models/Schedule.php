@@ -16,22 +16,22 @@ class Schedule extends Model
 //            'id'   => 1,
 //            'name' => 'Hẹn gọi lại',
 //        ],
-        [
-            'id' => 2,
-            'name' => 'Đặt lịch',
-        ],
-        [
-            'id' => 3,
-            'name' => 'Đến/mua',
-        ],
-        [
-            'id' => 4,
-            'name' => 'Đến/chưa mua',
-        ],
-        [
-            'id' => 5,
-            'name' => 'Hủy lịch',
-        ],
+[
+    'id'   => 2,
+    'name' => 'Đặt lịch',
+],
+[
+    'id'   => 3,
+    'name' => 'Đến/mua',
+],
+[
+    'id'   => 4,
+    'name' => 'Đến/chưa mua',
+],
+[
+    'id'   => 5,
+    'name' => 'Hủy lịch',
+],
 //        [
 //            'id'   => 6,
 //            'name' => 'Tất cả',
@@ -161,12 +161,13 @@ class Schedule extends Model
 
     public static function search($request)
     {
-        $docs = self::orderBy('id', 'desc')->when(isset($request['group_branch']) && count($request['group_branch']), function ($q) use ($request) {
-            $q->whereIn('branch_id', $request['group_branch']);
-        });
+        $docs = self::orderBy('id', 'desc')->when(isset($request['group_branch']) && count($request['group_branch']),
+            function ($q) use ($request) {
+                $q->whereIn('branch_id', $request['group_branch']);
+            });
         if (!empty($request['date'])) {
             $docs = $docs->where('date', $request['date']);
-        } elseif(empty($request['start_date'])) {
+        } elseif (empty($request['start_date'])) {
             $prevMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
             $nextMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
             $docs = $docs->whereBetween('date', [
@@ -185,6 +186,10 @@ class Schedule extends Model
                 Functions::yearMonthDay($request['start_date']) . ' 00:00',
                 Functions::yearMonthDay($request['end_date']) . ' 23:59',
             ]);
+        })->when(isset($request['is_upsale']), function ($q) use ($request) {
+            $q->whereHas('customer', function ($q) use ($request) {
+                $q->where('old_customer', $request['is_upsale']);
+            });
         });
         if (!empty($request['search'])) {
             $docs = $docs->whereIn('status', $request['search']);
@@ -197,7 +202,8 @@ class Schedule extends Model
         }
         if (!empty($request['category'])) {
             $docs = $docs->where('category_id', $request['category']);
-        }if (!empty($request['status_id'])) {
+        }
+        if (!empty($request['status_id'])) {
             $docs = $docs->where('status', $request['status_id']);
         }
         if (!empty($request['customer'])) {

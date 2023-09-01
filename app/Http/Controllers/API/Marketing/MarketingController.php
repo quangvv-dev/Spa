@@ -63,6 +63,7 @@ class MarketingController extends BaseApiController
             $item->orders = $orders->count();
             $item->gross_revenue = $orders->sum('gross_revenue');
             $input['marketing'] = $item->id;
+            $input['is_upsale'] = OrderConstant::NON_UPSALE;
             $item->schedules = Schedule::search($input)->count();
             return $item;
         })->sortByDesc('gross_revenue');

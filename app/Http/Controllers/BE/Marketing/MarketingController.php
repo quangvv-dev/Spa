@@ -68,6 +68,7 @@ class MarketingController extends Controller
                 $item->all_total = $orders->sum('all_total');
                 $item->gross_revenue = $orders->sum('gross_revenue');
                 $input['marketing'] = $item->id;
+                $input['is_upsale'] = OrderConstant::NON_UPSALE;
                 $item->schedules = Schedule::search($input)->count();
                 return $item;
             })->sortByDesc('gross_revenue');
