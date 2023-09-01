@@ -26,6 +26,7 @@ class SaleResource extends JsonResource
             'schedules_failed' => $this->schedules_failed,
             'call'             => $this->call,
             'percentOrder'     => $this->percentOrder,
+            'gross_revenue'    => $this->gross_revenue,
             'totalNew'         => $this->totalNew,
             'the_rest'         => @$this->the_rest,
             'avg'              => $this->avg,
