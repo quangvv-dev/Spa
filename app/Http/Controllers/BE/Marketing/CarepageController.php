@@ -53,34 +53,35 @@ class CarepageController extends Controller
             $input['group_branch'] = $group_branch;
         }
 
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->where('active',UserConstant::ACTIVE)
-            ->select('id', 'full_name')->get()->map(function ($item) use ($input) {
-            $input['carepage_id'] = $item->id;
-            $customer = Customer::search($input)->select('id');
-            $item->contact = $customer->count();
-            $group_user = $customer->pluck('id')->toArray();
-            $input['group_user'] = $group_user;
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->where('active',StatusCode::ON)
+            ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+                $input['carepage_id'] = $item->id;
+                $customer = Customer::searchApi($input)->select('id');
+                $item->contact = $customer->count();
+                $group_user = $customer->pluck('id')->toArray();
+                $input['group_user'] = $group_user;
 
-            if (count($group_user)) {
-                $schedules = Schedule::search($input)->select('id');
-                $item->schedules = $schedules->count();
-                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            } else {
-                $item->schedules = 0;
-                $item->schedules_den = 0;
-            }
-            $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
-            $payment = PaymentHistory::search($input, 'price','order_id')->get();
-            $item->orders = $orders->count();
-            $item->all_total = $orders->sum('all_total');
-            $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = $payment->sum('price');
-            return $item;
-        })->sortByDesc('payment')->filter(function ($q){
-            if ((int)$q->payment >0 ){
-                return $q;
-            }
-        });
+                if (count($group_user)) {
+                    $schedules = Schedule::search($input)->select('id');
+                    $item->schedules = $schedules->count();
+//                    $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
+                } else {
+                    $item->schedules = 0;
+//                    $item->schedules_den = 0;
+                }
+                $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
+                $item->orders = $orders->count();
+                $item->percent_order = !empty($item->contact) ? round($item->orders / $item->contact, 2) * 100 : 0;
+                $item->percent_schedules = !empty($item->contact) ? round($item->schedules / $item->contact, 2) * 100 : 0;
+                $item->all_total = (int)$orders->sum('all_total');
+                $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
+                    $item->where('is_upsale', OrderConstant::NON_UPSALE);
+                });
+                $item->gross_revenue = $payment->sum('price');
+                $item->payment = $payment->sum('price');
+                $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) : 0;
+                return $item;
+            })->sortByDesc('payment');
         if ($request->ajax()) {
             return view('marketing.carepage.ajax', compact('marketing'));
         }

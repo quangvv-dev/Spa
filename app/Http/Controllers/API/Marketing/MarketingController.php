@@ -103,7 +103,6 @@ class MarketingController extends BaseApiController
                 $item->schedules_den = 0;
             }
             $orders = Order::searchAll($input)->select('id', 'order_id', 'gross_revenue', 'all_total');
-            $payment = PaymentHistory::search($input, 'price', 'order_id')->get();
             $item->orders = $orders->count();
             $item->percent_order = !empty($item->contact) ? round($item->orders / $item->contact, 2) * 100 : 0;
             $item->percent_schedules = !empty($item->contact) ? round($item->schedules / $item->contact, 2) * 100 : 0;
@@ -116,11 +115,7 @@ class MarketingController extends BaseApiController
             $item->avg = !empty($item->orders) ? round($item->gross_revenue / $item->orders, 2) : 0;
 
             return $item;
-        })->sortByDesc('payment')->filter(function ($q) {
-            if ((int)$q->payment > 0) {
-                return $q;
-            }
-        });
+        })->sortByDesc('payment');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', CarepageResource::collection($marketing));
 
     }

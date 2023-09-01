@@ -158,7 +158,8 @@ class SalesController extends Controller
         }
 
         $params = $request->all();
-        $sale = User::where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($params) {
+        $sale = User::where('department_id', DepartmentConstant::TELESALES)
+            ->where('active', StatusCode::ON)->get()->map(function ($item) use ($params) {
             $params['telesales'] = $item->id;
             $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
             $item->gross_revenue = $detail->whereHas('order', function ($qr) use ($params) {
