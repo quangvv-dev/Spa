@@ -238,8 +238,10 @@ class MarketingController extends Controller
         }
 
         $input = $request->all();
-        $marketing = User::where('department_id', 3)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', 3)->where('active',StatusCode::ON)
+            ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
+            $input['is_upsale'] = OrderConstant::NON_UPSALE;
             $data = Order::searchAll($input)->select('gross_revenue');
             $item->gross_revenue = $data->sum('gross_revenue');
             return $item;
