@@ -8,6 +8,7 @@ use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Http\Resources\MarketingResource;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Order;
@@ -57,49 +58,28 @@ class MarketingController extends Controller
             $group_branch = Branch::where('location_id', @Auth::user()->branch->location_id)->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-
         $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active',StatusCode::ON)
-            ->select('id', 'full_name')->get()->map(function ($item) use ($input) {
-            $input['marketing'] = $item->id;
-            $input['thuc_hien_id'] = $item->id;
-            $params = $input;
-            unset($params['marketing'], $params['branch_id'], $params['location_id']);
-
-            $customer = Customer::search($input)->select('id');
-            $item->contact = $customer->count();
-            $group_user = $customer->pluck('id')->toArray();
-            $input['group_user'] = $group_user;
-
-            if (count($group_user)) {
-                $schedules = Schedule::search($input)->select('id');
-                $item->schedules = $schedules->count();
-                $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            } else {
-                $item->schedules = 0;
-                $item->schedules_den = 0;
-            }
-            $input['is_upsale'] = 0;
-            $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
-            $payment = PaymentHistory::search($input, 'price,order_id');
-            $paymentNew = clone $payment;
-            $paymentNew = $paymentNew->whereHas('order', function ($item) {
-                $item->where('is_upsale', 0);
-            });
-            $item->orders = $orders->count();
-            $item->all_total = $orders->sum('all_total');
-            $item->gross_revenue = $orders->sum('gross_revenue');
-            $item->payment = $paymentNew->sum('price');
-            $item->paymentAll = $payment->sum('price');
-            return $item;
-        })->sortByDesc('payment')
-            ->filter(function ($qr) {
-                if ($qr->payment > 0) {
-                    return $qr;
-                }
-            });
+            ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+                $input['marketing'] = $item->id;
+                $customer = Customer::searchApi($input)->select('id');
+                $item->contact = $customer->count();
+                $orders = Order::searchAll($input)->select('id', 'gross_revenue', 'all_total');
+                $item->orders = $orders->count();
+                $item->all_total = $orders->sum('all_total');
+                $item->gross_revenue = $orders->sum('gross_revenue');
+                $input['marketing'] = $item->id;
+                $item->schedules = Schedule::search($input)->count();
+                return $item;
+            })->sortByDesc('gross_revenue');
+        $marketing =  MarketingResource::collection($marketing);
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
+//        $payment = PaymentHistory::search($input, 'price,order_id');
+//        $paymentNew = clone $payment;
+//        $paymentNew = $paymentNew->whereHas('order', function ($item) {
+//            $item->where('is_upsale', 0);
+//        });
 
         return view('marketing.leader.index', compact('marketing'));
     }
