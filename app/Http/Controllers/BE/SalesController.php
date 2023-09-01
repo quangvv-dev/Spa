@@ -48,9 +48,9 @@ class SalesController extends Controller
 
     /**
      * Bảng xếp hạng sales
-     *
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -64,7 +64,7 @@ class SalesController extends Controller
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $users = User::select('id','full_name')->where('department_id', DepartmentConstant::TELESALES)
+        $users = User::select('id','full_name','caller_number')->where('department_id', DepartmentConstant::TELESALES)
             ->where('active', StatusCode::ON)->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
