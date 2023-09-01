@@ -609,8 +609,11 @@ class OrderController extends Controller
             self::commissionOrder($paymentHistory->order_id, $paymentHistory->id, $paymentHistory->price);
 
             if (count($check) <= 1) {
-                ZaloZns::dispatch($customer->phone, ['customer_name' => $customer->full_name, 'order_code' => $order->code])
-                    ->delay(now()->addSeconds(5));
+                ZaloZns::dispatch($customer->phone, [
+                    'customer_name' => $customer->full_name,
+                    'order_code'    => $order->code,
+                    'created_at'    => date('d/m/Y H:i', strtotime($paymentHistory->created_at)),
+                ])->delay(now()->addSeconds(5));
                 if (isset($check2) && count($check2)) {
                     $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
                     foreach ($check2 as $item) {
