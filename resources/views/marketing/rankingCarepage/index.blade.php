@@ -294,9 +294,9 @@
                             <input type="hidden" name="end_date" id="end_date">
                             <input id="reportrange" type="text" class="form-control square">
                         </div>
-                        <div class="col-lg-2 col-md-6">
-                            {!! Form::select('is_upsale', [0=>'Khách hàng mới',1=>'Khách hàng cũ'], null, array('class' => 'form-control', 'placeholder'=>'Tất cả khách hàng',)) !!}
-                        </div>
+{{--                        <div class="col-lg-2 col-md-6">--}}
+{{--                            {!! Form::select('is_upsale', [0=>'Khách hàng mới',1=>'Khách hàng cũ'], null, array('class' => 'form-control', 'placeholder'=>'Tất cả khách hàng',)) !!}--}}
+{{--                        </div>--}}
 
                         <button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm</button>
                     </div>

@@ -53,7 +53,8 @@ class CarepageController extends Controller
             $input['group_branch'] = $group_branch;
         }
 
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->where('active',UserConstant::ACTIVE)
+            ->select('id', 'full_name')->get()->map(function ($item) use ($input) {
             $input['carepage_id'] = $item->id;
             $customer = Customer::search($input)->select('id');
             $item->contact = $customer->count();
@@ -100,8 +101,10 @@ class CarepageController extends Controller
         }
 
         $input = $request->all();
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->where('active',UserConstant::ACTIVE)
+            ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['carepage_id'] = $item->id;
+            $input['is_upsale'] = OrderConstant::NON_UPSALE;
             $data = Order::searchAll($input)->select('gross_revenue');
             $item->gross_revenue = $data->sum('gross_revenue');
             return $item;

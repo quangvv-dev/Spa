@@ -43,7 +43,13 @@
 {{--                <td class="text-center bold">{{number_format($marketing->sum('payment'))}}</td>--}}
                 <td class="text-center bold">{{number_format(!empty($marketing->sum('orders')) ?round($marketing->sum('gross_revenue')/$marketing->sum('orders'),1):0)}}</td>
             </tr>
+            @php
+                $i =0;
+            @endphp
             @foreach($marketing as $i => $item)
+                @php
+                    $i ++;
+                @endphp
                 <tr class="">
                     <td class="text-center pdr10">{{$i}}</td>
                     <td class="text-center pdr10">{{$item->full_name}}
