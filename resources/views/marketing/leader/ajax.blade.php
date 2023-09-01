@@ -55,7 +55,7 @@
                     <td class="text-center pdr10">{{number_format($item->all_total)}}</td>
                     <td class="text-center pdr10">{{number_format($item->gross_revenue)}}</td>
 {{--                    <td class="text-center pdr10">{{number_format($item->payment)}}</td>--}}
-                    <td class="text-center pdr10">{{number_format(!empty($item->orders) ? round(($item->gross_revenue / $item->orders) * 100, 2) : 0)}}</td>
+                    <td class="text-center pdr10">{{number_format(!empty($item->orders) ? round(($item->gross_revenue / $item->orders), 2) : 0)}}</td>
                 </tr>
             @endforeach
         @endif
