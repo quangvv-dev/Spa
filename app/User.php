@@ -150,4 +150,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Team::class, 'leader_id', 'id');
     }
+    public function isLeaderAdmin() // trưởng phòng do code set
+    {
+        return $this->is_leader == 1;
+    }
 }
