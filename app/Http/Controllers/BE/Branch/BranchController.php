@@ -25,9 +25,9 @@ use Illuminate\Support\Facades\Response;
 class BranchController extends Controller
 {
 
-
     public function __construct()
     {
+        $this->middleware('permission:report.branch-source', ['only' => ['source']]);
         $branch= Branch::select('id','name')->pluck('name','id')->toArray();
         $location = Branch::getLocation();
         view()->share([

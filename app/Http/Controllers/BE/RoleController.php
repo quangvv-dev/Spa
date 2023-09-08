@@ -51,7 +51,8 @@ class RoleController extends Controller
         'report.sale',
         'statistics.taskSchedules',
         'call-center',
-        'report.hoa-hong'
+        'report.hoa-hong',
+        'report.branch-source'
     ];
 
     protected $other = [
