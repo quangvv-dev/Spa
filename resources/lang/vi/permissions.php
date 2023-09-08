@@ -37,6 +37,7 @@ return [
     "report.sale"              => "Xếp hạng Telesales",
     "report.hoa-hong"          => "Thống kê hoa hồng",
     "sms.history"              => "Tin nhắn đã gửi",
+    "permission:report.branch-source"  => "Doanh thu theo nguồn",
     //Quyền nâng cao
     'marketing.seeding_number' => "Kho số seeding",
     'marketing.fanpage_post'   => "Fanpage Post",
