@@ -223,11 +223,10 @@
                                         <li><a href="{{url('chart-revenue')}}">BĐ hệ thống</a></li>
                                         <li><a href="{{route('report.branchs')}}">Nguồn thu từ đơn hệ thống</a></li>
                                     @endif
-                                    @if($roleGlobal->permission('report.branch-source'))
-                                        <li><a href="{{route('report.branch-source')}}">Báo cáo nguồn dữ liệu</a></li>
-                                    @endif
                                     <li><a href="{{url('chart-pay')}}">Duyệt chi</a></li>
-
+                                @endif
+                                @if($roleGlobal->permission('report.branch-source'))
+                                    <li><a href="{{route('report.branch-source')}}">Báo cáo nguồn dữ liệu</a></li>
                                 @endif
                                 @if($roleGlobal->permission('report.groupSale'))
                                     <li><a href="{{url('report/group-sale')}}">Doanh số nhóm SP&DV</a></li>
