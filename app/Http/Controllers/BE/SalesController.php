@@ -125,13 +125,13 @@ class SalesController extends Controller
             $item->detail_new = $detail->whereHas('order', function ($qr) {
                 $qr->where('is_upsale', OrderConstant::NON_UPSALE);
             })->sum('price');
-//            $item->is_debt = $detail->where('is_debt', StatusCode::ON)->sum('price');
+            $item->is_debt = $detail->where('is_debt', StatusCode::ON)->sum('price');
             $item->customer_new = $data_new->count();
             $item->order_new = $order_new->count();
             $item->revenue_new = $order_new->sum('all_total');
             $item->payment_revenue = $orders->sum('gross_revenue');
             $item->payment_new = $order_new->sum('gross_revenue');
-            $item->is_debt = $item->detail_new - $item->payment_revenue;
+//            $item->is_debt = $item->detail_new - $item->payment_revenue;
             return $item;
         })->sortByDesc('all_payment');
         \View::share([
