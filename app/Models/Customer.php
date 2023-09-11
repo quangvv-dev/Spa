@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
+    public const DUPLICATE = 1;
+    public const NON_DUPLICATE = 0;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -54,7 +57,8 @@ class Customer extends Model
         'expired_time',
         'time_move_cskh',
         'expired_time_boolean',
-        'type_ctv'
+        'type_ctv',
+        'is_duplicate',
     ];
     public const grid_display = [
         0 => 'STT',
@@ -587,5 +591,10 @@ class Customer extends Model
             return ($days > 0 ? $days . ' ngày ' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
         }
         return '';
+    }
+
+    public function isDuplicate()
+    {
+        return $this->is_duplicate === self::DUPLICATE;
     }
 }

@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
+                        <div class="phone-group form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
                             {!! Form::label('phone', 'Số điện thoại', array('class' => 'control-label')) !!}
                             {!! Form::text('phone', isset($customer)? @str_limit($customer->phone,7,'xxx'):null, array('id' => 'phone','class' => 'form-control')) !!}
                             <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
@@ -86,14 +86,6 @@
                             <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
                         </div>
                     </div>
-
-                    {{--<div class="col-xs-12 col-md-12">--}}
-                    {{--<div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">--}}
-                    {{--{!! Form::label('genitive_id', 'Nhóm tính cách') !!}--}}
-                    {{--{!! Form::select('genitive_id',$genitives, null, array('class' => 'form-control select2', 'placeholder' => 'Chọn nhóm tính cách')) !!}--}}
-                    {{--<span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
                     @if(empty($checkRole))
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
@@ -108,7 +100,8 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group">
                             <label for="ctv" style="width: 100%;cursor: pointer;">Cộng tác viên</label>
-                            <input id="ctv" type="checkbox" name="type_ctv" style="width: 30px;height: 25px;cursor: pointer;">
+                            <input id="ctv" type="checkbox" name="type_ctv"
+                                   style="width: 30px;height: 25px;cursor: pointer;">
                         </div>
                     </div>
                 </div>
@@ -135,19 +128,21 @@
                     </div>
 
                     @if(\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::CARE_PAGE || \Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::ADMIN)
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('mkt_id') ? 'has-error' : '' }}">
-                            {!! Form::label('mkt_id', 'MKT phụ trách', array('class' => 'control-label')) !!}
-                            <select name="mkt_id" id="mkt_id" class="form-control select2" data-placeholder="Chọn nhân viên">
-                                <option value=""></option>
-                                @foreach($marketingUsers as $k => $i)
-                                 <option {{@$customer->mkt_id == $k?'selected':''}} value="{{ $k }}">{{ $i }}</option>
-                                @endforeach
-                            </select>
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('mkt_id') ? 'has-error' : '' }}">
+                                {!! Form::label('mkt_id', 'MKT phụ trách', array('class' => 'control-label')) !!}
+                                <select name="mkt_id" id="mkt_id" class="form-control select2"
+                                        data-placeholder="Chọn nhân viên">
+                                    <option value=""></option>
+                                    @foreach($marketingUsers as $k => $i)
+                                        <option
+                                            {{@$customer->mkt_id == $k?'selected':''}} value="{{ $k }}">{{ $i }}</option>
+                                    @endforeach
+                                </select>
 
-                            <span class="help-block">{{ $errors->first('mkt_id', ':message') }}</span>
+                                <span class="help-block">{{ $errors->first('mkt_id', ':message') }}</span>
+                            </div>
                         </div>
-                    </div>
                     @endif
 
                     <div class="col-xs-12 col-md-12">
@@ -242,6 +237,20 @@
                     phone_number.match(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
             }, "Số điện thoại không hợp lệ");
 
+            $('#phone').on('change', function () {
+                let current = $(this);
+                $.ajax({
+                    url: '/api/check-unique-customers',
+                    type:"post",
+                    data: {
+                        phone: $(this).val(),
+                    },
+                    success: function (data) {
+                        current.closest('.phone-group').find('.help-block').html('Số điện thoại đã tồn tại')
+                    }
+                })
+            });
+
             $("#fvalidate").validate({
                 rules: {
                     full_name: {
@@ -252,29 +261,6 @@
                     },
                     phone: {
                         required: true,
-                        remote: {
-                            url: "{{ url('api/check-unique-customers') }}",
-                            type: "post",
-                            data: {
-                                phone: function () {
-                                    return $("#phone").val();
-                                },
-                                id: {{ isset($customer) ? $customer->id : 0 }},
-                            },
-                        }
-                    },
-                    is_gioithieu: {
-                        // required: true,
-                        remote: {
-                            url: "{{ url('api/check-unique-customers') }}",
-                            type: "post",
-                            data: {
-                                phone: function () {
-                                    return $("#phone").val();
-                                },
-                                id: {{ isset($customer) ? $customer->id : 0 }},
-                            },
-                        }
                     },
                     gender: {
                         required: true
@@ -304,7 +290,6 @@
                     branch_id: "Chưa chọn chi nhánh",
                     phone: {
                         required: "Chưa nhập số điện thoại",
-                        remote: "Số điện thoại đã tồn tại trong hệ thống",
                     },
                     gender: "Chưa chọn giới tính",
                     status_id: "Chưa chọn trạng thái",

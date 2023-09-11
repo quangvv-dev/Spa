@@ -58,6 +58,8 @@ class CustomerService
             $userLogin = Auth::user()->id;
             $input['mkt_id'] = $userLogin;
         }
+        $customer = $this->customer->where('phone',$input['phone'])->first();
+        $input['is_duplicate'] = !empty($customer) ? Customer::DUPLICATE : Customer::NON_DUPLICATE;
         $input['carepage_id'] = Auth::user()->id;
         $data = $this->data($input);
         $customer = $this->customer->fill($data);
