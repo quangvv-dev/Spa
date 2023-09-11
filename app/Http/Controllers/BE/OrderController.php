@@ -570,14 +570,8 @@ class OrderController extends Controller
             $customer = Customer::find($request->customer_id);
             $input['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
             $find_order = Order::find($id);
-            if ($find_order) {
-                $get_month_now = date('m', strtotime(date('Y-m-d H:i:s')));
-                $month_check = date('m', strtotime($find_order->created_at));
-                if ($get_month_now != $month_check) {
-                    $input['is_debt'] = 1;
-                } else {
-                    $input['is_debt'] = 0;
-                }
+            if (isset($find_order->paymentHistories) && $find_order->paymentHistories->count() >= 1) {
+                $input['is_debt'] = 1;
             } else {
                 $input['is_debt'] = 0;
             }

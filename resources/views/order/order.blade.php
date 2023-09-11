@@ -282,7 +282,6 @@
                     let customer_id = '{{@$order->customer->id}}';
                     let maxWallet = $('#maxWallet').val();
                     let check = replaceNumber(grossRevenue);
-                    console.log(maxWallet, replaceNumber(grossRevenue));
                     if (paymentType == 3 && (parseInt(check) > parseInt(maxWallet))) {
 
                         $('#wallet-error').show();
