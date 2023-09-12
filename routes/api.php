@@ -105,6 +105,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('admin/status-schedules', 'SchedulesController@statusSchedules');
     Route::get('approval-orders', 'ChamCong\OrderController@index');
     Route::post('approval-orders', 'ChamCong\OrderController@store');
+    Route::post('checkin-orders', 'ChamCong\OrderController@checkInOrder');
     Route::put('approval-orders/{id}', 'ChamCong\OrderController@update');
     Route::get('approval-reason', 'ChamCong\OrderController@getListReason');
     Route::get('approval-accept', 'ChamCong\OrderController@getListAccept');

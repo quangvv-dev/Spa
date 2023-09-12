@@ -53,7 +53,7 @@ class OrderController extends BaseApiController
         });
         $docs = $docs->orderByDesc('date')->paginate(StatusCode::PAGINATE_20);
         $data = [
-            'status'  => $clone,
+            'status' => $clone,
             'records' => OrderResource::collection($docs),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -95,26 +95,24 @@ class OrderController extends BaseApiController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
         if ($request->type == OrderConstant::TYPE_DON_NGHI) {
             $validate = [
-                'date'      => "required",
-                'date_end'  => "required",
-                'time_to'   => "required",
-                'time_end'  => "required",
+                'date' => "required",
+                'date_end' => "required",
+                'time_to' => "required",
+                'time_end' => "required",
                 'reason_id' => "required",
                 'accept_id' => "required",
             ];
         } else {
             $validate = [
-                'date'      => "required",
-                'time_to'   => "required",
+                'date' => "required",
+                'time_to' => "required",
                 'reason_id' => "required",
                 'accept_id' => "required",
             ];
@@ -131,11 +129,30 @@ class OrderController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'Tạo mới đơn thành công', new OrderResource($approval_order));
     }
 
+    public function checkInOrder(Request $request)
+    {
+        $validate = [
+            'date' => "required",
+            'time_to' => "required",
+            'reason_id' => "required",
+            'accept_id' => "required",
+        ];
+        $user = $request->jwtUser;
+        $request->merge(['user_id' => $user->id, 'status' => OrderConstant::CHO_DUYET, 'type' => OrderConstant::TYPE_DON_CHECKIN_CHECKOUT]);
+        $this->validator($request, $validate);
+        if (!empty($this->error)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, $this->error);
+        }
+        $data = $request->all();
+        $approval_order = DonTu::create($data);
+        return $this->responseApi(ResponseStatusCode::OK, 'Tạo mới đơn check in - out thành công', new OrderResource($approval_order));
+    }
+
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -184,14 +201,14 @@ class OrderController extends BaseApiController
                         $key = array_search($don_tu->time_to, ChamCongConstant::HOURS);
                         $time = $don_tu->date . ' ' . $key;
                         ChamCong::insert([
-                            'name_machine'     => $cham_cong->name_machine ?: 'HN',
-                            'machine_number'   => 1,
-                            'approval_code'    => $user->approval_code,
+                            'name_machine' => $cham_cong->name_machine ?: 'HN',
+                            'machine_number' => 1,
+                            'approval_code' => $user->approval_code,
                             'date_time_record' => $time,
-                            'ind_red_id'       => explode('.', $user->approval_code),
-                            'type'             => 1,
-                            'created_at'       => $time,
-                            'updated_at'       => $time,
+                            'ind_red_id' => explode('.', $user->approval_code),
+                            'type' => 1,
+                            'created_at' => $time,
+                            'updated_at' => $time,
 
                         ]);
                     }
