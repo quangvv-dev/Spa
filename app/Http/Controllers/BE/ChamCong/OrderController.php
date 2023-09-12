@@ -227,7 +227,8 @@ class OrderController extends Controller
                             'updated_at'       => $time,
                         ]);
                     }
-                    $don_tu->update(['status' => OrderConstant::DUYET]);
+                    $don_tu->status = OrderConstant::DUYET;
+                    $don_tu->save();
                 }
             }
             return 1;

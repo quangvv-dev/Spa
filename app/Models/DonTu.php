@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DonTu extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
     public $time = ChamCongConstant::HOURS;
 
     public function user()
