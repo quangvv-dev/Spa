@@ -247,8 +247,7 @@
                         phone: $(this).val(),
                     },
                     success: function (data) {
-                        console.log(data);
-                        if(data.data == 'true'){
+                        if(data == 'true'){
                             current.closest('.phone-group').find('.help-block').html('Số điện thoại đã tồn tại')
                         }
                     }
