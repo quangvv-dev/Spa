@@ -476,10 +476,10 @@ class CustomerController extends Controller
         $customer = Customer::where('phone', $request->phone)->withTrashed()->first();
 
         if ($customer) {
-            return $customer->id == $request->id ? 'true' : 'false';
+            return 'true';
         }
 
-        return 'true';
+        return 'false';
     }
 
     public function exportCustomer(Request $request)

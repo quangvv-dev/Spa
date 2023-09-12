@@ -239,6 +239,7 @@
 
             $('#phone').on('change', function () {
                 let current = $(this);
+                current.closest('.phone-group').find('.help-block').html('');
                 $.ajax({
                     url: '/api/check-unique-customers',
                     type:"post",
@@ -246,7 +247,10 @@
                         phone: $(this).val(),
                     },
                     success: function (data) {
-                        current.closest('.phone-group').find('.help-block').html('Số điện thoại đã tồn tại')
+                        console.log(data);
+                        if(data.data == 'true'){
+                            current.closest('.phone-group').find('.help-block').html('Số điện thoại đã tồn tại')
+                        }
                     }
                 })
             });
