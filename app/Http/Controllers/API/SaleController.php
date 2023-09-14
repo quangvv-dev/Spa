@@ -53,12 +53,12 @@ class SaleController extends BaseApiController
                 'phoneNew'         => @$data_new->firstWhere('id',$item->id)->phoneNew??0,
                 'orderNew'         => @$order_new->firstWhere('id',$item->id)->orderNew??0,
                 'schedulesNew'     => @$schedules->firstWhere('id',$item->id)->schedulesNew??0,
-                'schedules_mua'    => @$schedules->firstWhere('id',$item->id)->schedules_mua??0,
-                'schedules_failed' => @$schedules->firstWhere('id',$item->id)->schedules_failed??0,
+                'schedules_mua'    => !empty($schedules->firstWhere('id',$item->id)->schedules_mua)?(int)$schedules->firstWhere('id',$item->id)->schedules_mua:0,
+                'schedules_failed' => !empty($schedules->firstWhere('id',$item->id)->schedules_failed)?(int)$schedules->firstWhere('id',$item->id)->schedules_failed:0,
                 'gross_revenue'    => @$order_new->firstWhere('id',$item->id)->gross_revenue??0,
                 'call'             => @$call->firstWhere('id',$item->id)->total??0,
                 'totalNew'         => @$payments->firstWhere('id',$item->id)->totalNew??0,
-                'the_rest'         => @$payments->firstWhere('id',$item->id)->the_rest??0,
+                'the_rest'         => @!empty($payments->firstWhere('id',$item->id)->the_rest)?(int)$payments->firstWhere('id',$item->id)->the_rest:0,
             ];
             $result['percentOrder'] = !empty($result['phoneNew']) ? round($result['orderNew'] / $result['phoneNew'] * 100, 2) : 0;
             $result['avg'] = !empty($result['totalNew']) && !empty($result['phoneNew']) ? round($result['totalNew'] / $result['orderNew'] * 100, 2) : 0;
