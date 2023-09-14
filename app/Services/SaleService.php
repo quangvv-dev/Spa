@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Constants\OrderConstant;
 use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
+use App\Models\CallCenter;
+use App\Models\PaymentHistory;
 use App\Models\Product;
 use App\User;
 use App\Constants\DepartmentConstant;
@@ -13,14 +15,14 @@ use Illuminate\Support\Facades\DB;
 
 class SaleService
 {
-    public function __construct(User $user)
+    public function __construct(User $users)
     {
-        $this->user = $user;
+        $this->users = $users;
     }
 
     public function getDataNew($input)
     {
-        return $this->user->join('customers as c', 'c.telesales_id', '=', 'users.id')
+        return $this->users->join('customers as c', 'c.telesales_id', '=', 'users.id')
             ->whereBetween('c.created_at', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
@@ -36,7 +38,7 @@ class SaleService
 
     public function getDataOrders($input)
     {
-        return $this->user->join('customers as c', 'c.telesales_id', '=', 'users.id')
+        return $this->users->join('customers as c', 'c.telesales_id', '=', 'users.id')
             ->join('orders as o', 'o.member_id', '=', 'c.id')
             ->whereBetween('o.created_at', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
@@ -45,9 +47,11 @@ class SaleService
                 $q->where('o.branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('o.branch_id', $input['group_branch']);
-            })->whereNull('o.deleted_at')->whereNull('c.deleted_at')->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            })->whereNull('o.deleted_at')->whereNull('c.deleted_at')
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->whereIn('o.role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
             ->where('users.department_id', DepartmentConstant::TELESALES)
-            ->select('users.id', \DB::raw('COUNT(o.id) as orderNew'),
+            ->select('users.id','users.full_name', \DB::raw('COUNT(o.id) as orderNew'),
                 \DB::raw('SUM(o.gross_revenue) as gross_revenue'))
             ->groupBy('users.id')
             ->get();
@@ -55,7 +59,7 @@ class SaleService
 
     public function getDataSchedules($input)
     {
-        return $this->user->leftJoin('schedules as s', 's.creator_id', '=', 'users.id')
+        return $this->users->leftJoin('schedules as s', 's.creator_id', '=', 'users.id')
             ->leftJoin('customers as c', 's.user_id', '=', 'c.id')
             ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
                 $q->where('s.branch_id', $input['branch_id']);
@@ -65,18 +69,45 @@ class SaleService
             ->where('c.old_customer', 0)
             ->whereNull('c.deleted_at')
             ->where('users.department_id', DepartmentConstant::TELESALES)->where('users.active', StatusCode::ON)
-
 //            ->whereRaw(DB::raw("COALESCE(s.date, '2022-08-01') >= '2022-08-01' AND COALESCE(s.date, '2022-08-30') <= '2022-08-30'"))
             ->whereBetween('s.date', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ])
             ->select('users.id', \DB::raw('COUNT(s.id) as schedulesNew'))
-            ->addSelect(\DB::raw('SUM(CASE WHEN s.status = "'.ScheduleConstant::DEN_MUA.'" THEN 1 ELSE 0 END) AS schedules_mua'))
-            ->addSelect(\DB::raw('SUM(CASE WHEN s.status = "'.ScheduleConstant::CHUA_MUA.'" THEN 1 ELSE 0 END) AS schedules_failed'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN s.status = "' . ScheduleConstant::DEN_MUA . '" THEN 1 ELSE 0 END) AS schedules_mua'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN s.status = "' . ScheduleConstant::CHUA_MUA . '" THEN 1 ELSE 0 END) AS schedules_failed'))
             ->groupBy('users.id')
             ->get();
+    }
 
+    public function getDataPayment($input)
+    {
+        return PaymentHistory::join('orders as o', 'payment_histories.order_id', '=', 'o.id')
+            ->join('customers as c', 'c.id', '=', 'o.member_id')
+            ->leftJoin('users as u', 'c.telesales_id', '=', 'u.id')
+            ->whereBetween('payment_histories.payment_date', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->where('o.is_upsale', OrderConstant::NON_UPSALE)
+            ->where('u.department_id', DepartmentConstant::TELESALES)->where('u.active', StatusCode::ON)
+            ->select('u.id', DB::raw('SUM(payment_histories.price) as totalNew'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN payment_histories.is_debt = "' . StatusCode::ON . '" THEN payment_histories.price ELSE 0 END) AS the_rest'))
+            ->groupBy('u.id')->get();
+    }
+
+    public function getDataCall($input)
+    {
+        return $this->users->join('call_center as cc', 'cc.caller_number', '=', 'users.caller_number')
+            ->whereBetween('cc.start_time', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->where('cc.call_status', CallCenter::ANSWERED)
+            ->where('users.department_id', DepartmentConstant::TELESALES)->where('users.active', StatusCode::ON)
+            ->select('users.id',DB::raw('COUNT(cc.id) as total'))
+            ->groupBy('users.id')->get();
     }
 
 

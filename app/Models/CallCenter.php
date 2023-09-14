@@ -11,6 +11,7 @@ class CallCenter extends Model
 {
     protected $guarded = ['id'];
     protected $table = 'call_center';
+    public const ANSWERED = 'ANSWERED';
 
 
     public function customer()

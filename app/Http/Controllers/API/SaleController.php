@@ -31,20 +31,22 @@ class SaleController extends BaseApiController
         $this->sale = $sale;
     }
 
-    public function sale2(Request $request)
+    public function salePerfomance(Request $request)
     {
         if (isset($request->location_id)) {
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
         $input = $request->all();
-        $user = User::select('id', 'full_name', 'avatar', 'caller_number')->where('users.department_id', DepartmentConstant::TELESALES)
-            ->get();
+        $users = User::select('id', 'full_name', 'avatar')->where('users.department_id', DepartmentConstant::TELESALES)
+            ->where('active', StatusCode::ON)->get();
         $data_new = $this->sale->getDataNew($input);
         $order_new = $this->sale->getDataOrders($input);
         $schedules = $this->sale->getDataSchedules($input);
-        $user = $user->transform(function ($item) use ($data_new,$order_new,$schedules){
-            return [
+        $payments = $this->sale->getDataPayment($input);
+        $call = $this->sale->getDataCall($input);
+        $users = $users->transform(function ($item) use ($data_new, $order_new, $schedules, $payments, $call) {
+            $result = [
                 'id'               => $item->id,
                 'full_name'        => $item->full_name,
                 'avatar'           => @$item->avatar,
@@ -53,54 +55,16 @@ class SaleController extends BaseApiController
                 'schedulesNew'     => @$schedules->firstWhere('id',$item->id)->schedulesNew??0,
                 'schedules_mua'    => @$schedules->firstWhere('id',$item->id)->schedules_mua??0,
                 'schedules_failed' => @$schedules->firstWhere('id',$item->id)->schedules_failed??0,
-                'call'             => @$item->call,
-                'percentOrder'     => @$item->percentOrder,
                 'gross_revenue'    => @$order_new->firstWhere('id',$item->id)->gross_revenue??0,
-                'totalNew'         => @$item->totalNew,
-                'the_rest'         => @$item->the_rest,
-                'avg'              => @$item->avg,
+                'call'             => @$call->firstWhere('id',$item->id)->total??0,
+                'totalNew'         => @$payments->firstWhere('id',$item->id)->totalNew??0,
+                'the_rest'         => @$payments->firstWhere('id',$item->id)->the_rest??0,
             ];
+            $result['percentOrder'] = !empty($result['phoneNew']) ? round($result['orderNew'] / $result['phoneNew'] * 100, 2) : 0;
+            $result['avg'] = !empty($result['phoneNew']) ? round($result['totalNew'] / $result['orderNew'] * 100, 2) : 0;
+            return $result;
         });
-
-        return $this->responseApi(ResponseStatusCode::OK, '123', $user);
-//        dd($data_new);
-
-        $users = User::select('id', 'full_name', 'avatar', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)
-            ->where('active', StatusCode::ON)->get()->map(function ($item) use ($request, $input) {
-
-                $input['telesales'] = $item->id;
-                $detail = PaymentHistory::search($input, 'price')->whereHas('order', function ($qr) {
-                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-                });
-                $input['creator_id'] = $item->id;
-                $schedules = Schedule::getBooks2($input, 'id')->whereHas('customer', function ($qr) {
-                    $qr->where('old_customer', 0);
-                });
-                $schedules_den = clone $schedules;
-                $item->schedulesNew = $schedules->count();
-
-                $item->schedules_mua = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
-                $item->schedules_failed = $schedules->where('status', ScheduleConstant::CHUA_MUA)->count();
-
-                $input['caller_number'] = $item->caller_number;
-                $input['call_status'] = 'ANSWERED';
-
-                $item->call = $input['caller_number'] ? CallCenter::search($input, 'id')->count() : 0;
-
-                $item->totalNew = $detail->sum('price');
-                $item->gross_revenue = $order_new->sum('gross_revenue');
-                $item->the_rest = $detail->where('is_debt', StatusCode::ON)->sum('price');
-//            $item->the_rest = $item->totalNew - $order_new->sum('gross_revenue');
-                $item->avg = !empty($item->orderNew) ? round($item->totalNew / $item->orderNew) : 0;
-                $item->percentOrder = !empty($item->orderNew) && !empty($item->phoneNew) ? round($item->orderNew / $item->phoneNew * 100,2) : 0;
-                return $item;
-            })->sortByDesc('totalAll');
-
-        $users = SaleResource::collection($users);
-        return $this->responseApi(ResponseStatusCode::OK, count($users), $users);
-
-
-
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
 
     /**
