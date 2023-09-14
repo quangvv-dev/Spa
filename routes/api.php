@@ -78,7 +78,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('users-marketing', 'Marketing\MarketingController@getMarketingUser');
 
     Route::get('sales-12321', 'SaleController@salePerfomance');
-    Route::get('sales', 'SaleController@sale');
+    Route::get('sales', 'SaleController@salePerfomance');
 
 
     Route::get('carepage', 'Marketing\MarketingController@carepage');//carepage
