@@ -90,6 +90,11 @@ class SaleService
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ])
+            ->when(isset($input['branch_id']) && $input['branch_id'], function ($q) use ($input) {
+                $q->where('payment_histories.branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('payment_histories.branch_id', $input['group_branch']);
+            })
             ->where('o.is_upsale', OrderConstant::NON_UPSALE)
             ->where('u.department_id', DepartmentConstant::TELESALES)->where('u.active', StatusCode::ON)
             ->select('u.id', DB::raw('SUM(payment_histories.price) as totalNew'))
