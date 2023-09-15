@@ -38,32 +38,12 @@ class SaleController extends BaseApiController
             $request->merge(['group_branch' => $group_branch]);
         }
         $input = $request->all();
-        $users = User::select('id', 'full_name', 'avatar')->where('users.department_id', DepartmentConstant::TELESALES)
-            ->where('active', StatusCode::ON)->get();
         $data_new = $this->sale->getDataNew($input);
         $order_new = $this->sale->getDataOrders($input);
         $schedules = $this->sale->getDataSchedules($input);
         $payments = $this->sale->getDataPayment($input);
         $call = $this->sale->getDataCall($input);
-        $users = $users->transform(function ($item) use ($data_new, $order_new, $schedules, $payments, $call) {
-            $result = [
-                'id'               => $item->id,
-                'full_name'        => $item->full_name,
-                'avatar'           => @$item->avatar,
-                'phoneNew'         => @$data_new->firstWhere('id',$item->id)->phoneNew??0,
-                'orderNew'         => @$order_new->firstWhere('id',$item->id)->orderNew??0,
-                'schedulesNew'     => @$schedules->firstWhere('id',$item->id)->schedulesNew??0,
-                'schedules_mua'    => !empty($schedules->firstWhere('id',$item->id)->schedules_mua)?(int)$schedules->firstWhere('id',$item->id)->schedules_mua:0,
-                'schedules_failed' => !empty($schedules->firstWhere('id',$item->id)->schedules_failed)?(int)$schedules->firstWhere('id',$item->id)->schedules_failed:0,
-                'gross_revenue'    => @$order_new->firstWhere('id',$item->id)->gross_revenue??0,
-                'call'             => @$call->firstWhere('id',$item->id)->total??0,
-                'totalNew'         => @$payments->firstWhere('id',$item->id)->totalNew??0,
-                'the_rest'         => @!empty($payments->firstWhere('id',$item->id)->the_rest)?(int)$payments->firstWhere('id',$item->id)->the_rest:0,
-            ];
-            $result['percentOrder'] = (int)$result['phoneNew']>0 ? round($result['orderNew'] / $result['phoneNew'] * 100, 2) : 0;
-            $result['avg'] = (int)$result['orderNew'] > 0  ? round((int)$result['totalNew'] / (int)$result['orderNew'] * 100, 2) : 0;
-            return $result;
-        });
+        $users = $this->sale->transformData($data_new, $order_new, $schedules, $payments, $call);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
 
