@@ -470,12 +470,10 @@ class OrderController extends Controller
             $input['branch_id'] = $checkRole;
         }
         $marketingUsers = User::select('id', 'full_name')->where('department_id',DepartmentConstant::MARKETING)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
+        $carepages = User::select('id', 'full_name')->where('department_id',DepartmentConstant::CARE_PAGE)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
-        $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name',
-            'id')->toArray();// nguồn KH
-//        $check_null = $this->checkNull($request);
-//        if ($check_null == StatusCode::NOT_NULL) {
+        $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
             $detail = PaymentHistory::search($input);
             View::share([
                 'allTotal' => $detail->sum('price'),
@@ -485,17 +483,13 @@ class OrderController extends Controller
                 'allTotalPage' => $detail->sum('price'),
             ]);
 
-//        }
-
-//        $rank = $detail->firstItem();
         $orders = $detail;
         if ($request->ajax()) {
-            return Response::json(view('order-details.ajax-payment',
-                compact('orders', 'title'))->render());
+            return Response::json(view('order-details.payment.ajax', compact('orders', 'title'))->render());
         }
 
-        return view('order-details.index-payment',
-            compact('orders', 'title', 'marketingUsers', 'telesales', 'source'));
+        return view('order-details.payment.index',
+            compact('orders', 'title', 'marketingUsers', 'telesales', 'source','carepages'));
     }
 
 

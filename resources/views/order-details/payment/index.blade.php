@@ -66,18 +66,18 @@
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col', 'id'=> 'gridForm','role'=>'form')) !!}
                 <div class="row">
                     <div class="col-md-2">
-                        {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
+                        {!! Form::select('telesales', $telesales, null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                     </div>
                     <div class="col-md-2">
-                        {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
+                        {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
                     </div>
                     @if(empty($checkRole))
                         <div class="col-md-2">
-                            {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                            {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id select2', 'placeholder'=>'Tất cả chi nhánh')) !!}
                         </div>
                     @endif
                     <div class="col-lg-2">
-                        {!! Form::select('source_id', $source, null, array('class' => 'form-control','id'=>'source', 'placeholder'=>'Nguồn')) !!}
+                        {!! Form::select('source_id', $source, null, array('class' => 'form-control select2','id'=>'source', 'placeholder'=>'Nguồn')) !!}
                     </div>
                     <div class="col-md-2">
                         <input type="hidden" name="start_date" id="start_date">
@@ -103,7 +103,7 @@
 
 
             <div id="registration-form">
-                @include('order-details.ajax-payment')
+                @include('order-details.ajax')
             </div>
         </div>
     </div>

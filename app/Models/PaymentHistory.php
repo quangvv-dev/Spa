@@ -73,6 +73,11 @@ class PaymentHistory extends Model
                 });
             });
         }
+        if (!empty($input['carepage_id'])) {
+            $detail = $detail->whereHas('order', function ($item) use ($input) {
+                $item->where('carepage_id', $input['carepage_id']);
+            });
+        }
         if (!empty($input['source_id'])) {
             $detail = $detail->whereHas('order', function ($qr) use ($input) {
                 $qr->where('source_id', $input['source_id']);
