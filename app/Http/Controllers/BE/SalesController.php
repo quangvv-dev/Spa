@@ -236,9 +236,7 @@ class SalesController extends Controller
 
             $item->customer_new = count($data_new);
             $item->order_new = $detail_new->get()->count();
-//            $item->order_old = $detail->get()->sum('COUNTS') - $detail_new->get()->sum('COUNTS');
             $item->revenue_new = $detail_new->get()->sum('all_total');
-//            $item->revenue_old = $detail->groupBy('order_id')->get()->sum('all_total') - $item->revenue_new;
             $item->revenue_total = $detail->groupBy('order_id')->get()->sum('all_total');
             return $item;
         })->sortByDesc('revenue_total')->filter(function ($item) {

@@ -16,9 +16,10 @@
             <th class="text-center">Lịch hẹn</th>
             <th class="text-center">SL khách đến</th>
             <th class="text-center">Đơn chốt</th>
-            <th class="text-center">Tỷ lệ<span class=""><br>chốt lịch</span></th>
+            <th class="text-center">%<span class=""><br>chốt lịch</span></th>
             <th class="text-center">Tỷ lệ<span class=""><br>đến</span></th>
-            <th class="text-center">Tỷ lệ<span class=""><br>chốt đơn</span></th>
+            <th class="text-center">%<span class=""><br>chốt đơn</span></th>
+            <th class="text-center">% chốt đơn<span class=""><br>khách đến</span></th>
             <th class="text-center">Doanh số<span class=""><br>sau CK</span></th>
             <th class="text-center">Doanh số<span class=""><br>TB/đơn</span></th>
             <th class="text-center no-wrap">Đơn chốt</th>
@@ -36,6 +37,7 @@
             <th class="text-center">(5)/(3)</th>
             <th class="text-center">(6)/(5)</th>
             <th class="text-center">(7)/(3)</th>
+            <th class="text-center">(7)/(6)</th>
             <th class="text-center">(9)</th>
             <th class="text-center">(10)</th>
             <th class="text-center">(11)</th>
@@ -87,9 +89,8 @@
                     </td>
                     <td class="text-center pdr10">{{!empty($item->become)?round(($item->become/$item->schedules_new)*100,1):0}}%</td>
 
-                    <td class="text-center pdr10">{{$item->order_new>0&&$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0}}
-                        %
-                    </td>
+                    <td class="text-center pdr10">{{$item->customer_new >0 ?round(($item->order_new/$item->customer_new)*100):0}}%</td>
+                    <td class="text-center pdr10">{{$item->become >0 ?round(($item->order_new/$item->become)*100):0}}%</td>
                     <td class="text-center pdr10">{{number_format($item->revenue_new)}}</td>
                     <td class="text-center pdr10">{{!empty($item->revenue_new)&&!empty($item->order_new)?number_format($item->revenue_new/$item->order_new):0}}</td>
                     <td class="text-center pdr10">{{number_format($item->order_old)}}</td>
@@ -109,9 +110,9 @@
             <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
             <td class="text-center bold">{{@number_format(!empty($users->sum('become'))?round(($users->sum('become')/$schedules_new)*100,1):0)}}%</td>
             <td class="text-center bold">{{@number_format($order_percent/count($users))}}%</td>
+            <td class="text-center bold">{{@number_format(round($order_new/$users->sum('become')*100,2))}}%</td>
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>
             <td class="text-center bold">{{!empty($revenue_new)&&!empty($order_new)?number_format($revenue_new/$order_new):0}}</td>
-
             <td class="text-center bold">{{@number_format($order_old)}}</td>
             <td class="text-center bold">{{@number_format($revenue_old)}}</td>
             <td class="text-center bold">{{number_format($allTotal)}}</td>
