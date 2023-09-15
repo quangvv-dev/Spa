@@ -474,16 +474,14 @@ class OrderController extends Controller
         $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-            $detail = PaymentHistory::search($input);
+            $orders = PaymentHistory::search($input);
             View::share([
-                'allTotal' => $detail->sum('price'),
+                'allTotal' => $orders->sum('price'),
             ]);
-            $detail = $detail->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
+            $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
             View::share([
-                'allTotalPage' => $detail->sum('price'),
+                'allTotalPage' => $orders->sum('price'),
             ]);
-
-        $orders = $detail;
         if ($request->ajax()) {
             return Response::json(view('order-details.payment.ajax', compact('orders', 'title'))->render());
         }

@@ -103,7 +103,7 @@
 
 
             <div id="registration-form">
-                @include('order-details.ajax')
+                @include('order-details.payment.ajax')
             </div>
         </div>
     </div>
