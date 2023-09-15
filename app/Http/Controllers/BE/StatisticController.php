@@ -19,6 +19,7 @@ use App\Models\Trademark;
 use App\Models\WalletHistory;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
+use App\Services\StatisticService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -66,7 +67,7 @@ class StatisticController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      * @throws \Throwable
      */
-    public function index(Request $request)
+    public function index(Request $request, StatisticService $statisticService)
     {
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
@@ -102,6 +103,7 @@ class StatisticController extends Controller
                     $qr->where('old_customer', 0);
                 })->count(),
         ];
+
         $payment_All = PaymentHistory::select('price')->when(isset($input['branch_id']) && $input['branch_id'],
             function ($q) use ($input) {
                 $q->where('branch_id', $input['branch_id']);
@@ -120,6 +122,9 @@ class StatisticController extends Controller
         $payment_isdebt = clone $payment;
         $payment_years = clone $payment_All;
         $orders = Order::returnRawData($input);
+        $orders2 = clone $orders;
+        $order_single = clone $orders;
+        $order_multiple = clone $orders;
         $orders2 = clone $orders;
         $orders_combo = clone $orders;
         $ordersYear = $payment_years->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
@@ -164,6 +169,8 @@ class StatisticController extends Controller
             //            'category_service' => $category_service,
             'category_product' => $category_product,
             'revenue_month' => $revenue_month,
+            'order_single' => $order_single->whereIn('role_type', [StatusCode::SERVICE, StatusCode::COMBOS])->where('all_total', '<', 1000000)->count(),
+            'order_multiple' => $order_multiple->whereIn('role_type', [StatusCode::SERVICE, StatusCode::COMBOS])->where('all_total', '>=', 1000000)->count(),
         ];
         $products = [
             'gross_revenue' => $orders->where('role_type', StatusCode::PRODUCT)->sum('gross_revenue'),
@@ -182,7 +189,7 @@ class StatisticController extends Controller
 
         $revenue_gender = $this->orderService->revenueGenderWithOrders($input);
 
-        $revenue_year = $ordersYear->select(\DB::raw('SUM(price) as all_total'),\DB::raw('MONTH(payment_date) month'))->groupBy('month')->get();
+        $revenue_year = $ordersYear->select(\DB::raw('SUM(price) as all_total'), \DB::raw('MONTH(payment_date) month'))->groupBy('month')->get();
         $all_payment = $payment->sum('price');
         $list_payment = [
             'money' => $payment2->where('payment_type', 1)->sum('price'),

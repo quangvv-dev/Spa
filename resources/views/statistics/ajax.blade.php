@@ -19,6 +19,14 @@
                 <div class="h3 font-weight-bold mb-4 font-30"><span
                         class="">{{@number_format($data['customers'])}}</span></div>
                 <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        &nbsp
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        &nbsp
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-4 col-xs-12">
                         SĐT: {{@number_format($data['customers'])}}
                     </div>
@@ -43,6 +51,14 @@
                 <div class="h5">Tổng số đơn hàng</div>
                 <div class="h3 font-weight-bold mb-4 font-30"><span
                         class="">{{@number_format($data['orders'] + $wallets['orders'])}}</span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        Đơn lẻ: {{@number_format($data['order_single'])}}
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        Đơn liệu trình: {{@number_format($data['order_multiple'])}}
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3 col-xs-12">
