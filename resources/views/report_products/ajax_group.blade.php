@@ -4,7 +4,7 @@
         <tr>
             <th class="text-center" colspan="1">STT</th>
             <th class="text-center" colspan="1"></th>
-            <th class="text-center" colspan="10">KHÁCH HÀNG MỚI</th>
+            <th class="text-center" colspan="11">KHÁCH HÀNG MỚI</th>
             <th class="text-center" colspan="2">KHÁCH HÀNG CŨ</th>
             <th class="text-center" colspan="1">TỔNG CHUNG</th>
         </tr>
@@ -110,7 +110,7 @@
             <td class="text-center bold">{{@number_format($schedules_percent/count($users))}}%</td>
             <td class="text-center bold">{{@number_format(!empty($users->sum('become'))?round(($users->sum('become')/$schedules_new)*100,1):0)}}%</td>
             <td class="text-center bold">{{@number_format($order_percent/count($users))}}%</td>
-            <td class="text-center bold">{{@number_format(round($order_new/$users->sum('become')*100,2))}}%</td>
+            <td class="text-center bold">{{@number_format(round($order_new/$users->sum('become')/count($users)*100,2))}}%</td>
             <td class="text-center bold">{{@number_format($revenue_new)}}</td>
             <td class="text-center bold">{{!empty($revenue_new)&&!empty($order_new)?number_format($revenue_new/$order_new):0}}</td>
             <td class="text-center bold">{{@number_format($order_old)}}</td>
