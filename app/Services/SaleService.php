@@ -35,7 +35,6 @@ class SaleService
             ->select('users.id', \DB::raw('COUNT(c.id) as phoneNew'))->groupBy('users.id')
             ->get();
     }
-
     public function getDataOrders($input)
     {
         return $this->users->join('customers as c', 'c.telesales_id', '=', 'users.id')
@@ -51,8 +50,7 @@ class SaleService
             ->where('o.is_upsale', OrderConstant::NON_UPSALE)
             ->whereIn('o.role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
             ->where('users.department_id', DepartmentConstant::TELESALES)
-            ->select('users.id', 'users.full_name', \DB::raw('COUNT(o.id) as orderNew'),
-                \DB::raw('SUM(o.gross_revenue) as gross_revenue'))
+            ->select('users.id', 'users.full_name', \DB::raw('COUNT(o.id) as orderNew'))
             ->groupBy('users.id')
             ->get();
     }
@@ -99,6 +97,7 @@ class SaleService
             ->where('u.department_id', DepartmentConstant::TELESALES)->where('u.active', StatusCode::ON)
             ->select('u.id', DB::raw('SUM(payment_histories.price) as totalNew'))
             ->addSelect(\DB::raw('SUM(CASE WHEN payment_histories.is_debt = "' . StatusCode::ON . '" THEN payment_histories.price ELSE 0 END) AS the_rest'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN payment_histories.is_debt = "' . StatusCode::OFF . '" THEN payment_histories.price ELSE 0 END) AS gross_revenue'))
             ->groupBy('u.id')->get();
     }
 
@@ -129,7 +128,7 @@ class SaleService
                 'schedulesNew'     => @$schedules->firstWhere('id',$item->id)->schedulesNew??0,
                 'schedules_mua'    => !empty($schedules->firstWhere('id',$item->id)->schedules_mua)?(int)$schedules->firstWhere('id',$item->id)->schedules_mua:0,
                 'schedules_failed' => !empty($schedules->firstWhere('id',$item->id)->schedules_failed)?(int)$schedules->firstWhere('id',$item->id)->schedules_failed:0,
-                'gross_revenue'    => @$order_new->firstWhere('id',$item->id)->gross_revenue??0,
+                'gross_revenue'    => @$payments->firstWhere('id',$item->id)->gross_revenue??0,
                 'call'             => @$call->firstWhere('id',$item->id)->total??0,
                 'totalNew'         => @$payments->firstWhere('id',$item->id)->totalNew??0,
                 'the_rest'         => @!empty($payments->firstWhere('id',$item->id)->the_rest)?(int)$payments->firstWhere('id',$item->id)->the_rest:0,
