@@ -118,11 +118,35 @@ function replaceVariable($content, $name = '', $phone = '', $branch = '', $phone
 
 }
 
-function usort_key($data, $key)
+/**
+ * Sắp xếp từ lớp tới nhỏ theo key
+ *
+ * @param $data
+ * @param $key
+ *
+ * @return mixed
+ */
+function usort_key_max($data, $key)
 {
     usort($data, function ($a, $b) use ($key) {
-        return $a[$key] <=> $b[$key];
+        return $a[$key] <= $b[$key];
     });
+    return $data;
+}
+
+/**
+ * Sắp xếp mảng từ nhỏ tới lớn theo key
+ * @param $data
+ * @param $key
+ *
+ * @return mixed
+ */
+function usort_key_min($data, $key)
+{
+    usort($data, function ($a, $b) use ($key) {
+        return $a[$key] >= $b[$key];
+    });
+    return $data;
 }
 
 if (!function_exists('formatYMD')) {

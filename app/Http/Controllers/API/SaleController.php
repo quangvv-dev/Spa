@@ -44,6 +44,7 @@ class SaleController extends BaseApiController
         $payments = $this->sale->getDataPayment($input);
         $call = $this->sale->getDataCall($input);
         $users = $this->sale->transformData($data_new, $order_new, $schedules, $payments, $call);
+        $users =  usort_key_max($users->toArray(),'totalNew');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
 
