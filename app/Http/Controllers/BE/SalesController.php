@@ -131,10 +131,10 @@ class SalesController extends Controller
             $item->revenue_new = $order_new->sum('all_total');
             $item->payment_new = $item->detail_new - $item->is_debt;
             return $item;
-        })->sortByDesc('all_payment');
+        })->sortByDesc('detail_new');
         \View::share([
-            'allTotal' => $users->sum('revenue_total'),
-            'grossRevenue' => $users->sum('payment_revenue'),
+            'allTotal' => $users->sum('revenue_new'),
+            'grossRevenue' => $users->sum('payment_new'),
         ]);
 
         if ($request->ajax()) {
