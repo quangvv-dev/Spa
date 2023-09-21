@@ -20,9 +20,8 @@
             <th class="text-center">Thực thu</th>
         </tr>
         </thead>
-        <tbody>
-
         @if(count($users))
+        <tbody>
             @foreach($users as $i => $item)
                 <tr>
                     <td>{{$i+1}}</td>
@@ -38,8 +37,21 @@
                     <td>{{number_format($item['all_payment'])}}</td>
                 </tr>
             @endforeach
-        @endif
-
         </tbody>
+        <tfoot>
+            <tr>
+                <td class="bold text-right" colspan="2">Tổng</td>
+                <td class="bold">{{$users->sum('task_todo')}}</td>
+                <td class="bold">{{$users->sum('task_done')}}</td>
+                <td class="bold">{{$users->sum('task_failed')}}</td>
+                <td class="bold">{{$users->sum('phoneNew')}}</td>
+                <td class="bold">{{$users->sum('order_new')}}</td>
+                <td class="bold">{{$users->sum('payment_new')}}</td>
+                <td class="bold">{{$users->sum('order_upsale')}}</td>
+                <td class="bold">{{$users->sum('payment_upsale')}}</td>
+                <td class="bold">{{$users->sum('all_payment')}}</td>
+            </tr>
+        </tfoot>
+    @endif
     </table>
 </div>
