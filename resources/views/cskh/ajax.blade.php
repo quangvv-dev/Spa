@@ -1,4 +1,4 @@
-<div  class="tableFixHead" id="registration-form">
+<div class="tableFixHead" id="registration-form">
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
         <tr>
@@ -21,7 +21,7 @@
         </tr>
         </thead>
         @if(count($users))
-        <tbody>
+            <tbody>
             @foreach($users as $i => $item)
                 <tr>
                     <td>{{$i+1}}</td>
@@ -37,21 +37,21 @@
                     <td>{{number_format($item['all_payment'])}}</td>
                 </tr>
             @endforeach
-        </tbody>
-        <tfoot>
+            </tbody>
+            <tfoot>
             <tr>
                 <td class="bold text-right" colspan="2">Tổng</td>
-                <td class="bold">{{$users->sum('task_todo')}}</td>
-                <td class="bold">{{$users->sum('task_done')}}</td>
-                <td class="bold">{{$users->sum('task_failed')}}</td>
-                <td class="bold">{{$users->sum('phoneNew')}}</td>
-                <td class="bold">{{$users->sum('order_new')}}</td>
-                <td class="bold">{{$users->sum('payment_new')}}</td>
-                <td class="bold">{{$users->sum('order_upsale')}}</td>
-                <td class="bold">{{$users->sum('payment_upsale')}}</td>
-                <td class="bold">{{$users->sum('all_payment')}}</td>
+                <td class="bold">{{number_format($users->sum('task_todo'))}}</td>
+                <td class="bold">{{number_format($users->sum('task_done'))}}</td>
+                <td class="bold">{{number_format($users->sum('task_failed'))}}</td>
+                <td class="bold">{{number_format($users->sum('phoneNew'))}}</td>
+                <td class="bold">{{number_format($users->sum('order_new'))}}</td>
+                <td class="bold">{{number_format($users->sum('payment_new'))}}</td>
+                <td class="bold">{{number_format($users->sum('order_upsale'))}}</td>
+                <td class="bold">{{number_format($users->sum('payment_upsale'))}}</td>
+                <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
             </tr>
-        </tfoot>
-    @endif
+            </tfoot>
+        @endif
     </table>
 </div>
