@@ -132,7 +132,7 @@ class SaleService
                 'the_rest'         => @!empty($payments->firstWhere('id',$item->id)->the_rest)?(int)$payments->firstWhere('id',$item->id)->the_rest:0,
             ];
             $result['gross_revenue'] = $result['totalNew'] - $result['the_rest'];
-            $result['percentOrder'] = (int)$result['phoneNew']>0 ? round($result['orderNew'] / $result['phoneNew'] * 100, 2) : 0;
+            $result['percentOrder'] = (int)$result['phoneNew'] > 0 ? round($result['orderNew'] / $result['phoneNew'] * 100, 2) : 0;
             $result['avg'] = (int)$result['orderNew'] > 0  ? round((int)$result['totalNew'] / (int)$result['orderNew']) : 0;
             return $result;
         });
