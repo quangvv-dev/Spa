@@ -13,12 +13,12 @@
                 success: function (data) {
                     // let abc = data.description.replaceAll("--", '\n');
                     let link = '/customers/'+data.customer.id;
-                    console.log(link,'link');
+                    let full_name = (typeof myVariable !== 'undefined') ?data.user.full_name:''
                     $('#name').val(data.name).change();
                     $("a[href]").attr("href",link);
                     $('.name-customer').html(data.customer.full_name).change();
                     $('.phone-customer').val(data.customer.phone).change();
-                    $('#user_id').val(data.user.full_name).change();
+                    $('#user_id').val(full_name).change();
                     $('#date_from').val(data.date_from).change();
                     $('#time_from').val(data.time_from).change();
                     $('#time_to').val(data.time_to).change();
