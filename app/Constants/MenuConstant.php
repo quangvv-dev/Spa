@@ -24,6 +24,7 @@ class MenuConstant
     const XEP_HANG_LETAN = 2.4;
     const XEP_HANG_KTV = 2.5;
     const XEP_HANG_TVV = 2.6;
+    const XEP_HANG_CSKH = 2.7;
     const BAN_HANG = 3;
     const QL_TONG_DAI = 3.1;
     const DS_DON_HANG = 3.2;

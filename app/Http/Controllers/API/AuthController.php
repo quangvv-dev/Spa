@@ -433,6 +433,7 @@ class AuthController extends BaseApiController
                     DepartmentConstant::WAITER,
                     DepartmentConstant::TU_VAN_VIEN,
                     DepartmentConstant::TECHNICIANS,
+                    DepartmentConstant::CSKH,
                 ],
                 'name_menu'  => 'XẾP HẠNG',
             ],
@@ -459,6 +460,11 @@ class AuthController extends BaseApiController
                 'menu_code'  => MenuConstant::XEP_HANG_LETAN,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::WAITER],
                 'name_menu'  => 'XẾP HẠNG LỄ TÂN',
+            ],
+            [
+                'menu_code'  => MenuConstant::XEP_HANG_CSKH,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::CSKH],
+                'name_menu'  => 'XẾP HẠNG CSKH',
             ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG_KTV,
