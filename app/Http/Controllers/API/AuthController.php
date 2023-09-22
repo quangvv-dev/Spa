@@ -286,7 +286,7 @@ class AuthController extends BaseApiController
 
         if (isset($user_check_phone)) {
             return response()->json([
-                'code'    => ResponseStatusCode::PHONE_EXIST,
+                'code'    => ResponseStatusCode::BAD_REQUEST,
                 'message' => __('auth.phone_exists'),
             ]);
         }
@@ -309,7 +309,7 @@ class AuthController extends BaseApiController
                 ]);
             } else {
                 return response()->json([
-                    'code'    => ResponseStatusCode::USER_NOT_EXIST,
+                    'code'    => ResponseStatusCode::BAD_REQUEST,
                     'message' => __('auth.not_edit_user_success'),
                 ]);
             }
