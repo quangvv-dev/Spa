@@ -47,11 +47,11 @@ class ScheduleObserver
 //                                $prefix = "Gọi lại ";
                             }
                             $prefix = 'Nhắc lịch hẹn ';
-                            $day = $job->configs->delay_value;
+//                            $day = $job->configs->delay_value;
                             $sms_content = $job->configs->sms_content;
                             $input = [
                                 'customer_id' => @$schedule->user_id,
-                                'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                'date_from' => $schedule->date_from,
                                 'time_from' => '07:00',
                                 'time_to' => '21:00',
                                 'code' => $prefix,
