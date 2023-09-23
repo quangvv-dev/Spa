@@ -5,7 +5,7 @@
             <th class="text-center" rowspan="2">STT</th>
             <th class="text-center" rowspan="2">CSKH</th>
             <th class="text-center no-wrap" colspan="3">Công việc</th>
-            <th class="text-center" colspan="3">Khách hàng mới</th>
+            <th class="text-center" colspan="4">Khách hàng mới</th>
             <th class="text-center" colspan="2">UPSALE</th>
             <th class="text-center" rowspan="2">Tổng thực thu</th>
         </tr>

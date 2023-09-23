@@ -136,6 +136,7 @@ function usort_key_max($data, $key)
 
 /**
  * Sắp xếp mảng từ nhỏ tới lớn theo key
+ *
  * @param $data
  * @param $key
  *
@@ -167,7 +168,8 @@ if (!function_exists('checkRoleAlready')) {
 if (!function_exists('checkTeamLead')) {
     function checkTeamLead()
     {
-        $user = \App\Models\Team::where('leader_id', \Illuminate\Support\Facades\Auth::user()->id)->with('teamMembers')->first();
+        $user = \App\Models\Team::where('leader_id',
+            \Illuminate\Support\Facades\Auth::user()->id)->with('teamMembers')->first();
         return isset($user->teamMembers) ? $user->teamMembers->pluck('user_id')->toArray() : [];
     }
 }
@@ -181,20 +183,19 @@ if (!function_exists('fcmSendCloudMessage')) {
 //        $notification_id = null,
         $notification_type = 'notification',
         $push_data = []
-    )
-    {
+    ) {
         //$deviceToken truyền mảng device hoặc 1 chuỗi device hoặc là 1 topic  ( '/topics/all' )
         $url = 'https://fcm.googleapis.com/fcm/send';
         $serverKey = config('app.SERVER_KEY_FIREBASE');
         $fields = [
-            'priority' => 'high',
+            'priority'     => 'high',
             'time_to_live' => 60 * 60 * 24,
         ];
         if (!empty($push_data)) {
             $fields['data'] = $push_data;
         }
         $fields['notification'] = [
-            "body" => $body,
+            "body"  => $body,
             "title" => $title,
             "sound" => "default",
             "badge" => "1",
@@ -203,9 +204,9 @@ if (!function_exists('fcmSendCloudMessage')) {
         ];
         // cấu hình android
         $fields['android'] = [
-            'ttl' => 3600 * 1000,
+            'ttl'          => 3600 * 1000,
             'notification' => [
-                'color' => '#f45342'
+                'color' => '#f45342',
                 //'icon'  => 'stock_ticker_update',
             ],
         ];
@@ -312,15 +313,40 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit)
         }
     }
 }
+
 if (!function_exists('GuzzleHttpCall')) {
     function GuzzleHttpCall($path, $method = 'get', $header = [], $post_data = [])
     {
         $client = new \GuzzleHttp\Client();
         $response = $client->$method($path, [
             'headers' => $header,
-            'json' => $post_data,
+            'json'    => $post_data,
         ]);
         return json_decode($response->getBody());
+    }
+}
+
+/**
+ * funtion get set dữ liệu vào bảng settings
+ */
+if (!function_exists('dbSetting')) {
+    function dbSetting($key, $value = "")
+    {
+        if (!empty($key) && !empty($value)) {
+            $exists = \App\Models\DBSettings::where('setting_key', $key)->first();
+            if (isset($exists) && $exists) {
+                $exists->setting_value = $value;
+                $exists->save();
+            } else {
+                $exists = \App\Models\DBSettings::create(['setting_key' => $key]);
+            }
+            return $exists->setting_value;
+
+        } elseif (!empty($key)) {
+            return @\App\Models\DBSettings::where('setting_key', $key)->first()->setting_value;
+        } else {
+            return "";
+        }
     }
 }
 
