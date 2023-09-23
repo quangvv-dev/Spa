@@ -13,6 +13,7 @@ use App\Models\PaymentHistory;
 use App\Models\PaymentWallet;
 use App\Models\Role;
 use App\Models\Status;
+use App\Models\TokenZalOa;
 use App\Models\WalletHistory;
 use Illuminate\Http\Request;
 use Excel;
@@ -21,6 +22,25 @@ class DBController extends Controller
 {
     public function index(Request $request)
     {
+        $oa = TokenZalOa::first();
+        if (empty(config('partners.zalo_zns.template_id')) || empty($oa)) {
+            return false;
+        }
+        $newPhone = substr_replace("0975091435", "84", 0, 1);
+        $response = GuzzleHttpCall(config('partners.zalo_zns.url'), 'post',
+            ['access_token' => $oa->access_token]
+            , [
+                'tracking_id'   => time(),
+                'phone'         => $newPhone,
+                'template_id'   => config('partners.zalo_zns.template_id'),
+                'template_data' => ['customer_name' => "Chị Nhiên", 'order_code' => 'DH11234','created_at'=>'01/09/2023 21:13'],
+            ]);
+        dd($response->error);
+        if ($response->error == 0) {
+            return true;
+        } else {
+            return false;
+        }
         ZaloZns::dispatch('0975091435', ['customer_name' => "Chị Nhiên", 'order_code' => 'DH11234','created_at'=>'01/09/2023 21:13'])
             ->delay(now()->addSeconds(5));
 //        $c = PaymentHistory::select('payment_histories.id', 'payment_histories.is_debt', \DB::raw('MONTH(payment_histories.payment_date) as month'), \DB::raw('MONTH(o.created_at) as m_created'))
