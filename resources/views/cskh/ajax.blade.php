@@ -13,7 +13,8 @@
             <th class="text-center">Công việc</th>
             <th class="text-center">Hoàn thành</th>
             <th class="text-center">Quá hạn</th>
-            <th class="text-center">SĐT</th>
+            <th class="text-center">SĐT tạo</th>
+            <th class="text-center">SĐT nhận</th>
             <th class="text-center">Đơn hàng</th>
             <th class="text-center">Thực thu</th>
             <th class="text-center">Đơn hàng</th>
@@ -30,6 +31,7 @@
                     <td>{{number_format($item['task_done'])}}</td>
                     <td>{{number_format($item['task_failed'])}}</td>
                     <td>{{number_format($item['phoneNew'])}}</td>
+                    <td>{{number_format($item['phoneReceive'])}}</td>
                     <td>{{number_format($item['order_new'])}}</td>
                     <td>{{number_format($item['payment_new'])}}</td>
                     <td>{{number_format($item['order_upsale'])}}</td>
@@ -45,6 +47,7 @@
                 <td class="bold">{{number_format($users->sum('task_done'))}}</td>
                 <td class="bold">{{number_format($users->sum('task_failed'))}}</td>
                 <td class="bold">{{number_format($users->sum('phoneNew'))}}</td>
+                <td class="bold">{{number_format($users->sum('phoneReceive'))}}</td>
                 <td class="bold">{{number_format($users->sum('order_new'))}}</td>
                 <td class="bold">{{number_format($users->sum('payment_new'))}}</td>
                 <td class="bold">{{number_format($users->sum('order_upsale'))}}</td>
