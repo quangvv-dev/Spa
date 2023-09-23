@@ -89,8 +89,12 @@ class CskhService
                 $q->where('c.branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('c.branch_id', $input['group_branch']);
-            })->whereNull('c.deleted_at')->where('users.department_id', DepartmentConstant::CSKH)->where('users.active', StatusCode::ON)
-            ->select('users.id', \DB::raw('COUNT(c.id) as phoneNew'))->groupBy('users.id')
+            })->whereNull('c.deleted_at')->where('users.department_id', DepartmentConstant::CSKH)->where('users.active',
+                StatusCode::ON)
+            ->select('users.id', \DB::raw('COUNT(c.id) as phoneReceive'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN c.telesales_id = users.id THEN 1 ELSE 0 END) AS phoneNew'))
+//            ->addSelect(\DB::raw('SUM(CASE WHEN c.time_move_cskh >= "' . Functions::yearMonthDay($input['start_date']) . " 00:00:00" . '" and c.time_move_cskh <= "' . Functions::yearMonthDay($input['end_date']) . " 00:00:00" . '" THEN 1 ELSE 0 END) AS phoneReceive'))
+            ->groupBy('users.id')
             ->get();
     }
 
@@ -115,7 +119,7 @@ class CskhService
                 $q->whereIn('payment_histories.branch_id', $input['group_branch']);
             })
             ->where('u.department_id', DepartmentConstant::CSKH)->where('u.active', StatusCode::ON)
-            ->select('u.id',DB::raw('SUM(payment_histories.price) as all_payment'))
+            ->select('u.id', DB::raw('SUM(payment_histories.price) as all_payment'))
             ->addSelect(\DB::raw('SUM(CASE WHEN o.is_upsale = "' . StatusCode::ON . '" THEN payment_histories.price ELSE 0 END) AS payment_upsale'))
             ->addSelect(\DB::raw('SUM(CASE WHEN o.is_upsale = "' . StatusCode::OFF . '" THEN payment_histories.price ELSE 0 END) AS payment_new'))
             ->groupBy('u.id')->get();
@@ -123,6 +127,7 @@ class CskhService
 
     /**
      * Transform data output
+     *
      * @param $task
      * @param $orders
      * @param $data
@@ -143,6 +148,7 @@ class CskhService
                 'task_failed'    => @$tasks->firstWhere('id', $item->id)->task_failed ?? 0,
                 'task_done'      => @$tasks->firstWhere('id', $item->id)->task_done ?? 0,
                 'phoneNew'       => @$data->firstWhere('id', $item->id)->phoneNew ?? 0,
+                'phoneReceive'   => @$data->firstWhere('id', $item->id)->phoneReceive ?? 0,
                 'order_upsale'   => @$orders->firstWhere('id', $item->id)->order_upsale ?? 0,
                 'order_new'      => @$orders->firstWhere('id', $item->id)->order_new ?? 0,
                 'payment_upsale' => @$payments->firstWhere('id', $item->id)->payment_upsale ?? 0,
