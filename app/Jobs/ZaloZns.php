@@ -15,19 +15,16 @@ class ZaloZns implements ShouldQueue
 
     public $phone;
     public $data;
-    public $template_id;
 
     /**
      * Create a new job instance.
      * @param $phone
      * @param $data
-     * @param $template_id
      */
-    public function __construct($phone, $data, $template_id = null)
+    public function __construct($phone, $data)
     {
         $this->phone = $phone;
         $this->data = $data;
-        $this->template_id = $template_id ?? config('partners.zalo_zns.template_id');
     }
 
     /**
