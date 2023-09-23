@@ -15,20 +15,24 @@ class ZaloZns implements ShouldQueue
 
     public $phone;
     public $data;
+    public $template_id;
 
     /**
      * Create a new job instance.
-     *
-     * @return void
+     * @param $phone
+     * @param $data
+     * @param $template_id
      */
-    public function __construct($phone, $data)
+    public function __construct($phone, $data, $template_id = null)
     {
         $this->phone = $phone;
         $this->data = $data;
+        $this->template_id = $template_id ?? config('partners.zalo_zns.template_id');
     }
 
     /**
      * Execute the job.
+     *
      * @return bool
      */
     public function handle()
@@ -40,8 +44,12 @@ class ZaloZns implements ShouldQueue
         $newPhone = substr_replace($this->phone, "84", 0, 1);
         $response = GuzzleHttpCall(config('partners.zalo_zns.url'), 'post',
             ['access_token' => $oa->access_token]
-            , ['tracking_id' => 'development', 'phone' => $newPhone, 'template_id' => config('partners.zalo_zns.template_id')
-                , 'template_data' => $this->data]);
+            , [
+                'tracking_id'   => 'development',
+                'phone'         => $newPhone,
+                'template_id'   => config('partners.zalo_zns.template_id'),
+                'template_data' => $this->data,
+            ]);
         if ($response->error == 0) {
             return true;
         } else {
