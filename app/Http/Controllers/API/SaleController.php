@@ -17,6 +17,7 @@ use App\Models\GroupComment;
 use App\Models\Order;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
+use App\Models\TeamMember;
 use App\Services\SaleService;
 use App\User;
 use Illuminate\Http\Request;
@@ -37,13 +38,15 @@ class SaleController extends BaseApiController
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
+        $myTeam = TeamMember::where('user_id',$request->jwtUser->id)->first();
+        $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
         $input = $request->all();
         $data_new = $this->sale->getDataNew($input);
         $order_new = $this->sale->getDataOrders($input);
         $schedules = $this->sale->getDataSchedules($input);
         $payments = $this->sale->getDataPayment($input);
         $call = $this->sale->getDataCall($input);
-        $users = $this->sale->transformData($data_new, $order_new, $schedules, $payments, $call);
+        $users = $this->sale->transformData($data_new, $order_new, $schedules, $payments, $call, $members);
         $users =  usort_key_max($users->toArray(),'totalNew');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }

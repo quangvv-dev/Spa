@@ -19,6 +19,7 @@ use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
 use App\Models\Services;
+use App\Models\TeamMember;
 use App\Services\TaskService;
 use App\User;
 use Illuminate\Http\Request;
@@ -64,8 +65,12 @@ class SalesController extends Controller
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $users = User::select('id','full_name','caller_number')->where('department_id', DepartmentConstant::TELESALES)
-            ->where('active', StatusCode::ON)->get()->map(function ($item) use ($request) {
+        $members = self::members();
+        $users = User::select('id', 'full_name', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)
+            ->where('active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('id', $members);
+            })->get()->map(function ($item) use ($request) {
             $data_new = Customer::select('id')->where('telesales_id', $item->id)
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -143,6 +148,12 @@ class SalesController extends Controller
         return view('report_products.sale', compact('users'));
     }
 
+    public function members()
+    {
+        $myTeam = TeamMember::where('user_id',Auth::user()->id)->first();
+        return !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
+    }
+
     /**
      * Xếp hạng telesale
      *
@@ -154,17 +165,22 @@ class SalesController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $members = self::members();
 
         $params = $request->all();
         $sale = User::where('department_id', DepartmentConstant::TELESALES)
-            ->where('active', StatusCode::ON)->get()->map(function ($item) use ($params) {
-            $params['telesales'] = $item->id;
-            $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-            $item->gross_revenue = $detail->whereHas('order', function ($qr) use ($params) {
-                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-            })->sum('price');
-            return $item;
-        })->sortByDesc('gross_revenue')->toArray();
+            ->where('active', StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('id', $members);
+            })->get()
+            ->map(function ($item) use ($params) {
+                $params['telesales'] = $item->id;
+                $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
+                $item->gross_revenue = $detail->whereHas('order', function ($qr) use ($params) {
+                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+                })->sum('price');
+                return $item;
+            })->sortByDesc('gross_revenue')->toArray();
 
         $my_key = array_keys(array_column((array)$sale, 'id'), Auth::user()->id);
 
