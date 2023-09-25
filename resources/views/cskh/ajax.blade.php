@@ -5,8 +5,8 @@
             <th class="text-center" rowspan="2">STT</th>
             <th class="text-center" rowspan="2">CSKH</th>
             <th class="text-center no-wrap" colspan="3">Công việc</th>
-            <th class="text-center" colspan="4">Khách hàng mới</th>
-            <th class="text-center" colspan="2">UPSALE</th>
+            <th class="text-center" colspan="3">Khách hàng mới</th>
+            <th class="text-center" colspan="3">UPSALE</th>
             <th class="text-center" rowspan="2">Tổng thực thu</th>
         </tr>
         <tr class="number_index">
@@ -14,9 +14,9 @@
             <th class="text-center">Hoàn thành</th>
             <th class="text-center">Quá hạn</th>
             <th class="text-center">SĐT tạo</th>
-            <th class="text-center">SĐT nhận</th>
             <th class="text-center">Đơn hàng</th>
             <th class="text-center">Thực thu</th>
+            <th class="text-center">SĐT nhận</th>
             <th class="text-center">Đơn hàng</th>
             <th class="text-center">Thực thu</th>
         </tr>
