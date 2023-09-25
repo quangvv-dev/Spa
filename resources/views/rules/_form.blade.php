@@ -293,7 +293,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="">Mô hình</label>
                                 <div>
-                                    <small>Chuột phải vào vùng dưới để thêm đối tượng</small>
+                                    <small style="color: orangered">Chuột phải vào vùng dưới để thêm đối tượng</small>
                                 </div>
                                 <textarea style="display:none" name="configs" cols="30"
                                           rows="10">{{!empty($rule->configs) ? $rule->configs : '{}' }}</textarea>
@@ -393,7 +393,7 @@
                             <form>
                                 <div class="form-group">
                                     <label for="" class="form-label">Trạng thái khách hàng</label>
-                                    <select class="select2-multiple" name="group[]" multiple="multiple">hàng
+                                    <select class="select2-multiple" name="group[]" multiple="multiple">
                                         @foreach($status as $k1 => $s)
                                             <option value="{{$k1}}">{{$s}}</option>
                                         @endforeach
@@ -410,7 +410,37 @@
                     </div>
                 </div>
             </div>
-
+            <div class="modal micromodal-slide modal-actor-staff_schedule" id="modal-actor-staff_schedule" aria-hidden="true">
+                <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+                    <div class="modal__container" role="dialog" aria-modal="true"
+                         aria-labelledby="modal-action-email-title">
+                        <header class="modal__header">
+                            <h2 class="modal__title" id="modal-action-email-title">
+                                Cài đặt
+                            </h2>
+                            <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                        </header>
+                        <main class="modal__content" id="modal-action-email-content">
+                            <form>
+                                <div class="form-group">
+                                    <label for="" class="form-label">Trạng thái lịch hẹn</label>
+                                    <select class="select2-multiple" name="group[]" multiple="multiple">
+                                        @foreach($schedule_status  as $s)
+                                            <option value="{{$s['id']}}">{{$s['name']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </form>
+                        </main>
+                        <footer class="modal__footer">
+                            <button class="btn btn-primary modal__btn-primary">Cập nhật</button>
+                            <button class="btn btn-link" data-micromodal-close aria-label="Close this dialog window">
+                                Close
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
             <div class="modal micromodal-slide modal-actor-staff_customer" id="modal-actor-staff_customer"
                  aria-hidden="true">
                 <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -434,7 +464,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="form-label">Trạng thái khách hàng</label>
-                                    <select class="select2-multiple" name="group1[]" multiple="multiple">hàng
+                                    <select class="select2-multiple" name="group1[]" multiple="multiple">
                                         @foreach($status as $k1 => $s)
                                             <option value="{{$k1}}">{{$s}}</option>
                                         @endforeach
@@ -463,6 +493,7 @@
             $('.datetimepicker').daterangepicker({
                 singleDatePicker: true,
                 timePicker: true,
+                autoUpdateInput:true,
                 locale: {
                     format: 'YYYY/MM/DD hh:mm'
                 }

@@ -92,7 +92,7 @@ class CskhService
             })->whereNull('c.deleted_at')->where('users.department_id', DepartmentConstant::CSKH)->where('users.active',
                 StatusCode::ON)
             ->select('users.id', \DB::raw('COUNT(c.id) as phoneReceive'))
-            ->addSelect(\DB::raw('SUM(CASE WHEN c.telesales_id = users.id THEN 1 ELSE 0 END) AS phoneNew'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN c.mkt_id = users.id THEN 1 ELSE 0 END) AS phoneNew'))
 //            ->addSelect(\DB::raw('SUM(CASE WHEN c.time_move_cskh >= "' . Functions::yearMonthDay($input['start_date']) . " 00:00:00" . '" and c.time_move_cskh <= "' . Functions::yearMonthDay($input['end_date']) . " 00:00:00" . '" THEN 1 ELSE 0 END) AS phoneReceive'))
             ->groupBy('users.id')
             ->get();
