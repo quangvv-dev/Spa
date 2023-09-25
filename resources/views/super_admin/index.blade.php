@@ -46,6 +46,13 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="form-group">
+                                                {!! Form::label('template_schedule_id', 'ZNS ID lịch hẹn', array('class' => 'control-label')) !!}
+                                                {!! Form::text('template_schedule_id',setting('template_schedule_id'), array('class' => 'form-control')) !!}
+                                                <span class="help-block">{{ $errors->first('template_schedule_id', ':message') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
                                             <div class="form-group required {{ $errors->has('logo_website') ? 'has-error' : '' }}">
                                                 {!! Form::label('logo_website', 'Ảnh đại diện') !!}
                                                 <div class="fileupload fileupload-{{!empty(setting('logo_website')) ? 'exists' : 'new' }}"

@@ -29,7 +29,7 @@ class ZaloService
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
-        $secret_key = 'secret_key: '.config('partners.zalo_zns.secret_key');
+        $secret_key = 'secret_key: ' . config('partners.zalo_zns.secret_key');
         $headers = [
             'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
             $secret_key,
@@ -47,6 +47,18 @@ class ZaloService
             'access_token' => $result->access_token
         ]);
         return true;
+    }
+
+    public function compareDataSchedule($schedule)
+    {
+        return [
+            'customer_name' => @$schedule->customer->full_name,
+            'time_from' => $schedule->time_from,
+            'time_to' => $schedule->time_to,
+            'date' => date('d/m/Y', strtotime($schedule->date)),
+            'address' => @$schedule->branch->address,
+            'code' => 'LH.' . $schedule->id,
+        ];
     }
 
 }

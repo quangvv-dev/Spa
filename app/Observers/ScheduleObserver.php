@@ -7,21 +7,24 @@ use App\Constants\NotificationConstant;
 use App\Constants\StatusCode;
 use App\Constants\UserConstant;
 use App\Helpers\Functions;
+use App\Jobs\ZaloZns;
 use App\Models\HistorySms;
 use App\Models\Notification;
 use App\Models\PaymentHistory;
 use App\Models\RuleOutput;
 use App\Models\Schedule;
 use App\Services\TaskService;
+use App\Services\ZaloService;
 use App\User;
 use Carbon\Carbon;
 
 class ScheduleObserver
 {
 
-    public function __construct(TaskService $taskService)
+    public function __construct(TaskService $taskService, ZaloService $zalo)
     {
         $this->taskService = $taskService;
+        $this->zalo = $zalo;
     }
 
     /**
@@ -30,6 +33,10 @@ class ScheduleObserver
      */
     public function created(Schedule $schedule)
     {
+        if (setting('template_schedule_id')) {
+            $input = $this->zalo->compareDataSchedule($schedule);
+            ZaloZns::dispatch(@$schedule->customer->phone, $input, setting('template_schedule_id'))->delay(now()->addSeconds(5));
+        }
         self::automationJob($schedule);
     }
 
