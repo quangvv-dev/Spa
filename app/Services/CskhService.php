@@ -152,7 +152,7 @@ class CskhService
     {
         $users = User::select('id', 'full_name', 'avatar')->where('users.department_id', DepartmentConstant::CSKH)
             ->where('active', StatusCode::ON)->get();
-        return $users->transform(function ($item) use ($tasks, $orders, $data, $payments) {
+        return $users->transform(function ($item) use ($tasks, $orders, $data, $payments, $call) {
             return [
                 'id'             => $item->id,
                 'full_name'      => $item->full_name,
@@ -160,7 +160,7 @@ class CskhService
                 'task_todo'      => @$tasks->firstWhere('id', $item->id)->task_todo ?? 0,
                 'task_failed'    => @$tasks->firstWhere('id', $item->id)->task_failed ?? 0,
                 'task_done'      => @$tasks->firstWhere('id', $item->id)->task_done ?? 0,
-                'call'           => !empty($call) ? $call->firstWhere('id', $item->id)->total ?? 0 : 0,
+                'call'           => !empty($call) ? @$call->firstWhere('id', $item->id)->total ?? 0 : 0,
                 'phoneNew'       => @$data->firstWhere('id', $item->id)->phoneNew ?? 0,
                 'phoneReceive'   => @$data->firstWhere('id', $item->id)->phoneReceive ?? 0,
                 'order_upsale'   => @$orders->firstWhere('id', $item->id)->order_upsale ?? 0,
