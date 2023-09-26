@@ -126,6 +126,8 @@
             <td class="text-center bold">Tổng cộng</td>
             <td class="text-center bold">{{@number_format($users->sum('call_center'))}}</td>
             <td class="text-center bold">{{@number_format($customer_new)}}</td>
+            <td class="text-center bold">{{@number_format($customer_new - $users->sum('duplicate'))}}</td>
+            <td class="text-center bold">{{@number_format($users->sum('duplicate'))}}</td>
             <td class="text-center bold">{{@number_format($schedules_new)}}</td>
             <td class="text-center bold">{{@number_format($all_schedules_den)}}</td>
             <td class="text-center bold">{{@number_format($users->sum('become_buy'))}}</td>
