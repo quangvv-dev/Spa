@@ -229,6 +229,25 @@
 @section('_script')
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script>
+
+        $(document).on('keyup', '#phone',function () {
+
+            let current = $(this);
+            current.closest('.phone-group').find('.help-block').html('');
+            $.ajax({
+                url: '/api/check-unique-customers',
+                type:"post",
+                data: {
+                    phone: $(this).val(),
+                },
+                success: function (data) {
+                    if(data == 'true'){
+                        current.closest('.phone-group').find('.help-block').html('Số điện thoại đã tồn tại')
+                    }
+                }
+            })
+        });
+
         $(document).ready(function () {
             // validate phone
             jQuery.validator.addMethod("phone_number", function (phone_number, element) {
@@ -236,23 +255,6 @@
                 return this.optional(element) || phone_number.length > 9 &&
                     phone_number.match(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
             }, "Số điện thoại không hợp lệ");
-
-            $('#phone').on('change', function () {
-                let current = $(this);
-                current.closest('.phone-group').find('.help-block').html('');
-                $.ajax({
-                    url: '/api/check-unique-customers',
-                    type:"post",
-                    data: {
-                        phone: $(this).val(),
-                    },
-                    success: function (data) {
-                        if(data == 'true'){
-                            current.closest('.phone-group').find('.help-block').html('Số điện thoại đã tồn tại')
-                        }
-                    }
-                })
-            });
 
             $("#fvalidate").validate({
                 rules: {

@@ -2,7 +2,7 @@
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-center" colspan="9">CHỈ SỐ BÁO CÁO</th>
+            <th class="text-center" colspan="10">CHỈ SỐ BÁO CÁO</th>
             <th class="text-center" colspan="6">TỶ LỆ CHUYỂN ĐỔI</th>
             <th class="text-center" colspan="5">KẾT QUẢ DOANH THU</th>
         </tr>
@@ -10,7 +10,8 @@
             <th class="text-center"></th>
             <th class="text-center">Nhân viên</th>
             <th class="text-center">Cuộc gọi</th>
-            <th class="text-center no-wrap">SĐT</th>
+            <th class="text-center no-wrap">SĐT mới</th>
+            <th class="text-center no-wrap">SĐT trùng</th>
             <th class="text-center">Lịch hẹn</th>
             <th class="text-center">Khách đến</th>
             <th class="text-center">Khách đến mua</th>
@@ -30,29 +31,29 @@
             <th class="text-center no-wrap">Thực thu</th>
 
         </tr>
-        <tr class="number_index">
-            <th class="text-center">(1)</th>
-            <th class="text-center">(2)</th>
-            <th class="text-center">(2.1)</th>
-            <th class="text-center">(3)</th>
-            <th class="text-center">(4)</th>
-            <th class="text-center">(5)</th>
-            <th class="text-center">(6)</th>
-            <th class="text-center">(7)</th>
-            <th class="text-center">(8)</th>
-            <th class="text-center">(8.1)</th>
+{{--        <tr class="number_index">--}}
+{{--            <th class="text-center">(1)</th>--}}
+{{--            <th class="text-center">(2)</th>--}}
+{{--            <th class="text-center">(2.1)</th>--}}
+{{--            <th class="text-center">(3)</th>--}}
+{{--            <th class="text-center">(4)</th>--}}
+{{--            <th class="text-center">(5)</th>--}}
+{{--            <th class="text-center">(6)</th>--}}
+{{--            <th class="text-center">(7)</th>--}}
+{{--            <th class="text-center">(8)</th>--}}
+{{--            <th class="text-center">(8.1)</th>--}}
 {{--            <th class="text-center">(5)/(3)</th>--}}
-            <th class="text-center">(5)/(4)</th>
-            <th class="text-center">(6)/(4)</th>
-            <th class="text-center">(7)/(4)</th>
-            <th class="text-center">(8)/(5)</th>
-            <th class="text-center">(8)/(3)</th>
-            <th class="text-center">(12)/(8)</th>
-            <th class="text-center">(9)</th>
-            <th class="text-center">(10)</th>
-            <th class="text-center">(11)</th>
-            <th class="text-center">(12)</th>
-        </tr>
+{{--            <th class="text-center">(5)/(4)</th>--}}
+{{--            <th class="text-center">(6)/(4)</th>--}}
+{{--            <th class="text-center">(7)/(4)</th>--}}
+{{--            <th class="text-center">(8)/(5)</th>--}}
+{{--            <th class="text-center">(8)/(3)</th>--}}
+{{--            <th class="text-center">(12)/(8)</th>--}}
+{{--            <th class="text-center">(9)</th>--}}
+{{--            <th class="text-center">(10)</th>--}}
+{{--            <th class="text-center">(11)</th>--}}
+{{--            <th class="text-center">(12)</th>--}}
+{{--        </tr>--}}
         </thead>
 
         <tbody>
@@ -94,6 +95,8 @@
                     <td class="text-center pdr10">{{$item->full_name}}</td>
                     <td class="text-center pdr10">{{$item->call_center}}</td>
                     <td class="text-center pdr10">{{$item->customer_new}}</td>
+                    <td class="text-center pdr10">{{$item->customer_new - $item->duplicate}}</td>
+                    <td class="text-center pdr10">{{$item->duplicate}}</td>
                     <td class="text-center pdr10">{{$item->schedules_new}}</td>
                     <td class="text-center pdr10">{{$item->schedules_den}}</td>
                     <td class="text-center pdr10">{{$item->become_buy}}</td>

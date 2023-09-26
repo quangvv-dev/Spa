@@ -132,6 +132,7 @@ class SalesController extends Controller
             })->sum('price');
             $item->is_debt = $detail->where('is_debt', StatusCode::ON)->sum('price');
             $item->customer_new = $data_new->count();
+            $item->duplicate = $data_new->where('is_duplicate',Customer::DUPLICATE)->count();
             $item->order_new = $order_new->count();
             $item->revenue_new = $order_new->sum('all_total');
             $item->payment_new = $item->detail_new - $item->is_debt;
