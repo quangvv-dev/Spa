@@ -128,6 +128,7 @@ class CustomerController extends Controller
         } elseif (count($input) < 1) {
             $input['branch_id'] = 1;
         }
+        $input['is_duplicate'] = Customer::NON_DUPLICATE;
         $input['cskh_id'] = Auth::user()->department_id == DepartmentConstant::CSKH ? Auth::user()->id : (!empty($input['cskh_id']) ? $input['cskh_id'] : '');
         if (isset($input['location_id'])) {
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();

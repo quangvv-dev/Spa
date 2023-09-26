@@ -136,6 +136,8 @@ class Customer extends Model
                 $query->where('source_id', $conditions['source']);
             })->when(isset($conditions['gender']), function ($query) use ($conditions) {
                 $query->where('gender', $conditions['gender']);
+            })->when(isset($conditions['is_duplicate']), function ($query) use ($conditions) {
+                $query->where('is_duplicate', $conditions['is_duplicate']);
             })->when(isset($conditions['call_back']), function ($query) {
                 $params = [
                     'date_from' => Carbon::now()->format('Y-m-d'),
@@ -282,6 +284,11 @@ class Customer extends Model
     public function getGenderTextAttribute()
     {
         return $this->gender == UserConstant::MALE ? 'Nam' : 'Nữ';
+    }
+
+    public function getDuplicateAttribute()
+    {
+        return self::where('phone',$this->phone)->count() > 1;
     }
 
     public function getActiveTextAttribute()
