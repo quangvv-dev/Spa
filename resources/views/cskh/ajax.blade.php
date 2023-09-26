@@ -35,9 +35,9 @@
                     <td>{{number_format($item['task_failed'])}}</td>
                     <td>{{($item['task_todo']+$item['task_done']+$item['task_failed']) > 0 ?round($item['task_done']/($item['task_todo']+$item['task_done']+$item['task_failed']) * 100,2) : 0}}%</td>
                     <td>{{number_format($item['phoneNew'])}}</td>
-                    <td>{{number_format($item['phoneReceive'])}}</td>
                     <td>{{number_format($item['order_new'])}}</td>
                     <td>{{number_format($item['payment_new'])}}</td>
+                    <td>{{number_format($item['phoneReceive'])}}</td>
                     <td>{{number_format($item['order_upsale'])}}</td>
                     <td>{{number_format($item['payment_upsale'])}}</td>
                     <td>{{number_format($item['all_payment'])}}</td>
@@ -53,9 +53,9 @@
                 <td class="bold">{{number_format($users->sum('task_failed'))}}</td>
                 <td class="bold">{{($users->sum('task_todo')+$users->sum('task_done')+$users->sum('task_failed')) > 0?round($users->sum('task_done')/($users->sum('task_todo')+$users->sum('task_done')+$users->sum('task_failed')) * 100,2):0}}%</td>
                 <td class="bold">{{number_format($users->sum('phoneNew'))}}</td>
-                <td class="bold">{{number_format($users->sum('phoneReceive'))}}</td>
                 <td class="bold">{{number_format($users->sum('order_new'))}}</td>
                 <td class="bold">{{number_format($users->sum('payment_new'))}}</td>
+                <td class="bold">{{number_format($users->sum('phoneReceive'))}}</td>
                 <td class="bold">{{number_format($users->sum('order_upsale'))}}</td>
                 <td class="bold">{{number_format($users->sum('payment_upsale'))}}</td>
                 <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
