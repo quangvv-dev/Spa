@@ -2,7 +2,7 @@
     <table class="table table-bordered table-info hidden-xs" style="margin-bottom: 0px;">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-center" colspan="10">CHỈ SỐ BÁO CÁO</th>
+            <th class="text-center" colspan="11">CHỈ SỐ BÁO CÁO</th>
             <th class="text-center" colspan="6">TỶ LỆ CHUYỂN ĐỔI</th>
             <th class="text-center" colspan="5">KẾT QUẢ DOANH THU</th>
         </tr>
@@ -10,6 +10,7 @@
             <th class="text-center"></th>
             <th class="text-center">Nhân viên</th>
             <th class="text-center">Cuộc gọi</th>
+            <th class="text-center no-wrap">Tổng SĐT</th>
             <th class="text-center no-wrap">SĐT mới</th>
             <th class="text-center no-wrap">SĐT trùng</th>
             <th class="text-center">Lịch hẹn</th>
