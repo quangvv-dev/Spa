@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers\BE\Cskh;
 
-use App\Constants\DepartmentConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
-use App\Models\CallCenter;
-use App\Models\Customer;
-use App\Models\Order;
-use App\Models\PaymentHistory;
 use App\Services\CskhService;
-use App\User;
 use Illuminate\Http\Request;
 
 class CskhController extends Controller
@@ -41,8 +35,9 @@ class CskhController extends Controller
         $orders = $this->cskh->getDataOrders($input);
         $data = $this->cskh->getDataNew($input);
         $payments = $this->cskh->getDataPayment($input);
+        $call = $this->cskh->getDataCall($input);
 
-        $users = $this->cskh->transformData($tasks, $orders, $data, $payments)->sortByDesc('all_payment');
+        $users = $this->cskh->transformData($tasks, $orders, $data, $payments, $call)->sortByDesc('all_payment');
         if ($request->ajax()) {
             return view('cskh.ajax', compact('users'));
         }

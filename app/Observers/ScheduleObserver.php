@@ -33,7 +33,7 @@ class ScheduleObserver
      */
     public function created(Schedule $schedule)
     {
-        if (setting('template_schedule_id')) {
+        if (!empty(setting('template_schedule_id'))) {
             $input = $this->zalo->compareDataSchedule($schedule);
             ZaloZns::dispatch(@$schedule->customer->phone, $input, setting('template_schedule_id'))->delay(now()->addSeconds(5));
         }

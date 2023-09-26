@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\User;
@@ -12,26 +13,26 @@ class Schedule extends Model
 {
     protected $guarded = ['id'];
     const  SCHEDULE_STATUS = [
-//        [
-//            'id'   => 1,
-//            'name' => 'Hẹn gọi lại',
-//        ],
-[
-    'id'   => 2,
-    'name' => 'Đặt lịch',
-],
-[
-    'id'   => 3,
-    'name' => 'Đến/mua',
-],
-[
-    'id'   => 4,
-    'name' => 'Đến/chưa mua',
-],
-[
-    'id'   => 5,
-    'name' => 'Hủy lịch',
-],
+        [
+            'id' => ScheduleConstant::DAT_LICH,
+            'name' => 'Đặt lịch',
+        ],
+        [
+            'id' => ScheduleConstant::DEN_MUA,
+            'name' => 'Đến/mua',
+        ],
+        [
+            'id' => ScheduleConstant::CHUA_MUA,
+            'name' => 'Đến/chưa mua',
+        ],
+        [
+            'id' => ScheduleConstant::HUY,
+            'name' => 'Hủy lịch',
+        ],
+        [
+            'id' => ScheduleConstant::QUA_HAN,
+            'name' => 'Quá hạn',
+        ],
 //        [
 //            'id'   => 6,
 //            'name' => 'Tất cả',

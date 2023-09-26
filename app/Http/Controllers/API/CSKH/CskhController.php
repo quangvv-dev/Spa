@@ -2,28 +2,11 @@
 
 namespace App\Http\Controllers\API\CSKH;
 
-use App\Constants\DepartmentConstant;
-use App\Constants\OrderConstant;
 use App\Constants\ResponseStatusCode;
-use App\Constants\ScheduleConstant;
-use App\Constants\StatusCode;
-use App\Constants\UserConstant;
-use App\Helpers\Functions;
 use App\Http\Controllers\API\BaseApiController;
-use App\Http\Resources\SaleResource;
 use App\Models\Branch;
-use App\Models\CallCenter;
-use App\Models\Customer;
-use App\Models\GroupComment;
-use App\Models\Order;
-use App\Models\PaymentHistory;
-use App\Models\Schedule;
 use App\Services\CskhService;
-use App\Services\SaleService;
-use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\DB;
 
 class CskhController extends BaseApiController
 {

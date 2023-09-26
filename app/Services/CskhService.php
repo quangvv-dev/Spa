@@ -125,6 +125,19 @@ class CskhService
             ->groupBy('u.id')->get();
     }
 
+    public function getDataCall($input)
+    {
+        return $this->users->join('call_center as cc', 'cc.caller_number', '=', 'users.caller_number')
+            ->whereBetween('cc.start_time', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ])
+            ->where('cc.call_status', CallCenter::ANSWERED)
+            ->where('users.department_id', DepartmentConstant::CSKH)->where('users.active', StatusCode::ON)
+            ->select('users.id', DB::raw('COUNT(cc.id) as total'))
+            ->groupBy('users.id')->get();
+    }
+
     /**
      * Transform data output
      *
@@ -135,7 +148,7 @@ class CskhService
      *
      * @return mixed
      */
-    public function transformData($tasks, $orders, $data, $payments)
+    public function transformData($tasks, $orders, $data, $payments,$call = null)
     {
         $users = User::select('id', 'full_name', 'avatar')->where('users.department_id', DepartmentConstant::CSKH)
             ->where('active', StatusCode::ON)->get();
@@ -147,6 +160,7 @@ class CskhService
                 'task_todo'      => @$tasks->firstWhere('id', $item->id)->task_todo ?? 0,
                 'task_failed'    => @$tasks->firstWhere('id', $item->id)->task_failed ?? 0,
                 'task_done'      => @$tasks->firstWhere('id', $item->id)->task_done ?? 0,
+                'call'           => !empty($call) ? $call->firstWhere('id', $item->id)->total ?? 0 : 0,
                 'phoneNew'       => @$data->firstWhere('id', $item->id)->phoneNew ?? 0,
                 'phoneReceive'   => @$data->firstWhere('id', $item->id)->phoneReceive ?? 0,
                 'order_upsale'   => @$orders->firstWhere('id', $item->id)->order_upsale ?? 0,
