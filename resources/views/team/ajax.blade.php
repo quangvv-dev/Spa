@@ -23,7 +23,8 @@
                     <td class="text-center">
                         {{$item->department_id==\App\Constants\DepartmentConstant::TELESALES?'Sale'
                         :($item->department_id==\App\Constants\DepartmentConstant::MARKETING?'Marketing'
-                        :($item->department_id==\App\Constants\DepartmentConstant::CSKH?'CSKH':''))}}
+                        :($item->department_id==\App\Constants\DepartmentConstant::CSKH?'CSKH':'Carepage')
+                        )}}
                     </td>
                     <td class="text-center">{{@$item->code}}</td>
                     <td class="text-center">{{@$item->name}}</td>
