@@ -20,6 +20,7 @@
                                 <option value="{{\App\Constants\DepartmentConstant::TELESALES}}">Nhóm sale</option>
                                 <option value="{{\App\Constants\DepartmentConstant::CSKH}}">Nhóm CSKH</option>
                                 <option value="{{\App\Constants\DepartmentConstant::MARKETING}}">Nhóm Marketing</option>
+                                <option value="{{\App\Constants\DepartmentConstant::CARE_PAGE}}">Nhóm Carepage</option>
                             </select>
                         </div>
                     </div>
