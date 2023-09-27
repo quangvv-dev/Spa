@@ -110,7 +110,6 @@ class ScheduleController extends Controller
             'user_id' => $id,
             'person_action' => Auth::user()->id,
             'creator_id' => Auth::user()->id,
-            'branch_id' => $customer->branch_id,
             'category_id' => isset($category) ? $category->category_id : 0,
         ]);
         if ($request->note) {

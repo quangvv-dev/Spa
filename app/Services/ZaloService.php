@@ -56,7 +56,7 @@ class ZaloService
             'time_from' => $schedule->time_from,
             'time_to' => $schedule->time_to,
             'date' => date('d/m/Y', strtotime($schedule->date)),
-            'address' => @$schedule->branch->address,
+            'address' => @$schedule->branch->address??"...",
             'code' => 'LH.' . $schedule->id,
         ];
     }
