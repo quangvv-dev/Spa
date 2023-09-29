@@ -218,7 +218,7 @@
                 </div>
             </div>
             <div class="col" style="margin-bottom: 10px;">
-                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="submit" class="btn btn-success" id="btn-submit-customer">Lưu</button>
                 <a href="{{route('customers.index')}}" class="btn btn-danger">Trở lại</a>
             </div>
             {{ Form::close() }}
@@ -231,7 +231,7 @@
     <script>
 
         $(document).on('keyup', '#phone',function () {
-
+            $('#btn-submit-customer').prop('disabled', false);
             let current = $(this);
             current.closest('.phone-group').find('.help-block').html('');
             $.ajax({
@@ -243,6 +243,9 @@
                 success: function (data) {
                     if(data == 'true'){
                         current.closest('.phone-group').find('.help-block').html('Số điện thoại đã tồn tại')
+                        @if(setting('accept_duplicate_phone') =='off')
+                            $('#btn-submit-customer').prop('disabled', true);
+                        @endif
                     }
                 }
             })

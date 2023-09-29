@@ -53,6 +53,13 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
+                                            <div class="form-group">
+                                                {!! Form::label('accept_duplicate_phone', 'Đồng ý cho nhập số trùng', array('class' => 'control-label')) !!}
+                                                <input type="checkbox" name="accept_duplicate_phone" {{setting('accept_duplicate_phone') == 'on' ? 'checked' : ''}}>
+                                                <span class="help-block">{{ $errors->first('accept_duplicate_phone', ':message') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12">
                                             <div class="form-group required {{ $errors->has('logo_website') ? 'has-error' : '' }}">
                                                 {!! Form::label('logo_website', 'Ảnh đại diện') !!}
                                                 <div class="fileupload fileupload-{{!empty(setting('logo_website')) ? 'exists' : 'new' }}"

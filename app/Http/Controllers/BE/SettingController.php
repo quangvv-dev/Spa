@@ -118,6 +118,7 @@ class SettingController extends Controller
     public function storeAdmin(Request $request)
     {
         $input = $request->except('_token');
+        $input['accept_duplicate_phone'] = $input['accept_duplicate_phone'] ?? 'off';
         if ($request->hasFile('logo_website')) {
             $input['logo_website'] = $this->fileUpload->uploadUserImage($input['logo_website']);
         }
@@ -125,7 +126,7 @@ class SettingController extends Controller
             foreach ($input as $key => $item) {
                 setting([$key => $item])->save();
             }
-        };
+        }
         return back()->with('success', 'Đã cập nhật thông tin thành công !!!');
     }
 
