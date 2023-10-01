@@ -201,7 +201,6 @@
         </thead>
         <tbody style="background: white;">
         @if (count($customers))
-
             @if(count($customers) <7)
                 <tr>
                     <td colspan="22"></td>
@@ -230,8 +229,8 @@
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{ str_limit($customer->phone,7,'xxx') }}
-                            <i style="color: red !important" class="{!! $customer->duplicate ? "fa fa fa-copy" :'' !!}"></i>
                         </a>
+                        <a href=""><i style="color: red !important" class="{!! $customer->duplicate ? "fa fa fa-copy" :'' !!}"></i></a>
                         @if(!empty($customer->call_back))
                             <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
                         @endif
@@ -249,14 +248,14 @@
                     <td class="text-center {{in_array(8,$user_filter_grid) ? '':'display-none'}}" style="position: relative;max-width: 146px">
                         <textarea data-id="{{$customer->id}}" class="description-cus">{{ $customer->description }}</textarea>
                     </td>
-                    <td class="text-center {{in_array(9,$user_filter_grid) ? '':'display-none'}}">{{$customer->expired_text}}</td>
-                    <td class="text-center {{in_array(10,$user_filter_grid) ? '':'display-none'}}">{{@$customer->time_move}}</td>
+{{--                    <td class="text-center {{in_array(9,$user_filter_grid) ? '':'display-none'}}">{{$customer->expired_text}}</td>--}}
+{{--                    <td class="text-center {{in_array(10,$user_filter_grid) ? '':'display-none'}}">{{@$customer->time_move}}</td>--}}
                     <td class="text-center {{in_array(11,$user_filter_grid) ? '':'display-none'}}">{{@$customer->branch->name}}</td>
 
-                    <td class="text-center category-tip {{in_array(12,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">
-                        <span class="badge badge-primary span-tips">{{str_limit($customer->group_tips,30)}}</span>
-                    </td>
-                    <td class="text-center genitive-db {{in_array(13,$user_filter_grid) ? '':'display-none'}}" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>
+{{--                    <td class="text-center category-tip {{in_array(12,$user_filter_grid) ? '':'display-none'}}" data-id="{{$customer->id}}">--}}
+{{--                        <span class="badge badge-primary span-tips">{{str_limit($customer->group_tips,30)}}</span>--}}
+{{--                    </td>--}}
+{{--                    <td class="text-center genitive-db {{in_array(13,$user_filter_grid) ? '':'display-none'}}" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>--}}
                     <td class="text-center {{in_array(14,$user_filter_grid) ? '':'display-none'}}">{{@$customer->carepage->full_name}}</td>
                     <td class="text-center {{in_array(25,$user_filter_grid) ? '':'display-none'}}">{{@$customer->cskh->full_name}}</td>
                     <td class="text-center {{in_array(15,$user_filter_grid) ? '':'display-none'}}" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">

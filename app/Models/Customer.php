@@ -70,11 +70,11 @@ class Customer extends Model
         6 => 'Trạng thái',
         7 => 'Người phụ trách',
         8 => 'Mô tả',
-        9 => 'T/G tác nghiệp',
-        10 => 'Chuyển về TP',
+//        9 => 'T/G tác nghiệp',
+//        10 => 'Chuyển về TP',
         11 => 'C.Nhánh',
-        12 => 'DV liên quan',
-        13 => 'Nhóm tính cách',
+//        12 => 'DV liên quan',
+//        13 => 'Nhóm tính cách',
         14 => 'Người tạo',
         25 => 'CSKH',
         15 => 'Lịch hẹn',
@@ -176,13 +176,19 @@ class Customer extends Model
         return $builder;
     }
 
+    /**
+     *Tìm kiếm khách hàng
+     * @param $param
+     *
+     * @return mixed
+     */
     public static function search($param)
     {
         $user = Auth::user();
         $data = self::latest();
         if ($user->department_id == DepartmentConstant::TELESALES) {
             $member = checkTeamLead();
-            if (!empty($user->isLeader) && !empty($member)) {
+            if (!empty($user->isLeader) && !count($member)) {
                 $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
