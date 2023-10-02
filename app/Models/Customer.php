@@ -188,7 +188,7 @@ class Customer extends Model
         $data = self::latest();
         if ($user->department_id == DepartmentConstant::TELESALES) {
             $member = checkTeamLead();
-            if (!empty($user->isLeader) && !count($member)) {
+            if (!empty($user->isLeader) && count($member)) {
                 $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
