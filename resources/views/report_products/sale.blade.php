@@ -52,6 +52,11 @@
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
                 </div>
+                @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
+                    <div class="col-lg-2 col-md-3">
+                        {!! Form::select('team_id', $teams, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Chọn team')) !!}
+                    </div>
+                @endif
                 <div class="col-lg-2 col-md-3">
                     {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
                 </div>

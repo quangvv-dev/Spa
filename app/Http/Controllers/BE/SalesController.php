@@ -55,6 +55,7 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
+        $teams = TeamMember::where('department_id', DepartmentConstant::TELESALES)->pluck('name','id')->toArray();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
@@ -65,79 +66,79 @@ class SalesController extends Controller
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $members = self::members();
+        $members = self::members($request->all());
         $users = User::select('id', 'full_name', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)
             ->where('active', StatusCode::ON)
             ->when(!empty($members), function ($q) use ($members) {
                 $q->whereIn('id', $members);
             })->get()->map(function ($item) use ($request) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                    $q->where('branch_id', $request->branch_id);
-                });
+                $data_new = Customer::select('id')->where('telesales_id', $item->id)
+                    ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                    ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                        $q->whereIn('branch_id', $request->group_branch);
+                    })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    });
 
-            $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
-                ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                    $q->where('branch_id', $request->branch_id);
-                })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
-                    $qr->where('telesales_id', $item->id);
-                });
-            $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
+                $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+                    ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                    ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                        $q->whereIn('branch_id', $request->group_branch);
+                    })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    })->with('orderDetails')->whereHas('customer', function ($qr) use ($item) {
+                        $qr->where('telesales_id', $item->id);
+                    });
+                $order_new = $orders->where('is_upsale', OrderConstant::NON_UPSALE);
 
-            if ($item->caller_number) {
-                $paramsCenter = [
-                    'caller_number' => $item->caller_number,
-                    'call_status' => 'ANSWERED',
-                    'start_date' => $request->start_date,
-                    'end_date' => $request->end_date,
-                ];
+                if ($item->caller_number) {
+                    $paramsCenter = [
+                        'caller_number' => $item->caller_number,
+                        'call_status' => 'ANSWERED',
+                        'start_date' => $request->start_date,
+                        'end_date' => $request->end_date,
+                    ];
 
-                $callCenter = CallCenter::search($paramsCenter, 'id')->count();
-                $item->call_center = $callCenter;
-            } else {
-                $item->call_center = 0;
-            }
+                    $callCenter = CallCenter::search($paramsCenter, 'id')->count();
+                    $item->call_center = $callCenter;
+                } else {
+                    $item->call_center = 0;
+                }
 
-            $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
-                ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
-                    $q->whereIn('branch_id', $request->group_branch);
-                })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
-                    $q->where('branch_id', $request->branch_id);
-                });
-            $schedules_den = clone $schedules;
-            $schedules_new = clone $schedules;
+                $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
+                    ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
+                        $q->whereIn('branch_id', $request->group_branch);
+                    })->when(isset($request->branch_id) && $request->branch_id, function ($q) use ($request) {
+                        $q->where('branch_id', $request->branch_id);
+                    });
+                $schedules_den = clone $schedules;
+                $schedules_new = clone $schedules;
 
-            $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
-                ->whereHas('customer', function ($qr) {
+                $item->schedules_den = $schedules_den->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])
+                    ->whereHas('customer', function ($qr) {
+                        $qr->where('old_customer', 0);
+                    })->count();
+                $item->become_buy = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
+                $item->not_buy = $item->schedules_den - $item->become_buy;
+                $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
                     $qr->where('old_customer', 0);
                 })->count();
-            $item->become_buy = $schedules_den->where('status', ScheduleConstant::DEN_MUA)->count();
-            $item->not_buy = $item->schedules_den - $item->become_buy;
-            $item->schedules_new = $schedules_new->whereHas('customer', function ($qr) {
-                $qr->where('old_customer', 0);
-            })->count();
-            //lich hen
+                //lich hen
 
-            $request->merge(['telesales' => $item->id]);
-            $params = $request->all();
-            $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
-            $item->detail_new = $detail->whereHas('order', function ($qr) {
-                $qr->where('is_upsale', OrderConstant::NON_UPSALE);
-            })->sum('price');
-            $item->is_debt = $detail->where('is_debt', StatusCode::ON)->sum('price');
-            $item->customer_new = $data_new->count();
-            $item->duplicate = $data_new->where('is_duplicate',Customer::DUPLICATE)->count();
-            $item->order_new = $order_new->count();
-            $item->revenue_new = $order_new->sum('all_total');
-            $item->payment_new = $item->detail_new - $item->is_debt;
-            return $item;
-        })->sortByDesc('detail_new');
+                $request->merge(['telesales' => $item->id]);
+                $params = $request->all();
+                $detail = PaymentHistory::search($params, 'price');//đã thu trong kỳ
+                $item->detail_new = $detail->whereHas('order', function ($qr) {
+                    $qr->where('is_upsale', OrderConstant::NON_UPSALE);
+                })->sum('price');
+                $item->is_debt = $detail->where('is_debt', StatusCode::ON)->sum('price');
+                $item->customer_new = $data_new->count();
+                $item->duplicate = $data_new->where('is_duplicate', Customer::DUPLICATE)->count();
+                $item->order_new = $order_new->count();
+                $item->revenue_new = $order_new->sum('all_total');
+                $item->payment_new = $item->detail_new - $item->is_debt;
+                return $item;
+            })->sortByDesc('detail_new');
         \View::share([
             'allTotal' => $users->sum('revenue_new'),
             'grossRevenue' => $users->sum('payment_new'),
@@ -146,12 +147,17 @@ class SalesController extends Controller
         if ($request->ajax()) {
             return view('report_products.ajax_sale', compact('users'));
         }
-        return view('report_products.sale', compact('users'));
+        return view('report_products.sale', compact('users','teams'));
     }
 
-    public function members()
+    public function members($params = [])
     {
-        $myTeam = TeamMember::where('user_id',Auth::user()->id)->first();
+        if (!empty($params['team_id'])) {
+            $myTeam = TeamMember::where('user_id', Auth::user()->id)->first();
+        } else {
+            $myTeam = TeamMember::where('team_id', $params['team_id'])->first();
+        }
+
         return !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
     }
 

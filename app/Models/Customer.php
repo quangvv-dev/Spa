@@ -254,7 +254,7 @@ class Customer extends Model
 
     public function child()
     {
-        return $this->hasMany(Customer::class, 'id', 'is_gioithieu');
+        return $this->hasMany(Customer::class, 'phone', 'phone');
     }
 
     public function marketing()
@@ -608,6 +608,6 @@ class Customer extends Model
 
     public function isDuplicate()
     {
-        return $this->is_duplicate === self::DUPLICATE;
+        return $this->child()->exists();
     }
 }
