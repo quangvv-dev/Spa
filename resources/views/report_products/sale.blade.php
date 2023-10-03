@@ -47,6 +47,8 @@
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
                 <div class="col-md-3"><h3 class="card-title bold">XẾP HẠNG TELESALE</h3></div>
+            </div>
+            <div class="row">
                 <div class="col-md-2">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
