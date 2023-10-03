@@ -153,7 +153,7 @@ class SalesController extends Controller
 
     public function members($params = [])
     {
-        if (!empty(@$params['team_id'])) {
+        if (isset($params['team_id'])) {
             $myTeam = TeamMember::where('user_id', Auth::user()->id)->first();
         } else {
             $myTeam = TeamMember::where('team_id', $params['team_id'])->first();
