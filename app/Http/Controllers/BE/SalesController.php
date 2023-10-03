@@ -19,6 +19,7 @@ use App\Models\OrderDetail;
 use App\Models\PaymentHistory;
 use App\Models\Schedule;
 use App\Models\Services;
+use App\Models\Team;
 use App\Models\TeamMember;
 use App\Services\TaskService;
 use App\User;
@@ -55,7 +56,7 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
-        $teams = TeamMember::where('department_id', DepartmentConstant::TELESALES)->pluck('name','id')->toArray();
+        $teams = Team::where('department_id', DepartmentConstant::TELESALES)->pluck('name','id')->toArray();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
