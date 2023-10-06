@@ -252,10 +252,10 @@ class Customer extends Model
         return $this->belongsTo(Customer::class, 'is_gioithieu', 'id')->withTrashed();
     }
 
-    public function child()
-    {
-        return $this->hasMany(Customer::class, 'phone', 'phone');
-    }
+//    public function child()
+//    {
+//        return $this->hasMany(Customer::class, 'phone', 'phone');
+//    }
 
     public function marketing()
     {
@@ -606,8 +606,8 @@ class Customer extends Model
         return '';
     }
 
-    public function isDuplicate()
-    {
-        return $this->child()->exists();
-    }
+//    public function isDuplicate()
+//    {
+//        return $this->child->count() > 2;
+//    }
 }
