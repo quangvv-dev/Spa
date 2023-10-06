@@ -77,6 +77,7 @@ class RoleController extends Controller
 
     protected $filter = [
         'filter.team',
+        'call-center.listen',
     ];
 
     protected $permissions = ['list', 'edit', 'add', 'delete'];

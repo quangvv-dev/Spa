@@ -60,4 +60,5 @@ return [
     'teams'                    => "QL đội nhóm",
     // quyền tìm kiếm
     'filter.team'              => "Tìm kiếm theo team (sale/mkt)",
+    'call-center.listen'       => "Nghe/Tải ghi âm",
 ];

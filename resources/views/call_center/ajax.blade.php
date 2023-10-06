@@ -31,7 +31,6 @@
             @foreach($docs as $doc)
                 <tr>
                     <td class="text-center">{{@$doc->customer->full_name?:'Số máy lạ'}}</br>
-                        {{--<a href="sip:{{@$doc->dest_number}}">{{@$doc->dest_number}}</a>--}}
                         <a href="{{'customers/'.@$doc->customer->id}}">{{@$doc->dest_number}}</a>
                     </td>
                     <td class="text-center">{{@$doc->user->full_name?:'Nhân viên lạ'}}</br>
@@ -48,16 +47,19 @@
                         <span
                             class="small-tip" style="color: orangered">{{!empty($doc->after_time)?'Sau '.$doc->after_time:''}}</span>
                     </td>
-                    <td class="text-center">
-                        {{--<i class="fas fa-play-circle fa-2x text-primary"></i>--}}
-                        @if($doc->recording_url !='None')
-                            <div class="mediPlayer">
-                                <audio class="listen" preload="none" data-size="40"
-                                       src="{{$doc->recording_url}}"></audio>
-                                <a href="{{$doc->recording_url}}" style="padding-right: 20px;font-size: 19px"><i class="fa fa-download"></i></a>
-                            </div>
-                        @endif
-                    </td>
+                    @if(auth()->user()->permission('call-center.listen'))
+                        <td class="text-center">
+                            @if($doc->recording_url !='None')
+                                <div class="mediPlayer">
+                                    <audio class="listen" preload="none" data-size="40"
+                                           src="{{$doc->recording_url}}"></audio>
+                                    <a href="{{$doc->recording_url}}" style="padding-right: 20px;font-size: 19px"><i class="fa fa-download"></i></a>
+                                </div>
+                            @endif
+                        </td>
+                    @else
+                        <td class="text-center"></td>
+                    @endif
                 </tr>
             @endforeach
 
