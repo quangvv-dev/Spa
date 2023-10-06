@@ -50,6 +50,7 @@ class RoleController extends Controller
         'report.commission',
         'report.sale',
         'report.mkt',
+        'report.cskh',
         'statistics.taskSchedules',
         'call-center',
         'report.hoa-hong',

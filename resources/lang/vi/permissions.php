@@ -36,6 +36,7 @@ return [
     "report.groupSale"         => "Doanh thu nhóm sản phẩm & Dịch vụ",
     "report.sale"              => "Xếp hạng Telesales",
     "report.mkt"               => "Xếp hạng Marketing",
+    "report.cskh"              => "Xếp hạng CSKH",
     "report.hoa-hong"          => "Thống kê hoa hồng",
     "sms.history"              => "Tin nhắn đã gửi",
     "report.branch-source"     => "Doanh thu theo nguồn",
