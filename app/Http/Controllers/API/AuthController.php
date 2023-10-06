@@ -419,11 +419,11 @@ class AuthController extends BaseApiController
                 'department' => [DepartmentConstant::ADMIN],
                 'name_menu'  => 'THỐNG KÊ SẢN PHẨM KHO',
             ],
-            [
-                'menu_code'  => MenuConstant::THONG_KE_LICH_HEN,
-                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES,DepartmentConstant::MARKETING],
-                'name_menu'  => 'THỐNG KÊ LỊCH HẸN',
-            ],
+//            [
+//                'menu_code'  => MenuConstant::THONG_KE_LICH_HEN,
+//                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES,DepartmentConstant::MARKETING],
+//                'name_menu'  => 'THỐNG KÊ LỊCH HẸN',
+//            ],
             [
                 'menu_code'  => MenuConstant::XEP_HANG,
                 'department' => [
