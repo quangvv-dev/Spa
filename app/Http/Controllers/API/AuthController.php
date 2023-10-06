@@ -404,16 +404,16 @@ class AuthController extends BaseApiController
                 'department' => [DepartmentConstant::ADMIN,DepartmentConstant::MARKETING],
                 'name_menu'  => 'THỐNG KÊ NGUỒN',
             ],
-            [
-                'menu_code'  => MenuConstant::BAO_CAO_MKT,
-                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],
-                'name_menu'  => 'BÁO CÁO MARKETING',
-            ],
-            [
-                'menu_code'  => MenuConstant::BAO_CAO_SALE,
-                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu'  => 'BÁO CÁO TELESALES',
-            ],
+//            [
+//                'menu_code'  => MenuConstant::BAO_CAO_MKT,
+//                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],// tạm ẩn
+//                'name_menu'  => 'BÁO CÁO MARKETING',
+//            ],
+//            [
+//                'menu_code'  => MenuConstant::BAO_CAO_SALE,
+//                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],// tạm ẩn
+//                'name_menu'  => 'BÁO CÁO TELESALES',
+//            ],
             [
                 'menu_code'  => MenuConstant::THONG_KE_SP_KHO,
                 'department' => [DepartmentConstant::ADMIN],
