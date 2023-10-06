@@ -35,9 +35,10 @@ return [
     "statistics.index"         => "Doanh thu",
     "report.groupSale"         => "Doanh thu nhóm sản phẩm & Dịch vụ",
     "report.sale"              => "Xếp hạng Telesales",
+    "report.mkt"               => "Xếp hạng Marketing",
     "report.hoa-hong"          => "Thống kê hoa hồng",
     "sms.history"              => "Tin nhắn đã gửi",
-    "report.branch-source"  => "Doanh thu theo nguồn",
+    "report.branch-source"     => "Doanh thu theo nguồn",
     //Quyền nâng cao
     'marketing.seeding_number' => "Kho số seeding",
     'marketing.fanpage_post'   => "Fanpage Post",
@@ -57,4 +58,6 @@ return [
     'carepage.index'           => "Báo cáo CarePage",
     'order.orders-destroy'     => "Đơn hàng đã bị xoá",
     'teams'                    => "QL đội nhóm",
+    // quyền tìm kiếm
+    'filter.team'              => "Tìm kiếm theo team (sale/mkt)",
 ];

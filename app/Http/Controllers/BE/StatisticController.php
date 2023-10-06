@@ -74,14 +74,14 @@ class StatisticController extends Controller
         }
         $input = $request->all();
         if (isset($input['location_id'])) {
-            $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
+            $group_branch = Branch::select('id')->where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = count($group_branch) ? $group_branch : [0];
         }
+        $user = Auth::user();
 
         if (count($input) == 2) {
-            $input['branch_id'] = 1;
+            $input['branch_id'] = $user->branch_id ?? 1;
         }
-        $user = Auth::user();
         if (!in_array($user->department_id, [DepartmentConstant::KE_TOAN, DepartmentConstant::MARKETING, DepartmentConstant::TELESALES]) && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))) {
             $input['branch_id'] = $user->branch_id;
         }

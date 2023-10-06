@@ -49,10 +49,11 @@ class RoleController extends Controller
         'report.tasks',
         'report.commission',
         'report.sale',
+        'report.mkt',
         'statistics.taskSchedules',
         'call-center',
         'report.hoa-hong',
-        'report.branch-source'
+        'report.branch-source',
     ];
 
     protected $other = [
@@ -73,15 +74,21 @@ class RoleController extends Controller
         'carepage.index',
         'order.orders-destroy',
     ];
+
+    protected $filter = [
+        'filter.team',
+    ];
+
     protected $permissions = ['list', 'edit', 'add', 'delete'];
 
     public function generateParams()
     {
         view()->share([
             'permissions' => $this->permissions,
-            'module' => $this->module,
-            'report' => $this->report,
-            'other' => $this->other,
+            'module'      => $this->module,
+            'report'      => $this->report,
+            'other'       => $this->other,
+            'filter'      => $this->filter,
         ]);
     }
 
@@ -94,10 +101,10 @@ class RoleController extends Controller
         $department = Department::pluck('name', 'id')->toArray();
 
         view()->share([
-            'type' => $this->type,
+            'type'       => $this->type,
             'department' => $department,
-            'report' => $this->report,
-            'other' => $this->other,
+            'report'     => $this->report,
+            'other'      => $this->other,
         ]);
     }
 
@@ -142,10 +149,10 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         Role::create([
-            'name' => $request->name,
-            'description' => $request->description,
+            'name'          => $request->name,
+            'description'   => $request->description,
             'department_id' => $request->department_id,
-            'permissions' => json_encode($request->permissions),
+            'permissions'   => json_encode($request->permissions),
         ]);
 
         return redirect(route('roles.index'))->with('success', 'Thêm mới quền thành công!');
@@ -182,7 +189,7 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -191,10 +198,10 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         if ($role) {
             $role->update([
-                'name' => $request->name,
-                'description' => $request->description,
+                'name'          => $request->name,
+                'description'   => $request->description,
                 'department_id' => $request->department_id,
-                'permissions' => json_encode($request->permissions),
+                'permissions'   => json_encode($request->permissions),
             ]);
 
             return back();

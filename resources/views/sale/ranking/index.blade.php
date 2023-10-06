@@ -294,6 +294,11 @@
                             <input type="hidden" name="end_date" id="end_date">
                             <input id="reportrange" type="text" class="form-control square">
                         </div>
+                        @if(auth()->user()->permission('filter.team'))
+                            <div class="col-lg-2 col-md-3">
+                                {!! Form::select('team_id', $teams, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Chọn team')) !!}
+                            </div>
+                        @endif
 {{--                        <div class="col-lg-2 col-md-6">--}}
 {{--                            {!! Form::select('is_upsale', [0=>'Khách hàng mới',1=>'Khách hàng cũ'], null, array('class' => 'form-control', 'placeholder'=>'Tất cả khách hàng',)) !!}--}}
 {{--                        </div>--}}

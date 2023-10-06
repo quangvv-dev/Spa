@@ -16,6 +16,7 @@ use App\Models\PaymentHistory;
 use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
+use App\Models\Team;
 use App\Models\ThuChi;
 use App\User;
 use Carbon\Carbon;
@@ -46,10 +47,14 @@ class MarketingController extends Controller
      */
     public function index(Request $request)
     {
+        $teams = Team::select('id','name')->where('department_id', DepartmentConstant::MARKETING)->pluck('name','id')->toArray();
+
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
+        $members = Functions::members($input);
+
         if (isset($input['location_id'])) {
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
@@ -59,7 +64,9 @@ class MarketingController extends Controller
             $input['group_branch'] = $group_branch;
         }
         $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active',StatusCode::ON)
-            ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('id', $members);
+            })->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
                 $input['marketing'] = $item->id;
                 $customer = Customer::searchApi($input)->select('id');
                 $item->contact = $customer->count();
@@ -80,15 +87,8 @@ class MarketingController extends Controller
         if ($request->ajax()) {
             return view('marketing.leader.ajax', compact('marketing'));
         }
-//        $payment = PaymentHistory::search($input, 'price,order_id')whereHas('order', function ($item) {
-////            $item->where('is_upsale', 0);
-////        });
-//        $paymentNew = clone $payment;
-//        $paymentNew = $paymentNew->whereHas('order', function ($item) {
-//            $item->where('is_upsale', 0);
-//        });
 
-        return view('marketing.leader.index', compact('marketing'));
+        return view('marketing.leader.index', compact('marketing', 'teams'));
     }
 
     /**
@@ -238,13 +238,18 @@ class MarketingController extends Controller
      */
     public function ranking(Request $request)
     {
+        $teams = Team::select('id','name')->where('department_id', DepartmentConstant::MARKETING)->pluck('name','id')->toArray();
+
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
+        $members = Functions::members($request->all());
 
         $input = $request->all();
-        $marketing = User::where('department_id', 3)->where('active',StatusCode::ON)
-            ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
+        $marketing = User::where('department_id', DepartmentConstant::MARKETING)->where('active',StatusCode::ON)
+            ->when(!empty($members), function ($q) use ($members) {
+                $q->whereIn('id', $members);
+            })->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['marketing'] = $item->id;
             $input['is_upsale'] = OrderConstant::NON_UPSALE;
             $payment = PaymentHistory::search($input, 'price,order_id')->whereHas('order', function ($item) {
@@ -259,6 +264,6 @@ class MarketingController extends Controller
         if ($request->ajax()) {
             return view('marketing.ranking.ajax', compact('marketing', 'my_key'));
         }
-        return view('marketing.ranking.index', compact('marketing', 'my_key'));
+        return view('marketing.ranking.index', compact('marketing', 'my_key', 'teams'));
     }
 }

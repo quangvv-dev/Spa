@@ -234,6 +234,7 @@
                             </ul>
                         </li>
 
+                        @if($roleGlobal->permission('report.mkt'))
                         <li class="sub-with-sub">
                             <a href="#">Marketing</a>
                             <ul>
@@ -241,6 +242,7 @@
                                 <li><a href="{{url('marketing/leader')}}">Báo cáo doanh thu</a></li>
                             </ul>
                         </li>
+                        @endif
 
                         @if($roleGlobal->permission('report.sale') || $roleGlobal->permission('statistics.taskSchedules'))
                             <li class="sub-with-sub">

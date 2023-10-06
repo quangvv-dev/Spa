@@ -56,7 +56,7 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
-        $teams = Team::where('department_id', DepartmentConstant::TELESALES)->pluck('name','id')->toArray();
+        $teams = Team::select('id','name')->where('department_id', DepartmentConstant::TELESALES)->pluck('name','id')->toArray();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
@@ -67,7 +67,8 @@ class SalesController extends Controller
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $members = self::members($request->all());
+        $members = Functions::members($request->all());
+
         $users = User::select('id', 'full_name', 'caller_number')->where('department_id', DepartmentConstant::TELESALES)
             ->where('active', StatusCode::ON)
             ->when(!empty($members), function ($q) use ($members) {
@@ -151,17 +152,6 @@ class SalesController extends Controller
         return view('report_products.sale', compact('users','teams'));
     }
 
-    public function members($params = [])
-    {
-        if (!isset($params['team_id'])) {
-            $myTeam = TeamMember::where('user_id', Auth::user()->id)->first();
-        } else {
-            $myTeam = TeamMember::where('team_id', $params['team_id'])->first();
-        }
-
-        return !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
-    }
-
     /**
      * Xếp hạng telesale
      *
@@ -170,10 +160,11 @@ class SalesController extends Controller
      */
     public function ranking(Request $request)
     {
+        $teams = Team::select('id','name')->where('department_id', DepartmentConstant::TELESALES)->pluck('name','id')->toArray();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        $members = self::members();
+        $members = Functions::members($request->all());
 
         $params = $request->all();
         $sale = User::where('department_id', DepartmentConstant::TELESALES)
@@ -195,7 +186,7 @@ class SalesController extends Controller
         if ($request->ajax()) {
             return view('sale.ranking.ajax', compact('sale', 'my_key'));
         }
-        return view('sale.ranking.index', compact('sale', 'my_key'));
+        return view('sale.ranking.index', compact('sale', 'my_key','teams'));
     }
 
     /**
@@ -210,10 +201,13 @@ class SalesController extends Controller
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        if (!isset($request->branch_id)) {
-            $request->merge(['branch_id' => 1]);
-        } elseif ($request->branch_id == (-1)) {
-            $request->merge(['branch_id' => null]);
+        $user = Auth::user();
+        if (!in_array($user->department_id, [
+                DepartmentConstant::KE_TOAN,
+                DepartmentConstant::MARKETING,
+                DepartmentConstant::TELESALES,
+            ]) && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))) {
+            $request->merge(['branch_id' => $user->branch_id]);
         }
         if (isset($request->location_id)) {
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
