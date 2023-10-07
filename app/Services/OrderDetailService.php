@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductDepot;
 use App\Models\Services;
@@ -119,16 +120,17 @@ class OrderDetailService
 
     public function revenueWithSource($input)
     {
-        return $this->orderDetail->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-            $q->whereBetween('order_detail.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-        })->when(isset($input['branch_id']), function ($query) use ($input) {
-            $query->where('order_detail.branch_id', $input['branch_id']);
-        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
-            $q->whereIn('order_detail.branch_id', $input['group_branch']);
-        })->join('customers as c', 'c.id', '=', 'order_detail.user_id')->join('status as s', 'c.source_id', '=', 's.id')
-            ->select(
-                DB::raw('SUM(order_detail.total_price) as revenue'), 's.name as name')
-            ->groupBy('c.source_id')->get();
+//        return $this->orderDetail->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+        return Order::join('customers as c', 'c.id', 'orders.member_id')->join('status as s', 'c.source_id', 's.id')
+            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('orders.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+            })->when(isset($input['branch_id']), function ($query) use ($input) {
+                $query->where('orders.branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('orders.branch_id', $input['group_branch']);
+            })
+            ->select(DB::raw('SUM(orders.all_total) as revenue'), 's.name as name')
+            ->groupBy('c.source_id')->dd();
     }
 
     public function revenueWithTrademark($input)
