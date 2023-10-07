@@ -125,7 +125,7 @@ class OrderDetailService
             $query->where('order_detail.branch_id', $input['branch_id']);
         })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('order_detail.branch_id', $input['group_branch']);
-        })->join('customers as c', 'c.id', 'order_detail.user_id')->join('status as s', 'c.source_id', 's.id')
+        })->join('customers as c', 'c.id', 'order_detail.user_id')->join('status as s', 'c.source_id','=', 's.id')
             ->select(
                 DB::raw('SUM(order_detail.total_price) as revenue'), 's.name as name')
             ->groupBy('c.source_id')->get();
