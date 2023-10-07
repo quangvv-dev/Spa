@@ -130,7 +130,7 @@ class OrderDetailService
                 $q->whereIn('orders.branch_id', $input['group_branch']);
             })
             ->select(DB::raw('SUM(orders.all_total) as revenue'), 's.name as name')
-            ->groupBy('c.source_id')->dd();
+            ->groupBy('c.source_id')->get();
     }
 
     public function revenueWithTrademark($input)
