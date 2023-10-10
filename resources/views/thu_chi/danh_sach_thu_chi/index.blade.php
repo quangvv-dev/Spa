@@ -37,7 +37,7 @@
             {!! Form::open(array('url' => url()->current(), 'id'=> 'gridForm','role'=>'form')) !!}
 
             <div class="card-header">
-                <h3 class="card-title">Danh sách chi</h3></br>
+                <h3 class="card-title">Danh sách chi</h3>
 
                 <div class="col">
                     @if(\Request::is('products'))
@@ -79,17 +79,18 @@
                         {!! Form::select('category_id', $categories, null, array('class' => 'form-control select2','id'=>'category','placeholder'=>'Chọn danh mục')) !!}
                     </div>
                     <div class="col-2">
-                        <select name="status" id="status" class="form-control">
+                        <select name="status" id="status" class="form-control select2">
                             <option value="">Chọn trạng thái</option>
                             <option value="0">Chưa duyệt</option>
                             <option value="1">Đã duyệt</option>
                         </select>
                     </div>
                     <input type="hidden" name="page" id="page">
-
-                    <div class="col-2">
-                        {!! Form::select('branch_id', $branches, null, array('class' => 'form-control select2','id'=>'branch','placeholder'=>'Chọn chi nhánh')) !!}
-                    </div>
+                    @if(empty(auth()->user()->branch_id))
+                        <div class="col-2">
+                            {!! Form::select('branch_id', $branches, null, array('class' => 'form-control select2','id'=>'branch','placeholder'=>'Chọn chi nhánh')) !!}
+                        </div>
+                    @endif
                     <div class="col-2">
                         <button class="btn btn-primary searchData"><i class="fa fa-search"></i> Tìm kiếm</button>
                     </div>

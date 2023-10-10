@@ -30,9 +30,10 @@ class ThuChiController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
+     * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -41,8 +42,8 @@ class ThuChiController extends Controller
         }
         $search = $request->all();
         $user = Auth::user();
-        $admin = $user->department_id == DepartmentConstant::ADMIN && $user->role == 1 ? true : false;
-        $quan_ly = $user->department_id == DepartmentConstant::ADMIN && $user->role != 1 ? true : false;
+        $admin = $user->department_id == DepartmentConstant::ADMIN &&  empty($user->branch_id) ? true : false;
+        $quan_ly = $user->department_id == DepartmentConstant::ADMIN && $user->branch_id? true : false;
         $ke_toan = $user->department_id == DepartmentConstant::KE_TOAN ? true : false;
         $branches = [];
         $users = User::pluck('full_name', 'id')->toArray();

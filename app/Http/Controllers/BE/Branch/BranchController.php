@@ -134,18 +134,24 @@ class BranchController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
      */
     public function source(Request $request)
     {
         $input = $request->all();
+        $user = Auth::user();
+        if (!in_array($user->department_id, [DepartmentConstant::KE_TOAN, DepartmentConstant::MARKETING, DepartmentConstant::TELESALES,
+            ]) && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))) {
+            $request->merge(['branch_id' => $user->branch_id]);
         $users = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get()->map(function ($item
         ) use ($request, $input) {
             $data_new = Customer::select('id')->whereBetween('created_at', [
                 Functions::yearMonthDay($request->start_date) . " 00:00:00",
                 Functions::yearMonthDay($request->end_date) . " 23:59:59",
-            ])->where('source_id', $item->id)->when(!empty($input['branch_id']), function ($query) use ($input) {
+            ])->where('source_id', $item->id)
+                ->when(!empty($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
             });
 

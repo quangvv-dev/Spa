@@ -103,7 +103,7 @@
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
                 <div class="col-md-4">
-                    <h3 class="card-title bold">BÁO CÁO CHI TIẾT NGUỒN DỮ LIỆU</h3></br>
+                    <h3 class="card-title bold">BÁO CÁO CHI TIẾT NGUỒN DỮ LIỆU</h3>
 
                 </div>
                 <div class="col-md-3">
@@ -111,9 +111,11 @@
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
                 </div>
-                <div class="col-lg-2 col-md-3">
-                    {!! Form::select('branch_id', $branch, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Tất cả chi nhánh')) !!}
-                </div>
+                @if(empty(auth()->user()->branch_id))
+                    <div class="col-lg-2 col-md-3">
+                        {!! Form::select('branch_id', $branch, null, array('class' => 'form-control location select2', 'placeholder' => 'Tất cả chi nhánh')) !!}
+                    </div>
+                @endif
 
                 <div class="col-lg-1 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
