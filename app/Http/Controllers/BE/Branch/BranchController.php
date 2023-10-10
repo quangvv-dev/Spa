@@ -145,6 +145,7 @@ class BranchController extends Controller
         if (!in_array($user->department_id, [DepartmentConstant::KE_TOAN, DepartmentConstant::MARKETING, DepartmentConstant::TELESALES,
             ]) && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))) {
             $request->merge(['branch_id' => $user->branch_id]);
+        }
         $users = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->get()->map(function ($item
         ) use ($request, $input) {
             $data_new = Customer::select('id')->whereBetween('created_at', [
