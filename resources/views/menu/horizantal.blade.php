@@ -63,7 +63,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('customers*')||Request::is('customers*') ? 'active' : '' }}"
                        href="{!! route('customers.index') !!}"><i
-                                class="fas fa-users"></i><span>Khách hàng</span></a>
+                            class="fas fa-users"></i><span>Khách hàng</span></a>
                 </li>
             @endif
             <li class="nav-item with-sub">
@@ -71,13 +71,13 @@
                    href="#"><i class="fas fa-magnet"></i><span>Marketing</span></a>
                 <div class="sub-item">
                     <ul>
-{{--                        @if($roleGlobal->permission('marketing.fanpage'))--}}
-{{--                            <li><a href="{{route('marketing.fanpage.index')}}">Fanpage </a></li>--}}
-{{--                        @endif--}}
+                        {{--                        @if($roleGlobal->permission('marketing.fanpage'))--}}
+                        {{--                            <li><a href="{{route('marketing.fanpage.index')}}">Fanpage </a></li>--}}
+                        {{--                        @endif--}}
 
-{{--                        @if($roleGlobal->permission('marketing.fanpage_post'))--}}
-{{--                            <li><a href="{{route('marketing.fanpage-post.index')}}">Fanpage Post</a></li>--}}
-{{--                        @endif--}}
+                        {{--                        @if($roleGlobal->permission('marketing.fanpage_post'))--}}
+                        {{--                            <li><a href="{{route('marketing.fanpage-post.index')}}">Fanpage Post</a></li>--}}
+                        {{--                        @endif--}}
 
                         @if($roleGlobal->permission('marketing.dashboard'))
                             <li class="sub-with-sub">
@@ -93,20 +93,20 @@
                                 <a href="#">Dữ liệu</a>
                                 <ul>
                                     @if($roleGlobal->permission('source.list'))
-{{--                                        <li><a href="{!! route('marketing.source-fb.index') !!}">Kết nối FaceBook</a>--}}
-{{--                                        </li>--}}
+                                        {{--                                        <li><a href="{!! route('marketing.source-fb.index') !!}">Kết nối FaceBook</a>--}}
+                                        {{--                                        </li>--}}
                                         <li><a href="{!! route('marketing.source-landipage.index') !!}">Kết nối
                                                 Landipage</a></li>
                                     @endif
 
-{{--                                    @if($roleGlobal->permission('marketing.seeding_number'))--}}
-{{--                                        <li><a href="{{route('marketing.seeding-number.index')}}">Kho số seeding</a>--}}
-{{--                                        </li>--}}
-{{--                                    @endif--}}
-{{--                                    @if($roleGlobal->permission('posts.list'))--}}
-{{--                                        <li><a href="{{route('posts.index')}}">Optin form</a>--}}
-{{--                                        </li>--}}
-{{--                                    @endif--}}
+                                    {{--                                    @if($roleGlobal->permission('marketing.seeding_number'))--}}
+                                    {{--                                        <li><a href="{{route('marketing.seeding-number.index')}}">Kho số seeding</a>--}}
+                                    {{--                                        </li>--}}
+                                    {{--                                    @endif--}}
+                                    {{--                                    @if($roleGlobal->permission('posts.list'))--}}
+                                    {{--                                        <li><a href="{{route('posts.index')}}">Optin form</a>--}}
+                                    {{--                                        </li>--}}
+                                    {{--                                    @endif--}}
                                 </ul>
                             </li>
                         @endif
@@ -126,7 +126,7 @@
                                     @endif
                                     @if($roleGlobal->permission('marketing.fanpage'))
                                         <li><a href="{{route('landipages.index')}}">Landipage</a></li>
-{{--                                        <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpage</a></li>--}}
+                                        {{--                                        <li><a href="{{route('marketing.chat-messages')}}">Nhắn tin fanpage</a></li>--}}
                                     @endif
                                 </ul>
                             </li>
@@ -219,12 +219,13 @@
                             <ul>
                                 @if($roleGlobal->permission('statistics.index'))
                                     <li><a href="{{url('statistics')}}">Doanh thu</a></li>
-                                    @if(empty($roleGlobal->branch_id))
-                                        <li><a href="{{url('chart-revenue')}}">BĐ hệ thống</a></li>
-                                        <li><a href="{{route('report.branchs')}}">Nguồn thu từ đơn hệ thống</a></li>
-                                    @endif
-                                    <li><a href="{{url('chart-pay')}}">Duyệt chi</a></li>
                                 @endif
+                                @if($roleGlobal->permission('report.chart-revenue'))
+                                    <li><a href="{{url('chart-revenue')}}">BĐ hệ thống</a></li>
+                                @endif
+
+                                <li><a href="{{route('report.branchs')}}">Nguồn thu từ đơn hệ thống</a></li>
+                                <li><a href="{{url('chart-pay')}}">Duyệt chi</a></li>
                                 @if($roleGlobal->permission('report.branch-source'))
                                     <li><a href="{{route('report.branch-source')}}">Báo cáo nguồn dữ liệu</a></li>
                                 @endif
@@ -235,13 +236,13 @@
                         </li>
 
                         @if($roleGlobal->permission('report.mkt'))
-                        <li class="sub-with-sub">
-                            <a href="#">Marketing</a>
-                            <ul>
-                                <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
-                                <li><a href="{{url('marketing/leader')}}">Báo cáo doanh thu</a></li>
-                            </ul>
-                        </li>
+                            <li class="sub-with-sub">
+                                <a href="#">Marketing</a>
+                                <ul>
+                                    <li><a href="{{url('marketing/ranking')}}">Bảng xếp hạng</a></li>
+                                    <li><a href="{{url('marketing/leader')}}">Báo cáo doanh thu</a></li>
+                                </ul>
+                            </li>
                         @endif
 
                         @if($roleGlobal->permission('report.sale') || $roleGlobal->permission('statistics.taskSchedules'))
@@ -323,57 +324,57 @@
                 </li>
             @endif
 
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
-                       href="#"><i class="fas fa-cog"></i><span>Nhân sự</span></a>
-                    <div class="sub-item">
-                        <ul>
-                            @if($roleGlobal->permission('time-status.index'))
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
+                   href="#"><i class="fas fa-cog"></i><span>Nhân sự</span></a>
+                <div class="sub-item">
+                    <ul>
+                        @if($roleGlobal->permission('time-status.index'))
                             <li><a href="{{url('settings/time-status')}}">Cài đặt thời gian</a></li>
-                            @endif
+                        @endif
 
-                            <li class="sub-with-sub">
-                                <a href="#">Chấm công</a>
-                                <ul>
-                                    @if($roleGlobal->permission('cham_cong.list'))
-                                        <li><a href="{{url('approval/statistic')}}">DS Chấm công</a></li>
-                                    @endif
-                                    @if($roleGlobal->permission('history_approval.list'))
-                                        <li><a href="{{url('approval/history')}}">Chi tiết chấm công</a></li>
-                                    @endif
-                                </ul>
-                            </li>
+                        <li class="sub-with-sub">
+                            <a href="#">Chấm công</a>
+                            <ul>
+                                @if($roleGlobal->permission('cham_cong.list'))
+                                    <li><a href="{{url('approval/statistic')}}">DS Chấm công</a></li>
+                                @endif
+                                @if($roleGlobal->permission('history_approval.list'))
+                                    <li><a href="{{url('approval/history')}}">Chi tiết chấm công</a></li>
+                                @endif
+                            </ul>
+                        </li>
 
-                            <li class="sub-with-sub">
-                                <a href="#">Bảng lương</a>
-                                <ul>
-                                    @if($roleGlobal->permission('history_salary.list'))
-                                        <li><a href="{{url('approval/history-import-salary')}}">Nhập bảng lương</a></li>
-                                    @endif
-                                    @if($roleGlobal->permission('salary.list'))
-                                        <li><a href="{{url('approval/salary')}}">Bảng lương</a></li>
-                                    @endif
-                                </ul>
-                            </li>
+                        <li class="sub-with-sub">
+                            <a href="#">Bảng lương</a>
+                            <ul>
+                                @if($roleGlobal->permission('history_salary.list'))
+                                    <li><a href="{{url('approval/history-import-salary')}}">Nhập bảng lương</a></li>
+                                @endif
+                                @if($roleGlobal->permission('salary.list'))
+                                    <li><a href="{{url('approval/salary')}}">Bảng lương</a></li>
+                                @endif
+                            </ul>
+                        </li>
 
-                            <li class="sub-with-sub">
-                                <a href="#">Đơn từ</a>
-                                <ul>
-                                    @if($roleGlobal->permission('don_tu.list'))
-                                        <li><a href="{{url('approval/order')}}">Đơn từ</a></li>
-                                    @endif
-                                    @if($roleGlobal->permission('reason.list'))
-                                        <li><a href="{{url('approval/reason')}}">Lý do đơn từ</a></li>
-                                    @endif
-                                </ul>
-                            </li>
-                            @if($roleGlobal->permission('teams.list'))
-                                <li><a href="{{route('teams.index')}}">Quản lý đội nhóm</a></li>
-                            @endif
+                        <li class="sub-with-sub">
+                            <a href="#">Đơn từ</a>
+                            <ul>
+                                @if($roleGlobal->permission('don_tu.list'))
+                                    <li><a href="{{url('approval/order')}}">Đơn từ</a></li>
+                                @endif
+                                @if($roleGlobal->permission('reason.list'))
+                                    <li><a href="{{url('approval/reason')}}">Lý do đơn từ</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                        @if($roleGlobal->permission('teams.list'))
+                            <li><a href="{{route('teams.index')}}">Quản lý đội nhóm</a></li>
+                        @endif
 
-                        </ul>
-                    </div>
-                </li>
+                    </ul>
+                </div>
+            </li>
 
         </ul>
         <div class="div-info">
@@ -381,9 +382,9 @@
                 <input id="check_notify" type="hidden">
                 <div class="dropdown dropdown-notification d-none d-md-flex">
                     <a class="nav-link icon notification margin-right0" data-toggle="dropdown"><i
-                                style="color: #3691ef;"
-                                class="fas fa-bell"></i> <span
-                                class="badge badge-danger badge-pill position0">10</span></a>
+                            style="color: #3691ef;"
+                            class="fas fa-bell"></i> <span
+                            class="badge badge-danger badge-pill position0">10</span></a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
                          style="overflow: auto;max-height: 400px">
                         <a class="dropdown-item text-center text-dark" href="#">2 New Messages</a>
@@ -418,15 +419,15 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                         <a class="dropdown-item" href="{{ url('users/'.Auth::user()->id . '/edit') }}"><i
-                                    class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
+                                class="dropdown-icon mdi mdi-face-profile"></i> Cài đặt tài khoản</a>
                         @if($roleGlobal->permission('users.list'))
                             <a class="dropdown-item" href="{!! route('users.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
+                                    class="dropdown-icon mdi mdi-account-outline"></i> Quản lý người dùng</a>
                         @endif
 
                         @if($roleGlobal->permission('department.list'))
                             <a class="dropdown-item" href="{!! route('department.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
+                                    class="dropdown-icon mdi mdi-account-multiple"></i> Quản lý phòng ban</a>
                         @endif
 
                         @if(empty($permissions) || !in_array('sms.index',$permissions))
@@ -438,18 +439,18 @@
                         @endif
                         @if($roleGlobal->permission('status.list'))
                             <a class="dropdown-item" href="{!! route('status.index') !!}"><i
-                                        class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
+                                    class="dropdown-icon mdi mdi-account-card-details"></i> Quản lý CRM</a>
                         @endif
                         @if(empty($permissions) || !in_array('package.index',$permissions))
                             @if($roleGlobal->permission('settings'))
                                 <a class="dropdown-item" href="{!! route('package.index') !!}"><i
-                                            class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
+                                        class="dropdown-icon mdi mdi-monitor"></i> Quản lý gói nạp ví</a>
                             @endif
                         @endif
                         @if(empty($permissions) || !in_array('settings.index',$permissions))
                             @if($roleGlobal->permission('settings'))
                                 <a class="dropdown-item" href="{!! route('settings.index') !!}"><i
-                                            class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
+                                        class="dropdown-icon mdi mdi-settings"></i> Cài đặt chung</a>
                             @endif
                         @endif
 

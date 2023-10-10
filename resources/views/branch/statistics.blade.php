@@ -103,12 +103,15 @@
             {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'col-md-12', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="row">
                 <div class="col-md-4">
-                    <h3 class="card-title bold">NGUỒN THU TỪ NGUỒN</h3></br>
+                    <h3 class="card-title bold">NGUỒN THU TỪ NGUỒN</h3>
                 </div>
                 <div class="col-md-3">
                     <input type="hidden" name="start_date" id="start_date">
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    {!! Form::select('branch_id', $branch, null, array('class' => 'form-control location select2', 'placeholder' => 'Cụm khu vực')) !!}
                 </div>
 {{--                <div class="col-lg-2 col-md-3">--}}
 {{--                    {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}--}}

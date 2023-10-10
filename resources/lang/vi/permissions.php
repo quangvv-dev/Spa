@@ -40,6 +40,8 @@ return [
     "report.hoa-hong"          => "Thống kê hoa hồng",
     "sms.history"              => "Tin nhắn đã gửi",
     "report.branch-source"     => "Doanh thu theo nguồn",
+    "report.chart-revenue"     => "Biểu đồ hệ thống",
+    "report.branchs"           => "Doanh thu nguồn từ đơn hệ thống",
     //Quyền nâng cao
     'marketing.seeding_number' => "Kho số seeding",
     'marketing.fanpage_post'   => "Fanpage Post",

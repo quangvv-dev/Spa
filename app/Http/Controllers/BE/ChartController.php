@@ -16,7 +16,7 @@ class ChartController extends Controller
 
     public function __construct()
     {
-        //
+        $this->middleware('permission:report.chart-revenue', ['only' => ['index']]);
     }
 
     public function index(Request $request)
