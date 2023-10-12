@@ -325,6 +325,10 @@ class StatisticController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
+        $user = Auth::user();
+        if (!in_array($user->department_id, [DepartmentConstant::KE_TOAN, DepartmentConstant::MARKETING, DepartmentConstant::TELESALES]) && ($user->department_id != DepartmentConstant::BAN_GIAM_DOC || ($user->department_id == DepartmentConstant::BAN_GIAM_DOC && $user->branch_id != null))) {
+            $input['branch_id'] = $user->branch_id;
+        }
         if (isset($input['location_id'])) {
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
