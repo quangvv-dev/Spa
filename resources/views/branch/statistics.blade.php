@@ -110,13 +110,11 @@
                     <input type="hidden" name="end_date" id="end_date">
                     <input id="reportrange" type="text" class="form-control square">
                 </div>
-                <div class="col-lg-2 col-md-3">
-                    {!! Form::select('branch_id', $branch, null, array('class' => 'form-control location select2', 'placeholder' => 'Cụm khu vực')) !!}
-                </div>
-{{--                <div class="col-lg-2 col-md-3">--}}
-{{--                    {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}--}}
-{{--                </div>--}}
-
+                @if(empty(\Illuminate\Support\Facades\Auth::user()->branch_id))
+                    <div class="col-lg-2 col-md-3">
+                        {!! Form::select('branch_id', $branch, null, array('class' => 'form-control location select2', 'placeholder' => 'Cụm chi nhánh')) !!}
+                    </div>
+                @endif
                 <div class="col-lg-1 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
                     </button>

@@ -49,6 +49,7 @@
                         <div class="col-md-2">
                             {{Form::select('type',[\App\Constants\StatusCode::SERVICE=>'Nhóm dịch vụ',\App\Constants\StatusCode::PRODUCT=>'Nhóm sản phẩm'], @$type, array('class' => 'form-control','id'=>'telesales','placeholder'=>'Chọn loại nhóm'))}}
                         </div>
+                        @if(empty(\Illuminate\Support\Facades\Auth::user()->branch_id))
                         <div class="col-md-2">
                             <select name="branch_id" id="branch_id" class="form-control">
                                 <option value="-1">Tất cả chi nhánh</option>
@@ -60,6 +61,7 @@
                         <div class="col-lg-2 col-md-3">
                             {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
                         </div>
+                        @endif
                         <div class="col-lg-2 col-md-6">
                             <button type="submit" class="btn btn-primary"> Tìm kiếm
                             </button>
