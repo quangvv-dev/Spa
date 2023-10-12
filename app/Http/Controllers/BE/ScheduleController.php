@@ -102,12 +102,11 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id)
+    public function store(Request $request, Customer $customer)
     {
-        $customer = Customer::find($id);
         $category = CustomerGroup::where('customer_id', $customer->id)->first();
         $request->merge([
-            'user_id' => $id,
+            'user_id' => $customer->id,
             'person_action' => Auth::user()->id,
             'creator_id' => Auth::user()->id,
             'category_id' => isset($category) ? $category->category_id : 0,

@@ -98,6 +98,9 @@ class Customer extends Model
 
     public static function applySearchConditions($builder, $conditions)
     {
+        if (isset($conditions['search'])) {
+            $builder = self::latest();
+        }
         $builder->when(isset($conditions['search']), function ($query) use ($conditions) {
             $query->where(function ($q) use ($conditions) {
                 if (is_numeric($conditions['search'])) {

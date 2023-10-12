@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('position/edit/{id}', 'PositionController@edit')->name('position.edit');
 
     Route::get('schedules', 'ScheduleController@homePage')->name('schedules.index');
-    Route::post('schedules/{id}', 'ScheduleController@store')->name('schedules.store');
+    Route::post('schedules/{customer}', 'ScheduleController@store')->name('schedules.store');
     Route::put('schedules/{id}', 'ScheduleController@update')->name('schedules.update');
     Route::get('schedules/edit/{id}', 'ScheduleController@edit')->name('schedules.edit');
     Route::delete('schedules/{id}', 'ScheduleController@destroy')->name('schedules.destroy');
