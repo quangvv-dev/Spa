@@ -54,7 +54,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-xs-12">
-                        Đơn lẻ: {{@number_format($data['order_single'])}}
+                        Đơn buổi lẻ: {{@number_format($data['order_single'])}}
                     </div>
                     <div class="col-md-6 col-xs-12">
                         Đơn liệu trình: {{@number_format($data['order_multiple'])}}
