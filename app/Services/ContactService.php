@@ -8,10 +8,7 @@
 
 namespace App\Services;
 
-use App\Constants\StatusCode;
 use App\Model\Contact;
-use App\Models\Customer;
-use App\Models\HistoryWalletCtv;
 
 class ContactService
 {

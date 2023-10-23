@@ -2,14 +2,36 @@
 @section('_style')
     <!-- Bootstrap fileupload css -->
     <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
+    <style>
+        a.nav-link.active {
+            font-weight: 600;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+            <div class=" tab-menu-heading">
+                <div class="tabs-menu1 ">
+                    <!-- Tabs -->
+                    <ul class="nav panel-tabs">
+                        <li class="nav-item">
+                            <a href="/123" class="nav-link active" >Thông tin tài khoản</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Hồ sơ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Hợp đồng (file)</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            @if (isset($user))
+
+        @if (isset($user))
                 {!! Form::model($user, array('url' => url('users/'.$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
                 {!! Form::open(array('url' => route('users.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
@@ -135,7 +157,6 @@
                         </div>
                     </div>
                     <input type="hidden" name="is_leader" value="0">
-
 
                 @endif
                 <div class="col-xs-12 col-md-6">

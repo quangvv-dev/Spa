@@ -41,7 +41,11 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('teams', 'TeamController');
     Route::resource('tips', 'PaymentWallet\TipController');
     Route::get('tips-export', 'PaymentWallet\TipController@exportData');
-//    Route::resource('users', 'UserController')->middleware('admin');
+
+    Route::group(['prefix' => 'personal'], function () {
+        Route::get('salary/{user}', 'PersonalController@salary');
+    });
+
     Route::resource('customers', 'CustomerController');
     Route::get('customers-group', 'CustomerController@createGroup')->name('customers.indexGroup');
     Route::post('customers-group', 'CustomerController@storeGroup')->name('customers.storeGroup');

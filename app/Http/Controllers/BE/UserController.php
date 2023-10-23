@@ -178,21 +178,6 @@ class UserController extends Controller
     }
 
     /**
-     * Lấy ds nhân viên tuộc phòng ban
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-//    public function getAllUserDepartment(Request $request)
-//    {
-//        $search['searchDepartment'] = $request->department;
-//        $user = $this->user->getAll($search)->get();
-//        return response()->json([
-//            'user' => $user
-//        ]);
-//    }
-
-    /**
      * get list user role sale
      *
      * @param Request $request
