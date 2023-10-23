@@ -147,10 +147,10 @@
             font-size: 14px;
             color: #050505;
             min-height: 22px;
-            border-bottom: 1px solid;
             font-weight: 500;
         }
         .col-6-custom{
+            border-bottom: 1px solid black;
             padding: 0;
         }
         @media only screen and (max-width: 1365px) {

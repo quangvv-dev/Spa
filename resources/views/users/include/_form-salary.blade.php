@@ -15,7 +15,7 @@
                             <p>{{$item}}</p>
                         </div>
                         <div class="col-4 col-6-custom text-right">
-                            <p>{{is_numeric(@$value[$key])?number_format($value[$key]):$value[$key]}}</p>
+                            <p>{{is_numeric(@$value[$key]) && strlen((int)$value[$key]) < 10 ?number_format($value[$key]):$value[$key]}}</p>
                         </div>
                     @endif
                 @empty

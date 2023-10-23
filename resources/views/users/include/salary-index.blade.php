@@ -10,9 +10,6 @@
             padding: 25px 30px 10px;
             justify-content: space-between;
         }
-        a.nav-link.active {
-            font-weight: 600;
-        }
         header .icons span {
             height: 38px;
             width: 38px;
@@ -145,6 +142,9 @@
             color: rgb(78, 52, 46);
             background: #ddd;
         }
+        a.nav-link.active {
+            font-weight: 600;
+        }
         p{
             font-size: 14px;
             color: #050505;
@@ -153,8 +153,6 @@
         }
         .col-6-custom{
             border-bottom: 1px solid black;
-        }
-        .col-6-custom{
             padding: 0;
         }
         @media only screen and (max-width: 1365px) {
