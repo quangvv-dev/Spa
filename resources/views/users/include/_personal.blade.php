@@ -134,29 +134,6 @@
                         <span class="help-block">{{ $errors->first('pause_time', ':message') }}</span>
                     </div>
                 </div>
-
-{{--                <div class="col-xs-12 col-md-6">--}}
-{{--                    <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">--}}
-{{--                        {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}--}}
-{{--                        <div class="fileupload fileupload-{{isset($user) ? 'exists' : 'new' }}"--}}
-{{--                             data-provides="fileupload">--}}
-{{--                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">--}}
-{{--                                @if (isset($user))--}}
-{{--                                    <img src="{{ $user->avatar }}" alt="image"/>--}}
-{{--                                @endif--}}
-{{--                            </div>--}}
-{{--                            <div>--}}
-{{--                                <button type="button" class="btn btn-default btn-file">--}}
-{{--                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>--}}
-{{--                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>--}}
-{{--                                    <input type="file" name="image" accept="image/*" class="btn-default upload"/>--}}
-{{--                                </button>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
-
             </div>
             <div class="col" style="margin-bottom: 10px;">
                 <button type="submit" class="btn btn-success">Lưu</button>
