@@ -43,7 +43,9 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('tips-export', 'PaymentWallet\TipController@exportData');
 
     Route::group(['prefix' => 'personal'], function () {
-        Route::get('salary/{user}', 'PersonalController@salary');
+        Route::get('salary/{user}', 'Personal\PersonalController@salary');
+        Route::get('/{user}', 'Personal\PersonalController@index');
+        Route::post('/{user}', 'Personal\PersonalController@store');
     });
 
     Route::resource('customers', 'CustomerController');

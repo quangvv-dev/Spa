@@ -14,15 +14,21 @@ function cb1(start, end) {
 }
 
 
-$('#demo').daterangepicker({
+$('.singleDate').daterangepicker({
     "singleDatePicker": true,
-    "timePicker": true,
-    "timePicker24Hour": true,
+    autoApply: true,
+    autoUpdateInput: false,
+    // "timePicker": true,
+    // "timePicker24Hour": true,
     locale: {
-        format: "DD/MM/YYYY H:mm",
+        format: "DD/MM/YYYY",
     }
 }, function(start, end, label) {
-    console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+    // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+});
+
+$('.singleDate').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('DD/MM/YYYY'));
 });
 
 $('#reportrange').daterangepicker({

@@ -11,6 +11,7 @@ use App\Models\DonTu;
 use App\Models\Location;
 use App\Models\Role;
 use App\Models\Team;
+use App\Models\UserPersonal;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -105,6 +106,11 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class, 'department_id', 'id');
     }
 
+    public function personal()
+    {
+        return $this->hasOne(UserPersonal::class);
+    }
+
     public function getRoleTextAttribute()
     {
         $role = Role::select('name')->find($this->role);
@@ -150,6 +156,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Team::class, 'leader_id', 'id');
     }
+
     public function isLeaderAdmin() // trưởng phòng do code set
     {
         return $this->is_leader == 1;

@@ -23,4 +23,8 @@ class Department extends Model
         return $this->hasMany(Department::class, 'parent_id');
     }
 
+    public function position()
+    {
+        return $this->hasMany(Position::class);
+    }
 }

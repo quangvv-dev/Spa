@@ -221,7 +221,7 @@
                                 <a class="nav-link active" href="{{url('personal/salary/'.$user->id)}}" data-toggle="tab">Bảng lương</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/1232">Hồ sơ</a>
+                                <a class="nav-link" href="{{url('personal/'.$user->id)}}">Hồ sơ</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/12312" data-toggle="tab">Hợp đồng (file)</a>
