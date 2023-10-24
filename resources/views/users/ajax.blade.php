@@ -5,7 +5,7 @@
             <th class="text-white">Mã NV</th>
             <th class="text-white text-center">Mã chấm công</th>
             <th class="text-white text-center">Họ tên</th>
-            <th class="text-white text-center">Tên export</th>
+{{--            <th class="text-white text-center">Tên export</th>--}}
             <th class="text-white text-center">Số điện thoại</th>
             <th class="text-white text-center">Cụm</th>
             <th class="text-white text-center">Phòng ban</th>
@@ -20,8 +20,8 @@
                 <tr>
                     <th scope="row">{{ $user->code }}</th>
                     <td class="text-center">{{ $user->approval_code }}</td>
-                    <td class="text-center">{{ $user->full_name }}</td>
-                    <td class="text-center">{{ $user->name_display }}</td>
+                    <td class="text-center"><a href="{{route('users.edit',$user->id)}}">{{ $user->full_name }}</a></td>
+{{--                    <td class="text-center">{{ $user->name_display }}</td>--}}
                     <td class="text-center">{{ $user->phone }}</td>
                     <td class="text-center">{{ @$user->location->name }}</td>
                     <td class="text-center">{{ @$user->department->name}}</td>
