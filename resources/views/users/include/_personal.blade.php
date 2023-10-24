@@ -16,19 +16,17 @@
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
                         <li class="nav-item">
-                            <a href="" class="nav-link active" >Thông tin tài khoản</a>
+                            <a href="/123" class="nav-link active" >Thông tin tài khoản</a>
                         </li>
-                        @if (isset($user))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="">Hồ sơ</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="">Hợp đồng (file)</a>
-                            </li>
-                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Hồ sơ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Hợp đồng (file)</a>
+                        </li>
                     </ul>
                 </div>
             </div>
