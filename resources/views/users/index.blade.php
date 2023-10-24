@@ -3,7 +3,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title">{{$title}}</h3>
                 <div class="col"><a class="right btn btn-primary btn-flat" href="{{ route('users.create') }}"><i
                             class="fa fa-plus-circle"></i> Tạo mới</a></div>
             </div>
@@ -27,6 +27,11 @@
                             <option {{@$input['department_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>
                         @empty
                         @endforelse
+                    </select>
+                    <select id="active" name="active" class="form-control">
+                        <option value="">Tất cả chi nhánh</option>
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Đã khóa</option>
                     </select>
                 </div>
                 @endif
@@ -60,12 +65,33 @@
             let branch = $(this).val();
             let search = $('#search').val();
             let department_id = $('#department_id').val();
+            let active = $('#active').val();
             $.ajax({
                 url: "{{ Url('users/') }}",
                 method: "get",
                 data: {
                     branch_id: branch,
                     search: search,
+                    active: active,
+                    department_id: department_id,
+                }
+            }).done(function (data) {
+                $('#registration-form').html(data);
+
+            });
+        });
+        $(document).on('change', '#active', function () {
+            let active = $(this).val();
+            let branch = $('#branch_id').val();
+            let search = $('#search').val();
+            let department_id = $('#department_id').val();
+            $.ajax({
+                url: "{{ Url('users/') }}",
+                method: "get",
+                data: {
+                    branch_id: branch,
+                    search: search,
+                    active: active,
                     department_id: department_id,
                 }
             }).done(function (data) {
@@ -77,6 +103,7 @@
             let department_id = $(this).val();
             let search = $('#search').val();
             let branch = $('#branch_id').val();
+            let active = $('#active').val();
 
             $.ajax({
                 url: "{{ Url('users/') }}",
@@ -84,6 +111,7 @@
                 data: {
                     department_id: department_id,
                     branch_id: branch,
+                    active: active,
                     search: search
                 }
             }).done(function (data) {
