@@ -28,12 +28,14 @@
                         @empty
                         @endforelse
                     </select>
-                    <select id="active" name="active" class="form-control">
-                        <option value="">Tất cả chi nhánh</option>
-                        <option value="1">Hoạt động</option>
-                        <option value="0">Đã khóa</option>
-                    </select>
                 </div>
+                    <div class="col-xs-12 col-md-2">
+                        <select id="active" name="active" class="form-control">
+                            <option value="">Tất cả tài khoản</option>
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Đã khóa</option>
+                        </select>
+                    </div>
                 @endif
             </div>
             <div id="registration-form">
