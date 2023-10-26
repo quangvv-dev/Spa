@@ -46,6 +46,11 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('salary/{user}', 'Personal\PersonalController@salary');
         Route::get('/{user}', 'Personal\PersonalController@index');
         Route::post('/{user}', 'Personal\PersonalController@store');
+        Route::group(['prefix' => 'images'], function () {
+            Route::get('{user}', 'Personal\PersonalController@image');
+            Route::get('{user}/store', 'Personal\PersonalController@image');
+
+        });
     });
 
     Route::resource('customers', 'CustomerController');

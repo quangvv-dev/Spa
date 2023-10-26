@@ -2,9 +2,6 @@
     <div class="card">
         <div class="col-md-12 col-lg-12">
             <div class="card">
-                {{--<div class="card-header">--}}
-                    {{--<h3 class="card-title">QL chi nhánh</h3></br>--}}
-                {{--</div>--}}
                 <div id="registration-form">
                     <div class="table card-table table-vcenter text-nowrap table-primary"
                          style="width: 100%; overflow-x: auto;">

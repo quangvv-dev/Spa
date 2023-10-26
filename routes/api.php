@@ -154,7 +154,7 @@ Route::get('uri-wallet', 'API\AppCustomers\WalletsController@hiddenWallet');// á
 */
 
 
-@include('apiAppCustomer.php');
+@include('app_customer.php');
 
 /*
 |--------------------------------------------------------------------------

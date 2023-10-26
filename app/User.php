@@ -9,6 +9,7 @@ use App\Models\ChamCong;
 use App\Models\Department;
 use App\Models\DonTu;
 use App\Models\Location;
+use App\Models\PersonalImage;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\UserPersonal;
@@ -111,6 +112,10 @@ class User extends Authenticatable
     public function personal()
     {
         return $this->hasOne(UserPersonal::class);
+    }
+    public function personal_image()
+    {
+        return $this->hasMany(PersonalImage::class);
     }
 
     public function getRoleTextAttribute()

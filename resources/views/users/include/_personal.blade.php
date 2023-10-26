@@ -26,7 +26,7 @@
                             <a class="nav-link active" href="">Hồ sơ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Hợp đồng (file)</a>
+                            <a class="nav-link" href="{{url('personal/images/'.$user->id)}}">Hợp đồng (file)</a>
                         </li>
                     </ul>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE\Personal;
 
 use App\Http\Controllers\Controller;
 use App\Models\LeaveReason;
+use App\Models\PersonalImage;
 use App\Models\Salary;
 use App\Services\UserPersonalService;
 use App\Services\UserService;
@@ -51,5 +52,16 @@ class PersonalController extends Controller
         }
         $user->personal()->create($params);
         return back();
+    }
+
+    public function image(User $user)
+    {
+        $label = PersonalImage::NAME_LABEL;
+        return view('users.include.image', compact('label', 'user'));
+    }
+
+    public function storeImage(Request $request, User $user)
+    {
+
     }
 }
