@@ -56,12 +56,17 @@ class PersonalController extends Controller
 
     public function image(User $user)
     {
-        $label = PersonalImage::NAME_LABEL;
-        return view('users.include.image', compact('label', 'user'));
+        $labels = PersonalImage::NAME_LABEL;
+        return view('users.include.image', compact('labels', 'user'));
     }
 
     public function storeImage(Request $request, User $user)
     {
-
+        $user->personal_image()->create([
+            'name'      => PersonalImage::CCCD_FRONT,
+            'link'      => null,
+            'type_file' => 'jpeg',
+        ]);
+        return back();
     }
 }

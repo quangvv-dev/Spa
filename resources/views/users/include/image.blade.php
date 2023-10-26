@@ -23,10 +23,10 @@
                             <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="">Hồ sơ</a>
+                            <a class="nav-link" href="">Hồ sơ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Hợp đồng (file)</a>
+                            <a class="nav-link active" href="{{url('personal/images/'.$user->id)}}">Hợp đồng (file)</a>
                         </li>
                     </ul>
                 </div>
@@ -47,7 +47,7 @@
                                             <th class="text-center">Đường dẫn</th>
                                             <th class="text-center">Định dạng</th>
                                             <th class="text-center nowrap">
-                                                <a id="add_new_location" style="cursor: pointer"><i class="fa fa-plus"></i> Thêm</a>
+                                                <a id="add_new" style="cursor: pointer"><i class="fa fa-plus"></i> Thêm</a>
                                             </th>
                                         </tr>
                                         </thead>
@@ -56,7 +56,19 @@
                                             @foreach($user->personal_image as $k =>$item)
                                                 <tr data-id="{{$item->id}}">
                                                     <td class="text-center">{{$k+1}}</td>
-                                                    <td class="text-center"><input type="text" class="name txt-dotted form-control" value="{{$item->name}}"></td>
+                                                    <td class="text-center">
+                                                        <form>
+                                                            <select id="branch_id" name="branch_id" class="form-control select2">
+                                                                <option value="">--Chọn loại tài liệu--</option>
+                                                                @forelse($labels as  $label)
+                                                                    <option
+                                                                        {{$label==$item->name?'selected':''}} value="{{$label}}">{{$label}}
+                                                                    </option>
+                                                                @empty
+                                                                @endforelse
+                                                            </select>
+                                                        </form>
+                                                    </td>
                                                     <td class="text-center"><input type="text" class="name txt-dotted form-control" value="{{$item->link}}"></td>
                                                     <td class="text-center"><input type="text" class="name txt-dotted form-control" value="{{$item->type_file}}"></td>
                                                     <td class="text-center">
@@ -84,6 +96,16 @@
     </div>
 @endsection
 @section('_script')
-
+<script>
+    $(document).on('click', '#add_new', function () {
+        $.ajax({
+            url: '{{route('personal_image.store',$user->id)}}',
+            method: 'POST',
+            success: function (data) {
+                location.reload();
+            }
+        })
+    })
+</script>
 @endsection
 

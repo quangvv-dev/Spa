@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PersonalImage extends Model
 {
-    protected $fillable = ['name', 'link', 'type'];
+    protected $fillable = ['name', 'link', 'type_file'];
 
     public const CCCD_FRONT = 'ẢNH CCCD MẶT TRƯỚC';
     public const CCCD_BEHIND = 'ẢNH CCCD MẶT SAU';
