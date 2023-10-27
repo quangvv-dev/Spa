@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::group(['prefix' => 'images'], function () {
             Route::get('{user}', 'Personal\PersonalController@image');
             Route::post('{user}/store', 'Personal\PersonalController@storeImage')->name('personal_image.store');
+            Route::put('{user}/update', 'Personal\PersonalController@updateImage')->name('personal_image.update');
 
         });
     });
