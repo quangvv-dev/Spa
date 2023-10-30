@@ -76,6 +76,7 @@ class RoleController extends Controller
         'report.commission',
         'carepage.index',
         'order.orders-destroy',
+        'personal.index',
     ];
 
     protected $filter = [

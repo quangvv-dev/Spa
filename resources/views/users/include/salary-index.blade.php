@@ -217,6 +217,7 @@
                             <li class="nav-item">
                                 <a href="{{route('users.edit',$user->id)}}" class="nav-link" >Thông tin tài khoản</a>
                             </li>
+                            @if (isset($user) && auth()->user()->permission('personal.index'))
                             <li class="nav-item">
                                 <a class="nav-link active" href="{{url('personal/salary/'.$user->id)}}" data-toggle="tab">Bảng lương</a>
                             </li>
@@ -226,6 +227,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url('personal/images/'.$user->id)}}">Hợp đồng (file)</a>
                             </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
