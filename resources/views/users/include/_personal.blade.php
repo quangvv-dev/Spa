@@ -19,10 +19,10 @@
                         <li class="nav-item">
                             <a href="{{route('users.edit',$user->id)}}" class="nav-link" >Thông tin tài khoản</a>
                         </li>
-                        @if (isset($user) && auth()->user()->permission('personal.index'))
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
                         </li>
+                        @if (isset($user) && auth()->user()->permission('personal.index'))
                         <li class="nav-item">
                             <a class="nav-link active" href="{{url('personal/'.$user->id)}}">Hồ sơ</a>
                         </li>
