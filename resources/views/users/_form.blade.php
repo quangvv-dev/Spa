@@ -18,7 +18,7 @@
                         <li class="nav-item">
                             <a href="" class="nav-link active" >Thông tin tài khoản</a>
                         </li>
-                        @if (isset($user))
+                        @if (isset($user) )
                             <li class="nav-item">
                                 <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
                             </li>

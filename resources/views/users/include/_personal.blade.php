@@ -23,7 +23,7 @@
                             <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="">Hồ sơ</a>
+                            <a class="nav-link active" href="{{url('personal/'.$user->id)}}">Hồ sơ</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('personal/images/'.$user->id)}}">Hợp đồng (file)</a>
