@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\BE\Personal;
 
+use App\Components\Filesystem\Filesystem;
+use App\Constants\DirectoryConstant;
+use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
 use App\Models\LeaveReason;
 use App\Models\PersonalImage;
@@ -13,10 +16,11 @@ use Illuminate\Http\Request;
 
 class PersonalController extends Controller
 {
-    public function __construct(UserService $userService, UserPersonalService $personalService)
+    public function __construct(UserService $userService, UserPersonalService $personalService, Filesystem $fileUpload)
     {
         $this->users = $userService;
         $this->personal = $personalService;
+        $this->fileUpload = $fileUpload;
     }
 
     public function salary(Request $request, User $user)
@@ -63,10 +67,34 @@ class PersonalController extends Controller
     public function storeImage(Request $request, User $user)
     {
         $user->personal_image()->create([
-            'name'      => PersonalImage::CCCD_FRONT,
-            'link'      => null,
+            'name' => PersonalImage::CCCD_FRONT,
+            'link' => null,
             'type_file' => 'jpeg',
         ]);
         return back();
+    }
+
+    public function updateImage(Request $request, PersonalImage $image)
+    {
+        if ($request->hasFile('file_image')) {
+            $request->merge(['type_file' => $request->file_image->getMimeType()]);
+            $link = $this->fileUpload->uploadImageCustom($request->file_image, DirectoryConstant::PERSONAL_IMAGE);
+            if (!empty($image->link)) {
+                Functions::unlinkUpload2($image->link);
+            }
+            $request->merge(['link' => $link]);
+
+        }
+        $image->update($request->except('_token', 'file_image'));
+        return back();
+    }
+
+    public function destroyImage(PersonalImage $image)
+    {
+        if (!empty($image->link)) {
+            Functions::unlinkUpload2($image->link);
+        }
+        $image->delete();
+        return 1;
     }
 }

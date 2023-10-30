@@ -76,12 +76,12 @@
                                         <tbody id="sortable1">
                                         @if(count($user->personal_image))
                                             @foreach($user->personal_image as $k =>$item)
-                                                <form action="{{route('personal_image.update',$user->id)}}" method="put">
-                                                    @csrf
-                                                <tr>
+                                            <tr>
+                                                <form action="{{route('personal_image.update',$item->id)}}" enctype="multipart/form-data" method="post">
+                                                        @csrf
                                                     <td class="text-center">{{$k+1}}</td>
                                                     <td class="text-center">
-                                                        <select id="branch_id" name="branch_id" class="form-control select2">
+                                                        <select id="branch_id" name="name" class="form-control select2">
                                                             <option value="">--Chọn loại tài liệu--</option>
                                                             @forelse($labels as  $label)
                                                                 <option
@@ -92,27 +92,31 @@
                                                         </select>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="text" class="name txt-dotted form-control" value="{{$item->link}}">
+                                                        @if(!empty($item->link))
+                                                            <a target="_blank" href="{{$item->link}}">
+                                                                <i class="fa fa-copy">Mở tài liệu</i>
+                                                            </a>
+                                                        @else
+                                                            <span>Chưa có tài liệu</span>
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="text" readonly class="name txt-dotted form-control" value="{{$item->type_file}}">
+                                                        <input type="text" readonly class="txt-dotted form-control" value="{{$item->type_file}}">
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple />
+                                                        <input type="file" name="file_image" id="file" class="inputfile"/>
                                                         <label for="file" class="tooltip-nav">
                                                             <span><i class="fa fa-upload"></i></span>
-{{--                                                            >--}}
-{{--                                                            <span class="tooltiptext">Upload</span>--}}
                                                         </label>
                                                         <a class="btn save" href="javascript:void(0)" data-id="{{$item->id}}">
                                                             <i class="fa fa-save"></i>
                                                         </a>
-                                                        <a class="btn delete" href="javascript:void(0)" data-url="{{'location/'.$item->id}}">
+                                                        <a class="btn delete" href="javascript:void(0)" data-url="{{route('personal_image.destroy',$item->id)}}">
                                                             <i class="fa fa-trash-alt"></i>
                                                         </a>
                                                     </td>
-                                                </tr>
                                                 </form>
+                                                </tr>
                                             @endforeach
                                         @endif
                                         </tbody>
@@ -139,11 +143,9 @@
             }
         })
     });
-    $(document).on('click', 'save', function () {
-        let fỏ
-        $.put($(this).attr('action'), $(this).serialize(), function (data) {
-                    console.log(data,'aaaa');
-                });
+    $(document).on('click', '.save', function () {
+        let form  = $(this).closest('tr').find('form');
+        form.submit();
     });
     var inputs = document.querySelectorAll( '.inputfile' );
     Array.prototype.forEach.call( inputs, function( input )
