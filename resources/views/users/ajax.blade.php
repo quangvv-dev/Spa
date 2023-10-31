@@ -7,10 +7,10 @@
             Nhân sự đang hoạt động: <span class="text-success">{{$statistics['active']}}</span>
         </div>
         <div class="col-md-3 bold">
-            Nhân sự tạm nghỉ : <span class="text-warning">0</span>
+            Nhân sự nghỉ việc (Khóa TK) : <span class="text-danger">{{$statistics['all'] - $statistics['active']}}</span>
         </div>
         <div class="col-md-3 bold">
-            Nhân sự nghỉ việc (Khóa TK) : <span class="text-danger">{{$statistics['all'] - $statistics['active']}}</span>
+            Nhân sự tạm nghỉ : <span class="text-warning">0</span>
         </div>
     </div>
     <table class="table card-table table-vcenter text-nowrap table-primary">
