@@ -88,7 +88,7 @@ class User extends Authenticatable
         })->when(isset($param['active']), function ($q) use ($param) {
             $q->where('active', $param['active']);
         })
-            ->latest('id')->paginate(StatusCode::PAGINATE_10);
+            ->latest('id');
 
         return $data;
     }

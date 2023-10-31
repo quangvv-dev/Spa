@@ -97,4 +97,11 @@ class PersonalController extends Controller
         $image->delete();
         return 1;
     }
+
+    public function statistics(Request $request)
+    {
+        $data = User::get();
+
+        return view('statistics.personal.index');
+    }
 }

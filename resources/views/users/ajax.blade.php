@@ -1,4 +1,18 @@
 <div class="table-responsive">
+    <div class="card-header">
+        <div class="col-md-3 bold">
+            Nhân sự trên hệ thống : <span class="text-info">{{$statistics['all']}}</span>
+        </div>
+        <div class="col-md-3 bold">
+            Nhân sự đang hoạt động: <span class="text-success">{{$statistics['active']}}</span>
+        </div>
+        <div class="col-md-3 bold">
+            Nhân sự tạm nghỉ : <span class="text-warning">0</span>
+        </div>
+        <div class="col-md-3 bold">
+            Nhân sự nghỉ việc (Khóa TK) : <span class="text-danger">{{$statistics['all'] - $statistics['active']}}</span>
+        </div>
+    </div>
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
@@ -53,7 +67,7 @@
         </div>
     </div>
     <div class="pull-right">
-        {{ $users->appends(['search' => @$input['search'],'branch_id' => @$input['branch_id'],'department_id' => @$input['department_id'] ])->links() }}
+        {{ $users->links() }}
     </div>
 </div>
 <!-- table-responsive -->

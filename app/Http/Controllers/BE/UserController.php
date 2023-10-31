@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Components\Filesystem\Filesystem;
 use App\Constants\StatusCode;
+use App\Constants\UserConstant;
 use App\Http\Requests\UserRequest;
 use App\Models\Branch;
 use App\Models\Department;
@@ -60,13 +61,16 @@ class UserController extends Controller
             $input['branch_id'] = $branch_id;
         }
         $users = User::search($input);
-        $title = 'Quản lý người dùng';
-
+        $users2 = clone $users;
+        $statistics = [
+            'all' => $users->count(),
+            'active' => $users2->where('active', UserConstant::ACTIVE)->count(),
+        ];
+        $users = $users->paginate(StatusCode::PAGINATE_10);
         if ($request->ajax()) {
-            return Response::json(view('users.ajax', compact('department', 'input', 'users', 'title'))->render());
+            return Response::json(view('users.ajax', compact('department', 'users', 'statistics'))->render());
         }
-
-        return view('users.index', compact('department', 'input', 'users', 'title'));
+        return view('users.index', compact('department', 'users', 'statistics'));
     }
 
     /**
@@ -133,7 +137,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $input = $request->except('image','confirm_password');
+        $input = $request->except('image', 'confirm_password');
         $input['image'] = $request->image;
         $input['password'] = $request->password;
 

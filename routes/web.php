@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('tips', 'PaymentWallet\TipController');
     Route::get('tips-export', 'PaymentWallet\TipController@exportData');
 
+    Route::get('statistics-personal', 'Personal\PersonalController@statistics');
+
     Route::group(['prefix' => 'personal'], function () {
         Route::get('salary/{user}', 'Personal\PersonalController@salary');
         Route::get('/{user}', 'Personal\PersonalController@index');
