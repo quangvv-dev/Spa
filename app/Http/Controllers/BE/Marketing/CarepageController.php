@@ -15,6 +15,7 @@ use App\Models\PaymentHistory;
 use App\Models\PriceMarketing;
 use App\Models\Schedule;
 use App\Models\Source;
+use App\Models\TeamMember;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -52,8 +53,15 @@ class CarepageController extends Controller
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->where('active',StatusCode::ON)
+        if (!empty($request->team_id)) {
+            $members = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
+        } else {
+            $myTeam = TeamMember::where('user_id', $request->jwtUser->id)->first();
+            $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
+        }
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)
+            ->whereIn('id',$members)
+            ->where('active',StatusCode::ON)
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
                 $input['carepage_id'] = $item->id;
                 $customer = Customer::searchApi($input)->select('id');

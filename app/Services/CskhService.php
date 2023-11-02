@@ -148,7 +148,7 @@ class CskhService
      *
      * @return mixed
      */
-    public function transformData($tasks, $orders, $data, $payments, $call = null, $members = null)
+    public function transformData($tasks, $orders, $data, $payments, $call = null, $members = [])
     {
         $users = User::select('id', 'full_name', 'avatar')
             ->whereIn('id',$members)

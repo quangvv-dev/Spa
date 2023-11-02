@@ -97,7 +97,14 @@ class MarketingController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)->where('active',StatusCode::ON)
+        if (!empty($request->team_id)) {
+            $members = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
+        } else {
+            $myTeam = TeamMember::where('user_id', $request->jwtUser->id)->first();
+            $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
+        }
+        $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)
+            ->where('active', StatusCode::ON)->whereIn('id', $members)
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['carepage_id'] = $item->id;
             $customer = Customer::searchApi($input)->select('id');
