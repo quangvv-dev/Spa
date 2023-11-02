@@ -59,7 +59,7 @@ class MarketingController extends BaseApiController
             $members = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
         } else {
             $myTeam = TeamMember::where('user_id', $request->jwtUser->id)->first();
-            $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
+            $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
         }
         $data = User::where('department_id', DepartmentConstant::MARKETING)
             ->where('active', StatusCode::ON)->whereIn('id', $members)
