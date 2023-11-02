@@ -56,7 +56,7 @@ class CarepageController extends Controller
         if (!empty($request->team_id)) {
             $members = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
         } else {
-            $myTeam = TeamMember::where('user_id', $request->jwtUser->id)->first();
+            $myTeam = TeamMember::where('user_id', Auth::user()->id)->first();
             $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
         }
         $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)
