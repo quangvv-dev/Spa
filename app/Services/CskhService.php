@@ -151,7 +151,9 @@ class CskhService
     public function transformData($tasks, $orders, $data, $payments, $call = null, $members = [])
     {
         $users = User::select('id', 'full_name', 'avatar')
-            ->whereIn('id',$members)
+            ->when(count($members), function ($q) use ($members) {
+                $q->whereIn('id', $members);
+            })
             ->where('users.department_id', DepartmentConstant::CSKH)
             ->where('active', StatusCode::ON)->get();
         return $users->transform(function ($item) use ($tasks, $orders, $data, $payments, $call) {
