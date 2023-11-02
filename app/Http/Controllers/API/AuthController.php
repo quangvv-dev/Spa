@@ -11,6 +11,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Branch;
 use App\Models\Source;
 use App\Models\Status;
+use App\Models\Team;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -45,7 +46,7 @@ class AuthController extends BaseApiController
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
                     $data = [
                         'token' => jwtEncode($payload),
-                        'info'  => $info,
+                        'info' => $info,
                     ];
 
                     return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
@@ -73,19 +74,19 @@ class AuthController extends BaseApiController
                 $user->save();
 
                 return response()->json([
-                    'code'    => ResponseStatusCode::OK,
+                    'code' => ResponseStatusCode::OK,
                     'message' => 'Xóa tài khoản thành công !!',
-                    'data'    => [],
+                    'data' => [],
                 ]);
             } else {
                 return response()->json([
-                    'code'    => ResponseStatusCode::NOT_FOUND,
+                    'code' => ResponseStatusCode::NOT_FOUND,
                     'message' => 'Không tồn tại tài khoản',
                 ]);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 'message' => __('system.server_error'),
             ]);
         }
@@ -105,7 +106,7 @@ class AuthController extends BaseApiController
         $messages = [
             'old_password.required' => 'Vui lòng nhập mật khẩu cũ',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới',
-            'new_password.min'      => 'Mật khẩu phải lớn hơn 6 ký tự!',
+            'new_password.min' => 'Mật khẩu phải lớn hơn 6 ký tự!',
         ];
         if ($user->password != '' || $user->password != null) {
             $validator = Validator::make($request->only('new_password', 'old_password'), [
@@ -120,7 +121,7 @@ class AuthController extends BaseApiController
 
         if ($validator->fails()) {
             return response()->json([
-                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->all(),
             ]);
         }
@@ -131,18 +132,18 @@ class AuthController extends BaseApiController
                     'password' => Hash::make(request('new_password')),
                 ]);
                 return response()->json([
-                    'code'    => ResponseStatusCode::OK,
+                    'code' => ResponseStatusCode::OK,
                     'message' => 'Thay đổi mật khẩu thành công',
                 ]);
             } else {
                 return response()->json([
-                    'code'    => ResponseStatusCode::BAD_REQUEST,
+                    'code' => ResponseStatusCode::BAD_REQUEST,
                     'message' => 'Mật khẩu cũ không đúng',
                 ]);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 'message' => __('system.server_error'),
             ]);
         }
@@ -159,20 +160,20 @@ class AuthController extends BaseApiController
     public function register(Request $request)
     {
         $required = [
-            'password'  => ['required', 'string'],
+            'password' => ['required', 'string'],
             'full_name' => ['required', 'string'],
-            'phone'     => ['unique:users', 'regex:/(0)[0-9]{9}/'],
+            'phone' => ['unique:users', 'regex:/(0)[0-9]{9}/'],
         ];
         $messages = [
             'full_name.required' => 'Chưa nhập tên',
-            'phone.unique'       => 'Số điện thoại trùng',
-            'password.required'  => 'Chưa nhập mật khẩu',
+            'phone.unique' => 'Số điện thoại trùng',
+            'password.required' => 'Chưa nhập mật khẩu',
         ];
 
         $validator = Validator::make($request->all(), $required, $messages);
         if ($validator->fails()) {
             return response()->json([
-                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->first(),
             ]);
         }
@@ -180,19 +181,19 @@ class AuthController extends BaseApiController
         $check_phone = User::where('phone', $request->input('phone'))->first();
         if (isset($check_phone)) {
             return response()->json([
-                'code'    => ResponseStatusCode::PHONE_ALREADY_EXIST,
+                'code' => ResponseStatusCode::PHONE_ALREADY_EXIST,
                 'message' => "Số điện thoại đã tồn tại !!!",
             ]);
         } else {
             $user = User::create([
-                'full_name'     => $request->input('full_name'),
-                'phone'         => $request->input('phone'),
-                'password'      => bcrypt($request->input('password')),
-                'active'        => StatusCode::ON,
-                'role'          => 11,
+                'full_name' => $request->input('full_name'),
+                'phone' => $request->input('phone'),
+                'password' => bcrypt($request->input('password')),
+                'active' => StatusCode::ON,
+                'role' => 11,
                 'department_id' => 5,
-                'branch_id'     => 1,
-                'gender'        => 1,
+                'branch_id' => 1,
+                'gender' => 1,
             ]);
         }
 
@@ -201,13 +202,13 @@ class AuthController extends BaseApiController
             $payload['time'] = strtotime(Date::now());
             $data = [
                 'token' => jwtencode($payload),
-                'info'  => $user,
+                'info' => $user,
             ];
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
         }
 
         return response()->json([
-            'code'    => ResponseStatusCode::NOT_FOUND,
+            'code' => ResponseStatusCode::NOT_FOUND,
             'message' => 'Đăng ký không thành công !!!',
         ]);
     }
@@ -232,21 +233,21 @@ class AuthController extends BaseApiController
                 }
 
                 return response()->json([
-                    'code'    => ResponseStatusCode::OK,
+                    'code' => ResponseStatusCode::OK,
                     'message' => __('auth.user_view_success'),
-                    'data'    => [
+                    'data' => [
                         'customer' => new UserResource($user),
                     ],
                 ]);
             } else {
                 return response()->json([
-                    'code'    => ResponseStatusCode::PHONE_ALREADY_EXIST,
+                    'code' => ResponseStatusCode::PHONE_ALREADY_EXIST,
                     'message' => __('auth.not_view_user_success'),
                 ]);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 'message' => __('system.server_error'),
             ]);
         }
@@ -265,19 +266,19 @@ class AuthController extends BaseApiController
 //        $regexName = regexName();
         $required = [
             'full_name' => "required|min:2|max:255",
-            'phone'     => "required|unique:users,phone,$user->id|regex:/(0)[0-9]{9}/",
+            'phone' => "required|unique:users,phone,$user->id|regex:/(0)[0-9]{9}/",
         ];
 
         $messages = [
-            'phone.required'     => 'Vui lòng nhập số điện thoại',
-            'phone.unique'       => __('auth.phone_exists'),
+            'phone.required' => 'Vui lòng nhập số điện thoại',
+            'phone.unique' => __('auth.phone_exists'),
             'full_name.required' => 'Nhập tên người dùng',
         ];
 
         $validator = Validator::make($request->all(), $required, $messages);
         if ($validator->fails()) {
             return response()->json([
-                'code'    => ResponseStatusCode::UNPROCESSABLE_ENTITY,
+                'code' => ResponseStatusCode::UNPROCESSABLE_ENTITY,
                 'message' => $validator->errors()->first(),
             ]);
         }
@@ -286,7 +287,7 @@ class AuthController extends BaseApiController
 
         if (isset($user_check_phone)) {
             return response()->json([
-                'code'    => ResponseStatusCode::BAD_REQUEST,
+                'code' => ResponseStatusCode::BAD_REQUEST,
                 'message' => __('auth.phone_exists'),
             ]);
         }
@@ -295,27 +296,27 @@ class AuthController extends BaseApiController
         $user->update([
             'full_name' => request('full_name'),
             //            'email' => request('email'),
-            'phone'     => request('phone'),
-            'gender'    => request('gender'),
+            'phone' => request('phone'),
+            'gender' => request('gender'),
             //            'avatar' => request('avatar'),
         ]);
 
         try {
             if ($user) {
                 return response()->json([
-                    'code'    => ResponseStatusCode::OK,
+                    'code' => ResponseStatusCode::OK,
                     'message' => __('auth.edit_user_success'),
-                    'data'    => new UserResource($user),
+                    'data' => new UserResource($user),
                 ]);
             } else {
                 return response()->json([
-                    'code'    => ResponseStatusCode::BAD_REQUEST,
+                    'code' => ResponseStatusCode::BAD_REQUEST,
                     'message' => __('auth.not_edit_user_success'),
                 ]);
             }
         } catch (\Exception $e) {
             return response()->json([
-                'code'    => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
                 'message' => __('system.server_error'),
             ]);
         }
@@ -348,29 +349,29 @@ class AuthController extends BaseApiController
     public function SendSMS($phone, $sms_text, $send_after = '')
     {
         $data = [
-            'to'         => $phone,
-            'from'       => "ROYAL SPA",
-            'message'    => $sms_text,
-            'scheduled'  => $send_after,//15-01-2019 16:05
-            'requestId'  => "",
+            'to' => $phone,
+            'from' => "ROYAL SPA",
+            'message' => $sms_text,
+            'scheduled' => $send_after,//15-01-2019 16:05
+            'requestId' => "",
             'useUnicode' => 0,//sử dụng có dấu hay k dấu
-            'type'       => 1, // CSKH hay QC
+            'type' => 1, // CSKH hay QC
         ];
         $data = json_encode((object)$data);
         $base_url = 'http://api.brandsms.vn:8018/api/SMSBrandname/SendSMS';
         $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c24iOiJyb3lhbHNwYSIsInNpZCI6ImFmZTIxOWQ4LTdhM2UtNDA5MS05NjBmLThmZjViNGI4NzRhMiIsIm9idCI6IiIsIm9iaiI6IiIsIm5iZiI6MTU4OTM1NDE4MCwiZXhwIjoxNTg5MzU3NzgwLCJpYXQiOjE1ODkzNTQxODB9.Hx8r30IR1nqAkOClihx0n9upfvgOg1f-E3MwNEwWT-0';
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL            => $base_url,
+            CURLOPT_URL => $base_url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => "",
-            CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => "POST",
-            CURLOPT_POSTFIELDS     => $data,
-            CURLOPT_HTTPHEADER     => [
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => [
                 "Content-Type: application/json",
                 "token: $token",
             ],
@@ -385,24 +386,24 @@ class AuthController extends BaseApiController
     {
         $data = [
             [
-                'menu_code'  => MenuConstant::THONG_KE,
+                'menu_code' => MenuConstant::THONG_KE,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu'  => 'THỐNG KÊ',
+                'name_menu' => 'THỐNG KÊ',
             ],
             [
-                'menu_code'  => MenuConstant::DOANH_THU,
+                'menu_code' => MenuConstant::DOANH_THU,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu'  => 'DOANH THU',
+                'name_menu' => 'DOANH THU',
             ],
             [
-                'menu_code'  => MenuConstant::DOANH_THU_THEO_NHOM,
+                'menu_code' => MenuConstant::DOANH_THU_THEO_NHOM,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu'  => 'DOANH THU THEO NHÓM',
+                'name_menu' => 'DOANH THU THEO NHÓM',
             ],
             [
-                'menu_code'  => MenuConstant::THONG_KE_NGUON,
-                'department' => [DepartmentConstant::ADMIN,DepartmentConstant::MARKETING],
-                'name_menu'  => 'THỐNG KÊ NGUỒN',
+                'menu_code' => MenuConstant::THONG_KE_NGUON,
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],
+                'name_menu' => 'THỐNG KÊ NGUỒN',
             ],
 //            [
 //                'menu_code'  => MenuConstant::BAO_CAO_MKT,
@@ -415,9 +416,9 @@ class AuthController extends BaseApiController
 //                'name_menu'  => 'BÁO CÁO TELESALES',
 //            ],
             [
-                'menu_code'  => MenuConstant::THONG_KE_SP_KHO,
+                'menu_code' => MenuConstant::THONG_KE_SP_KHO,
                 'department' => [DepartmentConstant::ADMIN],
-                'name_menu'  => 'THỐNG KÊ SẢN PHẨM KHO',
+                'name_menu' => 'THỐNG KÊ SẢN PHẨM KHO',
             ],
 //            [
 //                'menu_code'  => MenuConstant::THONG_KE_LICH_HEN,
@@ -425,7 +426,7 @@ class AuthController extends BaseApiController
 //                'name_menu'  => 'THỐNG KÊ LỊCH HẸN',
 //            ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG,
+                'menu_code' => MenuConstant::XEP_HANG,
                 'department' => [
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
@@ -435,77 +436,77 @@ class AuthController extends BaseApiController
                     DepartmentConstant::TECHNICIANS,
                     DepartmentConstant::CSKH,
                 ],
-                'name_menu'  => 'XẾP HẠNG',
+                'name_menu' => 'XẾP HẠNG',
             ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG_SALE,
+                'menu_code' => MenuConstant::XEP_HANG_SALE,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu'  => 'XẾP HẠNG TELESALES',
+                'name_menu' => 'XẾP HẠNG TELESALES',
             ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG_MKT,
+                'menu_code' => MenuConstant::XEP_HANG_MKT,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::MARKETING],
-                'name_menu'  => 'XẾP HẠNG MARKETING',
+                'name_menu' => 'XẾP HẠNG MARKETING',
             ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG_CAREPAGE,
+                'menu_code' => MenuConstant::XEP_HANG_CAREPAGE,
                 'department' => [
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::CARE_PAGE,
                     DepartmentConstant::MARKETING,
                 ],
-                'name_menu'  => 'XẾP HẠNG CAREPAGE',
+                'name_menu' => 'XẾP HẠNG CAREPAGE',
             ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG_LETAN,
+                'menu_code' => MenuConstant::XEP_HANG_LETAN,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::WAITER],
-                'name_menu'  => 'XẾP HẠNG LỄ TÂN',
+                'name_menu' => 'XẾP HẠNG LỄ TÂN',
             ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG_CSKH,
+                'menu_code' => MenuConstant::XEP_HANG_CSKH,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::CSKH],
-                'name_menu'  => 'XẾP HẠNG CSKH',
+                'name_menu' => 'XẾP HẠNG CSKH',
             ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG_KTV,
+                'menu_code' => MenuConstant::XEP_HANG_KTV,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TECHNICIANS],
-                'name_menu'  => 'XẾP HẠNG KỸ THUÂT VIÊN',
+                'name_menu' => 'XẾP HẠNG KỸ THUÂT VIÊN',
             ],
             [
-                'menu_code'  => MenuConstant::XEP_HANG_TVV,
+                'menu_code' => MenuConstant::XEP_HANG_TVV,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TU_VAN_VIEN],
-                'name_menu'  => 'XẾP HẠNG TƯ VẤN VIÊN',
+                'name_menu' => 'XẾP HẠNG TƯ VẤN VIÊN',
             ],
             [
-                'menu_code'  => MenuConstant::BAN_HANG,
+                'menu_code' => MenuConstant::BAN_HANG,
                 'department' => [
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::MARKETING,
                 ],
-                'name_menu'  => 'BÁN HÀNG',
+                'name_menu' => 'BÁN HÀNG',
             ],
             [
-                'menu_code'  => MenuConstant::QL_TONG_DAI,
+                'menu_code' => MenuConstant::QL_TONG_DAI,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu'  => 'QL TỔNG ĐÀI',
+                'name_menu' => 'QL TỔNG ĐÀI',
             ],
             [
-                'menu_code'  => MenuConstant::DS_DON_HANG,
+                'menu_code' => MenuConstant::DS_DON_HANG,
                 'department' => [
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::MARKETING,
                 ],
-                'name_menu'  => 'DS ĐƠN HÀNG',
+                'name_menu' => 'DS ĐƠN HÀNG',
             ],
             [
-                'menu_code'  => MenuConstant::CONG_VIEC_CSKH,
+                'menu_code' => MenuConstant::CONG_VIEC_CSKH,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
-                'name_menu'  => 'CÔNG VIỆC CSKH',
+                'name_menu' => 'CÔNG VIỆC CSKH',
             ],
             [
-                'menu_code'  => MenuConstant::DANH_SACH_KH,
+                'menu_code' => MenuConstant::DANH_SACH_KH,
                 'department' => [
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
@@ -513,47 +514,47 @@ class AuthController extends BaseApiController
                     DepartmentConstant::CARE_PAGE,
                     DepartmentConstant::WAITER,
                 ],
-                'name_menu'  => 'DANH SÁCH KHÁCH HÀNG',
+                'name_menu' => 'DANH SÁCH KHÁCH HÀNG',
             ],
             [
-                'menu_code'  => MenuConstant::DANH_SACH_DUYET_CHI,
+                'menu_code' => MenuConstant::DANH_SACH_DUYET_CHI,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN],
-                'name_menu'  => 'DANH SÁCH DUYỆT CHI',
+                'name_menu' => 'DANH SÁCH DUYỆT CHI',
             ],
             [
-                'menu_code'  => MenuConstant::NHAN_SU,
+                'menu_code' => MenuConstant::NHAN_SU,
                 'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                'name_menu'  => 'NHÂN SỰ',
+                'name_menu' => 'NHÂN SỰ',
             ],
             [
-                'menu_code'  => MenuConstant::BANG_LUONG,
+                'menu_code' => MenuConstant::BANG_LUONG,
                 'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                'name_menu'  => 'BẢNG LƯƠNG',
+                'name_menu' => 'BẢNG LƯƠNG',
             ],
             [
-                'menu_code'  => MenuConstant::CHAM_CONG,
+                'menu_code' => MenuConstant::CHAM_CONG,
                 'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                'name_menu'  => 'CHẤM CÔNG',
+                'name_menu' => 'CHẤM CÔNG',
             ],
             [
-                'menu_code'  => MenuConstant::DON_TU,
+                'menu_code' => MenuConstant::DON_TU,
                 'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                'name_menu'  => 'ĐƠN TỪ',
+                'name_menu' => 'ĐƠN TỪ',
             ],
             [
-                'menu_code'  => MenuConstant::LICH_HEN,
+                'menu_code' => MenuConstant::LICH_HEN,
                 'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES, DepartmentConstant::WAITER],
-                'name_menu'  => 'LỊCH HẸN',
+                'name_menu' => 'LỊCH HẸN',
             ],
             [
-                'menu_code'  => MenuConstant::ALBUM_KH,
+                'menu_code' => MenuConstant::ALBUM_KH,
                 'department' => [
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::WAITER,
                     DepartmentConstant::TECHNICIANS,
                 ],
-                'name_menu'  => 'HỒ SƠ KHÁCH HÀNG',
+                'name_menu' => 'HỒ SƠ KHÁCH HÀNG',
             ],
         ];
 
@@ -564,5 +565,19 @@ class AuthController extends BaseApiController
     {
         $data = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('id', 'name')->get();
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
+    }
+
+    public function teams(Request $request)
+    {
+        $auth = User::find($request->jwtUser->id);
+        if (empty($request->department)) {
+            return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'required department field');
+        }
+        $teams = [];
+        $department = $request->department == 'sale' ? DepartmentConstant::TELESALES : ($request->department == 'cskh' ? DepartmentConstant::CSKH : DepartmentConstant::MARKETING);
+        if ($auth->permission('filter.team')) {
+            $teams = Team::select('id', 'name')->where('department_id', $department)->get();
+        }
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $teams);
     }
 }

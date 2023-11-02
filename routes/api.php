@@ -113,6 +113,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('approval-reason', 'ChamCong\OrderController@getListReason');
     Route::get('approval-accept', 'ChamCong\OrderController@getListAccept');
     Route::get('approval-hours', 'ChamCong\OrderController@getListHours');
+    Route::get('teams', 'AuthController@teams');
 //end chấm công
 
     // Doanh thu app thống kê

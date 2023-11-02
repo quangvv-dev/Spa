@@ -38,8 +38,12 @@ class SaleController extends BaseApiController
             $group_branch = Branch::where('location_id', $request->location_id)->pluck('id')->toArray();
             $request->merge(['group_branch' => $group_branch]);
         }
-        $myTeam = TeamMember::where('user_id',$request->jwtUser->id)->first();
-        $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
+        if (!empty($request->team_id)) {
+            $members = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
+        } else {
+            $myTeam = TeamMember::where('user_id', $request->jwtUser->id)->first();
+            $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
+        }
         $input = $request->all();
         $data_new = $this->sale->getDataNew($input);
         $order_new = $this->sale->getDataOrders($input);
@@ -47,7 +51,7 @@ class SaleController extends BaseApiController
         $payments = $this->sale->getDataPayment($input);
         $call = $this->sale->getDataCall($input);
         $users = $this->sale->transformData($data_new, $order_new, $schedules, $payments, $call, $members);
-        $users =  usort_key_max($users->toArray(),'totalNew');
+        $users = usort_key_max($users->toArray(), 'totalNew');
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
 
@@ -62,44 +66,44 @@ class SaleController extends BaseApiController
         $input = $request->all();
         $users = User::select('id', 'full_name', 'avatar')->where('department_id', DepartmentConstant::TELESALES)
             ->where('active', StatusCode::ON)->get()->map(function ($item) use ($request, $input) {
-            $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
-            $orders = Order::select('id')->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
-                ->whereHas('customer', function ($qr) use ($item) {
-                    $qr->where('telesales_id', $item->id);
+                $data_new = Customer::select('id')->where('telesales_id', $item->id)->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+                $orders = Order::select('id')->whereBetween('created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"])
+                    ->whereHas('customer', function ($qr) use ($item) {
+                        $qr->where('telesales_id', $item->id);
+                    });
+                $orders2 = clone $orders;
+                $order_new = $orders->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('old_customer', 0);
                 });
-            $orders2 = clone $orders;
-            $order_new = $orders->whereHas('customer', function ($qr) use ($item) {
-                $qr->where('old_customer', 0);
-            });
-            $order_old = $orders2->whereHas('customer', function ($qr) use ($item) {
-                $qr->where('old_customer', 1);
-            });
+                $order_old = $orders2->whereHas('customer', function ($qr) use ($item) {
+                    $qr->where('old_customer', 1);
+                });
 
-            $input['telesales'] = $item->id;
-            $detail = PaymentHistory::search($input, 'price');
-            $detail_total = clone $detail;
-            $detail2 = clone $detail;
-            $total_old = $detail_total->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');
-            $total_new = $detail2->whereIn('order_id', $order_new->pluck('id')->toArray())->sum('price');
+                $input['telesales'] = $item->id;
+                $detail = PaymentHistory::search($input, 'price');
+                $detail_total = clone $detail;
+                $detail2 = clone $detail;
+                $total_old = $detail_total->whereIn('order_id', $order_old->pluck('id')->toArray())->sum('price');
+                $total_new = $detail2->whereIn('order_id', $order_new->pluck('id')->toArray())->sum('price');
 
 
-            $item->phoneNew = $data_new->get()->count();
-            $item->orderNew = $order_new->count();
-            $input['creator_id'] = $item->id;
-            $item->schedules = Schedule::getBooks($input, 'id');
+                $item->phoneNew = $data_new->get()->count();
+                $item->orderNew = $order_new->count();
+                $input['creator_id'] = $item->id;
+                $item->schedules = Schedule::getBooks($input, 'id');
 
-            $input['caller_number'] = $item->caller_number;
-            $input['call_status'] = 'ANSWERED';
+                $input['caller_number'] = $item->caller_number;
+                $input['call_status'] = 'ANSWERED';
 
-            $item->call = !empty($input['caller_number']) ? CallCenter::search($input)->count() : 0;
-            $item->thu_no = $detail->sum('price') - $total_new - $total_old;
+                $item->call = !empty($input['caller_number']) ? CallCenter::search($input)->count() : 0;
+                $item->thu_no = $detail->sum('price') - $total_new - $total_old;
 
-            $item->totalNew = $total_new;
-            $item->totalOld = $total_old;
+                $item->totalNew = $total_new;
+                $item->totalOld = $total_old;
 
-            $item->totalAll = $detail->sum('price');//da thu trong ky
-            return $item;
-        })->sortByDesc('totalAll');
+                $item->totalAll = $detail->sum('price');//da thu trong ky
+                return $item;
+            })->sortByDesc('totalAll');
         $users = SaleResource::collection($users);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $users);
     }
