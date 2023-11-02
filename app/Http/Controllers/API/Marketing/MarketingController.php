@@ -106,7 +106,10 @@ class MarketingController extends BaseApiController
             $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
         }
         $marketing = User::where('department_id', DepartmentConstant::CARE_PAGE)
-            ->where('active', StatusCode::ON)->whereIn('id', $members)
+            ->when(count($members), function ($q) use ($members) {
+                $q->whereIn('id', $members);
+            })
+            ->where('active', StatusCode::ON)
             ->select('id', 'full_name', 'avatar')->get()->map(function ($item) use ($input) {
             $input['carepage_id'] = $item->id;
             $customer = Customer::searchApi($input)->select('id');
