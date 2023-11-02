@@ -27,7 +27,7 @@ class CskhController extends BaseApiController
             $members = TeamMember::where('team_id', $request->team_id)->pluck('user_id')->toArray();
         } else {
             $myTeam = TeamMember::where('user_id', $request->jwtUser->id)->first();
-            $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
+            $members = !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
         }
         $input = $request->all();
         $tasks = $this->cskh->getDataTask($input);//công việc

@@ -788,13 +788,13 @@ class Functions
      */
     public static function members($params = [])
     {
-        if (!isset($params['team_id'])) {
-            $myTeam = TeamMember::where('user_id', Auth::user()->id)->first();
-        } else {
+        if (!empty($params['team_id'])) {
             $myTeam = TeamMember::where('team_id', $params['team_id'])->first();
+        } else {
+            $myTeam = TeamMember::where('user_id', Auth::user()->id)->first();
         }
 
-        return !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : null;
+        return !empty($myTeam->members) ? $myTeam->members->pluck('user_id')->toArray() : [];
     }
 
 }
