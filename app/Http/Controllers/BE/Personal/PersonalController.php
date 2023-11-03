@@ -132,13 +132,12 @@ class PersonalController extends Controller
                             'note'             => $row['gia_canh'],
                             'insurance_number' => $row['so_bhxh'],
                             'start_probation'  => !empty($row['ngay_bd_thu_viec']) ? Carbon::parse(trim($row['ngay_bd_thu_viec']))->format('Y-m-d') : null,
-                            'start_work'       => !empty($row['ngay_bd_thu_viec']) ? Carbon::parse(trim($row['ngay_lam_viec_chinh_thuc']))->format('Y-m-d') : null,
-                            'insurance_time'   => !empty($row['ngay_bd_thu_viec']) ? Carbon::parse(trim($row['ngay_bd_dong_bhxh']))->format('Y-m-d') : null,
-                            'leave_time'       => !empty($row['ngay_bd_thu_viec']) ? Carbon::parse(trim($row['ngay_nghi_viec']))->format('Y-m-d') : null,
-                            'birthday'         => !empty($row['ngay_bd_thu_viec']) ? Carbon::parse(trim($row['ngay_sinh']))->format('Y-m-d') : null,
-                            'pause_time'       => !empty($row['ngay_bd_thu_viec']) ? Carbon::parse(trim($row['ngay_tam_nghi']))->format('Y-m-d') : null,
+                            'start_work'       => !empty($row['ngay_lam_viec_chinh_thuc']) ? Carbon::parse(trim($row['ngay_lam_viec_chinh_thuc']))->format('Y-m-d') : null,
+                            'insurance_time'   => !empty($row['ngay_bd_dong_bhxh']) ? Carbon::parse(trim($row['ngay_bd_dong_bhxh']))->format('Y-m-d') : null,
+                            'leave_time'       => !empty($row['ngay_nghi_viec']) ? Carbon::parse(trim($row['ngay_nghi_viec']))->format('Y-m-d') : null,
+                            'birthday'         => !empty($row['ngay_sinh']) ? Carbon::parse(trim($row['ngay_sinh']))->format('Y-m-d') : null,
+                            'pause_time'       => !empty($row['ngay_tam_nghi']) ? Carbon::parse(trim($row['ngay_tam_nghi']))->format('Y-m-d') : null,
                         ]);
-
                     }
                 }
             });

@@ -10,6 +10,7 @@ class UserPersonal extends Model
     protected $guarded = ['id'];
     protected $table = 'user_personal';
 
+
     public function user()
     {
         return $this->belongsTo(User::class);
