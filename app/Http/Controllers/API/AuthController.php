@@ -574,7 +574,20 @@ class AuthController extends BaseApiController
             return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'required department field');
         }
         $teams = [];
-        $department = $request->department == 'sale' ? DepartmentConstant::TELESALES : ($request->department == 'cskh' ? DepartmentConstant::CSKH : DepartmentConstant::MARKETING);
+        switch ($request->department){
+            case 'sale':
+                $department =  DepartmentConstant::TELESALES;
+                break;
+                case 'cskh':
+                $department =  DepartmentConstant::CSKH;
+                break;
+                case 'carepage':
+                $department =  DepartmentConstant::CARE_PAGE;
+                break;
+                default:
+                $department = DepartmentConstant::MARKETING;
+                break;
+        }
         if ($auth->permission('filter.team')) {
             $teams = Team::select('id', 'name')->where('department_id', $department)->get();
         }
