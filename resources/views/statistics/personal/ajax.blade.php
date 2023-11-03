@@ -51,10 +51,10 @@
 <script type="text/javascript" src="{{asset('js/loader.js')}}"></script>
 <script type="text/javascript">
     google.charts.load('current', {callback: drawBasic, packages: ['corechart']});
-    var heights = {{count($chart)*70}};
+    var heights = {{count($chart)*60}};
         function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Lý do', 'Số lượng'],
+            ['Lý do', 'Nhân viên nghỉ'],
             @if(count($chart))
                 @foreach($chart as $k => $item)
             ['{{$item->name}}',{{100 - $k}}],
@@ -66,9 +66,9 @@
         ]);
 
         var options = {
-            title: 'THỐNG KÊ NGUỒN THU TOÀN HỆ THỐNG (VNĐ)',
+            title: 'Biểu đồ nhân viên nghỉ theo lý do',
             height: heights,
-            width: 1200,
+            width: '100%',
             titleFontSize: 13,
             chartArea: {
                 height: '100%',
@@ -78,6 +78,8 @@
             vAxis: {
                 textStyle: {
                     bold: true,
+                    fontSize:11,
+                    width: 500,
                 },
             },
             annotations: {

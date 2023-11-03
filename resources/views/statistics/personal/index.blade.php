@@ -22,14 +22,12 @@
                         <input type="hidden" name="end_date" id="end_date">
                         <input id="reportrange" type="text" class="form-control square">
                     </div>
-{{--                    @if((\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::BAN_GIAM_DOC && \Illuminate\Support\Facades\Auth::user()->branch_id == NULL)||(in_array(\Illuminate\Support\Facades\Auth::user()->department_id,[\App\Constants\DepartmentConstant::KE_TOAN,\App\Constants\DepartmentConstant::MARKETING])))--}}
-{{--                        <div class="col-lg-3 col-md-3">--}}
-{{--                            {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}--}}
-{{--                        </div>--}}
-{{--                        <div class="col-lg-3 col-md-3">--}}
-{{--                            {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
+                    <div class="col-lg-3 col-md-3">
+                        {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        {!! Form::select('location_id', $location, null, array('class' => 'form-control location select-gear', 'placeholder' => 'Cụm khu vực')) !!}
+                    </div>
                     <div class="col-lg-2 col-md-6">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm
                         </button>

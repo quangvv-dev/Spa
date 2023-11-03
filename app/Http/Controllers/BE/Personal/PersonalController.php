@@ -112,6 +112,8 @@ class PersonalController extends Controller
 
     public function statistics(Request $request)
     {
+        $branchs = Branch::search()->pluck('name', 'id');
+        $location = Branch::getLocation();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
@@ -127,7 +129,10 @@ class PersonalController extends Controller
                 $qr->whereNotNull('pause_time');
             })->count(),
         ];
-        return view('statistics.personal.index', compact('statistics', 'chart'));
+        if ($request->ajax()){
+            return view('statistics.personal.ajax', compact('statistics', 'chart'));
+        }
+        return view('statistics.personal.index', compact('statistics', 'chart','branchs','location'));
     }
 
     public function import(Request $request)
