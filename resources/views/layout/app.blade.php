@@ -141,9 +141,6 @@
     <!-- Horizantal menu-->
         <div class="container content-custom">
             <div class="side-app">
-                <div class="page-header">
-
-                </div>
                 <div class="row row-cards">
                     <div class="row">
                         <div class="col-xl-12">
