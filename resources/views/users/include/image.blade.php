@@ -16,18 +16,8 @@
             z-index: -1;
         }
         .inputfile + label {
-            /*font-size: 1.25em;*/
-            /*font-weight: 700;*/
-            /*color: white;*/
-            /*background-color: black;*/
-            /*display: inline-block;*/
             cursor: pointer;
         }
-
-        /*.inputfile:focus + label,*/
-        /*.inputfile + label:hover {*/
-        /*    background-color: red;*/
-        /*}*/
 
     </style>
 @endsection

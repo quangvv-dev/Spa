@@ -68,18 +68,18 @@
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group required {{ $errors->has('start_work') ? 'has-error' : '' }}">
-                        {!! Form::label('start_work', 'Ngày làm việc chính thức 1', array('class' => '')) !!}
+                        {!! Form::label('start_work', 'Ngày làm việc chính thức', array('class' => '')) !!}
                         {!! Form::text('start_work',!empty($user->personal->start_work)?@date('d/m/Y',strtotime($user->personal->start_work)):null, array('class' => 'form-control singleDate')) !!}
                         <span class="help-block">{{ $errors->first('start_work', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4">
-                    <div class="form-group required {{ $errors->has('insurance_time') ? 'has-error' : '' }}">
-                        {!! Form::label('insurance_time', 'Ngày BĐ đóng BHXH', array('class' => '')) !!}
-                        {!! Form::text('insurance_time',!empty($user->personal->insurance_time)?@date('d/m/Y',strtotime($user->personal->insurance_time)):null, array('class' => 'form-control singleDate')) !!}
-                        <span class="help-block">{{ $errors->first('insurance_time', ':message') }}</span>
-                    </div>
-                </div>
+{{--                <div class="col-xs-12 col-md-4">--}}
+{{--                    <div class="form-group required {{ $errors->has('insurance_time') ? 'has-error' : '' }}">--}}
+{{--                        {!! Form::label('insurance_time', 'Ngày BĐ đóng BHXH', array('class' => '')) !!}--}}
+{{--                        {!! Form::text('insurance_time',!empty($user->personal->insurance_time)?@date('d/m/Y',strtotime($user->personal->insurance_time)):null, array('class' => 'form-control singleDate')) !!}--}}
+{{--                        <span class="help-block">{{ $errors->first('insurance_time', ':message') }}</span>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group required {{ $errors->has('pause_time') ? 'has-error' : '' }}">
                         {!! Form::label('pause_time', 'Thời gian tạm nghỉ (Thai sản/ốm)', array('class' => '')) !!}

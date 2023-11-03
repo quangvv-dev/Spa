@@ -1,11 +1,30 @@
 @extends('layout.app')
 @section('content')
+    <style>
+        .inputfile {
+            /*width: 0.1px;*/
+            /*height: 0.1px;*/
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+        .inputfile + label {
+            cursor: pointer;
+        }
+    </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Quản lý người dùng</h3>
-                <div class="col"><a class="right btn btn-primary btn-flat" href="{{ route('users.create') }}"><i
-                            class="fa fa-plus-circle"></i> Tạo mới</a></div>
+                <div class="col">
+                    <a class="right btn btn-primary btn-flat" href="{{ route('users.create') }}"><i
+                            class="fa fa-plus-circle"></i> Tạo mới</a>
+                    <a class="right btn tooltip-nav" href="#" data-toggle="modal" data-target="#uploadModal">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span class="tooltiptext">Upload (excel)</span>
+                    </a>
+                </div>
             </div>
             <div class="card-header">
                 <form class="row col-12" action="{{route('users.index')}}" method="get" id="gridForm">
@@ -40,8 +59,7 @@
                     @endif
                     <input type="hidden" name="page" id="page">
                     <div class="col-lg-4 col-md-4">
-                        <button type="submit" class="btn btn-primary"> Tìm kiếm
-                        </button>
+                        <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
                     </div>
 
                 </form>
@@ -49,6 +67,7 @@
             <div id="registration-form">
                 @include('users.ajax')
             </div>
+            @include('users.modal.upload')
         </div>
     </div>
 @endsection
@@ -74,6 +93,25 @@
                 alertify.success('Cập nhật tk thành công !');
             });
         })
+        var inputs = document.querySelectorAll( '.inputfile' );
+        Array.prototype.forEach.call( inputs, function( input )
+        {
+            var label	 = input.nextElementSibling,
+                labelVal = label.innerHTML;
 
+            input.addEventListener( 'change', function( e )
+            {
+                var fileName = '';
+                if( this.files && this.files.length > 1 )
+                    fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+                else
+                    fileName = e.target.value.split( '\\' ).pop();
+
+                if( fileName )
+                    label.querySelector( 'span' ).innerHTML = fileName;
+                else
+                    label.innerHTML = labelVal;
+            });
+        });
     </script>
 @endsection

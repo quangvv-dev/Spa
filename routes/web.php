@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('salary/{user}', 'Personal\PersonalController@salary');
         Route::get('/{user}', 'Personal\PersonalController@index');
         Route::post('/{user}', 'Personal\PersonalController@store');
+        Route::post('/import/excel', 'Personal\PersonalController@import')->name('personal.import');
         Route::group(['prefix' => 'images'], function () {
             Route::get('{user}', 'Personal\PersonalController@image');
             Route::post('{user}/store', 'Personal\PersonalController@storeImage')->name('personal_image.store');

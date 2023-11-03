@@ -104,4 +104,13 @@ class PersonalController extends Controller
 
         return view('statistics.personal.index');
     }
+
+    public function import(Request $request)
+    {
+        if ($request->hasFile('file_image')) {
+
+        }
+        return back()->with('success','thành công');
+        dd($request->all());
+    }
 }
