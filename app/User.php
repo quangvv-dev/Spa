@@ -54,7 +54,7 @@ class User extends Authenticatable
         'location_id',
         'approval_code',
         'name_display',
-        'code'
+        'code',
     ];
 
     /**
@@ -85,6 +85,8 @@ class User extends Authenticatable
             $q->where('branch_id', $param['branch_id']);
         })->when(isset($param['department_id']) && $param['department_id'], function ($q) use ($param) {
             $q->where('department_id', $param['department_id']);
+        })->when(isset($param['group_branch']) && $param['group_branch'], function ($q) use ($param) {
+            $q->whereIn('branch_id', $param['group_branch']);
         })->when(isset($param['active']), function ($q) use ($param) {
             $q->where('active', $param['active']);
         })
@@ -113,6 +115,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserPersonal::class);
     }
+
     public function personal_image()
     {
         return $this->hasMany(PersonalImage::class);

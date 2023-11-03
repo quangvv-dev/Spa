@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE\Personal;
 
 use App\Components\Filesystem\Filesystem;
 use App\Constants\DirectoryConstant;
+use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
@@ -15,6 +16,7 @@ use App\Models\LeaveReason;
 use App\Models\PersonalImage;
 use App\Models\Salary;
 use App\Models\Status;
+use App\Models\UserPersonal;
 use App\Services\UserPersonalService;
 use App\Services\UserService;
 use App\User;
@@ -22,6 +24,7 @@ use Carbon\Carbon;
 use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PersonalController extends Controller
 {
@@ -109,9 +112,22 @@ class PersonalController extends Controller
 
     public function statistics(Request $request)
     {
-        $data = User::get();
-
-        return view('statistics.personal.index');
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
+        }
+//        $chart = $this->personal->chart($request->all());
+        $chart = LeaveReason::select('name')->get();
+        $users = User::search($request->all());
+        $users2 = clone $users;
+        $users3 = clone $users;
+        $statistics = [
+            'all'    => $users->count(),
+            'active' => $users2->where('active', UserConstant::ACTIVE)->count(),
+            'pause' => $users3->whereHas('personal', function ($qr) {
+                $qr->whereNotNull('pause_time');
+            })->count(),
+        ];
+        return view('statistics.personal.index', compact('statistics', 'chart'));
     }
 
     public function import(Request $request)

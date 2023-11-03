@@ -282,13 +282,18 @@
                                 <li><a href="/report/hoa-hong">Hoa hồng nhân viên</a></li>
                             </ul>
                         </li>
-
-                        @if($roleGlobal->permission('sms.history'))
-                            <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
-                        @endif
-                        @if($roleGlobal->permission('report.tasks'))
-                            <li><a href="{{url('report/tasks')}}">Hiệu quả công việc</a></li>
-                        @endif
+                        <li class="sub-with-sub">
+                            <a href="#">Khác</a>
+                            <ul>
+                                <li><a href="{{url('statistics-personal')}}">Biểu đồ nhân sự</a></li>
+                                @if($roleGlobal->permission('sms.history'))
+                                    <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>
+                                @endif
+                                @if($roleGlobal->permission('report.tasks'))
+                                    <li><a href="{{url('report/tasks')}}">Hiệu quả công việc</a></li>
+                                @endif
+                            </ul>
+                        </li>
                         @if($roleGlobal->permission('call-center'))
                             <li><a href="{{route('call-center.index')}}">Quản lý tổng đài</a></li>
                         @endif

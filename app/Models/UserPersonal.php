@@ -15,4 +15,9 @@ class UserPersonal extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function leave_reason()
+    {
+        return $this->belongsTo(LeaveReason::class);
+    }
 }

@@ -8,8 +8,10 @@
 
 namespace App\Services;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Carbon;
 use App\Models\UserPersonal;
+use Illuminate\Support\Facades\DB;
 
 class UserPersonalService
 {
@@ -54,4 +56,26 @@ class UserPersonalService
         }
         return $params;
     }
+
+    public function chart($input)
+    {
+        return UserPersonal::join('leave_reasons as lr', 'lr.id', '=', 'user_personal.leave_reason_id')
+            ->join('users as u', 'u.id', '=', 'user_personal.user_id')
+            ->when(!empty($input['start_date']), function ($query) use ($input) {
+                $query->whereBetween('user_personal.leave_time', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            })
+            ->when(!empty($input['department_id']), function ($query) use ($input) {
+                $query->where('u.department_id', $input['department_id']);
+            })->when(!empty($input['branch_id']), function ($query) use ($input) {
+                $query->where('u.branch_id', $input['branch_id']);
+            })->when(!empty($input['group_branch']), function ($query) use ($input) {
+                $query->whereIn('u.branch_id', $input['group_branch']);
+            })
+            ->select('lr.name', DB::raw('COUNT(user_id) as total'))
+            ->groupBy('lr.id')->get();
+    }
+
 }
