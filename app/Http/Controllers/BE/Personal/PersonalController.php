@@ -6,13 +6,22 @@ use App\Components\Filesystem\Filesystem;
 use App\Constants\DirectoryConstant;
 use App\Helpers\Functions;
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
+use App\Models\Category;
+use App\Models\Customer;
+use App\Models\CustomerGroup;
+use App\Models\GroupComment;
 use App\Models\LeaveReason;
 use App\Models\PersonalImage;
 use App\Models\Salary;
+use App\Models\Status;
 use App\Services\UserPersonalService;
 use App\Services\UserService;
 use App\User;
+use Carbon\Carbon;
+use Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PersonalController extends Controller
 {
@@ -67,8 +76,8 @@ class PersonalController extends Controller
     public function storeImage(Request $request, User $user)
     {
         $user->personal_image()->create([
-            'name' => PersonalImage::CCCD_FRONT,
-            'link' => null,
+            'name'      => PersonalImage::CCCD_FRONT,
+            'link'      => null,
             'type_file' => 'jpeg',
         ]);
         return back();
@@ -107,10 +116,33 @@ class PersonalController extends Controller
 
     public function import(Request $request)
     {
-        if ($request->hasFile('file_image')) {
+        if ($request->hasFile('file')) {
+            Excel::load($request->file('file')->getRealPath(), function ($render) {
+                $result = $render->toArray();
+                foreach ($result as $k => $row) {
 
+                    if (!empty($row['ma_nv'])) {
+                        $user = User::where('code', $row['ma_nv'])->first();
+                        if (empty($user)) {
+                            continue;
+                        }
+                        $user->personal()->delete();
+                        $user->personal()->create([
+                            'cccd'             => $row['so_cccd'],
+                            'note'             => $row['gia_canh'],
+                            'insurance_number' => $row['so_bhxh'],
+                            'start_probation'  => Carbon::parse(trim($row['ngay_bd_thu_viec']))->format('Y-m-d'),
+                            'start_work'       => Carbon::parse(trim($row['ngay_lam_viec_chinh_thuc']))->format('Y-m-d'),
+                            'insurance_time'   => Carbon::parse(trim($row['ngay_bd_dong_bhxh']))->format('Y-m-d'),
+                            'pause_time'       => Carbon::parse(trim($row['ngay_tam_nghi']))->format('Y-m-d'),
+                            'leave_time'       => Carbon::parse(trim($row['ngay_nghi_viec']))->format('Y-m-d'),
+                            'birthday'         => Carbon::parse(trim($row['ngay_sinh']))->format('Y-m-d'),
+                        ]);
+
+                    }
+                }
+            });
         }
-        return back()->with('success','thành công');
-        dd($request->all());
+        return back()->with('status', 'Cập nhật excel thành công');
     }
 }
