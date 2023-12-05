@@ -149,7 +149,7 @@ class CustomerController extends Controller
         $customers = Functions::customPaginate($customers, $page, $perPage);
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
-        $rank = $customers->firstItem();
+//        $rank = $customers->firstItem();
 
         $url = '/customers';
         $user = Auth::user();
@@ -162,11 +162,11 @@ class CustomerController extends Controller
         }
         if ($request->ajax()) {
             return view('customers.ajax',
-                compact('customers', 'statuses', 'rank', 'birthday', 'user_filter_list', 'user_filter_grid'));
+                compact('customers', 'statuses', 'birthday', 'user_filter_list', 'user_filter_grid'));
         }
 
         return view('customers.index',
-            compact('customers', 'statuses', 'rank', 'categories', 'carePageUsers', 'birthday', 'user_filter_grid',
+            compact('customers', 'statuses','categories', 'carePageUsers', 'birthday', 'user_filter_grid',
                 'user_filter_list'));
     }
 
