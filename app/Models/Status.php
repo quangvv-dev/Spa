@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Constants\ScheduleConstant;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Status extends Model
 {
@@ -62,16 +64,33 @@ class Status extends Model
     }
 
 
-    public static function getRelationshipByCustomer($input, $customers)
+    public static function getRelationshipByCustomer($customers)
     {
-        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($input, $customers) {
+
+        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($customers) {
             $caculate = clone $customers;
             $item->customers_count = $caculate->where('status_id', $item->id)->count();
             return $item;
         });
 
         return $data;
+    }
 
+    public static function getRelationshipByCustomerV2($input = [])
+    {
+
+        $data = Status::leftJoin('customers as c', 'c.status_id', 'status.id')
+            ->where('status.type', StatusCode::RELATIONSHIP)
+            ->select('status.id', 'status.name', 'status.color', DB::raw('COUNT(c.id) as customers_count'))
+            ->when(isset($input['branch_id']), function ($query) use ($input) {
+                $query->where('c.branch_id', $input['branch_id']);
+            })->when(isset($input['telesales']), function ($query) use ($input) {
+                $query->where('c.telesales_id', $input['telesales']);
+            })->when(isset($input['telesales']), function ($query) use ($input) {
+                $query->where('c.telesales_id', $input['telesales']);
+            })->orderBy('status.position', 'ASC')->groupBy('status.id')->get();
+
+        return $data;
     }
 
     public static function getRevenueSource($input)

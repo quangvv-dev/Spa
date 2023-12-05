@@ -141,7 +141,7 @@ class CustomerController extends Controller
         $page = $request->page;
         $customers = Customer::search($input);
         $birthday = clone $customers;
-        $statuses = Status::getRelationshipByCustomer($input, $customers);
+        $statuses = Status::getRelationshipByCustomerV2($input);
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
 
         $customers = $customers->take(StatusCode::PAGINATE_500)->orderByDesc('id')->get();

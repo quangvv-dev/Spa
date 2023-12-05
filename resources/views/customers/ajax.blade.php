@@ -97,7 +97,7 @@
             $customers_count = 0;
         @endphp
         @foreach(@$statuses as $k => $item)
-            <button class="status btn white account_relation position btn-new" data-name="{{$item->name}}"
+            <button class="status btn white account_relation position btn-new" data-name="{{$item->id}}"
                     style="background: {{$item->color ?:''}}">{{ $item->name }}<span
                     class="not-number-account white noti-reletion">{{ @$item->customers_count }}</span></button>
             @php

@@ -109,9 +109,7 @@ class Customer extends Model
             });
         })
             ->when(isset($conditions['status']), function ($query) use ($conditions) {
-                $query->whereHas('status', function ($q) use ($conditions) {
-                    $q->where('name', $conditions['status']);
-                });
+                $query->where('status_id', $conditions['status']);
             })->when(isset($conditions['group']), function ($query) use ($conditions) {
                 $group_customer = CustomerGroup::where('category_id', $conditions['group'])->pluck('customer_id')->toArray();
                 $query->whereIn('id', $group_customer);
