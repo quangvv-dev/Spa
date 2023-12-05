@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group">
-                                {!! Form::select('services', $services, null, array('class' => 'form-control service')) !!}
+                                {!! Form::select('services', $services, null, array('class' => 'form-control service select2')) !!}
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
