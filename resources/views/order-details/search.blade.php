@@ -33,27 +33,27 @@
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group">
-                                {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales', 'placeholder'=>'Người phụ trách')) !!}
+                                {!! Form::select('telesales', $telesales, null, array('class' => 'form-control telesales select2', 'placeholder'=>'Người phụ trách')) !!}
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group">
-                                {!! Form::select('support_id', $ktvUsers, null, array('class' => 'form-control waiters', 'placeholder'=>'KTV phụ trách')) !!}
+                                {!! Form::select('support_id', $ktvUsers, null, array('class' => 'form-control waiters select2', 'placeholder'=>'KTV phụ trách')) !!}
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group">
-                                {!! Form::select('order_category', $source, null, array('class' => 'form-control source', 'placeholder'=>'Nguồn KH')) !!}
+                                {!! Form::select('order_category', $source, null, array('class' => 'form-control source select2', 'placeholder'=>'Nguồn KH')) !!}
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group">
-                                {!! Form::select('payment_type',\App\Models\PaymentHistory::label, null, array('class' => 'form-control payment-type', 'placeholder' => 'Hình thức thanh toán')) !!}
+                                {!! Form::select('payment_type',\App\Models\PaymentHistory::label, null, array('class' => 'form-control payment-type select2', 'placeholder' => 'Hình thức thanh toán')) !!}
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group">
-                                {!! Form::select('marketing', $marketingUsers, null, array('class' => 'form-control marketing', 'placeholder'=>'Người tạo KH')) !!}
+                                {!! Form::select('marketing', $marketingUsers, null, array('class' => 'form-control marketing select2', 'placeholder'=>'Người tạo KH')) !!}
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">

@@ -301,8 +301,8 @@ class OrderController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        $services = Services::where('type', StatusCode::SERVICE)->orderBy('category_id', 'asc')->orderBy('id', 'desc')
-            ->get()->pluck('name', 'id')->prepend('-Chọn dịch vụ-', '');
+        $services = Services::orderBy('category_id', 'asc')->orderBy('id', 'desc')
+            ->get()->pluck('name', 'id')->prepend('-Chọn S.phẩm & D.vụ-', '');
         $group = Category::pluck('name', 'id')->toArray();
         $gifts = ProductDepot::select('product_id')->with('product')->has('product')->groupBy('product_id')->get()->map(function ($item) {
             $item->name = @$item->product->name;
