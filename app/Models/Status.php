@@ -62,21 +62,13 @@ class Status extends Model
     }
 
 
-    public static function getRelationshipByCustomer($input)
+    public static function getRelationshipByCustomer($input, $customers)
     {
-        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($input) {
-            $customers = Customer::search($input);
-            $item->customers_count = $customers->where('status_id', $item->id)->count();
+        $data = self::where('type', StatusCode::RELATIONSHIP)->orderBy('position', 'ASC')->get()->map(function ($item) use ($input, $customers) {
+            $caculate = clone $customers;
+            $item->customers_count = $caculate->where('status_id', $item->id)->count();
             return $item;
         });
-//        $data = $data->withCount(['customers' => function ($query) use ($input) {
-//            Customer::applySearchConditions($query, $input)
-//                ->whereHas('categories', function ($query) use ($input) {
-//                $query->when(isset($input['group']), function ($query) use($input) {
-//                    $query->where('categories.id', $input['group']);
-//                });
-//            });
-//        }]);
 
         return $data;
 

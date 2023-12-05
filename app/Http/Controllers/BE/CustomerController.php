@@ -137,14 +137,15 @@ class CustomerController extends Controller
         $input['marketing'] = empty($input['marketing']) ? (Auth::user()->department_id == DepartmentConstant::SEEDING ? Auth::user()->id : null) : $input['marketing'];
         $carePageUsers = User::whereIn('department_id', [DepartmentConstant::CARE_PAGE])->where('active', StatusCode::ON)
             ->select('full_name', 'id')->pluck('full_name', 'id')->toArray();
-        $statuses = Status::getRelationshipByCustomer($input);
+
         $page = $request->page;
         $customers = Customer::search($input);
         $birthday = clone $customers;
+        $statuses = Status::getRelationshipByCustomer($input, $customers);
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
 
         $customers = $customers->take(StatusCode::PAGINATE_500)->orderByDesc('id')->get();
-        $perPage = setting('defaultPagination')?? StatusCode::PAGINATE_20;
+        $perPage = setting('defaultPagination') ?? StatusCode::PAGINATE_20;
         $customers = Functions::customPaginate($customers, $page, $perPage);
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
