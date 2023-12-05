@@ -212,7 +212,12 @@ class SettingController extends Controller
         } else {
             UserFilterGrid::create($data);
         }
+        return 1;
+    }
 
+    public function setDefaultPagination(Request $request)
+    {
+        setting(['defaultPagination' => $request->limit])->save();
         return 1;
     }
 }

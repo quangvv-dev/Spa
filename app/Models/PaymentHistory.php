@@ -12,6 +12,20 @@ class PaymentHistory extends Model
     protected $guarded = ['id'];
     use SoftDeletes;
 
+    public const MONEY = 1;
+    public const CARD = 2;
+    public const POINT = 3; // điểm
+    public const TRANSFER = 4;//Chuyển khoản
+    public const TRA_GOP = 5;
+
+    public const label = [
+        self::MONEY => 'Tiền mặt',
+        self::CARD => 'Thẻ',
+        self::POINT => 'Điểm',
+        self::TRANSFER => 'Chuyển khoản',
+        self::TRA_GOP => 'Trả góp',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id');
@@ -19,14 +33,16 @@ class PaymentHistory extends Model
 
     public function getNamePaymentTypeAttribute()
     {
-        if ($this->payment_type === 1) {
+        if ($this->payment_type === self::MONEY) {
             return "Tiền mặt";
-        } elseif ($this->payment_type === 2) {
+        } elseif ($this->payment_type === self::CARD) {
             return "Thẻ";
-        } elseif ($this->payment_type === 4) {
+        } elseif ($this->payment_type === self::POINT) {
+            return "Điểm";
+        } elseif ($this->payment_type === self::TRANSFER) {
             return "Chuyển khoản";
         } else {
-            return "Điểm";
+            return "Trả góp";
         }
     }
 

@@ -82,6 +82,7 @@ class RoleController extends Controller
     protected $filter = [
         'filter.team',
         'call-center.listen',
+        'customer.changeBranch',
     ];
 
     protected $permissions = ['list', 'edit', 'add', 'delete'];
@@ -185,7 +186,7 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $doc = $role;
-        $action = route('roles.update', $doc->id);
+//        $action = route('roles.update', $doc->id);
         $this->generateParams();
         return view('role.create', compact('doc'));
     }

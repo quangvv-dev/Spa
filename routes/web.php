@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::post('settings', 'SettingController@storeRank')->name('settings.storeRank');
     Route::get('super-admin', 'SettingController@indexAdmin')->name('settings.indexAdmin');
     Route::post('super-admin', 'SettingController@storeAdmin')->name('settings.storeAdmin');
+    Route::post('set-default-pagination', 'SettingController@setDefaultPagination')->name('settings.defaultPagination');
     Route::post('store-branch', 'SettingController@storeBranch')->name('settings.storeBranch');
     Route::post('store-bank', 'SettingController@storeBank')->name('settings.storeBank');
     Route::post('store-location', 'SettingController@storeLocation')->name('settings.storeLocation');

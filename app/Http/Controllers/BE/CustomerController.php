@@ -82,15 +82,15 @@ class CustomerController extends Controller
         $telesales = [];
         User::select('id', 'department_id', 'full_name')->where('active', StatusCode::ON)->get()
             ->map(function ($item) use (&$telesales) {
-            if ($item->department_id == DepartmentConstant::WAITER) {
-                $telesales['Lễ Tân'][$item->full_name] = $item->id;
-            } elseif ($item->department_id == DepartmentConstant::TELESALES) {
-                $telesales['Telesales'][$item->full_name] = $item->id;
-            } elseif ($item->department_id == UserConstant::TECHNICIANS) {
-                $telesales['Tư vấn viên'][$item->full_name] = $item->id;
-            }
-            return $item;
-        });
+                if ($item->department_id == DepartmentConstant::WAITER) {
+                    $telesales['Lễ Tân'][$item->full_name] = $item->id;
+                } elseif ($item->department_id == DepartmentConstant::TELESALES) {
+                    $telesales['Telesales'][$item->full_name] = $item->id;
+                } elseif ($item->department_id == UserConstant::TECHNICIANS) {
+                    $telesales['Tư vấn viên'][$item->full_name] = $item->id;
+                }
+                return $item;
+            });
         $the_rest = [
             OrderConstant::THE_REST => 'Còn nợ',
             OrderConstant::NONE_REST => 'Đã thanh toán',
@@ -110,13 +110,10 @@ class CustomerController extends Controller
         ]);
     }
 
-    /**.
+    /**
      * Display a listing of the resource.
-     *
      * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Throwable
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -146,12 +143,8 @@ class CustomerController extends Controller
         $birthday = clone $customers;
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
 
-        $customers = $customers->take(StatusCode::PAGINATE_1000)->orderByDesc('id')->get();
-        if (isset($input['limit'])) {
-            $customers = Functions::customPaginate($customers, $page, $input['limit']);
-        } else {
-            $customers = Functions::customPaginate($customers, $page);
-        }
+        $customers = $customers->take(StatusCode::PAGINATE_500)->orderByDesc('id')->get();
+        $customers = Functions::customPaginate($customers, $page, setting('defaultPagination'));
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
         $rank = $customers->firstItem();
@@ -335,8 +328,8 @@ class CustomerController extends Controller
         $customers = Customer::find($id);
         //EndTask
         //History SMS
-        $tasks=[];
-        $schedules=[];
+        $tasks = [];
+        $schedules = [];
         $history = [];
         $customer_post = [];
         $wallet = [];
@@ -375,7 +368,7 @@ class CustomerController extends Controller
             return view('tasks._form', compact('tasks'));
         }
         if ($request->contact) {
-            $contacts = Contact::where('customer_id',$request->contact)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+            $contacts = Contact::where('customer_id', $request->contact)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
             return view('customers._include.contact', compact('contacts'));
         }
 
@@ -397,7 +390,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks',
-                'customer_post', 'customers', 'history', 'wallet','contacts',
+                'customer_post', 'customers', 'history', 'wallet', 'contacts',
                 'package', 'call_center', 'orders', 'tips'));
     }
 

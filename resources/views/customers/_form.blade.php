@@ -1,6 +1,7 @@
 @extends('layout.app')
 @php
     $checkRole = checkRoleAlready();
+    $roleGlobal = auth()->user()?:[];
 @endphp
 @section('_style')
     <!-- Bootstrap fileupload css -->
@@ -15,7 +16,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title">{{$title}}</h3>
             </div>
 
             @if (isset($customer))
@@ -90,7 +91,7 @@
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
                                 {!! Form::label('branch_id', 'Chi nhánh',['class'=>'required']) !!}
-                                {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2', 'placeholder' => 'Tất cả chi nhánh')) !!}
+                                {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2 branch', 'placeholder' => 'Tất cả chi nhánh')) !!}
                                 <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
                             </div>
                         </div>
@@ -229,6 +230,11 @@
 @section('_script')
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
     <script>
+        @if (isset($customer) && !$roleGlobal->permission('customer.changeBranch') )
+        $('.branch').select2({
+            disabled: true
+        });
+        @endif
 
         $(document).on('keyup', '#phone',function () {
             $('#btn-submit-customer').prop('disabled', false);
