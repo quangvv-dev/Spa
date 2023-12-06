@@ -189,7 +189,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class,
+//        Laravel\Socialite\SocialiteServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -266,7 +266,7 @@ return [
         'Setting' => anlutro\LaravelSettings\Facade::class,
         'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+//        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
