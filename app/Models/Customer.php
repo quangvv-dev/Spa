@@ -187,19 +187,19 @@ class Customer extends Model
         if ($user->department_id == DepartmentConstant::TELESALES) {
             $member = checkTeamLead();
             if (!empty($user->isLeader) && count($member)) {
-                $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+                $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
-                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer');
                 } else {
                     $data = $data->where('telesales_id', $user->id);
                 }
             }
             if (isset($param['search'])) {
-                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer');
             }
         } else {
-            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer');
         }
         if (isset($param['branch_id']) && $param['branch_id']) {
             if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
