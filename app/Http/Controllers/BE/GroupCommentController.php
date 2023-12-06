@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\GroupComment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GroupCommentController extends Controller
 {
@@ -29,6 +30,7 @@ class GroupCommentController extends Controller
         $this->groupCommentService = $groupCommentService;
         $this->customerService = $customerService;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -55,30 +57,22 @@ class GroupCommentController extends Controller
      */
     public function index2(Request $request, $id)
     {
-        $customer = Customer::with('telesale', 'source_customer', 'orders','categories','fanpage','cskh')->find($id);
+        $customer = Customer::with('telesale', 'source_customer', 'orders', 'cskh', 'categories')->find($id);
         $orderRevenue = number_format($customer->orders->sum('gross_revenue'));
-
-        $groupComments = GroupComment::with('user', 'customer')
-            ->where('customer_id', $id)
+        $groupComments = DB::table('group_comments')->join('users as u', 'u.id', '=', 'group_comments.user_id')
+            ->where('group_comments.customer_id', $id)
+            ->select('u.full_name','group_comments.id','group_comments.created_at','group_comments.messages','group_comments.image')
             ->orderBy('id', 'desc')
             ->get();
 
-        $lastContact = "";
-
-        if ($groupComments->isEmpty()) {
-            $lastContact = Carbon::parse($customer->created_at)->format('d-m-Y');
-        } else {
-            $lastContact = Carbon::parse($groupComments[0]->created_at)->format('d-m-Y');
-        }
-
-        $status = Status::where('type', StatusCode::RELATIONSHIP)->get();
-        $idLogin = Auth::user()->id;
+        $lastContact = $groupComments->isEmpty() ? Carbon::parse($customer->created_at)->format('d-m-Y') : Carbon::parse($groupComments[0]->created_at)->format('d-m-Y');
+        $status = Status::select('id', 'name')->where('type', StatusCode::RELATIONSHIP)->get();
 
         return response()->json([
             'customer' => $customer,
             'group_comments' => $groupComments,
             'status' => $status,
-            'id_login' => $idLogin,
+            'id_login' => Auth::user()->id,
             'order_revenue' => $orderRevenue,
             'last_contact' => $lastContact
         ]);
@@ -146,7 +140,7 @@ class GroupCommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

@@ -163,21 +163,20 @@
                     url: "{{ Url('/group_comments/') }}" + '/' + id,
                     method: "get",
                 }).done(function (data) {
-                    if(data.customer.page_id && data.customer.FB_ID && data.customer.fanpage){
-                        check_show_button = true;
-                        $('#view_chat .chat-page_id').val(data.customer.page_id);
-                        $('#view_chat .chat-sender_id').val(data.customer.FB_ID);
-                        $('#view_chat .chat-token').val(data.customer.fanpage.access_token);
-                    } else {
-                        check_show_button = false;
-                        $('#view_chat .chat-page_id').val('');
-                        $('#view_chat .chat-sender_id').val('');
-                        $('#view_chat .chat-token').val('');
-                    }
+                    // if(data.customer.page_id && data.customer.FB_ID && data.customer.fanpage){
+                    //     check_show_button = true;
+                    //     $('#view_chat .chat-page_id').val(data.customer.page_id);
+                    //     $('#view_chat .chat-sender_id').val(data.customer.FB_ID);
+                    //     $('#view_chat .chat-token').val(data.customer.fanpage.access_token);
+                    // } else {
+                    //     check_show_button = false;
+                    //     $('#view_chat .chat-page_id').val('');
+                    //     $('#view_chat .chat-sender_id').val('');
+                    //     $('#view_chat .chat-token').val('');
+                    // }
                     let category = '';
 
                     data.customer.categories.forEach(function (item) {
-                        console.log(item);
                         category += item.name + `, `;
                     });
 
@@ -230,7 +229,7 @@
                         <button class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
                     </div>
                 </div>
-                @include('message_fb.index')
+{{--                @include('message_fb.index')--}}
                 <div class="chat-ajax" >
 
                         </div>`;
@@ -239,7 +238,7 @@
                     data.group_comments.forEach(function (item) {
                         html1 += `<div class="col comment-fast" style="margin-bottom: 5px; padding: 10px;background: aliceblue;border-radius: 29px;">
                                 <div class="no-padd col-md-12">
-                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + (item.user ? item.user.full_name : "") + `</a>
+                                    <div class="col-md-11"><p><a href="#" class="bold blue">` + item.full_name??"" + `</a>
                                         <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
                                     </div>` +
                             (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
