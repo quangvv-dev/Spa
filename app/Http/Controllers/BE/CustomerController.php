@@ -140,13 +140,12 @@ class CustomerController extends Controller
 
         $customers = Customer::search($input);
         $birthday = clone $customers;
-        $statuses = Status::getRelationshipByCustomer($customers);
-//        $statuses = Status::getRelationshipByCustomerV2($input);
+//        $statuses = Status::getRelationshipByCustomer($customers);
+        $statuses = Status::getRelationshipByCustomerV2($input);
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
 
         $customers = $customers->take(StatusCode::PAGINATE_500)->orderByDesc('id')->get();
-        $perPage = setting('defaultPagination') ?? StatusCode::PAGINATE_20;
-        $customers = Functions::customPaginate($customers, $request->page ?? 1, $perPage);
+        $customers = Functions::customPaginate($customers, $request->page ?? 1, setting('defaultPagination') ?? StatusCode::PAGINATE_20);
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
 //        $rank = $customers->firstItem();
