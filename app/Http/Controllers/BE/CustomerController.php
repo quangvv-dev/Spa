@@ -149,7 +149,6 @@ class CustomerController extends Controller
         $customers = Functions::customPaginate($customers, $page, $perPage);
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
-//        $rank = $customers->firstItem();
 
         $url = '/customers';
         $user = Auth::user();
