@@ -146,7 +146,7 @@ class CustomerController extends Controller
 
         $customers = $customers->take(StatusCode::PAGINATE_500)->orderByDesc('id')->get();
         $perPage = setting('defaultPagination') ?? StatusCode::PAGINATE_20;
-        $customers = Functions::customPaginate($customers, $request->page??1, $perPage);
+        $customers = Functions::customPaginate($customers, $request->page ?? 1, $perPage);
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();
 //        $rank = $customers->firstItem();
@@ -166,7 +166,7 @@ class CustomerController extends Controller
         }
 
         return view('customers.index',
-            compact('customers', 'statuses','categories', 'carePageUsers', 'birthday', 'user_filter_grid',
+            compact('customers', 'statuses', 'categories', 'carePageUsers', 'birthday', 'user_filter_grid',
                 'user_filter_list'));
     }
 
@@ -324,7 +324,8 @@ class CustomerController extends Controller
 
         $staff = User::select('full_name', 'id')->where('department_id', '<>', DepartmentConstant::ADMIN)->where('active', StatusCode::ON)->pluck('full_name',
             'id')->toArray();
-        $docs = Model::where('customer_id', $id)->orderByDesc('id')->paginate(10);
+        $docs = Model::select('id', 'messages', 'created_at', 'image', 'user_id')->where('customer_id', $id)
+            ->orderByDesc('id')->paginate(10);
         //Task
         $input['type'] = $request->type ?: 'qf1';
         $customers = Customer::find($id);
