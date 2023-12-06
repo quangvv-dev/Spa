@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use App\Constants\StatusCode;
 use App\Constants\StatusConstant;
+use App\Http\Requests\GroupCommentRequest;
 use App\Models\Customer;
 use App\Models\Status;
 use App\Services\CustomerService;
@@ -98,7 +99,11 @@ class GroupCommentController extends Controller
     public function store(Request $request, $id)
     {
         $customer = $this->customerService->find($id);
+        $file = $request->file('image_contact');
         $input = $request->except(['image_contact']);
+        if ($file){
+            if ($file->getSize()/1024 >1024) return redirect()->back()->with('error', 'File ảnh quá dung lượng ('.round($file->getSize()/(1024*1024),2). 'MB/1MB) !!!');
+        }
         $input['image'] = $request->image_contact;
 
         $input['user_id'] = Auth::user()->id;
@@ -109,7 +114,7 @@ class GroupCommentController extends Controller
         $customer->update($time);
 
         $this->groupCommentService->create($input);
-        return redirect()->back();
+        return redirect()->back()->with('status', 'Trao đổi thành công !!!');
     }
 
     /**
