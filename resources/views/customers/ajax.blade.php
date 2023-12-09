@@ -68,9 +68,9 @@
             {{--<li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>--}}
             <li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>
             <li class="dropdown_action"><a id="change_relations">Trạng thái khách hàng</a></li>
-            @if($roleGlobal->permission('customer.changeBranch'))
+{{--            @if($roleGlobal->permission('customer.changeBranch'))--}}
                 <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>
-            @endif
+{{--            @endif--}}
             <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
             <li class="dropdown_action" id="restore_account"><a>Khôi phục</a></li>
             <li class="dropdown_action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></li>
