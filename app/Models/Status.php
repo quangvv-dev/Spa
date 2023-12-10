@@ -86,8 +86,10 @@ class Status extends Model
                 $query->where('c.branch_id', $input['branch_id']);
             })->when(isset($input['telesales']), function ($query) use ($input) {
                 $query->where('c.telesales_id', $input['telesales']);
-            })->when(isset($input['telesales']), function ($query) use ($input) {
-                $query->where('c.telesales_id', $input['telesales']);
+            })->when(isset($input['marketing']), function ($query) use ($input) {
+                $query->where('c.mkt_id', $input['marketing']);
+            })->when(isset($input['source']), function ($query) use ($input) {
+                $query->where('c.source_id', $input['source']);
             })->when(isset($input['data_time']) && $input['data_time'], function ($query) use ($input) {
                 $query->when($input['data_time'] == 'TODAY' ||
                     $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
