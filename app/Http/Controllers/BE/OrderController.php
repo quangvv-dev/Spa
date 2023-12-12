@@ -1099,6 +1099,7 @@ class OrderController extends Controller
     {
         $payments = PaymentHistory::search($request->all());
         self::renderPaymentHistory($payments);
+        return back();
     }
 
     public function renderPaymentHistory($data)

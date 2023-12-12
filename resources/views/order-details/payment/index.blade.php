@@ -122,11 +122,9 @@
 
         $(document).on('click', '.download', function (e) {
             $('#page').val('');
-            let params = $("#gridForm").serialize() + '&excel=@jKL74A';
-
-            $.get('{{route('export.paymentHistory')}}', params, function (data) {
-                //
-            });
+            let params = $("#gridForm").serialize();
+            let url = "{{route('export.paymentHistory')}}" + "?" + params;
+            window.location.replace(url);
         });
     </script>
 @endsection
