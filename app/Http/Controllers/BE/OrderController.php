@@ -479,7 +479,8 @@ class OrderController extends Controller
             'allTotal' => $orders->sum('price'),
         ]);
         if ($request->excel) {
-            self::exportPaymentHistory($orders->get());
+           $excel = self::exportPaymentHistory($orders->get());
+           $excel->export('xlsx');
             return false;
         }
         $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
@@ -1141,6 +1142,6 @@ class OrderController extends Controller
                     }
                 }
             });
-        })->export('xlsx');
+        });
     }
 }
