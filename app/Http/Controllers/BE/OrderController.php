@@ -1101,7 +1101,7 @@ class OrderController extends Controller
 
     public function exportPaymentHistory($data)
     {
-        Excel::create('Khách hàng (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
+        \Excel::create('Khách hàng (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
                 $sheet->cell('A1:S1', function ($row) {
                     $row->setBackground('#008686');
@@ -1127,7 +1127,7 @@ class OrderController extends Controller
                         $i++;
                         $sheet->row($i, [
                             @Carbon::createFromFormat('Y-m-d H:i:s', $ex->order->created_at)->format('d/m/Y'),
-                            @Carbon::createFromFormat('Y-m-d H:i:s', $ex->payment_date)->format('d/m/Y'),
+                            @Carbon::createFromFormat('Y-m-d', $ex->payment_date)->format('d/m/Y'),
                             @$ex->order->code,
                             @$ex->order->customer->full_name,
                             @$ex->order->customer->phone,
