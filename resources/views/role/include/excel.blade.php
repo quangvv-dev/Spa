@@ -50,5 +50,17 @@
                    onclick="checkAll('group32', 'input32')">
         </td>
     </tr>
+    <tr>
+        <td>Dữ liệu đã thu trong kỳ</td>
+        <td>
+            <input type="checkbox" id="input331" name="permissions[]"
+                   value="export.paymentHistory" {{@$doc && $doc->hasAccess('export.paymentHistory') ? 'checked' : ''}}>
+        </td>
+        <td></td>
+        <td>
+            <input type="checkbox" id="group33"
+                   onclick="checkAll('group33', 'input33')">
+        </td>
+    </tr>
     </tbody>
 </table>

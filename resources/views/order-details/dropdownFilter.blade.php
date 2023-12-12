@@ -18,7 +18,9 @@
     <div class="col-md-2 col-xs-12">
         {!! Form::select('is_upsale', [0 =>'Khách hàng mới',1 =>'Khách hàng cũ'], null, array('class' => 'form-control select2', 'placeholder'=>'Loại khách hàng')) !!}
     </div>
-    <a title="Tải Excel" class="btn download" href="javascript:void(0)">
-        <i class="fas fa-download"></i>
-    </a>
+    @if(auth()->user()->permission('export.paymentHistory'))
+        <a title="Tải Excel" class="btn download" href="javascript:void(0)">
+            <i class="fas fa-download"></i>
+        </a>
+    @endif
 </div>
