@@ -31,6 +31,11 @@ class PaymentHistory extends Model
         return $this->belongsTo(Order::class, 'order_id');
     }
 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
     /**
      * Attribute
      * @return string
