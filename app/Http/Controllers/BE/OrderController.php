@@ -469,25 +469,30 @@ class OrderController extends Controller
         if (!empty($checkRole)) {
             $input['branch_id'] = $checkRole;
         }
-        $marketingUsers = User::select('id', 'full_name')->where('department_id',DepartmentConstant::MARKETING)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
-        $carepages = User::select('id', 'full_name')->where('department_id',DepartmentConstant::CARE_PAGE)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
+        $marketingUsers = User::select('id', 'full_name')->where('department_id', DepartmentConstant::MARKETING)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
+        $carepages = User::select('id', 'full_name')->where('department_id', DepartmentConstant::CARE_PAGE)->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $telesales = User::select('id', 'full_name')->whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER])
             ->where('active', StatusCode::ON)->pluck('full_name', 'id')->toArray();
         $source = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();// nguồn KH
-            $orders = PaymentHistory::search($input);
-            View::share([
-                'allTotal' => $orders->sum('price'),
-            ]);
-            $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
-            View::share([
-                'allTotalPage' => $orders->sum('price'),
-            ]);
+        $orders = PaymentHistory::search($input);
+        View::share([
+            'allTotal' => $orders->sum('price'),
+        ]);
+        if ($request->excel) {
+            self::exportPaymentHistory($orders->get());
+            return false;
+        }
+        $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
+        View::share([
+            'allTotalPage' => $orders->sum('price'),
+        ]);
+
         if ($request->ajax()) {
             return Response::json(view('order-details.payment.ajax', compact('orders', 'title'))->render());
         }
 
         return view('order-details.payment.index',
-            compact('orders', 'title', 'marketingUsers', 'telesales', 'source','carepages'));
+            compact('orders', 'title', 'marketingUsers', 'telesales', 'source', 'carepages'));
     }
 
 
@@ -595,8 +600,8 @@ class OrderController extends Controller
             if (count($check) <= 1) {
                 ZaloZns::dispatch($customer->phone, [
                     'customer_name' => $customer->full_name,
-                    'order_code'    => $order->code,
-                    'created_at'    => date('d/m/Y H:i', strtotime($paymentHistory->created_at)),
+                    'order_code' => $order->code,
+                    'created_at' => date('d/m/Y H:i', strtotime($paymentHistory->created_at)),
                 ])->delay(now()->addSeconds(5));
                 if (isset($check2) && count($check2)) {
                     $check3 = PaymentHistory::where('branch_id', $customer->branch_id)->where('order_id', $id)->first();
@@ -908,7 +913,6 @@ class OrderController extends Controller
     public function importDataByExcel(Request $request)
     {
         if ($request->hasFile('file')) {
-            dd($request->file('file')->getRealPath());
             Excel::load($request->file('file')->getRealPath(), function ($render) {
                 $result = $render->toArray();
                 foreach ($result as $k => $row) {
@@ -1093,5 +1097,50 @@ class OrderController extends Controller
             return view('OrderDestroy.ajax', compact('datas'));
         }
         return view('OrderDestroy.index', compact('datas'));
+    }
+
+    public function exportPaymentHistory($data)
+    {
+        Excel::create('Khách hàng (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
+            $excel->sheet('Sheet 1', function ($sheet) use ($data) {
+                $sheet->cell('A1:S1', function ($row) {
+                    $row->setBackground('#008686');
+                    $row->setFontColor('#ffffff');
+                });
+                $sheet->freezeFirstRow();
+                $sheet->row(1, [
+                    'NGÀY ĐẶT HÀNG',
+                    'NGÀY THANH TOÁN',
+                    'TÊN KH',
+                    'SĐT',
+                    'DỊCH VỤ',
+                    'SỐ TIỀN',
+                    'NGƯỜI PHỤ TRÁCH',
+                    'PHƯƠNG THỨC THANH TOÁN',
+                    'NGƯỜI LÊN ĐƠN',
+                    'Chi nhánh',
+                ]);
+
+                $i = 1;
+                if ($data) {
+                    foreach ($data as $ex) {
+                        $i++;
+                        $sheet->row($i, [
+                            @Carbon::createFromFormat('Y-m-d H:i:s', $ex->order->created_at)->format('d/m/Y'),
+                            @Carbon::createFromFormat('Y-m-d H:i:s', $ex->payment_date)->format('d/m/Y'),
+                            @$ex->order->code,
+                            @$ex->order->customer->full_name,
+                            @$ex->order->customer->phone,
+                            @$ex->order->service_text,
+                            @number_format($ex->price, 0, ',', '.'),
+                            @$ex->order->customer->telesale->full_name,
+                            @$ex->name_payment_type,
+                            @$ex->order->owner->full_name,
+                            @$ex->branch->name,
+                        ]);
+                    }
+                }
+            });
+        })->export('xlsx');
     }
 }

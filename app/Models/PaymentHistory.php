@@ -31,6 +31,10 @@ class PaymentHistory extends Model
         return $this->belongsTo(Order::class, 'order_id');
     }
 
+    /**
+     * Attribute
+     * @return string
+     */
     public function getNamePaymentTypeAttribute()
     {
         if ($this->payment_type === self::MONEY) {

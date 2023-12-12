@@ -57,7 +57,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title">{{$title}}</h3>
                 <div class="col">
                 </div>
             </div>
@@ -69,7 +69,7 @@
                         {!! Form::select('telesales', $telesales, null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                     </div>
                     <div class="col-md-2">
-                        {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
+                        {!! Form::select('payment_type', \App\Models\PaymentHistory::label, null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
                     </div>
                     @if(empty($checkRole))
                         <div class="col-md-2">
@@ -97,7 +97,7 @@
                         </ul>
                     </div>
                 </div>
-                    @include('order-details.dropdownFilter')
+                @include('order-details.dropdownFilter')
                 {{ Form::close() }}
             </div>
 
@@ -118,6 +118,15 @@
             let pages = $(this).attr('href').split('page=')[1];
             $('#page').val(pages);
             $('#gridForm').submit();
+        });
+
+        $(document).on('click', '.download', function (e) {
+            $('#page').val('');
+            let params = $("#gridForm").serialize() + '&excel=@jKL74A';
+
+            $.get(window.location.href, params, function (data) {
+                //
+            });
         });
     </script>
 @endsection
