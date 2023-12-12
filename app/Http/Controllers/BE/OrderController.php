@@ -1098,15 +1098,15 @@ class OrderController extends Controller
     public function exportPaymentHistory(Request $request)
     {
         $payments = PaymentHistory::search($request->all());
-        self::renderPaymentHistory($payments);
+        self::renderPaymentHistory($payments->get());
         return back();
     }
 
     public function renderPaymentHistory($data)
     {
-        \Excel::create('Khách hàng (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
+        \Excel::create('Đã thu trong kỳ (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
-                $sheet->cell('A1:S1', function ($row) {
+                $sheet->cell('A1:J1', function ($row) {
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
@@ -1121,7 +1121,7 @@ class OrderController extends Controller
                     'NGƯỜI PHỤ TRÁCH',
                     'PHƯƠNG THỨC THANH TOÁN',
                     'NGƯỜI LÊN ĐƠN',
-                    'Chi nhánh',
+                    'CHI NHÁNH',
                 ]);
 
                 $i = 1;
