@@ -11,7 +11,7 @@
                             </p>
                             @if (Auth::user()->id == $item->user_id)
                                 <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                    @if(!in_array('comment.edit',setting('permissions')))
+                                    @if(!in_array('comment.edit',setting('permissions')??[]))
                                         <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
                                             <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
                                         </a>
