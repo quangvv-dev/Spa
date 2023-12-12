@@ -478,11 +478,6 @@ class OrderController extends Controller
         View::share([
             'allTotal' => $orders->sum('price'),
         ]);
-        if ($request->excel) {
-           $excel = self::exportPaymentHistory($orders->get());
-           $excel->export('xlsx');
-            return false;
-        }
         $orders = $orders->orderBy('id', 'desc')->paginate(StatusCode::PAGINATE_20);
         View::share([
             'allTotalPage' => $orders->sum('price'),
@@ -1100,9 +1095,15 @@ class OrderController extends Controller
         return view('OrderDestroy.index', compact('datas'));
     }
 
-    public function exportPaymentHistory($data)
+    public function exportPaymentHistory(Request $request)
     {
-       return \Excel::create('Khách hàng (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
+        $payments = PaymentHistory::search($request->all());
+        self::renderPaymentHistory($payments);
+    }
+
+    public function renderPaymentHistory($data)
+    {
+        \Excel::create('Khách hàng (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
                 $sheet->cell('A1:S1', function ($row) {
                     $row->setBackground('#008686');
@@ -1142,6 +1143,6 @@ class OrderController extends Controller
                     }
                 }
             });
-        });
+        })->export('xlsx');
     }
 }

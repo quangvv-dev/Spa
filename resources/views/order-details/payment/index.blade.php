@@ -124,7 +124,7 @@
             $('#page').val('');
             let params = $("#gridForm").serialize() + '&excel=@jKL74A';
 
-            $.get(window.location.href, params, function (data) {
+            $.get('{{route('export.paymentHistory')}}', params, function (data) {
                 //
             });
         });

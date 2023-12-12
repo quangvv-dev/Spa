@@ -176,6 +176,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
     Route::get('orders-payment', 'OrderController@listOrderPayment')->name('order.index_payment');//đã thu trong kỳ
     Route::get('orders-destroy', 'OrderController@getOrderDestroy')->name('order.orders-destroy');//đã thu trong kỳ hủy
+    Route::get('export-payment', 'OrderController@exportPaymentHistory')->name('export.paymentHistory');//tải excel
 
     Route::delete('order/{id}/destroy', 'OrderController@destroy')->name('order.destroy');
     Route::get('orders-service/{id}/edit', 'OrderController@editService')->name('orderService.edit');
