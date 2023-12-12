@@ -45,29 +45,5 @@
         $(function (e) {
             $('.messages').richText();
         });
-
-        {{--$(document).on('keyup', '.header-search', function (e) {--}}
-        {{--    e.preventDefault();--}}
-        {{--    var search = $(this).val();--}}
-        {{--    $.ajax({--}}
-        {{--        url: "{{ Url('category/') }}",--}}
-        {{--        method: "get",--}}
-        {{--        data: {search: search}--}}
-        {{--    }).done(function (data) {--}}
-        {{--        $('#registration-form').html(data);--}}
-
-        {{--    });--}}
-        {{--});--}}
-        {{--$(document).on('change', '.header-search', function () {--}}
-        {{--    var search = $(this).val();--}}
-        {{--    $.ajax({--}}
-        {{--        url: "{{ Url('category/') }}",--}}
-        {{--        method: "get",--}}
-        {{--        data: {search: search}--}}
-        {{--    }).done(function (data) {--}}
-        {{--        $('#registration-form').html(data);--}}
-
-        {{--    });--}}
-        {{--});--}}
     </script>
 @endsection

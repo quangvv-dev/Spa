@@ -117,13 +117,6 @@
                                                                value="settings.index" {{!empty($permissions) && in_array('settings.index',$permissions) ? 'checked' : ''}}>
                                                     </td>
                                                 </tr>
-                                                {{--<tr>--}}
-                                                    {{--<td>Chiến dịch khuyến mại (chi t)</td>--}}
-                                                    {{--<td>--}}
-                                                        {{--<input type="checkbox" id="input176" name="permissions[]"--}}
-                                                               {{--value="home" {{!empty($permissions) && in_array('sms.index',$permissions) ? 'checked' : ''}}>--}}
-                                                    {{--</td>--}}
-                                                {{--</tr>--}}
                                                 <tr>
                                                     <td>Quản lý voucher khuyến mại</td>
                                                     <td>
@@ -164,6 +157,13 @@
                                                     <td>
                                                         <input type="checkbox" id="input178" name="permissions[]"
                                                                value="the_last">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tắt sửa trao đổi</td>
+                                                    <td>
+                                                        <input type="checkbox" id="input179" name="permissions[]"
+                                                               value="comment.edit"  {{!empty($permissions) && in_array('comment.edit',$permissions) ? 'checked' : ''}}>
                                                     </td>
                                                 </tr>
                                                 </tbody>

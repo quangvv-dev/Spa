@@ -11,9 +11,12 @@
                             </p>
                             @if (Auth::user()->id == $item->user_id)
                                 <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                    <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                        <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
-                                    </a>
+                                    @if(!in_array('comment.edit',setting('permissions')))
+                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
+                                            <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
+                                        </a>
+                                    @endif
+
                                     <a data-original-title="Xóa" rel="tooltip">
                                         <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
                                     </a>

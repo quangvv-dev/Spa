@@ -243,9 +243,12 @@
                                         <span><i class="fa fa-clock"> ` + item.created_at + `</i></span></p>
                                     </div>` +
                             (data.id_login == item.user_id ? `<div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                                        @if(!in_array('comment.edit',setting('permissions')??[]))
                                         <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                            <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>
+                                        <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>
                                         </a>
+                                        @endif
+
                                         <a data-original-title="Xóa" rel="tooltip">
                                             <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
                                         </a>
