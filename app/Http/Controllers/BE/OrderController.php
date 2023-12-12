@@ -1136,7 +1136,7 @@ class OrderController extends Controller
                             @$ex->order->customer->full_name,
                             @$ex->order->customer->phone,
                             @str_replace("<br>",'|',$ex->order->service_text),
-                            @number_format($ex->price, 0, ',', '.'),
+                            @number_format($ex->price),
                             @$ex->order->customer->telesale->full_name,
                             @$ex->name_payment_type,
                             @$ex->order->owner->full_name,
