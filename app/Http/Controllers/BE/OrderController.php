@@ -1106,7 +1106,7 @@ class OrderController extends Controller
     {
         \Excel::create('Đã thu trong kỳ (' . Carbon::now()->format('d-m-Y') . ')', function ($excel) use ($data) {
             $excel->sheet('Sheet 1', function ($sheet) use ($data) {
-                $sheet->cell('A1:J1', function ($row) {
+                $sheet->cell('A1:K1', function ($row) {
                     $row->setBackground('#008686');
                     $row->setFontColor('#ffffff');
                 });
@@ -1114,6 +1114,7 @@ class OrderController extends Controller
                 $sheet->row(1, [
                     'NGÀY ĐẶT HÀNG',
                     'NGÀY THANH TOÁN',
+                    'MÃ ĐH',
                     'TÊN KH',
                     'SĐT',
                     'DỊCH VỤ',
@@ -1134,7 +1135,7 @@ class OrderController extends Controller
                             @$ex->order->code,
                             @$ex->order->customer->full_name,
                             @$ex->order->customer->phone,
-                            @$ex->order->service_text,
+                            @str_replace("<br>",'|',$ex->order->service_text),
                             @number_format($ex->price, 0, ',', '.'),
                             @$ex->order->customer->telesale->full_name,
                             @$ex->name_payment_type,
