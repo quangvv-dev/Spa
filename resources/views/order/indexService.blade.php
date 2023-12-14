@@ -195,26 +195,6 @@
                             <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">TV: <span class="select_tuVanChinh_showName">{{@$order->supportOrder->tuVanChinh->full_name}}</span> <span class="show-commission exchange_support1">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'chinh')}}</span></p>
                             <p style="margin-bottom: 1px !important;position: relative">TV: <span class="select_tuVanPhu_showName">{{@$order->supportOrder->tuVanPhu->full_name}}</span> <span class="show-commission exchange_support2">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'phu')}}</span></p>
                         </div>
-                        {{--<div class="box-add">--}}
-                        {{--<div class="btn-icon">--}}
-                        {{--<span class="icon-plus"><i class="fa fa-plus"></i></span>--}}
-                        {{--<br>--}}
-                        {{--Thêm y tá--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="box-add user-support">--}}
-                            {{--<input type="hidden" name="support_id" id="support_id" value="{{@$order->support_id}}">--}}
-                            {{--<div class="btn-icon">--}}
-                                {{--<span class="icon-plus">--}}
-                                    {{--<i class="fa fa-plus"></i>--}}
-                                    {{--<i class="fa fa-plus {{isset($order) && $order->support_id ? 'hide' : 'show'}}"></i>--}}
-                                    {{--<i class="fa fa-check {{isset($order) && $order->support_id ? 'show' : 'hide'}}"></i>--}}
-                                {{--</span>--}}
-                                {{--<br>--}}
-                                {{--<span class="chon-tu-van">Chọn tư vấn</span>--}}
-                                {{--<span class="small-tip small-tip-custom text-tu-van">{{@$order->support->full_name}}</span>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
                         <div class="row date-create">
                             <div class="col-6 mt-5">
                                 {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
@@ -262,10 +242,6 @@
             </div>
 
             <div class="card-footer">
-                {{--<div class="col bot" style="margin-top: 10px;">--}}
-                {{--<button type="submit" class="btn btn-success">Lưu</button>--}}
-                {{--<a href="{{route('order.list')}}" class="btn btn-danger">Về danh sách</a>--}}
-                {{--</div>--}}
                 <div class="col bot" style="margin-top: 10px;">
                     <button type="submit" class="btn btn-success save">Lưu</button>
                     <a href="{{route('order.list')}}" class="btn btn-danger back">Huỷ</a>

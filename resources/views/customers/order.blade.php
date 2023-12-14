@@ -15,7 +15,7 @@
             <th class="text-white text-center">Tên SP</th>
             <th class="text-white text-center">Loại đơn</th>
             <th class="text-white text-center">Người lên đơn</th>
-            <th class="text-white text-center">Tư vấn viên</th>
+            <th class="text-white text-center">Hỗ trợ</th>
             <th class="text-white text-center">Buổi còn lại</th>
             <th class="text-white text-center">Số tiền DH</th>
             <th class="text-white text-center">Đã thanh toán</th>
@@ -55,7 +55,12 @@
                     </td>
                     <td class="text-center order-type" data-id="{{ $order->id }}">{{ $order->name_type }}</td>
                     <td class="text-center">{{ @$order->owner->full_name }}</td>
-                    <td class="text-center">{{@getUser($order->support_id)->full_name}}</td>
+                    <td class="text-center">
+                        {{!empty(getUser($order->support_id))?'TVV: '.@getUser($order->support_id)->full_name:''}}
+                        <span style="color: gray; font-size: 11px">
+                        {{!empty($order->supportOrder->doctor)?'(BS: '.@$order->supportOrder->doctor->full_name.')':''}}
+                        </span>
+                    </td>
                     <td class="text-center">{{ $order->count_day }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
                     <td class="text-center">{{ number_format($order->gross_revenue) }}</td>
