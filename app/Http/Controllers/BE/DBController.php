@@ -24,8 +24,8 @@ class DBController extends Controller
     public function index(Request $request)
     {
 //        Session::flush();
-        ZaloZns::dispatch('0975091435', ['customer_name' => "Chị Nhiên", 'order_code' => 'DH11234','created_at'=>'01/09/2023 21:13'])
-            ->delay(now()->addSeconds(5));
+        ZaloZns::dispatch('0975091435', ['customer_name' => "Chị Nhiên", 'order_code' => 'DH112344','created_at'=>'15/12/2023 21:13'])
+            ->delay(now()->addSeconds(2));
 //        $c = PaymentHistory::select('payment_histories.id', 'payment_histories.is_debt', \DB::raw('MONTH(payment_histories.payment_date) as month'), \DB::raw('MONTH(o.created_at) as m_created'))
 //            ->whereDate('payment_histories.payment_date','>=', $request->date)
 //            ->join('orders as o', 'o.id', '=', 'payment_histories.order_id')->get()->chunk(300);
