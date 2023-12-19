@@ -165,7 +165,7 @@ class CustomerController extends Controller
         }
 
         return view('customers.index',
-            compact('customers', 'statuses','categories', 'carePageUsers', 'birthday', 'user_filter_grid',
+            compact('customers', 'statuses', 'categories', 'carePageUsers', 'birthday', 'user_filter_grid',
                 'user_filter_list'));
     }
 
@@ -381,10 +381,10 @@ class CustomerController extends Controller
         }
 
         if ($request->member_id || $request->role_type || $request->the_rest || $request->page_order) {
+            $params = $request->only('member_id', 'role_type', 'the_rest');
             if (!empty($request->page_order)) {
-                $request->merge(['page' => $request->page_order]);
+                $params['page'] = $request->page_order;
             }
-            $params = $request->only('member_id', 'role_type', 'the_rest', 'page');
             $orders = Order::search($params);
             return view('customers.order', compact('orders', 'waiters', 'tips'));
         }

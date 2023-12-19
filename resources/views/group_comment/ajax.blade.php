@@ -1,4 +1,4 @@
-<div class="table-responsive" style="padding: 5px">
+<div class="table-responsive group-comment-table" style="padding: 5px">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         @if(count($docs))
             @foreach($docs as $item)
@@ -41,6 +41,9 @@
                     </div>
                 </div>
             @endforeach
+                <div class="pull-right">
+                    {{ $docs->links() }}
+                </div>
         @endif
     </table>
 </div>
