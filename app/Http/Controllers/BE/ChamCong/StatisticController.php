@@ -65,9 +65,14 @@ class StatisticController extends Controller
                         $approval[$i] = 0;
                     } else {
                         $startDate = new Carbon($docs[0]['date_time_record']);
+                        $latedMax =  new Carbon($startDate->format("Y-m-d") . " 18:30:00");
                         $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
-                        $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
-                        $approval[$i] = $diff > 9.5 ? 1 : round($diff / 9.5, 2);
+                        if ($endDate > $latedMax) {
+                            $diff = round((strtotime($latedMax) - strtotime($startDate)) / 60 / 60, 1);
+                        }else{
+                            $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
+                        }
+                        $approval[$i] = $diff > 10.5 ? 1 : round($diff / 10.5, 2);
                         $late[] = (strtotime($startDate->format('H:i')) - strtotime('08:00')) / 60;
                         $early[] = (strtotime('17:30') - strtotime($endDate->format('H:i'))) / 60;
                     }
