@@ -46,7 +46,7 @@ ul.thumbnails.image_picker_selector li .thumbnail{
 
 .box-add-custom {
     width: 180px;
-    height: 114px;
+    min-height: 114px;
     background: #FFFFFF;
     border: 1px dashed #D4D7E7;
     border-radius: 4px;
