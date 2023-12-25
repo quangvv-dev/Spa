@@ -57,6 +57,7 @@
                     <td class="text-center">{{ @$order->owner->full_name }}</td>
                     <td class="text-center">
                         {{!empty(getUser($order->support_id))?'TVV: '.@getUser($order->support_id)->full_name:''}}
+                        <br>
                         <span style="color: gray; font-size: 11px">
                         {{!empty($order->supportOrder->doctor)?'(BS: '.@$order->supportOrder->doctor->full_name.')':''}}
                         </span>
