@@ -66,4 +66,5 @@ return [
     'filter.team'              => "Tìm kiếm theo team (sale/mkt)",
     'call-center.listen'       => "Nghe/Tải ghi âm",
     'customer.changeBranch'    => "Chuyển chi nhánh khách hàng",
+    'customer.changeSale'      => "Chuyển người phụ trách",
 ];

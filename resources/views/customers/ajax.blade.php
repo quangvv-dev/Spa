@@ -66,7 +66,9 @@
             {{--<li class="dropdown_action" id="mark_as_potential"><a>Tạo cơ hội</a></li>--}}
             {{--<li class="dropdown_action" id="show_popup_task"><a>Tạo công việc</a></li>--}}
             {{--<li class="dropdown_action" id="show_group_type_account"><a>Nhóm khách hàng</a></li>--}}
-            <li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>
+            @if(auth()->user()->permission('customer.changeSale'))
+                <li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>
+            @endif
             <li class="dropdown_action"><a id="change_relations">Trạng thái khách hàng</a></li>
             @if(auth()->user()->permission('customer.changeBranch'))
                 <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>
