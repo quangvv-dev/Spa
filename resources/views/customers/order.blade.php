@@ -12,7 +12,7 @@
             <th class="text-white text-center">C.Nhánh</th>
             <th class="text-white text-center">Ngày tạo</th>
             <th class="text-white text-center">Ng.hết hạn</th>
-            <th class="text-white text-center">Tên SP</th>
+            <th class="text-white text-center">Tên DV</th>
             <th class="text-white text-center">Loại đơn</th>
             <th class="text-white text-center">Người lên đơn</th>
             <th class="text-white text-center">Hỗ trợ</th>
@@ -47,7 +47,7 @@
                     <td class="text-center">{{ @$order->branch->name }}</td>
                     <td class="text-center">{{ date('d/m/Y',strtotime($order->created_at)) }}</td>
                     <td class="text-center">{{ @$order->hsd}}</td>
-                    <td class="text-center">
+                    <td class="text-center" style="max-width:350px;white-space: normal;">
                         <b><a id="edit-history-order" data-order-id="{{ $order->id }}" data-toggle="modal"
                               data-target="#largeModal">
                                 {{str_limit(str_replace('<br>',',',$order->service_text),70)}}
@@ -55,11 +55,13 @@
                     </td>
                     <td class="text-center order-type" data-id="{{ $order->id }}">{{ $order->name_type }}</td>
                     <td class="text-center">{{ @$order->owner->full_name }}</td>
-                    <td class="text-center">
-                        {{!empty(getUser($order->support_id))?'TVV: '.@getUser($order->support_id)->full_name:''}}
-                        <br>
+                    <td class="text-center"  style="max-width:300px;white-space: normal;">
                         <span style="color: gray; font-size: 11px">
-                        {{!empty($order->supportOrder->doctor)?'(BS: '.@$order->supportOrder->doctor->full_name.')':''}}
+                        {{!empty($order->supportOrder->doctor)?'(|BS: '.@$order->supportOrder->doctor->full_name.')':''}}
+                        {{!empty($order->supportOrder->yTaChinh)?'(|Y.Tá: '.@$order->supportOrder->yTaChinh->full_name.')':''}}
+                        {{!empty($order->supportOrder->yTaPhu)?'(|Y.Tá: '.@$order->supportOrder->yTaPhu->full_name.')':''}}
+                        {{!empty($order->supportOrder->tuVanChinh)?'(|Y.Tá: '.@$order->supportOrder->tuVanChinh->full_name.')':''}}
+                        {{!empty($order->supportOrder->tuVanPhu)?'(|Y.Tá: '.@$order->supportOrder->tuVanPhu->full_name.')':''}}
                         </span>
                     </td>
                     <td class="text-center">{{ $order->count_day }}</td>
