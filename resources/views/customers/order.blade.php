@@ -56,7 +56,7 @@
                     <td class="text-center order-type" data-id="{{ $order->id }}">{{ $order->name_type }}</td>
                     <td class="text-center">{{ @$order->owner->full_name }}</td>
                     <td class="text-center" {{!empty($order->supportOrder->doctor) ||!empty($order->supportOrder->tuVanChinh)
-                        ?"style=min-width:350px;max-width:350px;white-space: normal":'' }}>
+                        ?'style=min-width:350px;white-space: normal':'' }}>
                         <span style="color: gray; font-size: 11px">
                         {{!empty($order->supportOrder->doctor)?'(BS: '.@$order->supportOrder->doctor->full_name.')':''}}
                         {{!empty($order->supportOrder->yTaChinh)?'(Y.Tá: '.@$order->supportOrder->yTaChinh->full_name.')':''}}
