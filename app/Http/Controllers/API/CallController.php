@@ -72,12 +72,12 @@ class CallController extends BaseApiController
                 }
                 CallCenter::insert($input);
             } else {
-                return $this->responseApi(ResponseStatusCode::OK, 'CRM NOT SAVE INBOUND', $request->all());
+                return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND', $request->all());
             }
             return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $request->all());
 
         } else {
-            return $this->responseApi(ResponseStatusCode::OK, ' EXISTS RECORD CALLER', $request->all());
+            return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, ' EXISTS RECORD CALLER', $request->all());
         }
     }
 
