@@ -145,7 +145,7 @@ class CustomerController extends Controller
         $birthday = $birthday->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'))->count();
 
         $customers = $customers->take(StatusCode::PAGINATE_500)->orderByDesc('id')->get();
-        $perPage = setting('defaultPagination') ?? StatusCode::PAGINATE_20;
+        $perPage = @$_COOKIE['defaultPagination'] ?? StatusCode::PAGINATE_20;
         $customers = Functions::customPaginate($customers, $page, $perPage);
 
         $categories = Category::select('id', 'name')->where('type', StatusCode::SERVICE)->get();

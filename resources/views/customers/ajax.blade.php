@@ -129,10 +129,10 @@
                 <i class="fa fa-eye dropdown-toggle" role="button" data-toggle="dropdown" style="margin-top: 8px; margin-left: 5px;"></i>
                 <span class="tooltiptext">Hiển thị số trang</span>
                 <ul class="dropdown-menu pull-right tl mt5" role="menu" style="border-top:1px">
-                    <li><a class="b-white b-hover limiting {{setting('defaultPagination') == 20?'active_limit bold':''}}" data-limit="20">Hiển thị 20 kết quả/trang</a></li>
-                    <li><a class="b-white b-hover limiting {{setting('defaultPagination') == 50?'active_limit bold':''}}" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
-                    <li><a class="b-white b-hover limiting {{setting('defaultPagination') == 100?'active_limit bold':''}}" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
-                    <li><a class="b-white b-hover limiting {{setting('defaultPagination') == 200?'active_limit bold':''}}" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 20?'active_limit bold':''}}" data-limit="20">Hiển thị 20 kết quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 50?'active_limit bold':''}}" data-limit="50">Hiển thị 50 kết quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 100?'active_limit bold':''}}" data-limit="100">Hiển thị 100 kết quả/trang</a></li>
+                    <li><a class="b-white b-hover limiting {{@$_COOKIE['defaultPagination'] == 200?'active_limit bold':''}}" data-limit="200">Hiển thị 200 kết quả/trang</a></li>
                 </ul>
             </div>
         </div>

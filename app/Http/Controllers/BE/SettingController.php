@@ -217,7 +217,8 @@ class SettingController extends Controller
 
     public function setDefaultPagination(Request $request)
     {
-        setting(['defaultPagination' => $request->limit])->save();
+        setcookie("defaultPagination", $request->limit, 2147483647);
+//        setting(['defaultPagination' => $request->limit])->save();
         return 1;
     }
 }
