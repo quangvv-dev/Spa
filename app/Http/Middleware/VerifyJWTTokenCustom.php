@@ -26,7 +26,7 @@ class VerifyJWTTokenCustom
             ]);
         } else {
             try {
-                $request->jwtUser = jwtdecode($jwt, 'HS256');
+                $request->jwtUser = jwtdecode($jwt,'HS256');
             } catch (\Exception $e) {
                 return response()->json([
                     'code' => ResponseStatusCode::BAD_REQUEST,

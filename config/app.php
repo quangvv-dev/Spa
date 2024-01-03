@@ -170,7 +170,7 @@ return [
          * Package Service Providers...
          */
         Tungltdev\LaravelSettings\SettingsServiceProvider::class,
-//        Tungltdev\JWT\JwtAuthTokenProvider::class,
+        Tungltdev\LARAVEL\JWT\JwtAuthTokenProvider::class,
         /*
          * Application Service Providers...
          */
