@@ -21,7 +21,7 @@
         "laravelcollective/html": "^5.8.0",
         "maatwebsite/excel": "^2.1",
         "predis/predis": "^1.1",
-        "tungltdev/laravel-jwt": "*",
+        "tungltdev/laravel-php-jwt": "*",
         "tungltdev/laravel-settings": "*"
     },
     "require-dev": {
@@ -35,7 +35,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     },
     "extra": {
         "laravel": {
