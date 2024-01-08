@@ -50,10 +50,10 @@
                          {{'#dccf34'}}
                          @break
                          @case(3)
-                         {{'#d03636'}}
+                         {{'#4bcc4b'}}
                          @break
                          @case(4)
-                         {{'#4bcc4b'}}
+                         {{'#d03636'}}
                          @break
                          @case(5)
                          {{'gray'}}
