@@ -72,7 +72,7 @@ class StatisticController extends Controller
                         }else{
                             $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
                         }
-                        $approval[$i] = $diff > 10.5 ? 1 : round($diff / 10.5, 2);
+                        $approval[$i] = $diff > 10.5 ? 1 : abs(round($diff / 10.5, 2));
                         $late[] = (strtotime($startDate->format('H:i')) - strtotime('08:00')) / 60;
                         $early[] = (strtotime('18:30') - strtotime($endDate->format('H:i'))) / 60;
                     }
