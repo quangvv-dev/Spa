@@ -5,8 +5,8 @@
             <th class="text-center" rowspan="2">TT</th>
             {{--<th class="text-center" rowspan="2">CN</th>--}}
             <th class="text-center" rowspan="2" style="left: 0;z-index: 101">Họ và tên</th>
-            <th class="text-center" rowspan="2" style="left: 221px;z-index: 101">Phòng ban</th>
-            <th class="text-center" rowspan="2" style="left: 342px;z-index: 102">Vị trí</th>
+            <th class="text-center" rowspan="2" style="left: 188px;z-index: 101">Phòng ban</th>
+            <th class="text-center" rowspan="2" style="left: 310px;z-index: 102">Vị trí</th>
             <th class="text-center" colspan="{{$end}}">Ngày</th>
             <th class="text-center" colspan="2">Xử phạt</th>
             <th class="text-center" rowspan="2">Tổng công</th>
@@ -25,8 +25,8 @@
             <tr data-id="{{$item->id}}">
                 <td class="text-center">{{$key+1}}</td>
                 <td class="text-center" style="left: 0;z-index: 100;position: sticky">{{$item->full_name}}</td>
-                <td class="text-center" style="left: 221px;z-index: 100;position: sticky">{{@$item->department->name}}</td>
-                <td class="text-center" style="left: 342px;z-index: 100;position: sticky"></td>
+                <td class="text-center" style="left: 188px;z-index: 100;position: sticky">{{@$item->department->name}}</td>
+                <td class="text-center" style="left: 310px;z-index: 100;position: sticky"></td>
                 @for($i = 1; $i<= $end; $i++)
                     <td class="text-center pointer showModal" data-date="{{$i}}">{{$item->approval[$i]}}</td>
                 @endfor
