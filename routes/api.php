@@ -23,6 +23,7 @@ Route::post('login-app', 'API\AuthController@login');
 Route::post('register', 'API\AuthController@register');
 Route::get('uri', 'API\AuthController@uri');
 Route::get('uri-flyspa', 'API\AuthController@uriFlySpa');
+Route::get('uri-clone', 'API\AuthController@uriClone');
 Route::get('services', 'API\AppleController@services');
 
 
