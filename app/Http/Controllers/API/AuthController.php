@@ -347,7 +347,7 @@ class AuthController extends BaseApiController
     public function uriClone(Request $request)
     {
         if ($request->app_name == "apomant") {
-            $data = false;
+            $data = true;
         } else {
             $data = false;
         }
