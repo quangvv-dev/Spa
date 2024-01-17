@@ -27,7 +27,7 @@ class AppleController extends BaseApiController
 
     public function services()
     {
-        $services = Services::paginate(20);
+        $services = Services::where('type',StatusCode::SERVICE)->paginate(20);
         $data = AppleResource::collection($services);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
