@@ -57,11 +57,7 @@ class OrderController extends Controller
      * @param OrderService $orderService
      * @param OrderDetailService $orderDetailService
      */
-    public function __construct(
-        OrderService       $orderService,
-        OrderDetailService $orderDetailService,
-        TaskService        $taskService
-    )
+    public function __construct(OrderService $orderService, OrderDetailService $orderDetailService, TaskService $taskService)
     {
         $this->middleware('permission:order.index_payment', ['only' => ['order.index_payment']]);
         $this->middleware('permission:order.orders-destroy', ['only' => ['order.orders-destroy']]);
@@ -93,19 +89,24 @@ class OrderController extends Controller
     public function getCustomerSupport($customer)
     {
         if (Auth::user()->branch_id) {
-            $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [
-                DepartmentConstant::TECHNICIANS,
-//                DepartmentConstant::DOCTOR,
-                DepartmentConstant::TU_VAN_VIEN,
-            ])
-                ->where('branch_id', Auth::user()->branch_id)->get();
+            $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id',
+                [DepartmentConstant::TECHNICIANS,
+//               DepartmentConstant::DOCTOR,
+                    DepartmentConstant::TU_VAN_VIEN,
+                ])->where(function ($query) {
+                $query->where('branch_id', Auth::user()->branch_id)
+                    ->orWhereNull('branch_id');
+            })->get();
         } else {
             $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [
                 DepartmentConstant::TECHNICIANS,
 //                DepartmentConstant::DOCTOR,
                 DepartmentConstant::TU_VAN_VIEN,
-            ])
-                ->where('branch_id', $customer->branch_id)->get();
+            ])->where(function ($query) use ($customer) {
+                    $query->where('branch_id', $customer->branch_id)
+                        ->orWhereNull('branch_id');
+                })->get();
+//                ->where('branch_id', $customer->branch_id)->get();
         }
         return $customer_support;
     }
@@ -1135,7 +1136,7 @@ class OrderController extends Controller
                             @$ex->order->code,
                             @$ex->order->customer->full_name,
                             @$ex->order->customer->phone,
-                            @str_replace("<br>",'|',$ex->order->service_text),
+                            @str_replace("<br>", '|', $ex->order->service_text),
                             @number_format($ex->price),
                             @$ex->order->customer->telesale->full_name,
                             @$ex->name_payment_type,
