@@ -201,9 +201,12 @@
         @if(setting('expiry') &&  date('Y-m-d')>setting('expiry'))
             <div class="notification-pop">
                 <div class="" style="position: absolute; margin: auto;top:50%;left: 20%;right: 20%">
-                    <marquee><p style="color: #0aa2e1;font-size: 18px;font-weight: bold;opacity: 0.5"
-                        >Hệ thống của bạn hết hạn ngày {{setting('expiry')}}. Quý khách vui lòng gia hạn gói cước để
-                            tiếp tục sử dụng dịch vụ. Xin cảm ơn quý khách !!!</p>
+{{--                    <marquee><p style="color: #0aa2e1;font-size: 18px;font-weight: bold;opacity: 0.5"--}}
+{{--                        >Hệ thống của bạn hết hạn ngày {{setting('expiry')}}. Quý khách vui lòng gia hạn gói cước để--}}
+{{--                            tiếp tục sử dụng dịch vụ. Xin cảm ơn quý khách !!!</p>--}}
+{{--                    </marquee>--}}
+                    <marquee><p style="color: #e10a3c;font-size: 18px;font-weight: bold;opacity: 0.5"
+                        >Chúc mừng tập thể {{setting('title_website')}} môt năm mới 2024 bùng nổ & ngập tràn hạnh phúc !!!</p>
                     </marquee>
                 </div>
             </div>
