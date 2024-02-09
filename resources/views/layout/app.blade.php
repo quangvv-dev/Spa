@@ -206,7 +206,7 @@
 {{--                            tiếp tục sử dụng dịch vụ. Xin cảm ơn quý khách !!!</p>--}}
 {{--                    </marquee>--}}
                     <marquee><p style="color: #e10a3c;font-size: 18px;font-weight: bold;opacity: 0.5"
-                        >Chúc mừng tập thể {{setting('title_website')}} môt năm mới 2024 bùng nổ & ngập tràn hạnh phúc !!!</p>
+                        >Chúc mừng tập thể {{setting('title_website')}} một năm mới 2024 bùng nổ & ngập tràn hạnh phúc !!!</p>
                     </marquee>
                 </div>
             </div>
