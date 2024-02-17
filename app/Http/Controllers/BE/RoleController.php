@@ -112,6 +112,7 @@ class RoleController extends Controller
             'department' => $department,
             'report'     => $this->report,
             'other'      => $this->other,
+            'filter'      => $this->filter,
         ]);
     }
 
