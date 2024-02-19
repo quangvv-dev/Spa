@@ -575,7 +575,7 @@ class OrderController extends Controller
                 $point = ($customer->wallet - $paymentHistory->price) > 0 ? $customer->wallet - $paymentHistory->price : 0;
             }
 
-            $customer->wallet = $point;
+            $customer->wallet = $customer->wallet + $point;
             $customer->save();
             $order = $this->orderService->updatePayment($input, $id);
             if (!$paymentHistory || !$order) {
