@@ -570,12 +570,12 @@ class OrderController extends Controller
             $paymentHistory = PaymentHistoryService::create($input, $id);
             unset($input['is_debt']);
             if ($paymentHistory->payment_type != 3) {
-                $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
+                $pointCurrent = $paymentHistory->price + ($paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY);
             } else {
-                $point = ($customer->wallet - $paymentHistory->price) > 0 ? $customer->wallet - $paymentHistory->price : 0;
+                $pointCurrent = ($customer->wallet - $paymentHistory->price) > 0 ? $customer->wallet - $paymentHistory->price : 0;
             }
 
-            $customer->wallet = $customer->wallet + $point;
+            $customer->wallet = $pointCurrent;
             $customer->save();
             $order = $this->orderService->updatePayment($input, $id);
             if (!$paymentHistory || !$order) {
