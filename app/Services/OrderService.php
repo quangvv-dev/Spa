@@ -224,9 +224,9 @@ class OrderService
             'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
             'the_rest' => $order->the_rest + $paymentHistory->price,
         ]);
-        if ($paymentHistory->payment_type != 3) {
+        if ($paymentHistory->payment_type != PaymentHistory::POINT) {
             $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
-            $point = ($order->customer->wallet + $point) > 0 ? $order->customer->wallet + $point : 0;
+            $point = ($order->customer->wallet - $point) > 0 ? $order->customer->wallet - $point : 0;
         } else {
             $point = $order->customer->wallet + $paymentHistory->price;
         }

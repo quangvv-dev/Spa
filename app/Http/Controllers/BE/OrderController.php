@@ -569,8 +569,8 @@ class OrderController extends Controller
             }
             $paymentHistory = PaymentHistoryService::create($input, $id);
             unset($input['is_debt']);
-            if ($paymentHistory->payment_type != 3) {
-                $pointCurrent = $paymentHistory->price + ($paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY);
+            if ($paymentHistory->payment_type != PaymentHistory::POINT) { // truong hop thanh toan nhan tien
+                $pointCurrent = $customer->wallet + ($paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY);
             } else {
                 $pointCurrent = ($customer->wallet - $paymentHistory->price) > 0 ? $customer->wallet - $paymentHistory->price : 0;
             }
