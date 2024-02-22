@@ -272,9 +272,9 @@
                     <td class="text-center {{in_array(19,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->facebook}}</td>
                     <td class="text-center {{in_array(20,$user_filter_grid) ? '':'display-none'}}">{{ $customer->gender_text  }}</td>
                     <td class="text-center {{in_array(21,$user_filter_grid) ? '':'display-none'}}">{{ count($customer->orders) }}</td>
-                    <td class="text-center {{in_array(22,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('all_total')) }}</td>
-                    <td class="text-center {{in_array(23,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('gross_revenue')) }}</td>
-                    <td class="text-center {{in_array(24,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('the_rest')) }}</td>
+                    <td class="text-center {{in_array(22,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->SumAllTotal) }}</td>
+                    <td class="text-center {{in_array(23,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->TotalRevenue)}}</td>
+                    <td class="text-center {{in_array(24,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->wallet) }}</td>
                     <td class="text-center"><a title="Sửa tài khoản" class="btn" href="{{ route('customers.edit', $customer->id) }}"><i class="fas fa-edit"></i></a></td>
                 </tr>
             @endforeach

@@ -81,7 +81,7 @@ class Customer extends Model
         16 => 'Ngày sinh',
         17 => 'MKT Phụ trách',
         18 => 'Nguồn KH',
-        19 => 'Linh FB',
+        19 => 'Link FB',
         20 => 'Giới tính',
         21 => 'Số đơn',
         22 => 'Tổng doanh thu',
@@ -187,19 +187,19 @@ class Customer extends Model
         if ($user->department_id == DepartmentConstant::TELESALES) {
             $member = checkTeamLead();
             if (!empty($user->isLeader) && count($member)) {
-                $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                $data = $data->whereIn('telesales_id', $member)->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
-                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
                 } else {
                     $data = $data->where('telesales_id', $user->id);
                 }
             }
             if (isset($param['search'])) {
-                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             }
         } else {
-            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
         if (isset($param['branch_id']) && $param['branch_id']) {
             if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
@@ -295,12 +295,25 @@ class Customer extends Model
 
     public function getDuplicateAttribute()
     {
-        return self::where('phone',$this->phone)->count() > 1;
+        return self::where('phone', $this->phone)->count() > 1;
     }
 
     public function getActiveTextAttribute()
     {
         return $this->active == UserConstant::ACTIVE ? 'Hoạt động' : 'Không hoạt động';
+    }
+
+    public function getTotalRevenueAttribute()
+    {
+        $paymentHistories = PaymentHistory::join('orders as o', 'o.id', '=', 'payment_histories.order_id')
+            ->where('o.member_id', $this->id)->where('payment_histories.payment_type', '<>', PaymentHistory::POINT)
+            ->select('payment_histories.price')->sum('payment_histories.price');
+        return $this->wallet_histories->sum('gross_revenue') + $paymentHistories;
+    }
+    public function getSumAllTotalAttribute()
+    {
+        $paymentWallet = WalletHistory::select('order_price')->where('customer_id', $this->id)->sum('order_price');
+        return $this->orders->sum('all_total') + $paymentWallet;
     }
 
     public function getSchedulesTextAttribute()
@@ -378,6 +391,11 @@ class Customer extends Model
     public function groupCustomer()
     {
         return $this->hasMany(CustomerGroup::class, 'customer_id', 'id');
+    }
+
+    public function wallet_histories() // đơn nạp ví
+    {
+        return $this->hasMany(WalletHistory::class);
     }
 
     public function timeStatus()

@@ -127,7 +127,7 @@
                 </div>
                 <div class="col-md-1 no-padd tc bor-l mg0"></div>
                 <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:24px;color: #f36a26"
-                                                               class="bold mg0">{{number_format($customer->orders->sum('gross_revenue'))}}
+                                                               class="bold mg0">{{number_format($customer->TotalRevenue)}}
                         VNĐ</h1>
                     <p>Giá trị</p></div>
             </div>
