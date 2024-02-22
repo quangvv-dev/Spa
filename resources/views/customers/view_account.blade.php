@@ -129,7 +129,7 @@
                 <div class="col-md-2 no-padd tc bor-l mg0"><h1 style="font-size:24px;color: #f36a26"
                                                                class="bold mg0">{{number_format($customer->TotalRevenue)}}
                         VNĐ</h1>
-                    <p>Giá trị</p></div>
+                    <p>Tổng doanh thu</p></div>
             </div>
             <div style="height:5px" class="color-picker-bg-41"></div>
             <div class="col-md-12 no-padd">
@@ -199,7 +199,7 @@
                                             data-original-title="Liên hệ chính" rel="tooltip"
                                             class="fa fa-star text-warning" aria-hidden="true"></i></p>
                                     <p></p>
-                                    <p class="clearfix">&nbsp;{{ $customer->phone}}</p>
+                                    <p class="clearfix">&nbsp;{{ auth()->user()->permission('phone.open')? $customer->phone :str_limit($customer->phone,7,'xxx')}}</p>
                                 </div>
                                 <div class="col-md-12 no-padd hide"><a><i data-task-type="2"
                                                                           class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>
@@ -227,7 +227,7 @@
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Điện thoại:</p>
                                 <p class="word-wrap"><a class="" data-account-id="4629"
                                                         data-type="crm" data-issensitive="true">
-                                        &nbsp;{{ str_limit($customer->phone,7,'xxx') }} </a></p>
+                                        &nbsp;{{ auth()->user()->permission('phone.open')? $customer->phone :str_limit($customer->phone,7,'xxx') }} </a></p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Người phụ trách:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>

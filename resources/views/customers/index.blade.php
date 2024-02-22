@@ -180,7 +180,8 @@
                         console.log(item);
                         category += item.name + `, `;
                     });
-
+                    let hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
+                    let phoneNumber = hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7)+'xxx';
                     let html = '';
                     html += `<div class="row" style="padding-bottom: 10px;">
                     <div class="chat-flash col-md-12">
@@ -190,13 +191,13 @@
 
                             <div class="mt10 pb10" style="height:86px ; color:black">
                             <div class="col-md-10 info-avatar padding5 last_contacthover box_last">
-                            <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
+                            <p><i class="fa fa-user mr5" style="color: black;"></i> ` +data.customer.full_name+ `
                                 <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
                             </p>
                             <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue" data-contact-id="5678"
                                                           rel="tooltip" data-original-title="Click để gọi"
                                                           data-placement="right" data-flag="1"
-                                                          data-type="crm"> ` + data.customer.phone + `</a></p>
+                                                          data-type="crm"> ` + phoneNumber+ `</a></p>
                             <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>` + category + `</p>
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
@@ -248,10 +249,11 @@
                                         <i class="fas fa-edit btn-edit-comment" data-id="` + item.id + `"></i>
                                         </a>
                                         @endif
-
+                                        @if(1 ==2)
                                         <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
-                                        </a>
+                                         <i class="fas fa-trash-alt btn-delete-comment" data-id="` + item.id + `"></i>
+                                         </a>
+                                        @endif
                                     </div>` : "") +
                             `<div class="col-md-12 comment" style="margin-top: 5px; margin-bottom: 5px; white-space: pre-line;">` + item.messages + `
                                     </div>

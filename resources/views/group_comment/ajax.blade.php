@@ -17,9 +17,9 @@
                                         </a>
                                     @endif
 
-                                    <a data-original-title="Xóa" rel="tooltip">
-                                        <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
-                                    </a>
+{{--                                    <a data-original-title="Xóa" rel="tooltip">--}}
+{{--                                        <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>--}}
+{{--                                    </a>--}}
                                 </div>
                             @endif
                         </div>

@@ -34,7 +34,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;{{ @str_limit($order->customer->phone,7,'xxx') }} -
+                                <b>Điện thoại:</b>&nbsp;{{ auth()->user()->permission('phone.open')? $order->customer->phone :str_limit($order->customer->phone,7,'xxx') }}
                             </td>
                             <td style="width:50%">
                                 <b>Ngày tạo đơn:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}&emsp;
@@ -48,7 +48,7 @@
                             <td style="width:50%">
                                 <b>Người nhận:</b>&nbsp;{{ @$order->customer->full_name }} - Điện thoại:
                                 <a class="__clickToCall blue" data-phone="0932148915" data-type="crm"
-                                   data-call="order_222" data-contact-id="896">{{ @str_limit($order->customer->phone,7,'xxx') }}</a>
+                                   data-call="order_222" data-contact-id="896">{{ auth()->user()->permission('phone.open')? $order->customer->phone :str_limit($order->customer->phone,7,'xxx') }}</a>
                             </td>
                             <td style="width:50%">
                                 <b>Phương thức thanh toán:</b>&nbsp;{{@$order->name_payment_type}}

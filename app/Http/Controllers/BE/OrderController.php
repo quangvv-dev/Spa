@@ -547,6 +547,9 @@ class OrderController extends Controller
     {
         $order = Order::with('customer', 'orderDetails')->findOrFail($id);
         $payment = PaymentHistory::where('order_id', $order->id)->latest()->first();
+        if (empty($payment)){
+            return back()->with('error','Chưa tạo thanh toán');
+        }
         $bank = PaymentBank::where('branch_id', $order->branch_id)->first();
 
         $linkQr = !empty($bank) ? 'https://img.vietqr.io/image/' . $bank->bank_code . '-' . $bank->account_number . '-qr_only.jpg?amount=' .

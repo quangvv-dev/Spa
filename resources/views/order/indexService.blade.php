@@ -198,7 +198,11 @@
                         <div class="row date-create">
                             <div class="col-6 mt-5">
                                 {!! Form::label('created_at', 'Ngày tạo đơn', array('class' => ' required')) !!}
-                                {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
+                                @if(auth()->user()->permission('edit.order_date'))
+                                    {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control fc-datepicker')) !!}
+                                @else
+                                    {!! Form::text('created_at', isset($order) ? date("d-m-Y", strtotime($order->created_at)) : date("d-m-Y", strtotime("now")), array('class' => 'form-control','readonly')) !!}
+                                @endif
                             </div>
                         </div>
                     </div>
