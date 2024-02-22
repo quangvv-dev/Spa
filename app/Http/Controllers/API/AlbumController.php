@@ -104,7 +104,7 @@ class AlbumController extends BaseApiController
             ]);
         }
         $input = $request->all();
-        $customer = Customer::where('phone', $input['phone'])->first();
+        $customer = Customer::where('phone', $input['phone'])->orWhere('account_code',$input['phone'])->first();
         if (empty($customer)){
             return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND');
         }
