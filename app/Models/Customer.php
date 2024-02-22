@@ -73,8 +73,8 @@ class Customer extends Model
 //        9 => 'T/G tác nghiệp',
 //        10 => 'Chuyển về TP',
         11 => 'C.Nhánh',
-//        12 => 'DV liên quan',
-//        13 => 'Nhóm tính cách',
+        12 => 'DV liên quan',
+        13 => 'Nhóm tính cách',
         14 => 'Người tạo',
         25 => 'CSKH',
         15 => 'Lịch hẹn',
@@ -359,7 +359,7 @@ class Customer extends Model
         if ($this->category_tips) {
             $categoryId = array_values(json_decode($this->category_tips));
             $category = Category::select('name')->whereIn('id', $categoryId)->pluck('name')->toArray();
-            $text = count($category) ? implode($category, ',') : '';
+            $text = count($category) ? @implode($category, ',') : '';
         }
         return $text;
     }
