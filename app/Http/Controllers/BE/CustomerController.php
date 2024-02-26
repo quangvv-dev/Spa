@@ -424,7 +424,7 @@ class CustomerController extends Controller
     {
         $request->merge([
             'full_name' => str_replace("'", "", $request->full_name),
-            'category_tips'=> json_encode($request->category_tips),
+            'category_tips'=> !empty($request->category_tips) ? json_encode($request->category_tips):null,
         ]);
         $input = $request->except('group_id');
         if ((int)$input['status_id'] == StatusCode::ALL) {
