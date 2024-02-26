@@ -24,7 +24,7 @@ class Customer extends Model
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $guarded = ['id','image'];
 //    protected $fillable = [
 //        'mkt_id',
 //        'telesales_id',
