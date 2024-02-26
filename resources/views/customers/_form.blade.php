@@ -208,7 +208,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('category_tips') ? 'has-error' : '' }}">
-                            {!! Form::label('category_tips', 'Nhóm d.vụ khai tác thêm', array('class' => 'required control-label')) !!}
+                            {!! Form::label('category_tips', 'Nhóm d.vụ khai tác thêm', array('class' => 'control-label')) !!}
                             @if(isset($customer))
                                 <select class="form-control select2" name="category_tips[]" multiple="multiple"
                                         data-placeholder="Chọn nhóm dịch vụ">
