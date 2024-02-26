@@ -238,6 +238,7 @@ class ProductController extends Controller
                         $category = Category::where('name', 'like', '%' . $row['danh_muc'] . '%')->first();
                         if (isset($category) && $category) {
                             $input['category_id'] = $category->id;
+                            $input['code'] = @$row['ma_san_pham'];
                             $input['name'] = $row['ten'];
                             $input['description'] = $row['mo_ta'] ?: null;
                             $input['price_sell'] = @(int)$row['gia_ban'];
