@@ -20,7 +20,9 @@
                     <th scope="row">
                         <img src="{{App\Helpers\Functions::getImageModels($s,'services','images')}}" class="rounded-circle" height="60" width="60" />
                     </th>
-                    <td class="text-center">{{@$s->name}}</td>
+                    <td class="text-center">{{@$s->name}}
+                        <span class="small-tip">({{$s->dvt}})</span>
+                    </td>
                     <td class="text-center">{{@$s->code}}</td>
                     <td class="text-center">{{@$s->trademarks->name}}</td>
                     <td class="text-center">{{@$s->category->name}}</td>
