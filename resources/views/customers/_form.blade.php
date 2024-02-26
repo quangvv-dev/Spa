@@ -49,13 +49,13 @@
 {{--                                <span class="help-block">{{ $errors->first('membership', ':message') }}</span>--}}
 {{--                            </div>--}}
 {{--                        </div>--}}
-                        <div class="col-xs-12 col-md-12">
-                            <div class="form-group required {{ $errors->has('fb_name') ? 'has-error' : '' }}">
-                                {!! Form::label('fb_name', 'Nghề nghiêp') !!}
-                                {!! Form::text('fb_name', null, array('id' => 'fb_name','class' => 'form-control')) !!}
-                                <span class="help-block">{{ $errors->first('fb_name', ':message') }}</span>
-                            </div>
-                        </div>
+{{--                        <div class="col-xs-12 col-md-12">--}}
+{{--                            <div class="form-group required {{ $errors->has('fb_name') ? 'has-error' : '' }}">--}}
+{{--                                {!! Form::label('fb_name', 'Nghề nghiêp') !!}--}}
+{{--                                {!! Form::text('fb_name', null, array('id' => 'fb_name','class' => 'form-control')) !!}--}}
+{{--                                <span class="help-block">{{ $errors->first('fb_name', ':message') }}</span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="col-xs-12 col-md-12">
                             <div class="form-group required {{ $errors->has('numerology') ? 'has-error' : '' }}">
                                 {!! Form::label('numerology', 'Thần số học') !!}
