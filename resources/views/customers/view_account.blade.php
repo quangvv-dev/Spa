@@ -195,10 +195,9 @@
                             <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">
                                 <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i
                                             class="icon-user mr5 mt2 fl"></i> <b
-                                            class="blue">&nbsp;{{ $customer->full_name }}</b> <i
+                                            class="blue">&nbsp;{{ $customer->full_name.' ('.$customer->account_code.')' }}</b> <i
                                             data-original-title="Liên hệ chính" rel="tooltip"
                                             class="fa fa-star text-warning" aria-hidden="true"></i></p>
-                                    <p></p>
                                     <p class="clearfix">&nbsp;{{ auth()->user()->permission('phone.open')? $customer->phone :str_limit($customer->phone,7,'xxx')}}</p>
                                 </div>
                                 <div class="col-md-12 no-padd hide"><a><i data-task-type="2"
@@ -213,33 +212,36 @@
                     </div>
                     <div class="border padding mt10 ml2">
                         <div class="infor-top-ct"><h3 class="uppercase mb10 font12 bold mg0"
-                                                      style="margin-bottom: 10px!important;">Thông tin khách
-                                hàng</h3>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mã KH:</p>
-                                <p class="word-wrap"> &nbsp;{{$customer->account_code}}</p>
-                            </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tên KH:</p>
-                                <p class="word-wrap"> &nbsp;{{ $customer->full_name }} </p>
-                            </div>
+                                                      style="margin-bottom: 10px!important;">Thông tin khác</h3>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Chi nhánh:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Điện thoại:</p>
-                                <p class="word-wrap"><a class="" data-account-id="4629"
-                                                        data-type="crm" data-issensitive="true">
-                                        &nbsp;{{ auth()->user()->permission('phone.open')? $customer->phone :str_limit($customer->phone,7,'xxx') }} </a></p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nguồn KH:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Người phụ trách:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">CSKH:</p>
+                            <div class="mb10 clearfix " {{empty($customer->cskh)?'style:display:none':''}}><p class="bold pr5 fl">CSKH:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->cskh->full_name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm giới tính:</p>
-                                <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Mệnh:</p>
+                                <p class="word-wrap"> &nbsp;{{@\App\Models\Customer::five_elements[$customer->five_elements]}}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nguồn KH:</p>
-                                <p class="word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Thần số học:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->numerology }} </p>
+                            </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tử huyệt:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->death }} </p>
+                            </div>
+{{--                            <div class="mb10 clearfix "><p class="bold pr5 fl">Điện thoại:</p>--}}
+{{--                                <p class="word-wrap"><a class="" data-account-id="4629"--}}
+{{--                                                        data-type="crm" data-issensitive="true">--}}
+{{--                                        &nbsp;{{ auth()->user()->permission('phone.open')? $customer->phone :str_limit($customer->phone,7,'xxx') }} </a></p>--}}
+{{--                            </div>--}}
+
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm tính cách:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Sinh nhật:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->birthday }}</p>
@@ -247,28 +249,37 @@
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Mối quan hệ:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->status->name }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Ngày tạo:</p>
-                                <p class="word-wrap"> &nbsp;{{ $customer->created_at }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm dịch vụ (Nỗi đau chính):</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->GroupText }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Giới tính:</p>
-                                <p class="word-wrap"> &nbsp;{{ $customer->genderText }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm DV khai thác thêm:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->GroupTips }}</p>
+                            </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Sở thích:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->interest }}</p>
+                            </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nghề nghiệp:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->job }}</p>
+                            </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tính cách:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->facebook }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Mô tả:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->description }}</p>
                             </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Địa chỉ:</p>
+                                <p class="word-wrap"> &nbsp;{{ $customer->address }}</p>
+                            </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Số đơn hàng:</p>
                                 <p class="word-wrap "> &nbsp;{{ $customer->orders->count() }}</p>
                             </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tổng doanh số:</p>
+                                <p class="word-wrap">
+                                    &nbsp;{{number_format($customer->SumAllTotal)}}</p>
+                            </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Tổng doanh thu:</p>
                                 <p class="word-wrap">
-                                    &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
-                            </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Tổng số tương tác:</p>
-                                <p class="word-wrap">&nbsp;0</p>
-                            </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Giá trị:</p>
-                                <p class="word-wrap">
-                                    &nbsp;{{number_format($customer->orders->sum('gross_revenue'))}}</p>
+                                    &nbsp;{{number_format($customer->TotalRevenue)}}</p>
                             </div>
                         </div>
                     </div>

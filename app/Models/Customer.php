@@ -24,42 +24,48 @@ class Customer extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'mkt_id',
-        'telesales_id',
-        'source_id',
-        'status_id',
-        'genitive_id',
-        'full_name',
-        'account_code',
-        'address',
-        'phone',
-        'birthday',
-        'gender',
-        'description',
-        'facebook',
-        'avatar',
-        'fb_name',
-        'membership',
-        'branch_id',
-        'deleted_at',
-        'updated_at',
-        'created_at',
-        'wallet',
-        'old_customer',
-        'source_fb',
-        'category_tips',
-        'FB_ID',
-        'page_id',
-        'carepage_id',
-        'devices_token',
-        'is_gioithieu',
-        'expired_time',
-        'time_move_cskh',
-        'expired_time_boolean',
-        'type_ctv',
-        'is_duplicate',
-    ];
+    protected $guarded = ['id'];
+//    protected $fillable = [
+//        'mkt_id',
+//        'telesales_id',
+//        'source_id',
+//        'status_id',
+//        'genitive_id',
+//        'full_name',
+//        'account_code',
+//        'address',
+//        'phone',
+//        'birthday',
+//        'gender',
+//        'description',
+//        'facebook',
+//        'avatar',
+//        'fb_name',
+//        'membership',
+//        'branch_id',
+//        'deleted_at',
+//        'updated_at',
+//        'created_at',
+//        'wallet',
+//        'old_customer',
+//        'source_fb',
+//        'category_tips',
+//        'FB_ID',
+//        'page_id',
+//        'carepage_id',
+//        'devices_token',
+//        'is_gioithieu',
+//        'expired_time',
+//        'time_move_cskh',
+//        'expired_time_boolean',
+//        'type_ctv',
+//        'is_duplicate',
+//        'numerology',
+//        'death',
+//        'five_elements',
+//        'interest',
+//        'job',
+//    ];
     public const grid_display = [
         0 => 'STT',
         1 => 'Ngày tạo KH',
@@ -89,9 +95,15 @@ class Customer extends Model
         24 => 'Còn lại',
     ];
 
-    use SoftDeletes;
+    public const five_elements = [
+        1 => 'KIM',
+        2 => 'MỘC',
+        3 => 'THỦY',
+        4 => 'HỎA',
+        5 => 'THỔ',
+    ];
 
-    protected $guarded = ['id'];
+    use SoftDeletes;
 
     const VIP_STATUS = 10000000;
 

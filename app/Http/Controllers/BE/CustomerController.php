@@ -405,7 +405,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        $user['birthday'] = Functions::dayMonthYear($customer->birthday);
+        $customer->birthday = Functions::dayMonthYear($customer->birthday);
         $categories = Category::get();
         $categoryId = $customer->categories()->get()->pluck('id')->toArray();
         $title = 'Sửa khách hàng';
@@ -422,7 +422,10 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->merge(['full_name' => str_replace("'", "", $request->full_name)]);
+        $request->merge([
+            'full_name' => str_replace("'", "", $request->full_name),
+            'category_tips'=> json_encode($request->category_tips),
+        ]);
         $input = $request->except('group_id');
         if ((int)$input['status_id'] == StatusCode::ALL) {
             $input['status_id'] = StatusCode::NEW;

@@ -16,7 +16,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3>
+                <h3 class="card-title">{{$title}} {{isset($customer) ? '('.$customer->account_code.')':''}}</h3>
             </div>
 
             @if (isset($customer))
@@ -41,22 +41,44 @@
                         </div>
                     </div>
 
-                    @if (isset($customer))
+{{--                    @if (isset($customer))--}}
+{{--                        <div class="col-xs-12 col-md-12">--}}
+{{--                            <div class="form-group required {{ $errors->has('membership') ? 'has-error' : '' }}">--}}
+{{--                                {!! Form::label('membership', 'Mã thành viên (MEMBERSHIP)') !!}--}}
+{{--                                {!! Form::text('membership', null, array('id' => 'membership','maxLength'=>9,'class' => 'form-control')) !!}--}}
+{{--                                <span class="help-block">{{ $errors->first('membership', ':message') }}</span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="col-xs-12 col-md-12">
-                            <div class="form-group required {{ $errors->has('membership') ? 'has-error' : '' }}">
-                                {!! Form::label('membership', 'Mã thành viên (MEMBERSHIP)') !!}
-                                {!! Form::text('membership', null, array('id' => 'membership','maxLength'=>9,'class' => 'form-control')) !!}
-                                <span class="help-block">{{ $errors->first('membership', ':message') }}</span>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-12">
-                            <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                                {!! Form::label('fb_name', 'Tên Facebook') !!}
+                            <div class="form-group required {{ $errors->has('fb_name') ? 'has-error' : '' }}">
+                                {!! Form::label('fb_name', 'Nghề nghiêp') !!}
                                 {!! Form::text('fb_name', null, array('id' => 'fb_name','class' => 'form-control')) !!}
                                 <span class="help-block">{{ $errors->first('fb_name', ':message') }}</span>
                             </div>
                         </div>
-                    @endif
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('numerology') ? 'has-error' : '' }}">
+                                {!! Form::label('numerology', 'Thần số học') !!}
+                                {!! Form::text('numerology', null, array('class' => 'form-control')) !!}
+                                <span class="help-block">{{ $errors->first('numerology', ':message') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('death') ? 'has-error' : '' }}">
+                                {!! Form::label('death', 'Tử huyệt') !!}
+                                {!! Form::text('death', null, array('class' => 'form-control')) !!}
+                                <span class="help-block">{{ $errors->first('death', ':message') }}</span>
+                            </div>
+                        </div>
+
+{{--                    @endif--}}
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('job') ? 'has-error' : '' }}">
+                            {!! Form::label('job', 'Nghề nghiệp') !!}
+                            {!! Form::text('job', null, array('class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('job', ':message') }}</span>
+                        </div>
+                    </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('birthday') ? 'has-error' : '' }}">
                             {!! Form::label('birthday', 'Ngày sinh') !!}
@@ -72,6 +94,13 @@
                             </div>
                         </div>
                         <span class="help-block">{{ $errors->first('birthday', ':message') }}</span>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
+                            {!! Form::label('address', 'Địa chỉ') !!}
+                            {!! Form::text('address', null, array('id' => 'address','class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+                        </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('description') ? 'has-error' : '' }}">
@@ -98,13 +127,13 @@
                     @else
                         <input type="hidden" name="branch_id" value="{{$checkRole}}">
                     @endif
-                    <div class="col-xs-12 col-md-12">
-                        <div class="form-group">
-                            <label for="ctv" style="width: 100%;cursor: pointer;">Cộng tác viên</label>
-                            <input id="ctv" type="checkbox" name="type_ctv"
-                                   style="width: 30px;height: 25px;cursor: pointer;">
-                        </div>
-                    </div>
+{{--                    <div class="col-xs-12 col-md-12">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label for="ctv" style="width: 100%;cursor: pointer;">Cộng tác viên</label>--}}
+{{--                            <input id="ctv" type="checkbox" name="type_ctv"--}}
+{{--                                   style="width: 30px;height: 25px;cursor: pointer;">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
                 <div class="col-md-6">
                     <div class="col-xs-12 col-md-12">
@@ -154,10 +183,10 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('facebook', 'Link Facebook') !!}
-                            {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
-                            <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
+                        <div class="form-group required {{ $errors->has('source_id') ? 'has-error' : '' }}">
+                            {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => 'required control-label')) !!}
+                            {!! Form::select('source_id', $source, @$customer->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
+                            <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
@@ -178,23 +207,62 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('source_id') ? 'has-error' : '' }}">
-                            {!! Form::label('source_id', 'Nguồn khách hàng', array('class' => 'required control-label')) !!}
-                            {!! Form::select('source_id', $source, @$customer->source_id, array('class' => 'form-control select2', 'placeholder' => 'Nguồn khách hàng')) !!}
-                            <span class="help-block">{{ $errors->first('source_id', ':message') }}</span>
+                        <div class="form-group required {{ $errors->has('category_tips') ? 'has-error' : '' }}">
+                            {!! Form::label('category_tips', 'Nhóm d.vụ khai tác thêm', array('class' => 'required control-label')) !!}
+                            @if(isset($customer))
+                                <select class="form-control select2" name="category_tips[]" multiple="multiple"
+                                        data-placeholder="Chọn nhóm dịch vụ">
+                                    @foreach($categories as $item)
+                                        <option
+                                            value="{{ $item->id }}" {{ isset($customer) && in_array($item->id, !empty($customer->category_tips)?@json_decode($customer->category_tips):[]) ? 'selected' : "" }}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                {!! Form::select('category_tips[]', $group, null, array('class' => 'form-control select2', 'multiple' => 'multiple', 'data-placeholder'=> "Chọn nhóm khách hàng" )) !!}
+                                <span class="help-block">{{ $errors->first('category_tips', ':message') }}</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
+                            {!! Form::label('genitive_id', 'Nhóm tính cách') !!}
+                            {!! Form::select('genitive_id', $genitives, @$customer->genitive_id, array('class' => 'form-control select2')) !!}
+                            <span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('five_elements') ? 'has-error' : '' }}">
+                            {!! Form::label('five_elements', 'Mệnh') !!}
+                            {!! Form::select('five_elements', \App\Models\Customer::five_elements, @$customer->five_elements, array('class' => 'form-control select2')) !!}
+                            <span class="help-block">{{ $errors->first('five_elements', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('interest') ? 'has-error' : '' }}">
+                            {!! Form::label('interest', 'Sở thích') !!}
+                            {!! Form::text('interest', null, array('class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('interest', ':message') }}</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('is_gioithieu', 'SĐT khách giới thiệu') !!}
-                            @if(isset($customer))
-                                {!! Form::text('is_gioithieu',isset($customer)? (@$customer->gioithieu->phone.' ('.@$customer->gioithieu->full_name.' )'):null, array('id' => 'is_gioithieu','class' => 'form-control',$customer->is_gioithieu!=0?'readonly':'')) !!}
-                            @else
-                                {!! Form::text('is_gioithieu',null, array('id' => 'is_gioithieu','class' => 'form-control')) !!}
-                            @endif
-                            <span class="help-block">{{ $errors->first('is_gioithieu', ':message') }}</span>
+                            {!! Form::label('facebook', 'Tính cách khách hàng') !!}
+                            {!! Form::text('facebook', null, array('id' => 'facebook','class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('facebook', ':message') }}</span>
                         </div>
                     </div>
+{{--                    <div class="col-xs-12 col-md-12">--}}
+{{--                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">--}}
+{{--                            {!! Form::label('is_gioithieu', 'SĐT khách giới thiệu') !!}--}}
+{{--                            @if(isset($customer))--}}
+{{--                                {!! Form::text('is_gioithieu',isset($customer)? (@$customer->gioithieu->phone.' ('.@$customer->gioithieu->full_name.' )'):null, array('id' => 'is_gioithieu','class' => 'form-control',$customer->is_gioithieu!=0?'readonly':'')) !!}--}}
+{{--                            @else--}}
+{{--                                {!! Form::text('is_gioithieu',null, array('id' => 'is_gioithieu','class' => 'form-control')) !!}--}}
+{{--                            @endif--}}
+{{--                            <span class="help-block">{{ $errors->first('is_gioithieu', ':message') }}</span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
                             {!! Form::label('avatar', 'Ảnh đại diện') !!}
