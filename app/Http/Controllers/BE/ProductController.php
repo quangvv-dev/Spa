@@ -197,6 +197,7 @@ class ProductController extends Controller
                     'Giá bán',
                     'Trạng thái',
                     'Ngày tạo',
+                    'DVT',
                     'Chú ý',
                 ]);
                 $i = 1;
@@ -211,6 +212,7 @@ class ProductController extends Controller
                             @$ex->price_sell,
                             @$ex->enable == UserConstant::ACTIVE ? 'Kinh doanh' : 'Ngừng kinh doanh',
                             @$ex->created_at,
+                            @$ex->dvt,
                             @$i == 2 ? 'Đẩy data: - Vui lòng nhập tên danh mục chính xác có trong hệ thống.' .
                                 ' - Chỉnh sửa vui lòng nhập mã sản phẩm/DV, tạo mới thì bỏ trống mã sản phẩm /DV.
                             ' : '',
