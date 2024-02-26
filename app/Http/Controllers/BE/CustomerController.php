@@ -433,6 +433,7 @@ class CustomerController extends Controller
         if (isset($input['phone']) && str_contains($input['phone'], 'xxx')) {
             unset($input['phone']);
         }
+        $input['avatar'] = $request->image;
         $customer = $this->customerService->update($input, $id);
         CustomerGroup::where('customer_id', $customer->id)->delete();
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
