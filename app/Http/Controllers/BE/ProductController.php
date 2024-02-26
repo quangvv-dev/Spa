@@ -249,7 +249,7 @@ class ProductController extends Controller
                                 $service->update(['code' => $service->id]);
                             } else {
                                 $service = Service::find($row['ma_san_pham']);
-                                $service ? $service->update($input) : '';
+                                $service ? $service->update($input) : Service::create($input);
                             }
                         }
                     }
