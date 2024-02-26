@@ -241,6 +241,7 @@ class ProductController extends Controller
                             $input['name'] = $row['ten'];
                             $input['description'] = $row['mo_ta'] ?: null;
                             $input['price_sell'] = @(int)$row['gia_ban'];
+                            $input['dvt'] = @$row['dvt'];
                             $input['type'] = StatusCode::PRODUCT;
                             $input['enable'] = UserConstant::ACTIVE;
                             if (!$row['ma_san_pham']) {
