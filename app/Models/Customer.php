@@ -368,7 +368,7 @@ class Customer extends Model
     public function getGroupTipsAttribute()
     {
         $text = '';
-        if ($this->category_tips) {
+        if (!empty($this->category_tips)) {
             $categoryId = array_values(json_decode($this->category_tips));
             $category = Category::select('name')->whereIn('id', $categoryId)->pluck('name')->toArray();
             $text = count($category) ? @implode($category, ',') : '';
