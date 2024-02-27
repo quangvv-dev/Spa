@@ -225,8 +225,8 @@ class OrderService
             'the_rest' => $order->the_rest + $paymentHistory->price,
         ]);
         if ($paymentHistory->payment_type != 3) {
-            $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
-            $point = ($order->customer->wallet + $point) > 0 ? $order->customer->wallet + $point : 0;
+//            $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
+            $point = $order->customer->wallet;
         } else {
             $point = $order->customer->wallet + $paymentHistory->price;
         }
