@@ -16,39 +16,35 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Quản lý người dùng</h3>
+                <h3 class="card-title">Danh sách giám sát lỗi</h3>
                 <div class="col">
-                    <a class="right btn btn-primary btn-flat" href="{{ route('users.create') }}"><i
+                    <a class="right btn btn-primary btn-flat" href="{{ route('errors.monitoring.create') }}"><i
                             class="fa fa-plus-circle"></i> Tạo mới</a>
-                    <a class="right btn tooltip-nav" href="#" data-toggle="modal" data-target="#uploadModal">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span class="tooltiptext">Upload (excel)</span>
-                    </a>
                 </div>
             </div>
             <div class="card-header">
                 <form class="row col-12" action="{{route('users.index')}}" method="get" id="gridForm">
                     <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"
                            type="text" id="search" value="{{@$input['search']}}">
-                    <div class="col-xs-12 col-md-2">
-                        <select id="department_id" name="department_id" class="form-control">
-                            <option value="">Tất cả phòng ban</option>
-                            @forelse($department as $k => $item)
-                                <option {{@$input['branch_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>
-                            @empty
-                            @endforelse
-                        </select>
-                    </div>
+{{--                    <div class="col-xs-12 col-md-2">--}}
+{{--                        <select id="department_id" name="department_id" class="form-control">--}}
+{{--                            <option value="">Tất cả phòng ban</option>--}}
+{{--                            @forelse($department as $k => $item)--}}
+{{--                                <option {{@$input['branch_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>--}}
+{{--                            @empty--}}
+{{--                            @endforelse--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
                     @if(empty(\Illuminate\Support\Facades\Auth::user()->branch_id))
-                    <div class="col-xs-12 col-md-2">
-                        <select id="branch" name="branch_id" class="form-control">
-                            <option value="">Tất cả chi nhánh</option>
-                            @forelse($branchs as $k => $item)
-                                <option {{@$input['department_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>
-                            @empty
-                            @endforelse
-                        </select>
-                    </div>
+{{--                    <div class="col-xs-12 col-md-2">--}}
+{{--                        <select id="branch" name="branch_id" class="form-control">--}}
+{{--                            <option value="">Tất cả chi nhánh</option>--}}
+{{--                            @forelse($branchs as $k => $item)--}}
+{{--                                <option {{@$input['department_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>--}}
+{{--                            @empty--}}
+{{--                            @endforelse--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
                         <div class="col-xs-12 col-md-2">
                             <select id="active" name="active" class="form-control">
                                 <option value="">Tất cả tài khoản</option>
@@ -65,9 +61,8 @@
                 </form>
             </div>
             <div id="registration-form">
-                @include('users.ajax')
+                @include('errors.monitoring.ajax')
             </div>
-            @include('users.modal.upload')
         </div>
     </div>
 @endsection
@@ -81,7 +76,6 @@
         });
         $(document).on('change', '.check', function () {
             let value = this.checked ? 1 : 0;
-            console.log(value);
             $.ajax({
                 url: "/ajax/active-user/" + $(this).data('id'),
                 type: 'POST',
@@ -91,26 +85,6 @@
                 }
             }).done(function (data) {
                 alertify.success('Cập nhật tk thành công !');
-            });
-        })
-        var inputs = document.querySelectorAll( '.inputfile' );
-        Array.prototype.forEach.call( inputs, function( input )
-        {
-            var label	 = input.nextElementSibling,
-                labelVal = label.innerHTML;
-
-            input.addEventListener( 'change', function( e )
-            {
-                var fileName = '';
-                if( this.files && this.files.length > 1 )
-                    fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-                else
-                    fileName = e.target.value.split( '\\' ).pop();
-
-                if( fileName )
-                    label.querySelector( 'span' ).innerHTML = fileName;
-                else
-                    label.innerHTML = labelVal;
             });
         });
     </script>

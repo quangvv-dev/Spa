@@ -24,7 +24,7 @@ class CreateMonitorsTable extends Migration
             $table->integer('error_id')->comment('Lỗi');
             $table->integer('user_id')->comment('Người mắc lỗi');
             $table->text('note')->nullable()->comment('Mô tả');
-            $table->text('status')->default(0)->comment('0:chờ duyệt | 1: duyệt | 2: không duyệt');
+            $table->integer('status')->default(0)->comment('0:chờ duyệt | 1: duyệt | 2: không duyệt');
             $table->timestamps();
         });
     }

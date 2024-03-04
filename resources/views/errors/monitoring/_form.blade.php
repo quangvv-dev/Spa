@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('_style')
     <!-- Bootstrap fileupload css -->
-    <link href="{{ asset(('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css')) }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
     <style>
         a.nav-link.active {
             font-weight: 600;
@@ -16,12 +16,12 @@
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
                         <li class="nav-item">
-                            <a href="" class="nav-link active" >Thông tin tài khoản</a>
+                            <a href="" class="nav-link active">Thông tin tài khoản</a>
                         </li>
                         @if(isset($user))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
+                            </li>
                             @if (auth()->user()->permission('personal.index'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{url('personal/'.$user->id)}}">Hồ sơ</a>
@@ -35,175 +35,82 @@
                 </div>
             </div>
 
-        @if (isset($user))
-                {!! Form::model($user, array('url' => url('users/'.$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+            @if (isset($user))
+                {!! Form::model($user, array('url' => route('errors.monitoring.update',$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
-                {!! Form::open(array('url' => route('users.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::open(array('url' => route('errors.monitoring.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
             <div class="col row">
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
-                        {!! Form::label('full_name', 'Tên người dùng', array('class' => ' required')) !!}
-                        {!! Form::text('full_name', null, array('class' => 'form-control')) !!}
-                        <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
+                <div class="col-xs-12 col-md-3">
+                    <div class="form-group required {{ $errors->has('date_check') ? 'has-error' : '' }}">
+                        {!! Form::label('date_check', 'Ngày vi phạm', array('class' => ' required')) !!}
+                        <input class="form-control" data-toggle="datepicker" name="date_check">
+                        <span class="help-block">{{ $errors->first('date_check', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
-                        {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                        {!! Form::number('phone', null, array('id' => 'phone','class' => 'form-control')) !!}
-                        <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
-                    </div>
+                <div class="col-md-3 col-xs-12 clockpicker" data-placement="left" data-align="top"
+                     data-autoclose="true">
+                    {!! Form::label('time', 'Giờ mắc lỗi', array('class' => ' required')) !!}
+                    {!! Form::text('time', null, array('class' => 'form-control','required'=>true)) !!}
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-                        {!! Form::label('name_display', 'Tên xuất báo cáo', array('class' => '')) !!}
-                        {!! Form::text('name_display', null, array('class' => 'form-control')) !!}
-                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
-                        {!! Form::label('branch_id', 'Chi nhánh') !!}
-                        <select id="branch_id" name="branch_id" class="form-control select2">
-                            <option value="">Tất cả chi nhánh</option>
-                            @forelse($branchs as $k => $item)
-                                <option
-                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
-                                </option>
-                            @empty
-                            @endforelse
-                        </select>
-                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                    </div>
-                </div>
-                {{--<div class="col-xs-12 col-md-6">--}}
-                    {{--<div class="form-group required {{ $errors->has('email') ? 'has-error' : '' }}">--}}
-                        {{--{!! Form::label('email', 'Email', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::email('email', null, array('id' => 'email', 'class' => 'form-control')) !!}--}}
-                        {{--<span class="help-block">{{ $errors->first('email', ':message') }}</span>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
 
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('password') ? 'has-error' : '' }}">
-                        {!! Form::label('password', 'Mật khẩu', array('class' => ' required')) !!}
-                        <input type="password" name="password" id="password" autocomplete="new-password"
-                               class="form-control">
-                        <span class="help-block">{{ $errors->first('password', ':message') }}</span>
-                    </div>
+                    {!! Form::label('position_id', 'Vị trí giám sát', array('class' => ' required')) !!}
+                    {!! Form::select('position_id',$position, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn vị trí--', 'required' => true)) !!}
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('confirm_password') ? 'has-error' : '' }}">
-                        {!! Form::label('confirm_password', 'Nhập lại mật khẩu', array('class' => ' required')) !!}
-                        <input type="password" name="confirm_password" autocomplete="new-password" class="form-control">
-                        <span class="help-block">{{ $errors->first('confirm_password', ':message') }}</span>
-                    </div>
+                    {!! Form::label('user_id', 'Nhân viên vi phạm', array('class' => ' required')) !!}
+                    {!! Form::select('user_id',$users, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn nhân viên--', 'required' => true)) !!}
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('gender') ? 'has-error' : '' }}">
-                        {!! Form::label('gender', 'Giới tính', array('class' => ' required')) !!}
-                        {!! Form::select('gender',[0 => 'Nữ', 1 => 'Nam'], null, array('class' => 'form-control select2', 'placeholder' => 'Chọn giới tính')) !!}
-                        <span class="help-block">{{ $errors->first('gender', ':message') }}</span>
-                    </div>
+                    {!! Form::label('classify_id', 'Phân loại quy trình', array('class' => ' required')) !!}
+                    {!! Form::select('classify_id',$classify, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn quy trình--', 'required' => true)) !!}
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="row">
-                        <div class="col-xs-4 col-md-4">
-                            <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
-                                {!! Form::label('', 'Mã máy tổng đài (nếu có)') !!}
-                                <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}"
-                                    {{\Illuminate\Support\Facades\Auth::user()->department_id!=\App\Constants\UserConstant::ADMIN ?'disabled':'name=caller_number'}} >
-                                <span class="help-block">{{ $errors->first('caller_number', ':message') }}</span>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 col-md-4">
-                            <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
-                                {!! Form::label('', 'Mã NV') !!}
-                                <input type="text" name="code" class="form-control" value="{{isset($user)?@$user->code:''}}">
-                                <span class="help-block">{{ $errors->first('code', ':message') }}</span>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 col-md-4">
-                            <div class="form-group required {{ $errors->has('approval_code') ? 'has-error' : '' }}">
-                                {!! Form::label('', 'Mã chấm công (nếu có)') !!}
-                                <input type="text" id="approval_code" class="form-control" value="{{isset($user)?@$user->approval_code:''}}"
-                                       name='approval_code'>
-                                <span class="help-block">{{ $errors->first('approval_code', ':message') }}</span>
-                            </div>
-                        </div>
-                    </div>
+                    {!! Form::label('block_id', 'Khối', array('class' => ' required')) !!}
+                    {!! Form::select('block_id',$block, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn khối--', 'required' => true)) !!}
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    {!! Form::label('error_id', 'Lỗi vi phạm', array('class' => ' required')) !!}
+                    {!! Form::select('error_id',$error, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn lỗi vi phạm--', 'required' => true)) !!}
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    {!! Form::label('note', 'Mô tả') !!}
+                    {!! Form::textArea('note', null, array('class' => 'form-control header-search','rows'=> 3)) !!}
                 </div>
 
                 @if(\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\UserConstant::ADMIN)
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">
-                            {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}
-                            {!! Form::select('department_id', $departments, null, array('id'=>'departments','class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}
-                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <div class="form-group required {{ $errors->has('role') ? 'has-error' : '' }}">
-                            {!! Form::label('role', 'Quyền', array('class' => ' required')) !!}
-                            <select id="role" name="role" class="form-control select2">
-                                <option value="">Chọn quyền</option>
-                                @if(isset($user))
-                                    @forelse($role as $item)
-                                        <option
-                                            {{$user->role==$item->id?'selected':''}} value="{{$item->id}}">{{$item->name}}
-                                        </option>
-                                    @empty
-                                    @endforelse
-                                @endif
-                            </select>
-                            <span class="help-block">{{ $errors->first('role', ':message') }}</span>
-                        </div>
-                    </div>
-                    <input type="hidden" name="is_leader" value="0">
+                    {{--                    <div class="col-xs-12 col-md-6">--}}
+                    {{--                        <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">--}}
+                    {{--                            {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}--}}
+                    {{--                            {!! Form::select('department_id', $departments, null, array('id'=>'departments','class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}--}}
+                    {{--                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>--}}
+                    {{--                        </div>--}}
+                    {{--                    </div>--}}
+                    {{--                    <input type="hidden" name="is_leader" value="0">--}}
 
                 @endif
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group">
-                        {!! Form::label('location_id', 'Chọn cụm', array('class' => '')) !!}
-                        <select name="location_id" class="form-control select2">
-                            <option value="">Chọn cụm</option>
-                            @forelse($location as $k => $item)
-                                <option
-                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}
-                                </option>
-                            @empty
-                            @endforelse
-                        </select>
-                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
-                        {!! Form::label('avatar', 'Ảnh đại diện', array('class' => ' required')) !!}
-                        <div class="fileupload fileupload-{{isset($user) ? 'exists' : 'new' }}"
-                             data-provides="fileupload">
-                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px">
-                                @if (isset($user))
-                                    <img src="{{ $user->avatar }}" alt="image"/>
-                                @endif
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-default btn-file">
-                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Chọn ảnh</span>
-                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Thay đổi</span>
-                                    <input type="file" name="image" accept="image/*" class="btn-default upload"/>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {{--                <div class="col-xs-12 col-md-6">--}}
+                {{--                    <div class="form-group">--}}
+                {{--                        {!! Form::label('location_id', 'Chọn cụm', array('class' => '')) !!}--}}
+                {{--                        <select name="location_id" class="form-control select2">--}}
+                {{--                            <option value="">Chọn cụm</option>--}}
+                {{--                            @forelse($location as $k => $item)--}}
+                {{--                                <option--}}
+                {{--                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}--}}
+                {{--                                </option>--}}
+                {{--                            @empty--}}
+                {{--                            @endforelse--}}
+                {{--                        </select>--}}
+                {{--                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>--}}
+                {{--                    </div>--}}
+                {{--                </div>--}}
 
 
             </div>
             <div class="col" style="margin-bottom: 10px;">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('users.index')}}" class="btn btn-danger">Trở lại</a>
+                <a href="{{route('errors.monitoring.index')}}" class="btn btn-danger">Trở lại</a>
             </div>
 
             {{ Form::close() }}
@@ -217,11 +124,6 @@
     <script>
         $(document).ready(function () {
             // validate phone
-            jQuery.validator.addMethod("phone_number", function (phone_number, element) {
-                phone_number = phone_number.replace(/\s+/g, "");
-                return this.optional(element) || phone_number.length > 9 &&
-                    phone_number.match(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/);
-            }, "Số điện thoại không hợp lệ");
 
             $("#fvalidate").validate({
                 rules: {
@@ -306,17 +208,12 @@
             });
         });
 
-        $('#departments').change(function () {
-            let department_id = $(this).val();
-            let html = '';
-            $.ajax({
-                url: "/ajax/find-role/" + department_id,
-                method: "get",
-            }).done(function (data) {
-                data.forEach(element => {
-                    html += `<option value="` + element.id + `">` + element.name + `</option>`
-                });
-                $('#role').html(html);
+        $('document').ready(function () {
+            $('.clockpicker').clockpicker();
+            $('[data-toggle="datepicker"]').datepicker({
+                format: 'yyyy-mm-dd',
+                autoHide: true,
+                zIndex: 2048,
             });
         });
     </script>
