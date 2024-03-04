@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Errors extends Model
 {
-    protected $guarded = ['id'];
+    protected $fillable = ['name', 'type'];
     public $timestamps = false;
 
     public const POSITION = 1;
@@ -15,9 +15,9 @@ class Errors extends Model
     public const BLOCK = 4;
 
     public const labelType = [
-        self::POSITION => 'Vị trí lỗi',
+        self::POSITION => 'Vị trí',
         self::CLASSIFY => 'Quy trình',
-        self::ERROR => 'Phân loại lỗi',
+        self::ERROR => 'Lỗi',
         self::BLOCK => 'Khối',
     ];
 }

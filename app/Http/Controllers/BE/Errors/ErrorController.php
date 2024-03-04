@@ -19,7 +19,12 @@ class ErrorController extends Controller
         $input = $request->all();
         $data = Errors::when(isset($input['type']) && $input['type'], function ($q) use ($input) {
             $q->where('type', $input['type']);
-        })->paginate(20);
+        })->when(isset($input['name']) && $input['name'], function ($q) use ($input) {
+            $q->where('name', 'like', '%' . $input['name'] . '%');
+        })->orderByDesc('id')->paginate(20);
+        if ($request->ajax()){
+            return view('errors.ajax', compact('data'));
+        }
         return view('errors.index', compact('data'));
     }
 
@@ -77,9 +82,10 @@ class ErrorController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Errors $reason)
     {
-        //
+        $reason->update($request->all());
+        return 1;
     }
 
     /**
@@ -88,8 +94,9 @@ class ErrorController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Errors $reason)
     {
-        //
+        $reason->delete();
+        return 1;
     }
 }
