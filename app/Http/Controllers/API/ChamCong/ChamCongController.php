@@ -19,11 +19,10 @@ class ChamCongController extends BaseApiController
     {
 //        $data = "{\"NameMachine\":\"HN1\",\"Info\":[{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 1:58:07 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:11 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/6\/2023 2:10:19 PM\",\"IndRedID\":\"1\"},{\"MachineNumber\":\"1\",\"DateTimeRecord\":\"2\/7\/2023 8:54:42 AM\",\"IndRedID\":\"1\"}]}";
         \DB::table('settings')->insert(['setting_key' => now()->format("Y-m-d H:i:s"), 'setting_value' => json_encode($request->all())]);
-        return $this->responseApi(ResponseStatusCode::OK, 'Đẩy chấm công thành công!!');
         $data = $request->all();
-        if ($data['NameMachine'] == 'HP1'){
-
-        }
+//        if ($data['NameMachine'] == 'HP1'){
+//            return $this->responseApi(ResponseStatusCode::OK, 'Đẩy chấm công thành công!!');
+//        }
 
         $collect = array_reverse($data['Info']);
         foreach (array_chunk($collect,300) as $k => $item) {
