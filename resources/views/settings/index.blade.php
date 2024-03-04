@@ -82,7 +82,7 @@
                     console.log(data);
                 }
             })
-        })
+        });
 
         $(document).on('click', '.save-status', function () {
             let id = $(this).data('id');

@@ -26,6 +26,10 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('kanban-board', function () {
         return view('kanban_board.index');
     });
+    // Giám sát lỗi
+    Route::group(['prefix' => 'errors', 'as' => 'errors.', 'namespace' => 'Errors'], function () {
+        Route::resource('reason', 'ErrorController');
+    });
 
     Route::resource('call-center', 'CallController');
     Route::resource('gifts', 'Gift\GiftController');
