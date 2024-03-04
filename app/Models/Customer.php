@@ -116,7 +116,8 @@ class Customer extends Model
                     $q->where('phone', $conditions['search'])
                         ->orWhere('membership', $conditions['search']);
                 } else {
-                    $q->where('full_name', 'like', '%' . $conditions['search'] . '%');
+                    $q->where('full_name', 'like', '%' . $conditions['search'] . '%')
+                        ->orWhere('account_code', 'like', $conditions['search'] . '%');
                 }
             });
         })

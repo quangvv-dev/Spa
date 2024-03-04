@@ -230,6 +230,7 @@
                         </a>
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
+                        <p class="small-tip">({{$customer->account_code}})</p>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{ auth()->user()->permission('phone.open')? $customer->phone :str_limit($customer->phone,7,'xxx') }}
