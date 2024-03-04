@@ -6,7 +6,7 @@ use App\Models\Errors;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ErrorController extends Controller
+class MonitorController extends Controller
 {
     /**
      * Display a listing of the resource.

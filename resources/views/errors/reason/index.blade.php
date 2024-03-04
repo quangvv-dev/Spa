@@ -16,11 +16,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Quản lý lỗi</h3>
-                <div class="col">
-                    <a class="right btn btn-primary btn-flat" href="{{ route('users.create') }}"><i
-                            class="fa fa-plus-circle"></i> Tạo mới</a>
-                </div>
+                <h3 class="card-title bold">Quản lý lỗi</h3>
             </div>
             <div class="card-header">
                 <form class="row col-12" action="{{route('errors.reason.index')}}" method="get" id="gridForm">
@@ -42,7 +38,7 @@
                 </form>
             </div>
             <div id="registration-form">
-                @include('errors.ajax')
+                @include('errors.reason.ajax')
             </div>
         </div>
     </div>

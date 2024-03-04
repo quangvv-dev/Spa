@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     // Giám sát lỗi
     Route::group(['prefix' => 'errors', 'as' => 'errors.', 'namespace' => 'Errors'], function () {
         Route::resource('reason', 'ErrorController');
+        Route::resource('monitoring', 'MonitorController');
     });
 
     Route::resource('call-center', 'CallController');
