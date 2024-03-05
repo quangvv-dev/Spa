@@ -19,6 +19,8 @@ return [
     "promotions"               => "QL VOURCHER khuyến mại",
     "package"                  => "QL GÓI NẠP VÍ",
     "status"                   => "QL CRM",
+    "errors.monitoring"        => "QL giám sát lỗi",
+    "errors.reason"            => "QL danh mục lỗi",
     "order"                    => "QL đơn hàng",
     "thu-chi"                  => "QL thu chi",
     "source"                   => "QL nguồn dữ liệu",

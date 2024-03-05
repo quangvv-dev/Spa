@@ -41,6 +41,8 @@ class RoleController extends Controller
         'salary',
         'history_salary',
         'teams',
+        'errors.monitoring',
+        'errors.reason',
     ];
     protected $report = [
         'statistics.index',

@@ -1,4 +1,7 @@
 @extends('layout.app')
+@section('_style')
+    <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
+@endsection
 @section('content')
     <style>
         .inputfile {
@@ -9,6 +12,7 @@
             position: absolute;
             z-index: -1;
         }
+
         .inputfile + label {
             cursor: pointer;
         }
@@ -16,48 +20,42 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Danh sách giám sát lỗi</h3>
+                <h3 class="card-title">Danh sách vi phạm</h3>
                 <div class="col">
                     <a class="right btn btn-primary btn-flat" href="{{ route('errors.monitoring.create') }}"><i
                             class="fa fa-plus-circle"></i> Tạo mới</a>
                 </div>
             </div>
             <div class="card-header">
-                <form class="row col-12" action="{{route('users.index')}}" method="get" id="gridForm">
-                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"
-                           type="text" id="search" value="{{@$input['search']}}">
-{{--                    <div class="col-xs-12 col-md-2">--}}
-{{--                        <select id="department_id" name="department_id" class="form-control">--}}
-{{--                            <option value="">Tất cả phòng ban</option>--}}
-{{--                            @forelse($department as $k => $item)--}}
-{{--                                <option {{@$input['branch_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>--}}
-{{--                            @empty--}}
-{{--                            @endforelse--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-                    @if(empty(\Illuminate\Support\Facades\Auth::user()->branch_id))
-{{--                    <div class="col-xs-12 col-md-2">--}}
-{{--                        <select id="branch" name="branch_id" class="form-control">--}}
-{{--                            <option value="">Tất cả chi nhánh</option>--}}
-{{--                            @forelse($branchs as $k => $item)--}}
-{{--                                <option {{@$input['department_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>--}}
-{{--                            @empty--}}
-{{--                            @endforelse--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-                        <div class="col-xs-12 col-md-2">
-                            <select id="active" name="active" class="form-control">
-                                <option value="">Tất cả tài khoản</option>
-                                <option value="1">Hoạt động</option>
-                                <option value="0">Đã khóa</option>
-                            </select>
-                        </div>
-                    @endif
-                    <input type="hidden" name="page" id="page">
-                    <div class="col-lg-4 col-md-4">
-                        <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
+                <form class="row col-12" action="{{route('errors.monitoring.index')}}" method="get" id="gridForm">
+                    <div class="col-md-3">
+                        <input type="hidden" name="start_date" id="start_date">
+                        <input type="hidden" name="end_date" id="end_date">
+                        <input id="reportrange" type="text" class="form-control square">
+                    </div>
+                    <div class="col-xs-12 col-md-2">
+                        {!! Form::select('position_id',$position, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn vị trí--')) !!}
                     </div>
 
+                    <div class="col-xs-12 col-md-2">
+                        {!! Form::select('block_id',$block, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn khối--')) !!}
+                    </div>
+                    <div class="col-xs-12 col-md-2">
+                        {!! Form::select('error_id',$error, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn lỗi vi phạm--')) !!}
+                    </div>
+
+                    <input type="hidden" name="page" id="page">
+                    <div class="col-xs-12 col-md-2">
+                        <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
+                    </div>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a style="display: none" href="#" class="angleDoubleUp">
+                                    <i class="fa fa-angle-double-up"></i></a></li>
+                            <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
+                        </ul>
+                    </div>
+                    @include('errors.monitoring.dropdownFilter')
                 </form>
             </div>
             <div id="registration-form">
@@ -67,6 +65,8 @@
     </div>
 @endsection
 @section('_script')
+    <script src="{{asset('js/daterangepicker.min.js')}}"></script>
+    <script src="{{asset('js/dateranger-config.js')}}"></script>
     <script type="text/javascript">
         $(document).on('click', 'a.page-link', function (e) {
             e.preventDefault();
@@ -77,11 +77,11 @@
         $(document).on('change', '.check', function () {
             let value = this.checked ? 1 : 0;
             $.ajax({
-                url: "/ajax/active-user/" + $(this).data('id'),
-                type: 'POST',
+                url: "/errors/monitoring/" + $(this).data('id'),
+                type: 'PUT',
+                // _method:'PUT',
                 data: {
-                    active: value,
-                    // _token: 'I2oyUkzbxy2pMyZfs6idnBIxPoSnFo7CzQmY15xr',
+                    status: value,
                 }
             }).done(function (data) {
                 alertify.success('Cập nhật tk thành công !');

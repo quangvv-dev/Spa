@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\BE\Errors;
 
+use App\Constants\ResponseStatusCode;
+use App\Constants\StatusCode;
+use App\Helpers\Functions;
 use App\Models\Errors;
 use App\Models\Monitor;
 use App\User;
@@ -13,6 +16,10 @@ class MonitorController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('errors.monitoring.list', ['only' => ['index']]);
+        $this->middleware('errors.monitoring.edit', ['only' => ['edit']]);
+        $this->middleware('errors.monitoring.add', ['only' => ['create']]);
+        $this->middleware('errors.monitoring.delete', ['only' => ['destroy']]);
         $errors = Errors::orderByDesc('id');
         $position = clone $errors;
         $classify = clone $errors;
@@ -22,6 +29,7 @@ class MonitorController extends Controller
             'classify' => $classify->where('type', Errors::CLASSIFY)->pluck('name', 'id')->toArray(),
             'block' => $block->where('type', Errors::BLOCK)->pluck('name', 'id')->toArray(),
             'error' => $errors->where('type', Errors::ERROR)->pluck('name', 'id')->toArray(),
+            'users' => User::select('id', 'full_name')->pluck('full_name', 'id')->toArray(),
         ]);
     }
 
@@ -34,11 +42,8 @@ class MonitorController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $monitoring = Monitor::when(isset($input['type']) && $input['type'], function ($q) use ($input) {
-            $q->where('type', $input['type']);
-        })->when(isset($input['name']) && $input['name'], function ($q) use ($input) {
-            $q->where('name', 'like', '%' . $input['name'] . '%');
-        })->orderByDesc('id')->paginate(20);
+        $monitoring = Monitor::search($input);
+        $monitoring = $monitoring->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
             return view('errors.monitoring.ajax', compact('monitoring'));
         }
@@ -51,8 +56,7 @@ class MonitorController extends Controller
      */
     public function create()
     {
-        $users = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
-        return view('errors.monitoring._form', compact('users'));
+        return view('errors.monitoring._form');
     }
 
     /**
@@ -80,37 +84,44 @@ class MonitorController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Monitor $monitoring
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Monitor $monitoring)
     {
-        //
+        return view('errors.monitoring._form', compact('monitoring'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Monitor $monitoring
+     * @return \Illuminate\Http\RedirectResponse|int
      */
-    public function update(Request $request, Errors $reason)
+    public function update(Request $request, Monitor $monitoring)
     {
-        $reason->update($request->all());
-        return 1;
+        $monitoring->update($request->all());
+        if ($request->ajax()){
+            return 1;
+        }
+        return back()->with('status','Cập nhật thành công');
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Monitor $monitoring
+     * @return array|int
+     * @throws \Exception
      */
-    public function destroy(Errors $reason)
+    public function destroy(Monitor $monitoring)
     {
-        $reason->delete();
+        if ($monitoring->status == Monitor::ACTIVE){
+            return [
+                'code' => ResponseStatusCode::INTERNAL_SERVER_ERROR,
+                'message' => "Biên bản đã duyệt không thể xóa",
+            ];
+        }
+        $monitoring->delete();
         return 1;
     }
 }

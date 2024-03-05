@@ -46,6 +46,14 @@
                         </table>
                     </div>
                 </div>
+                <div class="pull-left">
+                    <div class="page-info">
+                        {{ 'Tổng số ' . $data->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+                    </div>
+                </div>
+                <div class="pull-right">
+                    {{ $data->links() }}
+                </div>
                 <!-- table-responsive -->
             </div>
         </div>

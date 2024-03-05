@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers\BE\Errors;
 
+use App\Constants\StatusCode;
 use App\Models\Errors;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ErrorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('errors.reason.list', ['only' => ['index']]);
+        $this->middleware('errors.reason.edit', ['only' => ['edit']]);
+        $this->middleware('errors.reason.add', ['only' => ['create']]);
+        $this->middleware('errors.reason.delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      * @param Request $request
@@ -21,7 +30,7 @@ class ErrorController extends Controller
             $q->where('type', $input['type']);
         })->when(isset($input['name']) && $input['name'], function ($q) use ($input) {
             $q->where('name', 'like', '%' . $input['name'] . '%');
-        })->orderByDesc('id')->paginate(20);
+        })->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
             return view('errors.reason.ajax', compact('data'));
         }

@@ -118,13 +118,7 @@
                            href="{{ route('customers.create') }}">Tạo mới</a>
                     @endif
                 </div>
-                <div class="heading-elements">
-                    <ul class="list-inline mb-0">
-                        <li><a style="display: none" href="#" class="angleDoubleUp">
-                                <i class="fa fa-angle-double-up"></i></a></li>
-                        <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
-                    </ul>
-                </div>
+
             </div>
             @include('customers.dropdownFilter')
             <div id="registration-form">

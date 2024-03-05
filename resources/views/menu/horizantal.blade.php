@@ -377,9 +377,23 @@
                                 @endif
                             </ul>
                         </li>
-                        @if($roleGlobal->permission('teams.list'))
-                            <li><a href="{{route('teams.index')}}">Quản lý đội nhóm</a></li>
-                        @endif
+                            @if($roleGlobal->permission('teams.list'))
+                                <li><a href="{{route('teams.index')}}">Quản lý đội nhóm</a></li>
+                            @endif
+                            @if($roleGlobal->permission('errors.monitoring.list') || $roleGlobal->permission('errors.reason.list'))
+                                <li class="sub-with-sub">
+                                    <a href="#">Giám sát vi phạm</a>
+                                    <ul>
+                                        @if($roleGlobal->permission('errors.monitoring.list'))
+                                            <li><a href="{{route('errors.monitoring.index')}}">Danh sách vi phạm</a>
+                                            </li>
+                                        @endif
+                                        @if($roleGlobal->permission('errors.reason.list'))
+                                            <li><a href="{{route('errors.reason.index')}}">Danh mục lỗi</a></li>
+                                        @endif
+                                    </ul>
+                                </li>
+                            @endif
 
                     </ul>
                 </div>

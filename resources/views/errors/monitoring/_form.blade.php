@@ -11,32 +11,12 @@
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class=" tab-menu-heading">
-                <div class="tabs-menu1 ">
-                    <!-- Tabs -->
-                    <ul class="nav panel-tabs">
-                        <li class="nav-item">
-                            <a href="" class="nav-link active">Thông tin tài khoản</a>
-                        </li>
-                        @if(isset($user))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{url('personal/salary/'.$user->id)}}">Bảng lương</a>
-                            </li>
-                            @if (auth()->user()->permission('personal.index'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{url('personal/'.$user->id)}}">Hồ sơ</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{url('personal/images/'.$user->id)}}">Hợp đồng (file)</a>
-                                </li>
-                            @endif
-                        @endif
-                    </ul>
-                </div>
+            <div class="card-header">
+                <h3 class="card-title">{{$title ?? ''}}</h3>
             </div>
 
-            @if (isset($user))
-                {!! Form::model($user, array('url' => route('errors.monitoring.update',$user->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+            @if (isset($monitoring))
+                {!! Form::model($monitoring, array('url' => route('errors.monitoring.update',$monitoring->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
                 {!! Form::open(array('url' => route('errors.monitoring.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif
@@ -44,7 +24,7 @@
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('date_check') ? 'has-error' : '' }}">
                         {!! Form::label('date_check', 'Ngày vi phạm', array('class' => ' required')) !!}
-                        <input class="form-control" data-toggle="datepicker" name="date_check">
+                        <input class="form-control" data-toggle="datepicker" value="{{@$monitoring->date_check}}" name="date_check">
                         <span class="help-block">{{ $errors->first('date_check', ':message') }}</span>
                     </div>
                 </div>
@@ -74,39 +54,16 @@
                     {!! Form::label('error_id', 'Lỗi vi phạm', array('class' => ' required')) !!}
                     {!! Form::select('error_id',$error, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn lỗi vi phạm--', 'required' => true)) !!}
                 </div>
+                @if (isset($monitoring))
+                    <div class="col-xs-12 col-md-6">
+                        {!! Form::label('status', 'Trạng thái biên bản', array('class' => ' required')) !!}
+                        {!! Form::select('status',\App\Models\Monitor::labelStatus, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Trạng thái--', 'required' => true)) !!}
+                    </div>
+                @endif
                 <div class="col-xs-12 col-md-6">
                     {!! Form::label('note', 'Mô tả') !!}
                     {!! Form::textArea('note', null, array('class' => 'form-control header-search','rows'=> 3)) !!}
                 </div>
-
-                @if(\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\UserConstant::ADMIN)
-                    {{--                    <div class="col-xs-12 col-md-6">--}}
-                    {{--                        <div class="form-group required {{ $errors->has('department_id') ? 'has-error' : '' }}">--}}
-                    {{--                            {!! Form::label('department_id', 'Phòng ban', array('class' => ' required')) !!}--}}
-                    {{--                            {!! Form::select('department_id', $departments, null, array('id'=>'departments','class' => 'form-control select2', 'placeholder' => 'Phòng ban')) !!}--}}
-                    {{--                            <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                    <input type="hidden" name="is_leader" value="0">--}}
-
-                @endif
-                {{--                <div class="col-xs-12 col-md-6">--}}
-                {{--                    <div class="form-group">--}}
-                {{--                        {!! Form::label('location_id', 'Chọn cụm', array('class' => '')) !!}--}}
-                {{--                        <select name="location_id" class="form-control select2">--}}
-                {{--                            <option value="">Chọn cụm</option>--}}
-                {{--                            @forelse($location as $k => $item)--}}
-                {{--                                <option--}}
-                {{--                                        {{@$user->branch_id==$k?'selected':''}} value="{{$k}}">{{$item}}--}}
-                {{--                                </option>--}}
-                {{--                            @empty--}}
-                {{--                            @endforelse--}}
-                {{--                        </select>--}}
-                {{--                        <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
-
-
             </div>
             <div class="col" style="margin-bottom: 10px;">
                 <button type="submit" class="btn btn-success">Lưu</button>
