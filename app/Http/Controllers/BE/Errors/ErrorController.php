@@ -11,10 +11,10 @@ class ErrorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('errors.reason.list', ['only' => ['index']]);
-        $this->middleware('errors.reason.edit', ['only' => ['edit']]);
-        $this->middleware('errors.reason.add', ['only' => ['create']]);
-        $this->middleware('errors.reason.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:errors.reason.list', ['only' => ['index']]);
+        $this->middleware('permission:errors.reason.edit', ['only' => ['edit']]);
+        $this->middleware('permission:errors.reason.add', ['only' => ['create']]);
+        $this->middleware('permission:errors.reason.delete', ['only' => ['destroy']]);
     }
 
     /**

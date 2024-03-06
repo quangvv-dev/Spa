@@ -16,10 +16,10 @@ class MonitorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('errors.monitoring.list', ['only' => ['index']]);
-        $this->middleware('errors.monitoring.edit', ['only' => ['edit']]);
-        $this->middleware('errors.monitoring.add', ['only' => ['create']]);
-        $this->middleware('errors.monitoring.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:errors.monitoring.list', ['only' => ['index']]);
+        $this->middleware('permission:errors.monitoring.edit', ['only' => ['edit']]);
+        $this->middleware('permission:errors.monitoring.add', ['only' => ['create']]);
+        $this->middleware('permission:errors.monitoring.delete', ['only' => ['destroy']]);
         $errors = Errors::orderByDesc('id');
         $position = clone $errors;
         $classify = clone $errors;
