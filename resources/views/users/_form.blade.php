@@ -112,8 +112,7 @@
                         <div class="col-xs-4 col-md-4">
                             <div class="form-group required {{ $errors->has('caller_number') ? 'has-error' : '' }}">
                                 {!! Form::label('', 'Mã máy tổng đài (nếu có)') !!}
-                                <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}"
-                                    {{\Illuminate\Support\Facades\Auth::user()->department_id!=\App\Constants\UserConstant::ADMIN ?'disabled':'name=caller_number'}} >
+                                <input type="text" id="phone_center" class="form-control" value="{{isset($user)?@$user->caller_number:''}}" name=caller_number>
                                 <span class="help-block">{{ $errors->first('caller_number', ':message') }}</span>
                             </div>
                         </div>
