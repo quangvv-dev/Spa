@@ -6,6 +6,7 @@ use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\PaymentBank;
 use App\Models\PaymentWallet;
 use App\Models\WalletHistory;
 use App\User;
@@ -182,6 +183,9 @@ class PaymentWalletController extends Controller
     {
         $order = $this->walletService->find($id);
         $payment = PaymentWallet::where('order_wallet_id', $id)->latest()->first();
-        return view('payment_wallet.order-pdf', compact('order','payment'));
+        $bank = PaymentBank::where('branch_id', $order->branch_id)->first();
+        $linkQr = !empty($bank) ? 'https://img.vietqr.io/image/' . $bank->bank_code . '-' . $bank->account_number . '-qr_only.jpg?amount=' .
+            $payment->price . '&addInfo=' . 'Thanh toan nap vi DH_NV' . $order->id . '&accountName=' . $bank->account_name : '';
+        return view('payment_wallet.order-pdf', compact('order', 'payment', 'linkQr'));
     }
 }

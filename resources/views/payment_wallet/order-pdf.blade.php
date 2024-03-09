@@ -64,11 +64,11 @@
                     </tr>
                     <tr class="font12">
                         <td class="padding5">Ngày : {{ date('d-m-Y', strtotime($payment->payment_date)) }}</td>
-                        <td class="padding5">HĐ: {{ $order->code }}</td>
+                        <td class="padding5">Mã KH: {{ @$order->customer->account_code }}</td>
                     </tr>
                     <tr class="font12">
                         <td class="padding5">Khách hàng : {{ @$order->customer->full_name }}</td>
-                        <td class="padding5">SĐT: {{ @$order->customer->phone }}</td>
+                        <td class="padding5">Số dư còn lại:: {{ @number_format($order->customer->wallet) }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -132,6 +132,11 @@
                     </tr>
                     </tfoot>
                 </table>
+                @if(!empty($linkQr))
+                    <div style="display: flex;justify-content: center">
+                        <img width="50%" src="{{$linkQr}}" alt="">
+                    </div>
+                @endif
             </div>
         @else
             <td class="text-center"> Đơn hàng chưa thanh toán</td>
