@@ -62,7 +62,17 @@ class WalletController extends Controller
      */
     public function store(Request $request)
     {
-        $package = PackageWallet::findOrFail($request->package_id);
+        $request->merge([
+            'price' => $request->price ? str_replace(',', '', $request->price) : 0
+        ]);
+        $package = PackageWallet::where('order_price',$request->price)->first();
+        if (empty($package)){
+            $package = PackageWallet::create([
+                'order_price' => $request->price,
+                'price' => $request->price,
+                'name' => 'Gói nạp '.$request->price/1000000 .'M VNĐ',
+            ]);
+        }
         $customer = Customer::findOrFail($request->customer_id);
         $input = [
             'package_id'  => $package->id,

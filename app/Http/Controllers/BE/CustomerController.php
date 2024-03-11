@@ -335,7 +335,7 @@ class CustomerController extends Controller
         $history = [];
         $customer_post = [];
         $wallet = [];
-        $package = [];
+//        $package = [];
         $orders = [];
         $call_center = [];
         $contacts = [];
@@ -350,10 +350,9 @@ class CustomerController extends Controller
             return view('post.history', compact('customer_post'));
         }
         if ($request->history_wallet) {
-            $wallet = WalletHistory::where('customer_id',
-                $request->history_wallet)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
-            $package = PackageWallet::pluck('name', 'id')->toArray();
-            return view('wallet.history', compact('wallet', 'package'));
+            $wallet = WalletHistory::where('customer_id', $request->history_wallet)->orderByDesc('id')
+                ->paginate(StatusCode::PAGINATE_20);;
+            return view('wallet.history', compact('wallet'));
         }
         if ($request->schedules) {
             $schedules = Schedule::orderBy('id', 'desc')->where('user_id', $id)->paginate(10);
@@ -392,8 +391,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks',
-                'customer_post', 'customers', 'history', 'wallet', 'contacts',
-                'package', 'call_center', 'orders', 'tips'));
+                'customer_post', 'customers', 'history', 'wallet', 'contacts', 'call_center', 'orders', 'tips'));
     }
 
     /**

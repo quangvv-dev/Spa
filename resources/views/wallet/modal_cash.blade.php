@@ -8,9 +8,9 @@
                 <div class="col row">
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('package_id', 'Gói nạp', array('class' => ' required')) !!}
-                            {!! Form::select('package_id',$package, null, array('class' => 'form-control select2','required'=>true,'placeholder'=>'Chọn gói nạp')) !!}
-                            <span class="help-block">{{ $errors->first('name', ':message') }}</span>
+                            {!! Form::label('price', 'Số tiền nạp', array('class' => ' required')) !!}
+                            {!! Form::text('price', null, array('class' => 'form-control','required'=>true,'data-type'=>'currency')) !!}
+                            <span class="help-block">{{ $errors->first('price', ':message') }}</span>
                         </div>
                         <input type="hidden" name="customer_id" value="{{request()->segment(2)}}">
                     </div>
@@ -32,3 +32,4 @@
         allowClear: true
     });
 </script>
+<script src="{{asset('js/format-number.js')}}"></script>
