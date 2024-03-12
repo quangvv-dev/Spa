@@ -1,17 +1,17 @@
 <div class="table-responsive">
     <div class="card-header">
-        <div class="col-md-3 bold">
-            Tổng lỗi : <span class="text-info">{{$monitoring->total()}}</span>
+        <div class="col-md-4 bold">
+            Tổng lỗi : <span class="text-danger">{{$allCurrent??0}}</span>
         </div>
-        <div class="col-md-3 bold">
-            Nhân sự mắc lỗi: <span class="text-success"></span>
+        <div class="col-md-4 bold">
+            Nhân sự mắc lỗi: <span class="text-info">{{$employee??0}}</span>
         </div>
-        <div class="col-md-3 bold">
-            Nhân sự nghỉ việc (Khóa TK) : <span class="text-danger"></span>
+        <div class="col-md-4 bold">
+            Phân loại lỗi : <span class="text-warning">{{$countTypeError??0}}</span>
         </div>
-        <div class="col-md-3 bold">
-            Nhân sự tạm nghỉ : <span class="text-warning">0</span>
-        </div>
+{{--        <div class="col-md-3 bold">--}}
+{{--            Nhân sự tạm nghỉ : <span class="text-warning">0</span>--}}
+{{--        </div>--}}
     </div>
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">

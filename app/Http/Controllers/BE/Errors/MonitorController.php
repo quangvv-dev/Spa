@@ -43,11 +43,16 @@ class MonitorController extends Controller
     {
         $input = $request->all();
         $monitoring = Monitor::search($input);
+        $allCurrent = $monitoring->count();
+        $employee = clone $monitoring;
+        $countTypeError = clone $monitoring;
+        $employee = $employee->groupBy('user_id')->count();
+        $countTypeError = $countTypeError->groupBy('error_id')->count();
         $monitoring = $monitoring->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return view('errors.monitoring.ajax', compact('monitoring'));
+            return view('errors.monitoring.ajax', compact('monitoring','allCurrent','employee','countTypeError'));
         }
-        return view('errors.monitoring.index', compact('monitoring'));
+        return view('errors.monitoring.index', compact('monitoring','allCurrent','employee','countTypeError'));
     }
 
     /**
