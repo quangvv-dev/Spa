@@ -1,17 +1,17 @@
 <div class="table-responsive">
     <div class="card-header">
-        <div class="col-md-4 bold">
+        <div class="col-md-3 bold">
             Tổng lỗi : <span class="text-danger">{{$allCurrent??0}}</span>
         </div>
-        <div class="col-md-4 bold">
+        <div class="col-md-3 bold">
             Nhân sự mắc lỗi: <span class="text-info">{{$employee??0}}</span>
         </div>
-        <div class="col-md-4 bold">
+        <div class="col-md-3 bold">
             Phân loại lỗi : <span class="text-warning">{{$countTypeError??0}}</span>
         </div>
-{{--        <div class="col-md-3 bold">--}}
-{{--            Nhân sự tạm nghỉ : <span class="text-warning">0</span>--}}
-{{--        </div>--}}
+        <div class="col-md-3 bold">
+            Tổng tiền phạt : <span class="text-success">{{@number_format($allPrice)}}</span>
+        </div>
     </div>
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
@@ -23,6 +23,7 @@
             <th class="text-white text-center">Phân loại quy trình</th>
             <th class="text-white text-center">Khối</th>
             <th class="text-white text-center">Lỗi</th>
+            <th class="text-white text-center">Mức phạt</th>
             <th class="text-white text-center">Note</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
@@ -38,6 +39,7 @@
                     <td class="text-center">{{ !empty($m->classify)?$m->classify->name:'X' }}</td>
                     <td class="text-center">{{ !empty($m->block)?$m->block->name:'X' }}</td>
                     <td class="text-center">{{ !empty($m->error)?$m->error->name:'X' }}</td>
+                    <td class="text-center">{{ $m->price?number_format($m->price):0}}</td>
                     <td class="text-center">{{ $m->note??''}}</td>
                     <td class="text-center">
                         <label class="switch">

@@ -44,15 +44,16 @@ class MonitorController extends Controller
         $input = $request->all();
         $monitoring = Monitor::search($input);
         $allCurrent = $monitoring->count();
+        $allPrice = $monitoring->sum('price');
         $employee = clone $monitoring;
         $countTypeError = clone $monitoring;
         $employee = $employee->groupBy('user_id')->count();
         $countTypeError = $countTypeError->groupBy('error_id')->count();
         $monitoring = $monitoring->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
-            return view('errors.monitoring.ajax', compact('monitoring','allCurrent','employee','countTypeError'));
+            return view('errors.monitoring.ajax', compact('monitoring','allCurrent','employee','countTypeError','allPrice'));
         }
-        return view('errors.monitoring.index', compact('monitoring','allCurrent','employee','countTypeError'));
+        return view('errors.monitoring.index', compact('monitoring','allCurrent','employee','countTypeError','allPrice'));
     }
 
     /**
@@ -71,9 +72,12 @@ class MonitorController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge(['owner_id' => Auth::user()->id]);
+        $request->merge([
+            'owner_id' => Auth::user()->id,
+            'price' => $request->price ? str_replace(',', '', $request->price) : 0
+            ]);
         Monitor::create($request->all());
-        return back()->with('status', 'Tạo mới đơn giám sát');
+        return back()->with('status', 'Tạo mới đơn giám sát thành công');
     }
 
     /**
@@ -105,6 +109,9 @@ class MonitorController extends Controller
      */
     public function update(Request $request, Monitor $monitoring)
     {
+        $request->merge([
+            'price' => $request->price ? str_replace(',', '', $request->price) : 0
+        ]);
         $monitoring->update($request->all());
         if ($request->ajax()){
             return 1;

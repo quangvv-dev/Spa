@@ -46,13 +46,17 @@
                     {!! Form::label('classify_id', 'Phân loại quy trình', array('class' => ' required')) !!}
                     {!! Form::select('classify_id',$classify, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn quy trình--', 'required' => true)) !!}
                 </div>
-                <div class="col-xs-12 col-md-6">
+                <div class="col-xs-12 col-md-6 ">
+                    {!! Form::label('error_id', 'Lỗi vi phạm', array('class' => ' required')) !!}
+                    {!! Form::select('error_id',$error, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn lỗi vi phạm--', 'required' => true)) !!}
+                </div>
+                <div class="col-xs-12 col-md-3">
                     {!! Form::label('block_id', 'Khối', array('class' => ' required')) !!}
                     {!! Form::select('block_id',$block, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn khối--', 'required' => true)) !!}
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    {!! Form::label('error_id', 'Lỗi vi phạm', array('class' => ' required')) !!}
-                    {!! Form::select('error_id',$error, null, array('class' => 'form-control select2 header-search','placeholder'=>'--Chọn lỗi vi phạm--', 'required' => true)) !!}
+                <div class="col-xs-12 col-md-3">
+                    {!! Form::label('price', 'Số tiền phạt (VNĐ)') !!}
+                    {!! Form::text('price', !empty($monitoring->price)?number_format($monitoring->price):0, array('class' => 'form-control','data-type'=>'currency')) !!}
                 </div>
                 @if (isset($monitoring))
                     <div class="col-xs-12 col-md-6">
@@ -78,6 +82,7 @@
 @section('_script')
     <!-- Bootstrap fileupload js -->
     <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js') }}"></script>
+    <script src="{{asset('js/format-number.js')}}"></script>
     <script>
         $(document).ready(function () {
             // validate phone

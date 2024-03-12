@@ -23,6 +23,7 @@ class CreateMonitorsTable extends Migration
             $table->integer('block_id')->comment('Khối');
             $table->integer('error_id')->comment('Lỗi');
             $table->integer('user_id')->comment('Người mắc lỗi');
+            $table->bigInteger('price')->nullable()->comment('Số tiền phạt');
             $table->text('note')->nullable()->comment('Mô tả');
             $table->integer('status')->default(0)->comment('0:chờ duyệt | 1: duyệt | 2: không duyệt');
             $table->timestamps();
