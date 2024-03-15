@@ -59,74 +59,74 @@
 @section('content')
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header search-box searchbox-sticky">
-                <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
-                       type="text" id="search">
-                <div class="col-md-2 col-xs-12">
-                    <select name="telesales_id" id="telesales_id" class="form-control telesales">
-                        <option value="">Người phụ trách</option>
-                        @foreach($telesales as $k => $l)
-                            <optgroup label="{{ $k }}">
+            <form>
+                <div class="card-header search-box searchbox-sticky">
+                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
+                           type="text" id="search">
+                    <div class="col-md-2 col-xs-12">
+                        <select name="telesales_id" id="telesales_id" class="form-control telesales select2">
+                            <option value="">Người phụ trách</option>
+                            @foreach($telesales as $k => $l)
                                 @foreach($l as $kl => $vl)
                                     <option
                                         {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
                                 @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2 col-xs-12">
-                    <select name="group" class="form-control group">
-                        <option value="">Nhóm dịch vụ</option>
-                        @foreach($categories as $item)
-                            <option value="{{$item->id}}">{{ $item->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2 col-xs-12">
-                    <select name="call_back" class="form-control call_back">
-                        <option value="">Tất cả công việc</option>
-                        <option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>
-                    </select>
-                </div>
-                <div class="col-xs-12" style="max-width: 170px">
-                    @if(empty($checkRole))
-                        <select name="branch_id" class="form-control branch_id">
-                            <option value="">Tất cả chi nhánh</option>
-                            @foreach($branchs as $k=> $item)
-                                <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
                             @endforeach
                         </select>
-                    @endif
-                </div>
-                <div class="col relative">
-                    <a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}
-                        class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span class="tooltiptext">Nhập khách hàng (excel)</span>
-                    </a>
-                    <a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}
-                       class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModalExport">
-                        <i class="fas fa-cloud-download-alt"></i>
-                        <span class="tooltiptext">Tải khách hàng (excel)</span>
-                    </a>
-                    {{--<a class="btn tooltip-nav dropdown-custom1">--}}
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                        <select name="group" class="form-control group select2">
+                            <option value="">Nhóm dịch vụ</option>
+                            @foreach($categories as $item)
+                                <option value="{{$item->id}}">{{ $item->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                        <select name="call_back" class="form-control call_back">
+                            <option value="">Tất cả công việc</option>
+                            <option value="{{\App\Constants\StatusCode::GOI_LAI}}">GỌI LẠI</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12" style="max-width: 170px">
+                        @if(empty($checkRole))
+                            <select name="branch_id" class="form-control branch_id">
+                                <option value="">Tất cả chi nhánh</option>
+                                @foreach($branchs as $k=> $item)
+                                    <option {{$k==1?'selected':''}} value="{{$k}}">{{ $item}}</option>
+                                @endforeach
+                            </select>
+                        @endif
+                    </div>
+                    <div class="col relative">
+                        <a {{$roleGlobal->permission('customer.import')?:"style=display:none"}}
+                           class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModal">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="tooltiptext">Nhập khách hàng (excel)</span>
+                        </a>
+                        <a {{$roleGlobal->permission('customer.export')?:"style=display:none"}}
+                           class="btn tooltip-nav" href="#" data-toggle="modal" data-target="#myModalExport">
+                            <i class="fas fa-cloud-download-alt"></i>
+                            <span class="tooltiptext">Tải khách hàng (excel)</span>
+                        </a>
+                        {{--<a class="btn tooltip-nav dropdown-custom1">--}}
                         {{--@include('components.user_filter_grid')--}}
-                    {{--</a>--}}
-                    @if($roleGlobal->permission('customers.add'))
-                        <a class="right btn btn-primary btn-flat"
-                           href="{{ route('customers.create') }}">Tạo mới</a>
-                    @endif
+                        {{--</a>--}}
+                        @if($roleGlobal->permission('customers.add'))
+                            <a class="right btn btn-primary btn-flat"
+                               href="{{ route('customers.create') }}">Tạo mới</a>
+                        @endif
+                    </div>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a style="display: none" href="#" class="angleDoubleUp">
+                                    <i class="fa fa-angle-double-up"></i></a></li>
+                            <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="heading-elements">
-                    <ul class="list-inline mb-0">
-                        <li><a style="display: none" href="#" class="angleDoubleUp">
-                                <i class="fa fa-angle-double-up"></i></a></li>
-                        <li><a href="#" class="angleDoubleDown"><i class="fa fa-angle-double-down"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-            @include('customers.dropdownFilter')
+                @include('customers.dropdownFilter')
+            </form>
             <div id="registration-form">
                 @include('customers.ajax')
             </div>

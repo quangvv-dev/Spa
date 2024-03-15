@@ -8,7 +8,7 @@
         </select>
     </div>
     <div class="col-md-2 col-xs-12">
-        <select name="group_product" class="form-control group-product">
+        <select name="group_product" class="form-control group-product select2">
             <option value="">MKT phụ trách</option>
             @foreach($marketingUsers as $k=> $item)
                 <option value="{{$k}}">{{ $item}}</option>
@@ -27,7 +27,7 @@
         {!! Form::select('location_id',$location, null, array('class' => 'form-control location','placeholder'=>'Cụm khu vực')) !!}
     </div>
     <div class="col-md-2 col-xs-12">
-        <select name="carepage_id" class="form-control carepage">
+        <select name="carepage_id" class="form-control carepage select2">
             <option value="">Người tạo</option>
             @foreach($carePageUsers as $k=> $item)
                 <option value="{{$k}}">{{ $item}}</option>
@@ -35,7 +35,7 @@
         </select>
     </div>
     <div class="col-md-2 col-xs-12">
-        <select name="cskh_id" class="form-control cskh">
+        <select name="cskh_id" class="form-control cskh select2">
             <option value="">CSKH</option>
             @foreach($cskh as $k=> $item)
                 <option value="{{$item->id}}">{{ $item->full_name}}</option>
