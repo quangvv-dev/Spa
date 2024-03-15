@@ -14,7 +14,6 @@
             @endif
             <div class="col row">
                 <div class="col-md-12 col-xs-12">
-
                     <div class="col row">
                         <div class="col-6 form-group">
                             {!! Form::label('name', 'Tên chiến dịch', array('class' => ' required control-label')) !!}
@@ -24,7 +23,7 @@
                         <div class="col-3 form-group required {{ $errors->has('start_date') ? 'has-error' : '' }}">
                             {!! Form::label('start_date', 'Ngày BĐ chiến dịch (từ ngày)') !!}
                             <input class="form-control" id="search" autocomplete="off"
-                                   data-toggle="datepicker" name="from_date"
+                                   data-toggle="datepicker" name="start_date"
                                    type="text"
                                    value="{{isset($order) ? \Carbon\Carbon::parse($order->date)->format('d/m/Y') : ''}}">
                         </div>
@@ -34,16 +33,6 @@
                                    data-toggle="datepicker" name="end_date"
                                    type="text"
                                    value="{{isset($order) ? \Carbon\Carbon::parse($order->date)->format('d/m/Y') : ''}}">
-                        </div>
-                        <div class="col-6 form-group">
-                            {!! Form::label('cskh_id', 'CSKH phụ trách', array('class' => ' required control-label')) !!}
-                            {!! Form::select('cskh_id', $cskh, null, array('class' => 'form-control select2', 'required' => true,'multiple'=>true, 'data-placeholder'=>'Chọn CSKH',)) !!}
-                            <span class="help-block">{{ $errors->first('cskh_id', ':message') }}</span>
-                        </div>
-                        <div class="col-6 form-group">
-                            {!! Form::label('sale_id', 'Telesale phụ trách', array('class' => ' required control-label')) !!}
-                            {!! Form::select('sale_id', $sale, null, array('class' => 'form-control select2', 'required' => true,'multiple'=>true, 'data-placeholder'=>'Chọn Sale',)) !!}
-                            <span class="help-block">{{ $errors->first('sale_id', ':message') }}</span>
                         </div>
                     </div>
                 </div>
@@ -85,10 +74,24 @@
                                 class="fas fa-sync"></i></button>
                     </div>
                 </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="col row">
+                        <div class="col-6 form-group">
+                            {!! Form::label('cskh_id', 'CSKH phụ trách', array('class' => ' required control-label')) !!}
+                            {!! Form::select('cskh_id[]', $cskh, null, array('class' => 'form-control select2', 'required' => true,'multiple'=>true, 'data-placeholder'=>'Chọn CSKH',)) !!}
+                            <span class="help-block">{{ $errors->first('cskh_id', ':message') }}</span>
+                        </div>
+                        <div class="col-6 form-group">
+                            {!! Form::label('sale_id', 'Telesale phụ trách', array('class' => ' required control-label')) !!}
+                            {!! Form::select('sale_id[]', $sale, null, array('class' => 'form-control select2', 'required' => true,'multiple'=>true, 'data-placeholder'=>'Chọn Sale',)) !!}
+                            <span class="help-block">{{ $errors->first('sale_id', ':message') }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col bot" style="margin-top: 10px">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{route('category.index')}}" class="btn btn-danger">Về danh sách</a>
+                <a href="{{route('campaigns.index')}}" class="btn btn-danger">Về danh sách</a>
             </div>
             {{ Form::close() }}
 
@@ -112,8 +115,8 @@
                 data: {
                     from_order: from_order,
                     to_order: to_order,
-                    branch: branch,
-                    status: status
+                    branch_id: branch,
+                    customer_status: status
                 }
             }).then(function (data) {
                 $('.alert-file').html('Tệp có '+data+' khách hàng !');

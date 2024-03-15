@@ -19,9 +19,9 @@ class ChangeAchitechCampaigns extends Migration
             $table->text('customer_status')->comment('trạng thái khách hàng');
             $table->date('from_order')->comment('Ngày phát sinh đơn hàng');
             $table->date('to_order')->comment('Ngày kết thúc phát sinh đơn hàng');
-            $table->integer('branch_id')->comment('Ngày kết thúc phát sinh đơn hàng');
+            $table->text('branch_id');
             $table->text('sale_id');
-            $table->text('cskh');
+            $table->text('cskh_id');
         });
     }
 
