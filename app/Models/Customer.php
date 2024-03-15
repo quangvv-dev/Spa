@@ -186,17 +186,18 @@ class Customer extends Model
         $data = self::latest();
         if ($user->department_id == DepartmentConstant::TELESALES) {
             $member = checkTeamLead();
-            if (!empty($user->isLeader) && count($member)) {
-                $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
-            } else {
-                if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
-                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
-                } else {
-                    $data = $data->where('telesales_id', $user->id);
-                }
-            }
             if (isset($param['search'])) {
                 $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+            }else{
+                if (!empty($user->isLeader) && count($member)) {
+                    $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                } else {
+                    if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
+                        $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                    } else {
+                        $data = $data->where('telesales_id', $user->id);
+                    }
+                }
             }
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
