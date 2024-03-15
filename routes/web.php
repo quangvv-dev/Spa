@@ -167,6 +167,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('get-all-user-department-team', 'UserController@getAllUserDepartmentTeam');
 
         Route::post('active-user/{id}', 'UserController@activeUser');
+
+        Route::get('check-campaign', 'Campaign\CampaignController@checkCampaign');
     });
 
     Route::resource('rules', 'RuleController');//Automation
@@ -336,5 +338,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('login/facebook/callback', 'Marketing\FanpageController@callbackFB');
     Route::get('remove-account-facebook', 'Marketing\FanpageController@removeAccount')->name('facebook.removeAccount');
 
+    //Campaigns
+    Route::resource('campaigns', 'Campaign\CampaignController');
 //    Route::get('test-cham-cong',)
 });
