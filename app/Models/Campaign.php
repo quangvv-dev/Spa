@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\Functions;
@@ -16,29 +17,41 @@ class Campaign extends Model
         return $this->hasMany(CustomerCampaign::class);
     }
 
+    public function getStatusTextAttribute()
+    {
+        $status = Status::whereIn('id', json_decode($this->customer_status))->pluck('name')->toArray();
+        return count($status) ? implode(' |', $status) : '';
+    }
+
+    public function getBranchTextAttribute()
+    {
+        $branch = Branch::whereIn('id', json_decode($this->branch_id))->pluck('name')->toArray();
+        return count($branch) ? implode(' |', $branch) : '';
+    }
+
+    public function getSaleTextAttribute()
+    {
+        $users = User::whereIn('id', json_decode($this->sale_id))->pluck('full_name')->toArray();
+        return count($users) ? implode(' |', $users) : '';
+    }
+
+    public function getCskhTextAttribute()
+    {
+        $users = User::whereIn('id', json_decode($this->cskh_id))->pluck('full_name')->toArray();
+        return count($users) ? implode('|', $users) : '';
+    }
+
     public static function search($input)
     {
-        $data = self::orderByDesc('updated_at')
-            ->when(isset($input['data_time']), function ($query) use ($input) {
-                $query->when($input['data_time'] == 'TODAY' ||
-                    $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                    $q->whereDate('created_at', getTime(($input['data_time'])));
-                })
-                    ->when($input['data_time'] == 'THIS_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'LAST_WEEK' ||
-                        $input['data_time'] == 'THIS_MONTH' ||
-                        $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                        $q->whereBetween('created_at', getTime(($input['data_time'])));
-                    });
-            })
-            ->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-                $q->whereBetween('created_at', [
-                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
-                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
-                ]);
-            });
+        $data = self::when(isset($input['search']) && $input['search'], function ($query) use ($input) {
+            $query->where('name', 'like', '%' . $input['search'] . '%');
+        })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
+        });
 
-        return $data;
+        return $data->orderByDesc('updated_at');
     }
 }

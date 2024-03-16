@@ -45,13 +45,18 @@ class CampaignController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     *  Display a listing of the resource.
+     * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $campaigns = Campaign::search($request->all())->paginate(StatusCode::PAGINATE_20);
+        if ($request->ajax()){
+            return view('campaigns.ajax',compact('campaigns'));
+        }
+        return view('campaigns.index',compact('campaigns'));
     }
 
     /**
@@ -109,7 +114,7 @@ class CampaignController extends Controller
             }
         }
         $campaign->customer_campaign()->insert($list_campaign);
-        return 'thành công';
+        return redirect(route('campaigns.index'));
     }
 
     /**
@@ -131,9 +136,9 @@ class CampaignController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Campaign $campaign)
     {
-        //
+        return view('campaigns._form', compact('campaign'));
     }
 
     /**
@@ -144,20 +149,59 @@ class CampaignController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Campaign $campaign)
     {
-        //
+        $input = $request->all();
+        $input['cskh_id'] = json_encode($input['cskh_id']);
+        $input['sale_id'] = json_encode($input['sale_id']);
+        $input['customer_status'] = json_encode($input['customer_status']);
+        $input['branch_id'] = json_encode($input['branch_id']);
+        $campaign->update($input);
+        $campaign->customer_campaign()->delete();
+        $customers = $this->loadCustomer($request)->pluck('id')->toArray();
+        $list_campaign = [];
+        if (count($customers)) {
+            $index_sale = 0;
+            $index_cskh = 0;
+            foreach ($customers as $c) {
+                $sale = $request->sale_id[$index_sale];
+                $cskh = $request->cskh_id[$index_cskh];
+
+                $list_campaign[] = [
+                    'customer_id' => $c,
+                    'campaign_id' => $campaign->id,
+                    'cskh_id'     => $cskh,
+                    'sale_id'     => $sale,
+                ];
+
+                $index_sale++;
+                $index_cskh++;
+
+                // Kiểm tra nếu đã duyệt hết mảng sale_id và cskh_id,
+                // thì reset lại index để bắt đầu lại từ đầu
+                if ($index_sale >= count($request->sale_id)) {
+                    $index_sale = 0;
+                }
+                if ($index_cskh >= count($request->cskh_id)) {
+                    $index_cskh = 0;
+                }
+            }
+        }
+        $campaign->customer_campaign()->insert($list_campaign);
+        return back()->with('status','Cập nhật chiến dịch thành công');
+
     }
 
     /**
      * Remove the specified resource from storage.
+     * @param Campaign $campaign
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Campaign $campaign)
     {
-        //
+        $campaign->delete();
+        return back()->with('error','Xóa chiến dịch thành công');
     }
 }
