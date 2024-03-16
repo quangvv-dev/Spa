@@ -30,7 +30,7 @@
                         <select name="campaign_id" class="form-control select2">
                             <option value="">--Chọn chiến dịch--</option>
                             @forelse($campaigns as $k => $item)
-                                <option {{$k == 0?'selected':''}} value="{{$item->id}}">{{$item->name}}</option>
+                                <option value="{{$item->id}}">{{$item->name}}</option>
                             @empty
                             @endforelse
                         </select>
@@ -44,8 +44,17 @@
                             @endforelse
                         </select>
                     </div>
+                    <div class="col-xs-12 col-md-2">
+                        <select name="branch_id" class="form-control select2">
+                            <option value="">--Chọn chi nhánh--</option>
+                            @forelse($branchs as $k => $item)
+                                <option value="{{$k}}">{{$item}}</option>
+                            @empty
+                            @endforelse
+                        </select>
+                    </div>
                     <input type="hidden" name="page" id="page">
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-2 col-md-2">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
                     </div>
 

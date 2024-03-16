@@ -47,10 +47,10 @@ class CustomerCampaignController extends Controller
         }
         $input = $request->all();
 
-        if (empty($input['campaign_id'])) {
-            $input['campaign_id'] = count($campaigns) ? $campaigns[0]->id : 0;
-        }
-        $customers = CustomerCampaign::search($input)->paginate(StatusCode::PAGINATE_20);
+//        if (empty($input['campaign_id'])) {
+//            $input['campaign_id'] = count($campaigns) ? $campaigns[0]->id : 0;
+//        }
+        $customers = CustomerCampaign::search($input)->take(500)->paginate(StatusCode::PAGINATE_20);
         if ($request->ajax()) {
             return view('customer_campaign.ajax', compact('campaigns', 'customers'));
         }
