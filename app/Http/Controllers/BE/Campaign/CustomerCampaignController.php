@@ -203,4 +203,11 @@ class CustomerCampaignController extends Controller
         $campaign->delete();
         return back()->with('error', 'Xóa chiến dịch thành công');
     }
+
+    public function updateStatus(Request $request, CustomerCampaign $customer)
+    {
+        $customer->status = $request->status;
+        $customer->save();
+        return $customer;
+    }
 }

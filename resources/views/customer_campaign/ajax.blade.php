@@ -28,7 +28,8 @@
                     <td class="text-center">{{@number_format($c->orders->sum('all_total') - $c->orders->sum('gross_revenue'))}}</td>
                     <td class="text-center">{{@$c->sale->full_name}}</td>
                     <td class="text-center">
-                        {!! Form::select('the_rest', \App\Models\CustomerCampaign::statusLabel, @$c->status, array('class' => 'form-control','id'=>'status','placeholder'=>'Tất cả trạng thái')) !!}
+                        {!! Form::select('the_rest', \App\Models\CustomerCampaign::statusLabel, @$c->status, array('class' => 'form-control status',
+                            'data-id'=> $c->id,'placeholder'=>'Tất cả trạng thái')) !!}
                     </td>
                     <td class="text-center">{{@$c->customer->branch->name}}</td>
                 </tr>

@@ -36,7 +36,7 @@
                         </select>
                     </div>
                     <div class="col-xs-12 col-md-2">
-                        <select name="campaign_id" class="form-control select2">
+                        <select name="status" class="form-control select2">
                             <option value="">--Chọn trạng thái--</option>
                             @forelse(\App\Models\CustomerCampaign::statusLabel as $k => $item)
                                 <option value="{{$k}}">{{$item}}</option>
@@ -64,6 +64,18 @@
             let pages = $(this).attr('href').split('page=')[1];
             $('#page').val(pages);
             $('#gridForm').submit();
+        });
+        $(document).on('change', '.status', function (e) {
+            let status = $(this).val();
+            $.ajax({
+                url: "/update-status-campaign/" + $(this).data('id'),
+                method: "POST",
+                data: {
+                    status: status,
+                }
+            }).done(function (data) {
+                alertify.success('Cập nhật trạng thái thành công !');
+            });
         });
         var inputs = document.querySelectorAll( '.inputfile' );
         Array.prototype.forEach.call( inputs, function( input )

@@ -341,5 +341,6 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     //Campaigns
     Route::resource('campaigns', 'Campaign\CampaignController');
     Route::resource('customer-campaign', 'Campaign\CustomerCampaignController');
+    Route::post('update-status-campaign/{customer}', 'Campaign\CustomerCampaignController@updateStatus');
 //    Route::get('test-cham-cong',)
 });

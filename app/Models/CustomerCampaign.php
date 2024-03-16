@@ -55,6 +55,8 @@ class CustomerCampaign extends Model
             });
         })->when(isset($input['campaign_id']) && $input['campaign_id'], function ($query) use ($input) {
             $query->where('campaign_id', $input['campaign_id']);
+        })->when(isset($input['status']) && $input['status'], function ($query) use ($input) {
+            $query->where('status', $input['status']);
         })->when(isset($input['sale_id']) && $input['sale_id'], function ($query) use ($input) {
             $query->where('sale_id', $input['sale_id']);
         })->when(isset($input['cskh_id']) && $input['cskh_id'], function ($query) use ($input) {
