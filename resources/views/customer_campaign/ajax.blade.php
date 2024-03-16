@@ -4,47 +4,44 @@
         <tr>
             <th class="text-white">STT</th>
             <th class="text-white text-center">Chiến dịch</th>
-            <th class="text-white text-center">Ngày áp dụng</th>
+            <th class="text-white text-center">Khách hàng</th>
+            <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Sale</th>
             <th class="text-white text-center">CSKH</th>
-{{--            <th class="text-white text-center">Quyền</th>--}}
             <th class="text-white text-center">Chi nhánh</th>
-            <th class="text-white text-center">Thao tác</th>
+            <th class="text-white text-center">H.thành</th>
         </tr>
         </thead>
         <tbody>
-        @if (count($campaigns))
-            @foreach($campaigns as $k => $c)
+        @if (count($customers))
+            @foreach($customers as $k => $c)
                 <tr>
                     <th scope="row">{{ $k +1 }}</th>
-                    <td class="text-center"><a href="{{route('campaigns.edit',$c->id)}}">{{ $c->name }}</a></td>
-                    <td class="text-center"><span class="small-tip-custom">{{ $c->start_date.' -> '.$c->end_date }}</span></td>
-                    <td class="text-center">{{$c->status_text}}</td>
-                    <td class="text-center"><span class="title-small">({{$c->sale_text}})</span></td>
-                    <td class="text-center"><span class="title-small">({{$c->cskh_text}})</span></td>
-                    <td class="text-center">{{$c->branch_text}}</td>
-                    <td class="text-center">
-                        <a title="sửa tài khoản" class="btn" href="{{ route('campaigns.edit', $c->id) }}"><i class="fas fa-edit"></i></a>
-                        <a title="Xóa tài khoản" class="btn delete" href="javascript:void(0)"
-                           data-url="{{ route('campaigns.destroy', $c->id) }}"><i class="fas fa-trash-alt"></i></a>
-                    </td>
+                    <td class="text-center">{{@$c->campaign->name}}</td>
+                    <td class="text-center">{{@$c->customer->full_name}}</td>
+                    <td class="text-center">{{@$c->customer->phone}}</td>
+                    <td class="text-center">{{@$c->customer->status->name}}</td>
+                    <td class="text-center">{{@$c->sale->full_name}}</td>
+                    <td class="text-center">{{@$c->cskh->full_name}}</td>
+                    <td class="text-center">{{@$c->customer->branch->name}}</td>
+                    <td class="text-center"><input type="checkbox"></td>
                 </tr>
             @endforeach
         @else
             <tr>
-                <td id="no-data" class="text-center" colspan="10">Không tồn tại dữ liệu</td>
+                <td id="no-data" class="text-center" colspan="11">Không tồn tại dữ liệu</td>
             </tr>
         @endif
         </tbody>
     </table>
     <div class="pull-left">
         <div class="page-info">
-            {{ 'Tổng số ' . $campaigns->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
+            {{ 'Tổng số ' . $customers->total() . ' bản ghi ' . (request()->search ? 'found' : '') }}
         </div>
     </div>
     <div class="pull-right">
-        {{ $campaigns->links() }}
+        {{ $customers->links() }}
     </div>
 </div>
 <!-- table-responsive -->

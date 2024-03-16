@@ -20,16 +20,21 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Quản lý chiến dịch</h3>
-                <div class="col">
-                    <a class="right btn btn-primary btn-flat" href="{{ route('campaigns.create') }}"><i
-                            class="fa fa-plus-circle"></i> Tạo mới</a>
-                </div>
+                <h3 class="card-title">DS khách hàng chiến dịch</h3>
             </div>
             <div class="card-header">
-                <form class="row col-12" action="{{route('campaigns.index')}}" method="get" id="gridForm">
-                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"
-                           type="text" id="search" value="{{@$input['search']}}">
+                <form class="row col-12" action="{{route('customer-campaign.index')}}" method="get" id="gridForm">
+{{--                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"--}}
+{{--                           type="text" id="search" value="{{@$input['search']}}">--}}
+                    <div class="col-xs-12 col-md-2">
+                        <select name="campaign_id" class="form-control select2">
+                            <option value="">--Chọn chiến dịch--</option>
+                            @forelse($campaigns as $k => $item)
+                                <option {{$k == 0?'selected':''}} value="{{$item->id}}">{{$item->name}}</option>
+                            @empty
+                            @endforelse
+                        </select>
+                    </div>
                     <input type="hidden" name="page" id="page">
                     <div class="col-lg-4 col-md-4">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
@@ -38,7 +43,7 @@
                 </form>
             </div>
             <div id="registration-form">
-                @include('campaigns.ajax')
+                @include('customer_campaign.ajax')
             </div>
         </div>
     </div>
@@ -51,20 +56,6 @@
             $('#page').val(pages);
             $('#gridForm').submit();
         });
-        $(document).on('change', '.check', function () {
-            let value = this.checked ? 1 : 0;
-            console.log(value);
-            $.ajax({
-                url: "/ajax/active-user/" + $(this).data('id'),
-                type: 'POST',
-                data: {
-                    active: value,
-                    // _token: 'I2oyUkzbxy2pMyZfs6idnBIxPoSnFo7CzQmY15xr',
-                }
-            }).done(function (data) {
-                alertify.success('Cập nhật tk thành công !');
-            });
-        })
         var inputs = document.querySelectorAll( '.inputfile' );
         Array.prototype.forEach.call( inputs, function( input )
         {

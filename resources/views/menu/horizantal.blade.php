@@ -88,6 +88,7 @@
                                 </ul>
                             </li>
                         @endif
+
                         @if($roleGlobal->permission('source.list') || $roleGlobal->permission('marketing.seeding_number'))
                             <li class="sub-with-sub">
                                 <a href="#">Dữ liệu</a>
@@ -131,6 +132,13 @@
                                 </ul>
                             </li>
                         @endif
+                        <li class="sub-with-sub">
+                            <a href="#">Chiến dịch</a>
+                            <ul>
+                                <li><a href="{{route('campaigns.index')}}">Quản lý chiến dịch</a></li>
+                                <li><a href="{{route('customer-campaign.index')}}">Khách hàng</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </li>

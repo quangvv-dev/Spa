@@ -7,13 +7,15 @@ use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Campaign;
+use App\Models\CustomerCampaign;
 use App\Models\Order;
 use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
-class CampaignController extends Controller
+class CustomerCampaignController extends Controller
 {
     public function __construct()
     {
@@ -27,36 +29,32 @@ class CampaignController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
-     * @return mixed
-     */
-    public function checkCampaign(Request $request)
-    {
-        return $this->loadCustomer($request)->count();
-    }
-
-    public function loadCustomer($request)
-    {
-        return Order::select('c.id')->join('customers as c', 'c.id', '=', 'orders.member_id')
-            ->whereBetween('orders.created_at', [$request->from_order . " 00:00:00", $request->to_order . " 23:59:59"])
-            ->whereIn('c.status_id', $request->customer_status)->whereIn('orders.branch_id',
-                $request->branch_id)->groupBy('orders.member_id')->get();
-    }
-
-    /**
      *  Display a listing of the resource.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
      */
     public function index(Request $request)
     {
-        $campaigns = Campaign::search($request->all())->paginate(StatusCode::PAGINATE_20);
-        if ($request->ajax()){
-            return view('campaigns.ajax',compact('campaigns'));
+        if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
+            $campaigns = CustomerCampaign::select('c.id', 'c.name')->join('campaigns as c', 'c.id', '=',
+                'customer_campaign.campaign_id')
+                ->where('customer_campaign.sale_id', Auth::user()->id)->orWhere('customer_campaign.cskh_id',
+                    Auth::user()->id)->groupBy('campaign_id')->orderByDesc('c.id')->get();
+        } else {
+            $campaigns = Campaign::select('id', 'name')->orderByDesc('id')->get();
         }
-        return view('campaigns.index',compact('campaigns'));
+        $input = $request->all();
+
+        if (empty($input['campaign_id'])) {
+            $input['campaign_id'] = count($campaigns) ? $campaigns[0]->id : 0;
+        }
+        $customers = CustomerCampaign::search($input)->paginate(StatusCode::PAGINATE_20);
+        if ($request->ajax()) {
+            return view('customer_campaign.ajax', compact('campaigns', 'customers'));
+        }
+        return view('customer_campaign.index', compact('campaigns', 'customers'));
     }
 
     /**
@@ -188,12 +186,13 @@ class CampaignController extends Controller
             }
         }
         $campaign->customer_campaign()->insert($list_campaign);
-        return back()->with('status','Cập nhật chiến dịch thành công');
+        return back()->with('status', 'Cập nhật chiến dịch thành công');
 
     }
 
     /**
      * Remove the specified resource from storage.
+     *
      * @param Campaign $campaign
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -201,8 +200,7 @@ class CampaignController extends Controller
      */
     public function destroy(Campaign $campaign)
     {
-        $campaign->customer_campaign()->delete();
         $campaign->delete();
-        return back()->with('error','Xóa chiến dịch thành công');
+        return back()->with('error', 'Xóa chiến dịch thành công');
     }
 }
