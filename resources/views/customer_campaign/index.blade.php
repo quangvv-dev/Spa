@@ -24,13 +24,22 @@
             </div>
             <div class="card-header">
                 <form class="row col-12" action="{{route('customer-campaign.index')}}" method="get" id="gridForm">
-{{--                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"--}}
-{{--                           type="text" id="search" value="{{@$input['search']}}">--}}
-                    <div class="col-xs-12 col-md-2">
+                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm SĐT…" tabindex="1"
+                           type="text" value="{{@$input['search']}}">
+                    <div class="col-xs-12 col-md-3">
                         <select name="campaign_id" class="form-control select2">
                             <option value="">--Chọn chiến dịch--</option>
                             @forelse($campaigns as $k => $item)
                                 <option {{$k == 0?'selected':''}} value="{{$item->id}}">{{$item->name}}</option>
+                            @empty
+                            @endforelse
+                        </select>
+                    </div>
+                    <div class="col-xs-12 col-md-2">
+                        <select name="campaign_id" class="form-control select2">
+                            <option value="">--Chọn trạng thái--</option>
+                            @forelse(\App\Models\CustomerCampaign::statusLabel as $k => $item)
+                                <option value="{{$k}}">{{$item}}</option>
                             @empty
                             @endforelse
                         </select>

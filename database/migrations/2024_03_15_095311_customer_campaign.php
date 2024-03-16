@@ -21,7 +21,8 @@ class CustomerCampaign extends Migration
             $table->bigInteger('customer_id')->unsigned();
             $table->foreign('customer_id')->references('id')->on('customers')->OnDelete('cascade');
             $table->integer('sale_id');
-            $table->integer('cskh_id');
+            $table->integer('status')->default(0);
+
         });
     }
 

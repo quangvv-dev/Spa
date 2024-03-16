@@ -74,12 +74,7 @@
                 <div class="col-md-12 col-xs-12">
                     <div class="col row">
                         <div class="col-6 form-group">
-                            {!! Form::label('cskh_id', 'CSKH phụ trách', array('class' => ' required control-label')) !!}
-                            {!! Form::select('cskh_id[]', $cskh, @json_decode($campaign->cskh_id), array('class' => 'form-control select2', 'required' => true,'multiple'=>true, 'data-placeholder'=>'Chọn CSKH',)) !!}
-                            <span class="help-block">{{ $errors->first('cskh_id', ':message') }}</span>
-                        </div>
-                        <div class="col-6 form-group">
-                            {!! Form::label('sale_id', 'Telesale phụ trách', array('class' => ' required control-label')) !!}
+                            {!! Form::label('sale_id', 'Người phụ trách', array('class' => ' required control-label')) !!}
                             {!! Form::select('sale_id[]', $sale, @json_decode($campaign->sale_id), array('class' => 'form-control select2', 'required' => true,'multiple'=>true, 'data-placeholder'=>'Chọn Sale',)) !!}
                             <span class="help-block">{{ $errors->first('sale_id', ':message') }}</span>
                         </div>

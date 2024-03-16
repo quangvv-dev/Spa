@@ -35,12 +35,6 @@ class Campaign extends Model
         return count($users) ? implode(' |', $users) : '';
     }
 
-    public function getCskhTextAttribute()
-    {
-        $users = User::whereIn('id', json_decode($this->cskh_id))->pluck('full_name')->toArray();
-        return count($users) ? implode('|', $users) : '';
-    }
-
     public static function search($input)
     {
         $data = self::when(isset($input['search']) && $input['search'], function ($query) use ($input) {

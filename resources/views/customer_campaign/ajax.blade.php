@@ -3,14 +3,15 @@
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
-            <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Khách hàng</th>
             <th class="text-white text-center">SĐT</th>
-            <th class="text-white text-center">Trạng thái</th>
+            <th class="text-white text-center">Đơn hàng</th>
+            <th class="text-white text-center">Doanh số</th>
+            <th class="text-white text-center">Doanh thu</th>
+            <th class="text-white text-center">Còn nợ</th>
             <th class="text-white text-center">Sale</th>
-            <th class="text-white text-center">CSKH</th>
+            <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Chi nhánh</th>
-            <th class="text-white text-center">H.thành</th>
         </tr>
         </thead>
         <tbody>
@@ -18,14 +19,18 @@
             @foreach($customers as $k => $c)
                 <tr>
                     <th scope="row">{{ $k +1 }}</th>
-                    <td class="text-center">{{@$c->campaign->name}}</td>
                     <td class="text-center">{{@$c->customer->full_name}}</td>
-                    <td class="text-center">{{@$c->customer->phone}}</td>
-                    <td class="text-center">{{@$c->customer->status->name}}</td>
+                    <td class="text-center"><a href="callto:{{@$c->customer->phone }}">{{ str_limit(@$c->customer->phone,7,'xxx') }}</a>
+                    </td>
+                    <td class="text-center">{{@$c->orders->count()}}</td>
+                    <td class="text-center">{{@number_format($c->orders->sum('all_total'))}}</td>
+                    <td class="text-center">{{@number_format($c->orders->sum('gross_revenue'))}}</td>
+                    <td class="text-center">{{@number_format($c->orders->sum('all_total') - $c->orders->sum('gross_revenue'))}}</td>
                     <td class="text-center">{{@$c->sale->full_name}}</td>
-                    <td class="text-center">{{@$c->cskh->full_name}}</td>
+                    <td class="text-center">
+                        {!! Form::select('the_rest', \App\Models\CustomerCampaign::statusLabel, @$c->status, array('class' => 'form-control','id'=>'status','placeholder'=>'Tất cả trạng thái')) !!}
+                    </td>
                     <td class="text-center">{{@$c->customer->branch->name}}</td>
-                    <td class="text-center"><input type="checkbox"></td>
                 </tr>
             @endforeach
         @else

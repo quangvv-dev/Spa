@@ -6,9 +6,7 @@
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Ngày áp dụng</th>
             <th class="text-white text-center">Trạng thái</th>
-            <th class="text-white text-center">Sale</th>
-            <th class="text-white text-center">CSKH</th>
-{{--            <th class="text-white text-center">Quyền</th>--}}
+            <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Chi nhánh</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
@@ -22,7 +20,6 @@
                     <td class="text-center"><span class="small-tip-custom">{{ $c->start_date.' -> '.$c->end_date }}</span></td>
                     <td class="text-center">{{$c->status_text}}</td>
                     <td class="text-center"><span class="title-small">({{$c->sale_text}})</span></td>
-                    <td class="text-center"><span class="title-small">({{$c->cskh_text}})</span></td>
                     <td class="text-center">{{$c->branch_text}}</td>
                     <td class="text-center">
                         <a title="sửa tài khoản" class="btn" href="{{ route('campaigns.edit', $c->id) }}"><i class="fas fa-edit"></i></a>
