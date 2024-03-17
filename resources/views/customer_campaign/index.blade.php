@@ -27,10 +27,10 @@
                     <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm SĐT…" tabindex="1"
                            type="text" value="{{@$input['search']}}">
                     <div class="col-xs-12 col-md-3">
-                        <select name="campaign_id" class="form-control select2">
+                        <select name="campaign_id" id="campaign_search" class="form-control">
                             <option value="">--Chọn chiến dịch--</option>
                             @forelse($campaigns as $k => $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                <option data-sale="{{$item->SaleRelation}}" value="{{$item->id}}">{{$item->name}}</option>
                             @empty
                             @endforelse
                         </select>
@@ -44,15 +44,23 @@
                             @endforelse
                         </select>
                     </div>
-                    <div class="col-xs-12 col-md-2">
-                        <select name="branch_id" class="form-control select2">
-                            <option value="">--Chọn chi nhánh--</option>
-                            @forelse($branchs as $k => $item)
-                                <option value="{{$k}}">{{$item}}</option>
-                            @empty
-                            @endforelse
-                        </select>
-                    </div>
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
+                        <div class="col-xs-12 col-md-2">
+                            <select name="sale_id" id="sale_id" class="form-control select2">
+                                <option value="">--Người phụ trách--</option>
+                            </select>
+                        </div>
+                    @else
+                        <div class="col-xs-12 col-md-2">
+                            <select name="branch_id" class="form-control select2">
+                                <option value="">--Chọn chi nhánh--</option>
+                                @forelse($branchs as $k => $item)
+                                    <option value="{{$k}}">{{$item}}</option>
+                                @empty
+                                @endforelse
+                            </select>
+                        </div>
+                    @endif
                     <input type="hidden" name="page" id="page">
                     <div class="col-lg-2 col-md-2">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
@@ -85,6 +93,16 @@
             }).done(function (data) {
                 alertify.success('Cập nhật trạng thái thành công !');
             });
+        });
+        $(document).on('change', '#campaign_search', function (e) {
+            let sale = $("#campaign_search option:selected").data('sale');
+            let option = ` <option value="">--Người phụ trách--</option>`;
+            if(sale && sale.length) {
+                sale.forEach(item => {
+                    option += `<option value="` + item.id + `">` + item.full_name + `</option>`
+                })
+            }
+            $('#sale_id').html(option);
         });
         var inputs = document.querySelectorAll( '.inputfile' );
         Array.prototype.forEach.call( inputs, function( input )

@@ -35,6 +35,12 @@ class Campaign extends Model
         return count($users) ? implode(' |', $users) : '';
     }
 
+    public function getSaleRelationAttribute()
+    {
+        $users = User::select('id','full_name')->whereIn('id', json_decode($this->sale_id))->get();
+        return count($users) ? json_encode($users) : null;
+    }
+
     public static function search($input)
     {
         $data = self::when(isset($input['search']) && $input['search'], function ($query) use ($input) {

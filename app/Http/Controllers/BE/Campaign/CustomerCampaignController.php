@@ -21,9 +21,6 @@ class CustomerCampaignController extends Controller
     {
         view()->share([
             'branchs' => Branch::pluck('name', 'id')->toArray(),
-            'cskh'    => User::where('department_id', DepartmentConstant::CSKH)->pluck('full_name', 'id')->toArray(),
-            'sale'    => User::where('department_id', DepartmentConstant::TELESALES)->pluck('full_name',
-                'id')->toArray(),
             'status'  => Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray(),
         ]);
     }
@@ -43,7 +40,7 @@ class CustomerCampaignController extends Controller
                 ->where('customer_campaign.sale_id', Auth::user()->id)->orWhere('customer_campaign.cskh_id',
                     Auth::user()->id)->groupBy('campaign_id')->orderByDesc('c.id')->get();
         } else {
-            $campaigns = Campaign::select('id', 'name')->orderByDesc('id')->get();
+            $campaigns = Campaign::select('id', 'name','sale_id')->orderByDesc('id')->get();
         }
         $input = $request->all();
 
