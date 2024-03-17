@@ -27,7 +27,7 @@
                     <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm SĐT…" tabindex="1"
                            type="text" value="{{@$input['search']}}">
                     <div class="col-xs-12 col-md-3">
-                        <select name="campaign_id" id="campaign_search" class="form-control">
+                        <select name="campaign_id" id="campaign_search" class="form-control select2">
                             <option value="">--Chọn chiến dịch--</option>
                             @forelse($campaigns as $k => $item)
                                 <option data-sale="{{$item->SaleRelation}}" value="{{$item->id}}">{{$item->name}}</option>
@@ -71,6 +71,7 @@
             <div id="registration-form">
                 @include('customer_campaign.ajax')
             </div>
+            @include('customers.modal_view')
         </div>
     </div>
 @endsection
@@ -82,6 +83,7 @@
             $('#page').val(pages);
             $('#gridForm').submit();
         });
+
         $(document).on('change', '.status', function (e) {
             let status = $(this).val();
             $.ajax({
@@ -104,25 +106,6 @@
             }
             $('#sale_id').html(option);
         });
-        var inputs = document.querySelectorAll( '.inputfile' );
-        Array.prototype.forEach.call( inputs, function( input )
-        {
-            var label	 = input.nextElementSibling,
-                labelVal = label.innerHTML;
-
-            input.addEventListener( 'change', function( e )
-            {
-                var fileName = '';
-                if( this.files && this.files.length > 1 )
-                    fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-                else
-                    fileName = e.target.value.split( '\\' ).pop();
-
-                if( fileName )
-                    label.querySelector( 'span' ).innerHTML = fileName;
-                else
-                    label.innerHTML = labelVal;
-            });
-        });
     </script>
+    <script src="{{ asset('js/group-comment.js') }}"></script>
 @endsection

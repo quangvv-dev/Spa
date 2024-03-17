@@ -177,7 +177,6 @@
                     let category = '';
 
                     data.customer.categories.forEach(function (item) {
-                        console.log(item);
                         category += item.name + `, `;
                     });
 

@@ -19,7 +19,11 @@
             @foreach($customers as $k => $c)
                 <tr>
                     <th scope="row">{{ $k +1 }}</th>
-                    <td class="text-center">{{@$c->customer->full_name}}</td>
+                    <td class="text-center">{{@$c->customer->full_name}}
+                        <a class="view_modal" data-customer-id="{{ $c->customer_id }}" href="#">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                    </td>
                     <td class="text-center"><a href="callto:{{@$c->customer->phone }}">{{ str_limit(@$c->customer->phone,7,'xxx') }}</a>
                     </td>
                     <td class="text-center">{{@$c->orders->count()}}</td>
