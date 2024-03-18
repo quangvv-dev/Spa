@@ -5,6 +5,7 @@
             <th class="text-white">STT</th>
             <th class="text-white text-center">Khách hàng</th>
             <th class="text-white text-center">SĐT</th>
+            <th class="text-white text-center">Lịch hẹn</th>
             <th class="text-white text-center">Đơn hàng</th>
             <th class="text-white text-center">Doanh số</th>
             <th class="text-white text-center">Doanh thu</th>
@@ -26,6 +27,7 @@
                     </td>
                     <td class="text-center"><a href="callto:{{@$c->customer->phone }}">{{ str_limit(@$c->customer->phone,7,'xxx') }}</a>
                     </td>
+                    <td class="text-center">{{@$c->schedules->count()}}</td>
                     <td class="text-center">{{@$c->orders->count()}}</td>
                     <td class="text-center">{{@number_format($c->orders->sum('all_total'))}}</td>
                     <td class="text-center">{{@number_format($c->orders->sum('gross_revenue'))}}</td>

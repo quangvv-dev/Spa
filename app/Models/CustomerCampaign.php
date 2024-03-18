@@ -16,12 +16,14 @@ class CustomerCampaign extends Model
     public const CHUA_KET_NOI = 1;
     public const DA_HEN_LICH = 2;
     public const DA_MUA_HANG = 3;
+    public const KO_NHU_CAU = 4;
 
     public const statusLabel = [
         self::NEW          => 'Mới',
         self::CHUA_KET_NOI => 'Chưa kết nối',
         self::DA_HEN_LICH  => 'Đã hẹn lịch',
         self::DA_MUA_HANG  => 'Đã mua hàng',
+        self::KO_NHU_CAU   => 'Không có nhu cầu',
     ];
 
     public function orders()
@@ -29,6 +31,13 @@ class CustomerCampaign extends Model
         return $this->hasMany(Order::class, 'member_id', 'customer_id')
             ->where('is_upsale', OrderConstant::IS_UPSALE)
             ->whereBetween('created_at',
+                [$this->campaign->start_date . ' 00:00:00', $this->campaign->end_date . ' 23:59:59']);
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'user_id', 'customer_id')
+            ->whereBetween('date',
                 [$this->campaign->start_date . ' 00:00:00', $this->campaign->end_date . ' 23:59:59']);
     }
 

@@ -5,6 +5,7 @@
             <th class="text-white">STT</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Ngày áp dụng</th>
+            <th class="text-white text-center">KH thuộc tệp</th>
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Chi nhánh</th>
@@ -18,7 +19,10 @@
                     <th scope="row">{{ $k +1 }}</th>
                     <td class="text-center"><a href="{{route('campaigns.edit',$c->id)}}">{{ $c->name }}</a></td>
                     <td class="text-center"><span class="small-tip-custom">{{ $c->start_date.' -> '.$c->end_date }}</span></td>
-                    <td class="text-center">{{$c->status_text}}</td>
+                    <td class="text-center">{{@$c->customer_campaign->count()}} <br>
+                    <td class="text-center">{{$c->status_text}} <br>
+                        <span class="small-tip">({{ $c->from_order.' -> '.$c->to_order }})</span>
+                    </td>
                     <td class="text-center"><span class="title-small">({{$c->sale_text}})</span></td>
                     <td class="text-center">{{$c->branch_text}}</td>
                     <td class="text-center">
