@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BE\Campaign;
 
 use App\Constants\DepartmentConstant;
+use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
 use App\Helpers\Functions;
 use App\Models\Branch;
@@ -13,6 +14,8 @@ use App\Models\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller
 {
@@ -20,9 +23,9 @@ class CampaignController extends Controller
     {
         view()->share([
             'branchs' => Branch::pluck('name', 'id')->toArray(),
-            'sale'    => User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::CSKH])
+            'sale' => User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::CSKH])
                 ->pluck('full_name', 'id')->toArray(),
-            'status'  => Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray(),
+            'status' => Status::where('type', StatusCode::RELATIONSHIP)->pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -93,8 +96,8 @@ class CampaignController extends Controller
                 $list_campaign[] = [
                     'customer_id' => $c,
                     'campaign_id' => $campaign->id,
-                    'sale_id'     => $sale,
-                    'status'      => CustomerCampaign::NEW,
+                    'sale_id' => $sale,
+                    'status' => CustomerCampaign::NEW,
                 ];
 
                 $index_sale++;
@@ -138,7 +141,7 @@ class CampaignController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -159,8 +162,8 @@ class CampaignController extends Controller
                 $list_campaign[] = [
                     'customer_id' => $c,
                     'campaign_id' => $campaign->id,
-                    'sale_id'     => $sale,
-                    'status'      => CustomerCampaign::NEW,
+                    'sale_id' => $sale,
+                    'status' => CustomerCampaign::NEW,
                 ];
 
                 $index_sale++;
@@ -190,5 +193,46 @@ class CampaignController extends Controller
         $campaign->customer_campaign()->delete();
         $campaign->delete();
         return back()->with('error', 'Xóa chiến dịch thành công');
+    }
+
+    public function statistic(Request $request)
+    {
+        if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
+            $campaigns = CustomerCampaign::select('c.id', 'c.name')->join('campaigns as c', 'c.id', '=',
+                'customer_campaign.campaign_id')
+                ->where('customer_campaign.sale_id', Auth::user()->id)->orWhere('customer_campaign.cskh_id',
+                    Auth::user()->id)->groupBy('campaign_id')->orderByDesc('c.id')->get();
+        } else {
+            $campaigns = Campaign::select('id', 'name', 'sale_id')->orderByDesc('id')->get();
+        }
+        $data = collect();
+
+        if (!empty($request->all())) {
+            $campaign = Campaign::find($request->campaign_id);
+            $data = Order::join('customer_campaign as cp', 'orders.member_id', '=', 'cp.customer_id')
+                ->join('users as u', 'u.id', '=', 'cp.sale_id')
+                ->leftJoin('schedules as s', 's.user_id', '=', 'cp.customer_id')
+                ->where('cp.campaign_id', $campaign->id)
+                ->whereBetween('orders.created_at', [
+                    $campaign->start_date . " 00:00:00",
+                    $campaign->end_date . " 23:59:59",
+                ])->whereBetween('s.date', [
+                    $campaign->start_date . " 00:00:00",
+                    $campaign->end_date . " 23:59:59",
+                ])
+                ->where('orders.is_upsale', OrderConstant::IS_UPSALE)
+                ->whereNull('orders.deleted_at')
+                ->groupBy('cp.sale_id')
+                ->select('u.full_name', DB::raw('SUM(orders.all_total) as all_total'),
+                    DB::raw('SUM(orders.gross_revenue) as gross_revenue'), DB::raw('SUM(orders.the_rest) as the_rest')
+                    , DB::raw('COUNT(s.id) as schedules'), DB::raw('COUNT(orders.id) as orders')
+                    , DB::raw('COUNT(cp.customer_id) as customers'))->get();
+
+        }
+        if ($request->ajax()){
+            return view('campaigns.statistic.ajax', compact('data'));
+        }
+        return view('campaigns.statistic.index', compact('data', 'campaigns'));
+
     }
 }

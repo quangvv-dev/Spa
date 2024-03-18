@@ -20,7 +20,8 @@
             @foreach($customers as $k => $c)
                 <tr>
                     <th scope="row">{{ $k +1 }}</th>
-                    <td class="text-center">{{@$c->customer->full_name}}
+                    <td class="text-center">
+                        <a href="{{route('customers.show',$c->customer_id)}}">{{@$c->customer->full_name}}</a>
                         <a class="view_modal" data-customer-id="{{ $c->customer_id }}" href="#">
                             <i class="fas fa-info-circle"></i>
                         </a>
