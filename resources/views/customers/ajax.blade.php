@@ -76,7 +76,7 @@
             <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
             <li class="dropdown_action" id="restore_account"><a>Khôi phục</a></li>
             <li class="dropdown_action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></li>
-            <li class="dropdown_action" data-toggle="modal" data-target="#show-modal-phanbo"><a>Phân bổ data</a></li>
+{{--            <li class="dropdown_action" data-toggle="modal" data-target="#show-modal-phanbo"><a>Phân bổ data</a></li>--}}
             @if(\Illuminate\Support\Facades\Auth::user()->department_id == \App\Constants\DepartmentConstant::ADMIN)
             <li class="dropdown_action"><a href="{{route('settings.phanbo')}}">Phân chia hàng loạt</a></li>
             @endif
