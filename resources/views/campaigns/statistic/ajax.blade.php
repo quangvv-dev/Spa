@@ -18,14 +18,14 @@
             @foreach($data as $k => $c)
                 <tr>
                     <th scope="row">{{ $k +1 }}</th>
-                    <td class="text-center">{{ $c->full_name }}</td>
-                    <td class="text-center">{{$c->customers}}</td>
-                    <td class="text-center">{{$c->schedules}}</td>
-                    <td class="text-center">{{$c->orders}}</td>
-                    <td class="text-center">{{number_format($c->all_total)}}</td>
-                    <td class="text-center">{{number_format($c->gross_revenue)}}</td>
-                    <td class="text-center">{{number_format($c->the_rest)}}</td>
-                    <td class="text-center">{{!empty($c->orders)?number_format($c->all_total / $c->orders):0}}</td>
+                    <td class="text-center">{{ $c['full_name'] }}</td>
+                    <td class="text-center">{{$c['customers']}}</td>
+                    <td class="text-center">{{$c['schedules']}}</td>
+                    <td class="text-center">{{$c['orders']}}</td>
+                    <td class="text-center">{{number_format($c['all_total'])}}</td>
+                    <td class="text-center">{{number_format($c['gross_revenue'])}}</td>
+                    <td class="text-center">{{number_format($c['the_rest'])}}</td>
+                    <td class="text-center">{{!empty($c['orders'])?number_format($c['all_total'] / $c['orders']):0}}</td>
                 </tr>
             @endforeach
             <tr class="bold">

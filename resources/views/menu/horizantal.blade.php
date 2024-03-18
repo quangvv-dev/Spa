@@ -293,6 +293,7 @@
                         <li class="sub-with-sub">
                             <a href="#">Khác</a>
                             <ul>
+                                <li><a href="{{route('statistic-campaigns.index')}}">Hiệu quả chiến dịch</a></li>
                                 <li><a href="{{url('statistics-personal')}}">Biểu đồ nhân sự</a></li>
                                 @if($roleGlobal->permission('sms.history'))
                                     <li><a href="{{url('history-sms')}}">Tin nhắn đã gửi</a></li>

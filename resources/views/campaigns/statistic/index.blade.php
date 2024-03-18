@@ -24,9 +24,9 @@
             </div>
             <div class="card-header">
                 <form class="row col-12" action="{{route('statistic-campaigns.index')}}" method="get" id="gridForm">
-                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"
-                           type="text" id="search" value="{{@$input['search']}}">
-                    <input type="hidden" name="page" id="page">
+{{--                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"--}}
+{{--                           type="text" id="search" value="{{@$input['search']}}">--}}
+{{--                    <input type="hidden" name="page" id="page">--}}
                     <div class="col-xs-12 col-md-3">
                         <select name="campaign_id" id="campaign_search" class="form-control select2">
                             <option value="">--Chọn chiến dịch--</option>
