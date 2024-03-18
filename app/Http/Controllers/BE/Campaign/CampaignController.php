@@ -153,12 +153,14 @@ class CampaignController extends Controller
         $input['sale_id'] = json_encode($input['sale_id']);
         $input['customer_status'] = json_encode($input['customer_status']);
         $input['branch_id'] = json_encode($input['branch_id']);
-        $campaign->update($input);
-        $campaign->customer_campaign()->delete();
         $customers = $this->loadCustomer($request)->pluck('id')->toArray();
-        $list_campaign = [];
-        if (count($customers)) {
+
+        if (count($customers) && ($campaign->from_order != $input['from_order'] || $campaign->to_order != $input['to_order']
+                || $campaign->customer_status != $input['customer_status'] || $campaign->branch_id != $input['branch_id'])) {
+            $campaign->update($input);
+            $campaign->customer_campaign()->delete();
             $index_sale = 0;
+            $list_campaign = [];
             foreach ($customers as $c) {
                 $sale = $request->sale_id[$index_sale];
                 $list_campaign[] = [
@@ -176,8 +178,8 @@ class CampaignController extends Controller
                     $index_sale = 0;
                 }
             }
+            $campaign->customer_campaign()->insert($list_campaign);
         }
-        $campaign->customer_campaign()->insert($list_campaign);
         return back()->with('status', 'Cập nhật chiến dịch thành công');
 
     }
