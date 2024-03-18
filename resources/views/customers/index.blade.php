@@ -10,7 +10,13 @@
         .card i {
             color: #3b8fec !important;
         }
+        .hide-href::after {
+            content: attr(data-href);
+        }
 
+        .hide-href:hover::after {
+            content: "";
+        }
         .description-cus {
             height: 100%;
             position: absolute;
