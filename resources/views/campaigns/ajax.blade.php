@@ -5,7 +5,7 @@
             <th class="text-white">STT</th>
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Ngày áp dụng</th>
-            <th class="text-white text-center">KH thuộc tệp</th>
+            <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Chi nhánh</th>
