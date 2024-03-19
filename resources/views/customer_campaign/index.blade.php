@@ -41,10 +41,10 @@
                         </select>
                     </div>
                     <div class="col-xs-12 col-md-2">
-                        <select name="status" class="form-control select2">
+                        <select name="status" class="form-control select2" style="background-color: orangered">
                             <option value="">--Chọn trạng thái--</option>
                             @forelse(\App\Models\CustomerCampaign::statusLabel as $k => $item)
-                                <option value="{{$k}}">{{$item}}</option>
+                                <option  value="{{$k}}">{{$item}}</option>
                             @empty
                             @endforelse
                         </select>

@@ -2,7 +2,8 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-white">STT</th>
+{{--            <th class="text-white"></th>--}}
+            <th class="text-white" style="width: 10px">STT</th>
             <th class="text-white text-center">Khách hàng</th>
             <th class="text-white text-center">SĐT</th>
             <th class="text-white text-center">Lịch hẹn</th>
@@ -19,7 +20,10 @@
         @if (count($customers))
             @foreach($customers as $k => $c)
                 <tr>
-                    <th scope="row">{{ $k +1 }}</th>
+                    <th scope="row" style="background: {{\App\Models\CustomerCampaign::statusColor[$c->status]}};color: white">
+                        {{ $k +1 }}
+                    </th>
+{{--                    <th scope="row">{{ $k +1 }}</th>--}}
                     <td class="text-center">
                         <a href="{{route('customers.show',$c->customer_id)}}">{{@$c->customer->full_name}}</a>
                         <a style="color: orange" class="view_modal" data-customer-id="{{ $c->customer_id }}">

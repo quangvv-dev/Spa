@@ -25,6 +25,13 @@ class CustomerCampaign extends Model
         self::DA_MUA_HANG  => 'Đã mua hàng',
         self::KO_NHU_CAU   => 'Không có nhu cầu',
     ];
+    public const statusColor = [
+        self::NEW          => '#eb00d7',
+        self::CHUA_KET_NOI => '#31c9b0',
+        self::DA_HEN_LICH  => '#569707',
+        self::DA_MUA_HANG  => '#f58300',
+        self::KO_NHU_CAU   => '#353503',
+    ];
 
     public function orders()
     {
