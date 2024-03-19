@@ -39,6 +39,7 @@ class CustomerCampaignService
             ->leftJoin('users as u', 'u.id', '=', 'customer_campaign.sale_id')
             ->leftJoin('orders as o', 'o.member_id', '=', 'customer_campaign.customer_id')
             ->where('customer_campaign.campaign_id', $campaign->id)
+            ->where('o.is_upsale', OrderConstant::IS_UPSALE)
             ->whereBetween('o.created_at', [
                 $campaign->start_date . " 00:00:00",
                 $campaign->end_date . " 23:59:59",
