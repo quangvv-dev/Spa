@@ -10,10 +10,12 @@
             position: absolute;
             z-index: -1;
         }
+
         .inputfile + label {
             cursor: pointer;
         }
-        .title-small{
+
+        .title-small {
             font-size: 13px;
             color: #999;
         }
@@ -25,13 +27,15 @@
             </div>
             <div class="card-header">
                 <form class="row col-12" action="{{route('customer-campaign.index')}}" method="get" id="gridForm">
-                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm SĐT…" tabindex="1"
+                    <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm SĐT…"
+                           tabindex="1"
                            type="text" value="{{@$input['search']}}">
                     <div class="col-xs-12 col-md-3">
                         <select name="campaign_id" id="campaign_search" class="form-control select2">
                             <option value="">--Chọn chiến dịch--</option>
                             @forelse($campaigns as $k => $item)
-                                <option data-sale="{{$item->SaleRelation}}" value="{{$item->id}}">{{$item->name}}</option>
+                                <option data-sale="{{$item->SaleRelation}}"
+                                        value="{{$item->id}}">{{$item->name}}</option>
                             @empty
                             @endforelse
                         </select>
@@ -85,7 +89,7 @@
             zIndex: 2048,
         });
         $(document).on('click', 'a.open-modal-schedule', function (e) {
-            let newUrl = '/schedules/'+$(this).data('id')
+            let newUrl = '/schedules/' + $(this).data('id')
             $('form#createSchedule').attr('action', newUrl);
             e.preventDefault();
         });
@@ -93,6 +97,8 @@
             let form = $('form#createSchedule');
             $.post(form.attr('action'), form.serialize(), function (data) {
                 alertify.success('Tạo lịch hẹn thành công!', 5);
+                let id = form.attr('action').match(/\d+/)[0];
+                submitStatus(id, 2);// chuyển về trạng thái đã hẹn lịch
             });
             $('#createScheduleModal input[type="text"]').val('');
             $('#createScheduleModal textarea').val('');
@@ -107,8 +113,12 @@
 
         $(document).on('change', '.status', function (e) {
             let status = $(this).val();
+            submitStatus($(this).data('id'), status);
+        });
+
+        function submitStatus(id, status) {
             $.ajax({
-                url: "/update-status-campaign/" + $(this).data('id'),
+                url: "/update-status-campaign/" + id,
                 method: "POST",
                 data: {
                     status: status,
@@ -116,11 +126,12 @@
             }).done(function (data) {
                 alertify.success('Cập nhật trạng thái thành công !');
             });
-        });
+        }
+
         $(document).on('change', '#campaign_search', function (e) {
             let sale = $("#campaign_search option:selected").data('sale');
             let option = ` <option value="">--Người phụ trách--</option>`;
-            if(sale && sale.length) {
+            if (sale && sale.length) {
                 sale.forEach(item => {
                     option += `<option value="` + item.id + `">` + item.full_name + `</option>`
                 })
