@@ -30,6 +30,15 @@
                 <form class="row col-12" action="{{route('campaigns.index')}}" method="get" id="gridForm">
                     <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm…" tabindex="1"
                            type="text" id="search" value="{{@$input['search']}}">
+                    <div class="col-xs-12 col-md-2">
+                        <select name="branch_id" class="form-control select2">
+                            <option value="">--Chọn chi nhánh--</option>
+                            @forelse($branchs as $k => $item)
+                                <option value="{{$k}}">{{$item}}</option>
+                            @empty
+                            @endforelse
+                        </select>
+                    </div>
                     <input type="hidden" name="page" id="page">
                     <div class="col-lg-4 col-md-4">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm</button>

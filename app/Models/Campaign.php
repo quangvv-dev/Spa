@@ -65,6 +65,8 @@ class Campaign extends Model
     {
         $data = self::when(isset($input['search']) && $input['search'], function ($query) use ($input) {
             $query->where('name', 'like', '%' . $input['search'] . '%');
+        })->when(isset($input['branch_id']) && $input['branch_id'], function ($query) use ($input) {
+            $query->where('branch_id', 'like', '%' . $input['branch_id'] . '%');
         })->when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('created_at', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
