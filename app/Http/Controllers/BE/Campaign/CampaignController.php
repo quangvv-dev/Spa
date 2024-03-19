@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\BE\Campaign;
 
 use App\Constants\DepartmentConstant;
-use App\Constants\OrderConstant;
 use App\Constants\StatusCode;
-use App\Helpers\Functions;
 use App\Models\Branch;
 use App\Models\Campaign;
 use App\Models\CustomerCampaign;
@@ -16,7 +14,6 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller
 {

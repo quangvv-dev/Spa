@@ -6,6 +6,7 @@
             <th class="text-white text-center">Chiến dịch</th>
             <th class="text-white text-center">Ngày áp dụng</th>
             <th class="text-white text-center">SĐT</th>
+            <th class="text-white text-center">Doanh số</th>
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Người phụ trách</th>
             <th class="text-white text-center">Chi nhánh</th>
@@ -20,6 +21,7 @@
                     <td class="text-center"><a href="{{route('campaigns.edit',$c->id)}}">{{ $c->name }}</a></td>
                     <td class="text-center"><span class="small-tip-custom">{{ $c->start_date.' -> '.$c->end_date }}</span></td>
                     <td class="text-center">{{@$c->customer_campaign->count()}} <br>
+                    <td class="text-center">{{@number_format($c->OrderValue)}} <br>
                     <td class="text-center">{{$c->status_text}} <br>
                         <span class="small-tip">({{ $c->from_order.' -> '.$c->to_order }})</span>
                     </td>

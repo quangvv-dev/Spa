@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Constants\OrderConstant;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\Functions;
+use Illuminate\Support\Facades\DB;
 
 class Campaign extends Model
 {
@@ -23,6 +25,24 @@ class Campaign extends Model
         return count($status) ? implode(' |', $status) : '';
     }
 
+    public function getOrderValueAttribute()
+    {
+        return CustomerCampaign::select(DB::raw('SUM(o.all_total) as all_total'))
+            ->join('orders as o', 'customer_campaign.customer_id', '=', 'o.member_id')
+            ->whereBetween('o.created_at', [
+                $this->start_date . " 00:00:00",
+                $this->end_date . " 23:59:59",
+            ])
+            ->where('o.is_upsale', OrderConstant::IS_UPSALE)
+            ->where('customer_campaign.campaign_id', $this->id)
+            ->groupBy('customer_campaign.campaign_id')
+            ->get()->sum('all_total');
+//        return [
+//            'all_total' => $data->sum('all_total'),
+//            'order_total' => $data->sum('order_total')
+//        ];
+    }
+
     public function getBranchTextAttribute()
     {
         $branch = Branch::whereIn('id', json_decode($this->branch_id))->pluck('name')->toArray();
@@ -37,7 +57,7 @@ class Campaign extends Model
 
     public function getSaleRelationAttribute()
     {
-        $users = User::select('id','full_name')->whereIn('id', json_decode($this->sale_id))->get();
+        $users = User::select('id', 'full_name')->whereIn('id', json_decode($this->sale_id))->get();
         return count($users) ? json_encode($users) : null;
     }
 
