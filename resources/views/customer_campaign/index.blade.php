@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('content')
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-clockpicker.min.css')}}">
     <style>
         .inputfile {
             /*width: 0.1px;*/
@@ -72,13 +73,33 @@
                 @include('customer_campaign.ajax')
             </div>
             @include('customers.modal_view')
+            @include('customer_campaign.modal_schedule')
         </div>
     </div>
 @endsection
 @section('_script')
     <script type="text/javascript">
-        $(document).on('click', 'a.page-link', function (e) {
+        $('[data-toggle="datepicker"]').datepicker({
+            format: 'yyyy-mm-dd',
+            autoHide: true,
+            zIndex: 2048,
+        });
+        $(document).on('click', 'a.open-modal-schedule', function (e) {
+            let newUrl = '/schedules/'+$(this).data('id')
+            $('form#createSchedule').attr('action', newUrl);
             e.preventDefault();
+        });
+        $(document).on('click', '.btn-create-schedule', function (e) {
+            let form = $('form#createSchedule');
+            $.post(form.attr('action'), form.serialize(), function (data) {
+                alertify.success('Tạo lịch hẹn thành công!', 5);
+            });
+            $('#createScheduleModal input[type="text"]').val('');
+            $('#createScheduleModal textarea').val('');
+            $('#createScheduleModal').modal('hide')
+            e.preventDefault();
+        });
+        $(document).on('click', 'a.page-link', function (e) {
             let pages = $(this).attr('href').split('page=')[1];
             $('#page').val(pages);
             $('#gridForm').submit();

@@ -22,9 +22,11 @@
                     <th scope="row">{{ $k +1 }}</th>
                     <td class="text-center">
                         <a href="{{route('customers.show',$c->customer_id)}}">{{@$c->customer->full_name}}</a>
-                        <a class="view_modal" data-customer-id="{{ $c->customer_id }}" href="#">
+                        <a style="color: orange" class="view_modal" data-customer-id="{{ $c->customer_id }}">
                             <i class="fas fa-info-circle"></i>
                         </a>
+                        <a style="color: #25a11a"  data-toggle="modal" data-id="{{ $c->customer_id }}" class="open-modal-schedule"
+                           data-target="#createScheduleModal"> <i class="fas fa-calendar"></i></a>
                     </td>
                     <td class="text-center"><a href="callto:{{@$c->customer->phone }}">{{ str_limit(@$c->customer->phone,7,'xxx') }}</a>
                     </td>
