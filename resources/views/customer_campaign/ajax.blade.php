@@ -30,7 +30,7 @@
                             <i class="fas fa-info-circle"></i>
                         </a>
                         <a style="color: #25a11a"  data-toggle="modal" data-id="{{ $c->id }}" class="open-modal-schedule"
-                           data-target="#createScheduleModal"> <i class="fas fa-calendar"></i></a>
+                           data-target="#createScheduleModal"> <i class="far fa-calendar"></i></a>
                     </td>
                     <td class="text-center"><a href="callto:{{@$c->customer->phone }}">{{ str_limit(@$c->customer->phone,7,'xxx') }}</a>
                     </td>
