@@ -189,7 +189,7 @@ class RuleController extends Controller
         }
         foreach ($link_nodes as $key => $record) {
             $new = [];
-            if (isset($category_ids) && count($category_ids)) {
+            if (!empty($category_ids) && count($category_ids)) {
                 foreach ($category_ids as $item) {
                     $new['rule_id'] = $rule->id;
                     $new['category_id'] = $item;
@@ -205,7 +205,7 @@ class RuleController extends Controller
                         }
                     }
                 }
-            }elseif(isset($status_ids) && count($status_ids)){
+            }elseif(!empty($status_ids) && count($status_ids)){
                 $new['rule_id'] = $rule->id;
                 $new['category_id'] = 0;
                 $new['status'] = $rule->status;
