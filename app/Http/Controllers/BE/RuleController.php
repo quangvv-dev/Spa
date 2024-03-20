@@ -219,7 +219,7 @@ class RuleController extends Controller
                         array_push($arr, $new);
                     }
                 }
-            }elseif(isset($schedule_status) && count($schedule_ids)){
+            }elseif(!empty($schedule_status) && count($schedule_ids)){
                 $new['rule_id'] = $rule->id;
                 $new['category_id'] = 0;
                 $new['status'] = $rule->status;
