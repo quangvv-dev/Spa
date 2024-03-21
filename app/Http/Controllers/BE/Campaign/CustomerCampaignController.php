@@ -34,14 +34,14 @@ class CustomerCampaignController extends Controller
      */
     public function index(Request $request)
     {
+        $input = $request->all();
         if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
-            $campaigns = CustomerCampaign::select('c.id', 'c.name')->join('campaigns as c', 'c.id', '=',
-                'customer_campaign.campaign_id')
+            $campaigns = CustomerCampaign::select('c.id', 'c.name')->join('campaigns as c', 'c.id', '=', 'customer_campaign.campaign_id')
                 ->where('customer_campaign.sale_id', Auth::user()->id)->groupBy('campaign_id')->orderByDesc('c.id')->get();
+            $input['sale_id'] = Auth::user()->id;
         } else {
             $campaigns = Campaign::select('id', 'name','sale_id')->orderByDesc('id')->get();
         }
-        $input = $request->all();
 
 //        if (empty($input['campaign_id'])) {
 //            $input['campaign_id'] = count($campaigns) ? $campaigns[0]->id : 0;
