@@ -15,7 +15,7 @@
                 <th style="min-width: 121px" class="text-white text-center">Mô tả</th>
             @else
                 <th class="text-white text-center">Sale</th>
-                <th style="width: 121px" class="text-white text-center">Mô tả</th>
+                <th style="min-width: 121px" class="text-white text-center">Mô tả</th>
             @endif
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Chi nhánh</th>
