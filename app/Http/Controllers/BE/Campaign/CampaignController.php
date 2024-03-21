@@ -151,10 +151,10 @@ class CampaignController extends Controller
         $input['customer_status'] = json_encode($input['customer_status']);
         $input['branch_id'] = json_encode($input['branch_id']);
         $customers = $this->loadCustomer($request)->pluck('id')->toArray();
+        $campaign->update($input);
 
         if (count($customers) && ($campaign->from_order != $input['from_order'] || $campaign->to_order != $input['to_order']
                 || $campaign->customer_status != $input['customer_status'] || $campaign->branch_id != $input['branch_id'])) {
-            $campaign->update($input);
             $campaign->customer_campaign()->delete();
             $index_sale = 0;
             $list_campaign = [];
