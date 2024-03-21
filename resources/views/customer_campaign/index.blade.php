@@ -19,6 +19,25 @@
             font-size: 13px;
             color: #999;
         }
+
+        .description-cus {
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            overflow-y: hidden;
+            transition: ease 0.2s all;
+            line-height: 20px;
+            font-size: 11px;
+            border: none;
+        }
+
+        .description-cus:focus, .description-cus:hover {
+            height: 70px;
+            width: 400px !important;
+            z-index: 9999;
+            box-shadow: 0 0 10px #ddd;
+        }
     </style>
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -44,7 +63,7 @@
                         <select name="status" class="form-control select2" style="background-color: orangered">
                             <option value="">--Chọn trạng thái--</option>
                             @forelse(\App\Models\CustomerCampaign::statusLabel as $k => $item)
-                                <option  value="{{$k}}">{{$item}}</option>
+                                <option value="{{$k}}">{{$item}}</option>
                             @empty
                             @endforelse
                         </select>
@@ -98,7 +117,7 @@
             $.post(form.attr('action'), form.serialize(), function (data) {
                 alertify.success('Tạo lịch hẹn thành công!', 5);
                 let id = form.attr('action').match(/\d+/)[0];
-                submitStatus(id, 2);// chuyển về trạng thái đã hẹn lịch
+                submitStatus(id, {status: 2});// chuyển về trạng thái đã hẹn lịch
             });
             $('#createScheduleModal input[type="text"]').val('');
             $('#createScheduleModal textarea').val('');
@@ -112,19 +131,19 @@
         });
 
         $(document).on('change', '.status', function (e) {
-            let status = $(this).val();
-            submitStatus($(this).data('id'), status);
+            let data = {
+                status: $(this).val(),
+            };
+            submitStatus($(this).data('id'), data);
         });
 
-        function submitStatus(id, status) {
+        function submitStatus(id, data) {
             $.ajax({
                 url: "/update-status-campaign/" + id,
                 method: "POST",
-                data: {
-                    status: status,
-                }
+                data: data
             }).done(function (data) {
-                alertify.success('Cập nhật trạng thái thành công !');
+                alertify.success('Cập nhật thành công !');
             });
         }
 
@@ -137,6 +156,13 @@
                 })
             }
             $('#sale_id').html(option);
+        });
+
+        $(document).on('change', '.description-cus', function (e) {
+            let id = $(this).data('id');
+            submitStatus($(this).data('id'), {
+                'message': $(this).val(),
+            });
         });
     </script>
     <script src="{{ asset('js/group-comment.js') }}"></script>

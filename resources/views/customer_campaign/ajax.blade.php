@@ -11,7 +11,12 @@
             <th class="text-white text-center">Doanh số</th>
             <th class="text-white text-center">Doanh thu</th>
             <th class="text-white text-center">Còn nợ</th>
-            <th class="text-white text-center">Sale</th>
+            @if(\Illuminate\Support\Facades\Auth::user()->department_id != \App\Constants\DepartmentConstant::ADMIN)
+                <th style="min-width: 121px" class="text-white text-center">Mô tả</th>
+            @else
+                <th class="text-white text-center">Sale</th>
+                <th style="width: 121px" class="text-white text-center">Mô tả</th>
+            @endif
             <th class="text-white text-center">Trạng thái</th>
             <th class="text-white text-center">Chi nhánh</th>
         </tr>
@@ -38,7 +43,16 @@
                     <td class="text-center">{{@number_format($c->orders->sum('all_total'))}}</td>
                     <td class="text-center">{{@number_format($c->orders->sum('gross_revenue'))}}</td>
                     <td class="text-center">{{@number_format($c->orders->sum('all_total') - $c->orders->sum('gross_revenue'))}}</td>
-                    <td class="text-center">{{@$c->sale->full_name}}</td>
+                    @if(\Illuminate\Support\Facades\Auth::user()->department_id != \App\Constants\DepartmentConstant::ADMIN)
+                        <td style="position: relative;max-width: 146px">
+                            <textarea data-id="{{$c->id}}" class="description-cus">{{ @$c->message }}</textarea>
+                        </td>
+                    @else
+                        <td class="text-center">{{@$c->sale->full_name}}</td>
+                        <td style="position: relative;max-width: 146px">
+                            <textarea data-id="{{$c->id}}" class="description-cus">{{ @$c->message }}</textarea>
+                        </td>
+                    @endif
                     <td class="text-center">
                         {!! Form::select('the_rest', \App\Models\CustomerCampaign::statusLabel, @$c->status, array('class' => 'form-control status',
                             'data-id'=> $c->id,'placeholder'=>'Tất cả trạng thái')) !!}

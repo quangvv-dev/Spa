@@ -8,7 +8,7 @@
             </div>
 
             @if (isset($campaign))
-                {!! Form::model($campaign, array('url' => route('campaigns.update',$campaign->id), 'method' => 'put', 'files'=> true,'id'=>'fvalidate')) !!}
+                {!! Form::model($campaign, array('url' => route('campaigns.update',$campaign->id), 'method' => 'PUT', 'files'=> true,'id'=>'fvalidate')) !!}
             @else
                 {!! Form::open(array('url' => route('campaigns.store'), 'method' => 'post', 'files'=> true,'id'=>'fvalidate')) !!}
             @endif

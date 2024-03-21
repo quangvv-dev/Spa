@@ -187,9 +187,8 @@ class CustomerCampaignController extends Controller
     }
 
     public function updateStatus(Request $request, CustomerCampaign $customer)
-    {
-        $customer->status = $request->status;
-        $customer->save();
+    {   $input = $request->only('status','message');
+        $customer->update($input);
         return $customer;
     }
 }
