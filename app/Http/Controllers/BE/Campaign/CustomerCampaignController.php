@@ -37,8 +37,7 @@ class CustomerCampaignController extends Controller
         if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
             $campaigns = CustomerCampaign::select('c.id', 'c.name')->join('campaigns as c', 'c.id', '=',
                 'customer_campaign.campaign_id')
-                ->where('customer_campaign.sale_id', Auth::user()->id)->orWhere('customer_campaign.cskh_id',
-                    Auth::user()->id)->groupBy('campaign_id')->orderByDesc('c.id')->get();
+                ->where('customer_campaign.sale_id', Auth::user()->id)->groupBy('campaign_id')->orderByDesc('c.id')->get();
         } else {
             $campaigns = Campaign::select('id', 'name','sale_id')->orderByDesc('id')->get();
         }
@@ -74,7 +73,6 @@ class CustomerCampaignController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $input['cskh_id'] = json_encode($input['cskh_id']);
         $input['sale_id'] = json_encode($input['sale_id']);
         $input['customer_status'] = json_encode($input['customer_status']);
         $input['branch_id'] = json_encode($input['branch_id']);
@@ -86,25 +84,19 @@ class CustomerCampaignController extends Controller
             $index_cskh = 0;
             foreach ($customers as $c) {
                 $sale = $request->sale_id[$index_sale];
-                $cskh = $request->cskh_id[$index_cskh];
 
                 $list_campaign[] = [
                     'customer_id' => $c,
                     'campaign_id' => $campaign->id,
-                    'cskh_id'     => $cskh,
                     'sale_id'     => $sale,
                 ];
 
                 $index_sale++;
-                $index_cskh++;
 
                 // Kiểm tra nếu đã duyệt hết mảng sale_id và cskh_id,
                 // thì reset lại index để bắt đầu lại từ đầu
                 if ($index_sale >= count($request->sale_id)) {
                     $index_sale = 0;
-                }
-                if ($index_cskh >= count($request->cskh_id)) {
-                    $index_cskh = 0;
                 }
             }
         }
@@ -147,7 +139,6 @@ class CustomerCampaignController extends Controller
     public function update(Request $request, Campaign $campaign)
     {
         $input = $request->all();
-        $input['cskh_id'] = json_encode($input['cskh_id']);
         $input['sale_id'] = json_encode($input['sale_id']);
         $input['customer_status'] = json_encode($input['customer_status']);
         $input['branch_id'] = json_encode($input['branch_id']);
@@ -157,28 +148,22 @@ class CustomerCampaignController extends Controller
         $list_campaign = [];
         if (count($customers)) {
             $index_sale = 0;
-            $index_cskh = 0;
+
             foreach ($customers as $c) {
                 $sale = $request->sale_id[$index_sale];
-                $cskh = $request->cskh_id[$index_cskh];
 
                 $list_campaign[] = [
                     'customer_id' => $c,
                     'campaign_id' => $campaign->id,
-                    'cskh_id'     => $cskh,
                     'sale_id'     => $sale,
                 ];
 
                 $index_sale++;
-                $index_cskh++;
 
                 // Kiểm tra nếu đã duyệt hết mảng sale_id và cskh_id,
                 // thì reset lại index để bắt đầu lại từ đầu
                 if ($index_sale >= count($request->sale_id)) {
                     $index_sale = 0;
-                }
-                if ($index_cskh >= count($request->cskh_id)) {
-                    $index_cskh = 0;
                 }
             }
         }
