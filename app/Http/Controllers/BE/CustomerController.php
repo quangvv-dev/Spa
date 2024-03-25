@@ -323,8 +323,10 @@ class CustomerController extends Controller
 
         $staff = User::select('full_name', 'id')->where('department_id', '<>', DepartmentConstant::ADMIN)->where('active', StatusCode::ON)->pluck('full_name',
             'id')->toArray();
-        $docs = Model::select('id', 'messages', 'created_at', 'image', 'user_id')->where('customer_id', $id)
-            ->orderByDesc('id')->paginate(10);
+        $docs = Model::select('id', 'messages', 'created_at', 'image', 'user_id',
+            \DB::raw('DATE(created_at) as date'))
+            ->where('customer_id', $id)
+            ->groupBy(\DB::raw('DATE(created_at)'))->orderByDesc('id')->paginate(10);
         //Task
         $input['type'] = $request->type ?: 'qf1';
         $customers = Customer::find($id);
