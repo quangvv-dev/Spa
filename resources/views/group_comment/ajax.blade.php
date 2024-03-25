@@ -93,7 +93,7 @@
                     <div class="ant-timeline-item-head ant-timeline-item-head-custom ant-timeline-item-head-blue">
                         <img src="{{asset('default/comment.png')}}" style="width: 25px; height: 25px;">
                     </div>
-                    <div class="ant-timeline-item-tail"></div>
+{{--                    <div class="ant-timeline-item-tail"></div>--}}
                     <div class="col row">
                         <div class="col-md-11 row" style="align-items: center">
                             <div class="col-md-1">
