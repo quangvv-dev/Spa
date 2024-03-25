@@ -123,7 +123,8 @@
                             @endif
                         </div>
                         <div class="col-md-11 comment" style="white-space: pre-line;">
-                            <span><b>Nội dung:</b>  {!! $item->messages !!}</span>
+                            <label>Nội dung: </label>
+                            {!! $item->messages !!}
                         </div>
                         @if (isset($item->image))
                             <div class="col-md-11">
