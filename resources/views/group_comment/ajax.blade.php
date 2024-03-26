@@ -99,12 +99,12 @@
                             <div class="col-md-1">
                                 <span class="ant-avatar ant-avatar-circle" style="background-color: rgb(150, 217, 201);">
                                     <span class="ant-avatar-string" style="transform: scale(1) translateX(-50%);">
-                                        {{isset($item->user)?substr($item->user->full_name, 0, 1):'NV bị xóa'}}</span>
+                                        {{isset($item->user)?substr($item->user->full_name, 0, 1):'N'}}</span>
                                 </span>
                             </div>
                             <div class="col-md-11">
                                 <p>
-                                    <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:''}}</a>
+                                    <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:'Nhân viên bị xóa'}}</a>
                                     <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
                                 </p>
                             </div>
