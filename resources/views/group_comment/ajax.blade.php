@@ -99,7 +99,7 @@
                             <div class="col-md-1">
                                 <span class="ant-avatar ant-avatar-circle" style="background-color: rgb(150, 217, 201);">
                                     <span class="ant-avatar-string" style="transform: scale(1) translateX(-50%);">
-                                        {{substr($item->user->full_name, 0, 1)}}</span>
+                                        {{isset($item->user)?substr($item->user->full_name, 0, 1):'NV bị xóa'}}</span>
                                 </span>
                             </div>
                             <div class="col-md-11">
