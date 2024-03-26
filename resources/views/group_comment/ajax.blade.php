@@ -1,10 +1,12 @@
 <style>
-    .content_msg{
-        background-color: rgb(243 243 243);
+    .content_msg {
+        background-color: #f3f3f3;
         margin: 10px 3px;
         padding: 8px 16px;
         border-radius: 8px;
+        border-top: 1px solid #c0c3c8;
     }
+
     .ant-divider-horizontal.ant-divider-with-text {
         margin: 16px 0;
         color: rgba(0, 0, 0, .85);
@@ -15,23 +17,25 @@
         border-top: 0;
         border-top-color: rgba(0, 0, 0, .06);
     }
+
     .ant-divider-inner-text {
         display: inline-block;
         padding: 0 1em;
     }
-    .label-date{
+
+    .label-date {
         color: white;
-        background-color: rgb(239, 135, 55);
+        background-color: #ef8737;
         padding: 0px 10px;
         border-radius: 999px;
         font-size: 15px;
         font-weight: 500;
     }
+
     .ant-avatar {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        color: rgba(0, 0, 0, .85);
         font-size: 14px;
         font-variant: tabular-nums;
         line-height: 1.5715;
@@ -50,13 +54,15 @@
         line-height: 32px;
         border-radius: 50%;
     }
+
     .ant-timeline-item-tail {
         position: absolute;
         top: 10px;
         left: 4px;
         height: calc(100% - 10px);
-        border-left: 2px dotted rgb(179, 179, 179);
+        border-left: 2px dotted #b3b3b3;
     }
+
     .ant-timeline-item-head-custom {
         position: absolute;
         top: 5.5px;
@@ -71,12 +77,32 @@
         border-radius: 0;
         transform: translate(-50%, -50%);
     }
+
     .ant-timeline-item-head-blue {
         color: #1890ff;
         border-color: #1890ff;
     }
-    .ant-timeline-item-head{
+
+    .ant-timeline-item-head {
         background-color: #fff;
+    }
+    /*.chat-color-tag {*/
+    /*    position: absolute;*/
+    /*    top: 0;*/
+    /*    left: 0;*/
+    /*    width: 4px;*/
+    /*    height: 100%;*/
+    /*    border-radius: 8px 0 0 8px;*/
+    /*}*/
+    .chat-tag-icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 4px;
+    }
+
+    .chat-tag-icon i {
+        font-size: 14px;
     }
 </style>
 
@@ -85,20 +111,16 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         @if(count($docs))
             @foreach($docs as $k => $item)
-                {{--                Date--}}
-{{--                <div class="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center" role="separator">--}}
-{{--                    <span class="ant-divider-inner-text"><div class="label-date">21/03/2024</div></span>--}}
-{{--                </div>--}}
                 <div class="col-md-12 content_msg padding" style="border-top: 1px solid #c0c3c8;">
-                    <div class="ant-timeline-item-head ant-timeline-item-head-custom ant-timeline-item-head-blue">
-                        <img src="{{asset('default/comment.png')}}" style="width: 25px; height: 25px;">
+{{--                    <div class="chat-color-tag chat-color-tag-blue"></div>--}}
+                    <div class="chat-tag-icon">
+                        <i class="fa fa-tag"></i>
                     </div>
-{{--                    <div class="ant-timeline-item-tail"></div>--}}
                     <div class="col row">
                         <div class="col-md-11 row" style="align-items: center">
                             <div class="col-md-1">
                                 <span class="ant-avatar ant-avatar-circle" style="background-color: rgb(150, 217, 201);">
-                                    <span class="ant-avatar-string" style="transform: scale(1) translateX(-50%);">
+                                    <span class="ant-avatar-string bold" style="transform: scale(1) translateX(-50%);">
                                         {{isset($item->user)?substr($item->user->full_name, 0, 1):'N'}}</span>
                                 </span>
                             </div>
@@ -123,8 +145,8 @@
                             @endif
                         </div>
                         <div class="col-md-11 comment" style="white-space: pre-line;">
-                            <label>Nội dung: </label>
-                            {!! $item->messages !!}
+                            <label class="bold">Nội dung: </label>
+                            <span style="font-style: italic">{!! $item->messages !!}</span>
                         </div>
                         @if (isset($item->image))
                             <div class="col-md-11">
@@ -147,4 +169,3 @@
         @endif
     </table>
 </div>
-
