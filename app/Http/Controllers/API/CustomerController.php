@@ -51,7 +51,7 @@ class CustomerController extends BaseApiController
         if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
             unset($input['branch_id']);
         }
-        $customers = Customer::searchApi($input);
+        $customers = Customer::searchApi($input, $request->jwtUser);
 
         $customers = $customers->take(StatusCode::PAGINATE_1000)->orderByDesc('id')->get();
         if (isset($input['limit'])) {
@@ -70,14 +70,14 @@ class CustomerController extends BaseApiController
     public function store(Request $request)
     {
         $validate = [
-            'phone'        => "required",
-            'full_name'    => "required",
-            'gender'       => "required",
+            'phone' => "required",
+            'full_name' => "required",
+            'gender' => "required",
             'telesales_id' => "required",
-            'status_id'    => "required",
-            'source_id'    => "required",
-            'group_id'     => "required",
-            'branch_id'    => "required",
+            'status_id' => "required",
+            'source_id' => "required",
+            'group_id' => "required",
+            'branch_id' => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -85,9 +85,9 @@ class CustomerController extends BaseApiController
         }
         $customer = $request->jwtUser;
         $request->merge([
-            'fb_name'   => $request->full_name,
+            'fb_name' => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
-            'type'      => 'full_data',
+            'type' => 'full_data',
         ]);
 
         $input = $request->except(['group_id']);
@@ -115,9 +115,12 @@ class CustomerController extends BaseApiController
     {
         $request->merge([
             'full_name' => str_replace("'", "", $request->full_name),
-            'type'      => 'full_data',
+            'type' => 'full_data',
         ]);
         $input = $request->except('group_id');
+        if (!is_numeric('phone')) {
+            unset($input['phone']);
+        }
         $customer = $this->customerService->update($input, $id);
         CustomerGroup::where('customer_id', $customer->id)->delete();
         $category = Category::whereIn('id', $request->group_id)->get();
@@ -214,8 +217,8 @@ class CustomerController extends BaseApiController
         $orders = $customer->orders(isset($request->sort) ? $request->sort : 'created_at')->paginate(StatusCode::PAGINATE_10);
         $data = [
             'currentPage' => $orders->currentPage(),
-            'lastPage'    => $orders->lastPage(),
-            'record'      => OrderResource::collection($orders),
+            'lastPage' => $orders->lastPage(),
+            'record' => OrderResource::collection($orders),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }

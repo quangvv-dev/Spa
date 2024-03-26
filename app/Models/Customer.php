@@ -225,9 +225,25 @@ class Customer extends Model
         return $data;
     }
 
-    public static function searchApi($param)
+    public static function searchApi($param ,$user = null)
     {
-        $data = self::latest()->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+        $data = self::latest();
+        if (!empty($user) && $user->department_id == DepartmentConstant::TELESALES) {
+            $user = User::find($user->id);
+            $member = checkTeamLeadApis($user);
+            if (!empty($user->isLeader) && count($member)) {
+                $data = $data->whereIn('telesales_id', $member)->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            } else {
+                if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
+                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+                } else {
+                    $data = $data->where('telesales_id', $user->id);
+                }
+            }
+            if (isset($param['search'])) {
+                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            }
+        }
         if (isset($param['branch_id']) && $param['branch_id']) {
             if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
                 $data = $data->where('branch_id', $param['branch_id']);

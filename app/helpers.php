@@ -173,6 +173,14 @@ if (!function_exists('checkTeamLead')) {
         return isset($user->teamMembers) ? $user->teamMembers->pluck('user_id')->toArray() : [];
     }
 }
+if (!function_exists('checkTeamLeadApis')) {
+    function checkTeamLeadApis($user)
+    {
+        $user = \App\Models\Team::where('leader_id',
+            $user->id)->with('teamMembers')->first();
+        return isset($user->teamMembers) ? $user->teamMembers->pluck('user_id')->toArray() : [];
+    }
+}
 
 if (!function_exists('fcmSendCloudMessage')) {
     function fcmSendCloudMessage(
