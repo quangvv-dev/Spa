@@ -21,6 +21,16 @@ class GroupComment extends Model
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    public function call()
+    {
+        return $this->belongsTo(CallCenter::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

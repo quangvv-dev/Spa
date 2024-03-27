@@ -297,8 +297,8 @@
                                                    data-toggle="tab">Tin nhắn</a></li>
                                             <li><a href="#tabGift" id="click_tab_gift" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Quà Tặng</a></li>
-                                            <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
-                                                   data-toggle="tab">Khuyến mại</a></li>
+{{--                                            <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"--}}
+{{--                                                   data-toggle="tab">Khuyến mại</a></li>--}}
                                             <li><a href="#tab12" id="click_tab_12" data-phone="{{$customer->phone}}"
                                                    data-toggle="tab">Tổng đài</a></li>
                                             <li><a href="#tab13" id="click_tab_13" data-id="{{$customer->id}}"
@@ -430,11 +430,11 @@
                                             </div>
                                         @include('customers.modal-sendSMS')
                                         </div>
-                                        <div class="tab-pane " id="tab11">
-                                            @if(count($customer_post))
-                                                @include('post.history')
-                                            @endif
-                                        </div>
+{{--                                        <div class="tab-pane " id="tab11">--}}
+{{--                                            @if(count($customer_post))--}}
+{{--                                                @include('post.history')--}}
+{{--                                            @endif--}}
+{{--                                        </div>--}}
                                         <div class="tab-pane " id="tab12">
                                             @include('call_center.customer')
                                         </div>

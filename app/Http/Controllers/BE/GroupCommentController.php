@@ -40,8 +40,7 @@ class GroupCommentController extends Controller
     public function index(Request $request, $id)
     {
         $customer = Customer::find($id);
-        $groupComments = GroupComment::with('user', 'customer')
-            ->where('customer_id', $id)
+        $groupComments = GroupComment::where('customer_id', $id)
             ->orderBy('id', 'desc')
             ->get();
 
@@ -112,6 +111,7 @@ class GroupCommentController extends Controller
         $time = Customer::timeExpired($customer->status_id);
         $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
         $customer->update($time);
+        $input['status'] = $customer->status_id;
 
         $this->groupCommentService->create($input);
         return redirect()->back()->with('status', 'Trao đổi thành công !!!');

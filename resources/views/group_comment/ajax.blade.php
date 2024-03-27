@@ -48,52 +48,17 @@
         white-space: nowrap;
         text-align: center;
         vertical-align: middle;
-        background: #ccc;
         width: 32px;
         height: 32px;
         line-height: 32px;
         border-radius: 50%;
+        background-color: rgb(150, 217, 201);
     }
 
-    .ant-timeline-item-tail {
-        position: absolute;
-        top: 10px;
-        left: 4px;
-        height: calc(100% - 10px);
-        border-left: 2px dotted #b3b3b3;
+    .group-comment-table{
+        overflow-x: hidden;
     }
 
-    .ant-timeline-item-head-custom {
-        position: absolute;
-        top: 5.5px;
-        left: 5px;
-        width: auto;
-        height: auto;
-        margin-top: 0;
-        padding: 3px 1px;
-        line-height: 1;
-        text-align: center;
-        border: 0;
-        border-radius: 0;
-        transform: translate(-50%, -50%);
-    }
-
-    .ant-timeline-item-head-blue {
-        color: #1890ff;
-        border-color: #1890ff;
-    }
-
-    .ant-timeline-item-head {
-        background-color: #fff;
-    }
-    /*.chat-color-tag {*/
-    /*    position: absolute;*/
-    /*    top: 0;*/
-    /*    left: 0;*/
-    /*    width: 4px;*/
-    /*    height: 100%;*/
-    /*    border-radius: 8px 0 0 8px;*/
-    /*}*/
     .chat-tag-icon {
         position: absolute;
         top: 0;
@@ -111,24 +76,33 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         @if(count($docs))
             @foreach($docs as $k => $item)
-                <div class="col-md-12 content_msg padding" style="border-top: 1px solid #c0c3c8;">
-{{--                    <div class="chat-color-tag chat-color-tag-blue"></div>--}}
-                    <div class="chat-tag-icon">
-                        <i class="fa fa-tag"></i>
-                    </div>
+                <div class="col-md-12 content_msg padding">
+                    @if(isset($item->status))
+                        <div class="chat-tag-icon">
+                            <i class="fa fa-tag" style="color: {{@$item->status->color}}"></i>
+                        </div>
+                    @endif
+
                     <div class="col row">
-                        <div class="col-md-11 row" style="align-items: center">
+                        <div class="col-md-11 row align-items-center">
                             <div class="col-md-1">
-                                <span class="ant-avatar ant-avatar-circle" style="background-color: rgb(150, 217, 201);">
-                                    <span class="ant-avatar-string bold" style="transform: scale(1) translateX(-50%);">
+                                <span class="ant-avatar ant-avatar-circle">
+                                    <span class="ant-avatar-string bold">
                                         {{isset($item->user)?substr($item->user->full_name, 0, 1):'N'}}</span>
                                 </span>
                             </div>
                             <div class="col-md-11">
-                                <p>
-                                    <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:'Nhân viên bị xóa'}}</a>
-                                    <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
-                                </p>
+                                @if(isset($item->call))
+                                    <p>
+                                        <a class="bold blue">{{isset($item->call->user)?$item->call->user->full_name:'Hệ thống'}}</a>
+                                        <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
+                                    </p>
+                                @else
+                                    <p>
+                                        <a class="bold blue">{{isset($item->user)?$item->user->full_name:'Nhân viên bị xóa'}}</a>
+                                        <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
+                                    </p>
+                                @endif
                             </div>
                             @if (Auth::user()->id == $item->user_id)
                                 <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
@@ -137,7 +111,6 @@
                                             <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
                                         </a>
                                     @endif
-
                                     <a data-original-title="Xóa" rel="tooltip">
                                         <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
                                     </a>
@@ -145,8 +118,15 @@
                             @endif
                         </div>
                         <div class="col-md-11 comment" style="white-space: pre-line;">
-                            <label class="bold">Nội dung: </label>
-                            <span style="font-style: italic">{!! $item->messages !!}</span>
+                            @if(isset($item->call))
+                                <label class="bold">File ghi âm: </label>
+                                <audio controls>
+                                    <source src="{{@$item->call->recording_url}}" type="audio/wav">
+                                </audio>
+                            @else
+                                <label class="bold">Nội dung: </label>
+                                <span style="font-style: italic">{!! $item->messages !!}</span>
+                            @endif
                         </div>
                         @if (isset($item->image))
                             <div class="col-md-11">
