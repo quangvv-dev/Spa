@@ -19,7 +19,7 @@ class CustomerObserver
             'customer_id' => $customer->id,
             'branch_id' => $customer->branch_id,
             'status_id' => $customer->status_id,
-            'user_id' => 0,
+            'user_id' => Auth::user()->id,
             'messages' => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
     }
