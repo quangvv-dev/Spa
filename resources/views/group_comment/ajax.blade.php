@@ -71,7 +71,7 @@
     }
 
     .audio-border {
-        border: 1px #e0d7d7 solid;
+        border: 1px #d7dde09e solid;
         border-radius: 10px;
     }
 </style>
