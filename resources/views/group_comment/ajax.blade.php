@@ -104,7 +104,7 @@
                                     </p>
                                 @else
                                     <p>
-                                        <a class="bold blue">{{isset($item->user)?$item->user->full_name:'Tin hệ thống'}}</a>
+                                        <a class="bold blue">{{isset($item->user)?$item->user->full_name:'Hệ thống'}}</a>
                                         <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
                                     </p>
                                 @endif
