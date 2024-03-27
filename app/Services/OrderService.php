@@ -130,7 +130,8 @@ class OrderService
         GroupComment::create([
             'customer_id' => $order->member_id,
             'user_id' => 1,
-            'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . $order->all_total,
+            'status_id' => @$order->customer->status_id ?? null,
+            'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . number_format($order->all_total),
         ]);
         if ($order->role_type == StatusCode::PRODUCT) {
             $order_detail = OrderDetail::select('booking_id', 'quantity')->where('order_id', $order->id)
@@ -247,7 +248,7 @@ class OrderService
             $query->where('orders.branch_id', $input['branch_id']);
         })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
             $q->whereIn('orders.branch_id', $input['group_branch']);
-        })->join('customers as c','c.id','orders.member_id')->select(
+        })->join('customers as c', 'c.id', 'orders.member_id')->select(
             DB::raw('SUM(gross_revenue) as all_total'),
             DB::raw("(CASE WHEN c.gender='0' THEN 'Nữ' ELSE 'Nam' END) as name"))
             ->groupBy('c.gender')->get();
