@@ -12,6 +12,7 @@ class CallCenter extends Model
     protected $guarded = ['id'];
     protected $table = 'call_center';
     public const ANSWERED = 'ANSWERED';
+    public $timestamps = false;
 
 
     public function customer()
@@ -50,7 +51,7 @@ class CallCenter extends Model
         return '';
     }
 
-    public static function search($param, $select='*')
+    public static function search($param, $select = '*')
     {
         $data = self::select($select)->when(isset($param['call_status']) && $param['call_status'], function ($q) use ($param) {
             $q->where('call_status', $param['call_status']);
@@ -59,11 +60,11 @@ class CallCenter extends Model
         })->when(isset($param['dest_number']) && $param['dest_number'], function ($q) use ($param) {
             $q->where('dest_number', $param['dest_number']);
         })->when(isset($param['start_date']) && isset($param['end_date']), function ($q) use ($param) {
-                $q->whereBetween('start_time', [
-                    Functions::yearMonthDay($param['start_date']) . " 00:00:00",
-                    Functions::yearMonthDay($param['end_date']) . " 23:59:59",
-                ]);
-            });
+            $q->whereBetween('start_time', [
+                Functions::yearMonthDay($param['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($param['end_date']) . " 23:59:59",
+            ]);
+        });
         return $data->orderByDesc('id');
     }
 }

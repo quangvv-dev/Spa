@@ -32,19 +32,7 @@ class CallController extends BaseApiController
         }
         $server = setting('server_call_center');
         if (isset($server) && $server == StatusCode::SERVER_GTC_TELECOM) {
-            $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
-            $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
-            $input = [
-                'caller_id'     => $request->CallId,
-                'call_type'     => $direction,
-                'start_time'    => $request->CallDate . ' ' . $request->CallDateTimeStart,
-                'caller_number' => $request->ExtensionNumber,
-                'dest_number'   => str_replace('+84', '0', $request->PhoneNumber),
-                'answer_time'   => $request->Duration,
-                'call_status'   => $status,
-                'recording_url' => $request->RecordingPath,
-            ];
-
+            $input = self::gtgTelecomData($request);
         } else {
             $input = $request->only('caller_number', 'answer_time', 'dest_number', 'call_status', 'recording_url',
                 'caller_id', 'call_type', 'start_time');
@@ -62,15 +50,15 @@ class CallController extends BaseApiController
                     $err = Functions::sendSmsV3($input['dest_number'], @$text);
                     if (isset($err) && $err) {
                         HistorySms::insert([
-                            'phone'       => $input['dest_number'],
+                            'phone' => $input['dest_number'],
                             'campaign_id' => 0,
-                            'message'     => $text,
-                            'created_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
-                            'updated_at'  => Carbon::now('Asia/Ho_Chi_Minh'),
+                            'message' => $text,
+                            'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                            'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                         ]);
                     }
                 }
-                CallCenter::insert($input);
+                CallCenter::create($input);
             } else {
                 return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND', $request->all());
             }
@@ -166,8 +154,22 @@ class CallController extends BaseApiController
             }
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
-
     }
 
+    public function gtgTelecomData($request)
+    {
+        $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
+        $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
+        return [
+            'caller_id' => $request->CallId,
+            'call_type' => $direction,
+            'start_time' => $request->CallDate . ' ' . $request->CallDateTimeStart,
+            'caller_number' => $request->ExtensionNumber,
+            'dest_number' => str_replace('+84', '0', $request->PhoneNumber),
+            'answer_time' => $request->Duration,
+            'call_status' => $status,
+            'recording_url' => $request->RecordingPath,
+        ];
+    }
 
 }

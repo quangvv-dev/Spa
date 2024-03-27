@@ -69,6 +69,11 @@
     .chat-tag-icon i {
         font-size: 14px;
     }
+
+    .audio-border {
+        border: 1px #e0d7d7 solid;
+        border-radius: 10px;
+    }
 </style>
 
 <div class="table-responsive group-comment-table" style="padding: 5px">
@@ -117,10 +122,10 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-11 comment" style="white-space: pre-line;">
+                        <div class="col-md-11 comment" style="white-space: pre-line">
                             @if(isset($item->call))
                                 <label class="bold">File ghi âm: </label>
-                                <audio controls>
+                                <audio controls class="audio-border">
                                     <source src="{{@$item->call->recording_url}}" type="audio/wav">
                                 </audio>
                             @else
