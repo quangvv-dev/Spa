@@ -15,9 +15,10 @@
                     let link = '/customers/'+data.customer.id;
                     let full_name = (typeof myVariable !== 'undefined') ?data.user.full_name:''
                     $('#name').val(data.name).change();
-                    $("a[href]").attr("href",link);
+                    $("a#customer").attr("href",link);
                     $('.name-customer').html(data.customer.full_name).change();
-                    $('.phone-customer').val(data.customer.phone).change();
+                    $('.phone-customer').html(data.customer.phone.substring(0, 6) + "xxx").change();
+                    $('.a-phone').attr('href','callto:'+data.customer.phone).change();
                     $('#user_id').val(full_name).change();
                     $('#date_from').val(data.date_from).change();
                     $('#time_from').val(data.time_from).change();

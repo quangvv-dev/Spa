@@ -677,10 +677,10 @@ class OrderController extends Controller
                                         'branch_id' => @$check3->order->branch_id,
                                         'type' => $type,
                                         'sms_content' => Functions::vi_to_en($sms_content),
-                                        'name' => $prefix . @$check3->order->customer->full_name . ' - ' . @$check3->order->customer->phone . ' - nhóm ' . implode(",",
+                                        'name' => $prefix . @$check3->order->customer->full_name . ' - ' . @str_limit($check3->order->customer->phone,7,'xxx') . ' - nhóm ' . implode(",",
                                                 $text_category) . ' ,' . @$check3->order->branch->name,
                                         'description' => $text_order . "--" . replaceVariable($sms_content,
-                                                @$check3->order->customer->full_name, @$check3->order->customer->phone,
+                                                @$check3->order->customer->full_name, @str_limit($check3->order->customer->phone,7,'xxx'),
                                                 @$check3->order->branch->name, @$check3->order->branch->phone,
                                                 @$check3->order->branch->address),
                                     ];

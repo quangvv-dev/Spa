@@ -775,10 +775,10 @@ class CustomerController extends Controller
                                     'customer_status' => @$customer->status_id,
                                     'type' => $type,
                                     'sms_content' => Functions::vi_to_en($sms_content),
-                                    'name' => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",
+                                    'name' => $prefix . @$customer->full_name . ' - ' . @str_limit($customer->phone,7,'xxx') . ' - nhóm ' . implode(",",
                                             $text_category) . ' ,' . @$customer->branch->name,
                                     'description' => $text_order . "--" . replaceVariable($sms_content,
-                                            @$customer->full_name, @$customer->phone,
+                                            @$customer->full_name, @str_limit($customer->phone,7,'xxx'),
                                             @$customer->branch->name, @$customer->branch->phone,
                                             @$customer->branch->address),
                                 ];

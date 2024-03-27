@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-xs-12 col-md-4">
                         {!! Form::label('phone', 'SĐT', array('class' => ' required')) !!}
-                        {!! Form::text('phone', null, array('class' => 'form-control phone-customer','readonly'=>'true')) !!}
+                        <a class="a-phone" href="#"><span class="form-group bold phone-customer"> </span></a>
 
                     </div>
                     <div class="col-xs-12 col-md-4">
