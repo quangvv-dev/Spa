@@ -14,7 +14,7 @@ class CallObserver
      */
     public function created(CallCenter $callCenter)
     {
-        if ($callCenter->call_status == 'ANSWERED') {
+        if ($callCenter->call_status == 'ANSWERED' && $callCenter->answer_time > 0) {
             $callCenter->customer->groupComments()->create([
                 'user_id' => @$callCenter->user->id ?? 0,
                 'branch_id' => @$callCenter->customer->branch_id ?? 0,
