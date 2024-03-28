@@ -304,8 +304,8 @@
                                                 <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                        data-toggle="tab">Ví tiền</a></li>
                                             @endif
-                                            <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
-                                                   data-toggle="tab">Tin nhắn</a></li>
+{{--                                            <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"--}}
+{{--                                                   data-toggle="tab">Tin nhắn</a></li>--}}
                                             <li><a href="#tabGift" id="click_tab_gift" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Quà Tặng</a></li>
                                             <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
@@ -433,14 +433,14 @@
                                                 @include('wallet.history')
                                             @endif
                                         </div>
-                                        <div class="tab-pane" id="tab9">
-                                            <div id="content_tab9">
-                                                @if(count($history))
-                                                    @include('sms.history')
-                                                @endif
-                                            </div>
-                                        @include('customers.modal-sendSMS')
-                                        </div>
+{{--                                        <div class="tab-pane" id="tab9">--}}
+{{--                                            <div id="content_tab9">--}}
+{{--                                                @if(count($history))--}}
+{{--                                                    @include('sms.history')--}}
+{{--                                                @endif--}}
+{{--                                            </div>--}}
+{{--                                        @include('customers.modal-sendSMS')--}}
+{{--                                        </div>--}}
                                         <div class="tab-pane " id="tab11">
                                             @if(count($customer_post))
                                                 @include('post.history')

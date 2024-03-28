@@ -332,18 +332,18 @@ class CustomerController extends Controller
         //History SMS
         $tasks = [];
         $schedules = [];
-        $history = [];
+//        $history = []; // ẩn lịch sử tin nhắn
         $customer_post = [];
         $wallet = [];
 //        $package = [];
         $orders = [];
         $call_center = [];
         $contacts = [];
-        if ($request->history_sms) {
-            $history = HistorySms::where('phone',
-                $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
-            return view('sms.history', compact('history'));
-        }
+//        if ($request->history_sms) { // ẩn lịch sử tin nhắn
+//            $history = HistorySms::where('phone',
+//                $request->history_sms)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
+//            return view('sms.history', compact('history'));
+//        }
         if ($request->post) {
             $customer_post = CustomerPost::where('phone', $request->post)->where('status', '<>',
                 0)->orderByDesc('id')->paginate(StatusCode::PAGINATE_20);
@@ -391,7 +391,7 @@ class CustomerController extends Controller
 
         return view('customers.view_account',
             compact('title', 'docs', 'customer', 'waiters', 'schedules', 'id', 'staff', 'tasks',
-                'customer_post', 'customers', 'history', 'wallet', 'contacts', 'call_center', 'orders', 'tips'));
+                'customer_post', 'customers', 'wallet', 'contacts', 'call_center', 'orders', 'tips'));
     }
 
     /**
