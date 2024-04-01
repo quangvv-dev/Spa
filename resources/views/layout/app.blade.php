@@ -26,7 +26,7 @@
     }
 
     thead > tr th {
-        background: #3b8fec;
+        background: {{setting('default_color')??'#3b8fec'}};
         color: #fff;
     }
 

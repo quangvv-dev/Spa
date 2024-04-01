@@ -38,11 +38,18 @@
                                                 <span class="help-block">{{ $errors->first('title_website', ':message') }}</span>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-xs-12">
+                                        <div class="col-md-3 col-xs-12">
                                             <div class="form-group">
                                                 {!! Form::label('expiry', 'Ngày hết hạn sử dụng', array('class' => 'control-label required')) !!}
                                                 {!! Form::text('expiry',setting('expiry'), array('class' => 'form-control','data-toggle' => 'datepicker','id'=>'date')) !!}
                                                 <span class="help-block">{{ $errors->first('title_website', ':message') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-xs-12">
+                                            <div class="form-group">
+                                                {!! Form::label('default_color', 'Màu chủ đạo', array('class' => 'control-label')) !!}
+                                                {!! Form::text('default_color',setting('default_color'), array('class' => 'form-control')) !!}
+                                                <span class="help-block">{{ $errors->first('default_color', ':message') }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xs-12">
