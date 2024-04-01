@@ -129,9 +129,9 @@ class OrderService
         $order = $this->find($id);
         GroupComment::create([
             'customer_id' => $order->member_id,
-            'user_id' => 1,
+            'user_id' => Auth::user()->id,
             'status_id' => @$order->customer->status_id ?? null,
-            'messages' => 'Tin hệ thống : ' . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . number_format($order->all_total),
+            'messages' => "<span class='bold text-info'>Đơn hàng: </span> " . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . number_format($order->all_total),
         ]);
         if ($order->role_type == StatusCode::PRODUCT) {
             $order_detail = OrderDetail::select('booking_id', 'quantity')->where('order_id', $order->id)

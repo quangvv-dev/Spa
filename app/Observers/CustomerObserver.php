@@ -31,22 +31,18 @@ class CustomerObserver
     {
         $changedAttributes = $customer->getDirty();
         $oldData = $customer->getOriginal();
-        // Loại bỏ trường 'updated_at' khỏi mảng sự thay đổi
-        unset($changedAttributes['updated_at'], $changedAttributes['is_gioithieu']);
         // Kiểm tra sự thay đổi của các trường khác
         if (count($changedAttributes)) {
             $text = '';
-            foreach ($changedAttributes as $k => $item) {
-                if ($k == 'mkt_id') {
-                    $text = $text.' <span class="text-purple">MKT: ' . User::find($oldData[$k])->full_name . ' --> ' . User::find($item)->full_name.'</span>';
+                if (!empty($changedAttributes['mkt_id'])) {
+                    $text = $text.' <span class="text-purple">MKT: ' . User::find($oldData['mkt_id'])->full_name . ' --> ' . User::find($changedAttributes['mkt_id'])->full_name.'</span>';
                 }
-                if ($k == 'telesales_id') {
-                    $text = $text.' <span class="text-info">| Sale: ' . User::find($oldData[$k])->full_name . ' --> ' . User::find($item)->full_name.'</span>';
+                if (!empty($changedAttributes['telesales_id'])) {
+                    $text = $text.' <span class="text-info">| Sale: ' . User::find($oldData['telesales_id'])->full_name . ' --> ' . User::find($changedAttributes['telesales_id'])->full_name.'</span>';
                 }
-                if ($k == 'status_id') {
-                    $text = $text.' <span class="text-green">| Trạng thái: ' . Status::find($oldData[$k])->name . ' --> ' . Status::find($item)->name.'</span>';
+                if (!empty($changedAttributes['status_id'])) {
+                    $text = $text.' <span class="text-green">| Trạng thái: ' . Status::find($oldData['status_id'])->name . ' --> ' . Status::find($changedAttributes['status_id'])->name.'</span>';
                 }
-            }
             if (!empty($text)){
                 $customer->groupComments()->create([
                     'customer_id' => $customer->id,

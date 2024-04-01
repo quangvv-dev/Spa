@@ -903,6 +903,7 @@ class OrderController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
+            dd($e);
             throw new Exception($e->getMessage());
         }
     }
