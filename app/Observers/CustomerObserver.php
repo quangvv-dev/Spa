@@ -24,14 +24,14 @@ class CustomerObserver
         ]);
     }
 
-    public function updating(Customer $customer)
+    public function updated(Customer $customer)
     {
         $changedAttributes = $customer->getDirty();
         // Loại bỏ trường 'updated_at' khỏi mảng sự thay đổi
         unset($changedAttributes['updated_at'], $changedAttributes['is_gioithieu']);
 
         // Kiểm tra sự thay đổi của các trường khác
-        if (!empty($changedAttributes)) {
+        if (count($changedAttributes)) {
             $customer->groupComments()->create([
                 'customer_id' => $customer->id,
                 'branch_id' => $customer->branch_id,
