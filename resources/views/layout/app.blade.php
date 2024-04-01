@@ -26,7 +26,7 @@
     }
 
     thead > tr th {
-        background: #3b8fec;
+        background: {{setting('default_color')??'#3b8fec'}};
         color: #fff;
     }
 
@@ -133,12 +133,12 @@
 <div class="page">
     <div class="page-main">
         <!-- Navbar-->
-    @include('menu.navbar')
-    <!-- Horizantal menu-->
-    @include('menu.horizantal')
-    <!-- Menu left-->
-    @include('menu.menu_left')
-    <!-- Horizantal menu-->
+        @include('menu.navbar')
+        <!-- Horizantal menu-->
+        @include('menu.horizantal')
+        <!-- Menu left-->
+        @include('menu.menu_left')
+        <!-- Horizantal menu-->
         <div class="container content-custom">
             <div class="side-app">
                 <div class="row row-cards">
@@ -196,7 +196,7 @@
         </div>
         @php
 
-                @endphp
+            @endphp
 
         @if(setting('expiry') &&  date('Y-m-d')>setting('expiry'))
             <div class="notification-pop">
@@ -207,9 +207,9 @@
                     </marquee>
                 </div>
             </div>
-    @endif
-    @include('layout.footer')
-    <!-- End Footer-->
+        @endif
+        @include('layout.footer')
+        <!-- End Footer-->
     </div>
 </div>
 
