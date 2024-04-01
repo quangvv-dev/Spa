@@ -122,14 +122,14 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-11 comment" style="white-space: pre-line">
+                        <div class="col-md-11 comment" style="margin-top: 10px">
                             @if(isset($item->call))
                                 <label class="bold">File ghi âm: </label>
                                 <audio controls class="audio-border">
                                     <source src="{{@$item->call->recording_url}}" type="audio/wav">
                                 </audio>
                             @else
-                                <label class="bold">Nội dung: </label>
+{{--                                <label class="bold">Nội dung: </label>--}}
                                 <span style="font-style: italic">{!! $item->messages !!}</span>
                             @endif
                         </div>
