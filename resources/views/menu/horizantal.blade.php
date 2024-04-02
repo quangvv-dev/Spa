@@ -204,19 +204,21 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}"
-                   href="{{url('tasks-employee')}}">
-                    <i class="fas fa-tasks"></i><span>CSKH</span></a>
-{{--                <div class="sub-item">--}}
-{{--                    <ul>--}}
-{{--                        @if($roleGlobal->permission('tasks.employee'))--}}
-{{--                            <li><a href="{{url('tasks')}}">CSKH nhân viên</a></li>--}}
-{{--                            <li><a href="{{url('tasks-employee')}}">CSKH phòng ban</a></li>--}}
-{{--                        @endif--}}
-{{--                    </ul>--}}
-{{--                </div>--}}
-            </li>
+                @if($roleGlobal->permission('tasks.employee'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('tasks') ? 'active' : '' }}"
+                           href="{{url('tasks-employee')}}">
+                            <i class="fas fa-tasks"></i><span>CSKH</span></a>
+                        {{--                <div class="sub-item">--}}
+                        {{--                    <ul>--}}
+                        {{--                        @if($roleGlobal->permission('tasks.employee'))--}}
+                        {{--                            <li><a href="{{url('tasks')}}">CSKH nhân viên</a></li>--}}
+                        {{--                            <li><a href="{{url('tasks-employee')}}">CSKH phòng ban</a></li>--}}
+                        {{--                        @endif--}}
+                        {{--                    </ul>--}}
+                        {{--                </div>--}}
+                    </li>
+                @endif
             <li class="nav-item with-sub">
                 <a class="nav-link {{ Request::is('statistics*')||Request::is('report*')||Request::is('history-sms') ? 'active' : '' }}"
                    href="#"><i class="fas fa-search"></i><span>Thống kê</span></a>
