@@ -35,7 +35,7 @@ class TaskController extends Controller
      */
     public function __construct(TaskService $taskService)
     {
-        $this->middleware('permission:report.tasks', ['only' => ['statistical']]);
+//        $this->middleware('permission:report.tasks', ['only' => ['statistical']]);
         $this->middleware('permission:tasks.employee', ['only' => ['statisticIndex']]);
 
         $this->taskService = $taskService;
@@ -48,7 +48,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $color = Status::where('type',StatusCode::RELATIONSHIP)->pluck('color','id')->toArray();
+        $color = Status::where('type', StatusCode::RELATIONSHIP)->pluck('color', 'id')->toArray();
         $branchs = Branch::pluck('name', 'id')->toArray();
         $location = Branch::getLocation();
         if (!$request->start_date) {
@@ -66,25 +66,30 @@ class TaskController extends Controller
         }
 
 //        $user = User::whereIn('department_id',[UserConstant::TELESALES,UserConstant::WAITER,UserConstant::CSKH]);
-        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id','type','customer_id')
-            ->with('user','customer')->get();
+        $docs = Task::search($input)->select('id', 'name', 'task_status_id', 'date_from', 'user_id', 'type',
+            'customer_id')
+            ->with('user', 'customer')->get();
         $new = [];
         $done = [];
         $fail = [];
-        if (count($docs))
+        if (count($docs)) {
             foreach ($docs as $item) {
-                if ($item->task_status_id == StatusConstant::TASK_TODO)
+                if ($item->task_status_id == StatusConstant::TASK_TODO) {
                     $new[] = $item;
-                if ($item->task_status_id == StatusConstant::TASK_FAILED)
+                }
+                if ($item->task_status_id == StatusConstant::TASK_FAILED) {
                     $fail[] = $item;
-                if ($item->task_status_id == StatusConstant::TASK_DONE)
+                }
+                if ($item->task_status_id == StatusConstant::TASK_DONE) {
                     $done[] = $item;
+                }
             }
+        }
         if ($request->ajax()) {
-            return view('kanban_board.ajax', compact('new', 'done', 'fail','color'));
+            return view('kanban_board.ajax', compact('new', 'done', 'fail', 'color'));
         }
 
-        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs','location','color'));
+        return view('kanban_board.index', compact('new', 'done', 'fail', 'branchs', 'location', 'color'));
     }
 
     /**
@@ -108,15 +113,15 @@ class TaskController extends Controller
     {
         $customer = Customer::find($request->customer_id);
         $request->merge([
-            'user_id' => Auth::user()->id,
-            'priority' => 1,
+            'user_id'   => Auth::user()->id,
+            'priority'  => 1,
             'branch_id' => $customer->branch_id,
         ]);
         $input = $request->except('ajax');
-        if (Auth::user()->department_id == DepartmentConstant::TELESALES){
-            $input['type']= StatusCode::GOI_LAI;
-        }else{
-            $input['type']= StatusCode::CSKH;
+        if (Auth::user()->department_id == DepartmentConstant::TELESALES) {
+            $input['type'] = StatusCode::GOI_LAI;
+        } else {
+            $input['type'] = StatusCode::CSKH;
         }
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
@@ -147,8 +152,9 @@ class TaskController extends Controller
         $customer = Customer::find($input['customer_id']);
         $text = [];
         if (isset($customer->categories)) {
-            foreach ($customer->categories as $item)
+            foreach ($customer->categories as $item) {
                 $text[] = $item->name;
+            }
         }
         $input['name'] = $input['name'] . ' - ' . $customer->full_name . ' - ' . $customer->phone . ' nhóm ' . implode($text);
         $task = $this->taskService->create($input);
@@ -203,14 +209,16 @@ class TaskController extends Controller
         $progress = Task::PROGRESS;
         $departments = Department::pluck('name', 'id');
 
-        return view('tasks._form-edit', compact('users', 'departments', 'users2', 'task', 'user', 'customers', 'type', 'priority', 'title', 'status', 'progress'));
+        return view('tasks._form-edit',
+            compact('users', 'departments', 'users2', 'task', 'user', 'customers', 'type', 'priority', 'title',
+                'status', 'progress'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -223,10 +231,10 @@ class TaskController extends Controller
 //            $note = str_replace("'", ' ', $note);
 //            $request->merge(['description' => $note]);
 //        }
-        $input = $request->except('user_id2', 'status_name','ajax');
+        $input = $request->except('user_id2', 'status_name', 'ajax');
         $task = $this->taskService->update($input, $id);
         $task->users()->sync($request->user_id2);
-        if ($request->ajax){
+        if ($request->ajax) {
             return back()->with('status', 'Cập nhật công việc thành công');
         }
         Notification::where('task_id', $task->id)->update(['created_at' => $task->date_from . ' ' . $task->time_from]);
@@ -259,7 +267,8 @@ class TaskController extends Controller
      * Update task
      *
      * @param Request $request
-     * @param $id
+     * @param         $id
+     *
      * @return mixed
      */
     public function ajaxUpdate(Request $request, $id)
@@ -283,6 +292,7 @@ class TaskController extends Controller
      * Thong ke hieu qua cong viec
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      * @throws \Throwable
      */
@@ -292,10 +302,13 @@ class TaskController extends Controller
             $request->merge(['data_time' => 'THIS_MONTH']);
         }
 
-        $data = Task::select('user_id', \DB::raw('count(id) as count'))->whereBetWeen('date_from', getTime($request->data_time))
+        $data = Task::select('user_id', \DB::raw('count(id) as count'))->whereBetWeen('date_from',
+            getTime($request->data_time))
             ->with('user')->groupBy('user_id')->get()->map(function ($item) use ($request) {
-                $item->new = Task::where('user_id', $item->user_id)->where('task_status_id', 1)->whereBetWeen('date_from', getTime($request->data_time))->count();
-                $item->success = Task::where('user_id', $item->user_id)->where('task_status_id', 3)->whereBetWeen('date_from', getTime($request->data_time))->count();
+                $item->new = Task::where('user_id', $item->user_id)->where('task_status_id',
+                    1)->whereBetWeen('date_from', getTime($request->data_time))->count();
+                $item->success = Task::where('user_id', $item->user_id)->where('task_status_id',
+                    3)->whereBetWeen('date_from', getTime($request->data_time))->count();
                 return $item;
             })->sortByDesc('count');
 
@@ -310,6 +323,7 @@ class TaskController extends Controller
      * Công việc theo sale
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function statisticIndex(Request $request)
@@ -318,15 +332,16 @@ class TaskController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
-        $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
+        $users = User::whereIn('department_id',
+            [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
             ->pluck('full_name', 'id')->toArray();
-        if (Auth::user()->department_id != DepartmentConstant::ADMIN){
-            $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
-                ->pluck('full_name', 'id')->toArray();
-            if (!empty($request->role)){
+        if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
+            if (!empty($request->role)) {
                 $input['member'] = myTeamMember();
+                $users = !empty($input['member']) ? User::whereIn('id', $input['member'])->pluck('full_name',
+                    'id')->toArray() : collect();
             }
-            if (empty($input['sale_id'])){
+            if (empty($input['sale_id'])) {
                 $input['sale_id'] = Auth::user()->id;
             }
         }
@@ -335,17 +350,18 @@ class TaskController extends Controller
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) {
-            return view('tasks.ajax_statistical', compact('docs','status'));
+            return view('tasks.ajax_statistical', compact('docs', 'status'));
         }
 
-        return view('tasks.statistical', compact( 'docs', 'users','status'));
+        return view('tasks.statistical', compact('docs', 'users', 'status'));
     }
 
     /**
      * Update task
      *
      * @param Request $request
-     * @param $id
+     * @param         $id
+     *
      * @return mixed
      */
     public function ajaxUpdateStatus(Request $request, $id)
@@ -360,6 +376,7 @@ class TaskController extends Controller
      * find task
      *
      * @param $id
+     *
      * @return mixed
      */
     public function findTask($id)

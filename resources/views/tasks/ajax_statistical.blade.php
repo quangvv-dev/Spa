@@ -20,29 +20,21 @@
         display: block;
         line-height: 13px;
     }
+    a.tag{
+        color: white !important;
+    }
 </style>
 <div class="scrollmenu col-md-7 mt-2 mb-2 ml-5">
-    <button class="btn btn-new bg-azure" data-id="1">Mới
-        <span class="not-number-account noti-reletion">4433</span>
-    </button>
-    <button class="btn btn-new bg-success" data-id="3">Hoàn thành
-        <span class="not-number-account noti-reletion">93</span>
-    </button>
-    <button class="btn btn-new bg-danger" data-id="6">Quá hạn
-        <span class="not-number-account noti-reletion">209</span>
-    </button>
+    @if(count($status))
+        @forelse($status as $k => $s)
+            <button class="btn btn-new {{$s->id == \App\Constants\StatusCode::NEW_TASK ?'bg-azure':($s->id == \App\Constants\StatusCode::DONE_TASK?'bg-success':'bg-danger')}}"
+                    data-id="{{$s->id}}">{{$s->name}}
+                <span class="not-number-account noti-reletion">{{$s->count}}</span>
+            </button>
+        @empty
+        @endforelse
+    @endif
 </div>
-{{--<div class="scrollmenu col-md-7">--}}
-{{--    @if(count($status))--}}
-{{--        @forelse($status as $k => $s)--}}
-{{--            <button class="btn btn-new {{$s->id == \App\Constants\StatusCode::NEW_TASK ?'bg-azure':($s->id == \App\Constants\StatusCode::DONE_TASK?'bg-success':'bg-danger')}}"--}}
-{{--                    data-id="{{$s->id}}">{{$s->name}}--}}
-{{--                <span class="not-number-account noti-reletion">{{$s->count}}</span>--}}
-{{--            </button>--}}
-{{--        @empty--}}
-{{--        @endforelse--}}
-{{--    @endif--}}
-{{--</div>--}}
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">

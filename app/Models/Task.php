@@ -190,18 +190,7 @@ class Task extends Model
     {
         $data = self::select('ts.id','ts.name',DB::raw('COUNT(tasks.id) as count'))
             ->leftJoin('task_status as ts','tasks.task_status_id','=','ts.id')
-            ->when(isset($input['data_time']), function ($query) use ($input) {
-            $query->when($input['data_time'] == 'TODAY' ||
-                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                $q->whereDate('tasks.date_from', getTime($input['data_time']));
-            })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('tasks.date_from', getTime($input['data_time']));
-                });
-        })->when(!empty($input['start_date']) && !empty($input['end_date']), function ($q) use ($input) {
+            ->when(!empty($input['start_date']) && !empty($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('tasks.date_from', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
@@ -209,6 +198,8 @@ class Task extends Model
         })
             ->when(isset($input['sale_id']) && isset($input['sale_id']), function ($q) use ($input) {
                 $q->where('tasks.user_id', $input['sale_id']);
+            })->when(isset($input['member']) && isset($input['member']), function ($q) use ($input) {
+                $q->whereIn('user_id', $input['member']);
             })->when(isset($input['customer_id']) && isset($input['customer_id']), function ($q) use ($input) {
                 $q->where('tasks.customer_id', $input['customer_id']);
             })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {
