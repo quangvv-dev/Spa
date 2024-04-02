@@ -39,6 +39,9 @@ class Task extends Model
 //        'sms_content',
 //    ];
 
+   public const ROLE = [
+        1 => 'Toàn phòng ban',
+    ];
     const TYPE = [
         2 => 'Chăm sóc',
         1 => 'Gọi điện',
@@ -156,18 +159,7 @@ class Task extends Model
 
     public static function search($input)
     {
-        $data = self::when(isset($input['data_time']), function ($query) use ($input) {
-            $query->when($input['data_time'] == 'TODAY' ||
-                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
-                $q->whereDate('date_from', getTime($input['data_time']));
-            })
-                ->when($input['data_time'] == 'THIS_WEEK' ||
-                    $input['data_time'] == 'LAST_WEEK' ||
-                    $input['data_time'] == 'THIS_MONTH' ||
-                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
-                    $q->whereBetween('date_from', getTime($input['data_time']));
-                });
-        })->when(!empty($input['start_date']) && !empty($input['end_date']), function ($q) use ($input) {
+        $data = self::when(!empty($input['start_date']) && !empty($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('date_from', [
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
@@ -175,6 +167,8 @@ class Task extends Model
         })
             ->when(isset($input['sale_id']) && isset($input['sale_id']), function ($q) use ($input) {
                 $q->where('user_id', $input['sale_id']);
+            })->when(isset($input['member']) && isset($input['member']), function ($q) use ($input) {
+                $q->whereIn('user_id', $input['member']);
             })->when(isset($input['customer_id']) && isset($input['customer_id']), function ($q) use ($input) {
                 $q->where('customer_id', $input['customer_id']);
             })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {

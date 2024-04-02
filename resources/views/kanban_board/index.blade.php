@@ -1,4 +1,4 @@
-@extends('layout.app')
+ @extends('layout.app')
 <link rel="stylesheet" href="{{asset('assets/plugins/kanban-board/jkanban.min.css')}}"/>
 <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
 <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>

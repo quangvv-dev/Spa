@@ -314,13 +314,23 @@ class TaskController extends Controller
      */
     public function statisticIndex(Request $request)
     {
-        if (empty($request->data_time) && empty($request->start_date) && empty($request->end_date)) {
-            $request->merge(['data_time' => 'THIS_MONTH']);
+        if (!$request->start_date) {
+            Functions::addSearchDateFormat($request, 'd-m-Y');
         }
-        $users = User::whereIn('department_id', [UserConstant::TELESALES, UserConstant::WAITER, UserConstant::TP_SALE])
-            ->pluck('full_name', 'id')->toArray();
-        $title = 'Danh sách công việc';
         $input = $request->all();
+        $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
+            ->pluck('full_name', 'id')->toArray();
+        if (Auth::user()->department_id != DepartmentConstant::ADMIN){
+            $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
+                ->pluck('full_name', 'id')->toArray();
+            if (!empty($request->role)){
+                $input['member'] = myTeamMember();
+            }
+            if (empty($input['sale_id'])){
+                $input['sale_id'] = Auth::user()->id;
+            }
+        }
+
         $status = Task::groupByStatus($input)->get();
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
 
@@ -328,7 +338,7 @@ class TaskController extends Controller
             return view('tasks.ajax_statistical', compact('docs','status'));
         }
 
-        return view('tasks.statistical', compact('title', 'docs', 'users','status'));
+        return view('tasks.statistical', compact( 'docs', 'users','status'));
     }
 
     /**
