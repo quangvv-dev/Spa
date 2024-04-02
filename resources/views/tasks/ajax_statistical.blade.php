@@ -1,29 +1,3 @@
-<style>
-    .btn-new {
-        color: #fff;
-        font-weight: 600;
-    }
-
-    .noti-reletion {
-        background: #f36a26;
-        font-size: 10px;
-        padding: 0 5px;
-        position: absolute;
-        color: #fff;
-        border-radius: 10px;
-        top: -8px;
-        border: 2px solid #fff;
-    }
-
-    .not-number-account, .not-number-customer {
-        font-weight: 700;
-        display: block;
-        line-height: 13px;
-    }
-    a.tag{
-        color: white !important;
-    }
-</style>
 <div class="scrollmenu col-md-7 mt-2 mb-2 ml-5">
     @if(count($status))
         @forelse($status as $k => $s)

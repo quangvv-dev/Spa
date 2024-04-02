@@ -2,6 +2,32 @@
 @section('_style')
     <link href="{{ asset('css/order-search.css') }}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{{asset('css/daterangepicker.css')}}"/>
+    <style>
+        .btn-new {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .noti-reletion {
+            background: #f36a26;
+            font-size: 10px;
+            padding: 0 5px;
+            position: absolute;
+            color: #fff;
+            border-radius: 10px;
+            top: -8px;
+            border: 2px solid #fff;
+        }
+
+        .not-number-account, .not-number-customer {
+            font-weight: 700;
+            display: block;
+            line-height: 13px;
+        }
+        a.tag{
+            color: white !important;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
@@ -64,8 +90,9 @@
                 $('#time_to').val(data.time_to).change();
                 $('#description').html(data.description).change();
                 $('.checkTask').attr('data-id',data.id);
-                $('.checkTask').attr('checked','checked');
-
+                if(data.task_status_id == 3){
+                    $('.checkTask').attr('checked','checked');
+                }
             });
 
             $(document).on('click', '.checkTask', function(e) {
