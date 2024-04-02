@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Functions;
+use Illuminate\Support\Facades\DB;
 
 class Task extends Model
 {
@@ -70,12 +71,17 @@ class Task extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    public function task_status()
+    {
+        return $this->belongsTo(TaskStatus::class);
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id')->withTrashed();
+        return $this->belongsTo(Customer::class)->withTrashed();
     }
 
     public function department()
@@ -183,6 +189,45 @@ class Task extends Model
                 $q->where('date_from', $input['date_from']);
             })
             ->orderByDesc('date_from');
+        return $data;
+    }
+
+    public static function groupByStatus($input)
+    {
+        $data = self::select('ts.id','ts.name',DB::raw('COUNT(tasks.id) as count'))
+            ->leftJoin('task_status as ts','tasks.task_status_id','=','ts.id')
+            ->when(isset($input['data_time']), function ($query) use ($input) {
+            $query->when($input['data_time'] == 'TODAY' ||
+                $input['data_time'] == 'YESTERDAY', function ($q) use ($input) {
+                $q->whereDate('tasks.date_from', getTime($input['data_time']));
+            })
+                ->when($input['data_time'] == 'THIS_WEEK' ||
+                    $input['data_time'] == 'LAST_WEEK' ||
+                    $input['data_time'] == 'THIS_MONTH' ||
+                    $input['data_time'] == 'LAST_MONTH', function ($q) use ($input) {
+                    $q->whereBetween('tasks.date_from', getTime($input['data_time']));
+                });
+        })->when(!empty($input['start_date']) && !empty($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('tasks.date_from', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
+        })
+            ->when(isset($input['sale_id']) && isset($input['sale_id']), function ($q) use ($input) {
+                $q->where('tasks.user_id', $input['sale_id']);
+            })->when(isset($input['customer_id']) && isset($input['customer_id']), function ($q) use ($input) {
+                $q->where('tasks.customer_id', $input['customer_id']);
+            })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {
+                $q->where('tasks.type', $input['type']);
+            })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                $q->where('tasks.branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('tasks.branch_id', $input['group_branch']);
+            })->when(isset($input['task_status_id']) && isset($input['task_status_id']), function ($q) use ($input) {
+                $q->where('tasks.task_status_id', $input['task_status_id']);
+            })->when(isset($input['date_from']) && isset($input['date_from']), function ($q) use ($input) {
+                $q->where('tasks.date_from', $input['date_from']);
+            })->groupBy('ts.id');
         return $data;
     }
 }

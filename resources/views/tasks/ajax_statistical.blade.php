@@ -1,3 +1,34 @@
+<style>
+    .btn-new {
+        color: #fff;
+        font-weight: 600;
+    }
+    .noti-reletion {
+        background: #f36a26;
+        font-size: 10px;
+        padding: 0 5px;
+        position: absolute;
+        color: #fff;
+        border-radius: 10px;
+        top: -8px;
+        border: 2px solid #fff;
+    }
+    .not-number-account, .not-number-customer{
+        font-weight: 700;
+        display: block;
+        line-height: 13px;
+    }
+</style>
+<div class="scrollmenu col-md-7">
+    @if(count($status))
+        @forelse($status as $k => $s)
+            <button class="btn btn-new" data-id="{{$s->id}}" style="background: #eb00d7">{{$s->name}}
+                <span class="not-number-account noti-reletion">{{$s->count}}</span>
+            </button>
+        @empty
+        @endforelse
+    @endif
+</div>
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">

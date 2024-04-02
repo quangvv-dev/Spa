@@ -321,13 +321,14 @@ class TaskController extends Controller
             ->pluck('full_name', 'id')->toArray();
         $title = 'Danh sách công việc';
         $input = $request->all();
+        $status = Task::groupByStatus($input)->get();
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
 
         if ($request->ajax()) {
-            return view('tasks.ajax_statistical', compact('docs'));
+            return view('tasks.ajax_statistical', compact('docs','status'));
         }
 
-        return view('tasks.statistical', compact('title', 'docs', 'users'));
+        return view('tasks.statistical', compact('title', 'docs', 'users','status'));
     }
 
     /**
