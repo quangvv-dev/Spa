@@ -346,8 +346,17 @@ class TaskController extends Controller
             }
         }
 
+
+
         $status = Task::groupByStatus($input)->get();
         $docs = Task::search($input)->paginate(StatusCode::PAGINATE_20);
+        $status =  TaskStatus::select('id','name')->get()->transform(function ($item) use ($status) {
+            return [
+                'id'    => $item->id,
+                'name'  => $item->name,
+                'count' => @$status->firstWhere('id', $item->id)->count ?? 0,
+            ];
+        });
 
         if ($request->ajax()) {
             return view('tasks.ajax_statistical', compact('docs', 'status'));

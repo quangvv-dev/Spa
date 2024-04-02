@@ -27,9 +27,9 @@
 <div class="scrollmenu col-md-7 mt-2 mb-2 ml-5">
     @if(count($status))
         @forelse($status as $k => $s)
-            <button class="btn btn-new {{$s->id == \App\Constants\StatusCode::NEW_TASK ?'bg-azure':($s->id == \App\Constants\StatusCode::DONE_TASK?'bg-success':'bg-danger')}}"
-                    data-id="{{$s->id}}">{{$s->name}}
-                <span class="not-number-account noti-reletion">{{$s->count}}</span>
+            <button class="btn btn-new {{$s['id'] == \App\Constants\StatusCode::NEW_TASK ?'bg-azure':($s['id'] == \App\Constants\StatusCode::DONE_TASK?'bg-success':'bg-danger')}}"
+                    data-id="{{$s['id']}}">{{$s['name']}}
+                <span class="not-number-account noti-reletion">{{$s['count']}}</span>
             </button>
         @empty
         @endforelse
