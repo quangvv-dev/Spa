@@ -31,7 +31,7 @@
             @foreach($docs as $doc)
                 <tr>
                     <td class="text-center">{{@$doc->customer->full_name?:'Số máy lạ'}}</br>
-                        <a href="{{'customers/'.@$doc->customer->id}}">{{@$doc->dest_number}}</a>
+                        <a href="{{'customers/'.@$doc->customer->id}}">{{@str_limit($doc->dest_number,7,'xxx')}}</a>
                     </td>
                     <td class="text-center">{{@$doc->user->full_name?:'Nhân viên lạ'}}</br>
                         <span class="small-tip">(Số máy lẻ: {{@$doc->caller_number}})</span>
