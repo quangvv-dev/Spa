@@ -189,8 +189,8 @@
                         <div class="box-add-custom">
                             <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">BS: <span class="select_doctor_showName small-tip">{{@$order->supportOrder->doctor->full_name}}</span> <span class="show-commission exchange_doctor small-tip">{{@$order->supportOrder->doctor->percent_rose}} %</span></p>
                             <hr style="padding: 0;margin: 0">
-                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">YTa: <span class="select_yTaChinh_showName small-tip">{{@$order->supportOrder->yTaChinh->full_name}}</span> <span class="show-commission exchange_yta1 small-tip">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'chinh'))}}</span></p>
-                            <p style="margin-bottom: 1px !important;position: relative">Yta: <span class="select_yTaPhu_showName small-tip">{{@$order->supportOrder->yTaPhu->full_name}}</span> <span class="show-commission exchange_yta2 small-tip">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'phu'))}}</span></p>
+                            <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">KTV: <span class="select_yTaChinh_showName small-tip">{{@$order->supportOrder->yTaChinh->full_name}}</span> <span class="show-commission exchange_yta1 small-tip">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'chinh'))}}</span></p>
+                            <p style="margin-bottom: 1px !important;position: relative">KTV: <span class="select_yTaPhu_showName small-tip">{{@$order->supportOrder->yTaPhu->full_name}}</span> <span class="show-commission exchange_yta2 small-tip">{{@number_format(\App\Helpers\Functions::returnPercentRoseYta(@$order->supportOrder->yta1_id,@$order->supportOrder->yta2_id,'phu'))}}</span></p>
                             <hr style="padding: 0;margin: 0">
                             <p style="margin-bottom: 1px !important;font-weight: 500;position: relative">TV: <span class="select_tuVanChinh_showName small-tip">{{@$order->supportOrder->tuVanChinh->full_name}}</span> <span class="show-commission exchange_support1 small-tip">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'chinh')}}</span></p>
                             <p style="margin-bottom: 1px !important;position: relative">TV: <span class="select_tuVanPhu_showName small-tip">{{@$order->supportOrder->tuVanPhu->full_name}}</span> <span class="show-commission exchange_support2 small-tip">{{\App\Helpers\Functions::returnPercentRoseSupport(@$order->supportOrder->support1_id,@$order->supportOrder->support2_id,'phu')}}</span></p>
@@ -695,7 +695,7 @@
             let elm = $(this);
             let ytaChinh = $('#yta').val();
             if(!ytaChinh){
-                alertify.error('Vui lòng chọn y tá chính !');
+                alertify.error('Vui lòng chọn KTV chính !');
                 return;
             }
             selectItem('.select_yTaPhu',elm,'#yta2');

@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Chọn Bác Sỹ</h4>
+                <h4>Chọn người phụ trách</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -22,8 +22,8 @@
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <button class="nav-link tab-bacSy active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Bác sĩ</button>
-                                <button class="nav-link tab-yTaChinh" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Y tá chính</button>
-                                <button class="nav-link tab-yTaPhu" id="nav-contact-tab" data-toggle="tab" data-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Y tá phụ</button>
+                                <button class="nav-link tab-yTaChinh" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">KTV chính</button>
+                                <button class="nav-link tab-yTaPhu" id="nav-contact-tab" data-toggle="tab" data-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">KTV body</button>
                                 <button class="nav-link tab-tuVanChinh" id="nav-contact-tab" data-toggle="tab" data-target="#nav-tu-van" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Tư vấn chính</button>
                                 <button class="nav-link tab-tuVanPhu" id="nav-contact-tab" data-toggle="tab" data-target="#nav-tu-van2" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Tư vấn phụ</button>
                             </div>

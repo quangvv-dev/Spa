@@ -82,7 +82,7 @@ class OrderController extends Controller
             'order_type' => $order_type,
             'branchs' => $branchs,
             'spaTherapissts' => User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id', DepartmentConstant::DOCTOR)->get(),
-            'customer_y_ta' => User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id', DepartmentConstant::Y_TA)->get(),
+            'customer_y_ta' => User::select('id', 'avatar', 'full_name', 'percent_rose')->where('department_id', DepartmentConstant::TECHNICIANS)->get(),
         ]);
     }
 
