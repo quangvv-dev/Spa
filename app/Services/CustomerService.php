@@ -78,6 +78,9 @@ class CustomerService
         } else {
             $input['birthday'] = @Functions::yearMonthDay($input['birthday']);
         }
+        if (!empty($input['category_tips'])){
+            $input['category_tips'] = json_encode($input['category_tips']);
+        }
         if (!empty($input['image'])) {
             $input['avatar'] = $this->fileUpload->uploadUserImage($input['image']);
         }
