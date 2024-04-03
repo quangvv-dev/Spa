@@ -61,7 +61,9 @@ class CustomerService
         $customer = $this->customer->where('phone',$input['phone'])->first();
         $input['is_duplicate'] = !empty($customer) ? Customer::DUPLICATE : Customer::NON_DUPLICATE;
         $input['carepage_id'] = Auth::user()->id;
-        $input['category_tips'] = json_encode($input['category_tips']);
+        if (!empty($input['category_tips'])){
+            $input['category_tips'] = json_encode($input['category_tips']);
+        }
         $data = $this->data($input);
         $customer = $this->customer->fill($data);
         $customer->save();
