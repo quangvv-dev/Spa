@@ -49,7 +49,7 @@ class CallController extends BaseApiController
                 if (!in_array(strtoupper($request->status), ['ANSWERED', 'BUSY'])) {
                     return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM ONLY SAVE ANSWERED & BUSY', $request->all());
                 }
-                $status = $request->status == 'ANSWERED' ? 'ANSWERED' : ($request->status == 'BUSY' ? 'MISSED CALL' : 'NOT-AVAILABLE');
+                $status = strtoupper($request->status) == 'ANSWERED' ? 'ANSWERED' : (strtoupper($request->status) == 'BUSY' ? 'MISSED CALL' : 'NOT-AVAILABLE');
                 $input = [
                     'caller_id'     => $request->call_id,
                     'call_type'     => strtoupper($request->direction),
