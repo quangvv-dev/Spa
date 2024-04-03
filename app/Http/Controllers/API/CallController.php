@@ -27,7 +27,7 @@ class CallController extends BaseApiController
      */
     public function hangUp(Request $request)
     {
-        if ($request->api_key != md5('quangphuong9685@gmail.com')) {
+        if ($request->api_key != md5('quangphuong9685@gmail.com') && $request->header('api-key') != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
 
@@ -49,7 +49,7 @@ class CallController extends BaseApiController
                 if (!in_array(strtoupper($request->status), ['ANSWERED', 'BUSY'])) {
                     return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM ONLY SAVE ANSWERED & BUSY', $request->all());
                 }
-                $status = $request->status == 'ANSWERED' ? 'ANSWERED' : ($request->status == 'BUSY') ? 'MISSED CALL' : "NOT-AVAILABLE";
+                $status = $request->status == 'ANSWERED' ? 'ANSWERED' : ($request->status == 'BUSY' ? 'MISSED CALL' : 'NOT-AVAILABLE');
                 $input = [
                     'caller_id'     => $request->call_id,
                     'call_type'     => strtoupper($request->direction),
