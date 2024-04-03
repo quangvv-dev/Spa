@@ -962,22 +962,42 @@
                     $(target).find(".name-customer").append(html);
                 });
             });
-            $(document).on('dblclick', '.phone-customer', function (e) {
-                let target = $(e.target).parent();
-                $(target).find('.phone-customer').empty();
-                let id = $(this).data('customer-id');
-                let html = '';
-
+            $(document).on('click', '.phone-customer', function (e) {
                 $.ajax({
-                    url: "ajax/customers/" + id,
-                    method: "get",
-                    data: {id: id}
-                }).done(function (data) {
-
-                    html += `<textarea data-id=` + data.id + ` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.phone + `</textarea>`;
-                    $(target).find(".phone-customer").append(html);
+                    url: 'https://api.mobilesip.vn/v1/click2call',
+                    type: 'GET',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer 5662792641bc41e9b22d34af22bea19f-MzAwNTcyNTEtYWM3Yi00Y2I1LWI2ZjAtZGFmODI3YzQzOWYy');
+                    },
+                    data: {
+                        'ext':"{{\Illuminate\Support\Facades\Auth::user()->caller_number??0}}",
+                        'phone':$(this).data('phone')
+                    },
+                    success: function () {
+                        alertify.success('Kết nối cuộc gọi thành công !',10);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error); // Log ra lỗi trong console
+                        alertify.error('Kết nối cuộc gọi thất bại !',10);
+                    },
                 });
             });
+            // $(document).on('dblclick', '.phone-customer', function (e) {
+            //     let target = $(e.target).parent();
+            //     $(target).find('.phone-customer').empty();
+            //     let id = $(this).data('customer-id');
+            //     let html = '';
+            //
+            //     $.ajax({
+            //         url: "ajax/customers/" + id,
+            //         method: "get",
+            //         data: {id: id}
+            //     }).done(function (data) {
+            //
+            //         html += `<textarea data-id=` + data.id + ` class="phone-result" style="width: auto; height: 58px; font-size: 14px; overflow-y: hidden;"> ` + data.phone + `</textarea>`;
+            //         $(target).find(".phone-customer").append(html);
+            //     });
+            // });
 
             $(document).on('focusout', '.handsontableInput', function (e) {
                 let target = $(e.target).parent();

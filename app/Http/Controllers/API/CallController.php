@@ -30,32 +30,49 @@ class CallController extends BaseApiController
         if ($request->api_key != md5('quangphuong9685@gmail.com')) {
             return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'API KEY WRONG');
         }
-        $server = setting('server_call_center');
-        if (isset($server) && $server == StatusCode::SERVER_GTC_TELECOM) {
-            $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
-            $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
-            $input = [
-                'caller_id'     => $request->CallId,
-                'call_type'     => $direction,
-                'start_time'    => $request->CallDate . ' ' . $request->CallDateTimeStart,
-                'caller_number' => $request->ExtensionNumber,
-                'dest_number'   => str_replace('+84', '0', $request->PhoneNumber),
-                'answer_time'   => $request->Duration,
-                'call_status'   => $status,
-                'recording_url' => $request->RecordingPath,
-            ];
 
-        } else {
-            $input = $request->only('caller_number', 'answer_time', 'dest_number', 'call_status', 'recording_url',
-                'caller_id', 'call_type', 'start_time');
-            if (!isset($input['answer_time'])) {
-                $input['answer_time'] = $request->duration;
+            $server = setting('server_call_center');
+            if (isset($server) && $server == StatusCode::SERVER_GTC_TELECOM) {
+                $status = $request->CallStatus == 'Answered' ? 'ANSWERED' : 'MISSED CALL';
+                $direction = $request->Direction == 'Outgoing' ? 'INBOUND' : 'MISSED CALL';
+                $input = [
+                    'caller_id'     => $request->CallId,
+                    'call_type'     => $direction,
+                    'start_time'    => $request->CallDate . ' ' . $request->CallDateTimeStart,
+                    'caller_number' => $request->ExtensionNumber,
+                    'dest_number'   => str_replace('+84', '0', $request->PhoneNumber),
+                    'answer_time'   => $request->Duration,
+                    'call_status'   => $status,
+                    'recording_url' => $request->RecordingPath,
+                ];
+            }elseif (isset($server) && $server == StatusCode::SERVER_CGV_TELECOM){
+                if (!in_array(strtoupper($request->status), ['ANSWERED', 'BUSY'])) {
+                    return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM ONLY SAVE ANSWERED & BUSY', $request->all());
+                }
+                $status = $request->status == 'ANSWERED' ? 'ANSWERED' : ($request->status == 'BUSY') ? 'MISSED CALL' : "NOT-AVAILABLE";
+                $input = [
+                    'caller_id'     => $request->call_id,
+                    'call_type'     => strtoupper($request->direction),
+                    'start_time'    => $request->time_started,
+                    'caller_number' => $request->from_number,
+                    'dest_number'   => $request->to_number,
+                    'answer_time'   => $request->duration,
+                    'call_status'   => $status,
+                    'recording_url' => $request->recording_url,
+                ];
             }
-        }
+            else {
+                $input = $request->only('caller_number', 'answer_time', 'dest_number', 'call_status', 'recording_url',
+                    'caller_id', 'call_type', 'start_time');
+                if (!isset($input['answer_time'])) {
+                    $input['answer_time'] = $request->duration;
+                }
+            }
+
 
         $isset = CallCenter::where('caller_id', $request->caller_id)->first();
         if (empty($isset)) {
-            if ($request->call_type != 'INBOUND') {
+            if ($input['call_type'] != 'INBOUND') {
                 $call_exits = CallCenter::where('dest_number', $input['dest_number'])->exists();
                 if (!$call_exits && !empty(setting('miss_call_sms'))) {
                     $text = Functions::vi_to_en(setting('miss_call_sms'));
