@@ -70,14 +70,14 @@ class CustomerController extends BaseApiController
     public function store(Request $request)
     {
         $validate = [
-            'phone' => "required",
-            'full_name' => "required",
-            'gender' => "required",
+            'phone'        => "required",
+            'full_name'    => "required",
+            'gender'       => "required",
             'telesales_id' => "required",
-            'status_id' => "required",
-            'source_id' => "required",
-            'group_id' => "required",
-            'branch_id' => "required",
+            'status_id'    => "required",
+            'source_id'    => "required",
+            'group_id'     => "required",
+            'branch_id'    => "required",
         ];
         $this->validator($request, $validate);
         if (!empty($this->error)) {
@@ -85,9 +85,9 @@ class CustomerController extends BaseApiController
         }
         $customer = $request->jwtUser;
         $request->merge([
-            'fb_name' => $request->full_name,
+            'fb_name'   => $request->full_name,
             'full_name' => str_replace("'", "", $request->full_name),
-            'type' => 'full_data',
+            'type'      => 'full_data',
         ]);
 
         $input = $request->except(['group_id']);
@@ -98,10 +98,19 @@ class CustomerController extends BaseApiController
         $input['carepage_id'] = $customer->id;
         $input['status_id'] = empty($input['status_id']) ? Functions::getStatusWithCode('moi') : $input['status_id'];
         $customer = Customer::create($input);
+        $this->update_code($customer);
         $category = Category::whereIn('id', $request->group_id)->get();
         AuthController::createCustomerGroup($category, $customer->id, $input['branch_id']);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new CustomerResource($customer));
+    }
+
+    public function update_code($customer)
+    {
+        $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
+        $code = 'KH' . $customer_id;
+        $customer->update(['account_code' => $code]);
+        return $customer;
     }
 
     /**
@@ -115,7 +124,7 @@ class CustomerController extends BaseApiController
     {
         $request->merge([
             'full_name' => str_replace("'", "", $request->full_name),
-            'type' => 'full_data',
+            'type'      => 'full_data',
         ]);
         $input = $request->except('group_id');
         if (!is_numeric('phone')) {
@@ -217,8 +226,8 @@ class CustomerController extends BaseApiController
         $orders = $customer->orders(isset($request->sort) ? $request->sort : 'created_at')->paginate(StatusCode::PAGINATE_10);
         $data = [
             'currentPage' => $orders->currentPage(),
-            'lastPage' => $orders->lastPage(),
-            'record' => OrderResource::collection($orders),
+            'lastPage'    => $orders->lastPage(),
+            'record'      => OrderResource::collection($orders),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
