@@ -963,6 +963,11 @@
                 });
             });
             $(document).on('click', '.phone-customer', function (e) {
+                let ext = "{{\Illuminate\Support\Facades\Auth::user()->caller_number??0}}";
+                if(ext ==0){
+                    alertify.warning('Tài khoản chưa có mã tổng đài !',5);
+                    return false;
+                }
                 $.ajax({
                     url: 'https://api.mobilesip.vn/v1/click2call',
                     type: 'GET',
@@ -970,15 +975,15 @@
                         xhr.setRequestHeader('Authorization', 'Bearer 5662792641bc41e9b22d34af22bea19f-MzAwNTcyNTEtYWM3Yi00Y2I1LWI2ZjAtZGFmODI3YzQzOWYy');
                     },
                     data: {
-                        'ext':"{{\Illuminate\Support\Facades\Auth::user()->caller_number??0}}",
+                        'ext':ext,
                         'phone':$(this).data('phone')
                     },
                     success: function () {
-                        alertify.success('Kết nối cuộc gọi thành công !',10);
+                        alertify.success('Kết nối cuộc gọi thành công !',5);
                     },
                     error: function (xhr, status, error) {
                         console.log(error); // Log ra lỗi trong console
-                        alertify.error('Kết nối cuộc gọi thất bại !',10);
+                        alertify.error('Kết nối cuộc gọi thất bại !',5);
                     },
                 });
             });
