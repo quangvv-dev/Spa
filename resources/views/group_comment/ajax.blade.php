@@ -99,15 +99,22 @@
                             <div class="col-md-1">
                                 <span class="ant-avatar ant-avatar-circle" style="background-color: rgb(150, 217, 201);">
                                     <span class="ant-avatar-string" style="transform: scale(1) translateX(-50%);">
-                                        {{substr($item->user->full_name, 0, 1)}}</span>
+                                        {{substr(@$item->user->full_name, 0, 1)}}</span>
                                 </span>
                             </div>
                             <div class="col-md-11">
                                 <p>
-                                    <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:''}}</a>
+                                    <a href="#" class="bold blue">{{isset($item->user)?@$item->user->full_name:''}}</a>
                                     <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
                                 </p>
                             </div>
+=======
+                        <div class="col-md-11">
+                            <p>
+                                <a href="#" class="bold blue">{{isset($item->user)?@$item->user->full_name:''}}</a>
+                                <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
+                            </p>
+>>>>>>> eee3a107 (usser)
                             @if (Auth::user()->id == $item->user_id)
                                 <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
                                     @if(!in_array('comment.edit',setting('permissions')??[]))
