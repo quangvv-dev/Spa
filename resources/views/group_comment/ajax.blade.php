@@ -85,10 +85,15 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         @if(count($docs))
             @foreach($docs as $k => $item)
+                {{--                Date--}}
+                {{--                <div class="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center" role="separator">--}}
+                {{--                    <span class="ant-divider-inner-text"><div class="label-date">21/03/2024</div></span>--}}
+                {{--                </div>--}}
                 <div class="col-md-12 content_msg padding" style="border-top: 1px solid #c0c3c8;">
                     <div class="ant-timeline-item-head ant-timeline-item-head-custom ant-timeline-item-head-blue">
                         <img src="{{asset('default/comment.png')}}" style="width: 25px; height: 25px;">
                     </div>
+                    {{--                    <div class="ant-timeline-item-tail"></div>--}}
                     <div class="col row">
                         <div class="col-md-11 row" style="align-items: center">
                             <div class="col-md-1">
@@ -99,45 +104,45 @@
                             </div>
                             <div class="col-md-11">
                                 <p>
-                                    <a href="#" class="bold blue">{{isset($item->user)?@$item->user->full_name:''}}</a>
+                                    <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:''}}</a>
                                     <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
                                 </p>
-                                @if (Auth::user()->id == $item->user_id)
-                                    <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
-                                        @if(!in_array('comment.edit',setting('permissions')??[]))
-                                            <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
-                                                <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
-                                            </a>
-                                        @endif
-
-                                        <a data-original-title="Xóa" rel="tooltip">
-                                            <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
+                            </div>
+                            @if (Auth::user()->id == $item->user_id)
+                                <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
+                                    @if(!in_array('comment.edit',setting('permissions')??[]))
+                                        <a data-original-title="Sửa"  rel="tooltip" style="margin-right: 5px">
+                                            <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
                                         </a>
-                                    </div>
-                                @endif
-                            </div>
-                            <div class="col-md-11 comment" style="white-space: pre-line;">
-                                <label>Nội dung: </label>
-                                {!! $item->messages !!}
-                            </div>
-                            @if (isset($item->image))
-                                <div class="col-md-11">
-                                    <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
-                                        <div class="fileupload fileupload-exists"
-                                             data-provides="fileupload">
-                                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">
-                                                <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}" alt="image"/></a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @endif
+
+                                    <a data-original-title="Xóa" rel="tooltip">
+                                        <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
+                                    </a>
                                 </div>
                             @endif
                         </div>
+                        <div class="col-md-11 comment mt-3">
+                            {!! $item->messages !!}
+                        </div>
+                        @if (isset($item->image))
+                            <div class="col-md-11">
+                                <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
+                                    <div class="fileupload fileupload-exists"
+                                         data-provides="fileupload">
+                                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100px">
+                                            <a href="{{ $item->image }}" class="mobileLightBox"><img src="{{ $item->image }}" alt="image"/></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
-                    @endforeach
-                    <div class="pull-right">
-                        {{ $docs->links() }}
-                    </div>
-                @endif
+                </div>
+            @endforeach
+            <div class="pull-right">
+                {{ $docs->links() }}
+            </div>
+        @endif
     </table>
 </div>
