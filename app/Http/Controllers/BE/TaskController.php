@@ -338,10 +338,10 @@ class TaskController extends Controller
                 $query->where('branch_id', $myBranch);
             })->pluck('full_name', 'id')->toArray();
         if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
+            $users = !empty($input['member']) ? User::whereIn('id', $input['member'])->pluck('full_name',
+                'id')->toArray() : collect();
             if (!empty($request->role)) {
                 $input['member'] = myTeamMember();
-                $users = !empty($input['member']) ? User::whereIn('id', $input['member'])->pluck('full_name',
-                    'id')->toArray() : collect();
             }
             if (empty($input['sale_id'])) {
                 $input['sale_id'] = Auth::user()->id;
