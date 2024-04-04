@@ -361,7 +361,7 @@ class CustomerController extends Controller
         }
 
         if ($request->call_center) {
-            $call_center = CallCenter::where('dest_number', $request->call_center)->paginate(StatusCode::PAGINATE_20);
+            $call_center = CallCenter::where('dest_number', $request->call_center)->orderByDesc('start_time')->paginate(StatusCode::PAGINATE_20);
             return view('call_center.customer', compact('call_center'));
         }
 

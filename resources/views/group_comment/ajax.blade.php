@@ -6,7 +6,7 @@
                     <div class="col row">
                         <div class="col-md-11">
                             <p>
-                                <a href="#" class="bold blue">{{isset($item->user)?@$item->user->full_name:''}}</a>
+                                <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:''}}</a>
                                 <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
                             </p>
                             @if (Auth::user()->id == $item->user_id)
@@ -47,3 +47,4 @@
         @endif
     </table>
 </div>
+
