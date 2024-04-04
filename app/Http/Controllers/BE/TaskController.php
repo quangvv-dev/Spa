@@ -332,9 +332,11 @@ class TaskController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
-        $users = User::whereIn('department_id',
-            [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
-            ->pluck('full_name', 'id')->toArray();
+        $myBranch = Auth::user()->id??null;
+        $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
+            ->when(!empty($myBranch), function ($query) use ($myBranch) {
+                $query->where('branch_id', $myBranch);
+            })->pluck('full_name', 'id')->toArray();
         if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
             if (!empty($request->role)) {
                 $input['member'] = myTeamMember();
