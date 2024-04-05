@@ -70,7 +70,7 @@ class CallController extends BaseApiController
                         ]);
                     }
                 }
-                CallCenter::insert($input);
+                CallCenter::create($input);
             } else {
                 return $this->responseApi(ResponseStatusCode::MOVED_PERMANENTLY, 'CRM NOT SAVE INBOUND', $request->all());
             }

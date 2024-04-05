@@ -8,13 +8,11 @@ class CallObserver
 {
     /**
      * Handle the call center "created" event.
-     *
-     * @param App\Models\CallCenter $callCenter
+     * @param CallCenter $callCenter
      * @return void
      */
     public function creating(CallCenter $callCenter)
     {
-        dd($callCenter);
         if ($callCenter->call_status == 'ANSWERED' && $callCenter->answer_time > 0) {
             $callCenter->customer->groupComments()->create([
                 'user_id' => @$callCenter->user->id ?? 0,
