@@ -135,9 +135,14 @@
             <div class="col-md-12 no-padd">
                 <div class="col-md-2 no-padd" style="float: left; display: block">
                     <div class="full2 mt10" id="info_bar">
-                        <div class="border padding infor-list-ct ml2"><h3 class="uppercase pb5 mb10 font12 bold mg0">Mối
-                                quan hệ</h3>
-                            <div class="">{{ @$customer->status->name }}
+                        <div class="border padding infor-list-ct ml2">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Mối quan hệ</h3>
+                                    <div>{{ @$customer->status->name }}</div></div>
+                                <div class="col-md-4 qrcode-container">
+                                    <div id="qrcodeTable"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -293,8 +298,8 @@
                                                 <li><a href="#tab10" id="click_tab_10" data-id="{{$customer->id}}"
                                                        data-toggle="tab">Ví tiền</a></li>
                                             @endif
-                                            <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"
-                                                   data-toggle="tab">Tin nhắn</a></li>
+{{--                                            <li><a href="#tab9" id="click_tab_9" data-phone="{{$customer->phone}}"--}}
+{{--                                                   data-toggle="tab">Tin nhắn</a></li>--}}
                                             <li><a href="#tabGift" id="click_tab_gift" data-id="{{$customer->id}}"
                                                    data-toggle="tab">Quà Tặng</a></li>
                                             <li><a href="#tab11" id="click_tab_11" data-phone="{{$customer->phone}}"
@@ -635,18 +640,18 @@
             return false
         })
 
-        $(document).on('click', '#click_tab_9', function () {
-            const phone = $(this).data('phone');
-            $('#content_tab9').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
+        {{--$(document).on('click', '#click_tab_9', function () {--}}
+        {{--    const phone = $(this).data('phone');--}}
+        {{--    $('#content_tab9').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');--}}
 
-            $.ajax({
-                url: "{{url()->current() }}",
-                method: "get",
-                data: {history_sms: phone}
-            }).done(function (data) {
-                $('#content_tab9').html(data);
-            });
-        })
+        {{--    $.ajax({--}}
+        {{--        url: "{{url()->current() }}",--}}
+        {{--        method: "get",--}}
+        {{--        data: {history_sms: phone}--}}
+        {{--    }).done(function (data) {--}}
+        {{--        $('#content_tab9').html(data);--}}
+        {{--    });--}}
+        {{--})--}}
         $(document).on('click', '#click_tab_10', function () {
             const id = $(this).data('id');
             $('#tab10').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
@@ -1075,6 +1080,16 @@
         //     let token = $('.chat-token').val();
         //     getMessage(page_id,sender_id,token);
         // })
+    </script>
+    <script src="{{asset('js/jquery.qrcode.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function (){
+            jQuery('#qrcodeTable').qrcode({
+                text	: "{{$customer->phone}}",
+                height:50,
+                width:50
+            });
+        });
     </script>
     {{--@include('message_fb.js_chat_app')--}}
 @endsection

@@ -230,11 +230,14 @@
                         </a>
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
+                        <a href="https://zalo.me/{{@$customer->phone}}">
+                            <img width="15" height="15" src="{{asset('assets/images/zalo_icon.png')}}">
+                        </a>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{ str_limit($customer->phone,7,'xxx') }}
                         </a>
-                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>
+{{--                        <a href=""><i style="color: red !important" class="{!! $customer->is_duplicate == 1 ? "fa fa fa-copy" :'' !!}"></i></a>--}}
                         @if(!empty($customer->call_back))
                             <span><i class="fas fa-phone call-back" data-id="{{$customer->call_back}}" style="cursor: pointer;color: red !important;"></i></span>
                         @endif
