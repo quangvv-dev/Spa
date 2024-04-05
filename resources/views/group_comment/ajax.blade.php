@@ -1,10 +1,12 @@
 <style>
-    .content_msg{
-        background-color: rgb(243 243 243);
+    .content_msg {
+        background-color: #f3f3f3;
         margin: 10px 3px;
         padding: 8px 16px;
         border-radius: 8px;
+        border-top: 1px solid #c0c3c8;
     }
+
     .ant-divider-horizontal.ant-divider-with-text {
         margin: 16px 0;
         color: rgba(0, 0, 0, .85);
@@ -15,23 +17,25 @@
         border-top: 0;
         border-top-color: rgba(0, 0, 0, .06);
     }
+
     .ant-divider-inner-text {
         display: inline-block;
         padding: 0 1em;
     }
-    .label-date{
+
+    .label-date {
         color: white;
-        background-color: rgb(239, 135, 55);
+        background-color: #ef8737;
         padding: 0px 10px;
         border-radius: 999px;
         font-size: 15px;
         font-weight: 500;
     }
+
     .ant-avatar {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        color: rgba(0, 0, 0, .85);
         font-size: 14px;
         font-variant: tabular-nums;
         line-height: 1.5715;
@@ -44,39 +48,31 @@
         white-space: nowrap;
         text-align: center;
         vertical-align: middle;
-        background: #ccc;
         width: 32px;
         height: 32px;
         line-height: 32px;
         border-radius: 50%;
+        background-color: rgb(150, 217, 201);
     }
-    .ant-timeline-item-tail {
+
+    .group-comment-table{
+        overflow-x: hidden;
+    }
+
+    .chat-tag-icon {
         position: absolute;
-        top: 10px;
-        left: 4px;
-        height: calc(100% - 10px);
-        border-left: 2px dotted rgb(179, 179, 179);
+        top: 0;
+        left: 0;
+        padding: 4px;
     }
-    .ant-timeline-item-head-custom {
-        position: absolute;
-        top: 5.5px;
-        left: 5px;
-        width: auto;
-        height: auto;
-        margin-top: 0;
-        padding: 3px 1px;
-        line-height: 1;
-        text-align: center;
-        border: 0;
-        border-radius: 0;
-        transform: translate(-50%, -50%);
+
+    .chat-tag-icon i {
+        font-size: 14px;
     }
-    .ant-timeline-item-head-blue {
-        color: #1890ff;
-        border-color: #1890ff;
-    }
-    .ant-timeline-item-head{
-        background-color: #fff;
+
+    .audio-border {
+        border: 1px #d7dde09e solid;
+        border-radius: 10px;
     }
 </style>
 
@@ -85,28 +81,33 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         @if(count($docs))
             @foreach($docs as $k => $item)
-                {{--                Date--}}
-                {{--                <div class="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center" role="separator">--}}
-                {{--                    <span class="ant-divider-inner-text"><div class="label-date">21/03/2024</div></span>--}}
-                {{--                </div>--}}
-                <div class="col-md-12 content_msg padding" style="border-top: 1px solid #c0c3c8;">
-                    <div class="ant-timeline-item-head ant-timeline-item-head-custom ant-timeline-item-head-blue">
-                        <img src="{{asset('default/comment.png')}}" style="width: 25px; height: 25px;">
-                    </div>
-                    {{--                    <div class="ant-timeline-item-tail"></div>--}}
+                <div class="col-md-12 content_msg padding">
+                    @if(isset($item->status))
+                        <div class="chat-tag-icon">
+                            <i class="fa fa-tag" style="color: {{@$item->status->color}}"></i>
+                        </div>
+                    @endif
+
                     <div class="col row">
-                        <div class="col-md-11 row" style="align-items: center">
+                        <div class="col-md-11 row align-items-center">
                             <div class="col-md-1">
-                              <span class="ant-avatar ant-avatar-circle" style="background-color: rgb(150, 217, 201);">
-                                  <span class="ant-avatar-string" style="transform: scale(1) translateX(-50%);">
-                                      {{substr(@$item->user->full_name, 0, 1)}}</span>
+                              <span class="ant-avatar ant-avatar-circle">
+                                  <span class="ant-avatar-string bold">
+                                      {{isset($item->user)?substr($item->user->full_name, 0, 1):'N'}}</span>
                               </span>
                             </div>
                             <div class="col-md-11">
-                                <p>
-                                    <a href="#" class="bold blue">{{isset($item->user)?$item->user->full_name:''}}</a>
-                                    <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
-                                </p>
+                                @if(isset($item->call))
+                                    <p>
+                                        <a class="bold blue">{{isset($item->call->user)?$item->call->user->full_name:'Hệ thống'}}</a>
+                                        <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
+                                    </p>
+                                @else
+                                    <p>
+                                        <a class="bold blue">{{isset($item->user)?$item->user->full_name:'Hệ thống'}}</a>
+                                        <span><i class="fa fa-clock"></i> {{$item->created_at}}</span>
+                                    </p>
+                                @endif
                             </div>
                             @if (Auth::user()->id == $item->user_id)
                                 <div class="tools-msg edit_area" style="position: absolute; right: 10px; top: 5px">
@@ -115,15 +116,22 @@
                                             <i class="fas fa-pencil-alt btn-edit-comment" data-id="{{$item->id}}"></i>
                                         </a>
                                     @endif
-
                                     <a data-original-title="Xóa" rel="tooltip">
                                         <i class="fas fa-trash-alt btn-delete-comment" data-id="{{$item->id}}"></i>
                                     </a>
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-11 comment mt-3">
-                            {!! $item->messages !!}
+                        <div class="col-md-11 comment" style="margin-top: 10px;align-items: center;display: flex">
+                            @if(isset($item->call))
+                                <label class="bold">File ghi âm:  </label>
+                                <audio controls class="audio-border">
+                                    <source src="{{@$item->call->recording_url}}" type="audio/wav">
+                                </audio>
+                            @else
+                                {{--                                <label class="bold">Nội dung: </label>--}}
+                                <span style="font-style: italic">{!! $item->messages !!}</span>
+                            @endif
                         </div>
                         @if (isset($item->image))
                             <div class="col-md-11">
