@@ -230,7 +230,7 @@
                         </a>
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
-                        <a href="https://zalo.me/{{@$customer->phone}}">
+                        <a target="_blank" href="https://zalo.me/{{@$customer->phone}}">
                             <img width="15" height="15" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
                     </td>
