@@ -323,7 +323,7 @@ class CustomerController extends Controller
 
         $staff = User::select('full_name', 'id')->where('department_id', '<>', DepartmentConstant::ADMIN)->where('active', StatusCode::ON)->pluck('full_name',
             'id')->toArray();
-        $docs = Model::select('id', 'messages', 'created_at', 'image', 'user_id')->where('customer_id', $id)
+        $docs = Model::select('id', 'messages', 'created_at', 'image', 'user_id','call_id','status_id')->where('customer_id', $id)
             ->orderByDesc('id')->paginate(10);
         //Task
         $input['type'] = $request->type ?: 'qf1';

@@ -25,6 +25,14 @@ class GroupComment extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    public function call()
+    {
+        return $this->belongsTo(CallCenter::class);
+    }
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
 
     public static function getAll($input)
     {
