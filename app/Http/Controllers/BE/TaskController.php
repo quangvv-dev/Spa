@@ -332,7 +332,7 @@ class TaskController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $input = $request->all();
-        $myBranch = Auth::user()->id??null;
+        $myBranch = Auth::user()->branch_id ?? null;
         $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
             ->when(!empty($myBranch), function ($query) use ($myBranch) {
                 $query->where('branch_id', $myBranch);
