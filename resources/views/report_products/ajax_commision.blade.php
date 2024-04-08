@@ -30,8 +30,8 @@
             <th class="text-white text-center">Nhân viên</th>
             <th class="text-white text-center">Số công chính</th>
             <th class="text-white text-center">Số công phụ</th>
-            <th class="text-white text-center">Tiền công liệu trình</th>
-            <th class="text-white text-center">Tổng số đơn hàng (upsale)</th>
+{{--            <th class="text-white text-center">Tiền công liệu trình</th>--}}
+            <th class="text-white text-center">Tổng số đơn hàng</th>
 {{--            <th class="text-white text-center">Doanh số</th>--}}
 {{--            <th class="text-white text-center">Doanh thu</th>--}}
             <th class="text-white text-center">Doanh số</th>

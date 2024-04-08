@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\DocBlock\Description;
 
 class CommissionController extends Controller
 {
@@ -48,7 +49,7 @@ class CommissionController extends Controller
     public function index($id)
     {
         $title = 'Chia doanh số KTV (thủ công)';
-        $users = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::TU_VAN_VIEN])->pluck('full_name', 'id');
+        $users = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::TU_VAN_VIEN])->pluck('full_name', 'id');
         $doc = Commission::where('order_id', $id)->first();
         $commissions = Commission::where('order_id', $id)->get();
         $order = Order::where('id', $id)->first();
@@ -112,16 +113,14 @@ class CommissionController extends Controller
                 $query->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
-            })->where('id',177)->with('branch')->get();
+            })->where('id', 177)->with('branch')->get();
 
         if (count($data)) {
             foreach ($data as $item) {
                 $price = [];
-                $input['support_id'] = $item->id;
-                $input['user_id'] = $item->id;
+//                $input['support_id'] = $item->id;
+//                $input['user_id'] = $item->id;
                 $input['type'] = 0;
-                dd($input);
-                $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
                     ->where('user_id', $item->id)->orWhere('support_id', $item->id)
@@ -140,24 +139,21 @@ class CommissionController extends Controller
                     }
                 }
                 $input['user_id'] = $item->id;
+                $earn = Commission::search($input, ['order_id', 'earn']);
+                $price = $earn->sum('earn');
+
+
                 $doc = [
                     'id' => $item->id,
                     'avatar' => $item->avatar,
                     'branch_name' => isset($item->branch) ? @$item->branch->name : '',
                     'full_name' => $item->full_name,
-                    'orders' => $order->count(),
-                    'all_total' => $order->sum('all_total'),
-                    'gross_revenue' => $order->sum('gross_revenue'),
+                    'orders' => $earn->groupBy('order_id')->addSelect(DB::raw('COUNT(order_id) as count'))->get()->sum('count'),
                     'days' => $cong_chinh,
                     'days_phu' => $cong_phu,
-                    'earn' => Commission::search($input, 'earn')->sum('earn'),
-                    'price' => array_sum($price) ? array_sum($price) : 0,
+                    'earn' => $price,
                 ];
-                    $docs[] = $doc;
-
-//                if ($doc['days'] > 0 || $doc['price'] > 0 || $doc['days_phu'] > 0) {
-//                    $docs[] = $doc;
-//                }
+                $docs[] = $doc;
             }
         }
         $data = collect($docs)->sortByDesc('gross_revenue')->toArray();
@@ -169,9 +165,7 @@ class CommissionController extends Controller
 
     public function getCommissionWithUser(Request $request)
     {
-
-        $data = Commission::where('user_id', $request->user_id)->whereBetween('created_at', getTime($request->data_time))
-            ->has('orders')->with('orders')->paginate(StatusCode::PAGINATE_10);
+        $data = Commission::search($request->all())->with('orders')->paginate(StatusCode::PAGINATE_10);
         return response()->json($data);
     }
 

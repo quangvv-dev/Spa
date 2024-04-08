@@ -145,7 +145,6 @@
                 {{ Form::close() }}
             </div>
         </div>
-        <input type="hidden" id="time_choose" value="THIS_MONTH">
         <input type="hidden" id="user_id" value="0">
         <input type="hidden" id="user_id" value="0">
         <div id="registration-form">
@@ -172,20 +171,23 @@
         $(document).on('click', '#click_detail', function (e) {
             let id = $(this).data('id');
             $('#user_id').val(id).change();
-            let time = $('#time_choose').val();
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
             var html = "";
             $.ajax({
                 url: '/ajax/commission',
                 method: "get",
-                data: {user_id: id, data_time: time},
+                data: {user_id: id, start_date: start_date,end_date:end_date},
             }).done(function (data) {
+                console.table(data.data,12312);
                 $.each(data.data, function (index, value) {
+                    console.log(value,'forr');
                     html += ` <tr>
                     <th scope="row">` + index + `</th>
                     <td class="text-center">` + value.orders.created_at + `</td>
-                    <td class="text-center">` + value.earn.toLocaleString('ja-JP') + `</td>
-                    <td class="text-center">` + value.orders.all_total.toLocaleString('ja-JP') + `</td>
-                    <td class="text-center">` + value.orders.gross_revenue.toLocaleString('ja-JP') + `</td>
+                    <td class="text-center">` + value.earn.toLocaleString('en-US') + `</td>
+                    <td class="text-center">` + value.orders.all_total.toLocaleString('en-US') + `</td>
+                    <td class="text-center">0</td>
                 </tr>`;
                 });
 
