@@ -103,9 +103,9 @@ class OrderController extends Controller
 //                DepartmentConstant::DOCTOR,
                 DepartmentConstant::TU_VAN_VIEN,
             ])->where(function ($query) use ($customer) {
-                    $query->where('branch_id', $customer->branch_id)
-                        ->orWhereNull('branch_id');
-                })->get();
+                $query->where('branch_id', $customer->branch_id)
+                    ->orWhereNull('branch_id');
+            })->get();
 //                ->where('branch_id', $customer->branch_id)->get();
         }
         return $customer_support;
@@ -210,9 +210,10 @@ class OrderController extends Controller
             }
             if (!empty($customer->branch->location_id) && empty($customer->cskh_id)) {
 //                $position = PositionCskh::firstOrCreate(['location_id' => $customer->branch->location_id]);
-                $position = PositionCskh::where('location_id',0)->first();
+                $position = PositionCskh::where('location_id', 0)->first();
                 $old_position = isset($position->position) ? $position->position : 0;
-                $cskh = User::select('id')->where('department_id', DepartmentConstant::CSKH)->pluck('id')->toArray();
+                $cskh = User::select('id')->where('department_id', DepartmentConstant::CSKH)
+                    ->where('is_leader', '<>', StatusCode::ON)->pluck('id')->toArray();
                 if (count($cskh) && !empty($position)) {
                     $position->position = (count($cskh) - 1) <= $old_position ? 0 : $old_position + 1;
                     $customer->cskh_id = !empty($cskh[$old_position]) ? $cskh[$old_position] : $cskh[0];
