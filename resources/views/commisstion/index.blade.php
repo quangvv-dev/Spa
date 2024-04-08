@@ -9,7 +9,10 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title">{{$title}}</h3>
+            </div>
+            <div class="card-header">
+                <span class="text-info bold">GIÁ TRỊ ĐƠN: </span> <span class="text-danger bold">&nbsp;&nbsp; {{number_format($order->all_total)}} đ</span>
             </div>
 
             @if (isset($doc))
@@ -22,17 +25,17 @@
                     @foreach($commissions as $item)
                         <div class="row">
                             <input type="hidden" name="id[]" value="{{ $item->id }}">
-                            <div class="col-xs-12 col-md-2">
+                            <div class="col-xs-12 col-md-3">
                                 {!! Form::label('user_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
-                                {!! Form::select('user_id[]', $customers, $item->user_id, array('class' => 'form-control select2 user', 'placeholder' => 'Chọn nhân viên')) !!}
+                                {!! Form::select('user_id[]', $users, $item->user_id, array('class' => 'form-control select2 user', 'placeholder' => 'Chọn nhân viên')) !!}
                             </div>
-                                <div class="col-xs-12 col-md-2">
-                                    <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">
-                                        {!! Form::label('percent', 'Hoa hồng hưởng (%)', array('class' => ' required')) !!}
-                                        {!! Form::number('percent[]', isset($item->percent) ? $item->percent: "", array('class' => 'form-control percent-order')) !!}
-                                    </div>
-                                </div>
-                            <div class="col-xs-12 col-md-2">
+{{--                                <div class="col-xs-12 col-md-2">--}}
+{{--                                    <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">--}}
+{{--                                        {!! Form::label('percent', 'Hoa hồng hưởng (%)', array('class' => ' required')) !!}--}}
+{{--                                        {!! Form::number('percent[]', isset($item->percent) ? $item->percent: "", array('class' => 'form-control percent-order')) !!}--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+                            <div class="col-xs-12 col-md-3">
                                 <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">
                                     {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
                                     {!! Form::text('earn[]', number_format($item->earn), array('class' => 'form-control earn-order')) !!}
@@ -44,9 +47,9 @@
                                     {!! Form::text('all_total', $order->gross_revenue, array('class' => 'form-control price-total hidden','required'=>true)) !!}
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-md-2">
+                            <div class="col-xs-12 col-md-5">
                                 <div class="form-group required {{ $errors->has('note') ? 'has-error' : '' }}">
-                                    {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
+                                    {!! Form::label('note', 'Ghi chú') !!}
                                     {!! Form::text('note[]', $item->note, array('class' => 'form-control')) !!}
                                 </div>
                             </div>
@@ -64,7 +67,7 @@
 
             <div class="col bot">
                 <button type="submit" class="btn btn-success">Lưu</button>
-                <a href="{{url('list-orders')}}" class="btn btn-danger">Về danh sách đơn hàng</a>
+                <a href="{{route('order.show',$order->id)}}" class="btn btn-danger">Trở lại</a>
             </div>
             {{ Form::close() }}
 
@@ -78,20 +81,20 @@
         $(document).on('click', '#add_row', function () {
             $('.order').append(`
             <div class='row item-file' >
-                <div class="col-xs-12 col-md-2">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('full_name') ? 'has-error' : '' }}">
                         {!! Form::label('user_id', 'Nhân viên hưởng', array('class' => ' required')) !!}
-                        {!! Form::select('user_id[]', $customers, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn nhân viên')) !!}
+                        {!! Form::select('user_id[]', $users, null, array('class' => 'form-control select2 user', 'required' => true, 'placeholder' => 'Chọn nhân viên')) !!}
                         <span class="help-block">{{ $errors->first('full_name', ':message') }}</span>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-2">
-                    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('percent', 'Hoa hồng hưởng (%)', array('class' => ' required')) !!}
-                        {!! Form::number('percent[]', null, array('class' => 'form-control percent-order', 'min' => 1)) !!}
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-2">
+                {{--<div class="col-xs-12 col-md-2">--}}
+                {{--    <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">--}}
+                {{--        {!! Form::label('percent', 'Hoa hồng hưởng (%)', array('class' => ' required')) !!}--}}
+                {{--        {!! Form::number('percent[]', null, array('class' => 'form-control percent-order', 'min' => 1)) !!}--}}
+                {{--    </div>--}}
+                {{--</div>--}}
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
                         {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
                         {!! Form::text('earn[]', null, array('class' => 'form-control earn-order','required'=>true)) !!}
@@ -103,9 +106,9 @@
                         {!! Form::text('all_total', $order->gross_revenue, array('class' => 'form-control price-total hidden','required'=>true)) !!}
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-2">
+                <div class="col-xs-12 col-md-5">
                     <div class="form-group required {{ $errors->has('note') ? 'has-error' : '' }}">
-                        {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
+                        {!! Form::label('note', 'Ghi chú') !!}
                         {!! Form::text('note[]', null, array('class' => 'form-control')) !!}
                 </div>
             </div>

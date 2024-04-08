@@ -35,7 +35,7 @@ class CommissionService
 
                 $model->update([
                     'user_id'  => $data['user_id'][$key],
-                    'percent'  => $data['percent'][$key],
+                    'percent'  => $data['percent'][$key]??null,
                     'note'     => $data['note'][$key],
                     'earn'     => $data['earn'][$key],
                     'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i:s')
@@ -43,7 +43,7 @@ class CommissionService
             } else {
                 $dataArr[] = [
                     'user_id'  => $data['user_id'][$key],
-                    'percent'  => $data['percent'][$key],
+                    'percent'  => $data['percent'][$key]??null,
                     'note'     => $data['note'][$key],
                     'order_id' => $orderId,
                     'earn'     => $data['earn'][$key],

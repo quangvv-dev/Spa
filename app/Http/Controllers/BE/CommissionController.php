@@ -47,15 +47,15 @@ class CommissionController extends Controller
 
     public function index($id)
     {
-        $title = 'Hoa hồng upsale';
-        $customers = User::where('department_id', '<>', DepartmentConstant::MARKETING)->pluck('full_name', 'id');
+        $title = 'Chia doanh số KTV (thủ công)';
+        $users = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::TU_VAN_VIEN])->pluck('full_name', 'id');
         $doc = Commission::where('order_id', $id)->first();
         $commissions = Commission::where('order_id', $id)->get();
         $order = Order::where('id', $id)->first();
         if (isset($doc) && $doc) {
-            return view('commisstion.index', compact('title', 'customers', 'doc', 'commissions', 'order'));
+            return view('commisstion.index', compact('title', 'users', 'doc', 'commissions', 'order'));
         } else {
-            return view('commisstion.index', compact('title', 'customers', 'order'));
+            return view('commisstion.index', compact('title', 'users', 'order'));
         }
     }
 
@@ -99,7 +99,7 @@ class CommissionController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
         $users = Auth::user();
-        if ($users->department_id == DepartmentConstant::WAITER) {
+        if ($users->department_id != DepartmentConstant::ADMIN) {
             $request->merge(['branch_id' => $users->branch_id]);
         }
         $input = $request->all();
@@ -123,16 +123,14 @@ class CommissionController extends Controller
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
-                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)->select('id', 'user_id', 'support_id', 'support2_id', 'tip_id', 'service_id')
+                    ->where('user_id', $item->id)->orWhere('support_id', $item->id)
+                    ->select('id', 'user_id', 'support_id', 'support2_id', 'tip_id', 'service_id')
                     ->orWhere('support2_id', $item->id)->with('service', 'tip');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
                 if (count($history)) {
                     foreach ($history as $item2) {
-                        if (isset($item2->tip)) {
-                            $price [] = (int)$item2->tip->price ?: 0;
-                        }
                         if ($item->id == $item2->user_id) {
                             $cong_chinh += 1;
                         } elseif ($item->id == @$item2->support_id || $item->id == @$item2->support2_id) {
