@@ -80,43 +80,13 @@ class CustomerObserver
                     foreach (array_values($rule_status) as $k1 => $item) {
                         $list_status = $item->configs->group;
                         if (in_array($customer->status_id, $list_status)) {
-                            $sms_ws = Functions::checkRuleSms($config);
-                            if (count($sms_ws)) {
-                                foreach (@array_values($sms_ws) as $k2 => $sms) {
-                                    $input_raw['full_name'] = @$customer->full_name;
-                                    $exactly_value = Functions::getExactlyTime($sms);
-                                    $text = $sms->configs->content;
-//                                $phone = Functions::convertPhone(@$customer->phone);
-                                    $text = Functions::replaceTextForUser($input_raw, $text);
-                                    $text = Functions::vi_to_en($text);
-                                    if (empty($exactly_value)) {
-                                        $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
-                                        if (isset($err) && $err) {
-                                            HistorySms::insert([
-                                                'phone' => @$customer->phone,
-                                                'campaign_id' => 0,
-                                                'message' => $text,
-                                                'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                                'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
-                                            ]);
-                                        }
-                                    } else {
-                                        SchedulesSms::create([
-                                            'phone' => $customer->phone,
-                                            'content' => @$text,
-                                            'exactly_value' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
-                                            'status_customer' => @$customer->status_id,
-                                        ]);
-                                    }
-                                }
-                            }
                             // Tạo công việc
                             $jobs = Functions::checkRuleJob($config);
 
                             if (count($jobs)) {
                                 foreach ($jobs as $job) {
                                     if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh') {
-                                        $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
+                                        $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : $customer->telesales_id;
                                         $rule->position = 0;
                                         $rule->save();
                                         $type = StatusCode::CSKH;
