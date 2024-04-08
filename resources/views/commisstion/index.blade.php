@@ -37,7 +37,7 @@
 {{--                                </div>--}}
                             <div class="col-xs-12 col-md-3">
                                 <div class="form-group required {{ $errors->has('earn') ? 'has-error' : '' }}">
-                                    {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
+                                    {!! Form::label('earn', 'Doanh số được chia (VNĐ)', array('class' => ' required')) !!}
                                     {!! Form::text('earn[]', number_format($item->earn), array('class' => 'form-control earn-order')) !!}
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                 {{--</div>--}}
                 <div class="col-xs-12 col-md-3">
                     <div class="form-group required {{ $errors->has('address') ? 'has-error' : '' }}">
-                        {!! Form::label('earn', 'Hoa hồng hưởng (VNĐ)', array('class' => ' required')) !!}
+                        {!! Form::label('earn', 'Doanh số được chia (VNĐ)', array('class' => ' required')) !!}
                         {!! Form::text('earn[]', null, array('class' => 'form-control earn-order','required'=>true)) !!}
                     </div>
                 </div>
