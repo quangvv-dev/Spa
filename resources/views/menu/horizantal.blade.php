@@ -423,7 +423,7 @@
                                   style="background-image: url(/assets/images/faces/female/25.jpg)"></span>
                         @endif
                         <span class="ml-2 d-none d-lg-block username">
-                    <span class="" style="color: #7490BD">{!! Auth::user()->full_name !!}</span>
+                    <span class="" style="color: #7490BD">{!! str_limit(Auth::user()->full_name,20) !!}</span>
                 </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
