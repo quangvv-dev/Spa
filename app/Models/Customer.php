@@ -184,22 +184,30 @@ class Customer extends Model
     {
         $user = Auth::user();
         $data = self::latest();
-        if ($user->department_id == DepartmentConstant::TELESALES) {
+        if ($user->department_id == DepartmentConstant::TELESALES || $user->department_id == DepartmentConstant::CSKH) {
             $member = checkTeamLead();
             if (!empty($user->isLeader) && count($member)) {
-                $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                $data = $data->when($user->department_id == DepartmentConstant::CSKH, function ($query) use ($member) {
+                    $query->whereIn('cskh_id', $member);
+                })->when($user->department_id == DepartmentConstant::TELESALES, function ($query) use ($member) {
+                    $query->whereIn('telesales_id', $member);
+                })->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             } else {
                 if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
-                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                    $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
                 } else {
-                    $data = $data->where('telesales_id', $user->id);
+                    $data = $data->when($user->department_id == DepartmentConstant::CSKH, function ($query) use ($user) {
+                        $query->whereIn('cskh_id', $user->id);
+                    })->when($user->department_id == DepartmentConstant::TELESALES, function ($query) use ($user) {
+                        $query->whereIn('telesales_id', $user->id);
+                    });
                 }
             }
             if (isset($param['search'])) {
-                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             }
         } else {
-            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
         if (isset($param['branch_id']) && $param['branch_id']) {
             if ((isset($param['search']) && !is_numeric($param['search'])) || empty($param['search'])) {
@@ -295,7 +303,7 @@ class Customer extends Model
 
     public function getDuplicateAttribute()
     {
-        return self::where('phone',$this->phone)->count() > 1;
+        return self::where('phone', $this->phone)->count() > 1;
     }
 
     public function getActiveTextAttribute()
@@ -346,7 +354,7 @@ class Customer extends Model
         if ($this->category_tips) {
             $categoryId = array_values(json_decode($this->category_tips));
             $category = Category::select('name')->whereIn('id', $categoryId)->pluck('name')->toArray();
-            $text = count($category) ? implode( ',',$category) : '';
+            $text = count($category) ? implode(',', $category) : '';
         }
         return $text;
     }
