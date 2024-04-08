@@ -14,7 +14,7 @@
                     console.log(data);
                     // let abc = data.description.replaceAll("--", '\n');
                     let link = '/customers/'+data.customer.id;
-                    let full_name = data.user.full_name ??'';
+                    let full_name =  data.user? data.user.full_name :'Hệ thống';
                     $('#name').val(data.name).change();
                     $("a[href]").attr("href",link);
                     $('.name-customer').html(data.customer.full_name).change();
