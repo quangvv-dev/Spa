@@ -209,10 +209,10 @@ class OrderController extends Controller
                 $order->cskh_id = $customer->cskh_id;
             }
             if (!empty($customer->branch->location_id) && empty($customer->cskh_id)) {
-                $position = PositionCskh::firstOrCreate(['location_id' => $customer->branch->location_id]);
+                $position = PositionCskh::where('')(['location_id' => $customer->branch->location_id]);
                 $old_position = isset($position->position) ? $position->position : 0;
-                $cskh = User::select('id')->where('location_id', $customer->branch->location_id)->where('department_id',
-                    DepartmentConstant::CSKH)->pluck('id')->toArray();
+                $cskh = User::select('id')->where('location_id', $customer->branch->location_id)
+                    ->where('department_id', DepartmentConstant::CSKH)->pluck('id')->toArray();
                 if (count($cskh) && !empty($position)) {
                     $position->position = (count($cskh) - 1) <= $old_position ? 0 : $old_position + 1;
                     $customer->cskh_id = !empty($cskh[$old_position]) ? $cskh[$old_position] : $cskh[0];
@@ -606,41 +606,41 @@ class OrderController extends Controller
                         if (@$item->rules->status == StatusCode::ON) {
                             $rule = $item->rules;
                             $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
-                            $sms_ws = Functions::checkRuleSms($config);
-                            if (count($sms_ws)) {
-                                foreach ($sms_ws as $sms) {
-                                    $input_raw['branch'] = @$check3->order->branch->name;
-                                    $input_raw['phoneBranch'] = @$check3->order->branch->phone;
-                                    $input_raw['addressBranch'] = @$check3->order->branch->address;
-                                    $input_raw['full_name'] = @$check3->order->customer->full_name;
-                                    $input_raw['phone'] = @$check3->order->customer->phone;
-                                    $exactly_value = Functions::getExactlyTime($sms);
-                                    $text = $sms->configs->content;
-                                    $phone = Functions::convertPhone($input_raw['phone']);
-                                    $text = Functions::replaceTextForUser($input_raw, $text);
-                                    $text = Functions::vi_to_en($text);
-                                    try {
-                                        $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
-                                        if (isset($err) && $err) {
-                                            HistorySms::insert([
-                                                'phone' => $input_raw['phone'],
-                                                'campaign_id' => 0,
-                                                'message' => $text,
-                                                'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
-                                                'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
-                                            ]);
-                                        }
-                                    } catch (Exception $exception) {
-
-                                    }
-
-                                }
-                            }
+//                            $sms_ws = Functions::checkRuleSms($config);
+//                            if (count($sms_ws)) {
+//                                foreach ($sms_ws as $sms) {
+//                                    $input_raw['branch'] = @$check3->order->branch->name;
+//                                    $input_raw['phoneBranch'] = @$check3->order->branch->phone;
+//                                    $input_raw['addressBranch'] = @$check3->order->branch->address;
+//                                    $input_raw['full_name'] = @$check3->order->customer->full_name;
+//                                    $input_raw['phone'] = @$check3->order->customer->phone;
+//                                    $exactly_value = Functions::getExactlyTime($sms);
+//                                    $text = $sms->configs->content;
+//                                    $phone = Functions::convertPhone($input_raw['phone']);
+//                                    $text = Functions::replaceTextForUser($input_raw, $text);
+//                                    $text = Functions::vi_to_en($text);
+//                                    try {
+//                                        $err = Functions::sendSmsV3($phone, @$text, $exactly_value);
+//                                        if (isset($err) && $err) {
+//                                            HistorySms::insert([
+//                                                'phone' => $input_raw['phone'],
+//                                                'campaign_id' => 0,
+//                                                'message' => $text,
+//                                                'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+//                                                'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+//                                            ]);
+//                                        }
+//                                    } catch (Exception $exception) {
+//
+//                                    }
+//
+//                                }
+//                            }
                             $jobs = Functions::checkRuleJob($config);
                             if (count($jobs) && $order->role_type != StatusCode::PRODUCT) { //add thêm role type
                                 foreach ($jobs as $job) {
                                     if ($job->configs->type_job && @$job->configs->type_job == 'cskh') {
-                                        $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
+                                        $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : $customer->telesales_id;
                                         $rule->save();
                                         $type = StatusCode::CSKH;
                                         $prefix = "CSKH ";

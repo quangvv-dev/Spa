@@ -11,7 +11,6 @@
                 url: '/ajax/tasks/' + el.dataset.eid,
                 method: 'GET',
                 success: function (data) {
-                    console.log(data);
                     // let abc = data.description.replaceAll("--", '\n');
                     let link = '/customers/'+data.customer.id;
                     let full_name =  data.user? data.user.full_name :'Hệ thống';
