@@ -3,7 +3,7 @@
         <!-- Modal content-->
         <div class="modal-content" style="max-height: 90vh;overflow-y: auto">
             <div class="modal-header">
-                <h4>Chi tiết đơn hàng nhận hoa hồng</h4>
+                <h4>Chi tiết show</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
