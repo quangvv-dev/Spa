@@ -187,7 +187,7 @@ class Customer extends Model
         if ($user->department_id == DepartmentConstant::TELESALES || $user->department_id == DepartmentConstant::CSKH) {
             $member = checkTeamLead();
             if (!empty($user->isLeader) && count($member)) {
-                $data = $data->when($user->department_id == DepartmentConstant::CSKH, function ($query) use ($member) {
+                $data = $data->when($user->department_id == DepartmentConstant::CSKH, function ($query) use ($member,$param) {
                     $query->whereIn('cskh_id', $member);
                 })->when($user->department_id == DepartmentConstant::TELESALES, function ($query) use ($member) {
                     $query->whereIn('telesales_id', $member);
