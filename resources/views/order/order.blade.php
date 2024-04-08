@@ -173,7 +173,7 @@
                 <div class="btn-group dropup fl task_footer_box">
                     <button class="btn btn-warning ml5" data-number="2"><a class="white"
                                                                            href="/commission/{{$order->id}}"><i
-                                class="fas fa-dollar-sign"></i>&nbsp;Hoa hồng</a>
+                                class="fas fa-dollar-sign"></i>&nbsp;Doanh thu KTV</a>
                     </button>
                 </div>
                 <div class="btn-group dropup fl task_footer_box">

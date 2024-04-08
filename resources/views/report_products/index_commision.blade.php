@@ -150,6 +150,7 @@
         <div id="registration-form">
             @include('report_products.ajax_commision')
         </div>
+        @include('report_products.commision_modal')
     </div>
     <script src="{{asset('js/daterangepicker.min.js')}}"></script>
     <script src="{{asset('js/dateranger-config.js')}}"></script>
@@ -173,38 +174,18 @@
             $('#user_id').val(id).change();
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
-            var html = "";
             $.ajax({
                 url: '/ajax/commission',
                 method: "get",
                 data: {user_id: id, start_date: start_date,end_date:end_date},
             }).done(function (data) {
-                console.table(data.data,12312);
-                $.each(data.data, function (index, value) {
-                    console.log(value,'forr');
-                    html += ` <tr>
-                    <th scope="row">` + index + `</th>
-                    <td class="text-center">` + value.orders.created_at + `</td>
-                    <td class="text-center">` + value.earn.toLocaleString('en-US') + `</td>
-                    <td class="text-center">` + value.orders.all_total.toLocaleString('en-US') + `</td>
-                    <td class="text-center">0</td>
-                </tr>`;
-                });
-
-                let next = urlParam('page', data.next_page_url);
-                let pev = urlParam('page', data.prev_page_url);
-                let html_paginate = `<li class="page-item" aria-disabled="true" aria-label="« Previous">
-                                <a class="page-link" href="javascript:void(0)" data-url="` + pev + `" rel="next" aria-label="Next »">‹</a>
-                            </li>
-                            <li class="page-item active" aria-current="page"><span class="page-link">` + data.current_page + `</span></li>
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0)" data-url="` + next + `" rel="next" aria-label="Next »">›</a>
-                            </li>`;
+                let html = compareData(data);
+                let html_paginate = paginateJS(data);
                 $('.pagination').html(html_paginate);
                 $('#get_data').html(html);
                 $('#myModal').modal('show');
             });
-        })
+        });
 
         $(document).on('click', '.page-link', function (e) {
             let page = $(this).data('url');
@@ -217,30 +198,54 @@
                 method: "get",
                 data: {page: page, user_id: user_id, data_time: time},
             }).done(function (data) {
-                $.each(data.data, function (index, value) {
-                    html += ` <tr>
-                    <th scope="row">` + index + `</th>
-                    <td class="text-center">` + value.orders.created_at + `</td>
-                    <td class="text-center">` + value.earn.toLocaleString('ja-JP') + `</td>
-                    <td class="text-center">` + value.orders.all_total.toLocaleString('ja-JP') + `</td>
-                    <td class="text-center">` + value.orders.gross_revenue.toLocaleString('ja-JP') + `</td>
-                </tr>`;
-                });
-
-                let next = urlParam('page', data.next_page_url);
-                let pev = urlParam('page', data.prev_page_url);
-                let html_paginate = `<li class="page-item" aria-disabled="true" aria-label="« Previous">
+                let html = compareData(data);
+                let html_paginate = paginateJS(data);
+                $('.pagination').html(html_paginate);
+                $('#get_data').html(html);
+                $('#myModal').modal('show');
+            })
+        });
+        function paginateJS(data){
+            let next = urlParam('page', data.next_page_url);
+            let pev = urlParam('page', data.prev_page_url);
+            let html_paginate = `<li class="page-item" aria-disabled="true" aria-label="« Previous">
                                 <a class="page-link" href="javascript:void(0)" data-url="` + pev + `" rel="next" aria-label="Next »">‹</a>
                             </li>
                             <li class="page-item active" aria-current="page"><span class="page-link">` + data.current_page + `</span></li>
                             <li class="page-item">
                                 <a class="page-link" href="javascript:void(0)" data-url="` + next + `" rel="next" aria-label="Next »">›</a>
                             </li>`;
-                $('.pagination').html(html_paginate);
-                $('#get_data').html(html);
-                $('#myModal').modal('show');
-            })
-        })
+            return html_paginate;
+        }
+
+        function compareData(data) {
+            var html = "";
+            $.each(data.data, function (index, value) {
+                let name = value.service != null ? value.service.name : '';
+                var name_type = '';
+                if (value.type == 0) {
+                    name_type = 'Trừ liệu trình';
+                }
+                if (value.type == 1) {
+                    name_type = 'Đã bảo hành';
+                }
+                if (value.type == 2) {
+                    name_type = 'Đang bảo lưu';
+                }
+                let fullname = value.user && value.user.full_name ?value.user.full_name:'';
+                let name_support = value.support && value.support.full_name ?value.support.full_name:'';
+                let name_support2 = value.support2 && value.support2.full_name ?' | '+value.support2.full_name:'';
+                html += '<tr >' + '<td class="text-center">' + index +1 + '</td>' +
+                    '<td class="text-center">' + value.created_at + '</td>' +
+                    '<td class="text-center">' + fullname + '</td>' +
+                    '<td class="text-center">' + name_support +name_support2 +'</td>' +
+                    '<td class="text-center">' + name + '</td>' +
+                    '<td class="text-center">' + (value.description ? value.description : '') + '</td>' +
+                    '<td class="text-center">' + (name_type ? name_type : '') + '</td>' +
+                    '</tr>';
+            });
+            return html;
+        }
 
     </script>
 @endsection

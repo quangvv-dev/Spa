@@ -113,7 +113,7 @@ class CommissionController extends Controller
                 $query->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
-            })->where('id', 177)->with('branch')->get();
+            })->with('branch')->get();
 
         if (count($data)) {
             foreach ($data as $item) {
@@ -153,10 +153,12 @@ class CommissionController extends Controller
                     'days_phu' => $cong_phu,
                     'earn' => $price,
                 ];
-                $docs[] = $doc;
+                if ($doc['days'] > 0 || $doc['earn'] > 0 || $doc['days_phu'] > 0|| $doc['orders'] > 0) {
+                    $docs[] = $doc;
+                }
             }
         }
-        $data = collect($docs)->sortByDesc('gross_revenue')->toArray();
+        $data = collect($docs)->sortByDesc('earn')->toArray();
         if ($request->ajax()) {
             return view('report_products.ajax_commision', compact('data'));
         }
@@ -165,7 +167,12 @@ class CommissionController extends Controller
 
     public function getCommissionWithUser(Request $request)
     {
-        $data = Commission::search($request->all())->with('orders')->paginate(StatusCode::PAGINATE_10);
+        $input = $request->except('user_id');
+        $data = HistoryUpdateOrder::search($input)
+            ->where('user_id', $request->user_id)->orWhere('support_id', $request->user_id)
+            ->orWhere('support2_id', $request->user_id)->with('service', 'tip','user')
+            ->paginate(StatusCode::PAGINATE_10);
+//        $data = Commission::search($request->all())->with('orders')->paginate(StatusCode::PAGINATE_10);
         return response()->json($data);
     }
 
