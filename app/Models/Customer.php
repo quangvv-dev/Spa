@@ -197,9 +197,9 @@ class Customer extends Model
                     $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
                 } else {
                     $data = $data->when($user->department_id == DepartmentConstant::CSKH, function ($query) use ($user) {
-                        $query->whereIn('cskh_id', $user->id);
+                        $query->where('cskh_id', $user->id);
                     })->when($user->department_id == DepartmentConstant::TELESALES, function ($query) use ($user) {
-                        $query->whereIn('telesales_id', $user->id);
+                        $query->where('telesales_id', $user->id);
                     });
                 }
             }
