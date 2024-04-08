@@ -209,10 +209,10 @@ class OrderController extends Controller
                 $order->cskh_id = $customer->cskh_id;
             }
             if (!empty($customer->branch->location_id) && empty($customer->cskh_id)) {
-                $position = PositionCskh::where('')(['location_id' => $customer->branch->location_id]);
+//                $position = PositionCskh::firstOrCreate(['location_id' => $customer->branch->location_id]);
+                $position = PositionCskh::where('location_id',0)->first();
                 $old_position = isset($position->position) ? $position->position : 0;
-                $cskh = User::select('id')->where('location_id', $customer->branch->location_id)
-                    ->where('department_id', DepartmentConstant::CSKH)->pluck('id')->toArray();
+                $cskh = User::select('id')->where('department_id', DepartmentConstant::CSKH)->pluck('id')->toArray();
                 if (count($cskh) && !empty($position)) {
                     $position->position = (count($cskh) - 1) <= $old_position ? 0 : $old_position + 1;
                     $customer->cskh_id = !empty($cskh[$old_position]) ? $cskh[$old_position] : $cskh[0];
