@@ -11,9 +11,10 @@
                 url: '/ajax/tasks/' + el.dataset.eid,
                 method: 'GET',
                 success: function (data) {
+                    console.log(data);
                     // let abc = data.description.replaceAll("--", '\n');
                     let link = '/customers/'+data.customer.id;
-                    let full_name = (typeof myVariable !== 'undefined') ?data.user.full_name:''
+                    let full_name = data.user.full_name ??'';
                     $('#name').val(data.name).change();
                     $("a[href]").attr("href",link);
                     $('.name-customer').html(data.customer.full_name).change();

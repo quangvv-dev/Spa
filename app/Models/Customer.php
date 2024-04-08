@@ -346,7 +346,7 @@ class Customer extends Model
         if ($this->category_tips) {
             $categoryId = array_values(json_decode($this->category_tips));
             $category = Category::select('name')->whereIn('id', $categoryId)->pluck('name')->toArray();
-            $text = count($category) ? implode($category, ',') : '';
+            $text = count($category) ? implode( ',',$category) : '';
         }
         return $text;
     }

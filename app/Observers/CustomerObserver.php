@@ -2,13 +2,31 @@
 
 namespace App\Observers;
 
+use App\Constants\DepartmentConstant;
+use App\Constants\NotificationConstant;
+use App\Constants\StatusCode;
+use App\Constants\UserConstant;
+use App\Helpers\Functions;
 use App\Models\Customer;
+use App\Models\HistorySms;
+use App\Models\Notification;
+use App\Models\RuleOutput;
+use App\Models\SchedulesSms;
 use App\Models\Status;
+use App\Services\TaskService;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class CustomerObserver
 {
+    private $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
     /**
      * Handle the call center "created" event.
      *
@@ -20,10 +38,10 @@ class CustomerObserver
     {
         $customer->groupComments()->create([
             'customer_id' => $customer->id,
-            'branch_id'   => $customer->branch_id,
-            'status_id'   => $customer->status_id,
-            'user_id'     => Auth::user()->id,
-            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
+            'branch_id' => $customer->branch_id,
+            'status_id' => $customer->status_id,
+            'user_id' => Auth::user()->id,
+            'messages' => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
     }
 
@@ -34,23 +52,137 @@ class CustomerObserver
         // Kiểm tra sự thay đổi của các trường khác
         if (count($changedAttributes)) {
             $text = '';
-                if (!empty($changedAttributes['mkt_id'])) {
-                    $text = $text.' <span class="text-purple">MKT: ' . User::find($oldData['mkt_id'])->full_name . ' --> ' . User::find($changedAttributes['mkt_id'])->full_name.'</span>';
-                }
-                if (!empty($changedAttributes['telesales_id'])) {
-                    $text = $text.' <span class="text-info">| Sale: ' . User::find($oldData['telesales_id'])->full_name . ' --> ' . User::find($changedAttributes['telesales_id'])->full_name.'</span>';
-                }
-                if (!empty($changedAttributes['status_id'])) {
-                    $text = $text.' <span class="text-green">| Trạng thái: ' . Status::find($oldData['status_id'])->name . ' --> ' . Status::find($changedAttributes['status_id'])->name.'</span>';
-                }
-            if (!empty($text)){
+            if (!empty($changedAttributes['mkt_id'])) {
+                $text = $text . ' <span class="text-purple">MKT: ' . User::find($oldData['mkt_id'])->full_name . ' --> ' . User::find($changedAttributes['mkt_id'])->full_name . '</span>';
+            }
+            if (!empty($changedAttributes['telesales_id'])) {
+                $text = $text . ' <span class="text-info">| Sale: ' . User::find($oldData['telesales_id'])->full_name . ' --> ' . User::find($changedAttributes['telesales_id'])->full_name . '</span>';
+            }
+            if (!empty($changedAttributes['status_id'])) {
+                $text = $text . ' <span class="text-green">| Trạng thái: ' . Status::find($oldData['status_id'])->name . ' --> ' . Status::find($changedAttributes['status_id'])->name . '</span>';
+            }
+            if (!empty($text)) {
                 $customer->groupComments()->create([
                     'customer_id' => $customer->id,
-                    'branch_id'   => $customer->branch_id,
-                    'status_id'   => $customer->status_id,
-                    'user_id'     => Auth::user()->id,
-                    'messages'    => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " .$text,
+                    'branch_id' => $customer->branch_id,
+                    'status_id' => $customer->status_id,
+                    'user_id' => Auth::user()->id,
+                    'messages' => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " . $text,
                 ]);
+            }
+            if (!empty($changedAttributes['status_id'])) {
+                $check2 = RuleOutput::where('event', 'change_relation')->first();
+
+                if (isset($check2) && $check2) {
+                    $rule = $check2->rules;
+                    $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
+                    $rule_status = Functions::checkRuleStatusCustomer($config);
+                    foreach (array_values($rule_status) as $k1 => $item) {
+                        $list_status = $item->configs->group;
+                        if (in_array($customer->status_id, $list_status)) {
+                            $sms_ws = Functions::checkRuleSms($config);
+                            if (count($sms_ws)) {
+                                foreach (@array_values($sms_ws) as $k2 => $sms) {
+                                    $input_raw['full_name'] = @$customer->full_name;
+                                    $exactly_value = Functions::getExactlyTime($sms);
+                                    $text = $sms->configs->content;
+//                                $phone = Functions::convertPhone(@$customer->phone);
+                                    $text = Functions::replaceTextForUser($input_raw, $text);
+                                    $text = Functions::vi_to_en($text);
+                                    if (empty($exactly_value)) {
+                                        $err = Functions::sendSmsV3($customer->phone, @$text, $exactly_value);
+                                        if (isset($err) && $err) {
+                                            HistorySms::insert([
+                                                'phone' => @$customer->phone,
+                                                'campaign_id' => 0,
+                                                'message' => $text,
+                                                'created_at' => Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d H:i'),
+                                                'updated_at' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                            ]);
+                                        }
+                                    } else {
+                                        SchedulesSms::create([
+                                            'phone' => $customer->phone,
+                                            'content' => @$text,
+                                            'exactly_value' => Carbon::parse($exactly_value)->format('Y-m-d H:i'),
+                                            'status_customer' => @$customer->status_id,
+                                        ]);
+                                    }
+                                }
+                            }
+                            // Tạo công việc
+                            $jobs = Functions::checkRuleJob($config);
+
+                            if (count($jobs)) {
+                                foreach ($jobs as $job) {
+                                    if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh') {
+                                        $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
+                                        $rule->position = 0;
+                                        $rule->save();
+                                        $type = StatusCode::CSKH;
+                                        $prefix = "CSKH ";
+
+                                    } else {
+                                        $user_id = @$customer->telesales_id;
+                                        $type = StatusCode::GOI_LAI;
+                                        $prefix = "Gọi lại ";
+                                    }
+
+                                    $day = $job->configs->delay_value;
+                                    $sms_content = $job->configs->sms_content;
+                                    $category = @$customer->categories;
+                                    $text_category = [];
+                                    if (count($category)) {
+                                        foreach ($category as $item) {
+                                            $text_category[] = $item->name;
+                                        }
+                                    }
+                                    $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
+                                    $input = [
+                                        'customer_id' => @$customer->id,
+                                        'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                        'time_from' => '07:00',
+                                        'time_to' => '21:00',
+                                        'code' => 'CSKH',
+                                        'user_id' => $user_id,
+                                        'all_day' => 'on',
+                                        'priority' => 1,
+                                        'branch_id' => @$customer->branch_id,
+                                        'customer_status' => @$customer->status_id,
+                                        'type' => $type,
+                                        'sms_content' => Functions::vi_to_en($sms_content),
+                                        'name' => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",
+                                                $text_category) . ' ,' . @$customer->branch->name,
+                                        'description' => $text_order . "--" . replaceVariable($sms_content,
+                                                @$customer->full_name, @$customer->phone,
+                                                @$customer->branch->name, @$customer->branch->phone,
+                                                @$customer->branch->address),
+                                    ];
+
+                                    $task = $this->taskService->create($input);
+                                    $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
+                                        $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
+                                            UserConstant::IS_LEADER);
+                                    })->where('active', StatusCode::ON)->get();
+                                    $task->users()->attach($follow);
+                                    $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
+                                        : '📅📅📅 Bạn có công việc chăm sóc mới !';
+                                    Notification::insert([
+                                        'title' => $title,
+                                        'user_id' => $task->user_id,
+                                        'type' => $task->type,
+                                        'task_id' => $task->id,
+                                        'status' => NotificationConstant::HIDDEN,
+                                        'created_at' => $task->date_from . ' ' . $task->time_from,
+                                        'data' => json_encode((array)['task_id' => $task->id]),
+                                    ]);
+                                }
+                            }
+                            // end cong viec
+
+                        }
+                    }
+                }
             }
         }
     }
