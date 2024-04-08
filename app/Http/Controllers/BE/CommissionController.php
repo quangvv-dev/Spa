@@ -112,7 +112,7 @@ class CommissionController extends Controller
                 $query->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
                 $q->whereIn('branch_id', $input['group_branch']);
-            })->with('branch')->get();
+            })->where('id',177)->with('branch')->get();
 
         if (count($data)) {
             foreach ($data as $item) {
@@ -120,12 +120,13 @@ class CommissionController extends Controller
                 $input['support_id'] = $item->id;
                 $input['user_id'] = $item->id;
                 $input['type'] = 0;
+                dd($input);
                 $order = Order::getAll($input);
                 unset($input['support_id'], $input['user_id']);
                 $history_orders = HistoryUpdateOrder::search($input)
                     ->where('user_id', $item->id)->orWhere('support_id', $item->id)
-                    ->select('id', 'user_id', 'support_id', 'support2_id', 'tip_id', 'service_id')
-                    ->orWhere('support2_id', $item->id)->with('service', 'tip');
+                    ->orWhere('support2_id', $item->id)->with('service', 'tip')
+                    ->select('id', 'user_id', 'support_id', 'support2_id', 'tip_id', 'service_id');
                 $history = $history_orders->get();
                 $cong_chinh = 0;
                 $cong_phu = 0;
@@ -152,9 +153,11 @@ class CommissionController extends Controller
                     'earn' => Commission::search($input, 'earn')->sum('earn'),
                     'price' => array_sum($price) ? array_sum($price) : 0,
                 ];
-                if ($doc['days'] > 0 || $doc['price'] > 0 || $doc['days_phu'] > 0) {
                     $docs[] = $doc;
-                }
+
+//                if ($doc['days'] > 0 || $doc['price'] > 0 || $doc['days_phu'] > 0) {
+//                    $docs[] = $doc;
+//                }
             }
         }
         $data = collect($docs)->sortByDesc('gross_revenue')->toArray();
