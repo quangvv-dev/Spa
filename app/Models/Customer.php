@@ -204,7 +204,7 @@ class Customer extends Model
                 }
             }
             if (isset($param['search'])) {
-                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+                $data = self::latest()->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
             }
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
