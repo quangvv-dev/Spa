@@ -533,9 +533,6 @@
 
             $(document).on('keyup', '#search', delay(function (e) {
                 let search = $('#search').val();
-                if(!search){
-                    return false;
-                }
                 let carepage_id = $('.carepage').val();
                 $('#search_value').val(search);
                 $('#birthday_tab').val('');
@@ -565,9 +562,7 @@
                     cskh_id: cskh,
                 };
                 searchAjax(data);
-                if(search){
-                    e.preventDefault();
-                }
+                e.preventDefault();
             }, 500));
 
             $(document).on('click', '.invalid_account', function (e) {
