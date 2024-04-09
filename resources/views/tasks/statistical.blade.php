@@ -39,7 +39,7 @@
             {!! Form::open(array('url' => url()->current(), 'method' => 'get', 'id'=> 'gridForm','role'=>'form')) !!}
             <div class="card-header">
                 <div class="col-md-2">
-                    {!! Form::select('sale_id', $users, null, array('class' => 'form-control sale select2','placeholder'=>'Tất cả sale')) !!}
+                    {!! Form::select('user_id', $users, null, array('class' => 'form-control sale select2','placeholder'=>'Tất cả sale')) !!}
                 </div>
                 <div class="col-md-2">
                     {!! Form::select('type', [\App\Constants\NotificationConstant::CSKH=>'CSKH',\App\Constants\NotificationConstant::CALL=>'Gọi điện'], null, array('class' => 'form-control type','placeholder'=>'Tất cả công việc')) !!}

@@ -344,8 +344,8 @@ class TaskController extends Controller
             if (!empty($request->role)) {
                 $input['member'] = myTeamMember();
             }
-            if (empty($input['sale_id'])) {
-                $input['sale_id'] = Auth::user()->id;
+            if (empty($input['user_id'])) {
+                $input['user_id'] = Auth::user()->id;
             }
         }
 
