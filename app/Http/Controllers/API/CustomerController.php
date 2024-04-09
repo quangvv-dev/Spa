@@ -48,7 +48,7 @@ class CustomerController extends BaseApiController
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        if (isset($input['search']) && $input['search'] && is_numeric($input['search'])) {
+        if (!empty($input['search'])) {
             unset($input['branch_id']);
         }
         $customers = Customer::searchApi($input);
