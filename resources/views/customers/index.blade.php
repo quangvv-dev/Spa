@@ -476,6 +476,7 @@
                     cskh_id: cskh,
                 };
                 searchAjax(data);
+                e.preventDefault();
             });
 
             // delay keyup
@@ -530,8 +531,11 @@
 
             }, 500));
 
-            $(document).on('keyup', '#search', delay(function () {
+            $(document).on('keyup', '#search', delay(function (e) {
                 let search = $('#search').val();
+                if(!search){
+                    return false;
+                }
                 let carepage_id = $('.carepage').val();
                 $('#search_value').val(search);
                 $('#birthday_tab').val('');
@@ -561,8 +565,10 @@
                     cskh_id: cskh,
                 };
                 searchAjax(data);
-
-            }, 300));
+                if(search){
+                    e.preventDefault();
+                }
+            }, 500));
 
             $(document).on('click', '.invalid_account', function (e) {
                 let target = $(e.target).parent();
