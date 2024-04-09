@@ -58,7 +58,7 @@
 @endsection
 @section('content')
     <div class="col-md-12 col-lg-12">
-        <form>
+        <form id="gridFormA">
             <div class="card" >
                 <div class="card-header search-box searchbox-sticky">
                     <input class="form-control col-md-2 col-xs-12" name="search" placeholder="Tìm kiếm" tabindex="1"
@@ -530,7 +530,16 @@
                 searchAjax(data);
 
             }, 500));
+// Định nghĩa hàm xử lý sự kiện khi nhấn phím
+            function handleKeyDown(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault(); // Chặn việc gửi form
+                    console.log("Enter key pressed, form submission prevented");
+                }
+            }
 
+// Lắng nghe sự kiện keydown cho các phần tử input trong form
+            $("#gridFormA").on("keydown", handleKeyDown);
             $(document).on('keyup', '#search', delay(function (e) {
                 let search = $('#search').val();
                 let carepage_id = $('.carepage').val();
