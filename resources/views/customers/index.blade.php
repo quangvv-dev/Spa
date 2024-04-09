@@ -562,7 +562,7 @@
                 };
                 searchAjax(data);
 
-            }, 500));
+            }, 300));
 
             $(document).on('click', '.invalid_account', function (e) {
                 let target = $(e.target).parent();

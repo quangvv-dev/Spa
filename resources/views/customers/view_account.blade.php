@@ -1085,7 +1085,7 @@
     <script type="text/javascript">
         $(document).ready(function (){
             jQuery('#qrcodeTable').qrcode({
-                text	: "{{$customer->phone}}",
+                text	: "{{$customer->account_code}}",
                 height:50,
                 width:50
             });
