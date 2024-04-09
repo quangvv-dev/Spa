@@ -165,8 +165,8 @@ class Task extends Model
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ]);
         })
-            ->when(isset($input['sale_id']) && isset($input['sale_id']), function ($q) use ($input) {
-                $q->where('user_id', $input['sale_id']);
+            ->when(isset($input['user_id']) && isset($input['user_id']), function ($q) use ($input) {
+                $q->where('user_id', $input['user_id']);
             })->when(isset($input['member']) && isset($input['member']), function ($q) use ($input) {
                 $q->whereIn('user_id', $input['member']);
             })->when(isset($input['customer_id']) && isset($input['customer_id']), function ($q) use ($input) {
