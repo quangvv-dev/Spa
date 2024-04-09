@@ -113,8 +113,8 @@ class TaskController extends Controller
     {
         $customer = Customer::find($request->customer_id);
         $request->merge([
-            'user_id'   => Auth::user()->id,
-            'priority'  => 1,
+            'user_id' => Auth::user()->id,
+            'priority' => 1,
             'branch_id' => $customer->branch_id,
         ]);
         $input = $request->except('ajax');
@@ -218,7 +218,7 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -333,7 +333,6 @@ class TaskController extends Controller
         }
         $input = $request->all();
         $myBranch = Auth::user()->branch_id ?? null;
-        $input['branch_id'] = $myBranch;
         $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
             ->when(!empty($myBranch), function ($query) use ($myBranch) {
                 $query->where('branch_id', $myBranch);
@@ -347,14 +346,16 @@ class TaskController extends Controller
             if (empty($input['user_id'])) {
                 $input['user_id'] = Auth::user()->id;
             }
+        } else {
+            $input['branch_id'] = $myBranch;
         }
 
         $status = Task::groupByStatus($input)->get();
         $docs = Task::search($input)->orderByDesc('id')->orderBy('task_status_id')->paginate(StatusCode::PAGINATE_20);
         $status = TaskStatus::select('id', 'name')->get()->transform(function ($item) use ($status) {
             return [
-                'id'    => $item->id,
-                'name'  => $item->name,
+                'id' => $item->id,
+                'name' => $item->name,
                 'count' => @$status->firstWhere('id', $item->id)->count ?? 0,
             ];
         });
