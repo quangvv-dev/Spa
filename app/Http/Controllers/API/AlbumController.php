@@ -31,9 +31,9 @@ class AlbumController extends BaseApiController
                 $images = json_decode($doc->images);
                 foreach ($input['images'] as $item) {
                     $images[] = [
-                        'fileName'  => $item,
-                        'title'     => isset($request->title)?$request->title:null,
-                        'date'      => Carbon::now()->format('d/m/Y'),
+                        'fileName' => $item,
+                        'title' => isset($request->title) ? $request->title : null,
+                        'date' => Carbon::now()->format('d/m/Y'),
                     ];
                 }
                 $doc->images = json_encode($images);
@@ -44,7 +44,7 @@ class AlbumController extends BaseApiController
                 foreach ($input['images'] as $item) {
                     $images[] = [
                         'fileName' => $item,
-                        'title'     => isset($request->title)?$request->title:null,
+                        'title' => isset($request->title) ? $request->title : null,
                         'date' => Carbon::now()->format('d/m/Y'),
                     ];
                 }
@@ -104,8 +104,8 @@ class AlbumController extends BaseApiController
             ]);
         }
         $input = $request->all();
-        $customer = Customer::where('phone', $input['phone'])->first();
-        if (empty($customer)){
+        $customer = Customer::where('phone', $input['phone'])->orWhere('account_code', $input['phone'])->first();
+        if (empty($customer)) {
             return $this->responseApi(ResponseStatusCode::NOT_FOUND, 'NOT FOUND');
         }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', new CustomerResource($customer));

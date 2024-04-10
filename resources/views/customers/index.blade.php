@@ -534,7 +534,6 @@
             function handleKeyDown(event) {
                 if (event.keyCode === 13) {
                     event.preventDefault(); // Chặn việc gửi form
-                    console.log("Enter key pressed, form submission prevented");
                 }
             }
 
