@@ -13,6 +13,9 @@ Route::get('zalopay', 'BE\WalletController@indexVNPAY')->name('vnpay.index');// 
 Route::get('403', function () {
     return view('errors.403');
 });
+Route::get('call-api', function () {
+    return view('callApi');
+});
 Route::get('privacy-policy', function () {
     return view('policy');
 });
