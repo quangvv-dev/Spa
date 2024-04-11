@@ -118,6 +118,9 @@ class CustomerController extends BaseApiController
             'type'      => 'full_data',
         ]);
         $input = $request->except('group_id');
+        if (isset($input['phone']) && str_contains($input['phone'], 'xxx')) {
+            unset($input['phone']);
+        }
         $customer = $this->customerService->update($input, $id);
         CustomerGroup::where('customer_id', $customer->id)->delete();
         $category = Category::whereIn('id', $request->group_id)->get();

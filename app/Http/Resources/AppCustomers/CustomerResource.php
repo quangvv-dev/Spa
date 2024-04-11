@@ -35,7 +35,7 @@ class CustomerResource extends JsonResource
             return [
                 'id'           => @$this->id,
                 'full_name'    => @$this->full_name,
-                'phone'        => @$this->phone,
+                'phone'        => @str_limit($this->phone,7,'xxx'),
                 'membership'   => @$this->membership,
                 'wallet'       => @$this->wallet,
                 'wallet_ctv'   => @$this->wallet_ctv,
