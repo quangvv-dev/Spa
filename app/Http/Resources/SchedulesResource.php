@@ -38,7 +38,7 @@ class SchedulesResource extends JsonResource
                 'branch_id'    => @$this->branch_id,
                 'user_id'      => @$this->user_id,
                 'user_name'    => @$this->customer->full_name,
-                'user_phone'   => @$this->customer->phone,
+                'user_phone'   => @str_limit($this->customer->phone,7,'xxx'),
                 'creator_id'   => @$this->creator_id,
                 'creator_name' => @$this->creator->full_name,
             ];
