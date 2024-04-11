@@ -19,7 +19,7 @@ class CustomerResource extends JsonResource
             return [
                 'id'           => @$this->id,
                 'full_name'    => @$this->full_name,
-                'phone'        => @$this->phone,
+                'phone'        => @str_limit($this->phone,7,'xxx'),
                 'telesales_id' => @$this->telesales_id,
                 'mkt_id'       => @$this->mkt_id,
                 'gender'       => @$this->gender,
