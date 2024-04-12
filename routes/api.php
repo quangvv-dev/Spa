@@ -148,6 +148,7 @@ Route::get('depots/statistical', 'API\DepotController@index');
 
 Route::get('uri-wallet', 'API\AppCustomers\WalletsController@hiddenWallet');// Ẩn hiện ví
 
+
 /*
 |--------------------------------------------------------------------------
 | APIs APP KHÁCH HÀNG
