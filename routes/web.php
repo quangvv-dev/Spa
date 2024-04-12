@@ -21,6 +21,8 @@ Route::get('privacy-policy', function () {
 });
 
 Route::get('demo/data-system', 'BE\DBController@index');
+Route::get('zalo/conversation/list', 'BE\SaleWork\ZaloController@conversationList');
+Route::get('zalo/conversation/detail/{id}', 'BE\SaleWork\ZaloController@detailConversation');
 
 Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('/', function () {
@@ -340,6 +342,4 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('remove-account-facebook', 'Marketing\FanpageController@removeAccount')->name('facebook.removeAccount');
 
 //    Route::get('test-cham-cong',)
-    Route::get('zalo/conversation/list', 'SaleWork\ZaloController@conversationList');
-    Route::get('zalo/conversation/detail/{id}', 'SaleWork\ZaloController@detailConversation');
 });
