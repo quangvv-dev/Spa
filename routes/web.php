@@ -340,5 +340,5 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('remove-account-facebook', 'Marketing\FanpageController@removeAccount')->name('facebook.removeAccount');
 
 //    Route::get('test-cham-cong',)
-    Route::get('zalo/conversation/list', 'Marketing\FanpageController@postLoginFB')->name('facebook.login');
+    Route::get('zalo/conversation/list', 'Marketing\FanpageController@postLoginFB');
 });
