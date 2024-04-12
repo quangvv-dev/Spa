@@ -341,4 +341,5 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
 
 //    Route::get('test-cham-cong',)
     Route::get('zalo/conversation/list', 'SaleWork\ZaloController@conversationList');
+    Route::get('zalo/conversation/detail/{id}', 'SaleWork\ZaloController@detailConversation');
 });
