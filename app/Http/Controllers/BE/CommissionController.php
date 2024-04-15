@@ -108,7 +108,7 @@ class CommissionController extends Controller
             $group_branch = Branch::where('location_id', $input['location_id'])->pluck('id')->toArray();
             $input['group_branch'] = $group_branch;
         }
-        $data = User::select('id', 'full_name', 'avatar', 'branch_id')->whereIn('role', [UserConstant::TECHNICIANS])
+        $data = User::select('id', 'full_name', 'avatar', 'branch_id')->whereIn('role', [UserConstant::TECHNICIANS,DepartmentConstant::TU_VAN_VIEN])
             ->when(isset($input['branch_id']), function ($query) use ($input) {
                 $query->where('branch_id', $input['branch_id']);
             })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
