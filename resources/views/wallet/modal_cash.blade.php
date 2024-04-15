@@ -1,4 +1,9 @@
 <!-- The Modal -->
+<style>
+    .datepicker-container.datepicker-dropdown {
+        z-index: 9999 !important;
+    }
+</style>
 <div class="modal fade" id="wallet">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -14,6 +19,15 @@
                         </div>
                         <input type="hidden" name="customer_id" value="{{request()->segment(2)}}">
                     </div>
+                    @if(auth()->user()->permission('edit.order_date'))
+                        <div class="col-xs-12 col-md-12">
+                            <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
+                                {!! Form::label('created_at', 'Ngày nạp', array('class' => ' required')) !!}
+                                {!! Form::text('created_at', null, array('class' => 'form-control fc-datepicker')) !!}
+                                <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -27,9 +41,12 @@
         {{ Form::close() }}
     </div>
 </div>
-<script>
-    $('.select2').select2({ //apply select2 to my element
-        allowClear: true
-    });
+<script type="text/javascript">
+    $('.fc-datepicker').datepicker({
+        format: "dd-mm-yyyy",
+    }).datepicker("setDate",'now');;
+    // $('.select2').select2({ //apply select2 to my element
+    //     allowClear: true
+    // });
 </script>
 <script src="{{asset('js/format-number.js')}}"></script>

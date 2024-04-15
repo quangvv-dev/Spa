@@ -63,14 +63,14 @@ class WalletController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'price' => $request->price ? str_replace(',', '', $request->price) : 0
+            'price'      => $request->price ? str_replace(',', '', $request->price) : 0,
         ]);
-        $package = PackageWallet::where('order_price',$request->price)->first();
-        if (empty($package)){
+        $package = PackageWallet::where('order_price', $request->price)->first();
+        if (empty($package)) {
             $package = PackageWallet::create([
                 'order_price' => $request->price,
-                'price' => $request->price,
-                'name' => 'Gói nạp '.$request->price/1000000 .'M VNĐ',
+                'price'       => $request->price,
+                'name'        => 'Gói nạp ' . $request->price / 1000000 . 'M VNĐ',
             ]);
         }
         $customer = Customer::findOrFail($request->customer_id);
@@ -82,6 +82,7 @@ class WalletController extends Controller
             'order_price' => $package->order_price,
             'branch_id'   => !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id,
             'source_id'   => $customer->source_id,
+            'created_at' => isset($request->created_at) ? Functions::createYearMonthDay($request->created_at) : now(),
         ];
         $wallet = $this->walletService->create($input);
         return redirect('/wallet/' . $wallet->id);
@@ -147,9 +148,9 @@ class WalletController extends Controller
             $customer->save();
             PaymentWallet::where('order_wallet_id', $walet->id)->delete();
             $walet->delete();
-            $request->session()->flash('error', 'Xóa thành công danh mục!');
+            $request->session()->flash('error', 'Xóa đơn nạp ví thành công!');
         } else {
-            $request->session()->flash('error', 'Không thể xóa vì lịch sử ví!');
+            $request->session()->flash('error', 'Không thể xóa vì đơn nạp đã thanh toán');
         }
     }
 
@@ -193,7 +194,7 @@ class WalletController extends Controller
                 # Giao dịch thành công, tiền hành xử lý đơn hàng
                 $order = WalletHistory::find($pay_id);// đơn nạp ví
                 if ($response->returncode === 1) {
-                    $order->gross_revenue = (int)$order->gross_revenue+(int)$response->amount;
+                    $order->gross_revenue = (int)$order->gross_revenue + (int)$response->amount;
                     $order->app_trans_id = $apptransid;
                     $order->save();
                     $input = [
@@ -212,33 +213,34 @@ class WalletController extends Controller
                     $currentWallet = $customer->wallet;
                     if (!empty($customer->devices_token)) {
                         $devices_token = [$customer->devices_token];
-                        fcmSendCloudMessage($devices_token, '💰💰💰 Nạp tiền vào ví thành công', 'Chạm để xem', 'notification', ['type' => NotificationConstant::NAP_VI]);
+                        fcmSendCloudMessage($devices_token, '💰💰💰 Nạp tiền vào ví thành công', 'Chạm để xem',
+                            'notification', ['type' => NotificationConstant::NAP_VI]);
                     }
 
                     NotificationCustomer::create([
-                        'customer_id'   => $customer->id,
-                        'title'     => '💰💰💰 Nạp tiền vào ví thành công',
-                        'data'      => '',
-                        'type'      => NotificationConstant::NAP_VI,
-                        'status'    => 1,
-//                        'created_at' => Carbon::now(),
+                        'customer_id' => $customer->id,
+                        'title'       => '💰💰💰 Nạp tiền vào ví thành công',
+                        'data'        => '',
+                        'type'        => NotificationConstant::NAP_VI,
+                        'status'      => 1,
+                        //                        'created_at' => Carbon::now(),
                     ]);
                     $title = 'Nạp tiền vào ví thành công';
-                }else{
+                } else {
                     $order->delete();
                     $title = 'Thanh toán thất bại';
                 }
             } else {
-                $payment = PaymentWallet::where('app_trans_id',$apptransid)->first();
+                $payment = PaymentWallet::where('app_trans_id', $apptransid)->first();
                 $customer = Customer::find($order->customer_id);
                 $currentWallet = $customer->wallet;
                 $title = 'Nạp tiền vào ví thành công';
             }
-        }else{
+        } else {
             $title = 'Thanh toán thất bại';
         }
 
-        return view('wallet.payment', compact('order', 'currentWallet','payment','title'));
+        return view('wallet.payment', compact('order', 'currentWallet', 'payment', 'title'));
     }
 
     /**
@@ -250,7 +252,7 @@ class WalletController extends Controller
      *  - true: hợp lệ
      *  - false: không hợp lệ
      */
-    public function verifyRedirect(Array $data, $key2)
+    public function verifyRedirect(array $data, $key2)
     {
         $reqChecksum = $data["checksum"];
         $checksum = self::redirectCallBack($data, $key2);
@@ -266,7 +268,7 @@ class WalletController extends Controller
      *
      * @return string
      */
-    public function redirectCallBack(Array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
+    public function redirectCallBack(array $params, $key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf")
     {
         return self::compute($params['appid'] . "|" . $params['apptransid'] . "|" . $params['pmcid'] . "|" . $params['bankcode']
             . "|" . $params['amount'] . "|" . $params['discountamount'] . "|" . $params["status"], $key2);
