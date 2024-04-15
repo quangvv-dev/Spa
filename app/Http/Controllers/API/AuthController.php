@@ -561,6 +561,9 @@ class AuthController extends BaseApiController
                 'menu_code' => MenuConstant::ALBUM_KH,
                 'department' => [
                     DepartmentConstant::ADMIN,
+                    DepartmentConstant::DOCTOR,
+                    DepartmentConstant::Y_TA,
+                    DepartmentConstant::KE_TOAN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::WAITER,
                     DepartmentConstant::TECHNICIANS,
