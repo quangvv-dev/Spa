@@ -67,12 +67,10 @@
                         <select name="telesales_id" id="telesales_id" class="form-control telesales select2">
                             <option value="">Người phụ trách</option>
                             @foreach($telesales as $k => $l)
-    {{--                            <optgroup label="{{ $k }}">--}}
                                     @foreach($l as $kl => $vl)
                                         <option
                                             {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
                                     @endforeach
-    {{--                            </optgroup>--}}
                             @endforeach
                         </select>
                     </div>
@@ -165,21 +163,10 @@
                     url: "{{ Url('/group_comments/') }}" + '/' + id,
                     method: "get",
                 }).done(function (data) {
-                    if(data.customer.page_id && data.customer.FB_ID && data.customer.fanpage){
-                        check_show_button = true;
-                        $('#view_chat .chat-page_id').val(data.customer.page_id);
-                        $('#view_chat .chat-sender_id').val(data.customer.FB_ID);
-                        $('#view_chat .chat-token').val(data.customer.fanpage.access_token);
-                    } else {
-                        check_show_button = false;
-                        $('#view_chat .chat-page_id').val('');
-                        $('#view_chat .chat-sender_id').val('');
-                        $('#view_chat .chat-token').val('');
-                    }
+                    check_show_button = true;
                     let category = '';
 
                     data.customer.categories.forEach(function (item) {
-                        console.log(item);
                         category += item.name + `, `;
                     });
 
@@ -195,7 +182,7 @@
                             <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
                                 <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
                             </p>
-                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue" data-contact-id="5678"
+                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="clickToCall blue" data-contact-id="5678"
                                                           rel="tooltip" data-original-title="Click để gọi"
                                                           data-placement="right" data-flag="1"
                                                           data-type="crm"> ` + data.customer.phone + `</a></p>
@@ -228,11 +215,11 @@
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
 
-                        <button class="btn btn-warning message-chat float-right">Hội thoại FB</button>
-                        <button class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
+                        <button type="button" class="btn btn-warning message-chat float-right" data-phone="`+ data.customer.phone +`">Zalo Messages</button>
+                        <button type="button" class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
                     </div>
                 </div>
-                @include('message_fb.index')
+                @include('message_zalo.index')
                 <div class="chat-ajax" >
 
                         </div>`;
@@ -1265,17 +1252,14 @@
 
         $(document).on('click','#view_chat .message-chat',function () {
 
-            let page_id = $('.chat-page_id').val();
-            let sender_id = $('.chat-sender_id').val();
-            let token = $('.chat-token').val();
-
-            if(page_id && sender_id && token){
+            getMessage($(this).data('phone'));
+            $('#view_chat .chatApplication').show();
                 $('#view_chat .chat-ajax').hide();
-                $('#view_chat .chatApplication').show();
-                getMessage(page_id,sender_id,token);
-            } else {
-                alertify.warning('Không có đoạn hội thoại !');
-            }
+            // if(page_id && sender_id && token){
+            //     $('#view_chat .chatApplication').show();
+            // } else {
+            //     alertify.warning('Không có đoạn hội thoại !');
+            // }
         })
         $(document).on('click','#view_chat .sale-note',function () {
             $('#view_chat .chat-ajax').show();
@@ -1319,6 +1303,6 @@
         })
 
     </script>
-    @include('message_fb.js_chat_app')
+    @include('message_zalo.js_chat_app')
 
 @endsection
