@@ -39,7 +39,7 @@
             let convertedTime =  convertTimestamp(parseInt(item.ts));
             if(item.msgType =="chat.photo"){
                 let object = JSON.parse(item.content);
-                content = `<img src="${object.href}" width="50p" height="50">`;
+                content = `<img src="${object.href}" width="50p" height="50" class="myImage">`;
             }
             else if(item.msgType =="chat.ecard"){
                 let object = JSON.parse(item.content);
@@ -125,4 +125,12 @@
             $('.chatContent').html(html);
         }
     })
+
+    $(document).on('click', '.media-body .myImage',async function (e) {
+        if ($(this).hasClass("zoomed")) {
+            $(this).removeClass("zoomed");
+        }else {
+            $(this).addClass("zoomed");
+        }
+    });
 </script>

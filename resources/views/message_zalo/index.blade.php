@@ -161,7 +161,11 @@
         z-index: -1;
         width: 20px
     }
-
+    .zoomed {
+        width: 375px !important;
+        height: 375px !important;
+        transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển đổi mềm mại */
+    }
 </style>
 
 <div class="page-content page-container chatApplication" id="page-content">
