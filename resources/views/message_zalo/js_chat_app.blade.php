@@ -1,7 +1,10 @@
 <script>
+    var lastTimestamp = 0;
+    var prevTimestamp = 0;
+    var convertion_id = 0;
+    var avatar = null;
     async function getMessage(phone) {
         let url = 'https://tapdoangtg.vn/zalo/conversation/list?phone='+phone;
-        let html = '';
 
         try {
             const res = await $.ajax({
@@ -11,23 +14,45 @@
                 alertify.warning('Không có đoạn hội thoại !');
                 return false;
             }
-            let convertion_id = res.data[0].id;
-            let avatar = res.data[0].avatar;
-
+            convertion_id = res.data[0].id;
+            avatar = res.data[0].avatar;
             let data = await detailConvertionZalo(convertion_id);
-
             if (data && data.length > 0) {
-                data.forEach( function (item) {
-                    let convertedTime =  convertTimestamp(parseInt(item.ts));
-                    let content = '';
-                    if(item.msgType =="chat.photo"){
-                        let object = JSON.parse(item.content);
-                         content = `<img src="${object.href}" width="50p" height="50">`;
-                    }else {
-                         content = `<p>${item.content}</p>`;
-                    }
-                    if (item.id.idTo == 0) { //khách
-                        html += `
+                let html = parseMessages(data, avatar);
+                $('.chatContent').html(html);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function parseMessages(data, avatar) {
+        let html = '';
+        let content = '';
+        data.forEach( function (item,key) {
+            console.log(key,'KEY');
+            if(key == (data.length - 1)){
+                lastTimestamp = parseInt(item.ts);
+            }
+            if(key == 0){
+                prevTimestamp = parseInt(item.ts);
+            }
+            let convertedTime =  convertTimestamp(parseInt(item.ts));
+            if(item.msgType =="chat.photo"){
+                let object = JSON.parse(item.content);
+                content = `<img src="${object.href}" width="50p" height="50">`;
+            }
+            else if(item.msgType =="chat.ecard"){
+                let object = JSON.parse(item.content);
+                content = `<p>${object.title}</p>`;
+            }
+            else {
+                if(item.content.includes("{")) {
+                    return;
+                }
+                content = `<p>${item.content}</p>`;
+            }
+            if (item.id.idTo == 0) { //khách
+                html += `
                             <div class="media media-chat">
                               <img class="avatar" src="${avatar}" alt="...">
                               <div class="media-body">
@@ -38,39 +63,35 @@
                               </div>
                             </div>
                           `;
-                    } else {
-                        html += `
+            } else {
+                html += `
             <div class="media media-chat media-chat-reverse">
               <div class="media-body">
                  ${content}
               </div>
             </div>
           `;}
-                });
+        });
 
-                html = `
+        html = `
         <div class="ps-container ps-theme-default ps-active-y"
           style="overflow-y: scroll !important; height:400px !important;">
           ${html}
-        </div>
-      `;
-
-                $('.chatContent').html(html);
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        </div>`;
+        return html;
     }
 
-    async function detailConvertionZalo(convertion_id) {
+    async function detailConvertionZalo(convertion_id, lastTimestamp = null) {
         let url = 'https://tapdoangtg.vn/zalo/conversation/detail/' + convertion_id;
 
         try {
             const res = await $.ajax({
                 url: url,
+                data: {timestamp: lastTimestamp},
             });
 
-            return res.data.reverse();
+            // return res.data.reverse();
+            return res.data;
         } catch (error) {
             console.log(error);
             return [];
@@ -87,123 +108,21 @@
         return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
-    $(document).on('click', '.chatApplication .next', function (e) {
+    $(document).on('click', '.chatApplication .next',async function (e) {
         e.preventDefault();
-        let url_new = $('.chatApplication .input-next').val();
-        let sender_id = $('.chat-sender_id').val();
-        let html = '';
-        $.ajax({
-            url: url_new,
-            success: function (res) {
-                let data = res.data.reverse();
-
-                if (res.paging.next) {
-                    $('.chatApplication .input-next').val(res.paging.next).change();
-                    $('.chatApplication .next').href = res.paging.next;
-                    $('.chatApplication .next').show();
-                } else {
-                    $('.chatApplication .next').hide();
-                }
-                if (res.paging.previous) {
-                    $('.chatApplication .input-previous').val(res.paging.previous).change();
-                    $('.chatApplication .previous').href = res.paging.previous;
-                    $('.chatApplication .previous').show();
-                }
-                if (data && data.length > 0) {
-                    data.forEach(function (item) {
-                        if (item.from.id == sender_id) { //khách
-                            html += `
-                                <div class="media media-chat">
-                                    <img class="avatar" src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                                                                   alt="...">
-                                    <div class="media-body">
-                                        <p>` + item.message + `</p>
-                                        <p class="meta">
-                                            <time datetime="2018">` + item.created_time + `</time>
-                                        </p>
-                                    </div>
-                                </div>
-                            `
-                        } else {
-                            html += `
-                                <div class="media media-chat media-chat-reverse">
-                                    <div class="media-body">
-                                        <p>` + item.message + `</p>
-                                    </div>
-                                </div>
-                            `
-                        }
-                    })
-                    html = `
-                        <div class="ps-container ps-theme-default ps-active-y"
-                         style="overflow-y: scroll !important; height:400px !important;">
-                        ` + html + `
-                        </div>
-                    `
-                    $('.chatContent').html(html)
-                }
-            }
-        })
+        let data = await detailConvertionZalo(convertion_id, lastTimestamp);
+        if (data && data.length > 0) {
+            let html = parseMessages(data, avatar);
+            $('.chatContent').html(html);
+        }
     })
 
-    $(document).on('click', '.chatApplication .previous', function (e) {
+    $(document).on('click', '.chatApplication .previous',async function (e) {
         e.preventDefault();
-        let url_new = $('.chatApplication .input-previous').val();
-        let sender_id = $('.chat-sender_id').val();
-        let html = '';
-        $.ajax({
-            url: url_new,
-            success: function (res) {
-                let data = res.data.reverse();
-
-                if (res.paging.next) {
-                    $('.chatApplication .input-next').val(res.paging.next).change();
-                    $('.chatApplication .next').href = res.paging.next;
-                    $('.chatApplication .next').show();
-                } else {
-                    $('.chatApplication .next').hide();
-                }
-                if (res.paging.previous) {
-                    $('.chatApplication .input-previous').val(res.paging.previous).change();
-                    $('.chatApplication .previous').href = res.paging.previous;
-                    $('.chatApplication .previous').show();
-                } else {
-                    $('.chatApplication .previous').hide();
-                }
-                if (data && data.length > 0) {
-                    data.forEach(function (item) {
-                        if (item.from.id == sender_id) { //khách
-                            html += `
-                                <div class="media media-chat">
-                                    <img class="avatar" src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                                                                   alt="...">
-                                    <div class="media-body">
-                                        <p>` + item.message + `</p>
-                                        <p class="meta">
-                                            <time datetime="2018">` + item.created_time + `</time>
-                                        </p>
-                                    </div>
-                                </div>
-                            `
-                        } else {
-                            html += `
-                                <div class="media media-chat media-chat-reverse">
-                                    <div class="media-body">
-                                        <p>` + item.message + `</p>
-                                    </div>
-                                </div>
-                            `
-                        }
-                    })
-                    html = `
-                        <div class="ps-container ps-theme-default ps-active-y"
-                         style="overflow-y: scroll !important; height:400px !important;">
-                        ` + html + `
-                        </div>
-                    `
-                    $('.chatContent').html(html)
-                }
-            }
-        })
+        let data = await detailConvertionZalo(convertion_id, prevTimestamp);
+        if (data && data.length > 0) {
+            let html = parseMessages(data, avatar);
+            $('.chatContent').html(html);
+        }
     })
 </script>

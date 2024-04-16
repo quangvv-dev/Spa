@@ -196,13 +196,13 @@
         </div>
         <div class="col-md-2">
             <input type="hidden" class="input-previous">
-            <a class="previous" href="javascript:void(0)" data-url="" aria-label="Previous" style="display: none;">
+            <a class="previous" href="javascript:void(0)" data-url="" aria-label="Previous">
                 <span aria-hidden="true">«</span>
             </a>
         </div>
         <div class="col-md-2">
             <input type="hidden" class="input-next">
-            <a class="next" href="javascript:void(0)" data-url="" aria-label="Next" style="display: none;">
+            <a class="next" href="javascript:void(0)" data-url="" aria-label="Next">
                 <span aria-hidden="true">»</span>
             </a>
         </div>
