@@ -27,6 +27,9 @@ class ZaloController extends Controller
     public function detailConversation(Request $request, $id)
     {
         $url = $this->converstionDetailUrl . $id . '?limit=10';
+        if ($request->timestamp) {
+            $url = $url . '&timestamp=' . $request->timestamp;
+        }
         $abc = GuzzleHttpCall($url, 'GET', $this->header);
         return response()->json($abc);
     }
