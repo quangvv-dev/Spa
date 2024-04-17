@@ -106,7 +106,6 @@
                 }).done(function (data) {
                     var b = [];
                     $.each(data, function (index, value) {
-
                         switch (value.status) {
                             case 1:
                                 var col = '#63cff9'
@@ -115,10 +114,10 @@
                                 var col = '#dccf34'
                                 break;
                             case 3:
-                                var col = '#d03636'
+                                var col = '#4bcc4b'
                                 break;
                             case 4:
-                                var col = '#4bcc4b'
+                                var col = '#d03636'
                                 break;
                             case 5:
                                 var col = '#808080'
