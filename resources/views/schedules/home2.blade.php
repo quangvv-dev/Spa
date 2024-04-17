@@ -115,15 +115,15 @@
                                 var col = '#dccf34'
                                 break;
                             case 3:
-                                var col = '#d03636'
+                                var col = '#4bcc4b'
                                 break;
                             case 4:
-                                var col = '#4bcc4b'
+                                var col = '#d03636'
                                 break;
                             case 5:
                                 var col = '#808080'
                                 break;
-                                case 6:
+                            case 6:
                                 var col = '#f36a26'
                                 break;
                             default:
