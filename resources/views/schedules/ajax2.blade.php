@@ -3,6 +3,12 @@
         label.required {
             font-size: 14px;
         }
+        .fc-list-heading-main{
+            font-weight: bold !important;
+        }
+        td.fc-list-item-title.fc-widget-content {
+            font-size: 13px;
+        }
     </style>
     <div class="card">
         <div class="card-status bg-primary br-tr-3 br-tl-3"></div>
@@ -39,14 +45,18 @@
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',
-                                right: 'month,agendaWeek,agendaDay'
+                                right: 'month,agendaWeek,agendaDay,listWeek'
                             },
+                            // initialView: 'listWeek',
                             buttonText: {
                                 today: 'Hôm nay',
                                 month: 'Tháng',
                                 week: 'Tuần',
                                 day: 'Ngày',
+                                listWeek: 'Danh sách',
                             },
+                            plugins: [ 'list' ],
+                            // defaultView: 'listWeek',
                             locale: 'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
