@@ -349,7 +349,7 @@ class AuthController extends BaseApiController
         if ($request->app_name == "apomant") {
             $data = false;
         }elseif ($request->app_name == "gtg") {
-            $data = false;
+            $data = true;
         } else {
             $data = false;
         }
