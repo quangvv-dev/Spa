@@ -186,6 +186,7 @@ class GroupCommentController extends Controller
         $customer = Customer::find($request->customer_id);
         $time = Customer::timeExpired($customer->status_id);
         $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
+        $time['last_time'] = now();
         $customer->update($time);
 
         return response()->json(['group_comment' => $groupComment1, 'id_login' => Auth::user()->id]);
