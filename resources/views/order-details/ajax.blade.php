@@ -42,7 +42,7 @@
                         </a>
                         {{ @$order->customer->account_code }}</td>
                     <td class="text-center">{{ @$order->customer->full_name }}</td>
-                    <td class="text-center">{{ @$order->customer->phone }}</td>
+                    <td class="text-center">{{ auth()->user()->permission('phone.open') ? @$order->customer->phone : @str_limit($order->customer->phone, 7, 'xxx') }}</td>
                     <td class="text-center">{!!@$order->service_text !!}</td>
                     <td class="text-center">{{ @$order->orderDetails->sum('quantity') }}</td>
                     <td class="text-center">{{ number_format($order->all_total) }}</td>
