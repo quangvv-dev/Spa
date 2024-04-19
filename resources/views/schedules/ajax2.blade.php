@@ -3,6 +3,12 @@
         label.required {
             font-size: 14px;
         }
+        .fc-list-heading-main{
+            font-weight: bold !important;
+        }
+        td.fc-list-item-title.fc-widget-content {
+            font-size: 13px;
+        }
     </style>
     <div class="card">
         <div class="card-status bg-primary br-tr-3 br-tl-3"></div>
