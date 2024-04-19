@@ -135,9 +135,14 @@
             <div class="col-md-12 no-padd">
                 <div class="col-md-2 no-padd" style="float: left; display: block">
                     <div class="full2 mt10" id="info_bar">
-                        <div class="border padding infor-list-ct ml2"><h3 class="uppercase pb5 mb10 font12 bold mg0">Mối
-                                quan hệ</h3>
-                            <div class="">{{ @$customer->status->name }}
+                        <div class="border padding infor-list-ct ml2">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h3 class="uppercase pb5 mb10 font12 bold mg0">Mối quan hệ</h3>
+                                    <div>{{ @$customer->status->name }}</div></div>
+                                <div class="col-md-4 qrcode-container">
+                                    <div id="qrcodeTable"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1075,6 +1080,16 @@
         //     let token = $('.chat-token').val();
         //     getMessage(page_id,sender_id,token);
         // })
+    </script>
+    <script src="{{asset('js/jquery.qrcode.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function (){
+            jQuery('#qrcodeTable').qrcode({
+                text	: "{{$customer->account_code}}",
+                height:50,
+                width:50
+            });
+        });
     </script>
     {{--@include('message_fb.js_chat_app')--}}
 @endsection
