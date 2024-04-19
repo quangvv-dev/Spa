@@ -39,14 +39,17 @@
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',
-                                right: 'month,agendaWeek,agendaDay'
+                                right: 'month,agendaWeek,agendaDay,listWeek'
                             },
                             buttonText: {
                                 today: 'Hôm nay',
                                 month: 'Tháng',
                                 week: 'Tuần',
                                 day: 'Ngày',
+                                listWeek: 'Danh sách',
                             },
+                            dayNames: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
+                            plugins: [ 'list' ],
                             locale: 'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
@@ -81,10 +84,10 @@
                                     color: '#dccf34',
                                     @break
                                         @case(\App\Constants\ScheduleConstant::DEN_MUA)
-                                    color: '#d03636',
+                                    color: '#4bcc4b',
                                     @break
                                         @case(\App\Constants\ScheduleConstant::CHUA_MUA)
-                                    color: '#4bcc4b',
+                                    color: '#d03636',
                                     @break
                                         @case(\App\Constants\ScheduleConstant::HUY)
                                     color: '#808080',
