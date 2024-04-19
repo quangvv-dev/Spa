@@ -52,9 +52,11 @@
                                 month: 'Tháng',
                                 week: 'Tuần',
                                 day: 'Ngày',
+                                listWeek: 'Danh sách',
                             },
                             dayNames: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
                             plugins: [ 'list' ],
+                            defaultView: 'listWeek',
                             locale: 'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
