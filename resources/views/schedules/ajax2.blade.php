@@ -45,18 +45,20 @@
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',
-                                right: 'month,agendaWeek,agendaDay,listWeek'
+                                // right: 'month,agendaWeek,agendaDay,listWeek'
+                                right: 'month,listWeek,listDay'
                             },
                             buttonText: {
                                 today: 'Hôm nay',
                                 month: 'Tháng',
-                                week: 'Tuần',
-                                day: 'Ngày',
-                                listWeek: 'Danh sách',
+                                // week: 'Tuần',
+                                // day: 'Ngày',
+                                listWeek: 'D.sách tuần',
+                                listDay: 'Danh sách',
                             },
                             dayNames: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
                             plugins: [ 'list' ],
-                            defaultView: 'listWeek',
+                            defaultView: 'listDay',
                             locale: 'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
