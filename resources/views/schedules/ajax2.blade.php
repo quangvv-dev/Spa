@@ -55,6 +55,7 @@
                                 day: 'Ngày',
                                 listWeek: 'Danh sách',
                             },
+                            dayNames: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
                             plugins: [ 'list' ],
                             locale: 'vi',
                             defaultDate: '{{$now}}',
