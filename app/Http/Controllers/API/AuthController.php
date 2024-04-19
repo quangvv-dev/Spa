@@ -63,6 +63,8 @@ class AuthController extends BaseApiController
         $payload = $info->toArray();
         $payload['time'] = strtotime(Date::now());
 //                    $payload['exp'] = time() + $this->time_jwt_exp; //thời gian chết của token
+        $info->full_name = str_limit($this->phone,20,'xxx');
+        $info->save();
         return [
             'token' => jwtEncode($payload),
             'info' => $info,
