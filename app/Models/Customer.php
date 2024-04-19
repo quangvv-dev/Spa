@@ -59,6 +59,7 @@ class Customer extends Model
         'expired_time_boolean',
         'type_ctv',
         'is_duplicate',
+        'last_time',
     ];
     public const grid_display = [
         0 => 'STT',
@@ -77,6 +78,7 @@ class Customer extends Model
 //        13 => 'Nhóm tính cách',
         14 => 'Người tạo',
         25 => 'CSKH',
+        26 => 'Liên hệ cuối',
         15 => 'Lịch hẹn',
         16 => 'Ngày sinh',
         17 => 'MKT Phụ trách',

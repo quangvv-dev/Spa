@@ -23,8 +23,9 @@ class GroupCommentController extends Controller
 
     /**
      * GroupCommentController constructor.
+     *
      * @param GroupCommentService $groupCommentService
-     * @param CustomerService $customerService
+     * @param CustomerService     $customerService
      */
     public function __construct(GroupCommentService $groupCommentService, CustomerService $customerService)
     {
@@ -45,8 +46,8 @@ class GroupCommentController extends Controller
             ->get();
 
         return response()->json([
-            'customer' => $customer,
-            'group_comments' => $groupComments
+            'customer'       => $customer,
+            'group_comments' => $groupComments,
         ]);
     }
 
@@ -61,7 +62,8 @@ class GroupCommentController extends Controller
         $orderRevenue = number_format($customer->orders->sum('gross_revenue'));
         $groupComments = DB::table('group_comments')->join('users as u', 'u.id', '=', 'group_comments.user_id')
             ->where('group_comments.customer_id', $id)
-            ->select('u.full_name','group_comments.id','group_comments.created_at','group_comments.messages','group_comments.image','group_comments.user_id')
+            ->select('u.full_name', 'group_comments.id', 'group_comments.created_at', 'group_comments.messages',
+                'group_comments.image', 'group_comments.user_id')
             ->orderBy('id', 'desc')
             ->get();
 
@@ -69,12 +71,12 @@ class GroupCommentController extends Controller
         $status = Status::select('id', 'name')->where('type', StatusCode::RELATIONSHIP)->get();
 
         return response()->json([
-            'customer' => $customer,
+            'customer'       => $customer,
             'group_comments' => $groupComments,
-            'status' => $status,
-            'id_login' => Auth::user()->id,
-            'order_revenue' => $orderRevenue,
-            'last_contact' => $lastContact
+            'status'         => $status,
+            'id_login'       => Auth::user()->id,
+            'order_revenue'  => $orderRevenue,
+            'last_contact'   => $lastContact,
         ]);
     }
 
@@ -100,8 +102,11 @@ class GroupCommentController extends Controller
         $customer = $this->customerService->find($id);
         $file = $request->file('image_contact');
         $input = $request->except(['image_contact']);
-        if ($file){
-            if ($file->getSize()/1024 >1024) return redirect()->back()->with('error', 'File ảnh quá dung lượng ('.round($file->getSize()/(1024*1024),2). 'MB/1MB) !!!');
+        if ($file) {
+            if ($file->getSize() / 1024 > 1024) {
+                return redirect()->back()->with('error',
+                    'File ảnh quá dung lượng (' . round($file->getSize() / (1024 * 1024), 2) . 'MB/1MB) !!!');
+            }
         }
         $input['image'] = $request->image_contact;
 
@@ -110,6 +115,7 @@ class GroupCommentController extends Controller
 
         $time = Customer::timeExpired($customer->status_id);
         $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
+        $time['last_time'] = now();
         $customer->update($time);
         $input['status_id'] = $customer->status_id;
 
@@ -145,7 +151,7 @@ class GroupCommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -185,6 +191,7 @@ class GroupCommentController extends Controller
 
         $time = Customer::timeExpired($customer->status_id);
         $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
+        $time['last_time'] = now();
         $customer->update($time);
 
         return response()->json(['group_comment' => $groupComment1, 'id_login' => Auth::user()->id]);
