@@ -194,51 +194,53 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="border padding infor-list-ct ml2 mt10"><h3
-                            class="uppercase pb5 mb10 font12 bold mg0">Liên hệ</h3>
-                        <div class="box-cont">
-                            <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">
-                                <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i
-                                            class="icon-user mr5 mt2 fl"></i> <b
-                                            class="blue">&nbsp;{{ $customer->full_name }}</b> <i
-                                            data-original-title="Liên hệ chính" rel="tooltip"
-                                            class="fa fa-star text-warning" aria-hidden="true"></i></p>
-                                    <p></p>
-                                    <p class="clearfix">&nbsp;{{ $customer->phone}}</p>
-                                </div>
-                                <div class="col-md-12 no-padd hide"><a><i data-task-type="2"
-                                                                          class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>
-                                    <a><i data-task-type="3"
-                                          class="tc new_popup_task icon-group style-icon-group mr10 fl"></i></a> <a><i
-                                            data-task-type="4"
-                                            class="tc new_popup_task icon-envelope-alt style-icon-envelope mr10 fl"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{{--                    <div class="border padding infor-list-ct ml2 mt10"><h3--}}
+{{--                            class="uppercase pb5 mb10 font12 bold mg0">Liên hệ</h3>--}}
+{{--                        <div class="box-cont">--}}
+{{--                            <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">--}}
+{{--                                <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i--}}
+{{--                                            class="icon-user mr5 mt2 fl"></i> <b--}}
+{{--                                            class="blue">&nbsp;{{ $customer->full_name }}</b> <i--}}
+{{--                                            data-original-title="Liên hệ chính" rel="tooltip"--}}
+{{--                                            class="fa fa-star text-warning" aria-hidden="true"></i></p>--}}
+{{--                                    <p></p>--}}
+{{--                                    <p class="clearfix">&nbsp;{{ $customer->phone}}</p>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-12 no-padd hide"><a><i data-task-type="2"--}}
+{{--                                                                          class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>--}}
+{{--                                    <a><i data-task-type="3"--}}
+{{--                                          class="tc new_popup_task icon-group style-icon-group mr10 fl"></i></a> <a><i--}}
+{{--                                            data-task-type="4"--}}
+{{--                                            class="tc new_popup_task icon-envelope-alt style-icon-envelope mr10 fl"></i></a>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="border padding mt10 ml2">
-                        <div class="infor-top-ct"><h3 class="uppercase mb10 font12 bold mg0"
-                                                      style="margin-bottom: 10px!important;">Thông tin khách
-                                hàng</h3>
+                        <div class="infor-top-ct">
+                            <h3 class="uppercase mb10 font12 bold mg0" style="margin-bottom: 10px!important;">Thông tin khách hàng</h3>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Mã KH:</p>
-                                <p class="word-wrap"> &nbsp;{{$customer->account_code}}</p>
+                                <p class="word-wrap bold text-info"> &nbsp;{{$customer->account_code}}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Tên KH:</p>
-                                <p class="word-wrap"> &nbsp;{{ $customer->full_name }} </p>
+                                <p class="word-wrap bold text-info"> &nbsp;{{ $customer->full_name }} </p>
+                            </div>
+                            <div class="mb10 clearfix"><p class="bold pr5 fl">Điện thoại:</p>
+                                <p class="word-wrap bold text-info"><a class="" data-account-id="4629"
+                                                                       data-type="crm" data-issensitive="true">
+                                        &nbsp;{{ str_limit($customer->phone,7,'xxx') }} </a></p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Chi nhánh:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
-                            </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Điện thoại:</p>
-                                <p class="word-wrap"><a class="" data-account-id="4629"
-                                                        data-type="crm" data-issensitive="true">
-                                        &nbsp;{{ str_limit($customer->phone,7,'xxx') }} </a></p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Người phụ trách:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->telesale->full_name }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">CSKH:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->cskh->full_name }}</p>
+                            </div>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Liên hệ cuối:</p>
+                                <p class="word-wrap text-danger"> &nbsp;{{ @diffTime($customer->last_time) }}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm giới tính:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
