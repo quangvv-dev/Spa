@@ -61,7 +61,7 @@
                                     @foreach($docs as $item)
                                 {
                                     id: '{{$item->id}}',
-                                    title: "{!! 'KH: '.@$item->customer->full_name .', SĐT: '.@$item->customer->phone.' Lưu ý: '.$item->note !!}",
+                                    title: "{!! 'KH1231: '.@$item->customer->full_name .', SĐT: '.(auth()->user()->permission('phone.open')? @$item->customer->phone :@str_limit($item->customer->phone,7,'xxx')).' Lưu ý: '.$item->note !!}",
                                     note: "{{$item->note}}",
                                     description: "{{$item->note}}",
                                     full_name: '{{@$item->customer->full_name}}',
@@ -101,7 +101,6 @@
                             //Su kien click
                             eventClick: function (info) {
                                 let id = info.id;
-                                console.log(info, 'info');
                                 $('#update_id').val(info.id).change();
                                 $('#update_date').val(info.date).change();
                                 $('#update_time1').val(info.time_from).change();
@@ -110,7 +109,7 @@
                                 $('#update_branch').val(info.branch_id).change();
                                 $('#update_note').val(info.note).change();
                                 $('#full_name').val(info.full_name).change();
-                                $('#phone').val(info.phone).change();
+                                $('#phone').val(hidden_phone == true ? info.phone : info.phone.slice(0, 7)+'xxx').change();
                                 $('#action').val(info.creator_id).change();
                                 $('.modal.fade').attr('id', 'modal_' + id).change();
                                 $('.delete').data('url', 'schedules/' + id).change();

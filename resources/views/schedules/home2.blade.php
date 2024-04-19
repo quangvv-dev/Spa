@@ -92,10 +92,10 @@
 @endsection
 @section('_script')
     <script>
+        var hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
         $(document).ready(function () {
             $('.page-title').hide();
             $('.breadcrumb').hide();
-
             function searchAjax(data) {
                 // $('#calendar1').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
 
@@ -131,7 +131,7 @@
                         }
                         b.push({
                             id: value.id,
-                            title: 'KH: ' + value.customer.full_name + ', SĐT: ' + value.customer.phone + ' Lưu ý: ' + value.note,
+                            title: 'KH: ' + value.customer.full_name + ', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7)+'xxx') + ' Lưu ý: ' + value.note,
                             start: value.date + 'T' + value.time_from + ':00',
                             end: value.date + 'T' + value.time_to + ':00',
                             color: col,
@@ -281,7 +281,7 @@
                     var col = chooseColor(data.status);
                     b.push({
                         id: data.id,
-                        title: 'KH: ' + data.customer.full_name + ', SĐT: ' + data.customer.phone + ' Lưu ý: ' + data.note,
+                        title: 'KH: ' + data.customer.full_name + ', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7)+'xxx') + ' Lưu ý: ' + data.note,
                         description: data.note,
                         start: data.date + 'T' + data.time_from + ':00',
                         end: data.date + 'T' + data.time_to + ':00',
