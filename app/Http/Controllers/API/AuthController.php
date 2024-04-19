@@ -494,6 +494,7 @@ class AuthController extends BaseApiController
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::MARKETING,
+                    DepartmentConstant::KE_TOAN,
                 ],
                 'name_menu' => 'BÁN HÀNG',
             ],
