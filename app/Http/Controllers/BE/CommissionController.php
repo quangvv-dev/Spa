@@ -16,6 +16,7 @@ use App\Models\HistoryWalletCtv;
 use App\Models\Order;
 use App\Models\PaymentHistory;
 use App\Models\SupportOrder;
+use App\Models\WalletHistory;
 use App\Services\CommissionService;
 use App\User;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class CommissionController extends Controller
         $users = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::TU_VAN_VIEN])->pluck('full_name', 'id');
         $doc = Commission::where('order_id', $id)->first();
         $commissions = Commission::where('order_id', $id)->get();
-        $order = Order::where('id', $id)->first();
+        $order = WalletHistory::where('id', $id)->first();
         if (isset($doc) && $doc) {
             return view('commisstion.index', compact('title', 'users', 'doc', 'commissions', 'order'));
         } else {
@@ -66,7 +67,7 @@ class CommissionController extends Controller
 
         $this->commissionService->create($input, $id);
 
-        return redirect(url('order/' . $id . '/show'));
+        return redirect(url('wallet/' . $id));
     }
 
     public function update(Request $request)
@@ -77,7 +78,7 @@ class CommissionController extends Controller
 
         $this->commissionService->create($input, $input['order_id']);
 
-        return redirect('order/' . $commission->order_id . '/show');
+        return redirect('wallet/' . $commission->order_id);
     }
 
     public function destroy(Request $request, $id)

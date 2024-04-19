@@ -12,7 +12,7 @@
                 <h3 class="card-title">{{$title}}</h3>
             </div>
             <div class="card-header">
-                <span class="text-info bold">GIÁ TRỊ ĐƠN: </span> <span class="text-danger bold">&nbsp;&nbsp; {{number_format($order->all_total)}} đ</span>
+                <span class="text-info bold">GIÁ TRỊ ĐƠN: </span> <span class="text-danger bold">&nbsp;&nbsp; {{number_format($order->order_price)}} đ</span>
             </div>
 
             @if (isset($doc))

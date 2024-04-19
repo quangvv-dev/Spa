@@ -14,7 +14,7 @@ class Commission extends Model
 
     public function orders()
     {
-        return $this->belongsTo(Order::class, 'order_id', 'id');
+        return $this->belongsTo(WalletHistory::class, 'order_id', 'id');
     }
     public function supportOrder()
     {

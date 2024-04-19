@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <td style="width:50%">
-                                <b>Điện thoại:</b>&nbsp;{{ @$order->customer->phone }} -
+                                <b>Điện thoại:</b>&nbsp;{{auth()->user()->permission('phone.open') ? $order->customer->phone : str_limit($order->customer->phone, 7, 'xxx')}}
                             </td>
                             <td style="width:50%">
                                 <b>Ngày tạo đơn:</b>&nbsp; {{ date('d-m-Y', strtotime($order->created_at)) }}&emsp;
@@ -50,8 +50,9 @@
                         <tr>
                             <td style="width:50%">
                                 <b>Người nhận:</b>&nbsp;{{ @$order->customer->full_name }} - Điện thoại:
-                                <a class="__clickToCall blue" data-phone="0932148915" data-type="crm"
-                                   data-call="order_222" data-contact-id="896">{{ @$order->customer->phone }}</a>
+                                <a class="__clickToCall blue" data-type="crm"
+                                   data-call="order_222" data-contact-id="896">
+                                    {{auth()->user()->permission('phone.open') ? $order->customer->phone : str_limit($order->customer->phone, 7, 'xxx')}}</a>
                             </td>
                             <td style="width:50%">
                                 <b>Phương thức thanh toán:</b>&nbsp;{{@$order->name_payment_type}}
@@ -153,9 +154,15 @@
                                 class="fa fa-print"></i>&nbsp;In</a>
                 </button>
             </div>
+            <div class="btn-group dropup fl task_footer_box">
+                <button class="btn btn-warning ml5" data-number="2"><a class="white"
+                                                                       href="/commission/{{$order->id}}"><i
+                            class="fas fa-dollar-sign"></i>&nbsp;Chia doanh thu</a>
+                </button>
+            </div>
             <div class="fl task_footer_box cancel_order">
                 <button class="btn btn-default fr ml5">
-                    <a href="{{route('order.list')}}">Trở lại</a>
+                    <a href="{{route('wallet.index')}}">Trở lại</a>
                 </button>
             </div>
         </div>
