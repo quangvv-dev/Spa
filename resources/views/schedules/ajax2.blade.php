@@ -39,7 +39,7 @@
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',
-                                right: 'month,agendaWeek,agendaDay'
+                                right: 'month,agendaWeek,agendaDay,listWeek'
                             },
                             buttonText: {
                                 today: 'Hôm nay',
@@ -47,6 +47,8 @@
                                 week: 'Tuần',
                                 day: 'Ngày',
                             },
+                            dayNames: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
+                            plugins: [ 'list' ],
                             locale: 'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
