@@ -499,7 +499,7 @@ class AuthController extends BaseApiController
             ],
             [
                 'menu_code' => MenuConstant::QL_TONG_DAI,
-                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES, DepartmentConstant::KE_TOAN],
                 'name_menu' => 'QL TỔNG ĐÀI',
             ],
             [
