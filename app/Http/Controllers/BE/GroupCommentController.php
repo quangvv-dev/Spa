@@ -111,6 +111,7 @@ class GroupCommentController extends Controller
 
         $time = Customer::timeExpired($customer->status_id);
         $time['expired_time_boolean'] = StatusConstant::CHUA_QUA_HAN;
+        $time['last_time'] = now();
         $customer->update($time);
 
         $this->groupCommentService->create($input);

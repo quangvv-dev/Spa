@@ -217,7 +217,7 @@ class Schedule extends Model
         if (!empty($request['customer'])) {
             $param = $request['customer'];
             $docs->whereHas('customer', function ($q) use ($param) {
-                $q->where('phone', $param);
+                $q->where('phone', $param)->orWhere('account_code', $param);
             });
         }
         if (!empty($request['status'])) {

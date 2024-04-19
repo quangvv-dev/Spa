@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Date;
+
 function getTime($dataTime)
 {
 
@@ -346,6 +348,22 @@ if (!function_exists('dbSetting')) {
             return @\App\Models\DBSettings::where('setting_key', $key)->first()->setting_value;
         } else {
             return "";
+        }
+    }
+
+    if (!function_exists('diffTime')) {
+        function diffTime($time = null)
+        {
+            $now = now();
+            if (!empty($time)) {
+                $countdown = strtotime($now) - strtotime($time);
+                $days = ($countdown / 86400) >= 1 ? floor($countdown / 86400) : 0;
+                $hours = floor(($countdown % 86400) / 3600);
+                $minutes = round((($countdown % 86400) % 3600) / 60);
+
+                return ($days > 0 ? $days . ' ngày ' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
+            }
+            return '';
         }
     }
 }

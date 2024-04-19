@@ -192,8 +192,7 @@
                     @endif
                 @else
                     <th class="text-white text-center {{in_array($key,$user_filter_grid) ? '':'display-none'}}"
-                        style="{{$key==8 ? 'min-width: 121px;' : ''}}z-index: 1;"
-                    >
+                        style="{{$key==8 ? 'min-width: 121px;' : ''}}z-index: 1;">
                         {{$item}}
                     </th>
                 @endif
@@ -265,6 +264,7 @@
 {{--                    <td class="text-center genitive-db {{in_array(13,$user_filter_grid) ? '':'display-none'}}" data-id="{{@$customer->id}}">{{@$customer->genitive->name}}</td>--}}
                     <td class="text-center {{in_array(14,$user_filter_grid) ? '':'display-none'}}">{{@$customer->carepage->full_name}}</td>
                     <td class="text-center {{in_array(25,$user_filter_grid) ? '':'display-none'}}">{{@$customer->cskh->full_name}}</td>
+                    <td class="text-center small-tip {{in_array(26,$user_filter_grid) ? '':'display-none'}}">{{diffTime($customer->last_time)}}</td>
                     <td class="text-center {{in_array(15,$user_filter_grid) ? '':'display-none'}}" title="Đến mua màu xanh / đến không mua màu vàng/ Hủy màu đỏ/ Tất cả đơn màu đen">
                         {!! $customer->schedules_text !!}
                     </td>
