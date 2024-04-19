@@ -191,7 +191,6 @@
                                     <div class="text-a">{{ $customer->orders->count() }}</div>
                                 </div>
                             </div>
-                            </h3>
                         </div>
                     </div>
 {{--                    <div class="border padding infor-list-ct ml2 mt10"><h3--}}
