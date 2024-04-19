@@ -36,7 +36,7 @@
                     <div class="col-xs-12 col-md-3">
                         <div class="form-group required {{ $errors->has('phone') ? 'has-error' : '' }}">
                             {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                            {!! Form::text('phone', $customer ? $customer->phone: null, array('class' => 'form-control phone input-custom', 'required' => true)) !!}
+                            {!! Form::text('phone', $customer ? auth()->user()->permission('phone.open') ? $customer->phone : str_limit($customer->phone, 7, 'xxx'): null, array('class' => 'form-control phone input-custom', 'required' => true)) !!}
                             <span class="help-block">{{ $errors->first('phone', ':message') }}</span>
                         </div>
                     </div>

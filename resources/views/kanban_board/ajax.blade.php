@@ -17,7 +17,7 @@
                     $('#name').val(data.name).change();
                     $("a[href]").attr("href",link);
                     $('.name-customer').html(data.customer.full_name).change();
-                    $('.phone-customer').val(data.customer.phone).change();
+                    $('.phone-customer').val(data.customer.phone.substring(0, 7) + "xxx").change();
                     $('#user_id').val(full_name).change();
                     $('#date_from').val(data.date_from).change();
                     $('#time_from').val(data.time_from).change();

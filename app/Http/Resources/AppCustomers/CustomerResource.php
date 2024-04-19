@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\AppCustomers;
 
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CustomerResource extends JsonResource
@@ -15,11 +16,16 @@ class CustomerResource extends JsonResource
      */
     public function toArray($request)
     {
+        $phone = $this->phone;
+        if (!empty($request->jwtUser)) {
+            $user = User::find($request->jwtUser->id);
+            $phone = @$user->permission('phone.open') ? $phone : str_limit($phone, 7, 'xxx');
+        }
         if ($request->type =='full_data'){
             return [
                 'id'           => @$this->id,
                 'full_name'    => @$this->full_name,
-                'phone'        => @str_limit($this->phone,7,'xxx'),
+                'phone'        => $phone,
                 'telesales_id' => @$this->telesales_id,
                 'mkt_id'       => @$this->mkt_id,
                 'gender'       => @$this->gender,
@@ -35,7 +41,7 @@ class CustomerResource extends JsonResource
             return [
                 'id'           => @$this->id,
                 'full_name'    => @$this->full_name,
-                'phone'        => @str_limit($this->phone,7,'xxx'),
+                'phone'        => $phone,
                 'membership'   => @$this->membership,
                 'wallet'       => @$this->wallet,
                 'wallet_ctv'   => @$this->wallet_ctv,

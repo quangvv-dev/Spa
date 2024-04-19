@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SchedulesResource extends JsonResource
@@ -28,6 +29,8 @@ class SchedulesResource extends JsonResource
                 'branch_address' => @$this->branch->address,
             ];
         }elseif ($request->type == "list_schedules"){
+            $user = User::find($request->jwtUser->id);
+            $phone = @$user->permission('phone.open') ? $this->customer->phone : str_limit($this->customer->phone, 7, 'xxx');
             return [
                 'id'           => @$this->id,
                 'note'         => @$this->note,
@@ -38,7 +41,7 @@ class SchedulesResource extends JsonResource
                 'branch_id'    => @$this->branch_id,
                 'user_id'      => @$this->user_id,
                 'user_name'    => @$this->customer->full_name,
-                'user_phone'   => @str_limit($this->customer->phone,7,'xxx'),
+                'user_phone'   => @$phone,
                 'creator_id'   => @$this->creator_id,
                 'creator_name' => @$this->creator->full_name,
             ];
