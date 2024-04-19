@@ -151,6 +151,8 @@
 @endsection
 @section('_script')
     <script type="text/javascript">
+        var hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
+
         function searchAjax(data) {
             $('#registration-form').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
             $.ajax({
@@ -379,11 +381,12 @@
             }).done(function (data) {
                 let html = '';
                 let html1 = '';
+                let phoneNumber = hidden_phone == true ? data.order.customer.phone : data.order.customer.phone.slice(0, 7)+'xxx';
 
                 html1 += `<div class="row">
                     <div class="col-md-6">
                         <p>Tên KH: ` + data.order.customer.full_name + `</p>
-                        <p>SDT: ` + data.order.customer.phone + `</p>
+                        <p>SĐT: ` + phoneNumber + `</p>
                     </div>
                     <div class="col-md-6">
                         <p>Người thực hiện đơn hàng: ` + (data.order.spa_therapisst ? data.order.spa_therapisst.full_name : '') + `</p>

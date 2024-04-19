@@ -24,7 +24,8 @@
                     <td class="text-center">{{ isset($order->payment_date) ? date("d-m-Y", strtotime($order->payment_date)) : '' }}</td>
                     <td class="text-center"><a href="{{isset($order->order)?route('order.show',$order->order_id):'#'}}">{{isset($order->order) ? $order->order->code:' ' }}</a></td>
                     <td class="text-center">{{isset($order->order) && isset($order->order->customer) ? @$order->order->customer->full_name :''}}</td>
-                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer) ? @$order->order->customer->phone :''}}</td>
+                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer) ?
+                    (auth()->user()->permission('phone.open') ? @$order->order->customer->phone : @str_limit($order->order->customer->phone, 7, 'xxx')) :''}}</td>
                     <td class="text-center">{!! isset($order->order) && !empty($order->order->service_text) ? @$order->order->service_text :'' !!}</td>
                     <td class="text-center">{{ @number_format($order->price) }}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->telesale)? @$order->order->customer->telesale->full_name:'' }}</td>
