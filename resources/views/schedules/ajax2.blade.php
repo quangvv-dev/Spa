@@ -56,7 +56,6 @@
                                 listWeek: 'Danh sách',
                             },
                             plugins: [ 'list' ],
-                            // defaultView: 'listWeek',
                             locale: 'vi',
                             defaultDate: '{{$now}}',
                             navLinks: true, // can click day/week names to navigate views
@@ -111,7 +110,6 @@
                             //Su kien click
                             eventClick: function (info) {
                                 let id = info.id;
-                                console.log(info, 'info');
                                 $('#update_id').val(info.id).change();
                                 $('#update_date').val(info.date).change();
                                 $('#update_time1').val(info.time_from).change();

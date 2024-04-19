@@ -298,7 +298,6 @@
                     })
                     $('#calendar1').fullCalendar('removeEvents', [id]);
                     $('#calendar1').fullCalendar('addEventSource', b);
-                    console.log(data);
                 })
             })
 

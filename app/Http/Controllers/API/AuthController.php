@@ -40,7 +40,7 @@ class AuthController extends BaseApiController
                 return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Sai mật khẩu');
             } else {
                 if (in_array($info->department_id,
-                    [DepartmentConstant::AN_NINH, DepartmentConstant::Y_TA, DepartmentConstant::SEEDING])) {
+                    [DepartmentConstant::AN_NINH, DepartmentConstant::SEEDING])) {
                     return $this->responseApi(ResponseStatusCode::BAD_REQUEST, 'Tài khoản không có quyền');
                 }
                 if ($info->active == StatusCode::ON) {
