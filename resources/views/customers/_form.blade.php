@@ -221,7 +221,7 @@
                                         data-placeholder="Chọn nhóm dịch vụ">
                                     @foreach($categories as $item)
                                         <option
-                                            value="{{ $item->id }}" {{ isset($customer) && in_array($item->id, !empty($customer->category_tips)?@json_decode($customer->category_tips):[]) ? 'selected' : "" }}>{{ $item->name }}</option>
+                                            value="{{ $item->id }}" {{ (isset($customer) && @in_array($item->id, !empty($customer->category_tips))?@json_decode($customer->category_tips):[]) ? 'selected' : "" }}>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             @else
