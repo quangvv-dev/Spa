@@ -245,7 +245,7 @@
 {{--                            </div>--}}
 
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm tính cách:</p>
-                                <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
+                                <p class="word-wrap"> &nbsp;{{count($customer->genitive)?implode(', ',$customer->genitive->pluck('name')->toArray()):''}}</p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Sinh nhật:</p>
                                 <p class="word-wrap"> &nbsp;{{ $customer->birthday }}</p>

@@ -58,7 +58,10 @@ class CustomerService
             $userLogin = Auth::user()->id;
             $input['mkt_id'] = $userLogin;
         }
-        $customer = $this->customer->where('phone',$input['phone'])->first();
+        if (isset($input['genitive_id']) && count($input['genitive_id'])) {
+            $input['genitive_id'] = json_encode($input['genitive_id']);
+        }
+        $customer = $this->customer->where('phone', $input['phone'])->first();
         $input['is_duplicate'] = !empty($customer) ? Customer::DUPLICATE : Customer::NON_DUPLICATE;
         $input['carepage_id'] = Auth::user()->id;
         $data = $this->data($input);
@@ -75,7 +78,7 @@ class CustomerService
         } else {
             $input['birthday'] = @Functions::yearMonthDay($input['birthday']);
         }
-        if (!empty($input['category_tips'])){
+        if (!empty($input['category_tips'])) {
             $input['category_tips'] = json_encode($input['category_tips']);
         }
         if (!empty($input['image'])) {
@@ -88,6 +91,9 @@ class CustomerService
 
     public function update($input, $id)
     {
+        if (isset($input['genitive_id']) && count($input['genitive_id'])) {
+            $input['genitive_id'] = json_encode($input['genitive_id']);
+        }
         $data = $this->data($input);
         $customer = $this->find($id);
         $customer->update($data);
@@ -120,7 +126,8 @@ class CustomerService
         return $customer;
     }
 
-    public function countWithStatus($input){
+    public function countWithStatus($input)
+    {
         return Customer::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
             $q->whereBetween('customers.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
         })->when(isset($input['branch_id']), function ($query) use ($input) {

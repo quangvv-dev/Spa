@@ -204,7 +204,7 @@
                                         data-placeholder="Chọn nhóm khách hàng">
                                     @foreach($categories as $item)
                                         <option
-                                            value="{{ $item->id }}" {{ isset($customer) && in_array($item->id, $categoryId) ? 'selected' : "" }}>{{ $item->name }}</option>
+                                            value="{{ $item->id }}" {{ isset($customer) && @in_array((int)$item->id, $categoryId) ? 'selected' : "" }}>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             @else
@@ -234,7 +234,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
                             {!! Form::label('genitive_id', 'Nhóm tính cách') !!}
-                            {!! Form::select('genitive_id', $genitives, @$customer->genitive_id, array('class' => 'form-control select2')) !!}
+                            {!! Form::select('genitive_id[]', $genitives,isset($customer->genitive)?? @$customer->genitive->pluck('id'), array('class' => 'form-control select2','multiple'=>'true')) !!}
                             <span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>
                         </div>
                     </div>

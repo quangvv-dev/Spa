@@ -227,7 +227,7 @@ class Customer extends Model
         return $data;
     }
 
-    public static function searchApi($param ,$user = null)
+    public static function searchApi($param, $user = null)
     {
         $data = self::latest();
         if (!empty($user) && $user->department_id == DepartmentConstant::TELESALES) {
@@ -294,11 +294,6 @@ class Customer extends Model
         return $this->belongsTo(User::class, 'mkt_id', 'id');
     }
 
-    public function genitive()
-    {
-        return $this->belongsTo(Genitive::class, 'genitive_id', 'id');
-    }
-
     public function carepage()
     {
         return $this->belongsTo(User::class, 'carepage_id', 'id');
@@ -341,6 +336,7 @@ class Customer extends Model
             ->select('payment_histories.price')->sum('payment_histories.price');
         return $this->wallet_histories->sum('gross_revenue') + $paymentHistories;
     }
+
     public function getSumAllTotalAttribute()
     {
         $paymentWallet = WalletHistory::select('order_price')->where('customer_id', $this->id)->sum('order_price');
@@ -384,6 +380,18 @@ class Customer extends Model
         return $text;
     }
 
+    public function getGenitiveAttribute()
+    {
+        if (is_numeric($this->genitive_id)) {
+            return Genitive::where('id', $this->genitive_id)->get();
+        } elseif (is_null($this->genitive_id)) {
+            return collect();
+        } else {
+            $list = json_decode($this->genitive_id);
+            return Genitive::whereIn('id', $list)->get();
+        }
+    }
+
     public function getGroupTipsAttribute()
     {
         $text = '';
@@ -393,8 +401,8 @@ class Customer extends Model
                 $category = Category::select('name')->whereIn('id', $categoryId)->pluck('name')->toArray();
                 $text = count($category) ? @implode($category, ',') : '';
             }
-        }catch (\Exception $exception){
-            $text ="";
+        } catch (\Exception $exception) {
+            $text = "";
         }
 
         return $text;
