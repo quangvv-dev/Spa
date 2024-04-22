@@ -103,6 +103,13 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('social_link') ? 'has-error' : '' }}">
+                            {!! Form::label('social_link', 'Facebook') !!}
+                            {!! Form::text('social_link', null, array('id' => 'social_link','class' => 'form-control')) !!}
+                            <span class="help-block">{{ $errors->first('social_link', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('description') ? 'has-error' : '' }}">
                             {!! Form::label('description', 'Mô tả') !!}
                             {!! Form::text('description', null, array('id' => 'description','class' => 'form-control')) !!}

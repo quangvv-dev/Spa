@@ -230,6 +230,11 @@
                         </a>
                         <a href="{{ route('customers.show', $customer->id) }}">{{ $customer->full_name }}</a>
                         <span class="noti-number noti-number-on ml5">{{ $customer->groupComments->count() }}</span>
+                        @if(!empty($customer->social_link))
+                            <a target="_blank" href="{{$customer->social_link}}">
+                                <img width="25" height="25" src="{{asset('assets/images/fb_logo.png')}}">
+                            </a>
+                        @endif
                         <p class="small-tip">({{$customer->account_code}})</p>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-phone="{{$customer->phone}}"

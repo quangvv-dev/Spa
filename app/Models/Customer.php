@@ -65,6 +65,7 @@ class Customer extends Model
         'five_elements',
         'interest',
         'job',
+        'social_link',
     ];
     public const grid_display = [
         0 => 'STT',
@@ -75,6 +76,7 @@ class Customer extends Model
         5 => 'Nhóm KH',
         6 => 'Trạng thái',
         7 => 'Người phụ trách',
+//        26 => 'Link MXH',
         8 => 'Mô tả',
 //        9 => 'T/G tác nghiệp',
 //        10 => 'Chuyển về TP',
