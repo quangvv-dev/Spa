@@ -732,28 +732,28 @@
                 });
             });
 
-            $(document).on('dblclick', '.genitive-db', function (e) {
-                let target = $(e.target).parent();
-                $(target).find('.genitive-db').empty();
-                let id = $(this).data('id');
-                let html = '';
-
-                $.ajax({
-                    url: "ajax/genitives/",
-                    method: "get",
-                    data: {id: id}
-                }).done(function (data) {
-                    html +=
-                        '<select class="genitive-result form-control" data-id="' + data.customer.id + '" name="status_id" style="font-size: 14px;">';
-                    data.data.forEach(function (item) {
-                        html +=
-                            '<option value="' + item.id + '" ' + (item.id === data.customer.genitive_id ? "selected" : "") + '>' + item.name + '</option>';
-                    });
-
-                    html += '</select>';
-                    $(target).find(".genitive-db").append(html);
-                });
-            });
+            // $(document).on('dblclick', '.genitive-db', function (e) {
+            //     let target = $(e.target).parent();
+            //     $(target).find('.genitive-db').empty();
+            //     let id = $(this).data('id');
+            //     let html = '';
+            //
+            //     $.ajax({
+            //         url: "ajax/genitives/",
+            //         method: "get",
+            //         data: {id: id}
+            //     }).done(function (data) {
+            //         html +=
+            //             '<select class="genitive-result form-control" data-id="' + data.customer.id + '" name="status_id" style="font-size: 14px;">';
+            //         data.data.forEach(function (item) {
+            //             html +=
+            //                 '<option value="' + item.id + '" ' + (item.id === data.customer.genitive_id ? "selected" : "") + '>' + item.name + '</option>';
+            //         });
+            //
+            //         html += '</select>';
+            //         $(target).find(".genitive-db").append(html);
+            //     });
+            // });
 
             $(document).on('change', '.status-result', function (e) {
                 let target = $(e.target).parent();
