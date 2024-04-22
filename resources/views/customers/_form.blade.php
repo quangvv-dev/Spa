@@ -234,7 +234,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
                             {!! Form::label('genitive_id', 'Nhóm tính cách') !!}
-                            {!! Form::select('genitive_id[]', $genitives,isset($customer->genitive)?? @$customer->genitive->pluck('id'), array('class' => 'form-control select2','multiple'=>'true')) !!}
+                            {!! Form::select('genitive_id[]', $genitives,isset($customer->genitive)?? @$customer->genitive->pluck('id')->toArray(), array('class' => 'form-control select2','multiple'=>'true')) !!}
                             <span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>
                         </div>
                     </div>
