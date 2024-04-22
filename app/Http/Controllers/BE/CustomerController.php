@@ -406,8 +406,9 @@ class CustomerController extends Controller
         $customer->birthday = Functions::dayMonthYear($customer->birthday);
         $categories = Category::get();
         $categoryId = $customer->categories()->get()->pluck('id')->toArray();
+        $genitiveId = $customer->genitive->pluck('id')->toArray();
         $title = 'Sửa khách hàng';
-        return view('customers._form', compact('customer', 'title', 'categories', 'categoryId'));
+        return view('customers._form', compact('customer', 'title', 'categories', 'categoryId','genitiveId'));
     }
 
     /**

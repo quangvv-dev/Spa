@@ -125,7 +125,7 @@
                     </div>
                     @if(empty($checkRole))
                         <div class="col-xs-12 col-md-12">
-                            <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
+                            <div class="form-group required {{ $errors->has('branch_id') ? 'has-error' : '' }}">
                                 {!! Form::label('branch_id', 'Chi nhánh',['class'=>'required']) !!}
                                 {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2 branch', 'placeholder' => 'Tất cả chi nhánh')) !!}
                                 <span class="help-block">{{ $errors->first('branch_id', ':message') }}</span>
@@ -234,8 +234,17 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('genitive_id') ? 'has-error' : '' }}">
                             {!! Form::label('genitive_id', 'Nhóm tính cách') !!}
-                            {!! Form::select('genitive_id[]', $genitives,isset($customer->genitive)?? @$customer->genitive->pluck('id')->toArray(), array('class' => 'form-control select2','multiple'=>'true')) !!}
-                            <span class="help-block">{{ $errors->first('genitive_id', ':message') }}</span>
+                            @if(isset($customer))
+                                <select class="form-control select2" name="genitive_id[]" multiple="multiple"
+                                data-placeholder="Chọn nhóm tính cách">
+                                @foreach($genitives as $key => $item)
+                                    <option
+                                        value="{{ $key }}" {{ (isset($customer) && in_array($key, $genitiveId)) ? 'selected' : "" }}>{{ $item }}</option>
+                                    @endforeach
+                                    </select>
+                            @else
+                                {!! Form::select('genitive_id[]', $genitives,null, array('class' => 'form-control select2','multiple'=>'true')) !!}
+                            @endif
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
