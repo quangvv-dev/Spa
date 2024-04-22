@@ -329,8 +329,8 @@ class AuthController extends BaseApiController
         return response()->json([
             'code'     => ResponseStatusCode::OK,
             'messages' => 'SUCCESS',
-            //            'data' => true,//hiển thị app giả
-            'data'     => false, //hiển thị app thống kê
+                        'data' => true,//hiển thị app giả
+//            'data'     => false, //hiển thị app thống kê
         ]);
     }
 
