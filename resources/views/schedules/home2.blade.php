@@ -299,7 +299,7 @@
                 let status = $('#update_status').val();
                 let category_id = $('#update_category').val();
                 let note = $('#update_note').val();
-                let type = $('#type').val();
+                let type = $('#update_type').val();
 
 
                 $.ajax({
