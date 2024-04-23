@@ -36,13 +36,15 @@
 
 </style>
 @section('content')
+
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header row">
-                {{--<div class="col-md-6">--}}
-                @foreach($color as $k => $item)
-                    <div data-id="{{$k}}" class="btn white account_relation position"
-                         style="background: @switch($k)
+            <form>
+                <div class="card-header row">
+                    {{--<div class="col-md-6">--}}
+                    @foreach($color as $k => $item)
+                        <div data-id="{{$k}}" class="btn white account_relation position"
+                             style="background: @switch($k)
                          @case(1)
                          {{'#63cff9'}}
                          @break
@@ -62,31 +64,32 @@
                          {{'#f36a26'}}
                          @break
                          @endswitch;text-align: left">
-                        <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
-                        <label>{{$item}}</label>
+                            <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
+                            <label>{{$item}}</label>
+                        </div>
+                    @endforeach
+                    {{--                <div class="col">--}}
+                    {{--                    {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}--}}
+                    {{--                </div>--}}
+                    <div class="col">
+                        {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
                     </div>
-                @endforeach
-{{--                <div class="col">--}}
-{{--                    {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}--}}
-{{--                </div>--}}
-                <div class="col">
-                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
-                </div>
-                <div class="col">
-                    {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
-                </div>
+                    <div class="col">
+                        {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
+                    </div>
 
-            </div>
-            <input type="hidden" id="status_val">
+                </div>
+                <input type="hidden" id="status_val">
+            </form>
             <div class="side-app">
                 @include('schedules.ajax2')
             </div>
@@ -97,6 +100,9 @@
     <script>
         var hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
         $(document).ready(function () {
+            $('form').submit(function(event) {
+                event.preventDefault(); // Ngăn chặn gửi form
+            });
             $('.page-title').hide();
             $('.breadcrumb').hide();
 
