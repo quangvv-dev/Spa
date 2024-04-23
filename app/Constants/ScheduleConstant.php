@@ -16,4 +16,5 @@ class ScheduleConstant
     const QUA_HAN = 6;
     const LICH_MOI = 1;
     const TAI_KHAM = 2;
+    const LIEU_TRINH = 3;
 }

@@ -16,6 +16,7 @@ class Schedule extends Model
     const SCHEDULE_TYPE = [
         ScheduleConstant::LICH_MOI => 'Lịch mới',
         ScheduleConstant::TAI_KHAM => 'Tái khám',
+        ScheduleConstant::LIEU_TRINH => 'Liệu trình',
     ];
     const  SCHEDULE_STATUS = [
         [
