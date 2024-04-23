@@ -72,7 +72,7 @@ class CustomerController extends Controller
 
         $status = Status::where('type', StatusCode::RELATIONSHIP)->select('name', 'id')->pluck('name',
             'id')->toArray();//mối quan hệ
-        $group = Category::pluck('name', 'id')->toArray();//nhóm KH
+        $group = Category::where('type',StatusCode::SERVICE)->pluck('name', 'id')->toArray();//nhóm KH
         $source = Status::where('type', StatusCode::SOURCE_CUSTOMER)->select('name', 'id')->pluck('name',
             'id')->toArray();// nguồn KH
         $branchs = Branch::search()->pluck('name', 'id');// chi nhánh

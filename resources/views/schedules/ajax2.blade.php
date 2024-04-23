@@ -71,7 +71,7 @@
                                     @foreach($docs as $item)
                                 {
                                     id: '{{$item->id}}',
-                                    title: "{!! 'KH: '.@$item->customer->full_name .', SĐT: '.(auth()->user()->permission('phone.open')? @$item->customer->phone :@str_limit($item->customer->phone,7,'xxx')).' Lưu ý: '.$item->note !!}",
+                                    title: "{!! @$item->category->name.', '.@$item->customer->full_name .', SĐT: '.(auth()->user()->permission('phone.open')? @$item->customer->phone :@str_limit($item->customer->phone,7,'xxx')).' Lưu ý: '.$item->note !!}",
                                     note: "{{$item->note}}",
                                     description: "{{$item->note}}",
                                     full_name: '{{@$item->customer->full_name}}',
@@ -80,6 +80,7 @@
                                     time_from: '{{$item->time_from}}',
                                     time_to: '{{$item->time_to}}',
                                     category_id: '{{@$item->category_id}}',
+                                    type: '{{@$item->type}}',
                                     date: '{{$item->date_schedule}}',
                                     status: '{{$item->status}}',
                                     branch_id: '{{$item->branch_id}}',
@@ -117,6 +118,8 @@
                                 $('#update_time2').val(info.time_to).change();
                                 $('#update_status').val(info.status).change();
                                 $('#update_branch').val(info.branch_id).change();
+                                $('#update_category').val(info.category_id);
+                                $('#update_type').val(info.type);
                                 $('#update_note').val(info.note).change();
                                 $('#full_name').val(info.full_name).change();
                                 $('#phone').val(hidden_phone == true ? info.phone : info.phone.slice(0, 7) + 'xxx').change();
@@ -192,13 +195,21 @@
                                             {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch',6 => 'Quá hạn'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                                         @endif
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        {!! Form::label('type', 'Loại lịch', array('class' => ' required')) !!}
+                                        {!! Form::select('type',\App\Models\Schedule::SCHEDULE_TYPE, null, array('class' => 'form-control','id'=>'update_type','required'=>true)) !!}
+                                    </div>
+                                    <div class="col-md-4">
                                         {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
                                         {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control','id'=>'update_branch'))!!}
                                     </div>
-                                    <div class="col-md-6 col-xs-12">
+                                    <div class="col-md-4 col-xs-12">
                                         {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
                                         {!! Form::select('person_action',@$staff,null, array('id'=>'action','class' => 'form-control','required'=>true,'disabled'=>true)) !!}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                                        {!! Form::select('category_id',$group, null, array('class' => 'form-control','id'=>'update_category'))!!}
                                     </div>
                                     <div class="col-md-12 ">
                                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}

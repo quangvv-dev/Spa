@@ -12,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     protected $guarded = ['id'];
+
+    const SCHEDULE_TYPE = [
+        ScheduleConstant::LICH_MOI => 'Lịch mới',
+        ScheduleConstant::TAI_KHAM => 'Tái khám',
+    ];
+
     const  SCHEDULE_STATUS = [
         [
             'id' => ScheduleConstant::DAT_LICH,
@@ -42,6 +48,10 @@ class Schedule extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'creator_id', 'id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
     public function staff()
