@@ -62,6 +62,7 @@ return [
     'order.orders-destroy'     => "Đơn hàng đã bị xoá",
     'teams'                    => "QL đội nhóm",
     "personal.index"           => "QL hồ sơ nhân sự",
+    "phone.open"               => "Xem SĐT khách hàng bị ẩn",
     // quyền tìm kiếm
     'filter.team'              => "Tìm kiếm theo team (sale/mkt)",
     'call-center.listen'       => "Nghe/Tải ghi âm",

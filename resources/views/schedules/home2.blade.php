@@ -95,6 +95,7 @@
 @endsection
 @section('_script')
     <script>
+        var hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
         $(document).ready(function () {
             $('.page-title').hide();
             $('.breadcrumb').hide();

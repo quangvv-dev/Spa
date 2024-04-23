@@ -77,6 +77,7 @@ class RoleController extends Controller
         'carepage.index',
         'order.orders-destroy',
         'personal.index',
+        'phone.open',
     ];
 
     protected $filter = [

@@ -56,7 +56,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title">{{$title}}</h3>
                 <div class="col">
                     <a {{$roleGlobal->permission('orders.import')?:"style=display:none"}}
                        title="Upload Data" style="position: absolute;right: 0%" href="#" data-toggle="modal"

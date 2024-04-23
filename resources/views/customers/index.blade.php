@@ -163,23 +163,14 @@
                     url: "{{ Url('/group_comments/') }}" + '/' + id,
                     method: "get",
                 }).done(function (data) {
-                    if(data.customer.page_id && data.customer.FB_ID && data.customer.fanpage){
-                        check_show_button = true;
-                        $('#view_chat .chat-page_id').val(data.customer.page_id);
-                        $('#view_chat .chat-sender_id').val(data.customer.FB_ID);
-                        $('#view_chat .chat-token').val(data.customer.fanpage.access_token);
-                    } else {
-                        check_show_button = false;
-                        $('#view_chat .chat-page_id').val('');
-                        $('#view_chat .chat-sender_id').val('');
-                        $('#view_chat .chat-token').val('');
-                    }
+                    check_show_button = true;
                     let category = '';
 
                     data.customer.categories.forEach(function (item) {
                         category += item.name + `, `;
                     });
-
+                    let hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
+                    let phoneNumber = hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7)+'xxx';
                     let html = '';
                     html += `<div class="row" style="padding-bottom: 10px;">
                     <div class="chat-flash col-md-12">
@@ -195,7 +186,7 @@
                             <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue" data-contact-id="5678"
                                                           rel="tooltip" data-original-title="Click để gọi"
                                                           data-placement="right" data-flag="1"
-                                                          data-type="crm"> ` + data.customer.phone + `</a></p>
+                                                          data-type="crm"> ` + phoneNumber + `</a></p>
                             <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>` + category + `</p>
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
@@ -229,7 +220,7 @@
                         <button class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
                     </div>
                 </div>
-                @include('message_fb.index')
+                @include('message_zalo.index')
                 <div class="chat-ajax" >
 
                         </div>`;
