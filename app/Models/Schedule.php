@@ -188,6 +188,8 @@ class Schedule extends Model
         }
         $docs->when(isset($request['branch_id']), function ($q) use ($request) {
             $q->where('branch_id', $request['branch_id']);
+        })->when(isset($request['type']), function ($q) use ($request) {
+            $q->where('type', $request['type']);
         })->when(isset($request['marketing']), function ($q) use ($request) {
             $q->whereHas('customer', function ($q) use ($request) {
                 $q->where('mkt_id', $request['marketing']);
