@@ -29,6 +29,10 @@
                         {!! Form::text('time_to', null, array('class' => 'form-control','required'=>true)) !!}
                     </div>
                     <div class="col-md-6">
+                        {!! Form::label('type', 'Loại lịch', array('class' => ' required')) !!}
+                        {!! Form::select('type',\App\Models\Schedule::SCHEDULE_TYPE, null, array('class' => 'form-control select2','required'=>true)) !!}
+                    </div>
+                    <div class="col-md-6">
                         {!! Form::label('status', 'Trạng thái hẹn lịch', array('class' => ' required')) !!}
                         {!! Form::select('status',array(2 => 'Đặt lịch'), null, array('class' => 'form-control select2','required'=>true)) !!}
                     </div>
@@ -36,10 +40,10 @@
                         {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}
                         {!! Form::select('branch_id',$branchs, null, array('class' => 'form-control select2','required'=>true)) !!}
                     </div>
-                    {{--<div class="col-md-12">--}}
-                        {{--{!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control select2'))!!}--}}
-                    {{--</div>--}}
+                    <div class="col-md-12">
+                        {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                        {!! Form::select('category_id',$group, null, array('class' => 'form-control select2'))!!}
+                    </div>
                     <div class="col-md-12 ">
                         {!! Form::label('note', 'Ghi chú', array('class' => ' required')) !!}
                         {!! Form::textArea('note', null, array('class' => 'form-control','rows'=>5)) !!}
@@ -60,7 +64,6 @@
 
 <div class="modal fade" id="updateModal" role="dialog">
     <div class="modal-dialog modal-md">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <h4 style="font-weight: 900;color: #0fa2e8;">Cập nhật lịch hẹn</h4>
@@ -92,13 +95,17 @@
                             {!! Form::select('status',array(2 => 'Đặt lịch',3 => 'Đến/Mua',4 => 'Đến/Chưa mua',5 => 'Hủy lịch',6 => 'Quá hạn'), null, array('class' => 'form-control','id'=>'update_status')) !!}
                         @endif
                     </div>
-                    {{--<div class="col-md-6 col-xs-12">--}}
-                        {{--{!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}--}}
-                        {{--{!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control'))!!}--}}
-                    {{--</div>--}}
+                    <div class="col-md-6">
+                        {!! Form::label('type', 'Loại lịch', array('class' => ' required')) !!}
+                        {!! Form::select('type',\App\Models\Schedule::SCHEDULE_TYPE, null, array('class' => 'form-control select2','id'=>'update_type','required'=>true)) !!}
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        {!! Form::label('category_id', 'Nhóm dịch vụ', array('class' => ' required')) !!}
+                        {!! Form::select('category_id',$group, @$item->category_id, array('class' => 'form-control select2','id'=>'update_category'))!!}
+                    </div>
                     <div class="col-md-6 col-xs-12">
                         {!! Form::label('person_action', 'Người tạo', array('class' => ' required')) !!}
-                        {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true,'disabled'=>true)) !!}
+                        {!! Form::select('person_action',@$staff, @$item->creator_id, array('id'=>'update_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','disabled'=>true)) !!}
                     </div>
                     <div class="col-md-6">
                         {!! Form::label('branch_id', 'Chi nhánh', array('class' => ' required')) !!}

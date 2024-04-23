@@ -69,8 +69,11 @@
 {{--                <div class="col">--}}
 {{--                    {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}--}}
 {{--                </div>--}}
+{{--                <div class="col">--}}
+{{--                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}--}}
+{{--                </div>--}}
                 <div class="col">
-                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                    {!! Form::select('status', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
                 </div>
                 <div class="col">
                     {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}

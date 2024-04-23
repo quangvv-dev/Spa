@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     protected $guarded = ['id'];
+
+    const SCHEDULE_TYPE = [
+        ScheduleConstant::LICH_MOI => 'Lịch mới',
+        ScheduleConstant::TAI_KHAM => 'Tái khám',
+    ];
     const  SCHEDULE_STATUS = [
         [
             'id' => ScheduleConstant::DAT_LICH,

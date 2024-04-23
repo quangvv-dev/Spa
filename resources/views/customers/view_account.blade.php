@@ -1045,6 +1045,8 @@
                     $('#update_time2').val(data['time_to']);
                     $('#update_status').val(data['status']);
                     $('#update_note').val(data['note']);
+                    $('#update_type').val(data['type']).change();
+                    $('#update_category').val(data['category_id']).change();
                     $('.branch').val(data['branch_id']).change();
                     $('#update_action').val(data['person_action']).change();
 
