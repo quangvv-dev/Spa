@@ -319,7 +319,7 @@
                     $('#modal_' + id).modal('toggle');
                     var b = [];
                     var col = chooseColor(data.status);
-                    let typeText = value.type == 1?'Lịch mới':(value.type == 2?'Tái khám':'Liệu trình');
+                    let typeText = data.type == 1?'Lịch mới':(data.type == 2?'Tái khám':'Liệu trình');
                     b.push({
                         id: data.id,
                         title: typeText+': '+data.category.name+', ' + data.customer.full_name + ', SĐT: ' + (hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + data.note,
