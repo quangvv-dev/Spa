@@ -73,7 +73,7 @@
 {{--                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}--}}
 {{--                </div>--}}
                 <div class="col">
-                    {!! Form::select('status', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
+                    {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
                 </div>
                 <div class="col">
                     {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
@@ -172,7 +172,9 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({search: arr, status: status, date: date, user: user, customer: customer});
+                let type = $('#type').val();
+
+                searchAjax({search: arr, status: status, date: date, user: user, customer: customer,type:type});
             });
             $(document).on('change', '#search', function () {
                 $('.spin').show();
@@ -181,11 +183,14 @@
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
+                let type = $('#type').val();
+
                 searchAjax({
                     date: val,
                     branch_id: branch_id,
                     status: status,
                     search: arr,
+                    type: type,
                     user: user,
                     customer: customer
                 });
@@ -194,6 +199,7 @@
                 $('.spin').show();
                 var val = $(this).val();
                 let date = $('#search').val();
+                let type = $('#type').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
@@ -202,6 +208,26 @@
                     status: val,
                     branch_id: branch_id,
                     date: date,
+                    type: type,
+                    search: arr,
+                    user: user,
+                    customer: customer
+                });
+            });
+            $(document).on('change', '#type', function () {
+                $('.spin').show();
+                var val = $(this).val();
+                let date = $('#search').val();
+                let status = $('#status').val();
+                let user = $('#person_action').val();
+                let customer = $('#customer_plus').val();
+                let branch_id = $('#branch_id').val();
+
+                searchAjax({
+                    type: val,
+                    branch_id: branch_id,
+                    date: date,
+                    status: status,
                     search: arr,
                     user: user,
                     customer: customer
@@ -213,9 +239,11 @@
                 let date = $('#search').val();
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
+                let type = $('#type').val();
 
                 searchAjax({
                     user: val,
+                    type: type,
                     branch_id: branch_id,
                     status: status,
                     date: date,
@@ -230,7 +258,8 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let branch_id = $('#branch_id').val();
-                searchAjax({customer: val, branch_id: branch_id, status: status, user: user, date: date, search: arr});
+                let type = $('#type').val();
+                searchAjax({customer: val, branch_id: branch_id, status: status, user: user, date: date, search: arr,type:type});
 
             });
 
@@ -240,10 +269,13 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
+                let type = $('#type').val();
+
                 searchAjax({
                     customer: customer,
                     branch_id: branch_id,
                     status: status,
+                    type: type,
                     user: user,
                     date: date,
                     search: arr
@@ -266,6 +298,8 @@
                 let status = $('#update_status').val();
                 let category_id = $('#update_category').val();
                 let note = $('#update_note').val();
+                let type = $('#type').val();
+
 
                 $.ajax({
                     url: "/schedules/" + id,
@@ -278,6 +312,7 @@
                         status: status,
                         category_id: category_id,
                         note: note,
+                        type: type,
                     }
                 }).done(function (data) {
                     $('#modal_' + id).modal('toggle');
@@ -298,6 +333,7 @@
                         time_from: data.time_from,
                         time_to: data.time_to,
                         category_id: data.category_id,
+                        type: data.type,
                         date: formatYMDtoDMY(data.date),
                         status: data.status,
                     })
@@ -320,8 +356,10 @@
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
                 let date = $('#search').val();
+                let type = $('#type').val();
 
                 searchAjax({
+                    type: type,
                     customer: customer,
                     branch_id: branch_id,
                     status: status,
