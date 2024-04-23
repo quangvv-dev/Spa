@@ -216,6 +216,7 @@ class ScheduleController extends Controller
 
     public function homePage(Request $request)
     {
+        $group = Category::where('type',StatusCode::SERVICE)->pluck('name', 'id')->toArray();
         $status = Status::select('id', 'name')->where('type', StatusCode::SOURCE_CUSTOMER)->pluck('name', 'id')->toArray();
         $now = Carbon::now()->format('Y-m-d');
         if (!empty(Auth::user()->branch_id)) {
