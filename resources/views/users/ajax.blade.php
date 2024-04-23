@@ -20,11 +20,11 @@
             <th class="text-white text-center">Mã chấm công</th>
             <th class="text-white text-center">Họ tên</th>
 {{--            <th class="text-white text-center">Tên export</th>--}}
-            <th class="text-white text-center">Số điện thoại</th>
             <th class="text-white text-center">Cụm</th>
             <th class="text-white text-center">Phòng ban</th>
             <th class="text-white text-center">Quyền</th>
             <th class="text-white text-center">Chi nhánh</th>
+            <th class="text-white text-center">Đăng nhập</th>
             <th class="text-white text-center">Thao tác</th>
         </tr>
         </thead>
@@ -34,13 +34,22 @@
                 <tr>
                     <th scope="row">{{ $user->code }}</th>
                     <td class="text-center">{{ $user->approval_code }}</td>
-                    <td class="text-center"><a href="{{route('users.edit',$user->id)}}">{{ $user->full_name }}</a></td>
+                    <td class="text-center"><a href="{{route('users.edit',$user->id)}}">{{ $user->full_name }}</a>
+                    <span class="small-tip">({{ $user->phone }})</span>
+                    </td>
 {{--                    <td class="text-center">{{ $user->name_display }}</td>--}}
-                    <td class="text-center">{{ $user->phone }}</td>
+{{--                    <td class="text-center">{{ $user->phone }}</td>--}}
                     <td class="text-center">{{ @$user->location->name }}</td>
                     <td class="text-center">{{ @$user->department->name}}</td>
                     <td class="text-center">{{ $user->role_text }}</td>
                     <td class="text-center">{{ isset($user->branch)?$user->branch->name:'Tất cả chi nhánh'}}</td>
+                    <td class="text-center">
+                        <select name="pc_name" id="" class="form-control">
+                            <option value="">Tất cả</option>
+                            <option value="1">Đăng nhập 1 nơi</option>
+                            <option value="2">Đăng nhập nhiều nơi</option>
+                        </select>
+                    </td>
                     <td class="text-center">
                         <label class="switch">
                             <input data-id="{{$user->id}}" name="checkbox" class="check" type="checkbox" {{$user->active==\App\Constants\StatusCode::ON?'checked':''}}>
