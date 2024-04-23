@@ -259,7 +259,7 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let branch_id = $('#branch_id').val();
-                let type = $('#type').val();
+                let type = $('#update_type').val();
                 searchAjax({customer: val, branch_id: branch_id, status: status, user: user, date: date, search: arr,type:type});
 
             });
@@ -270,7 +270,7 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                let type = $('#type').val();
+                let type = $('#update_type').val();
 
                 searchAjax({
                     customer: customer,
@@ -299,7 +299,7 @@
                 let status = $('#update_status').val();
                 let category_id = $('#update_category').val();
                 let note = $('#update_note').val();
-                let type = $('#type').val();
+                let type = $('#update_type').val();
 
 
                 $.ajax({
@@ -358,7 +358,7 @@
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
                 let date = $('#search').val();
-                let type = $('#type').val();
+                let type = $('#update_type').val();
 
                 searchAjax({
                     type: type,
