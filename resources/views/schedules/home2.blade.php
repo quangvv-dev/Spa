@@ -61,7 +61,7 @@
                          @case(6)
                          {{'#f36a26'}}
                          @break
-                         @endswitch;margin-left: 3px;text-align: left">
+                         @endswitch;text-align: left">
                         <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
                         <label>{{$item}}</label>
                     </div>
@@ -69,9 +69,9 @@
 {{--                <div class="col">--}}
 {{--                    {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}--}}
 {{--                </div>--}}
-{{--                <div class="col">--}}
-{{--                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}--}}
-{{--                </div>--}}
+                <div class="col">
+                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
+                </div>
                 <div class="col">
                     {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
                 </div>
