@@ -319,9 +319,10 @@
                     $('#modal_' + id).modal('toggle');
                     var b = [];
                     var col = chooseColor(data.status);
+                    let typeText = value.type == 1?'Lịch mới':(value.type == 2?'Tái khám':'Liệu trình');
                     b.push({
                         id: data.id,
-                        title: 'KH: ' + data.customer.full_name + ', SĐT: ' + data.customer.phone + ' Lưu ý: ' + data.note,
+                        title: typeText+': '+data.category.name+', ' + data.customer.full_name + ', SĐT: ' + (hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + data.note,
                         description: data.note,
                         start: data.date + 'T' + data.time_from + ':00',
                         end: data.date + 'T' + data.time_to + ':00',
