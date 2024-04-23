@@ -243,7 +243,7 @@ class ScheduleController extends Controller
         if ($request->ajax()) {
             return $docs;
         }
-        return view('schedules.home2', compact('status', 'title', 'docs', 'now', 'user', 'customer'));
+        return view('schedules.home2', compact('status', 'title', 'docs', 'now', 'user', 'customer','group'));
     }
 
     /**
