@@ -49,6 +49,10 @@ class Schedule extends Model
     {
         return $this->belongsTo(User::class, 'creator_id', 'id');
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function staff()
     {

@@ -228,7 +228,7 @@ class ScheduleController extends Controller
         }
         $params = $request->all();
 
-        $docs = Schedule::search($params)->has('customer')->with('customer');
+        $docs = Schedule::search($params)->has('customer')->with('customer','category');
 
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
