@@ -35,6 +35,7 @@
                     <th scope="row">{{ $user->code }}</th>
                     <td class="text-center">{{ $user->approval_code }}</td>
                     <td class="text-center"><a href="{{route('users.edit',$user->id)}}">{{ $user->full_name }}</a>
+                        <br>
                     <span class="small-tip">({{ $user->phone }})</span>
                     </td>
 {{--                    <td class="text-center">{{ $user->name_display }}</td>--}}
@@ -44,10 +45,10 @@
                     <td class="text-center">{{ $user->role_text }}</td>
                     <td class="text-center">{{ isset($user->branch)?$user->branch->name:'Tất cả chi nhánh'}}</td>
                     <td class="text-center">
-                        <select name="pc_name" id="" class="form-control">
+                        <select data-id="{{$user->id}}"  name="pc_name" class="form-control pc-name">
                             <option value="">Tất cả</option>
-                            <option value="1">Đăng nhập 1 nơi</option>
-                            <option value="2">Đăng nhập nhiều nơi</option>
+                            <option value="1">Đăng nhập 1 thiết bị</option>
+                            <option value="2" {{$user->pc_name !== null && $user->pc_name == 0 ?'selected':""}}>Đăng nhập nhiều thiết bị</option>
                         </select>
                     </td>
                     <td class="text-center">

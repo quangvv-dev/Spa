@@ -32,12 +32,36 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if ($user->active == StatusCode::ON) {
+            $user = Auth::user();
+            $value = isset($_COOKIE['user']) ? $_COOKIE['user'] : '';
+            if ($user->pc_name == null) {
+                if (!empty($value)) {
+                    $user->update(['pc_name' => $value]);
+
+                } else {
+                    $value_has = $user->id . rand(10, 999);
+                    setcookie("user", $value_has, 2147483647);
+                    $user->update(['pc_name' => $value_has]);
+                }
+            } elseif ($user->pc_name && $user->pc_name != $value && $user->pc_name != '0') {
+                $this->guard()->logout();
+                $request->session()->invalidate();
+                return back()->with('error', 'Không phải thiết bị mà bạn đăng ký !!!');
+            }
+            Auth::logoutOtherDevices($request->password);
             return redirect('/customers');
         } else {
             Auth::logout();
             return back()->with('danger', 'Tài khoản bị khóa vui lòng liên hệ Admin!');
         }
     }
+
+//    public function logout(Request $request)
+//    {
+//        $this->guard()->logout();
+//        $request->session()->invalidate();
+//        return redirect('/login');
+//    }
 
     /**
      * Create a new controller instance.

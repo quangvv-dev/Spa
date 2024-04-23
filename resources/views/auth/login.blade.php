@@ -52,6 +52,11 @@
                             {{ $errors->first() }}
                         </div>
                     @endif
+                    @if(Session::has('error'))
+                        <div class="alert alert-danger" role="alert" style="font-size: 14px">
+                            {{ Session::get('error') }}
+                        </div>
+                    @endif
                     <form class="card" method="POST" action="{{ url('login') }}">
                         @csrf
                         <div class="card-body p-6">

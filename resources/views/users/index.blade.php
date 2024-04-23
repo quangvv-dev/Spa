@@ -9,6 +9,7 @@
             position: absolute;
             z-index: -1;
         }
+
         .inputfile + label {
             cursor: pointer;
         }
@@ -40,15 +41,16 @@
                         </select>
                     </div>
                     @if(empty(\Illuminate\Support\Facades\Auth::user()->branch_id))
-                    <div class="col-xs-12 col-md-2">
-                        <select id="branch" name="branch_id" class="form-control">
-                            <option value="">Tất cả chi nhánh</option>
-                            @forelse($branchs as $k => $item)
-                                <option {{@$input['department_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>
-                            @empty
-                            @endforelse
-                        </select>
-                    </div>
+                        <div class="col-xs-12 col-md-2">
+                            <select id="branch" name="branch_id" class="form-control">
+                                <option value="">Tất cả chi nhánh</option>
+                                @forelse($branchs as $k => $item)
+                                    <option
+                                        {{@$input['department_id']==$k?'selected':''}} value="{{$k}}">{{$item}}</option>
+                                @empty
+                                @endforelse
+                            </select>
+                        </div>
                         <div class="col-xs-12 col-md-2">
                             <select id="active" name="active" class="form-control">
                                 <option value="">Tất cả tài khoản</option>
@@ -79,9 +81,25 @@
             $('#page').val(pages);
             $('#gridForm').submit();
         });
+
+        $(document).on('change', '.pc-name', function () {
+            let value = $(this).val();
+            let id = $(this).data('id');
+            $.ajax({
+                url:'/reset-login/'+id,
+                method:'POST',
+                data:{
+                    type:value
+                },
+                success:function(data){
+                    if(data){
+                        alertify.success('Cập nhật thành công !');
+                    }
+                }
+            })
+        });
         $(document).on('change', '.check', function () {
             let value = this.checked ? 1 : 0;
-            console.log(value);
             $.ajax({
                 url: "/ajax/active-user/" + $(this).data('id'),
                 type: 'POST',
@@ -93,22 +111,20 @@
                 alertify.success('Cập nhật tk thành công !');
             });
         })
-        var inputs = document.querySelectorAll( '.inputfile' );
-        Array.prototype.forEach.call( inputs, function( input )
-        {
-            var label	 = input.nextElementSibling,
+        var inputs = document.querySelectorAll('.inputfile');
+        Array.prototype.forEach.call(inputs, function (input) {
+            var label = input.nextElementSibling,
                 labelVal = label.innerHTML;
 
-            input.addEventListener( 'change', function( e )
-            {
+            input.addEventListener('change', function (e) {
                 var fileName = '';
-                if( this.files && this.files.length > 1 )
-                    fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+                if (this.files && this.files.length > 1)
+                    fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
                 else
-                    fileName = e.target.value.split( '\\' ).pop();
+                    fileName = e.target.value.split('\\').pop();
 
-                if( fileName )
-                    label.querySelector( 'span' ).innerHTML = fileName;
+                if (fileName)
+                    label.querySelector('span').innerHTML = fileName;
                 else
                     label.innerHTML = labelVal;
             });

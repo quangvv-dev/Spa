@@ -73,6 +73,17 @@ class UserController extends Controller
         return view('users.index', compact('department', 'users', 'statistics'));
     }
 
+    public function resetLogin(Request $request, User $user)
+    {
+        if ($request->type == 2) {
+            $pc_name = 0;
+        } else {
+            $pc_name = NULL;
+        }
+        $user->update(['pc_name' => $pc_name]);
+        return 1;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

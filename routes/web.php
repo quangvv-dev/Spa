@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::resource('products', 'ProductController');
     Route::resource('combos', 'CombosController');
     Route::resource('users', 'UserController');
+    Route::post('reset-login/{user}', 'UserController@resetLogin');
     Route::resource('roles', 'RoleController');
     Route::resource('teams', 'TeamController');
     Route::resource('tips', 'PaymentWallet\TipController');
