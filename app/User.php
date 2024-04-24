@@ -58,6 +58,9 @@ class User extends Authenticatable
         'pc_name'
     ];
 
+    public const LOCAL_LOGIN = 1;
+    public const GLOBAL_LOGIN = 2;
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -90,6 +93,14 @@ class User extends Authenticatable
             $q->whereIn('branch_id', $param['group_branch']);
         })->when(isset($param['active']), function ($q) use ($param) {
             $q->where('active', $param['active']);
+        })->when(isset($param['pc_name']), function ($q) use ($param) {
+            if ($param['pc_name'] == self::LOCAL_LOGIN) {
+                $q->where(function ($query) {
+                    $query->where('pc_name', '<>', 0)->orWhereNull('pc_name');
+                });
+            } else {
+                $q->where('pc_name', 0);
+            }
         })
             ->latest('id');
 

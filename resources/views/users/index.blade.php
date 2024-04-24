@@ -58,6 +58,15 @@
                                 <option value="0">Đã khóa</option>
                             </select>
                         </div>
+
+                        <div class="col-xs-12 col-md-2">
+                            <select name="pc_name" class="form-control">
+                                <option value="">Tất cả</option>
+                                <option value="1">Đăng nhập 1 thiết bị</option>
+                                <option value="2">Đăng nhập nhiều thiết bị</option>
+                            </select>
+                        </div>
+
                     @endif
                     <input type="hidden" name="page" id="page">
                     <div class="col-lg-4 col-md-4">
@@ -86,13 +95,13 @@
             let value = $(this).val();
             let id = $(this).data('id');
             $.ajax({
-                url:'/reset-login/'+id,
-                method:'POST',
-                data:{
-                    type:value
+                url: '/reset-login/' + id,
+                method: 'POST',
+                data: {
+                    type: value
                 },
-                success:function(data){
-                    if(data){
+                success: function (data) {
+                    if (data) {
                         alertify.success('Cập nhật thành công !');
                     }
                 }
