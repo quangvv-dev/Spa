@@ -52,6 +52,11 @@ class CustomerObserver
 
     public function updated(Customer $customer)
     {
+        if (empty($customer->account_code)) {
+            $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
+            $customer->account_code = 'KH' . $customer_id;
+            $customer->save();
+        }
         $changedAttributes = $customer->getDirty();
         $oldData = $customer->getOriginal();
         // Kiểm tra sự thay đổi của các trường khác
