@@ -46,7 +46,7 @@
                     <td class="text-center">{{ isset($user->branch)?$user->branch->name:'Tất cả chi nhánh'}}</td>
                     <td class="text-center">
                         <select data-id="{{$user->id}}"  name="pc_name" class="form-control pc-name">
-                            <option value="">Tất cả</option>
+                            <option value="">Reset đăng nhập</option>
                             <option value="1" {{$user->pc_name == null || @$user->pc_name != 0 ?'selected':""}}>Đăng nhập 1 thiết bị</option>
                             <option value="2" {{$user->pc_name !== null && $user->pc_name == 0 ?'selected':""}}>Đăng nhập nhiều thiết bị</option>
                         </select>
