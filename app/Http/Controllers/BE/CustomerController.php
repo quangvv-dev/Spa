@@ -225,7 +225,7 @@ class CustomerController extends Controller
         }
         $input['type_ctv'] = $request->type_ctv == 'on' ? 1 : 0;
         $customer = $this->customerService->create($input);
-        $this->update_code($customer);
+//        $this->update_code($customer);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
 
         $time = Customer::timeExpired($customer->status_id);
@@ -289,7 +289,7 @@ class CustomerController extends Controller
             $input['mkt_id'] = null;
             $input['status_id'] = StatusCode::NEW;
             $customer = $this->customerService->create($input);
-            $this->update_code($customer);
+//            $this->update_code($customer);
             $category = Category::find($request->group_id[$k]);
             $customer->categories()->attach($category);
         }

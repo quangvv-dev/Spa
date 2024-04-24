@@ -417,7 +417,7 @@ class AuthController extends BaseApiController
         $input['status_id'] = Functions::getStatusWithCode('moi');
 
         $customer = $this->customerService->createApi($input);
-        $this->update_code($customer);
+//        $this->update_code($customer);
         $category = Category::where('name', 'like', '%DV Khác%')->get();
         self::createCustomerGroup($category, $customer->id, $input['branch_id']);
         $payload = $customer->toArray();

@@ -169,7 +169,7 @@ class ChatController extends Controller
             $data['mkt_id'] = $fanpage->source->mkt_id;
         }
         $customer = Customer::create($data);
-        $this->update_code($customer);
+//        $this->update_code($customer);
         self::createCustomerGroup($request->group_id, $customer->id, $customer->branch_id);
         return response()->json([
             'code' => 200,
