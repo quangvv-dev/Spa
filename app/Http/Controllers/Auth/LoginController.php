@@ -37,7 +37,6 @@ class LoginController extends Controller
             if ($user->pc_name == null) {
                 if (!empty($value)) {
                     $user->update(['pc_name' => $value]);
-
                 } else {
                     $value_has = $user->id . rand(10, 999);
                     setcookie("user", $value_has, 2147483647);

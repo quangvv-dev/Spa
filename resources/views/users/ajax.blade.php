@@ -16,8 +16,8 @@
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
-            <th class="text-white">Mã NV</th>
-            <th class="text-white text-center">Mã chấm công</th>
+{{--            <th class="text-white">Mã NV</th>--}}
+{{--            <th class="text-white text-center">Mã chấm công</th>--}}
             <th class="text-white text-center">Họ tên</th>
 {{--            <th class="text-white text-center">Tên export</th>--}}
             <th class="text-white text-center">Cụm</th>
@@ -32,8 +32,8 @@
         @if (count($users))
             @foreach($users as $user)
                 <tr>
-                    <th scope="row">{{ $user->code }}</th>
-                    <td class="text-center">{{ $user->approval_code }}</td>
+{{--                    <th scope="row">{{ $user->code }}</th>--}}
+{{--                    <td class="text-center">{{ $user->approval_code }}</td>--}}
                     <td class="text-center"><a href="{{route('users.edit',$user->id)}}">{{ $user->full_name }}</a>
                         <br>
                     <span class="small-tip">({{ $user->phone }})</span>
@@ -47,7 +47,7 @@
                     <td class="text-center">
                         <select data-id="{{$user->id}}"  name="pc_name" class="form-control pc-name">
                             <option value="">Tất cả</option>
-                            <option value="1">Đăng nhập 1 thiết bị</option>
+                            <option value="1" {{@$user->pc_name != 0 ?'selected':""}}>Đăng nhập 1 thiết bị</option>
                             <option value="2" {{$user->pc_name !== null && $user->pc_name == 0 ?'selected':""}}>Đăng nhập nhiều thiết bị</option>
                         </select>
                     </td>
