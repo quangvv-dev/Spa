@@ -69,7 +69,7 @@
 
                     @endif
                     <input type="hidden" name="page" id="page">
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-2 col-md-2">
                         <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
                     </div>
 
