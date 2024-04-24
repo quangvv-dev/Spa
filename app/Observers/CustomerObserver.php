@@ -9,6 +9,7 @@ use App\Constants\UserConstant;
 use App\Helpers\Functions;
 use App\Models\Customer;
 use App\Models\HistorySms;
+use App\Models\HistoryStatus;
 use App\Models\Notification;
 use App\Models\RuleOutput;
 use App\Models\SchedulesSms;
@@ -41,6 +42,13 @@ class CustomerObserver
             $customer->account_code = 'KH' . $customer_id;
             $customer->save();
         }
+
+        $customer->historyStatus()->create([
+            'customer_id' => $customer->id,
+            'status_id' => $customer->status_id,
+            'created_at' => now(),
+        ]);
+
         $customer->groupComments()->create([
             'customer_id' => $customer->id,
             'branch_id' => $customer->branch_id,
@@ -70,6 +78,16 @@ class CustomerObserver
             }
             if (!empty(@$changedAttributes['status_id'])) {
                 $text = $text . ' <span class="text-green">| Trạng thái: ' . @Status::find($oldData['status_id'])->name . ' --> ' . @Status::find($changedAttributes['status_id'])->name . '</span>';
+                $oldStatus = HistoryStatus::where('status_id',$oldData['status_id'])->first();
+                if(!empty($oldStatus)){
+                    $oldStatus->updated_at = now();
+                    $oldStatus->save();
+                }
+                $customer->historyStatus()->create([
+                    'customer_id' => $customer->id,
+                    'status_id' => $changedAttributes['status_id'],
+                    'created_at' => now(),
+                ]);
             }
             if (!empty($text)) {
                 $customer->groupComments()->create([

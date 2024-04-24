@@ -185,19 +185,20 @@ if (!function_exists('fcmSendCloudMessage')) {
 //        $notification_id = null,
         $notification_type = 'notification',
         $push_data = []
-    ) {
+    )
+    {
         //$deviceToken truyền mảng device hoặc 1 chuỗi device hoặc là 1 topic  ( '/topics/all' )
         $url = 'https://fcm.googleapis.com/fcm/send';
         $serverKey = config('app.SERVER_KEY_FIREBASE');
         $fields = [
-            'priority'     => 'high',
+            'priority' => 'high',
             'time_to_live' => 60 * 60 * 24,
         ];
         if (!empty($push_data)) {
             $fields['data'] = $push_data;
         }
         $fields['notification'] = [
-            "body"  => $body,
+            "body" => $body,
             "title" => $title,
             "sound" => "default",
             "badge" => "1",
@@ -206,7 +207,7 @@ if (!function_exists('fcmSendCloudMessage')) {
         ];
         // cấu hình android
         $fields['android'] = [
-            'ttl'          => 3600 * 1000,
+            'ttl' => 3600 * 1000,
             'notification' => [
                 'color' => '#f45342',
                 //'icon'  => 'stock_ticker_update',
@@ -322,7 +323,7 @@ if (!function_exists('GuzzleHttpCall')) {
         $client = new \GuzzleHttp\Client();
         $response = $client->$method($path, [
             'headers' => $header,
-            'json'    => $post_data,
+            'json' => $post_data,
         ]);
         return json_decode($response->getBody());
     }
@@ -357,6 +358,20 @@ if (!function_exists('dbSetting')) {
             $now = now();
             if (!empty($time)) {
                 $countdown = strtotime($now) - strtotime($time);
+                $days = ($countdown / 86400) >= 1 ? floor($countdown / 86400) : 0;
+                $hours = floor(($countdown % 86400) / 3600);
+                $minutes = round((($countdown % 86400) % 3600) / 60);
+
+                return ($days > 0 ? $days . ' ngày ' : '') . ($hours > 0 ? $hours . ' giờ ' : '') . ($minutes > 0 && $days < 1 ? $minutes . ' phút' : '');
+            }
+            return '';
+        }
+    }
+    if (!function_exists('diffTimeTwo')) {
+        function diffTimeTwo($from = null, $to = null)
+        {
+            if (!empty($from)) {
+                $countdown = strtotime($to) - strtotime($from);
                 $days = ($countdown / 86400) >= 1 ? floor($countdown / 86400) : 0;
                 $hours = floor(($countdown % 86400) / 3600);
                 $minutes = round((($countdown % 86400) % 3600) / 60);

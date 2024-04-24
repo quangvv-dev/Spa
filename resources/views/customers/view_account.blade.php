@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/style.css') }}" media="all">
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/mobilelightbox.css') }}" media="all">
     <link href="{{ asset('css/progres-bar.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/container-arrow.css') }}" rel="stylesheet"/>
     <link rel="stylesheet" href="{{asset('/assets/plugins/simple-lightbox/simple-lightbox.min.css')}}"/>
 
     <style>
@@ -89,18 +90,16 @@
     <div class="col-md-12 col-lg-12" style="font-size: 0.8rem">
         <div class="card">
             <div class="card-header">
-                <div class="col-md-3 no-padd font16"><a class="fl mr10 pic"> <img class="avatar"
-                                                                                  src="{{$customer->avatar?:'/default/noavatar.png'}}">
-                    </a> <span
-                        class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
+                <div class="col-md-3 no-padd font16"><a class="fl mr10 pic">
+                        <img class="avatar" src="{{$customer->avatar?:'/default/noavatar.png'}}"></a>
+                    <span class="bold uppercase ">  &nbsp;{{ $customer->full_name }}  </span>
                     <div class="display" id="toolbox" style="width: 28px; height: 20px">
-                        <a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}"><i
-                                class="fas fa-pencil-alt"></i></a>
+                        <a title="Sửa tài khoản" href="{{ route('customers.edit', $customer->id) }}">
+                            <i class="fas fa-pencil-alt"></i></a>
                         <a id="btn_del_account" rel="tooltip"
                            data-placement="bottom"
                            data-original-title="Xóa" class="ml5">
-                            <i
-                                class="gf-icon-hover icon-remove mr5"></i>
+                            <i class="gf-icon-hover icon-remove mr5"></i>
                         </a>
                     </div>
                 </div>
@@ -191,31 +190,9 @@
                                     <div class="text-a">{{ $customer->orders->count() }}</div>
                                 </div>
                             </div>
-                            </h3>
                         </div>
                     </div>
-{{--                    <div class="border padding infor-list-ct ml2 mt10"><h3--}}
-{{--                            class="uppercase pb5 mb10 font12 bold mg0">Liên hệ</h3>--}}
-{{--                        <div class="box-cont">--}}
-{{--                            <div class="list-row-ifct mb10 pb10 clearfix contact_item" data-contact-id="4658">--}}
-{{--                                <div class="col-md-12 no-padd mt2 gray fl mb10"><p class="clearfix white-space"><i--}}
-{{--                                            class="icon-user mr5 mt2 fl"></i> <b--}}
-{{--                                            class="blue">&nbsp;{{ $customer->full_name }}</b> <i--}}
-{{--                                            data-original-title="Liên hệ chính" rel="tooltip"--}}
-{{--                                            class="fa fa-star text-warning" aria-hidden="true"></i></p>--}}
-{{--                                    <p></p>--}}
-{{--                                    <p class="clearfix">&nbsp;&nbsp;{{ auth()->user()->permission('phone.open')? $customer->phone :str_limit($customer->phone,7,'xxx')}}</p>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-md-12 no-padd hide"><a><i data-task-type="2"--}}
-{{--                                                                          class="tc new_popup_task icon-phone style-icon-phone mr10 fl"></i></a>--}}
-{{--                                    <a><i data-task-type="3"--}}
-{{--                                          class="tc new_popup_task icon-group style-icon-group mr10 fl"></i></a> <a><i--}}
-{{--                                            data-task-type="4"--}}
-{{--                                            class="tc new_popup_task icon-envelope-alt style-icon-envelope mr10 fl"></i></a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+
                     <div class="border padding mt10 ml2">
                         <div class="infor-top-ct">
                             <h3 class="uppercase mb10 font12 bold mg0" style="margin-bottom: 10px!important;">Thông tin khách hàng</h3>
@@ -284,7 +261,12 @@
                     <div class="col-md-12 no-padd spanfull2 padding" style="float: left;">
                         <div class="">
                             <div class="panel panel-primary">
-                                <div class=" tab-menu-heading">
+                                @if(count($customer->historyStatus))
+                                    <div class="tab-menu-heading" style="padding: 3px">
+                                        @include('customers._include.container_arrow')
+                                    </div>
+                                @endif
+                                <div class="tab-menu-heading">
                                     <div class="tabs-menu1 ">
                                         <!-- Tabs -->
                                         <ul class="nav panel-tabs">
