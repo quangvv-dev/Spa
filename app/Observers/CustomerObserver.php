@@ -67,19 +67,20 @@ class CustomerObserver
         }
         $changedAttributes = $customer->getDirty();
         $oldData = $customer->getOriginal();
+
         // Kiểm tra sự thay đổi của các trường khác
         if (count($changedAttributes)) {
             $text = '';
-            if (!empty(@$changedAttributes['mkt_id'])) {
+            if (!empty(@$changedAttributes['mkt_id']) && !empty(@$oldData['mkt_id'])) {
                 $text = $text . ' <span class="text-purple">MKT: ' . @User::find($oldData['mkt_id'])->full_name . ' --> ' . @User::find($changedAttributes['mkt_id'])->full_name . '</span>';
             }
-            if (!empty(@$changedAttributes['telesales_id'])) {
+            if (!empty(@$changedAttributes['telesales_id']) && !empty(@$oldData['telesales_id'])) {
                 $text = $text . ' <span class="text-info">| Sale: ' . @User::find($oldData['telesales_id'])->full_name . ' --> ' . @User::find($changedAttributes['telesales_id'])->full_name . '</span>';
             }
-            if (!empty(@$changedAttributes['status_id'])) {
+            if (!empty(@$changedAttributes['status_id']) && !empty(@$oldData['status_id'])) {
                 $text = $text . ' <span class="text-green">| Trạng thái: ' . @Status::find($oldData['status_id'])->name . ' --> ' . @Status::find($changedAttributes['status_id'])->name . '</span>';
-                $oldStatus = HistoryStatus::where('status_id',$oldData['status_id'])->first();
-                if(!empty($oldStatus)){
+                $oldStatus = HistoryStatus::where('status_id', $oldData['status_id'])->first();
+                if (!empty($oldStatus)) {
                     $oldStatus->updated_at = now();
                     $oldStatus->save();
                 }
