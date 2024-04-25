@@ -1,7 +1,7 @@
 <div class="cont">
     @forelse($customer->historyStatus as $item)
-        <div class="container-arrow {{empty($item->updated_at)?'selected':''}}">
-            <div class="arrow-before"></div>
+        <div class="container-arrow {{$item->status_id == $customer->status_id?'selected':''}}">
+        <div class="arrow-before"></div>
             <div class="text-arrow">
                 <span class="status">{{@$item->status->name}}</span>
                 <span

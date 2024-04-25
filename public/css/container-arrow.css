@@ -6,6 +6,7 @@
     align-items: center;
     width: fit-content;
     padding: 9px 5px;
+    padding-left:20px;
 .status {
     font-size: 16px;
     line-height: 1.25;
