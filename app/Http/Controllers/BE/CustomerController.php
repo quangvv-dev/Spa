@@ -787,17 +787,16 @@ class CustomerController extends Controller
                                         UserConstant::IS_LEADER);
                                 })->where('active', StatusCode::ON)->get();
                                 $task->users()->attach($follow);
-                                $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
-                                    : '📅📅📅 Bạn có công việc chăm sóc mới !';
-                                Notification::insert([
-                                    'title' => $title,
-                                    'user_id' => $task->user_id,
-                                    'type' => $task->type,
-                                    'task_id' => $task->id,
-                                    'status' => NotificationConstant::HIDDEN,
-                                    'created_at' => $task->date_from . ' ' . $task->time_from,
-                                    'data' => json_encode((array)['task_id' => $task->id]),
-                                ]);
+//                                $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !' : '📅📅📅 Bạn có công việc chăm sóc mới !';
+//                                Notification::insert([
+//                                    'title' => $title,
+//                                    'user_id' => $task->user_id,
+//                                    'type' => $task->type,
+//                                    'task_id' => $task->id,
+//                                    'status' => NotificationConstant::HIDDEN,
+//                                    'created_at' => $task->date_from . ' ' . $task->time_from,
+//                                    'data' => json_encode((array)['task_id' => $task->id]),
+//                                ]);
                             }
                         }
                         // end cong viec
