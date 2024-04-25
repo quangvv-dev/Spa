@@ -78,13 +78,13 @@
                         {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
                     </div>
                     <div class="col">
-                        {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
+                        {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT/ Mã KH')) !!}
                     </div>
                     <div class="col">
                         {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
                     </div>
                     <div class="col">
-                        {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
+                        {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id ?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
                     </div>
 
                 </div>
@@ -100,6 +100,7 @@
     <script>
         var hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
         $(document).ready(function () {
+            $("#customer_plus").focus();
             $('form').submit(function(event) {
                 event.preventDefault(); // Ngăn chặn gửi form
             });
