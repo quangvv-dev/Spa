@@ -82,7 +82,7 @@
 
                 $('#name').val(data.name).change();
                 // $("a[href]").attr("href",link);
-                $('.name-customer').html(data.customer.full_name).change();
+                $('.name-customer').html(data.customer.full_name+'  ('+data.customer.account_code+')').change();
                 $('.phone-customer').val(data.customer.phone).change();
                 $('#user_id').val(data.user.full_name).change();
                 $('#date_from').val(data.date_from).change();

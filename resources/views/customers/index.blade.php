@@ -1279,7 +1279,7 @@
                     let link = '/customers/'+data.customer.id;
                     $('#name').val(data.name).change();
                     $("a[href]").attr("href",link);
-                    $('.modal-body .name-customer').html(data.customer.full_name).change();
+                    $('.modal-body .name-customer').html(data.customer.full_name+'('+data.customer.account_code+')').change();
                     $('.modal-body .phone-customer').val(data.customer.phone).change();
                     $('.modal-body #user_id').val(data.user.full_name).change();
                     $('.modal-body #date_from').val(data.date_from).change();
