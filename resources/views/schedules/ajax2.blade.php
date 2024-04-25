@@ -73,7 +73,7 @@
                                     @foreach($docs as $item)
                                 {
                                     id: '{{$item->id}}',
-                                    title: "{!! (!empty($item->type)?\App\Models\Schedule::SCHEDULE_TYPE[$item->type]:'').': '.@$item->category->name.', '.@$item->customer->full_name .', SĐT: '.(auth()->user()->permission('phone.open')? @$item->customer->phone :@str_limit($item->customer->phone,7,'xxx')).' Lưu ý: '.$item->note !!}",
+                                    title: "{!! (!empty($item->type)?\App\Models\Schedule::SCHEDULE_TYPE[$item->type]:'').': '.@$item->customer->full_name.'--'.@$item->category->name.', SĐT: '.(auth()->user()->permission('phone.open')? @$item->customer->phone :@str_limit($item->customer->phone,7,'xxx')).' Lưu ý: '.$item->note !!}",
                                     note: "{{$item->note}}",
                                     description: "{{$item->note}}",
                                     full_name: '{{@$item->customer->full_name}}',
