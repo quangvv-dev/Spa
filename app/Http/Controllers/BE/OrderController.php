@@ -652,6 +652,7 @@ class OrderController extends Controller
                                     }
 
                                     $day = $job->configs->delay_value;
+                                    $delay_unit = $job->configs->delay_unit;
                                     $sms_content = $job->configs->sms_content;
                                     $category = @$customer->categories;
                                     $text_category = [];
@@ -665,7 +666,7 @@ class OrderController extends Controller
                                         . "--Các dịch vụ :" . @str_replace('<br>', "|", @$check3->order->service_text);
                                     $input = [
                                         'customer_id' => @$customer->id,
-                                        'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                        'date_from' => $delay_unit == 'hours'? Carbon::now()->addHours($day)->format('Y-m-d') :Carbon::now()->addDays($day)->format('Y-m-d'),
                                         'time_from' => '07:00',
                                         'time_to' => '21:00',
                                         'code' => $prefix,
@@ -689,17 +690,17 @@ class OrderController extends Controller
                                             UserConstant::IS_LEADER);
                                     })->where('active', StatusCode::ON)->get();
                                     $task->users()->attach($follow);
-                                    $title = $task->type == StatusCode::GOI_LAI ? '💬💬💬 Bạn có công việc gọi điện mới !'
-                                        : '📅📅📅 Bạn có công việc chăm sóc mới !';
-                                    Notification::insert([
-                                        'title' => $title,
-                                        'user_id' => $task->user_id,
-                                        'type' => $task->type,
-                                        'task_id' => $task->id,
-                                        'status' => NotificationConstant::HIDDEN,
-                                        'created_at' => $task->date_from . ' ' . $task->time_from,
-                                        'data' => json_encode((array)['task_id' => $task->id]),
-                                    ]);
+//                                    $title = $task->type == StatusCode::GOI_LAI ? '💬💬💬 Bạn có công việc gọi điện mới !'
+//                                        : '📅📅📅 Bạn có công việc chăm sóc mới !';
+//                                    Notification::insert([
+//                                        'title' => $title,
+//                                        'user_id' => $task->user_id,
+//                                        'type' => $task->type,
+//                                        'task_id' => $task->id,
+//                                        'status' => NotificationConstant::HIDDEN,
+//                                        'created_at' => $task->date_from . ' ' . $task->time_from,
+//                                        'data' => json_encode((array)['task_id' => $task->id]),
+//                                    ]);
                                 }
                             }
 

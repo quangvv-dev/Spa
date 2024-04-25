@@ -128,6 +128,7 @@ class CustomerObserver
                                     }
 
                                     $day = $job->configs->delay_value;
+                                    $delay_unit = $job->configs->delay_unit;
                                     $sms_content = $job->configs->sms_content;
                                     $category = @$customer->categories;
                                     $text_category = [];
@@ -139,7 +140,7 @@ class CustomerObserver
                                     $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
                                     $input = [
                                         'customer_id' => @$customer->id,
-                                        'date_from' => Carbon::now()->addDays($day)->format('Y-m-d'),
+                                        'date_from' => $delay_unit == 'hours'? Carbon::now()->addHours($day)->format('Y-m-d') :Carbon::now()->addDays($day)->format('Y-m-d'),
                                         'time_from' => '07:00',
                                         'time_to' => '21:00',
                                         'code' => 'CSKH',
