@@ -40,7 +40,7 @@
                                 <input name="delay_value" class="form-control" type="number">
                                 <div class="input-group-append">
                                     <select name="delay_unit" id="">
-                                        {{--<option value="hours">Giờ</option>--}}
+                                        <option value="hours">Giờ</option>
                                         <option value="days">Ngày</option>
                                     </select>
                                 </div>
