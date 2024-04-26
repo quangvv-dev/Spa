@@ -171,7 +171,7 @@ class Customer extends Model
             })
             ->when(isset($conditions['birthday']), function ($query) use ($conditions) {
                 $query->whereRaw('DATE_FORMAT(birthday, "%m-%d") = ?', Carbon::now()->format('m-d'));
-            })->orderByDesc('id');
+            });
 
         return $builder;
     }
@@ -220,7 +220,7 @@ class Customer extends Model
         if (count($param)) {
             static::applySearchConditions($data, $param);
         }
-        return $data;
+        return $data->orderByDesc('update');
     }
 
     public static function searchApi($param)
@@ -234,7 +234,7 @@ class Customer extends Model
         if (count($param)) {
             static::applySearchConditions($data, $param);
         }
-        return $data;
+        return $data->orderByDesc('id');
     }
 
     public static function search1($input)

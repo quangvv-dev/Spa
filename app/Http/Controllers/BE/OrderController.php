@@ -874,7 +874,7 @@ class OrderController extends Controller
 //            $input['hsd'] = $date;
 //        }
         $customer = Customer::find($request->user_id);
-        $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
+        $customer->update($request->only('full_name', 'address', 'status_id'));
         DB::beginTransaction();
         try {
             $order = $this->orderService->update($id, $input);
