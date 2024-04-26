@@ -220,7 +220,7 @@ class Customer extends Model
         if (count($param)) {
             static::applySearchConditions($data, $param);
         }
-        return $data->orderByDesc('update');
+        return $data->orderByDesc('updated_at');
     }
 
     public static function searchApi($param)
