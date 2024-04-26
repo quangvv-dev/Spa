@@ -99,9 +99,8 @@ class CustomerObserver
                     'messages' => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " . $text,
                 ]);
             }
-            if (!empty($changedAttributes['status_id'])) {
+            if (!empty(@$changedAttributes['status_id']) && !empty(@$oldData['status_id'])) {
                 $check2 = RuleOutput::where('event', 'change_relation')->first();
-
                 if (isset($check2) && $check2) {
                     $rule = $check2->rules;
                     $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
