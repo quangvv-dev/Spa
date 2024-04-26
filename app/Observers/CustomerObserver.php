@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Customer;
+use App\Models\HistoryStatus;
 use App\Models\Status;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,16 @@ class CustomerObserver
      */
     public function created(Customer $customer)
     {
+        if (empty($customer->account_code)) {
+            $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
+            $customer->account_code = 'KH' . $customer_id;
+            $customer->save();
+        }
+        $customer->historyStatus()->create([
+            'customer_id' => $customer->id,
+            'status_id' => $customer->status_id,
+            'created_at' => now(),
+        ]);
         $customer->groupComments()->create([
             'customer_id' => $customer->id,
             'branch_id'   => $customer->branch_id,
@@ -34,15 +45,20 @@ class CustomerObserver
         // Kiểm tra sự thay đổi của các trường khác
         if (count($changedAttributes)) {
             $text = '';
-                if (!empty($changedAttributes['mkt_id'])) {
-                    $text = $text.' <span class="text-purple">MKT: ' . User::find($oldData['mkt_id'])->full_name . ' --> ' . User::find($changedAttributes['mkt_id'])->full_name.'</span>';
+            if (!empty(@$changedAttributes['mkt_id']) && !empty(@$oldData['mkt_id'])) {
+                $text = $text.' <span class="text-purple">MKT: ' . User::find($oldData['mkt_id'])->full_name . ' --> ' . User::find($changedAttributes['mkt_id'])->full_name.'</span>';
                 }
-                if (!empty($changedAttributes['telesales_id'])) {
-                    $text = $text.' <span class="text-info">| Sale: ' . User::find($oldData['telesales_id'])->full_name . ' --> ' . User::find($changedAttributes['telesales_id'])->full_name.'</span>';
+            if (!empty(@$changedAttributes['telesales_id']) && !empty(@$oldData['telesales_id'])) {
+                $text = $text.' <span class="text-info">| Sale: ' . User::find($oldData['telesales_id'])->full_name . ' --> ' . User::find($changedAttributes['telesales_id'])->full_name.'</span>';
                 }
-                if (!empty($changedAttributes['status_id'])) {
-                    $text = $text.' <span class="text-green">| Trạng thái: ' . Status::find($oldData['status_id'])->name . ' --> ' . Status::find($changedAttributes['status_id'])->name.'</span>';
+            if (!empty(@$changedAttributes['status_id']) && !empty(@$oldData['status_id'])) {
+                $text = $text.' <span class="text-green">| Trạng thái: ' . Status::find($oldData['status_id'])->name . ' --> ' . Status::find($changedAttributes['status_id'])->name.'</span>';
+                $oldStatus = HistoryStatus::where('status_id', $oldData['status_id'])->first();
+                if (!empty($oldStatus)) {
+                    $oldStatus->updated_at = now();
+                    $oldStatus->save();
                 }
+            }
             if (!empty($text)){
                 $customer->groupComments()->create([
                     'customer_id' => $customer->id,

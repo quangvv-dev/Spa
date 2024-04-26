@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/style.css') }}" media="all">
     <link rel="stylesheet" type="text/css" href="{{ asset('zoom-image/css/mobilelightbox.css') }}" media="all">
     <link href="{{ asset('css/progres-bar.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/container-arrow.css') }}" rel="stylesheet"/>
     <link rel="stylesheet" href="{{asset('/assets/plugins/simple-lightbox/simple-lightbox.min.css')}}"/>
 
     <style>
@@ -283,6 +284,11 @@
                     <div class="col-md-12 no-padd spanfull2 padding" style="float: left;">
                         <div class="">
                             <div class="panel panel-primary">
+                                @if(count($customer->historyStatus))
+                                    <div class="tab-menu-heading" style="padding: 3px">
+                                        @include('customers._include.container_arrow')
+                                    </div>
+                                @endif
                                 <div class=" tab-menu-heading">
                                     <div class="tabs-menu1 ">
                                         <!-- Tabs -->

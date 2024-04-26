@@ -251,6 +251,10 @@ class Customer extends Model
         return $this->belongsTo(Status::class, 'status_id', 'id');
     }
 
+    public function historyStatus()
+    {
+        return $this->hasMany(HistoryStatus::class);
+    }
     public function gioithieu()
     {
         return $this->belongsTo(Customer::class, 'is_gioithieu', 'id')->withTrashed();
