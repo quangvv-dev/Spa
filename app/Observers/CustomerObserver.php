@@ -57,6 +57,12 @@ class CustomerObserver
                 if (!empty($oldStatus)) {
                     $oldStatus->updated_at = now();
                     $oldStatus->save();
+                }else{
+                    $customer->historyStatus()->create([
+                        'customer_id' => $customer->id,
+                        'status_id' => $customer->status_id,
+                        'created_at' => now(),
+                    ]);
                 }
             }
             if (!empty($text)){
