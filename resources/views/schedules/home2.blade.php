@@ -143,7 +143,7 @@
                         let typeText = value.type == 1?'Lịch mới':(value.type == 2?'Tái khám':'Liệu trình');
                         b.push({
                             id: value.id,
-                            title: typeText+': '+data.customer.full_name+' -'+value.category.name+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
+                            title: typeText+': '+value.customer.full_name+' -'+value.category.name+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
                             start: value.date + 'T' + value.time_from + ':00',
                             end: value.date + 'T' + value.time_to + ':00',
                             color: col,
