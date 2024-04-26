@@ -526,8 +526,10 @@
             }).done(function (data) {
                 $('#name_update').val(data.name);
                 $('.date_update').val(data.date_from.toLocaleString());
-                $('.time_from').val(data.time_from);
-                $('.time_to').val(data.time_to);
+                console.log(data,'123123');
+                $('.time_from').val(data.time_from).change();
+                // $('.time_to').val(data.time_to);
+                $('#updateType').val(data.type).change();
                 $('#description_update').val(data.description);
                 $('.formUpdateTask').attr('action', "/tasks/"+data.id).change();
 

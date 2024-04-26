@@ -113,10 +113,16 @@ class TaskController extends Controller
             'branch_id' => $customer->branch_id,
         ]);
         $input = $request->except('ajax');
-        if (Auth::user()->department_id == DepartmentConstant::TELESALES){
-            $input['type']= StatusCode::GOI_LAI;
-        }else{
-            $input['type']= StatusCode::CSKH;
+        if ($input['type'] == 3 && Auth::user()->department_id != DepartmentConstant::CSKH) {
+            $input['type'] = StatusCode::GOI_LAI;
+        } elseif ($input['type'] == 3 && Auth::user()->department_id == DepartmentConstant::CSKH) {
+            $input['type'] = StatusCode::CSKH;
+        }
+
+        if ($request->type == StatusCode::GOI_LAI) {
+            $input['user_id'] = $customer->telesales_id;
+        } else if ($request->type == StatusCode::CSKH) {
+            $input['user_id'] = @$customer->cskh ?? $customer->telesales_id;
         }
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);

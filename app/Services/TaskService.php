@@ -44,8 +44,8 @@ class TaskService
         $note = str_replace('"', ' ', $note);
         $note = str_replace("'", ' ', $note);
         $handleData['description'] = $note;
-        $handleData['time_from'] = '07:00';
-        $handleData['time_to'] = '21:00';
+        $handleData['time_from'] = !empty($data['time_from']) ? $data['time_from'] : '07:00';
+        $handleData['time_to'] = !empty($data['time_to']) ? $data['time_to'] : '21:00';
         $model = $this->task->create($handleData);
         return $model;
     }
@@ -58,8 +58,8 @@ class TaskService
         $note = str_replace('"', ' ', $note);
         $note = str_replace("'", ' ', $note);
         $data['description'] = $note;
-        $data['time_from'] = '07:00';
-        $data['time_to'] = '21:00';
+        $data['time_from'] = !empty($data['time_from']) ? $data['time_from'] : '07:00';
+        $data['time_to'] = !empty($data['time_to']) ? $data['time_to'] : '21:00';
         $model = $this->task->create($data);
         return $model;
     }
