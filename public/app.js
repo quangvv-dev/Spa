@@ -118,8 +118,8 @@ function cxcommand(event, val) {
         }
         case "configs": {
             let data = diagram.selection.first().data
-            appendDataToModal(`.modal-${data.type}-${data.value}`, data.configs)
             console.log(123123123,document.querySelector(`.modal-${data.type}-${data.value}`).id)
+            appendDataToModal(`.modal-${data.type}-${data.value}`, data.configs)
             MicroModal.show(document.querySelector(`.modal-${data.type}-${data.value}`).id);
             break;
         }
