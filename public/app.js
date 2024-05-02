@@ -254,6 +254,5 @@ $(document).ready(() => {
     // console.log($('.select2-multiple'))
     $('.select2-multiple').select2();
 
-
 })
 
