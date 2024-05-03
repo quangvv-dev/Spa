@@ -196,9 +196,11 @@
         <div class="col-md-6">
             <div id="piechart-4" style="margin-left: 15px"></div>
         </div>
-        <div class="col-md-6">
-            <div id="piechart-5" style="margin-left: 15px"></div>
-        </div>
+        @if(count($data['category_product']))
+            <div class="col-md-6">
+                <div id="piechart-5" style="margin-left: 15px"></div>
+            </div>
+        @endif
         <div class="col-md-6">
             <div id="piechart-6" style="margin-left: 15px"></div>
         </div>
@@ -306,15 +308,14 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @foreach($data['category_product'] as $k =>$item)
-                @if(!empty($item))
+            @forelse($data['category_product'] as $k =>$item)
             ['{{$item->name}}', {{$item->total}}],
-            @endif
-            @endforeach
+            @empty
+            @endforelse
         ]);
 
         var options = {
-            title: 'TOP 5 SẢN PHẨM BÁN CHẠY',
+            title: 'TOP 5 SẢN PHẨM BÁN CHẠY NHẤT',
             width: 500,
             height: 300,
         };
