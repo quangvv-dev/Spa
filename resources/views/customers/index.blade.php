@@ -216,7 +216,7 @@
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
 
-                        <button class="btn btn-warning message-chat float-right">Hội thoại FB</button>
+                        <button class="btn btn-warning message-chat float-right">Zalo Message</button>
                         <button class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
                     </div>
                 </div>
@@ -1252,17 +1252,9 @@
 
         $(document).on('click','#view_chat .message-chat',function () {
 
-            let page_id = $('.chat-page_id').val();
-            let sender_id = $('.chat-sender_id').val();
-            let token = $('.chat-token').val();
-
-            if(page_id && sender_id && token){
-                $('#view_chat .chat-ajax').hide();
-                $('#view_chat .chatApplication').show();
-                getMessage(page_id,sender_id,token);
-            } else {
-                alertify.warning('Không có đoạn hội thoại !');
-            }
+            getMessage($(this).data('phone'));
+            $('#view_chat .chatApplication').show();
+            $('#view_chat .chat-ajax').hide();
         })
         $(document).on('click','#view_chat .sale-note',function () {
             $('#view_chat .chat-ajax').show();
@@ -1306,6 +1298,6 @@
         })
 
     </script>
-    @include('message_fb.js_chat_app')
+    @include('message_zalo.js_chat_app')
 
 @endsection

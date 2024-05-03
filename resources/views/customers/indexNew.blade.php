@@ -234,7 +234,7 @@
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success chat-save" id="chat-save" data-customer-id="">Lưu</button>
 
-                        <button class="btn btn-warning message-chat float-right">Hội thoại FB</button>
+                        <button class="btn btn-warning message-chat float-right">Zalo Message</button>
                         <button class="btn btn-info sale-note float-right mr-1">Trao đổi</button>
                     </div>
                 </div>

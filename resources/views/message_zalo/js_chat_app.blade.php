@@ -3,14 +3,16 @@
     var prevTimestamp = 0;
     var convertion_id = 0;
     var avatar = null;
+    var currentURL = window.location.origin;
+
     async function getMessage(phone) {
-        let url = 'https://tapdoangtg.vn/zalo/conversation/list?phone='+phone;
+        let url = currentURL + '/zalo/conversation/list?phone=' + phone;
 
         try {
             const res = await $.ajax({
                 url: url,
             });
-            if(!res.data.length){
+            if (!res.data.length) {
                 alertify.warning('Không có đoạn hội thoại !');
                 return false;
             }
@@ -25,28 +27,27 @@
             console.log(error);
         }
     }
+
     function parseMessages(data, avatar) {
         let html = '';
         let content = '';
-        data.forEach( function (item,key) {
-            console.log(key,'KEY');
-            if(key == (data.length - 1)){
+        data.forEach(function (item, key) {
+            console.log(key, 'KEY');
+            if (key == (data.length - 1)) {
                 lastTimestamp = parseInt(item.ts);
             }
-            if(key == 0){
+            if (key == 0) {
                 prevTimestamp = parseInt(item.ts);
             }
-            let convertedTime =  convertTimestamp(parseInt(item.ts));
-            if(item.msgType =="chat.photo"){
+            let convertedTime = convertTimestamp(parseInt(item.ts));
+            if (item.msgType == "chat.photo") {
                 let object = JSON.parse(item.content);
                 content = `<img src="${object.href}" width="50p" height="50" class="myImage">`;
-            }
-            else if(item.msgType =="chat.ecard"){
+            } else if (item.msgType == "chat.ecard") {
                 let object = JSON.parse(item.content);
                 content = `<p>${object.title}</p>`;
-            }
-            else {
-                if(item.content.includes("{")) {
+            } else {
+                if (item.content.includes("{")) {
                     return;
                 }
                 content = `<p>${item.content}</p>`;
@@ -70,7 +71,8 @@
                  ${content}
               </div>
             </div>
-          `;}
+          `;
+            }
         });
 
         html = `
@@ -82,7 +84,7 @@
     }
 
     async function detailConvertionZalo(convertion_id, lastTimestamp = null) {
-        let url = 'https://tapdoangtg.vn/zalo/conversation/detail/' + convertion_id;
+        let url = currentURL + '/zalo/conversation/detail/' + convertion_id;
 
         try {
             const res = await $.ajax({
@@ -97,7 +99,8 @@
             return [];
         }
     }
-    function convertTimestamp(timestamp){
+
+    function convertTimestamp(timestamp) {
         let date = new Date(timestamp);
         let year = date.getFullYear();
         let month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -108,7 +111,7 @@
         return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
-    $(document).on('click', '.chatApplication .next',async function (e) {
+    $(document).on('click', '.chatApplication .next', async function (e) {
         e.preventDefault();
         let data = await detailConvertionZalo(convertion_id, lastTimestamp);
         if (data && data.length > 0) {
@@ -117,7 +120,7 @@
         }
     })
 
-    $(document).on('click', '.chatApplication .previous',async function (e) {
+    $(document).on('click', '.chatApplication .previous', async function (e) {
         e.preventDefault();
         let data = await detailConvertionZalo(convertion_id, prevTimestamp);
         if (data && data.length > 0) {
@@ -126,10 +129,10 @@
         }
     })
 
-    $(document).on('click', '.media-body .myImage',async function (e) {
+    $(document).on('click', '.media-body .myImage', async function (e) {
         if ($(this).hasClass("zoomed")) {
             $(this).removeClass("zoomed");
-        }else {
+        } else {
             $(this).addClass("zoomed");
         }
     });
