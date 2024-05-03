@@ -306,15 +306,15 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            @if(count($trademark))
-            @foreach($trademark as $item)
-            ['{{$item->name}}', {{$item->price}}],
-            @endforeach
+                @foreach($data['category_product'] as $k =>$item)
+                @if(!empty($item))
+            ['{{$item->name}}', {{$item->total}}],
             @endif
+            @endforeach
         ]);
 
         var options = {
-            title: 'DOANH SỐ 5 NHÀ CUNG CẤP BÁN CHẠY NHẤT',
+            title: 'TOP 5 SẢN PHẨM BÁN CHẠY',
             width: 500,
             height: 300,
         };

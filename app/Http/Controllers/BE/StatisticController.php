@@ -132,14 +132,14 @@ class StatisticController extends Controller
         $orders_combo = clone $orders;
         $ordersYear = $payment_years->whereYear('payment_date', Date::now('Asia/Ho_Chi_Minh')->format('Y'));
 
-        $trademark = $this->orderDetail->revenueWithTrademark($input)->take(5);
+//        $trademark = $this->orderDetail->revenueWithTrademark($input)->take(5);
 
         $wallet = WalletHistory::search($input, 'order_price,payment_type,price');
         $payment_wallet = PaymentWallet::search($input, 'price');
         //Status Revuenue
         $statusRevenues = $this->orderDetail->revenueWithSource($input);
         //END
-//        $category_product = $this->orderDetail->revenueWithService($input)->take(5);
+        $category_product = $this->orderDetail->revenueWithService($input)->take(5);
         $statusCustomer = $this->customerService->countWithStatus($input);
 
         $revenue_month = $paymentMonth->select('payment_date', 'branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')
@@ -171,6 +171,7 @@ class StatisticController extends Controller
             'orders' => $orders->count(),
             'customers' => $customers->count(),
             //            'category_service' => $category_service,
+            'category_product' => $category_product,
             'statusCustomer' => $statusCustomer,
             'revenue_month' => $revenue_month,
             'order_single' => $order_single->whereIn('role_type', [StatusCode::SERVICE, StatusCode::COMBOS])->where('all_total', '<', 1000000)->count(),
@@ -210,11 +211,11 @@ class StatisticController extends Controller
         if ($request->ajax()) {
             return view('statistics.ajax',
                 compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
-                    'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
+                    'revenue_gender', 'revenue_year', 'revenue'));
         }
         return view('statistics.index',
             compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
-                'trademark', 'revenue_gender', 'revenue_year', 'revenue'));
+                'revenue_gender', 'revenue_year', 'revenue'));
     }
 
     /**
