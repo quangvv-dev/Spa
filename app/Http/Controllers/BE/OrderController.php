@@ -213,6 +213,7 @@ class OrderController extends Controller
                 $position = PositionCskh::where('location_id', 0)->first();
                 $old_position = isset($position->position) ? $position->position : 0;
                 $cskh = User::select('id')->where('department_id', DepartmentConstant::CSKH)
+                    ->where('branch_id', $order->branch_id)
                     ->where('is_leader', '<>', StatusCode::ON)->pluck('id')->toArray();
                 if (count($cskh) && !empty($position)) {
                     $position->position = (count($cskh) - 1) <= $old_position ? 0 : $old_position + 1;
