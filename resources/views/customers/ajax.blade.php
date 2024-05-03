@@ -273,7 +273,7 @@
                         data-id="{{$customer->id}}">{{$customer->birthday? date('d-m-Y', strtotime($customer->birthday)):'' }}</td>
                     <td class="text-center {{in_array(17,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center {{in_array(18,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->source_customer->name}}</td>
-                    <td class="text-center {{in_array(19,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->facebook}}</td>
+                    <td class="text-center {{in_array(19,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->facebook?str_limit($customer->facebook,30,'...'):''}}</td>
                     <td class="text-center {{in_array(20,$user_filter_grid) ? '':'display-none'}}">{{ $customer->gender_text  }}</td>
                     <td class="text-center {{in_array(21,$user_filter_grid) ? '':'display-none'}}">{{ count($customer->orders) }}</td>
                     <td class="text-center {{in_array(22,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('all_total')) }}</td>
