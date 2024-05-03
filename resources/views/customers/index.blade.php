@@ -169,8 +169,8 @@
                     data.customer.categories.forEach(function (item) {
                         category += item.name + `, `;
                     });
-                    let hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
-                    let phoneNumber = hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7)+'xxx';
+                    {{--let hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};--}}
+                    // let phoneNumber = hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7)+'xxx';
                     let html = '';
                     html += `<div class="row" style="padding-bottom: 10px;">
                     <div class="chat-flash col-md-12">
@@ -186,7 +186,7 @@
                             <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="clickToCall blue" data-contact-id="5678"
                                                           rel="tooltip" data-original-title="Click để gọi"
                                                           data-placement="right" data-flag="1"
-                                                          data-type="crm"> ` + phoneNumber + `</a></p>
+                                                          data-type="crm"> ` + data.customer.account_code + `</a></p>
                             <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>` + category + `</p>
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
