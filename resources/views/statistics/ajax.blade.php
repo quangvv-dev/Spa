@@ -257,15 +257,14 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-                @foreach($data['category_product'] as $k =>$item)
-                @if(!empty($item))
+            @forelse($data['statusCustomer'] as $k =>$item)
             ['{{$item->name}}', {{$item->total}}],
-            @endif
-            @endforeach
+            @empty
+            @endforelse
         ]);
 
         var options = {
-            title: 'TOP 5 SẢN PHẨM BÁN CHẠY NHẤT',
+            title: 'KHÁCH HÀNG MỚI THEO TRẠNG THÁI',
             width: 500,
             height: 300,
         };

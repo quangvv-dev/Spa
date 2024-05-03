@@ -17,6 +17,7 @@ use App\Models\Status;
 use App\Models\ThuChi;
 use App\Models\Trademark;
 use App\Models\WalletHistory;
+use App\Services\CustomerService;
 use App\Services\OrderDetailService;
 use App\Services\OrderService;
 use App\Services\StatisticService;
@@ -40,7 +41,8 @@ class StatisticController extends Controller
      *
      * @param Customer $customer
      */
-    public function __construct(Customer $customer, OrderDetailService $orderDetailService, OrderService $orderService)
+    public function __construct(Customer $customer, OrderDetailService $orderDetailService, OrderService $orderService
+    ,CustomerService $customerService)
     {
         $this->middleware('permission:statistics.index', ['only' => ['index']]);
         $this->middleware('permission:statistics.taskSchedules', ['only' => ['taskSchedules']]);
@@ -48,6 +50,7 @@ class StatisticController extends Controller
         $user = User::select('id', 'full_name')->pluck('full_name', 'id')->toArray();
         $branchs = Branch::search()->pluck('name', 'id');
         $this->customer = $customer;
+        $this->customerService = $customerService;
         $this->orderDetail = $orderDetailService;
         $this->orderService = $orderService;
         $location = Location::select('id', 'name')->pluck('name', 'id')->toArray();
@@ -67,7 +70,7 @@ class StatisticController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      * @throws \Throwable
      */
-    public function index(Request $request, StatisticService $statisticService)
+    public function index(Request $request)
     {
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
@@ -136,7 +139,8 @@ class StatisticController extends Controller
         //Status Revuenue
         $statusRevenues = $this->orderDetail->revenueWithSource($input);
         //END
-        $category_product = $this->orderDetail->revenueWithService($input)->take(5);
+//        $category_product = $this->orderDetail->revenueWithService($input)->take(5);
+        $statusCustomer = $this->customerService->countWithStatus($input);
 
         $revenue_month = $paymentMonth->select('payment_date', 'branch_id', \DB::raw('SUM(price) AS payment_revenue'))->groupBy('payment_date')
             ->get()->map(function ($item) use ($request) {
@@ -167,7 +171,7 @@ class StatisticController extends Controller
             'orders' => $orders->count(),
             'customers' => $customers->count(),
             //            'category_service' => $category_service,
-            'category_product' => $category_product,
+            'statusCustomer' => $statusCustomer,
             'revenue_month' => $revenue_month,
             'order_single' => $order_single->whereIn('role_type', [StatusCode::SERVICE, StatusCode::COMBOS])->where('all_total', '<', 1000000)->count(),
             'order_multiple' => $order_multiple->whereIn('role_type', [StatusCode::SERVICE, StatusCode::COMBOS])->where('all_total', '>=', 1000000)->count(),
