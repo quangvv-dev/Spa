@@ -270,7 +270,7 @@
                         {!! $customer->schedules_text !!}
                     </td>
                     <td class="text-center customer-birthday {{in_array(16,$user_filter_grid) ? '':'display-none'}}"
-                        data-id="{{$customer->id}}">{{ date('d-m-Y', strtotime($customer->birthday)) }}</td>
+                        data-id="{{$customer->id}}">{{$customer->birthday? date('d-m-Y', strtotime($customer->birthday)):'' }}</td>
                     <td class="text-center {{in_array(17,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center {{in_array(18,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->source_customer->name}}</td>
                     <td class="text-center {{in_array(19,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->facebook}}</td>
