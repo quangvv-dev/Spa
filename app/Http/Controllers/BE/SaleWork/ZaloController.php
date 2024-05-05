@@ -19,9 +19,13 @@ class ZaloController extends Controller
 
     public function conversationList(Request $request)
     {
-        $url = $this->converstionUrl . (isset($request->phone) ? '&search=' . $request->phone : '');
-        $abc = GuzzleHttpCall($url, 'GET', $this->header);
-        return response()->json($abc);
+        try {
+            $url = $this->converstionUrl . (isset($request->phone) ? '&search=' . $request->phone : '');
+            $abc = GuzzleHttpCall($url, 'GET', $this->header);
+            return response()->json($abc);
+        }catch (\Exception $exception){
+            dd($exception->getMessage(),$this->header);
+        }
     }
 
     public function detailConversation(Request $request, $id)
