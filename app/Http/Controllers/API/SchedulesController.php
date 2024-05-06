@@ -54,6 +54,24 @@ class SchedulesController extends BaseApiController
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', SchedulesResource::collection($docs));
     }
 
+    public function store(Request $request)
+    {
+        $input = $request->all();
+        if ($request->note) {
+            $note = str_replace("\r\n", ' ', $request->note);
+            $note = str_replace("\n", ' ', $note);
+            $note = str_replace('"', ' ', $note);
+            $note = str_replace("'", ' ', $note);
+            $input['note'] = $note;
+        }
+        $input['creator_id'] = $request->jwtUser->id;
+        $input['status'] = ScheduleConstant::DAT_LICH;
+        $data = Schedule::create($input);
+        $request->merge(['type' => 'list_schedules']);
+        return $this->responseApi(ResponseStatusCode::OK, 'Tạo lịch hẹn thành công', new SchedulesResource($data));
+
+    }
+
     public function type()
     {
         $data = [
