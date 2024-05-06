@@ -80,7 +80,7 @@ class TaskService
         if (isset($data['date_from'])) {
             $data['date_from'] = Functions::yearMonthDay($data['date_from']);
         }
-        $data['taskmaster_id'] = Auth::user()->id;
+        $data['taskmaster_id'] = $data['taskmaster_id'] ?? Auth::user()->id;
         $data['code'] = $this->genderCode();
 
         if (!empty($data['file_document'])) {

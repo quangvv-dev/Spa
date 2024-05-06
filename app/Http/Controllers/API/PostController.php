@@ -3,26 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Constants\ResponseStatusCode;
-use App\Constants\ScheduleConstant;
-use App\Constants\StatusCode;
-use App\Constants\StatusConstant;
-use App\CustomerPost;
-use App\Models\Campaign;
-use App\Models\Customer;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\PaymentHistory;
 use App\Models\Post;
-use App\Models\Status;
-use App\Models\Task;
-use App\User;
-use App\Models\Schedule;
 use Illuminate\Http\Request;
-use App\Models\Services;
-use App\Models\Category;
-use App\Helpers\Functions;
-use App\Constants\UserConstant;
-use App\Models\GroupComment;
 
 class PostController extends BaseApiController
 {

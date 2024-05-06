@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\API\Task\TaskController;
+use App\Http\Controllers\API\SchedulesController as ScheduleApis;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,12 +105,19 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
     Route::get('salary', 'ChamCong\ChamCongController@salary');
     Route::get('approval-history', 'ChamCong\ChamCongController@history');
     Route::get('approval-history-detail', 'ChamCong\ChamCongController@showHistory');
-    Route::get('admin/customers-schedules/{customer}', 'SchedulesController@show');
-    Route::get('admin/type-schedules', 'SchedulesController@type');
-    Route::post('admin/schedules', 'SchedulesController@store');
-    Route::get('admin/schedules', 'SchedulesController@index');
-    Route::put('admin/schedules/{id}', 'SchedulesController@update');
-    Route::get('admin/status-schedules', 'SchedulesController@statusSchedules');
+    Route::group(['prefix' => 'admin'], function () {
+        Route::get('customers-schedules/{customer}', [ScheduleApis::class, 'show']);
+        Route::get('type-schedules', [ScheduleApis::class, 'type']);
+        Route::post('schedules', [ScheduleApis::class, 'store']);
+        Route::get('schedules', [ScheduleApis::class, 'index']);
+        Route::put('schedules/{id}', [ScheduleApis::class, 'update']);
+        Route::get('status-schedules', [ScheduleApis::class, 'statusSchedules']);
+        Route::get('tasks/{customer}', [TaskController::class, 'index']);
+        Route::post('tasks', [TaskController::class, 'store']);
+        Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
+        Route::put('tasks/{task}', [TaskController::class, 'update']);
+        Route::get('task-status', [TaskController::class, 'taskStatus']);
+    });
     Route::get('approval-orders', 'ChamCong\OrderController@index');
     Route::post('approval-orders', 'ChamCong\OrderController@store');
     Route::post('checkin-orders', 'ChamCong\OrderController@checkInOrder');

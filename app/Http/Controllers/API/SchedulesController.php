@@ -51,7 +51,11 @@ class SchedulesController extends BaseApiController
         $docs = Schedule::search($params)->has('customer')->with('customer:id,full_name,phone', 'creator:id,full_name')
             ->select('id', 'creator_id', 'user_id', 'date', 'note', 'status', 'time_from', 'time_to', 'user_id', 'branch_id', 'type', 'category_id')
             ->paginate(StatusCode::PAGINATE_20);
-        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', SchedulesResource::collection($docs));
+        $data = [
+            'lastPage' => $docs->lastPage(),
+            'records' => SchedulesResource::collection($docs),
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
     public function store(Request $request)
