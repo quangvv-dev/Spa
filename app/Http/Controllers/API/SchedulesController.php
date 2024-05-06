@@ -9,6 +9,7 @@ use App\Constants\StatusConstant;
 use App\Constants\UserConstant;
 use App\Http\Resources\SchedulesResource;
 use App\Models\ChamCong;
+use App\Models\Customer;
 use App\Models\Salary;
 use App\Models\Schedule;
 use App\User;
@@ -38,7 +39,17 @@ class SchedulesController extends BaseApiController
         unset($params['status']);
         $params['status_id'] = isset($request->status) ? $request->status : '';
         $docs = Schedule::search($params)->has('customer')->with('customer:id,full_name,phone', 'creator:id,full_name')
-            ->select('id', 'creator_id', 'user_id', 'date', 'note', 'status','time_from','time_to','user_id', 'branch_id')
+            ->select('id', 'creator_id', 'user_id', 'date', 'note', 'status', 'time_from', 'time_to', 'user_id', 'branch_id')
+            ->paginate(StatusCode::PAGINATE_20);
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', SchedulesResource::collection($docs));
+    }
+
+    public function show(Request $request, Customer $customer)
+    {
+        $request->merge(['type' => 'list_schedules']);
+        $params['customer_id'] = $customer->id;
+        $docs = Schedule::search($params)->has('customer')->with('customer:id,full_name,phone', 'creator:id,full_name')
+            ->select('id', 'creator_id', 'user_id', 'date', 'note', 'status', 'time_from', 'time_to', 'user_id', 'branch_id','type','category_id')
             ->paginate(StatusCode::PAGINATE_20);
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', SchedulesResource::collection($docs));
     }
@@ -47,23 +58,23 @@ class SchedulesController extends BaseApiController
     {
         $data = [
             [
-                'id'   => ScheduleConstant::DAT_LICH,
+                'id' => ScheduleConstant::DAT_LICH,
                 'name' => 'Đặt lịch',
             ],
             [
-                'id'   => ScheduleConstant::DEN_MUA,
+                'id' => ScheduleConstant::DEN_MUA,
                 'name' => 'Đến mua',
             ],
             [
-                'id'   => ScheduleConstant::CHUA_MUA,
+                'id' => ScheduleConstant::CHUA_MUA,
                 'name' => 'Đến chưa mua',
             ],
             [
-                'id'   => ScheduleConstant::HUY,
+                'id' => ScheduleConstant::HUY,
                 'name' => 'Hủy',
             ],
             [
-                'id'   => ScheduleConstant::QUA_HAN,
+                'id' => ScheduleConstant::QUA_HAN,
                 'name' => 'Quá hạn',
             ],
         ];

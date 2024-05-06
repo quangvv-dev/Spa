@@ -220,6 +220,9 @@ class Schedule extends Model
         if (!empty($request['user'])) {
             $docs = $docs->where('creator_id', $request['user']);
         }
+        if (!empty($request['customer_id'])) {
+            $docs = $docs->where('user_id', $request['customer_id']);
+        }
         if (!empty($request['category'])) {
             $docs = $docs->where('category_id', $request['category']);
         }

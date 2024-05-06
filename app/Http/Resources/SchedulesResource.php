@@ -42,6 +42,8 @@ class SchedulesResource extends JsonResource
                 'user_id'      => @$this->user_id,
                 'user_name'    => @$this->customer->full_name,
                 'user_phone'   => @$phone,
+                'category_id'  => @$this->category_id,
+                'type'         => @$this->type,
                 'creator_id'   => @$this->creator_id,
                 'creator_name' => @$this->creator->full_name,
             ];
