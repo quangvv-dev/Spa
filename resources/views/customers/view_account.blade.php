@@ -226,9 +226,8 @@
                                 <p class="word-wrap bold text-info"> &nbsp;{{ $customer->full_name }} </p>
                             </div>
                             <div class="mb10 clearfix"><p class="bold pr5 fl">Điện thoại:</p>
-                                <p class="word-wrap bold text-info"><a class="" data-account-id="4629"
-                                                                       data-type="crm" data-issensitive="true">
-                                        &nbsp;{{\Illuminate\Support\Facades\Auth::user()->permission('phone.open') ? $customer->phone : str_limit($customer->phone, 7, 'xxx')}} </a></p>
+                                <p class="word-wrap bold text-info">
+                                    <a class="">{{auth()->user()->permission('phone.open') ? $customer->phone : str_limit($customer->phone, 7, 'xxx')}} </a></p>
                             </div>
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Chi nhánh:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->branch->name }}</p>
