@@ -211,8 +211,10 @@ class CustomerController extends Controller
         ]);
         $input = $request->except(['group_id', 'image', 'type_ctv']);
         if (isset($input['is_gioithieu']) && $input['is_gioithieu']) {
-            $customer_gioithieu = Customer::where('phone', $input['is_gioithieu'])->first();
+            $customer_gioithieu = Customer::where('phone', $input['is_gioithieu'])->orWhere('account_code', $input['is_gioithieu'])->first();
             $input['is_gioithieu'] = isset($customer_gioithieu) && $customer_gioithieu ? $customer_gioithieu->id : 0;
+            $customer_gioithieu->type_ctv = 1;
+            $customer_gioithieu->save();
         }
         $input['mkt_id'] = $request->mkt_id ?: Auth::user()->id;
         $input['image'] = $request->image;
@@ -305,7 +307,7 @@ class CustomerController extends Controller
     public function show(Request $request, $id)
     {
         $title = 'Trao đổi';
-        $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer','historyStatus')->findOrFail($id);
+        $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer', 'historyStatus')->findOrFail($id);
         $curent_branch = Auth::user()->branch_id ? Auth::user()->branch_id : '';
         if (isset($customer) && $customer) {
             $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
@@ -322,7 +324,7 @@ class CustomerController extends Controller
 
         $staff = User::select('full_name', 'id')->where('department_id', '<>', DepartmentConstant::ADMIN)->where('active', StatusCode::ON)->pluck('full_name',
             'id')->toArray();
-        $docs = Model::select('id', 'messages', 'created_at', 'image', 'user_id','status_id','call_id')
+        $docs = Model::select('id', 'messages', 'created_at', 'image', 'user_id', 'status_id', 'call_id')
             ->where('customer_id', $id)->orderByDesc('id')->paginate(10);
         //Task
         $input['type'] = $request->type ?: 'qf1';
@@ -762,7 +764,7 @@ class CustomerController extends Controller
                                 $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
                                 $input = [
                                     'customer_id' => @$customer->id,
-                                    'date_from' => $delay_unit == 'hours'? Carbon::now()->addHours($day)->format('Y-m-d') :Carbon::now()->addDays($day)->format('Y-m-d'),
+                                    'date_from' => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
                                     'time_from' => '07:00',
                                     'time_to' => '21:00',
                                     'code' => 'CSKH',

@@ -265,10 +265,10 @@ class CommissionController extends Controller
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
 
-        $request['start_date'] = "21-06-2021";
-
-        $ctv = Customer::select('id', 'full_name', 'is_gioithieu')->where('type_ctv', 1)->get()->map(function ($item) use ($request) {
-            $orders = Order::where('member_id', $item->id)
+        $ctv = Customer::select('id', 'full_name', 'account_code', 'is_gioithieu')->where('type_ctv', 1)->get()->map(function ($item) use ($request) {
+            $orders = Order::whereHas('customer', function ($qr) use ($item) {
+                $qr->where('is_gioithieu', $item->id);
+            })
                 ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
                     $q->whereBetween('created_at', [
                         Functions::yearMonthDay($request['start_date']) . " 00:00:00",
@@ -277,11 +277,18 @@ class CommissionController extends Controller
                 });
             $orders1 = clone $orders;
             $orders1 = $orders1->pluck('id')->toArray();
+            $item->don_hang = $orders->count();
             $item->doanh_so = $orders->sum('all_total');
 
             $item->doanh_thu = PaymentHistory::whereIn('order_id', $orders1)->sum('price');
-
-            $item->doanh_thu_ctv = HistoryWalletCtv::where('customer_id', $item->id)->sum('price');
+            
+            $item->doanh_thu_ctv = HistoryWalletCtv::where('customer_id', $item->id)
+                ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
+                    $q->whereBetween('created_at', [
+                        Functions::yearMonthDay($request['start_date']) . " 00:00:00",
+                        Functions::yearMonthDay($request['end_date']) . " 23:59:59",
+                    ]);
+                })->sum('price');
 
             $item->total_khach_gt = Customer::whereBetween('created_at', [
                 Functions::yearMonthDay($request['start_date']) . " 00:00:00",
@@ -290,6 +297,9 @@ class CommissionController extends Controller
 
             return $item;
         });
+        if ($request->ajax()) {
+            return view('statistics.ajax_ctv', compact('ctv'));
+        }
         return view('statistics.hoa_hong_ctv', compact('ctv'));
     }
 

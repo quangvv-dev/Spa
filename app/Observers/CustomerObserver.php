@@ -19,11 +19,6 @@ class CustomerObserver
      */
     public function created(Customer $customer)
     {
-        if (empty($customer->account_code)) {
-            $customer_id = $customer->id < 10 ? '0' . $customer->id : $customer->id;
-            $customer->account_code = 'KH' . $customer_id;
-            $customer->save();
-        }
         $customer->historyStatus()->create([
             'customer_id' => $customer->id,
             'status_id' => $customer->status_id,

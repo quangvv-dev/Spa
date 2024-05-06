@@ -241,9 +241,12 @@
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Liên hệ cuối:</p>
                                 <p class="word-wrap text-danger"> &nbsp;{{ @diffTime($customer->last_time) }}</p>
                             </div>
-                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm giới tính:</p>
-                                <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>
+                            <div class="mb10 clearfix "><p class="bold pr5 fl">Người giới thiệu:</p>
+                                <p class="word-wrap"> &nbsp;{{ @$customer->gioithieu->full_name }}</p>
                             </div>
+{{--                            <div class="mb10 clearfix "><p class="bold pr5 fl">Nhóm tính cách:</p>--}}
+{{--                                <p class="word-wrap"> &nbsp;{{ @$customer->genitive->name }}</p>--}}
+{{--                            </div>--}}
                             <div class="mb10 clearfix "><p class="bold pr5 fl">Nguồn KH:</p>
                                 <p class="word-wrap"> &nbsp;{{ @$customer->source_customer->name }}</p>
                             </div>

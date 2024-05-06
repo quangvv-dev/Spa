@@ -14,6 +14,7 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\HistorySms;
 use App\Models\HistoryUpdateOrder;
+use App\Models\HistoryWalletCtv;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentBank;
@@ -103,9 +104,9 @@ class OrderController extends Controller
 //                DepartmentConstant::DOCTOR,
                 DepartmentConstant::TU_VAN_VIEN,
             ])->where(function ($query) use ($customer) {
-                    $query->where('branch_id', $customer->branch_id)
-                        ->orWhereNull('branch_id');
-                })->get();
+                $query->where('branch_id', $customer->branch_id)
+                    ->orWhereNull('branch_id');
+            })->get();
 //                ->where('branch_id', $customer->branch_id)->get();
         }
         return $customer_support;
@@ -665,7 +666,7 @@ class OrderController extends Controller
                                         . "--Các dịch vụ :" . @str_replace('<br>', "|", @$check3->order->service_text);
                                     $input = [
                                         'customer_id' => @$customer->id,
-                                        'date_from' => $delay_unit == 'hours'? Carbon::now()->addHours($day)->format('Y-m-d') :Carbon::now()->addDays($day)->format('Y-m-d'),
+                                        'date_from' => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
                                         'time_from' => '07:00',
                                         'time_to' => '21:00',
                                         'code' => $prefix,
@@ -1046,7 +1047,7 @@ class OrderController extends Controller
     public function deletePayment($id)
     {
         $order = $this->orderService->deletePayment($id);
-
+        HistoryWalletCtv::where('payment_history_id', $id)->delete();
         return redirect('order/' . $order->id . '/show')->with('status', 'Xoá lịch sử thanh toán thành công');
     }
 
