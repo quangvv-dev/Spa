@@ -346,19 +346,21 @@ class TaskController extends Controller
                 $query->where('branch_id', $myBranch);
             })->pluck('full_name', 'id')->toArray();
         if (Auth::user()->department_id != DepartmentConstant::ADMIN) {
-            if (!empty($request->role)) {
-                $input['member'] = myTeamMember();
-            }
-            $users = !empty($input['member']) ? User::whereIn('id', $input['member'])->pluck('full_name',
-                'id')->toArray() : collect();
             if (empty($input['user_id'])) {
                 $input['user_id'] = Auth::user()->id;
             }
+            if (!empty($request->role)) {
+                $input['member'] = myTeamMember();
+                unset($input['user_id']);
+            }
+            $users = !empty($input['member']) ? User::whereIn('id', $input['member'])->pluck('full_name',
+                'id')->toArray() : collect();
         } else {
             $input['branch_id'] = $myBranch;
         }
 
         $status = Task::groupByStatus($input)->get();
+        dd($input);
         $docs = Task::search($input)->orderByDesc('id')->orderBy('task_status_id')->paginate(StatusCode::PAGINATE_20);
         $status = TaskStatus::select('id', 'name')->get()->transform(function ($item) use ($status) {
             return [
