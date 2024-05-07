@@ -360,7 +360,6 @@ class TaskController extends Controller
         }
 
         $status = Task::groupByStatus($input)->get();
-        dd($input);
         $docs = Task::search($input)->orderByDesc('id')->orderBy('task_status_id')->paginate(StatusCode::PAGINATE_20);
         $status = TaskStatus::select('id', 'name')->get()->transform(function ($item) use ($status) {
             return [
