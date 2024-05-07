@@ -48,16 +48,16 @@ class CustomerObserver
                 }
             if (!empty(@$changedAttributes['status_id']) && !empty(@$oldData['status_id'])) {
                 $text = $text.' <span class="text-green">| Trạng thái: ' . Status::find($oldData['status_id'])->name . ' --> ' . Status::find($changedAttributes['status_id'])->name.'</span>';
-                $oldStatus = HistoryStatus::where('status_id', $changedAttributes['status_id'])->first();
+                $oldStatus = HistoryStatus::where('status_id', $oldData['status_id'])->first();
                 if (!empty($oldStatus)) {
                     $oldStatus->updated_at = now();
                     $oldStatus->save();
-                }else{
-                    $customer->historyStatus()->create([
+                }
+                $customer->historyStatus()->create([
                         'customer_id' => $customer->id,
                         'status_id' => $customer->status_id,
                         'created_at' => now(),
-                    ]);
+                ]);
                 }
             }
             if (!empty($text)){
