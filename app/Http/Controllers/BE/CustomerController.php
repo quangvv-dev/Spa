@@ -22,6 +22,7 @@ use App\Models\Department;
 use App\Models\Genitive;
 use App\Models\GroupComment;
 use App\Models\HistorySms;
+use App\Models\Locale;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\PackageWallet;
@@ -176,7 +177,8 @@ class CustomerController extends Controller
     public function create()
     {
         $title = 'Thêm mới khách hàng';
-        return view('customers._form', compact('title'));
+        $locales = Locale::get()->pluck('name','id');
+        return view('customers._form', compact('title','locales'));
     }
 
     public function createGroup()
@@ -406,11 +408,12 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        $user['birthday'] = Functions::dayMonthYear($customer->birthday);
+//        $user['birthday'] = Functions::dayMonthYear($customer->birthday);
+        $locales = Locale::get()->pluck('name','id');
         $categories = Category::get();
         $categoryId = $customer->categories()->get()->pluck('id')->toArray();
         $title = 'Sửa khách hàng';
-        return view('customers._form', compact('customer', 'title', 'categories', 'categoryId'));
+        return view('customers._form', compact('customer', 'title', 'categories', 'categoryId','locales'));
     }
 
     /**

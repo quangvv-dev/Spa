@@ -122,7 +122,8 @@
                 <div class="row">
                     <div class="col-12 row">
                         <div class="title col-5">Doanh thu:</div>
-                        <div class="col-7">{{@number_format($data['payment'] - $wallets['used'] - $data['is_debt'])}}</div>
+                        <div
+                            class="col-7">{{@number_format($data['payment'] - $wallets['used'] - $data['is_debt'])}}</div>
                     </div>
                     <div class="col-12 row">
                         <div class="title col-5">Thu nợ:</div>
@@ -201,6 +202,11 @@
                 <div id="piechart-5" style="margin-left: 15px"></div>
             </div>
         @endif
+        @if(count($revenue_locale))
+            <div class="col-md-6">
+                <div id="piechart-9" style="margin-left: 15px"></div>
+            </div>
+        @endif
         <div class="col-md-6">
             <div id="piechart-6" style="margin-left: 15px"></div>
         </div>
@@ -259,7 +265,32 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            @forelse($data['statusCustomer'] as $k =>$item)
+            @forelse($revenue_locale as $k =>$item)
+            ['{{$item->name}}', {{$item->total}}],
+            @empty
+            @endforelse
+        ]);
+
+        var options = {
+            title: 'TOP 5 TỈNH CÓ DOANH THU CAO NHẤT',
+            width: 500,
+            height: 300,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-9'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+                @forelse($data['statusCustomer'] as $k =>$item)
             ['{{$item->name}}', {{$item->total}}],
             @empty
             @endforelse
@@ -308,7 +339,7 @@
 
         var data = google.visualization.arrayToDataTable([
             ['Task', 'Hours per Day'],
-            @forelse($data['category_product'] as $k =>$item)
+                @forelse($data['category_product'] as $k =>$item)
             ['{{$item->name}}', {{$item->total}}],
             @empty
             @endforelse
@@ -379,9 +410,9 @@
 
     function drawBasic() {
         var data = google.visualization.arrayToDataTable([
-            ['Ngày','Doanh số','Doanh thu'],
+            ['Ngày', 'Doanh số', 'Doanh thu'],
                 @foreach($data['revenue_month'] as $k =>$item)
-            ['{{substr($item->payment_date, -2)}}',{{$item->order_month + $item->wallet_month}},{{$item->payment_revenue + $item->payment_wallet_month}}],
+            ['{{substr($item->payment_date, -2)}}', {{$item->order_month + $item->wallet_month}}, {{$item->payment_revenue + $item->payment_wallet_month}}],
             @endforeach
         ]);
         var options = {

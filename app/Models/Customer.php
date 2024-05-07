@@ -49,8 +49,8 @@ class Customer extends Model
         'old_customer',
         'source_fb',
         'category_tips',
-        'FB_ID',
-        'page_id',
+//        'FB_ID',
+//        'page_id',
         'carepage_id',
         'devices_token',
         'is_gioithieu',
@@ -60,6 +60,7 @@ class Customer extends Model
         'type_ctv',
         'is_duplicate',
         'last_time',
+        'locale_id'
     ];
     public const grid_display = [
         0 => 'STT',
@@ -258,6 +259,11 @@ class Customer extends Model
     public function gioithieu()
     {
         return $this->belongsTo(Customer::class, 'is_gioithieu', 'id')->withTrashed();
+    }
+
+    public function locale()
+    {
+        return $this->belongsTo(Locale::class);
     }
 
 //    public function child()

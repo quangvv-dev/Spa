@@ -125,7 +125,6 @@ class StatisticController extends Controller
         $payment_isdebt = clone $payment;
         $payment_years = clone $payment_All;
         $orders = Order::returnRawData($input);
-        $orders2 = clone $orders;
         $order_single = clone $orders;
         $order_multiple = clone $orders;
         $orders2 = clone $orders;
@@ -193,6 +192,7 @@ class StatisticController extends Controller
         $revenue = self::getRevenueCustomer($input, $payment);
 
         $revenue_gender = $this->orderService->revenueGenderWithOrders($input);
+        $revenue_locale = $this->orderService->revenueLocaleWithOrders($input);
 
         $revenue_year = $ordersYear->select(\DB::raw('SUM(price) as all_total'), \DB::raw('MONTH(payment_date) month'))->groupBy('month')->get();
         $all_payment = $payment->sum('price');
@@ -211,11 +211,11 @@ class StatisticController extends Controller
         if ($request->ajax()) {
             return view('statistics.ajax',
                 compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
-                    'revenue_gender', 'revenue_year', 'revenue'));
+                    'revenue_gender', 'revenue_year', 'revenue','revenue_locale'));
         }
         return view('statistics.index',
             compact('data', 'services', 'products', 'statusRevenues', 'list_payment', 'schedules', 'wallets',
-                'revenue_gender', 'revenue_year', 'revenue'));
+                'revenue_gender', 'revenue_year', 'revenue','revenue_locale'));
     }
 
     /**

@@ -43,25 +43,25 @@ class OrderService
             $countDay = $data['count_day'] - 1;
         }
         $input = [
-            'member_id' => $data['user_id'],
-            'branch_id' => $data['branch_id'],
-            'the_rest' => $theRest,
-            'discount_order' => $data['discount_order'],
-            'role_type' => $data['role_type'],
-            'hsd' => isset($data['hsd']) ? $data['hsd'] : null,
-            'support_id' => isset($data['support_id']) ? $data['support_id'] : 0,
-            'count_day' => $countDay,
-            'type' => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total' => $theRest,
-            'owner_id' => Auth::user()->id ? Auth::user()->id : 1,
-            'carepage_id' => $data['carepage_id'] ?: 0,
-            'mkt_id' => $data['mkt_id'] ?: 0,
-            'telesale_id' => $data['telesale_id'] ?: 0,
-            'source_id' => $data['source_id'] ?: 0,
-            'discount' => $data['discount'] ?: 0,
-            'voucher_id' => $data['voucher_id'] ?: 0,
+            'member_id'         => $data['user_id'],
+            'branch_id'         => $data['branch_id'],
+            'the_rest'          => $theRest,
+            'discount_order'    => $data['discount_order'],
+            'role_type'         => $data['role_type'],
+            'hsd'               => isset($data['hsd']) ? $data['hsd'] : null,
+            'support_id'        => isset($data['support_id']) ? $data['support_id'] : 0,
+            'count_day'         => $countDay,
+            'type'              => ($data['count_day'] == null || $data['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'all_total'         => $theRest,
+            'owner_id'          => Auth::user()->id ? Auth::user()->id : 1,
+            'carepage_id'       => $data['carepage_id'] ?: 0,
+            'mkt_id'            => $data['mkt_id'] ?: 0,
+            'telesale_id'       => $data['telesale_id'] ?: 0,
+            'source_id'         => $data['source_id'] ?: 0,
+            'discount'          => $data['discount'] ?: 0,
+            'voucher_id'        => $data['voucher_id'] ?: 0,
             'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : 0,
-            'created_at' => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
+            'created_at'        => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
         ];
         $model = $this->order->fill($input);
 
@@ -112,7 +112,7 @@ class OrderService
         $model = $this->find($id);
 
         $order = [
-            'cash' => $data['gross_revenue'] ?: 0,
+            'cash'        => $data['gross_revenue'] ?: 0,
             'remain_cash' => $model->the_rest - $data['gross_revenue'],
             'return_cash' => $data['gross_revenue'] > $model->the_rest ? $data['gross_revenue'] - $model->the_rest : 0,
         ];
@@ -129,15 +129,16 @@ class OrderService
         $order = $this->find($id);
         GroupComment::create([
             'customer_id' => $order->member_id,
-            'user_id' => Auth::user()->id,
-            'status_id' => @$order->customer->status_id ?? null,
-            'messages' => "<span class='bold text-blue'>Đơn hàng: </span> " . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . number_format($order->all_total),
+            'user_id'     => Auth::user()->id,
+            'status_id'   => @$order->customer->status_id ?? null,
+            'messages'    => "<span class='bold text-blue'>Đơn hàng: </span> " . Auth::user()->full_name . ' đã xóa đơn hàng trị giá ' . number_format($order->all_total),
         ]);
         if ($order->role_type == StatusCode::PRODUCT) {
             $order_detail = OrderDetail::select('booking_id', 'quantity')->where('order_id', $order->id)
                 ->where('branch_id', $order->branch_id)->get();
             foreach ($order_detail as $item) {
-                $product = ProductDepot::where('branch_id', $order->branch_id)->where('product_id', $item->booking_id)->first();
+                $product = ProductDepot::where('branch_id', $order->branch_id)->where('product_id',
+                    $item->booking_id)->first();
                 if (isset($product)) {
                     $product->quantity = $product->quantity + $item->quantity;
                     $product->save();
@@ -182,7 +183,7 @@ class OrderService
         }
 
         return $data = [
-            'order' => $order,
+            'order'         => $order,
             'order_details' => $orderDetails,
         ];
     }
@@ -198,16 +199,16 @@ class OrderService
         }
 
         $attibutes = [
-            'member_id' => $attibutes['user_id'],
-            'the_rest' => $theRest,
-            'role_type' => $attibutes['role_type'],
-            'hsd' => isset($attibutes['hsd']) ? $attibutes['hsd'] : null,
-            'support_id' => isset($attibutes['support_id']) ? $attibutes['support_id'] : 0,
-            'count_day' => $attibutes['count_day'],
-            'type' => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
-            'all_total' => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount - $order->discount_order,
+            'member_id'         => $attibutes['user_id'],
+            'the_rest'          => $theRest,
+            'role_type'         => $attibutes['role_type'],
+            'hsd'               => isset($attibutes['hsd']) ? $attibutes['hsd'] : null,
+            'support_id'        => isset($attibutes['support_id']) ? $attibutes['support_id'] : 0,
+            'count_day'         => $attibutes['count_day'],
+            'type'              => ($attibutes['count_day'] == null || $attibutes['count_day'] == 0) ? Order::TYPE_ORDER_DEFAULT : Order::TYPE_ORDER_ADVANCE,
+            'all_total'         => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount - $order->discount_order,
             'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
-            'created_at' => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
+            'created_at'        => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
         ];
 
         $order->update($attibutes);
@@ -223,7 +224,7 @@ class OrderService
 
         $order->update([
             'gross_revenue' => $order->gross_revenue - $paymentHistory->price,
-            'the_rest' => $order->the_rest + $paymentHistory->price,
+            'the_rest'      => $order->the_rest + $paymentHistory->price,
         ]);
         if ($paymentHistory->payment_type != PaymentHistory::POINT) {
             $point = $paymentHistory->price / StatusCode::EXCHANGE_POINT * StatusCode::EXCHANGE_MONEY;
@@ -243,7 +244,10 @@ class OrderService
     public function revenueGenderWithOrders($input)
     {
         return Order::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
-            $q->whereBetween('orders.created_at', [Functions::yearMonthDay($input['start_date']) . " 00:00:00", Functions::yearMonthDay($input['end_date']) . " 23:59:59"]);
+            $q->whereBetween('orders.created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
         })->when(isset($input['branch_id']), function ($query) use ($input) {
             $query->where('orders.branch_id', $input['branch_id']);
         })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
@@ -252,5 +256,22 @@ class OrderService
             DB::raw('SUM(gross_revenue) as all_total'),
             DB::raw("(CASE WHEN c.gender='0' THEN 'Nữ' ELSE 'Nam' END) as name"))
             ->groupBy('c.gender')->get();
+    }
+
+    public function revenueLocaleWithOrders($input)
+    {
+        return Order::when(isset($input['start_date']) && isset($input['end_date']), function ($q) use ($input) {
+            $q->whereBetween('orders.created_at', [
+                Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+            ]);
+        })->when(isset($input['branch_id']), function ($query) use ($input) {
+            $query->where('orders.branch_id', $input['branch_id']);
+        })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+            $q->whereIn('orders.branch_id', $input['group_branch']);
+        })->join('customers as c', 'c.id', 'orders.member_id')
+            ->join('locales as lc', 'c.locale_id', 'lc.id')
+            ->select('lc.name', DB::raw('SUM(gross_revenue) as total'))
+            ->groupBy('c.locale_id')->orderByDesc('total')->take(5)->get();
     }
 }

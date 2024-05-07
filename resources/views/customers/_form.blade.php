@@ -99,6 +99,13 @@
                         <input type="hidden" name="branch_id" value="{{$checkRole}}">
                     @endif
                     <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('locale_code') ? 'has-error' : '' }}">
+                            {!! Form::label('locale_id', 'Khách tỉnh',['class'=>'required']) !!}
+                            {!! Form::select('locale_id',$locales, @$customer->locale_id, array('class' => 'form-control select2')) !!}
+                            <span class="help-block">{{ $errors->first('locale_code', ':message') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group">
                             <label for="ctv" style="width: 100%;cursor: pointer;">Cộng tác viên</label>
                             <input id="ctv" type="checkbox" name="type_ctv"
@@ -186,7 +193,7 @@
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('is_gioithieu', 'SĐT khách giới thiệu') !!}
+                            {!! Form::label('is_gioithieu', 'SĐT | Mã KH giới thiệu') !!}
                             @if(isset($customer))
                                 {!! Form::text('is_gioithieu',isset($customer)? (@$customer->gioithieu->phone.' ('.@$customer->gioithieu->full_name.' )'):null, array('id' => 'is_gioithieu','class' => 'form-control',$customer->is_gioithieu!=0?'readonly':'')) !!}
                             @else
