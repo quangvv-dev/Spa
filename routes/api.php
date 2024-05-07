@@ -117,6 +117,7 @@ Route::group(['middleware' => ['jwt.auth.token'], 'namespace' => 'API'], functio
         Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
         Route::put('tasks/{task}', [TaskController::class, 'update']);
         Route::get('task-status', [TaskController::class, 'taskStatus']);
+        Route::get('task-type', [TaskController::class, 'taskType']);
     });
     Route::get('approval-orders', 'ChamCong\OrderController@index');
     Route::post('approval-orders', 'ChamCong\OrderController@store');

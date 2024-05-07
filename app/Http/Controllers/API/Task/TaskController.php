@@ -34,7 +34,7 @@ class TaskController extends BaseApiController
         $tasks = Task::where('customer_id', $customer->id)->orderByDesc('date_from')->paginate(10);
         $data = [
             'lastPage' => $tasks->lastPage(),
-            'records' => TasksResource::collection($tasks),
+            'records'  => TasksResource::collection($tasks),
         ];
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
@@ -50,10 +50,10 @@ class TaskController extends BaseApiController
         }
         $customer = Customer::find($request->customer_id);
         $request->merge([
-            'user_id' => $request->jwtUser->id,
+            'user_id'       => $request->jwtUser->id,
             'taskmaster_id' => $request->jwtUser->id,
-            'priority' => 1,
-            'branch_id' => $customer->branch_id,
+            'priority'      => 1,
+            'branch_id'     => $customer->branch_id,
         ]);
         $input = $request->all();
         if ($input['type'] == 3 && $request->jwtUser->department_id != DepartmentConstant::CSKH) {
@@ -64,8 +64,10 @@ class TaskController extends BaseApiController
 
         if ($request->type == StatusCode::GOI_LAI) {
             $input['user_id'] = $customer->telesales_id;
-        } else if ($request->type == StatusCode::CSKH) {
-            $input['user_id'] = @$customer->cskh ?? $customer->telesales_id;
+        } else {
+            if ($request->type == StatusCode::CSKH) {
+                $input['user_id'] = @$customer->cskh ?? $customer->telesales_id;
+            }
         }
         $task = $this->taskService->create($input);
         $request->merge(['api_type' => 'list_tasks']);
@@ -85,6 +87,25 @@ class TaskController extends BaseApiController
     public function taskStatus()
     {
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', TaskStatus::select('id', 'name')->get());
+    }
+
+    public function taskType()
+    {
+        $data = [
+            [
+                'id'   => 3,
+                'name' => 'Của tôi',
+            ],
+            [
+                'id'   => 1,
+                'name' => 'Gọi lại (phân bổ cho Telesale)',
+            ],
+            [
+                'id'   => 2,
+                'name' => 'CSKH (phân bổ cho CSKH)',
+            ],
+        ];
+        return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', collect($data));
     }
 
     public function destroy(Task $task)
