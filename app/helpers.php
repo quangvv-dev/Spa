@@ -179,7 +179,9 @@ if (!function_exists('myTeamMember')) {
         $user = \App\Models\TeamMember::where('user_id',
             \Illuminate\Support\Facades\Auth::user()->id)->first();
 
-        return isset($user->members) ? $user->members->pluck('user_id')->toArray() : [];
+        return !empty($user) ? \App\Models\TeamMember::where('team_id', $user->team_id)
+            ->pluck('user_id')->toArray() : [];
+//        return isset($user->members) ? $user->members->pluck('user_id')->toArray() : [];
     }
 }
 
