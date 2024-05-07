@@ -33,7 +33,7 @@ class TasksResource extends JsonResource
                 ] : null,
                 'type' => @$this->type ? [
                     'id' => $this->type,
-                    'name' => Task::TYPE[$this->type]
+                    'name' => Task::TYPE[$this->type]??null
                 ] : null,
             ];
         }
