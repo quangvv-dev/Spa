@@ -56,6 +56,7 @@ class TaskController extends BaseApiController
             'branch_id'     => $customer->branch_id,
         ]);
         $input = $request->all();
+        $input['type'] = StatusCode::GOI_LAI;
         if ($input['type'] == 3 && $request->jwtUser->department_id != DepartmentConstant::CSKH) {
             $input['type'] = StatusCode::GOI_LAI;
         } elseif ($input['type'] == 3 && $request->jwtUser->department_id == DepartmentConstant::CSKH) {
