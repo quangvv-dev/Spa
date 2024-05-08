@@ -20,6 +20,7 @@ class AlbumResource extends JsonResource
             'customer_id'      => @$this->customer->id,
             'customer_name'    => @$this->customer->full_name,
             'phone'            => @$this->customer->phone,
+            'account_code'     => @$this->customer->account_code,
             'title'            => @$this->title,
             'branch_id'        => @$this->branch_id,
             'service_text'           => @$this->service_text,
