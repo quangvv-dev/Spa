@@ -14,7 +14,6 @@ class AlbumResource extends JsonResource
      */
     public function toArray($request)
     {
-
         $phone = $request->jwtUser->permission('phone.open') ? @$this->customer->phone : str_limit($this->customer->phone, 7, 'xxx');
         return [
 //            'id'               => @$this->id,
