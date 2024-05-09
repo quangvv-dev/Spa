@@ -494,12 +494,13 @@ class AuthController extends BaseApiController
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::MARKETING,
+                    DepartmentConstant::KE_TOAN,
                 ],
                 'name_menu' => 'BÁN HÀNG',
             ],
             [
                 'menu_code' => MenuConstant::QL_TONG_DAI,
-                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES],
+                'department' => [DepartmentConstant::ADMIN, DepartmentConstant::TELESALES, DepartmentConstant::KE_TOAN],
                 'name_menu' => 'QL TỔNG ĐÀI',
             ],
             [
@@ -524,6 +525,7 @@ class AuthController extends BaseApiController
                     DepartmentConstant::MARKETING,
                     DepartmentConstant::CARE_PAGE,
                     DepartmentConstant::WAITER,
+                    DepartmentConstant::KE_TOAN,
                 ],
                 'name_menu' => 'DANH SÁCH KHÁCH HÀNG',
             ],
@@ -561,6 +563,9 @@ class AuthController extends BaseApiController
                 'menu_code' => MenuConstant::ALBUM_KH,
                 'department' => [
                     DepartmentConstant::ADMIN,
+                    DepartmentConstant::DOCTOR,
+                    DepartmentConstant::Y_TA,
+                    DepartmentConstant::KE_TOAN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::WAITER,
                     DepartmentConstant::TECHNICIANS,
