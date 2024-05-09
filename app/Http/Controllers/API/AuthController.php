@@ -444,6 +444,7 @@ class AuthController extends BaseApiController
                     DepartmentConstant::ADMIN,
                     DepartmentConstant::TELESALES,
                     DepartmentConstant::MARKETING,
+                    DepartmentConstant::CARE_PAGE,
                     DepartmentConstant::WAITER,
                     DepartmentConstant::TU_VAN_VIEN,
                     DepartmentConstant::TECHNICIANS,
