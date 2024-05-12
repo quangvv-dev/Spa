@@ -35,7 +35,17 @@
                     {!! Form::label('server_call_center', 'SERVER TỔNG ĐÀI', array('class' => 'control-label required')) !!}
                     {!! Form::select('server_call_center',[\App\Constants\StatusCode::SERVER_3CX=>'Sever 3CX',\App\Constants\StatusCode::SERVER_GTC_TELECOM=>'Server GtcTelecom' ], @setting('server_call_center'), array('class' => 'form-control','data-placeholder'=>'Danh mục cha')) !!}
                 </div>
-                <div class="form-group"></div>
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <div class="form-group">
+                    {!! Form::label('approval_start', 'BĐ ca chấm công (08:00)', array('class' => 'control-label')) !!}
+                    {!! Form::text('approval_start',@setting('approval_start'), array('class' => 'form-control')) !!}
+                </div>
+            </div><div class="col-md-3 col-xs-12">
+                <div class="form-group">
+                    {!! Form::label('approval_end', 'Kết thúc ca chấm công (18:30)', array('class' => 'control-label')) !!}
+                    {!! Form::text('approval_end',@setting('approval_end'), array('class' => 'form-control')) !!}
+                </div>
             </div>
         </div>
         <hr class="mt-2 mb-2">
