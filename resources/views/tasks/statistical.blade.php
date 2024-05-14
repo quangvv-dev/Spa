@@ -79,7 +79,7 @@
             $(document).on('click', '.tag', function(e) {
                 let data = $(this).data('content');
                 $('#name').val(data.name).change();
-                // $("a[href]").attr("href",link);
+                $("#customer").attr("href",'/customers/'+data.customer.id);
                 $('.name-customer').html(data.customer.full_name+'  ('+data.customer.account_code+')').change();
                 $('.phone-customer').val(data.customer.phone).change();
                 $('#user_id').val(data.user.full_name).change();
