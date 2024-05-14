@@ -119,7 +119,7 @@ class TaskController extends Controller
             'branch_id' => $customer->branch_id,
         ]);
         $input = $request->except('ajax');
-        $input['type'] = StatusCode::CSKH;
+        $input['type'] = StatusCode::GOI_LAI;
         if ($input['type'] == 3 && Auth::user()->department_id != DepartmentConstant::CSKH) {
             $input['type'] = StatusCode::GOI_LAI;
         } elseif ($input['type'] == 3 && Auth::user()->department_id == DepartmentConstant::CSKH) {
