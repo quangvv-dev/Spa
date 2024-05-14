@@ -91,7 +91,7 @@
                 $('#description').html(data.description).change();
                 $('.checkTask').attr('data-id',data.id);
                 if(data.task_status_id == 3){
-                    $('.checkTask').attr('checked','checked');
+                    $('.checkTask').prop('checked',true);
                 }else {
                     $('.checkTask').prop('checked', false);
                 }
