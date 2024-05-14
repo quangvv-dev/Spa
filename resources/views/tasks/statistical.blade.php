@@ -78,8 +78,6 @@
 
             $(document).on('click', '.tag', function(e) {
                 let data = $(this).data('content');
-                console.log(data)
-
                 $('#name').val(data.name).change();
                 // $("a[href]").attr("href",link);
                 $('.name-customer').html(data.customer.full_name+'  ('+data.customer.account_code+')').change();
@@ -89,29 +87,29 @@
                 $('#time_from').val(data.time_from).change();
                 $('#time_to').val(data.time_to).change();
                 $('#description').html(data.description).change();
-                $('.checkTask').attr('data-id',data.id);
-                if(data.task_status_id == 3){
-                    $('.checkTask').prop('checked',true);
-                }else {
-                    $('.checkTask').prop('checked', false);
+                $('.btn-complete').attr('data-id', data.id);
+
+                if(data.task_status_id != 1){
+                    $('.btn-complete').prop('disabled',true);
                 }
             });
 
-            $(document).on('click', '.checkTask', function(e) {
-                let val = $(this).val();
-                console.log(val);
-                if(val == "on"){
-                    $.ajax({
-                        type: 'POST',
-                        url: '/ajax/tasks/update',
-                        data: {
-                            id: $(this).data('id'),
-                        },
-                        success: function () {
-                            alertify.success('Hoàn thành công việc');
-                        }
-                    })
-                }
+            $(document).on('click', '.btn-complete', function(e) {
+                let id = $(this).data('id');
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/tasks/update',
+                    data: {
+                        id: id,
+                    },
+                    success: function () {
+                        $('a[data-id="' + id + '"]').text('Hoàn thành');
+                        $('a[data-id="' + id + '"]').removeClass('tag-azure');
+                        $('a[data-id="' + id + '"]').addClass('tag-success');
+                        $('.btn-complete').prop('disabled',true);
+                        alertify.success('Hoàn thành công việc');
+                    }
+                });
             });
             $(document).on('click', 'a.page-link', function (e) {
                 e.preventDefault();

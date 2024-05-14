@@ -239,6 +239,7 @@ class TaskController extends Controller
 //            $note = str_replace("'", ' ', $note);
 //            $request->merge(['description' => $note]);
 //        }
+        $input['type'] = StatusCode::GOI_LAI;
         $input = $request->except('user_id2', 'status_name', 'ajax');
         $task = $this->taskService->update($input, $id);
         $task->users()->sync($request->user_id2);

@@ -12,11 +12,6 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('name', 'Tên công việc', array('class' => ' required')) !!}
-                            <label class="switch" style="float: right">
-                                <input name="checkbox" class="checkTask"
-                                       type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
                             {{--{!! Form::hidden('task_id', null, array('id'=>'currentTask')) !!}--}}
                             {!! Form::text('name', null, array('class' => 'form-control','id'=>'name', 'required' => true)) !!}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
@@ -62,8 +57,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                {{--<button type="submit" class="btn btn-success">Lưu</button>--}}
-                {{--<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>--}}
+                <button type="button" class="btn btn-success btn-complete float-right">Hoàn thành</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             </div>
             {{ Form::close() }}
         </div>

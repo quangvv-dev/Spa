@@ -36,11 +36,11 @@
                     <td class="text-center">{{$s->type==\App\Constants\NotificationConstant::CALL?'Gọi điện':'CSKH'}}</td>
                     <td class="text-center">
                         @if($s->task_status_id ==  \App\Constants\StatusCode::NEW_TASK)
-                            <a class="tag tag-azure" data-toggle="modal" data-target="#myModal" data-content="{{json_encode($s)}}">Mới</a>
+                            <a class="tag tag-azure" data-toggle="modal" data-target="#myModal" data-id="{{$s->id}}" data-content="{{json_encode($s)}}">Mới</a>
                         @elseif($s->task_status_id ==  \App\Constants\StatusCode::DONE_TASK)
-                            <a class="tag tag-success" data-toggle="modal" data-target="#myModal" data-content="{{json_encode($s)}}">Hoàn thành</a>
+                            <a class="tag tag-success" data-toggle="modal" data-target="#myModal" data-id="{{$s->id}}" data-content="{{json_encode($s)}}">Hoàn thành</a>
                         @else
-                            <a class="tag tag-danger" data-toggle="modal" data-target="#myModal" data-content="{{json_encode($s)}}">Quá hạn</a>
+                            <a class="tag tag-danger" data-toggle="modal" data-target="#myModal" data-id="{{$s->id}}" data-content="{{json_encode($s)}}">Quá hạn</a>
                         @endif
                     </td>
                 </tr>
