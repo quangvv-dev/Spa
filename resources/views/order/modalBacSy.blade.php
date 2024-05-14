@@ -10,9 +10,9 @@
                 <div class="row mb-2">
                     <div class="col-4"></div>
                     <div class="col-8">
-                        <input type="text" class="form-control input-custom quickSearchPage quickSearchPageDoctor active" placeholder="Nhập tên">
-                        <input type="text" class="form-control input-custom quickSearchPage quickSearchPageYTa" placeholder="Nhập tên">
-                        <input type="text" class="form-control input-custom quickSearchPage quickSearchPageYTa2" placeholder="Nhập tên">
+{{--                        <input type="text" class="form-control input-custom quickSearchPage quickSearchPageDoctor active" placeholder="Nhập tên">--}}
+{{--                        <input type="text" class="form-control input-custom quickSearchPage quickSearchPageYTa" placeholder="Nhập tên">--}}
+{{--                        <input type="text" class="form-control input-custom quickSearchPage quickSearchPageYTa2" placeholder="Nhập tên">--}}
                         <input type="text" class="form-control input-custom quickSearchPage quickSearchPageSupport" placeholder="Nhập tên">
                         <input type="text" class="form-control input-custom quickSearchPage quickSearchPageSupport2" placeholder="Nhập tên">
                     </div>
