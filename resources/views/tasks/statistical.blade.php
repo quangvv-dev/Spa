@@ -93,7 +93,7 @@
                 if(data.task_status_id == 3){
                     $('.checkTask').attr('checked','checked');
                 }else {
-                    $('.checkTask').attr('checked',false);
+                    $('.checkTask').prop('checked', false);
                 }
             });
 
