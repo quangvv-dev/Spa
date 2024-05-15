@@ -67,7 +67,7 @@ class TaskController extends BaseApiController
             $input['user_id'] = $customer->telesales_id;
         } else {
             if ($request->type == StatusCode::CSKH) {
-                $input['user_id'] = @$customer->cskh ?? $customer->telesales_id;
+                $input['user_id'] = @$customer->cskh_id ?? $customer->telesales_id;
             }
         }
         $task = $this->taskService->create($input);
