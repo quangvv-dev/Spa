@@ -23,13 +23,11 @@ $(document).on('click', '.view_modal', function (e) {
 
                             <div class="mt10 pb10" style="height:86px ; color:black">
                             <div class="col-md-12 info-avatar padding5 last_contacthover box_last">
-                            <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + `
+                            <p><i class="fa fa-user mr5" style="color: black;"></i> ` + data.customer.full_name + " ("+data.customer.account_code+")" + `
                                 <i class="fa orange fa-star" aria-hidden="true" style="color: orange;"></i>
                             </p>
-                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i><a class="__clickToCall blue" data-contact-id="5678"
-                                                          rel="tooltip" data-original-title="Click để gọi"
-                                                          data-placement="right" data-flag="1"
-                                                          data-type="crm"> ` + data.customer.phone + `</a></p>
+                            <p class="mt10"><i class="fa fa-phone mr10" style="color: black;" aria-hidden="true"></i>
+                            <a> ` + data.customer.phone + `</a></p>
                             <p> <i class="fa fa-users"style="color: black;" aria-hidden="true"></i>` + category + `</p>
                             <p class="mt10 white-space"><i class="icon-envelope mr5"></i></p></div>
                         </div>
