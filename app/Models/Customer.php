@@ -110,7 +110,6 @@ class Customer extends Model
                     $q->where('account_code', 'like', '%' . $conditions['search']);
                 }
             });
-            unset($conditions['branch_id']);
         })
             ->when(isset($conditions['status']), function ($query) use ($conditions) {
                 $query->where('status_id', $conditions['status']);
@@ -191,20 +190,24 @@ class Customer extends Model
         if ($user->department_id == DepartmentConstant::TELESALES) {
             $member = checkTeamLead();
             if (isset($param['search'])) {
-                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
-            }else{
+                $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+            } else {
                 if (!empty($user->isLeader) && count($member)) {
-                    $data = $data->whereIn('telesales_id',$member)->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                    $data = $data->whereIn('telesales_id', $member)->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
                 } else {
                     if (setting('view_customer_sale') == StatusCode::ON || $user->isLeaderAdmin()) {
-                        $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+                        $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
                     } else {
                         $data = $data->where('telesales_id', $user->id);
                     }
                 }
             }
         } else {
-            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
+            $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
+        }
+        if (isset($param['search'])) {
+            unset($param['branch_id']);
+            $data = self::latest()->with('status', 'marketing', 'categories', 'orders', 'source_customer', 'groupComments');
         }
         if (count($param)) {
             static::applySearchConditions($data, $param);
@@ -252,6 +255,7 @@ class Customer extends Model
     {
         return $this->hasMany(HistoryStatus::class);
     }
+
     public function gioithieu()
     {
         return $this->belongsTo(Customer::class, 'is_gioithieu', 'id')->withTrashed();
@@ -304,7 +308,7 @@ class Customer extends Model
 
     public function getDuplicateAttribute()
     {
-        return self::where('phone',$this->phone)->count() > 1;
+        return self::where('phone', $this->phone)->count() > 1;
     }
 
     public function getActiveTextAttribute()
