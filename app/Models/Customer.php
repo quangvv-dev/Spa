@@ -105,11 +105,12 @@ class Customer extends Model
             $query->where(function ($q) use ($conditions) {
                 if (is_numeric($conditions['search'])) {
                     $q->where('phone', $conditions['search'])
-                        ->orWhere('account_code', $conditions['search']);
+                        ->orWhere('membership', $conditions['search']);
                 } else {
                     $q->where('account_code', 'like', '%' . $conditions['search']);
                 }
             });
+            unset($conditions['branch_id']);
         })
             ->when(isset($conditions['status']), function ($query) use ($conditions) {
                 $query->where('status_id', $conditions['status']);
@@ -204,11 +205,6 @@ class Customer extends Model
             }
         } else {
             $data = $data->with('status', 'marketing', 'categories', 'orders', 'source_customer','groupComments');
-        }
-        if (isset($param['branch_id']) && $param['branch_id']) {
-            if (empty($param['search'])) {
-                $data = $data->where('branch_id', $param['branch_id']);
-            }
         }
         if (count($param)) {
             static::applySearchConditions($data, $param);
