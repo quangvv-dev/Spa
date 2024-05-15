@@ -129,7 +129,7 @@ class TaskController extends Controller
         if ($request->type == StatusCode::GOI_LAI) {
             $input['user_id'] = $customer->telesales_id;
         } else if ($request->type == StatusCode::CSKH) {
-            $input['user_id'] = @$customer->cskh ?? $customer->telesales_id;
+            $input['user_id'] = @$customer->cskh_id ?? $customer->telesales_id;
         }
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
