@@ -105,7 +105,7 @@ class Customer extends Model
             $query->where(function ($q) use ($conditions) {
                 if (is_numeric($conditions['search'])) {
                     $q->where('phone', $conditions['search'])
-                        ->orWhere('membership', $conditions['search']);
+                        ->orWhere('account_code', $conditions['search']);
                 } else {
                     $q->where('account_code', 'like', '%' . $conditions['search']);
                 }
