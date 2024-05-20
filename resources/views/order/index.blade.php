@@ -118,7 +118,7 @@
                                                 {!! Form::text('order_detail_id[]', $orderDetail->id, array('class' => 'form-control hidden')) !!}
                                                 <select class="select2 form-control service" required id="service" required
                                                         name="service_id[]">
-                                                    <option>-Chọn sản phẩm-</option>
+                                                    <option>-Chọn dịch vụ khác-</option>
                                                     @foreach($products as $product)
                                                         <option
                                                             value="{{$product->id}}" {{$product->id == $orderDetail->booking_id ? "selected": ""}} >{{@$product->category->name}}
@@ -209,7 +209,7 @@
                         <tfoot>
                         <tr>
                             <td>
-                                <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Sản phẩm</a></div>
+                                <div class="col-md-12"><a href="javascript:void(0)" id="add_row" class="red">(+) Dịch vụ khác</a></div>
                             </td>
                             <td colspan="5">
                                 @if(empty($order))
@@ -305,7 +305,7 @@
                     <div class="row">
                     <div class="col-xs-12 col-md-10">
                         <select class="select2 select3 form-control service" required id="service" name="service_id[]">
-                            <option>-Chọn sản phẩm-</option>
+                            <option>-Chọn dịch vụ khác-</option>
                             @foreach($products as $product)
                 <option value="{{@$product->id}}">{{@$product->category->name}} - {{@$product->name}} </option>
                             @endforeach

@@ -12,14 +12,14 @@
 
                 <div class="row text-center">
                     <div class="col-md-12">
-                        <a href="{{ route('ordersService.create', $customer->id) }}?type=services" class="btn btn-success width-180">Dịch vụ</a>
+                        <a href="{{ route('ordersService.create', $customer->id) }}?type=services" class="btn btn-success width-180">Đơn học phí</a>
                     </div>
                     <div class="col-md-12">
-                        <a href="{{ route('orders.create', $customer->id) }}?type=products" class="btn btn-danger width-180">Sản phẩm</a>
+                        <a href="{{ route('orders.create', $customer->id) }}?type=products" class="btn btn-danger width-180">Đơn khác</a>
                     </div>
-                    <div class="col-md-12">
-                        <a href="{{ route('ordersService.create', $customer->id) }}?type=combos" class="btn btn-info width-180">Sản phẩm & dịch vu</a>
-                    </div>
+{{--                    <div class="col-md-12">--}}
+{{--                        <a href="{{ route('ordersService.create', $customer->id) }}?type=combos" class="btn btn-info width-180">Sản phẩm & dịch vu</a>--}}
+{{--                    </div>--}}
                 </div>
             </div>
         </div>
