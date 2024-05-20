@@ -141,9 +141,10 @@
                             // code block
                         }
                         let typeText = value.type == 1?'Lịch mới':(value.type == 2?'Tái khám':'Liệu trình');
+                        let categoryText = value.category.name??'';
                         b.push({
                             id: value.id,
-                            title: typeText+': '+value.customer.full_name+' -'+value.category.name+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
+                            title: typeText+': '+data.customer.full_name+' -'+categoryText+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
                             start: value.date + 'T' + value.time_from + ':00',
                             end: value.date + 'T' + value.time_to + ':00',
                             color: col,
@@ -327,9 +328,10 @@
                     var b = [];
                     var col = chooseColor(data.status);
                     let typeText = data.type == 1?'Lịch mới':(data.type == 2?'Tái khám':'Liệu trình');
+                    let categoryText = data.category.name??'';
                     b.push({
                         id: data.id,
-                        title: typeText+': '+data.customer.full_name+'-'+data.category.name+', ' + ', SĐT: ' + (hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + data.note,
+                        title: typeText+': '+data.customer.full_name+'-'+categoryText+', ' + ', SĐT: ' + (hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + data.note,
                         description: data.note,
                         start: data.date + 'T' + data.time_from + ':00',
                         end: data.date + 'T' + data.time_to + ':00',
