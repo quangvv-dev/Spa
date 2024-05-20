@@ -287,44 +287,44 @@
                 </div>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('depots/product') ? 'active' : '' }}" href="#">
-                    <i class="fas fa-tasks"></i><span>6. Kho Vận</span></a>
-                <div class="sub-item">
-                    <ul>
-                        <li><a href="{{url('depots/product')}}">6.1 Sản phẩm kho</a></li>
-                        <li><a href="{{url('depots/history')}}">6.2 Lich sử nhập, xuất kho</a></li>
-                        <li><a href="{{url('depots/statistical')}}">6.3 Báo cáo tồn</a></li>
-                    </ul>
-                </div>
-            </li>
+{{--            <li class="nav-item">--}}
+{{--                <a class="nav-link {{ Request::is('depots/product') ? 'active' : '' }}" href="#">--}}
+{{--                    <i class="fas fa-tasks"></i><span>6. Kho Vận</span></a>--}}
+{{--                <div class="sub-item">--}}
+{{--                    <ul>--}}
+{{--                        <li><a href="{{url('depots/product')}}">6.1 Sản phẩm kho</a></li>--}}
+{{--                        <li><a href="{{url('depots/history')}}">6.2 Lich sử nhập, xuất kho</a></li>--}}
+{{--                        <li><a href="{{url('depots/statistical')}}">6.3 Báo cáo tồn</a></li>--}}
+{{--                    </ul>--}}
+{{--                </div>--}}
+{{--            </li>--}}
 
-            @if($roleGlobal->permission('thu-chi.list'))
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"
-                       href="#">
-                        <i class="fas fa-tasks"></i><span>7. Duyệt chi</span></a>
-                    <div class="sub-item">
-                        <ul>
-                            @if($roleGlobal->permission('danh-muc-thu-chi.index'))
-                                <li><a href="{{url('danh-muc-thu-chi')}}">7.1 Danh mục duyệt chi</a></li>
-                                <li><a href="{{url('ly-do-thu-chi')}}">7.2 Lý do duyệt chi</a></li>
-                            @endif
-                            <li><a href="{{url('thu-chi')}}">7.3 Danh sách duyệt chi</a></li>
-                        </ul>
-                    </div>
-                </li>
-            @endif
+{{--            @if($roleGlobal->permission('thu-chi.list'))--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a class="nav-link {{ Request::is('danh-muc-thu-chi*')||Request::is('thu-chi*') ? 'active' : '' }}"--}}
+{{--                       href="#">--}}
+{{--                        <i class="fas fa-tasks"></i><span>7. Duyệt chi</span></a>--}}
+{{--                    <div class="sub-item">--}}
+{{--                        <ul>--}}
+{{--                            @if($roleGlobal->permission('danh-muc-thu-chi.index'))--}}
+{{--                                <li><a href="{{url('danh-muc-thu-chi')}}">7.1 Danh mục duyệt chi</a></li>--}}
+{{--                                <li><a href="{{url('ly-do-thu-chi')}}">7.2 Lý do duyệt chi</a></li>--}}
+{{--                            @endif--}}
+{{--                            <li><a href="{{url('thu-chi')}}">7.3 Danh sách duyệt chi</a></li>--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </li>--}}
+{{--            @endif--}}
 
 
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('settings*')||Request::is('settings*') ? 'active' : '' }}"
                    href="#"><i
-                            class="fas fa-cog"></i><span>8. Cài đặt</span></a>
+                            class="fas fa-cog"></i><span>6. Cài đặt</span></a>
                 <div class="sub-item">
                     <ul>
                         @if($roleGlobal->permission('time-status.index'))
-                            <li><a href="{{url('settings/time-status')}}">8.1 Cài đặt thời gian</a></li>
+                            <li><a href="{{url('settings/time-status')}}">6.1 Cài đặt thời gian</a></li>
                         @endif
 
                     </ul>
