@@ -141,7 +141,7 @@
                             // code block
                         }
                         let typeText = value.type == 1?'Lịch mới':(value.type == 2?'Tái khám':'Liệu trình');
-                        let categoryText = !$.isEmptyObject(value.category.name)?value.category.name:"";
+                        let categoryText = !$.isEmptyObject(value.category)?value.category.name:"";
                         b.push({
                             id: value.id,
                             title: typeText+': '+value.customer.full_name+' -'+categoryText+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
@@ -328,7 +328,7 @@
                     var b = [];
                     var col = chooseColor(data.status);
                     let typeText = data.type == 1?'Lịch mới':(data.type == 2?'Tái khám':'Liệu trình');
-                    let categoryText = !$.isEmptyObject(data.category.name)?data.category.name:"";
+                    let categoryText = !$.isEmptyObject(data.category)?data.category.name:"";
                     b.push({
                         id: data.id,
                         title: typeText+': '+data.customer.full_name+'-'+categoryText+', ' + ', SĐT: ' + (hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + data.note,
