@@ -91,15 +91,15 @@ class SalesController extends Controller
                 });
 
             $input = $request->all();
-            $input['caller_number'] = $item->caller_number;
-            $input['call_status'] = 'ANSWERED';
-            if (!empty($item->caller_number)) {
-                $call_center = CallCenter::search($input, 'id,answer_time');
-                $item->history = $call_center->sum('answer_time');
-                $item->call_center = $call_center->where('call_status', 'ANSWERED')->count();
-            } else {
-                $item->call_center = 0;
-            }
+//            $input['caller_number'] = $item->caller_number;
+//            $input['call_status'] = 'ANSWERED';
+//            if (!empty($item->caller_number)) {
+//                $call_center = CallCenter::search($input, 'id,answer_time');
+//                $item->history = $call_center->sum('answer_time');
+//                $item->call_center = $call_center->where('call_status', 'ANSWERED')->count();
+//            } else {
+//                $item->call_center = 0;
+//            }
 
             $schedules = Schedule::select('id')->where('creator_id', $item->id)->whereBetween('date', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
@@ -111,11 +111,11 @@ class SalesController extends Controller
             //Lịch hẹn
             $item->all_schedules = $schedules->count();
             $item->schedules_den = $schedules->whereIn('status', [ScheduleConstant::DEN_MUA, ScheduleConstant::CHUA_MUA])->count();
-            $item->schedules_huy = $schedules2->where('status', ScheduleConstant::HUY)->count();
+//            $item->schedules_huy = $schedules2->where('status', ScheduleConstant::HUY)->count();
             //End Lịch hẹn
 
             $item->customer_new = $data_new->count();
-            $item->tiep_can = $data_new->whereNotIn('status_id', [2, 20])->count();
+//            $item->tiep_can = $data_new->whereNotIn('status_id', [2, 20])->count();
             $item->orders = $orders->count(); // HV chốt
 
             return $item;
