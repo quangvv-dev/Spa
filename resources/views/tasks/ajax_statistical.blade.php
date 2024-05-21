@@ -1,3 +1,14 @@
+<div class="scrollmenu col-md-7 mt-2 mb-2 ml-5">
+    @if(count($status))
+        @forelse($status as $k => $s)
+            <button class="btn btn-new {{$s['id'] == \App\Constants\StatusCode::NEW_TASK ?'bg-azure':($s['id'] == \App\Constants\StatusCode::DONE_TASK?'bg-success':'bg-danger')}}"
+                    data-id="{{$s['id']}}">{{$s['name']}}
+                <span class="not-number-account noti-reletion">{{$s['count']}}</span>
+            </button>
+        @empty
+        @endforelse
+    @endif
+</div>
 <div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
@@ -6,7 +17,7 @@
             <th class="text-white text-center">Ngày thực hiện</th>
             <th class="text-white text-center">Nhân viên</th>
             <th class="text-white text-center">Khách hàng</th>
-            <th class="text-white text-center">Công việc</th>
+            {{--            <th class="text-white text-center">Công việc</th>--}}
             <th class="text-white text-center">Loại công việc</th>
             <th class="text-white text-center">Trạng thái</th>
         </tr>
@@ -18,16 +29,18 @@
                     <th scope="row">{{$k}}</th>
                     <td class="text-center">{{$s->date_from}}</td>
                     <td class="text-center">{{@$s->user->full_name}}</td>
-                    <td class="text-center">{{@$s->customer->full_name}}</td>
-                    <td class="text-center">{{$s->name}}</td>
-                    <td class="text-center">{{$s->type==\App\Constants\NotificationConstant::CALL?'Gọi điên':'CSKH'}}</td>
+                    <td class="text-center">{{@$s->customer->full_name}}<br>
+                        <span class="small-tip">({{@str_limit($s->customer->phone,7,'xxx')}})</span>
+                    </td>
+                    {{--                    <td class="text-center">{{$s->name}}</td>--}}
+                    <td class="text-center">{{$s->type==\App\Constants\NotificationConstant::CALL?'Gọi điện':'CSKH'}}</td>
                     <td class="text-center">
                         @if($s->task_status_id ==  \App\Constants\StatusCode::NEW_TASK)
-                            <span class="tag tag-azure">Mới</span>
+                            <a class="tag tag-azure" data-toggle="modal" data-target="#myModal" data-id="{{$s->id}}" data-content="{{json_encode($s)}}">Mới</a>
                         @elseif($s->task_status_id ==  \App\Constants\StatusCode::DONE_TASK)
-                            <span class="tag tag-success">Hoàn thành</span>
+                            <a class="tag tag-success" data-toggle="modal" data-target="#myModal" data-id="{{$s->id}}" data-content="{{json_encode($s)}}">Hoàn thành</a>
                         @else
-                            <span class="tag tag-danger">Quá hạn</span>
+                            <a class="tag tag-danger" data-toggle="modal" data-target="#myModal" data-id="{{$s->id}}" data-content="{{json_encode($s)}}">Quá hạn</a>
                         @endif
                     </td>
                 </tr>
@@ -48,4 +61,3 @@
         {{ $docs->appends(['search' => request()->search ])->links() }}
     </div>
 </div>
-

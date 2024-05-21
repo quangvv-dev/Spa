@@ -27,16 +27,21 @@
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
-{{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
-{{--                         data-autoclose="true">--}}
-{{--                        {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}--}}
-{{--                        {!! Form::text('time_from', null, array('class' => 'form-control','required'=>true)) !!}--}}
-{{--                    </div>--}}
-{{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
-{{--                         data-autoclose="true">--}}
-{{--                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}--}}
-{{--                        {!! Form::text('time_to', null, array('class' => 'form-control','required'=>true)) !!}--}}
-{{--                    </div>--}}
+                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"
+                         data-autoclose="true">
+                        {!! Form::label('time_from', 'Giờ hẹn', array('class' => ' required')) !!}
+                        {!! Form::text('time_from', null, array('class' => 'form-control','required'=>true)) !!}
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        {!! Form::label('type', 'Loại công việc', array('class' => ' required')) !!}
+                        {!! Form::select('type', [3=>'Của tôi',\App\Constants\StatusCode::GOI_LAI=>'Gọi lại (phân bổ cho Telesale)',\App\Constants\StatusCode::CSKH=>'CSKH (phân bổ cho CSKH)'], null,
+                        array('class' => 'form-control')) !!}
+                    </div>
+                    {{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
+                    {{--                         data-autoclose="true">--}}
+                    {{--                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}--}}
+                    {{--                        {!! Form::text('time_to', null, array('class' => 'form-control','required'=>true)) !!}--}}
+                    {{--                    </div>--}}
                     <div class="col-md-12 col-xs-12">
 
                         {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
@@ -85,16 +90,26 @@
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
-{{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
-{{--                         data-autoclose="true">--}}
-{{--                        {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}--}}
-{{--                        {!! Form::text('time_from', null, array('class' => 'form-control time_from','required'=>true)) !!}--}}
-{{--                    </div>--}}
-{{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
-{{--                         data-autoclose="true">--}}
-{{--                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}--}}
-{{--                        {!! Form::text('time_to', null, array('class' => 'form-control time_to','required'=>true)) !!}--}}
-{{--                    </div>--}}
+                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"
+                         data-autoclose="true">
+                        {!! Form::label('time_from', 'Giờ hẹn', array('class' => ' required')) !!}
+                        {!! Form::text('time_from', null, array('class' => 'form-control time_from','required'=>true)) !!}
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        {!! Form::label('type', 'Loại công việc', array('class' => ' required')) !!}
+                        {!! Form::select('type', [3=>'Của tôi',\App\Constants\StatusCode::GOI_LAI=>'Gọi lại (phân bổ cho Telesale)',\App\Constants\StatusCode::CSKH=>'CSKH (phân bổ cho CSKH)'], null,
+                        array('class' => 'form-control','id'=>'updateType')) !!}
+                    </div>
+                    {{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
+                    {{--                         data-autoclose="true">--}}
+                    {{--                        {!! Form::label('time_from', 'Giờ hẹn ( Từ)', array('class' => ' required')) !!}--}}
+                    {{--                        {!! Form::text('time_from', null, array('class' => 'form-control time_from','required'=>true)) !!}--}}
+                    {{--                    </div>--}}
+                    {{--                    <div class="col-md-4 col-xs-12 clockpicker" data-placement="left" data-align="top"--}}
+                    {{--                         data-autoclose="true">--}}
+                    {{--                        {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}--}}
+                    {{--                        {!! Form::text('time_to', null, array('class' => 'form-control time_to','required'=>true)) !!}--}}
+                    {{--                    </div>--}}
                     <div class="col-md-12 col-xs-12">
 
                         {!! Form::label('description', 'Nội dung', array('class' => ' required')) !!}
@@ -114,4 +129,3 @@
         </div>
     </div>
 </div>
-

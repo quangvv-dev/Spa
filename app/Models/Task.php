@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Functions;
+use Illuminate\Support\Facades\DB;
 
 class Task extends Model
 {
@@ -38,6 +39,9 @@ class Task extends Model
 //        'sms_content',
 //    ];
 
+    public const ROLE = [
+        1 => 'Toàn phòng ban',
+    ];
     const TYPE = [
         2 => 'Chăm sóc',
         1 => 'Gọi điện',
@@ -185,4 +189,34 @@ class Task extends Model
             ->orderByDesc('date_from');
         return $data;
     }
+    public static function groupByStatus($input)
+    {
+        $data = self::select('ts.id','ts.name',DB::raw('COUNT(tasks.id) as count'))
+            ->leftJoin('task_status as ts','tasks.task_status_id','=','ts.id')
+            ->when(!empty($input['start_date']) && !empty($input['end_date']), function ($q) use ($input) {
+                $q->whereBetween('tasks.date_from', [
+                    Functions::yearMonthDay($input['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($input['end_date']) . " 23:59:59",
+                ]);
+            })
+            ->when(isset($input['user_id']) && isset($input['user_id']), function ($q) use ($input) {
+                $q->where('tasks.user_id', $input['user_id']);
+            })->when(isset($input['member']) && isset($input['member']), function ($q) use ($input) {
+                $q->whereIn('user_id', $input['member']);
+            })->when(isset($input['customer_id']) && isset($input['customer_id']), function ($q) use ($input) {
+                $q->where('tasks.customer_id', $input['customer_id']);
+            })->when(isset($input['type']) && $input['type'], function ($q) use ($input) {
+                $q->where('tasks.type', $input['type']);
+            })->when(isset($input['branch_id']) && isset($input['branch_id']), function ($q) use ($input) {
+                $q->where('tasks.branch_id', $input['branch_id']);
+            })->when(isset($input['group_branch']) && count($input['group_branch']), function ($q) use ($input) {
+                $q->whereIn('tasks.branch_id', $input['group_branch']);
+            })->when(isset($input['task_status_id']) && isset($input['task_status_id']), function ($q) use ($input) {
+                $q->where('tasks.task_status_id', $input['task_status_id']);
+            })->when(isset($input['date_from']) && isset($input['date_from']), function ($q) use ($input) {
+                $q->where('tasks.date_from', $input['date_from']);
+            })->groupBy('ts.id');
+        return $data;
+    }
+
 }
