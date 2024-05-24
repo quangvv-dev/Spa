@@ -36,13 +36,15 @@
 
 </style>
 @section('content')
+
     <div class="col-md-12 col-lg-12">
         <div class="card">
-            <div class="card-header row">
-                {{--<div class="col-md-6">--}}
-                @foreach($color as $k => $item)
-                    <div data-id="{{$k}}" class="btn white account_relation position"
-                         style="background: @switch($k)
+            <form>
+                <div class="card-header row">
+                    {{--<div class="col-md-6">--}}
+                    @foreach($color as $k => $item)
+                        <div data-id="{{$k}}" class="btn white account_relation position"
+                             style="background: @switch($k)
                          @case(1)
                          {{'#63cff9'}}
                          @break
@@ -61,29 +63,33 @@
                          @case(6)
                          {{'#f36a26'}}
                          @break
-                         @endswitch;margin-left: 3px;text-align: left">
-                        <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
-                        <label>{{$item}}</label>
+                         @endswitch;text-align: left">
+                            <input class="status" id="{{$k}}" type="checkbox" data-id="{{$k}}">
+                            <label>{{$item}}</label>
+                        </div>
+                    @endforeach
+                    {{--                <div class="col">--}}
+                    {{--                    {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}--}}
+                    {{--                </div>--}}
+                    <div class="col">
+                        {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control select2','data-placeholder'=>'người phụ trách','required'=>true)) !!}
                     </div>
-                @endforeach
-{{--                <div class="col">--}}
-{{--                    {!! Form::text('date', null, array('class' => 'form-control','id'=>'search','autocomplete'=>'off','data-toggle'=>'datepicker','placeholder'=>'Ngày hẹn')) !!}--}}
-{{--                </div>--}}
-                <div class="col">
-                    {!! Form::select('person_action',@$staff2, $user, array( 'id'=>'person_action','class' => 'form-control','data-placeholder'=>'người phụ trách','required'=>true)) !!}
-                </div>
-                <div class="col">
-                    {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT khách hàng')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
-                </div>
-                <div class="col">
-                    {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
-                </div>
+                    <div class="col">
+                        {!! Form::select('type', \App\Models\Schedule::SCHEDULE_TYPE,null, array( 'id'=>'type','class' => 'form-control','placeholder'=>'Loại lịch')) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::text('customer_plus', $customer, array( 'id'=>'customer_plus','class' => 'form-control','placeholder'=>'SĐT/ Mã KH')) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::select('status', $status,null, array( 'id'=>'status','class' => 'form-control','placeholder'=>'Nguồn')) !!}
+                    </div>
+                    <div class="col">
+                        {!! Form::select('branch_id', $branchs,\Illuminate\Support\Facades\Auth::user()->branch_id ?:1, array( 'id'=>'branch_id','class' => 'form-control','placeholder'=>'T.cả chi nhánh')) !!}
+                    </div>
 
-            </div>
-            <input type="hidden" id="status_val">
+                </div>
+                <input type="hidden" id="status_val">
+            </form>
             <div class="side-app">
                 @include('schedules.ajax2')
             </div>
@@ -94,8 +100,13 @@
     <script>
         var hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
         $(document).ready(function () {
+            $("#customer_plus").focus();
+            $('form').submit(function(event) {
+                event.preventDefault(); // Ngăn chặn gửi form
+            });
             $('.page-title').hide();
             $('.breadcrumb').hide();
+
             function searchAjax(data) {
                 // $('#calendar1').html('<div class="text-center"><i style="font-size: 100px;" class="fa fa-spinner fa-spin"></i></div>');
 
@@ -129,9 +140,11 @@
                             default:
                             // code block
                         }
+                        let typeText = value.type == 1?'Lịch mới':(value.type == 2?'Tái khám':'Liệu trình');
+                        let categoryText = !$.isEmptyObject(value.category)?value.category.name:"";
                         b.push({
                             id: value.id,
-                            title: 'KH: ' + value.customer.full_name + ', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7)+'xxx') + ' Lưu ý: ' + value.note,
+                            title: typeText+': '+value.customer.full_name+' -'+categoryText+', ' +', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
                             start: value.date + 'T' + value.time_from + ':00',
                             end: value.date + 'T' + value.time_to + ':00',
                             color: col,
@@ -168,7 +181,9 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
-                searchAjax({search: arr, status: status, date: date, user: user, customer: customer});
+                let type = $('#type').val();
+
+                searchAjax({search: arr, status: status, date: date, user: user, customer: customer,type:type});
             });
             $(document).on('change', '#search', function () {
                 $('.spin').show();
@@ -177,11 +192,14 @@
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
+                let type = $('#type').val();
+
                 searchAjax({
                     date: val,
                     branch_id: branch_id,
                     status: status,
                     search: arr,
+                    type: type,
                     user: user,
                     customer: customer
                 });
@@ -190,6 +208,7 @@
                 $('.spin').show();
                 var val = $(this).val();
                 let date = $('#search').val();
+                let type = $('#type').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
@@ -198,6 +217,26 @@
                     status: val,
                     branch_id: branch_id,
                     date: date,
+                    type: type,
+                    search: arr,
+                    user: user,
+                    customer: customer
+                });
+            });
+            $(document).on('change', '#type', function () {
+                $('.spin').show();
+                var val = $(this).val();
+                let date = $('#search').val();
+                let status = $('#status').val();
+                let user = $('#person_action').val();
+                let customer = $('#customer_plus').val();
+                let branch_id = $('#branch_id').val();
+
+                searchAjax({
+                    type: val,
+                    branch_id: branch_id,
+                    date: date,
+                    status: status,
                     search: arr,
                     user: user,
                     customer: customer
@@ -209,9 +248,11 @@
                 let date = $('#search').val();
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
+                let type = $('#type').val();
 
                 searchAjax({
                     user: val,
+                    type: type,
                     branch_id: branch_id,
                     status: status,
                     date: date,
@@ -226,7 +267,8 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let branch_id = $('#branch_id').val();
-                searchAjax({customer: val, branch_id: branch_id, status: status, user: user, date: date, search: arr});
+                let type = $('#type').val();
+                searchAjax({customer: val, branch_id: branch_id, status: status, user: user, date: date, search: arr,type:type});
 
             });
 
@@ -236,10 +278,13 @@
                 let date = $('#search').val();
                 let user = $('#person_action').val();
                 let customer = $('#customer_plus').val();
+                let type = $('#type').val();
+
                 searchAjax({
                     customer: customer,
                     branch_id: branch_id,
                     status: status,
+                    type: type,
                     user: user,
                     date: date,
                     search: arr
@@ -262,6 +307,8 @@
                 let status = $('#update_status').val();
                 let category_id = $('#update_category').val();
                 let note = $('#update_note').val();
+                let type = $('#update_type').val();
+
 
                 $.ajax({
                     url: "/schedules/" + id,
@@ -274,14 +321,17 @@
                         status: status,
                         category_id: category_id,
                         note: note,
+                        type: type,
                     }
                 }).done(function (data) {
                     $('#modal_' + id).modal('toggle');
                     var b = [];
                     var col = chooseColor(data.status);
+                    let typeText = data.type == 1?'Lịch mới':(data.type == 2?'Tái khám':'Liệu trình');
+                    let categoryText = !$.isEmptyObject(data.category)?data.category.name:"";
                     b.push({
                         id: data.id,
-                        title: 'KH: ' + data.customer.full_name + ', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7)+'xxx') + ' Lưu ý: ' + data.note,
+                        title: typeText+': '+data.customer.full_name+'-'+categoryText+', ' + ', SĐT: ' + (hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + data.note,
                         description: data.note,
                         start: data.date + 'T' + data.time_from + ':00',
                         end: data.date + 'T' + data.time_to + ':00',
@@ -294,6 +344,7 @@
                         time_from: data.time_from,
                         time_to: data.time_to,
                         category_id: data.category_id,
+                        type: data.type,
                         date: formatYMDtoDMY(data.date),
                         status: data.status,
                     })
@@ -316,8 +367,10 @@
                 let customer = $('#customer_plus').val();
                 let branch_id = $('#branch_id').val();
                 let date = $('#search').val();
+                let type = $('#type').val();
 
                 searchAjax({
+                    type: type,
                     customer: customer,
                     branch_id: branch_id,
                     status: status,
