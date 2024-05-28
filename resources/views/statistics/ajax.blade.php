@@ -75,17 +75,17 @@
                     <span class="">{{@number_format($data['all_total'] + $wallets['revenue'])}}</span>
                 </div>
                 <div class="col-12 row">
-                    <div class="title col-5">Sản phẩm:</div>
+                    <div class="title col-5">Dịch vụ khác:</div>
                     <div class="col-7">{{@number_format($products['all_total'])}}</div>
                 </div>
                 <div class="col-12 row">
-                    <div class="title col-5">Dịch vụ:</div>
+                    <div class="title col-5">Học phí:</div>
                     <div class="col-7">{{@number_format($services['all_total'])}}</div>
                 </div>
-                <div class="col-12 row">
-                    <div class="title col-5">S.phẩm và Dịch vụ:</div>
-                    <div class="col-7">{{@number_format($services['combo_total'])}}</div>
-                </div>
+{{--                <div class="col-12 row">--}}
+{{--                    <div class="title col-5">S.phẩm và Dịch vụ:</div>--}}
+{{--                    <div class="col-7">{{@number_format($services['combo_total'])}}</div>--}}
+{{--                </div>--}}
                 <div class="col-12 row">
                     <div class="title col-5">Nạp ví:</div>
                     <div class="col-7">{{@number_format($wallets['revenue'])}}</div>
