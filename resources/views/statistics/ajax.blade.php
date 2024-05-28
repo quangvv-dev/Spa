@@ -99,7 +99,7 @@
                     <div class="col-7">{{@number_format($services['all_total'])}}</div>
                 </div>
                 <div class="col-12 row">
-                    <div class="title col-5">S.phẩm và Dịch vụ:</div>
+                    <div class="title col-5">S.phẩm và D.vụ:</div>
                     <div class="col-7">{{@number_format($services['combo_total'])}}</div>
                 </div>
                 <div class="col-12 row">
