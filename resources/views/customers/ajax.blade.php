@@ -233,6 +233,11 @@
                         <a target="_blank" href="https://zalo.me/{{@$customer->phone}}">
                             <img width="15" height="15" src="{{asset('assets/images/zalo_icon.png')}}">
                         </a>
+                        @if(@$customer->facebook)
+                            <a target="_blank" href="{{@$customer->facebook}}">
+                                <img width="25" height="25" src="{{asset('assets/images/fb_logo.png')}}">
+                            </a>
+                        @endif
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{auth()->user()->permission('phone.open')? $customer->phone: str_limit($customer->phone,7,'xxx') }}
@@ -273,9 +278,9 @@
                         data-id="{{$customer->id}}">{{$customer->birthday? date('d-m-Y', strtotime($customer->birthday)):'' }}</td>
                     <td class="text-center {{in_array(17,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->marketing ? @$customer->marketing->full_name: '' }}</td>
                     <td class="text-center {{in_array(18,$user_filter_grid) ? '':'display-none'}}">{{ @$customer->source_customer->name}}</td>
-                    <td class="text-center {{in_array(19,$user_filter_grid) ? '':'display-none'}}">
-                        <a target="_blank" href="{{@$customer->facebook}}">{{ @$customer->facebook?str_limit($customer->facebook,30,'...'):''}}</a>
-                    </td>
+{{--                    <td class="text-center {{in_array(19,$user_filter_grid) ? '':'display-none'}}">--}}
+{{--                        <a target="_blank" href="{{@$customer->facebook}}">{{ @$customer->facebook?str_limit($customer->facebook,30,'...'):''}}</a>--}}
+{{--                    </td>--}}
                     <td class="text-center {{in_array(20,$user_filter_grid) ? '':'display-none'}}">{{ $customer->gender_text  }}</td>
                     <td class="text-center {{in_array(21,$user_filter_grid) ? '':'display-none'}}">{{ count($customer->orders) }}</td>
                     <td class="text-center {{in_array(22,$user_filter_grid) ? '':'display-none'}}">{{ number_format($customer->orders->sum('all_total')) }}</td>

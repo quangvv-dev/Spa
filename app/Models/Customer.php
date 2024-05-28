@@ -84,7 +84,7 @@ class Customer extends Model
         16 => 'Ngày sinh',
         17 => 'MKT Phụ trách',
         18 => 'Nguồn KH',
-        19 => 'Linh FB',
+//        19 => 'Linh FB',
         20 => 'Giới tính',
         21 => 'Số đơn',
         22 => 'Tổng doanh thu',
