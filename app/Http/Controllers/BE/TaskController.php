@@ -131,6 +131,7 @@ class TaskController extends Controller
         } else if ($request->type == StatusCode::CSKH) {
             $input['user_id'] = @$customer->cskh_id ?? $customer->telesales_id;
         }
+        dd($input);
         $task = $this->taskService->create($input);
         $user = User::find($request->user_id2);
         $task->users()->attach($user);

@@ -17,28 +17,28 @@ class Task extends Model
      *
      * @var array
      */
-//    protected $fillable = [
-//        'user_id',
-//        'customer_id',
-//        'parent_id',
-//        'name',
-//        'code',
-//        'type',
-//        'amount_of_work',
-//        'date_from',
-//        'date_to',
-//        'time_from',
-//        'time_to',
-//        'document',
-//        'description',
-//        'priority',
-//        'task_status_id',
-//        'progress',
-//        'taskmaster_id',
-//        'department_id',
-//        'sms_content',
-//    ];
 
+    public const LABEL_NAME_TEXT = [
+        'Chăm sóc sau 1 ngày',
+        'Chăm sóc sau 3 ngày',
+        'Chăm sóc sau 5 ngày',
+        'Chăm sóc sau 7 ngày',
+        'Chăm sóc sau 10 ngày',
+        'Chăm sóc sau 15 ngày',
+        'Chăm sóc sau 20 ngày',
+        'Chăm sóc sau 30 ngày',
+        'Chăm sóc sau 2 tháng',
+        'Chăm sóc sau 3 tháng',
+        'Chăm sóc sau 4 tháng',
+        'Chăm sóc sau 6 tháng',
+        'Chăm sóc sau 9 tháng',
+        'Chăm sóc sau 1 năm',
+        'Chăm sóc sau 2 năm',
+        'Chăm sóc sau 3 năm',
+        'Chăm sóc sau 5 năm',
+        'Chăm sóc sau 7 năm',
+        'Chăm sóc sau 10 năm',
+    ];
    public const ROLE = [
         1 => 'Toàn phòng ban',
     ];

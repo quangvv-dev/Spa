@@ -12,7 +12,13 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('name') ? 'has-error' : '' }}">
                             {!! Form::label('name', 'Tên công việc', array('class' => ' required')) !!}
-                            {!! Form::text('name', null, array('class' => 'form-control', 'required' => true)) !!}
+                            <select name="name" class="form-control select2" required>
+                                @forelse(\App\Models\Task::LABEL_NAME_TEXT as $item)
+                                    <option value="{{$item}}">{{$item}}</option>
+                                @empty
+                                @endforelse
+                            </select>
+{{--                            {!! Form::text('name', null, array('class' => 'form-control', 'required' => true)) !!}--}}
                             <span class="help-block">{{ $errors->first('name', ':message') }}</span>
                         </div>
                     </div>
