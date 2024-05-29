@@ -24,31 +24,37 @@
                     <td class="text-center">{{ $k +1 }}</td>
                     <td class="text-center">{{ isset($order->order) ? @date("d-m-Y", strtotime($order->order->created_at)) : '' }}</td>
                     <td class="text-center">{{ isset($order->payment_date) ? date("d-m-Y", strtotime($order->payment_date)) : '' }}</td>
-                    <td class="text-center"><a href="{{isset($order->order)?route('order.show',$order->order_id):'#'}}">{{isset($order->order) ? $order->order->code:' ' }}</a></td>
+                    <td class="text-center"><a
+                            href="{{isset($order->order)?route('order.show',$order->order_id):'#'}}">{{isset($order->order) ? $order->order->code:' ' }}</a>
+                    </td>
                     <td class="text-center">{{isset($order->order) && isset($order->order->customer) ? @$order->order->customer->full_name :''}}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer) ?
                     (auth()->user()->permission('phone.open') ? @$order->order->customer->phone : @str_limit($order->order->customer->phone, 7, 'xxx')) :''}}</td>
                     <td class="text-center">{!! isset($order->order) && !empty($order->order->service_text) ? @$order->order->service_text :'' !!}</td>
                     <td class="text-center">{{ @number_format($order->price) }}</td>
-                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->telesale)? @$order->order->customer->telesale->full_name:'' }}</td>
-                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->marketing)? @$order->order->customer->marketing->full_name:'' }}</td>
-                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->carepage)? @$order->order->customer->carepage->full_name:'' }}</td>
+                    <td class="text-center">
+                        <span class="small-tip">
+                        {{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->telesale)? @$order->order->customer->telesale->full_name:'' }}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span class="small-tip">
+                        {{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->marketing)? @$order->order->customer->marketing->full_name:'' }}
+                        </span>
+                    <td class="text-center">
+                        <span class="small-tip">
+                        {{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->carepage)? @$order->order->customer->carepage->full_name:'' }}
+                        </span>
+                    </td>
                     <td class="text-center">{{ isset($order->payment_type) ? $order->name_payment_type:' ' }}</td>
                     <td class="text-center">{{ isset($order->order)&& isset($order->order->owner)? @$order->order->owner->full_name:'' }}</td>
                 </tr>
             @endforeach
             <tr class="fixed2">
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+                <td class="text-center" colspan="6"></td>
                 <td class="text-center bold">Tổng trang</td>
                 <td class="text-center bold">{{ @number_format($allTotalPage) }}</td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+                <td colspan="5" class="text-center"></td>
             </tr>
             <tr class="fixed">
                 <td class="text-center" colspan="6"></td>
