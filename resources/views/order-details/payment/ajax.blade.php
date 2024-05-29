@@ -51,17 +51,10 @@
                 <td class="text-center"></td>
             </tr>
             <tr class="fixed">
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+                <td class="text-center" colspan="6"></td>
                 <td class="text-center bold">Tổng cộng</td>
                 <td class="text-center bold">{{ @number_format($allTotal) }}</td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
-                <td class="text-center"></td>
+                <td colspan="5" class="text-center"></td>
 
             </tr>
         @else
