@@ -405,7 +405,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        $user['birthday'] = Functions::dayMonthYear($customer->birthday);
+//        $user['birthday'] = Functions::dayMonthYear($customer->birthday);
         $categories = Category::get();
         $categoryId = $customer->categories()->get()->pluck('id')->toArray();
         $title = 'Sửa khách hàng';

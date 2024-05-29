@@ -11,6 +11,8 @@
             <th class="text-white text-center">Dịch vụ</th>
             <th class="text-white text-center">Số tiền</th>
             <th class="text-white text-center">Người phụ trách</th>
+            <th class="text-white text-center">MKT</th>
+            <th class="text-white text-center">Carepage</th>
             <th class="text-white text-center">Phương thức thanh toán</th>
             <th class="text-white text-center">Người lên đơn</th>
         </tr>
@@ -29,6 +31,8 @@
                     <td class="text-center">{!! isset($order->order) && !empty($order->order->service_text) ? @$order->order->service_text :'' !!}</td>
                     <td class="text-center">{{ @number_format($order->price) }}</td>
                     <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->telesale)? @$order->order->customer->telesale->full_name:'' }}</td>
+                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->marketing)? @$order->order->customer->marketing->full_name:'' }}</td>
+                    <td class="text-center">{{ isset($order->order) && isset($order->order->customer)&& isset($order->order->customer->carepage)? @$order->order->customer->carepage->full_name:'' }}</td>
                     <td class="text-center">{{ isset($order->payment_type) ? $order->name_payment_type:' ' }}</td>
                     <td class="text-center">{{ isset($order->order)&& isset($order->order->owner)? @$order->order->owner->full_name:'' }}</td>
                 </tr>
