@@ -56,7 +56,6 @@
                     <td class="text-center pdr10">{{!empty($item->schedules_den)?round($item->schedules_den/$item->all_schedules*100,2):0}}%</td>
                     <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->schedules_den)?round($item->orders/$item->schedules_den*100,2):0}}%</td>
                     <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->customer_new)?round($item->orders/$item->customer_new*100,2):0}}%</td>
-                    <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->customer_new)?round($item->orders/$item->customer_new*100,2):0}}%</td>
                     <td class="text-center pdr10">{{!empty($item->tiep_can) && !empty($item->customer_new)?round($item->tiep_can/$item->customer_new*100,2):0}}%</td>
                 </tr>
             @endforeach
