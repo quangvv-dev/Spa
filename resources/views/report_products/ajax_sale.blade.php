@@ -12,6 +12,7 @@
             <th class="text-center">% HV đến/Lịch hẹn</th>
             <th class="text-center">% HV chốt/HV đến</th>
             <th class="text-center">% Chốt/SĐT</th>
+            <th class="text-center">% Tiếp cận</th>
         <tr class="number_index">
             <th class="text-center"></th>
             <th class="text-center"></th>
@@ -23,6 +24,7 @@
             <th class="text-center">(3)/(2)</th>
             <th class="text-center">(4)/(3)</th>
             <th class="text-center">(4)/(2)</th>
+            <th class="text-center">(5)</th>
         </tr>
         </thead>
 
@@ -40,7 +42,7 @@
                 <td class="text-center bold">{{!empty($users->sum('schedules_den'))?round($users->sum('schedules_den')/$users->sum('all_schedules'),2)*100:0}}%</td>
                 <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('schedules_den'))?round($users->sum('orders')/$users->sum('schedules_den')*100,2):0}}%</td>
                 <td class="text-center bold">{{!empty($users->sum('orders')) && !empty($users->sum('customer_new'))?round($users->sum('orders')/$users->sum('customer_new')*100,2):0}}%</td>
-
+                <td class="text-center bold">{{!empty($users->sum('tiep_can')) && !empty($users->sum('customer_new'))?round($users->sum('tiep_can')/$users->sum('customer_new')*100,2):0}}%</td>
             </tr>
             @foreach($users as $item)
                 <tr class="">
@@ -54,6 +56,8 @@
                     <td class="text-center pdr10">{{!empty($item->schedules_den)?round($item->schedules_den/$item->all_schedules*100,2):0}}%</td>
                     <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->schedules_den)?round($item->orders/$item->schedules_den*100,2):0}}%</td>
                     <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->customer_new)?round($item->orders/$item->customer_new*100,2):0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->orders) && !empty($item->customer_new)?round($item->orders/$item->customer_new*100,2):0}}%</td>
+                    <td class="text-center pdr10">{{!empty($item->tiep_can) && !empty($item->customer_new)?round($item->tiep_can/$item->customer_new*100,2):0}}%</td>
                 </tr>
             @endforeach
         @endif

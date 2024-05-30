@@ -115,7 +115,7 @@ class SalesController extends Controller
             //End Lịch hẹn
 
             $item->customer_new = $data_new->count();
-//            $item->tiep_can = $data_new->whereNotIn('status_id', [2, 20])->count();
+            $item->tiep_can = $data_new->whereNotIn('status_id', [2, 20])->count();
             $item->orders = $orders->count(); // HV chốt
 
             return $item;
