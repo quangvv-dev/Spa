@@ -112,11 +112,11 @@
                     <div class="btn-group ml5">
                         <button class="btn btn-default order_status" data-status="">Đã hủy</button>
                     </div>
+{{--                    <div class="btn-group ml5">--}}
+{{--                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Đơn thường & Liệu trình')) !!}--}}
+{{--                    </div>--}}
                     <div class="btn-group ml5">
-                        {!! Form::select('order_type', $order_type, null, array('class' => 'form-control','id'=>'order_type', 'placeholder'=>'Đơn thường & Liệu trình')) !!}
-                    </div>
-                    <div class="btn-group ml5">
-                        {!! Form::select('role_type', [1=>'Dịch vụ',2=>'Sản phẩm',3=>'Combo'], null, array('class' => 'form-control role_type', 'placeholder'=>'Tất cả đơn')) !!}
+                        {!! Form::select('role_type', [1=>'Học phí',2=>'Đơn khác'], null, array('class' => 'form-control role_type', 'placeholder'=>'Tất cả đơn')) !!}
                     </div>
                     @if(empty($checkRole))
                         <div class="btn-group ml5">

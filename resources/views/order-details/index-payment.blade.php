@@ -57,21 +57,24 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{$title}}</h3></br>
+                <h3 class="card-title">{{$title}}</h3>
                 <div class="col">
                 </div>
             </div>
             <div class="card-header">
                 {!! Form::open(array('url' => url()->current(), 'method' => 'get','class'=>'row col', 'id'=> 'gridForm','role'=>'form')) !!}
                 <div class="col-md-2">
-                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
+                    {!! Form::select('telesales', $telesales, null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Người phụ trách')) !!}
                 </div>
                 <div class="col-md-2">
-                    {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
+                    {!! Form::select('payment_type', [1=>'Tiền mặt',2=>'Thẻ',3=>'Điểm',4=>'Chuyển khoản'], null, array('class' => 'form-control select2','id'=>'telesales', 'placeholder'=>'Loại thanh toán')) !!}
+                </div>
+                <div class="col-md-2">
+                    {!! Form::select('role_type', [1=>'Học phí',2=>'Đơn khác'], null, array('class' => 'form-control select2', 'placeholder'=>'Tất cả đơn')) !!}
                 </div>
                 @if(empty($checkRole))
                     <div class="col-md-2">
-                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id', 'placeholder'=>'Tất cả chi nhánh')) !!}
+                        {!! Form::select('branch_id', $branchs, null, array('class' => 'form-control branch_id select2', 'placeholder'=>'Tất cả chi nhánh')) !!}
                     </div>
                 @endif
                 <div class="col-md-3">
@@ -81,7 +84,7 @@
                 </div>
                 <input type="hidden" name="page" value="1" id="page">
 
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-1 col-md-6">
                     <button type="submit" class="btn btn-primary"> Tìm kiếm
                     </button>
                 </div>

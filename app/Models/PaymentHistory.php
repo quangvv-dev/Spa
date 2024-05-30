@@ -76,6 +76,11 @@ class PaymentHistory extends Model
                 $item->where('carepage_id', $input['carepage_id']);
             });
         }
+        if (!empty($input['role_type'])) {
+            $detail = $detail->whereHas('order', function ($item) use ($input) {
+                $item->where('role_type', $input['role_type']);
+            });
+        }
         if (isset($input['telesales'])) {
             $detail = $detail->whereHas('order', function ($item) use ($input) {
                 $item->where('telesale_id', $input['telesales']);
