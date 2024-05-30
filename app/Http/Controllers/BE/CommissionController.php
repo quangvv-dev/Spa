@@ -256,36 +256,49 @@ class CommissionController extends Controller
         return view('waiters.index', compact('users'));
     }
 
-    public function statisticalCTV(Request $request){
-        if(!$request->start_date){
+    public function statisticalCTV(Request $request)
+    {
+        if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
 
-        $request['start_date'] = "21-06-2021";
+        $orders = Order::join('users as u', 'u.id', 'orders.support_id')->join('payment_histories as ph', 'ph.order_id', 'orders.id')
+            ->select('u.id', DB::raw('SUM(orders.all_total) as all_total'), DB::raw('SUM(orders.the_rest) as the_rest'), DB::raw('COUNT(orders.id) as orders'))
+            ->addSelect(DB::raw('SUM(CASE WHEN ph.is_debt = 0 THEN ph.price ELSE 0 END) AS gross_revenue'))
+            ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
+                $q->whereBetween('orders.created_at', [
+                    Functions::yearMonthDay($request['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($request['end_date']) . " 23:59:59",
+                ]);
+            })->groupBy('orders.support_id')->get();
 
-        $ctv = Customer::select('id','full_name','is_gioithieu')->where('type_ctv',1)->get()->map(function ($item) use ($request){
-            $orders = Order::where('member_id',$item->id)
-                ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
-                    $q->whereBetween('created_at', [
-                        Functions::yearMonthDay($request['start_date']) . " 00:00:00",
-                        Functions::yearMonthDay($request['end_date']) . " 23:59:59",
-                    ]);
-                });
-            $orders1 = clone $orders;
-            $orders1 = $orders1->pluck('id')->toArray();
-            $item->doanh_so = $orders->sum('all_total');
+        $payments = Order::join('users as u', 'u.id', 'orders.support_id')->join('payment_histories as ph', 'ph.order_id', 'orders.id')
+            ->select('u.id', 'u.full_name', DB::raw('SUM(ph.price) as price'))
+            ->when(isset($request['start_date']) && isset($request['end_date']), function ($q) use ($request) {
+                $q->whereBetween('ph.payment_date', [
+                    Functions::yearMonthDay($request['start_date']) . " 00:00:00",
+                    Functions::yearMonthDay($request['end_date']) . " 23:59:59",
+                ]);
+            })->groupBy('orders.support_id')->get();
+        $data = $this->transformData($payments, $orders);
+        if ($request->ajax()) {
+            return view('statistics.ajax_ctv', compact('data'));
+        }
+        return view('statistics.hoa_hong_ctv', compact('data'));
+    }
 
-            $item->doanh_thu = PaymentHistory::whereIn('order_id',$orders1)->sum('price');
-
-            $item->doanh_thu_ctv = HistoryWalletCtv::where('customer_id',$item->id)->sum('price');
-
-            $item->total_khach_gt = Customer::whereBetween('created_at', [
-                Functions::yearMonthDay($request['start_date']) . " 00:00:00",
-                Functions::yearMonthDay($request['end_date']) . " 23:59:59",
-            ])->where('is_gioithieu',$item->id)->count();
-
-            return $item;
+    public function transformData($payments, $orders)
+    {
+        return $payments->transform(function ($item) use ($orders) {
+            return [
+                'id' => $item->id,
+                'full_name' => $item->full_name,
+                'all_total' => @$orders->firstWhere('id', $item->id)->all_total ?? 0,
+                'gross_revenue' => @$orders->firstWhere('id', $item->id)->gross_revenue ?? 0,
+                'the_rest' => @$orders->firstWhere('id', $item->id)->the_rest ?? 0,
+                'orders' => @$orders->firstWhere('id', $item->id)->orders ?? 0,
+                'price' => $item->price,
+            ];
         });
-        return view('statistics.hoa_hong_ctv',compact('ctv'));
     }
 }

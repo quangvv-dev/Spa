@@ -1,35 +1,33 @@
-<div class="table-responsive" id="registration-form">
+<div class="table-responsive">
     <table class="table card-table table-vcenter text-nowrap table-primary">
         <thead class="bg-primary text-white">
         <tr>
             <th class="text-white">STT</th>
-            <th class="text-white text-center">Tên</th>
+            <th class="text-white text-center">Nhân viên</th>
+            <th class="text-white text-center">Đơn tư vấn</th>
             <th class="text-white text-center">Doanh số</th>
+            <th class="text-white text-center">Doanh thu</th>
+            <th class="text-white text-center">Còn nợ</th>
             <th class="text-white text-center">Thực thu</th>
-            <th class="text-white text-center">Hoa hồng CTV</th>
-            <th class="text-white text-center">Tổng khách GT</th>
-            <th class="text-white text-center">Thao tác</th>
 
         </tr>
 
         </thead>
         <tbody>
-        @forelse($ctv as $key=>$item)
+        @forelse($data as $key => $item)
             <tr>
                 <th scope="row">{{$key+1}}</th>
                 <td class="text-center">
-                    {{$item->full_name}}
+                    {{$item['full_name']}}
                     <br>
-                    <span class="small-tip">12341234</span>
+{{--                    <span class="small-tip">12341234</span>--}}
 
                 </td>
-                <td class="text-center">{{number_format($item->doanh_so)}}</td>
-                <td class="text-center">{{number_format($item->doanh_thu)}}</td>
-                <td class="text-center">{{number_format($item->doanh_thu_ctv)}}</td>
-                <td class="text-center">{{$item->total_khach_gt}}</td>
-                <td class="text-center">
-                    <i class="fa fa-save showDetail" style="cursor: pointer" title="Chi tiết"></i>
-                </td>
+                <td class="text-center">{{number_format($item['orders'])}}</td>
+                <td class="text-center">{{number_format($item['all_total'])}}</td>
+                <td class="text-center">{{number_format($item['gross_revenue'])}}</td>
+                <td class="text-center">{{number_format($item['the_rest'])}}</td>
+                <td class="text-center">{{number_format($item['price'])}}</td>
             </tr>
         @empty
             <tr>
@@ -42,9 +40,6 @@
         <div class="page-info">
             {{ 'Tổng số ' . 10 . ' bản ghi ' . (request()->search ? 'found' : '') }}
         </div>
-    </div>
-    <div class="pull-right">
-        {{--{{ $docs->appends(['search' => request()->search ])->links() }}--}}
     </div>
 </div>
 

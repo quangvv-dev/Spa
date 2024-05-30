@@ -269,7 +269,7 @@
                                 @if($roleGlobal->permission('report.commission'))
                                     <li><a href="{{url('report/commission')}}">5.4.4 Báo cáo KTV</a></li>
                                 @endif
-                                <li><a href="/report/hoa-hong-ctv">5.4.5 Hoa hồng CTV</a></li>
+                                <li><a href="/report/hoa-hong-ctv">5.4.5 Tư vấn trực tiếp</a></li>
                             </ul>
                         </li>
 

@@ -94,8 +94,8 @@ class OrderController extends Controller
         $customerId = $request->customer_id;
         $customer = Customer::find($customerId);
         $spaTherapissts = User::where('department_id', DepartmentConstant::DOCTOR)->pluck('full_name', 'id');
-        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,UserConstant::CSKH,UserConstant::ADMIN])->pluck('full_name',
-            'id');
+        $customer_support = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, UserConstant::WAITER,UserConstant::CSKH,UserConstant::ADMIN])
+            ->pluck('full_name', 'id');
         $title = 'Tạo đơn hàng';
 //        $services = Services::where('type', StatusCode::SERVICE)->with('category')->get();
         $products = Services::where('type', StatusCode::PRODUCT)->with('category')->get();
