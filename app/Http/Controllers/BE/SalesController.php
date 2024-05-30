@@ -364,7 +364,10 @@ class SalesController extends Controller
 
         $users = User::select('id', 'full_name')->where('department_id', DepartmentConstant::TELESALES)->get()->map(function ($item) use ($request) {
 
-            $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')->whereIn('role_type', [StatusCode::COMBOS, StatusCode::SERVICE])
+            $orders = Order::select('id', 'member_id', 'all_total', 'gross_revenue')
+                ->when(isset($request->role_type), function ($q) use ($request) {
+                    $q->where('role_type', $request->role_type);
+                })
                 ->whereBetween('created_at', [Functions::yearMonthDay($request->start_date) . " 00:00:00", Functions::yearMonthDay($request->end_date) . " 23:59:59"])
                 ->when(isset($request->group_branch) && count($request->group_branch), function ($q) use ($request) {
                     $q->whereIn('branch_id', $request->group_branch);

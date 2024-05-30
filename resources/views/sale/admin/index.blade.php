@@ -58,6 +58,9 @@
                 <div class="col-lg-2 col-md-3">
                     {!! Form::select('branch_id', $branchs, 1, array('class' => 'form-control', 'placeholder' => 'Tất cả chi nhánh')) !!}
                 </div>
+                <div class="col-md-2">
+                    {!! Form::select('role_type', [1=>'Học phí',2=>'Đơn khác'], null, array('class' => 'form-control', 'placeholder'=>'Tất cả đơn')) !!}
+                </div>
                 {{--<div class="col-lg-2 col-md-3">--}}
                     {{--{!! Form::select('filter_date', ['created_at'=>'Ngày data về hệ thống','ngay_sale_nhan_data'=>'Ngày sale nhận data'], null, array('class' => 'form-control', 'placeholder' => 'Kiểu lọc')) !!}--}}
                 {{--</div>--}}
