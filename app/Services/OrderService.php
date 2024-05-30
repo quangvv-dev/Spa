@@ -59,7 +59,8 @@ class OrderService
             'voucher_id' => $data['voucher_id'] ?: 0,
             'spa_therapisst_id' => isset($data['spa_therapisst_id']) ? $data['spa_therapisst_id'] : 0,
             'created_at' => isset($data['created_at']) ? Functions::yearMonthDay($data['created_at']) . $now : Carbon::now(),
-            'city_id' => $data['city_id']
+            'city_id' => $data['city_id'],
+            'is_upsale' => @$data['is_upsale'] ?? 0
         ];
         $model = $this->order->fill($input);
         $model->save();
@@ -204,7 +205,8 @@ class OrderService
             'all_total' => array_sum(replaceNumberFormat($attibutes['total_price'])) - $order->discount - $order->discount_order,
 //            'spa_therapisst_id' => $attibutes['spa_therapisst_id'],
             'created_at' => isset($attibutes['created_at']) ? Functions::yearMonthDay($attibutes['created_at']) . $now : Carbon::now(),
-            'city_id' => $attibutes['city_id']
+            'city_id' => $attibutes['city_id'],
+            'is_upsale' => @$attibutes['is_upsale'] ?? 0
         ];
 
         $order->update($attibutes);

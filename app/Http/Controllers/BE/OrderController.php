@@ -163,8 +163,8 @@ class OrderController extends Controller
         $customer->update($inputCustomer);
         $param['branch_id'] = !empty(Auth::user()->branch_id) ? Auth::user()->branch_id : $customer->branch_id;
         $param['mkt_id'] = $customer->mkt_id ?: 0;
-        $param['carepage_id'] = $customer->carepage_id ?: 0;
-        $param['telesale_id'] = $customer->telesales_id ?: 0;
+        $param['carepage_id'] = $customer->carepage_id ?? 0;
+        $param['telesale_id'] = $customer->telesales_id ?? 0;
         DB::beginTransaction();
         try {
             $param['source_id'] = $customer->source_id ?: 0;
@@ -176,8 +176,6 @@ class OrderController extends Controller
             if (@$countOrders >= 2) {
                 $customer->old_customer = 1;
                 $customer->save();
-                $order->is_upsale = 1;
-                $order->save();
             }
 
             if ($order->discount > 0) {
@@ -805,13 +803,6 @@ class OrderController extends Controller
     {
         $input = $request->all();
         $input['count_day'] = isset($input['days']) && count($input['days']) ? array_sum($input['days']) : 0;
-//        if ($input['role_type'] == StatusCode::COMBOS) {
-//            $check = $this->orderService->find($id);
-//            $combo = Services::find($input['service_id'][0]);
-//            $date = strtotime('+' . $combo->hsd . ' months', strtotime($check->created_at));
-//            $date = date("Y-m-d", $date);
-//            $input['hsd'] = $date;
-//        }
         $customer = Customer::find($request->user_id);
         $customer->update($request->only('full_name', 'phone', 'address', 'status_id'));
 

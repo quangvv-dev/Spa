@@ -218,6 +218,14 @@
                                         </div>
                                         <span class="help-block">{{ $errors->first('created_at', ':message') }}</span>
                                     </div>
+                                    <div class="col-md-4">
+                                        <label for="is_upsale" >Đơn upsale</label>
+                                        <div class="box" style="position: relative">
+                                            <input class="form-control" name="is_upsale" type="checkbox" value="1"
+                                                   style="font-size: 6px;position: absolute;right: 100px"
+                                                {{@$order->is_upsale == 1 ? 'checked':''}}>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                             <td class="text-center bold"><b>Giảm giá (VNĐ)</b></td>
