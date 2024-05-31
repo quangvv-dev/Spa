@@ -481,6 +481,44 @@
                     </div>
                 </div>
             </div>
+            <div class="modal micromodal-slide modal-actor-info_customer" id="modal-actor-info_customer"
+                 aria-hidden="true">
+                <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+                    <div class="modal__container" role="dialog" aria-modal="true"
+                         aria-labelledby="modal-action-email-title">
+                        <header class="modal__header">
+                            <h2 class="modal__title" id="modal-action-email-title">
+                                Cài đặt
+                            </h2>
+                            <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                        </header>
+                        <main class="modal__content" id="modal-action-email-content">
+                            <form>
+                                <div>
+                                    <label class="custom-control custom-radio">
+                                        <input checked class="condition-activator custom-control-input job-input" type="radio"
+                                               name="field_customer" id="field_customer" value="link_fb">
+                                        <span class="custom-control-label">Link Facebook</span>
+                                    </label>
+                                </div>
+{{--                                <div>--}}
+{{--                                    <label class="custom-control custom-radio">--}}
+{{--                                        <input class="condition-activator custom-control-input" type="radio"--}}
+{{--                                               name="time_type" id="exactly" value="exactly">--}}
+{{--                                        <span class="custom-control-label">Chính xác</span>--}}
+{{--                                    </label>--}}
+{{--                                </div>--}}
+                            </form>
+                        </main>
+                        <footer class="modal__footer">
+                            <button class="btn btn-primary modal__btn-primary">Cập nhật</button>
+                            <button class="btn btn-link" data-micromodal-close aria-label="Close this dialog window">
+                                Close
+                            </button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

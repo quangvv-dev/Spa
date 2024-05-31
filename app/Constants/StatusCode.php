@@ -64,6 +64,7 @@ class StatusCode
 
     const CSKH = 2;
     const GOI_LAI = 1;
+    const CAREPAGE = 3;
 
     //Khu vực cụm vùng miền
     const CUM_MIEN_BAC = 1;

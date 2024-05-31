@@ -176,6 +176,7 @@ class RuleController extends Controller
         $key = array_keys(array_column((array)$configs->nodeDataArray, 'key'), 3);
         $key_status = array_keys(array_column((array)$configs->nodeDataArray, 'key'), 4);
         $schedule_status = array_keys(array_column((array)$configs->nodeDataArray, 'key'), 10);
+        $link_fb = array_keys(array_column((array)$configs->nodeDataArray, 'key'), 12);
         if (count($key)){
             $category_data = $configs->nodeDataArray[$key[0]];
             $category_ids = $category_data->configs->group;
@@ -186,6 +187,10 @@ class RuleController extends Controller
         if (count($schedule_status)){
             $schedule_status = $configs->nodeDataArray[$schedule_status[0]];
             $schedule_ids = $schedule_status->configs->group;
+        }
+        if (count($link_fb)) {
+            $link_fb = $configs->nodeDataArray[$link_fb[0]];
+            $field_customer = $link_fb->configs->field_customer;
         }
         foreach ($link_nodes as $key => $record) {
             $new = [];
@@ -219,7 +224,7 @@ class RuleController extends Controller
                         array_push($arr, $new);
                     }
                 }
-            }elseif(isset($schedule_status) && count($schedule_ids)){
+            }elseif(isset($schedule_status) && !empty($schedule_ids)){
                 $new['rule_id'] = $rule->id;
                 $new['category_id'] = 0;
                 $new['status'] = $rule->status;
@@ -233,6 +238,21 @@ class RuleController extends Controller
                         array_push($arr, $new);
                     }
                 }
+            }elseif (@$field_customer){
+                $new['rule_id'] = $rule->id;
+                $new['category_id'] = 0;
+                $new['status'] = $rule->status;
+                $new['event'] = $nodes[$record[0]]->value;
+                $new['action'] = $nodes[$record[2]]->value;
+                $new['configs'] = isset($nodes[$record[2]]->configs) ? json_encode($nodes[$record[2]]->configs) : null;
+                $new['actor'] = $field_customer;
+                array_push($arr, $new);
+//                if (isset($nodes[$record[1]]->configs) && isset($nodes[$record[1]]->configs->group) && count($nodes[$record[1]]->configs->group)) {
+//                    foreach ($nodes[$record[1]]->configs->group as $key => $gr) {
+//                        $new['actor'] = $gr;
+//                        array_push($arr, $new);
+//                    }
+//                }
             }
         }
         $this->removeOutput($rule->id); // Remove before insert

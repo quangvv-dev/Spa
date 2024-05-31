@@ -66,6 +66,12 @@
                                     <span class="custom-control-label">CSKH</span>
                                 </label>
                             </div>
+                            <div>
+                                <label class="custom-control custom-radio">
+                                    <input class="type-job-action custom-control-input job-input" type="radio" name="type_job" id="carepage" value="carepage">
+                                    <span class="custom-control-label">Carepage</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 

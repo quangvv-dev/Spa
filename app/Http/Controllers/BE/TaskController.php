@@ -342,7 +342,8 @@ class TaskController extends Controller
         }
         $input = $request->all();
         $myBranch = Auth::user()->branch_id ?? null;
-        $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH])
+        $users = User::whereIn('department_id', [DepartmentConstant::TELESALES, DepartmentConstant::WAITER, DepartmentConstant::CSKH,
+            DepartmentConstant::CARE_PAGE])
             ->when(!empty($myBranch), function ($query) use ($myBranch) {
                 $query->where('branch_id', $myBranch);
             })->pluck('full_name', 'id')->toArray();
