@@ -5,25 +5,37 @@ namespace App\Http\Controllers\BE;
 use App\Constants\StatusCode;
 use App\Http\Controllers\Controller;
 use App\Jobs\ZaloZns;
-use App\Models\ChamCong;
-use App\Models\Customer;
-use App\Models\Order;
-use App\Helpers\Functions;
-use App\Models\PaymentHistory;
-use App\Models\PaymentWallet;
-use App\Models\Role;
-use App\Models\Status;
 use App\Models\TokenZalOa;
-use App\Models\WalletHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Excel;
 
 class DBController extends Controller
 {
+    public function __construct($template_id = null)
+    {
+        $this->template_id = $template_id ?? config('partners.zalo_zns.template_id');
+    }
+
     public function index(Request $request)
     {
-//        Session::flush();
+//        $phone = '0975091435';
+//        $data = ['customer_name' => "Chị Nhiên", 'order_code' => 'DH112334','created_at'=>'01/06/2024 21:13'];
+////        Session::flush();
+//        $oa = TokenZalOa::first();
+//        if (empty($this->template_id) || empty($oa)) {
+//            return false;
+//        }
+//        $newPhone = substr_replace($phone, "84", 0, 1);
+//        $response = GuzzleHttpCall(config('partners.zalo_zns.url'), 'post',
+//            ['access_token' => $oa->access_token]
+//            , [
+//                'tracking_id' => 'development',
+//                'phone' => $newPhone,
+//                'template_id' => $this->template_id,
+//                'template_data' => $data,
+//            ]);
+//        return $response->error;
         ZaloZns::dispatch('0975091435', ['customer_name' => "Chị Nhiên", 'order_code' => 'DH112344','created_at'=>'15/12/2023 21:13'])
             ->delay(now()->addSeconds(2));
 //        $c = PaymentHistory::select('payment_histories.id', 'payment_histories.is_debt', \DB::raw('MONTH(payment_histories.payment_date) as month'), \DB::raw('MONTH(o.created_at) as m_created'))

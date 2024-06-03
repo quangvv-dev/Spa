@@ -49,10 +49,6 @@ class ZaloZns implements ShouldQueue
                 'template_id' => $this->template_id,
                 'template_data' => $this->data,
             ]);
-        if ($response->error == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $response->error;
     }
 }
