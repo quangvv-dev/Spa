@@ -57,7 +57,7 @@ class StatisticController extends Controller
 
         $results = [];
         foreach ($docs as $doc) {
-            $date = $doc->date_time_record->format('j');
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $doc->date_time_record)->format('j');
             $approvalCode = $doc->approval_code;
             if (!isset($results[$approvalCode])) {
                 $results[$approvalCode] = [
