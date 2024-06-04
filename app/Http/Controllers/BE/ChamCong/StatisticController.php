@@ -23,12 +23,7 @@ class StatisticController extends Controller
 {
     public function __construct()
     {
-//        $this->middleware('permission:approval', ['only' => ['index', 'store', 'update', 'destroy']]);
-
         $this->middleware('permission:cham_cong.list', ['only' => ['index']]);
-//        $this->middleware('permission:cham_cong.edit', ['only' => ['editOrder']]);
-//        $this->middleware('permission:cham_cong.add', ['only' => ['createOrder']]);
-//        $this->middleware('permission:cham_cong.delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -48,56 +43,127 @@ class StatisticController extends Controller
         } else {
             $end = now()->endOfMonth()->format('d');
         }
-        $docs = User::select('id', 'full_name', 'approval_code', 'department_id')
-            ->when(isset($request->branch_id), function ($q) use ($request) {
-                $q->where('branch_id', $request->branch_id);
-            })->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
-                $approval = [];
-                $late = [];
-                $early = [];
-                for ($i = 1; $i <= $end; $i++) {
-                    $curentDate = $request->month ? Carbon::create($year,
-                        $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
-                        : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
-                    $docs = ChamCong::select('date_time_record')->where('approval_code',
-                        $item->approval_code)->whereDate('date_time_record', $curentDate)
-                        ->orderBy('date_time_record')->get()->toArray();
-                    if ($item->approval_code) {
-                        if (count($docs) < 2) {
-                            $approval[$i] = 0;
-                        } else {
-                            $startDate = new Carbon($docs[0]['date_time_record']);
-                            $latedMax = !empty(setting('approval_end')) ? new Carbon($startDate->format("Y-m-d") . " ".setting('approval_end').":00")
-                                : new Carbon($startDate->format("Y-m-d") . " 18:30:00");
-                            $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
-                            if ($endDate > $latedMax) {
-                                $diff = round((strtotime($latedMax) - strtotime($startDate)) / 60 / 60, 1);
-                            } else {
-                                $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
-                            }
-                            $approval[$i] = $diff > 10.5 ? 1 : abs(round($diff / 10.5, 2));
-                            $late[] = (strtotime($startDate->format('H:i')) - strtotime(setting('approval_start') ?? '08:00')) / 60;
-                            $early[] = (strtotime(setting('approval_end') ?? '18:30') - strtotime($endDate->format('H:i'))) / 60;
-                        }
-                    } else {
-                        $approval[$i] = 0;
-                    }
+
+        $users = User::where('branch_id', $request->branch_id)
+            ->whereNotNull('approval_code')
+            ->pluck('id', 'approval_code');
+
+        $docs = ChamCong::select('approval_code', 'date_time_record')
+            ->whereIn('approval_code', $users->keys()->toArray())
+            ->whereYear('date_time_record', $year)
+            ->whereMonth('date_time_record', $request->month ?? now()->format('m'))
+            ->orderBy('date_time_record')
+            ->get();
+
+        $results = [];
+        foreach ($docs as $doc) {
+            $date = $doc->date_time_record->format('j');
+            $approvalCode = $doc->approval_code;
+            if (!isset($results[$approvalCode])) {
+                $results[$approvalCode] = [
+                    'id' => $users[$approvalCode],
+                    'full_name' => '', // Set the full name here
+                    'approval_code' => $approvalCode,
+                    'department_id' => '', // Set the department ID here
+                    'approval' => [],
+                    'late' => [],
+                    'early' => [],
+                ];
+            }
+            if (!isset($results[$approvalCode]['approval'][$date])) {
+                $results[$approvalCode]['approval'][$date] = 0;
+            }
+            $docsForDate = $docs->where('date_time_record', $doc->date_time_record);
+            if ($docsForDate->count() >= 2) {
+                $startDate = $docsForDate->first()->date_time_record;
+                $endDate = $docsForDate->last()->date_time_record;
+                $latedMax = !empty(setting('approval_end')) ? new Carbon($startDate->format("Y-m-d") . " " . setting('approval_end') . ":00") : new Carbon($startDate->format("Y-m-d") . " 18:30:00");
+
+                if ($endDate > $latedMax) {
+                    $diff = round((strtotime($latedMax) - strtotime($startDate)) / 60 / 60, 1);
+                } else {
+                    $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
                 }
-                $item->approval = $approval;
-                $item->late = $late > 0 ? $late : 0;
-                $item->early = $early > 0 ? $early : 0;
-                return $item;
-            })->filter(function ($fl) {
-                if (!empty($fl->approval_code)) {
-                    return $fl;
-                }
-            });
+
+                $results[$approvalCode]['approval'][$date] = $diff > 10.5 ? 1 : abs(round($diff / 10.5, 2));
+                $results[$approvalCode]['late'][] = (strtotime($startDate->format('H:i')) - strtotime(setting('approval_start') ?? '08:00')) / 60;
+                $results[$approvalCode]['early'][] = (strtotime(setting('approval_end') ?? '18:30') - strtotime($endDate->format('H:i'))) / 60;
+            }
+        }
+
+        $filteredResults = collect($results)->filter(function ($item) {
+            return !empty($item['approval_code']);
+        });
+
+        $docs = $filteredResults->values();
         if ($request->ajax()) {
             return view('cham_cong.statistic.ajax', compact('end', 'docs'));
         }
         $branches = Branch::pluck('name', 'id')->toArray();
         return view('cham_cong.statistic.index', compact('end', 'docs', 'branches'));
     }
+//    public function index(Request $request)
+//    {
+//        if (!count($request->all())) {
+//            $request->merge(['branch_id' => 1]);
+//        }
+//        $year = $request->year ?: now()->format('Y');
+//
+//        if ($request->month) {
+//            $end = Carbon::create($year, $request->month)->endOfMonth()->format('d');
+//        } else {
+//            $end = now()->endOfMonth()->format('d');
+//        }
+//        $docs = User::select('id', 'full_name', 'approval_code', 'department_id')
+//            ->when(isset($request->branch_id), function ($q) use ($request) {
+//                $q->where('branch_id', $request->branch_id);
+//            })->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
+//                $approval = [];
+//                $late = [];
+//                $early = [];
+//                for ($i = 1; $i <= $end; $i++) {
+//                    $curentDate = $request->month ? Carbon::create($year,
+//                        $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
+//                        : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
+//                    $docs = ChamCong::select('date_time_record')->where('approval_code',
+//                        $item->approval_code)->whereDate('date_time_record', $curentDate)
+//                        ->orderBy('date_time_record')->get()->toArray();
+//                    if ($item->approval_code) {
+//                        if (count($docs) < 2) {
+//                            $approval[$i] = 0;
+//                        } else {
+//                            $startDate = new Carbon($docs[0]['date_time_record']);
+//                            $latedMax = !empty(setting('approval_end')) ? new Carbon($startDate->format("Y-m-d") . " ".setting('approval_end').":00")
+//                                : new Carbon($startDate->format("Y-m-d") . " 18:30:00");
+//                            $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
+//                            if ($endDate > $latedMax) {
+//                                $diff = round((strtotime($latedMax) - strtotime($startDate)) / 60 / 60, 1);
+//                            } else {
+//                                $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
+//                            }
+//                            $approval[$i] = $diff > 10.5 ? 1 : abs(round($diff / 10.5, 2));
+//                            $late[] = (strtotime($startDate->format('H:i')) - strtotime(setting('approval_start') ?? '08:00')) / 60;
+//                            $early[] = (strtotime(setting('approval_end') ?? '18:30') - strtotime($endDate->format('H:i'))) / 60;
+//                        }
+//                    } else {
+//                        $approval[$i] = 0;
+//                    }
+//                }
+//                $item->approval = $approval;
+//                $item->late = $late > 0 ? $late : 0;
+//                $item->early = $early > 0 ? $early : 0;
+//                return $item;
+//            })->filter(function ($fl) {
+//                if (!empty($fl->approval_code)) {
+//                    return $fl;
+//                }
+//            });
+//        if ($request->ajax()) {
+//            return view('cham_cong.statistic.ajax', compact('end', 'docs'));
+//        }
+//        $branches = Branch::pluck('name', 'id')->toArray();
+//        return view('cham_cong.statistic.index', compact('end', 'docs', 'branches'));
+//    }
 
     /**
      * Show the form for creating a new resource.
