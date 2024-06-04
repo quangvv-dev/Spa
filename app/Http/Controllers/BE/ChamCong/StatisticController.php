@@ -16,6 +16,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Excel;
 
@@ -114,50 +116,55 @@ class StatisticController extends Controller
         } else {
             $end = now()->endOfMonth()->format('d');
         }
-        $docs = User::select('id', 'full_name', 'approval_code', 'department_id')
-            ->when(isset($request->branch_id), function ($q) use ($request) {
-                $q->where('branch_id', $request->branch_id);
-            })->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
-                $approval = [];
-                $late = [];
-                $early = [];
-                for ($i = 1; $i <= $end; $i++) {
-                    $curentDate = $request->month ? Carbon::create($year,
-                        $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
-                        : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
-                    $docs = ChamCong::select('date_time_record')->where('approval_code',
-                        $item->approval_code)->whereDate('date_time_record', $curentDate)
-                        ->orderBy('date_time_record')->get()->toArray();
-                    if ($item->approval_code) {
-                        if (count($docs) < 2) {
-                            $approval[$i] = 0;
-                        } else {
-                            $startDate = new Carbon($docs[0]['date_time_record']);
-                            $latedMax = !empty(setting('approval_end')) ? new Carbon($startDate->format("Y-m-d") . " ".setting('approval_end').":00")
-                                : new Carbon($startDate->format("Y-m-d") . " 18:30:00");
-                            $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
-                            if ($endDate > $latedMax) {
-                                $diff = round((strtotime($latedMax) - strtotime($startDate)) / 60 / 60, 1);
+
+        $cacheKey = 'chamcong' . ($request->month ?? (int)Date::now()->format('m')) . '_' . $request->branch_id;
+        $docs = Cache::remember($cacheKey, 1440, function () use ($request, $year, $end) {
+            return User::select('id', 'full_name', 'approval_code', 'department_id')
+                ->when(isset($request->branch_id), function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                })->whereNotNull('approval_code')->get()->map(function ($item) use ($end, $year, $request) {
+                    $approval = [];
+                    $late = [];
+                    $early = [];
+                    for ($i = 1; $i <= $end; $i++) {
+                        $curentDate = $request->month ? Carbon::create($year,
+                            $request->month)->startOfMonth()->addDays($i - 1)->format('Y-m-d')
+                            : now()->startOfMonth()->addDays($i - 1)->format('Y-m-d');
+                        $docs = ChamCong::select('date_time_record')->where('approval_code',
+                            $item->approval_code)->whereDate('date_time_record', $curentDate)
+                            ->orderBy('date_time_record')->get()->toArray();
+                        if ($item->approval_code) {
+                            if (count($docs) < 2) {
+                                $approval[$i] = 0;
                             } else {
-                                $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
+                                $startDate = new Carbon($docs[0]['date_time_record']);
+                                $latedMax = !empty(setting('approval_end')) ? new Carbon($startDate->format("Y-m-d") . " " . setting('approval_end') . ":00")
+                                    : new Carbon($startDate->format("Y-m-d") . " 18:30:00");
+                                $endDate = new Carbon($docs[count($docs) - 1]['date_time_record']);
+                                if ($endDate > $latedMax) {
+                                    $diff = round((strtotime($latedMax) - strtotime($startDate)) / 60 / 60, 1);
+                                } else {
+                                    $diff = round((strtotime($endDate) - strtotime($startDate)) / 60 / 60, 1);
+                                }
+                                $approval[$i] = $diff > 10.5 ? 1 : abs(round($diff / 10.5, 2));
+                                $late[] = (strtotime($startDate->format('H:i')) - strtotime(setting('approval_start') ?? '08:00')) / 60;
+                                $early[] = (strtotime(setting('approval_end') ?? '18:30') - strtotime($endDate->format('H:i'))) / 60;
                             }
-                            $approval[$i] = $diff > 10.5 ? 1 : abs(round($diff / 10.5, 2));
-                            $late[] = (strtotime($startDate->format('H:i')) - strtotime(setting('approval_start') ?? '08:00')) / 60;
-                            $early[] = (strtotime(setting('approval_end') ?? '18:30') - strtotime($endDate->format('H:i'))) / 60;
+                        } else {
+                            $approval[$i] = 0;
                         }
-                    } else {
-                        $approval[$i] = 0;
                     }
-                }
-                $item->approval = $approval;
-                $item->late = $late > 0 ? $late : 0;
-                $item->early = $early > 0 ? $early : 0;
-                return $item;
-            })->filter(function ($fl) {
-                if (!empty($fl->approval_code)) {
-                    return $fl;
-                }
-            });
+                    $item->approval = $approval;
+                    $item->late = $late > 0 ? $late : 0;
+                    $item->early = $early > 0 ? $early : 0;
+                    return $item;
+                })->filter(function ($fl) {
+                    if (!empty($fl->approval_code)) {
+                        return $fl;
+                    }
+                });
+        });
+
         if ($request->ajax()) {
             return view('cham_cong.statistic.ajax', compact('end', 'docs'));
         }
@@ -218,7 +225,7 @@ class StatisticController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -243,7 +250,7 @@ class StatisticController extends Controller
     {
         $user = User::where('id', $request->user_id)->with([
             'department',
-            'donTu'    => function ($query) use ($request) {
+            'donTu' => function ($query) use ($request) {
                 $query->where('date',
                     Carbon::createFromFormat('d-m-Y', $request['date'])->format('Y-m-d'))->with('reason');
                 return $query;
@@ -269,10 +276,10 @@ class StatisticController extends Controller
             $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
             $machineStart = isset($docs[0]) && $docs[0]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
             $approval = [
-                'approval'     => 0,
-                'time_work'    => 0,
+                'approval' => 0,
+                'time_work' => 0,
                 'history_chot' => !empty($startDate) ? ($startDate->format('H:i') . $machineStart) : '-',
-                'time'         => !empty($startDate) ? $startDate->format('H:i') : '-',
+                'time' => !empty($startDate) ? $startDate->format('H:i') : '-',
             ];
         } else {
             $startDate = new Carbon($docs[0]['date_time_record']);
@@ -281,10 +288,10 @@ class StatisticController extends Controller
             $machineStart = $docs[0]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
             $machineEnd = $docs[count($docs) - 1]['type'] == StatusConstant::ACTIVE ? '(Đơn)' : '(Máy)';
             $approval = [
-                'approval'     => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
-                'time_work'    => round($diff - 1.5, 2),
+                'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
+                'time_work' => round($diff - 1.5, 2),
                 'history_chot' => $startDate->format('H:i') . $machineStart . '<br>' . $endDate->format('H:i') . $machineEnd,
-                'time'         => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
+                'time' => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
             ];
 
         }
@@ -314,8 +321,8 @@ class StatisticController extends Controller
                 $startDate = isset($docs[0]) ? new Carbon($docs[0]['date_time_record']) : '';
                 $approval[$i] = [
                     'approval' => 0,
-                    'time'     => !empty($startDate) ? $startDate->format('H:i') . ' - Không có' : '',
-                    'donTu'    => '',
+                    'time' => !empty($startDate) ? $startDate->format('H:i') . ' - Không có' : '',
+                    'donTu' => '',
                 ];
                 $approval[$i]['off'] = ($curentDay > $i && $approval[$i]['approval'] == 0) ? 1 : 0;
             } else {
@@ -325,8 +332,8 @@ class StatisticController extends Controller
                 $check = $docs[0]['type'] == UserConstant::ACTIVE ? $startDate->format('H:i') : ($docs[count($docs) - 1]['type'] == UserConstant::ACTIVE ? $endDate->format('H:i') : '');
                 $approval[$i] = [
                     'approval' => $diff > 9.5 ? 1 : round($diff / 9.5, 2),
-                    'time'     => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
-                    'donTu'    => $check,
+                    'time' => $startDate->format('H:i') . ' - ' . $endDate->format('H:i'),
+                    'donTu' => $check,
                 ];
                 $approval[$i]['off'] = ($curentDay > $i && $approval[$i]['approval'] == 0) ? 1 : 0;
 
