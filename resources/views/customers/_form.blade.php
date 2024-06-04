@@ -118,7 +118,7 @@
                                     <optgroup label="{{ $k }}">
                                         @foreach($l as $kl => $vl)
                                             <option
-                                                {{@$customer->telesales_id == $vl||\Illuminate\Support\Facades\Auth::user()->department_id==\App\Constants\DepartmentConstant::WAITER&&\Illuminate\Support\Facades\Auth::user()->id==$vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
+                                                {{@$customer->telesales_id == $vl?'selected':''}} value="{{ $vl }}">{{ $kl }}</option>
                                         @endforeach
                                     </optgroup>
                                 @endforeach
