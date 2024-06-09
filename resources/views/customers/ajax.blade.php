@@ -69,6 +69,9 @@
             @if(auth()->user()->permission('customer.changeSale'))
                 <li class="dropdown_action" id="show_manager_account"><a>Chuyển người phụ trách</a></li>
             @endif
+            @if(auth()->user()->permission('customer.changeCskh'))
+                <li class="dropdown_action" data-toggle="modal" data-target="#show-cskh-account"><a>Chuyển CSKH</a></li>
+            @endif
             <li class="dropdown_action"><a id="change_relations">Trạng thái khách hàng</a></li>
             @if(auth()->user()->permission('customer.changeBranch'))
                 <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>

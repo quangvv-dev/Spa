@@ -84,7 +84,8 @@ class RoleController extends Controller
         'filter.team',
         'call-center.listen',
         'customer.changeBranch',
-        'customer.changeSale'
+        'customer.changeSale',
+        'customer.changeCskh'
     ];
 
     protected $permissions = ['list', 'edit', 'add', 'delete'];

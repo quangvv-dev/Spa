@@ -827,6 +827,11 @@ class CustomerController extends Controller
                 'status_id' => $request->status_id,
             ]);
         }
+        if (isset($request->cskh_id)) {
+            $customer->update([
+                'cskh_id' => $request->cskh_id,
+            ]);
+        }
 
         if (isset($request->telesales_id)) {
             $customer->update([

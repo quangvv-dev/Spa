@@ -133,6 +133,7 @@
                 @include('customers.modal-export')
                 @include('customers.modal-update-relation')
                 @include('customers.modal-update-account-manager')
+                @include('customers.modal-update-cskh')
                 @include('customers.modal-branch')
                 @include('kanban_board.modal')
                 <input type="hidden" id="status">
@@ -1147,6 +1148,26 @@
                     data: {
                         ids: ids,
                         telesales_id: account_manager,
+                    }
+                }).done(function () {
+                    window.location.reload();
+                });
+            });
+
+            $(document).on('click', '.update-multiple-account-cskh', function () {
+                let id = $('td .myCheck:checked');
+                let ids = [];
+                let account_manager = $('#cskh_account').val();
+                $.each(id, function () {
+                    ids.push($(this).val());
+                });
+
+                $.ajax({
+                    url: "customers/update-multiple-status",
+                    method: "post",
+                    data: {
+                        ids: ids,
+                        cskh_id: account_manager,
                     }
                 }).done(function () {
                     window.location.reload();

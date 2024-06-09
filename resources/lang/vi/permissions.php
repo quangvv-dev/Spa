@@ -68,4 +68,5 @@ return [
     'call-center.listen'       => "Nghe/Tải ghi âm",
     'customer.changeBranch'    => "Chuyển chi nhánh khách hàng",
     'customer.changeSale'      => "Chuyển người phụ trách",
+    'customer.changeCskh'      => "Chuyển CSKH phụ trách",
 ];
