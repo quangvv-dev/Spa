@@ -91,6 +91,30 @@ class Customer extends Model
         24 => 'Còn lại',
     ];
 
+    public const last_time_label = [
+        1 => 'Sau 1 ngày',
+        2 => 'Sau 2 ngày',
+        3 => 'Sau 3 ngày',
+        4 => 'Sau 4 ngày',
+        5 => 'Sau 5 ngày',
+        10 => 'Sau 10 ngày',
+        15 => 'Sau 15 ngày',
+        20 => 'Sau 20 ngày',
+        25 => 'Sau 25 ngày',
+        30 => 'Sau 30 ngày',
+        60 => 'Sau 60 ngày',
+        90 => 'Sau 90 ngày',
+        120 => 'Sau 120 ngày',
+        150 => 'Sau 150 ngày',
+        180 => 'Sau 180 ngày',
+        210 => 'Sau 210 ngày',
+        240 => 'Sau 240 ngày',
+        280 => 'Sau 280 ngày',
+        310 => 'Sau 310 ngày',
+        340 => 'Sau 340 ngày',
+        360 => 'Sau 360 ngày'
+    ];
+
     use SoftDeletes;
 
     protected $guarded = ['id'];
@@ -118,6 +142,10 @@ class Customer extends Model
             })
             ->when(isset($conditions['telesales']), function ($query) use ($conditions) {
                 $query->where('telesales_id', $conditions['telesales']);
+            })->when(isset($conditions['last_time']), function ($query) use ($conditions) {
+                $query->whereBetween('last_time', [
+                    now()->subDays($conditions['last_time'])->startOfDay(), now(),
+                ]);
             })->when(isset($conditions['branch_id']) && $conditions['branch_id'], function ($query) use ($conditions) {
                 $query->where('branch_id', $conditions['branch_id']);
             })->when(isset($conditions['group_branch']) && count($conditions['group_branch']), function ($q) use ($conditions) {

@@ -16,10 +16,16 @@
         </select>
     </div>
     <div class="col-md-2 col-xs-12">
-        <select name="gender" class="form-control gender select2">
+        <select hidden name="gender" class="form-control gender">
             <option value="">Giới tính</option>
             <option value="0">Nữ</option>
             <option value="1">Nam</option>
+        </select>
+        <select name="last_time" class="form-control last_time select2">
+            <option value="">Tương tác</option>
+            @foreach(\App\Models\Customer::last_time_label as $k=> $item)
+                <option value="{{$k}}">{{ $item}}</option>
+            @endforeach
         </select>
     </div>
 

@@ -29,7 +29,6 @@
         let html = '';
         let content = '';
         data.forEach( function (item,key) {
-            console.log(key,'KEY');
             if(key == (data.length - 1)){
                 lastTimestamp = parseInt(item.ts);
             }

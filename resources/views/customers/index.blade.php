@@ -380,6 +380,7 @@
                 let telesales = $('#telesales').val();
                 let branch_id = $('.branch_id').val();
                 let cskh = $('.cskh').val();
+                let last_time = $('.last_time').val();
 
                 $('#status').val(status);
                 $('#birthday_tab').val('');
@@ -395,6 +396,7 @@
                     branch_id: branch_id,
                     location_id: location,
                     cskh_id: cskh,
+                    last_time: last_time,
                 };
 
                 searchAjax(data);
@@ -445,6 +447,7 @@
                 const start_date = $('.filter_start_date').val();
                 const end_date = $('.filter_end_date').val();
                 let cskh = $('.cskh').val();
+                let last_time = $('.last_time').val();
 
                 $('.filter_start_date').val('');
                 $('.filter_end_date').val('');
@@ -463,6 +466,7 @@
                     start_date: start_date,
                     end_date: end_date,
                     cskh_id: cskh,
+                    last_time: last_time,
                 };
                 searchAjax(data);
                 e.preventDefault();
@@ -481,7 +485,7 @@
                 };
             }
 
-            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location,.carepage, .call_back,.cskh', delay(function () {
+            $(document).on('change', '.group, .telesales, .group-product, .source, .branch_id, .gender, .location,.carepage, .call_back,.cskh,.last_time', delay(function () {
                 let marketing = $('.group-product').val();
                 let call_back = $('.call_back').val();
                 let carepage_id = $('.carepage').val();
@@ -491,6 +495,7 @@
                 let source = $('.source').val();
                 let group = $('.group').val();
                 let cskh = $('.cskh').val();
+                let last_time = $('.last_time').val();
                 let telesales = $('.telesales').val();
                 let search = $('#search_value').val();
                 $('#branch_id').val(branch_id);
@@ -514,7 +519,8 @@
                     status: status,
                     source: source,
                     branch_id: branch_id,
-                    cskh_id: cskh
+                    cskh_id: cskh,
+                    last_time: last_time
                 };
                 searchAjax(data);
 
@@ -543,6 +549,7 @@
                 let gender = $('.gender').val();
                 let location = $('.location').val();
                 let cskh = $('.cskh').val();
+                let last_time = $('.last_time').val();
 
                 let data = {
                     carepage_id: carepage_id,
@@ -557,6 +564,7 @@
                     branch_id: branch_id,
                     location_id: location,
                     cskh_id: cskh,
+                    last_time: last_time,
                 };
                 searchAjax(data);
                 e.preventDefault();
@@ -910,6 +918,7 @@
                 let birthday = $('#birthday_tab').val();
                 let location = $('.location').val();
                 let cskh = $('.cskh').val();
+                let last_time = $('.last_time').val();
 
                 $.ajax({
                     url: '{{ url()->current() }}',
@@ -929,7 +938,8 @@
                         data_time: btn_choose_time,
                         birthday: birthday,
                         branch_id: branch_id,
-                        cskh_id: cskh
+                        cskh_id: cskh,
+                        last_time: last_time
                     },
                 }).done(function (data) {
                     $('#registration-form').html(data);
