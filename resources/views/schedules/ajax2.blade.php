@@ -71,11 +71,11 @@
                                     @foreach($docs as $item)
                                 {
                                     id: '{{$item->id}}',
-                                    title: "{!! (!empty($item->type)?\App\Models\Schedule::SCHEDULE_TYPE[$item->type]:'').': '.@$item->category->name.', '.@$item->customer->full_name .', SĐT: '.(auth()->user()->permission('phone.open')? @$item->customer->phone :@str_limit($item->customer->phone,7,'xxx')).' Lưu ý: '.$item->note !!}",
+                                    title: "{!! (!empty($item->type)?\App\Models\Schedule::SCHEDULE_TYPE[$item->type]:'').': '.@$item->category->name.', '.@$item->customer->full_name .', Mã KH: '.$item->customer->account_code.' Lưu ý: '.$item->note !!}",
                                     note: "{{$item->note}}",
                                     description: "{{$item->note}}",
                                     full_name: '{{@$item->customer->full_name}}',
-                                    phone: "{{@$item->customer->phone}}",
+                                    account_code: "{{@$item->customer->account_code}}",
                                     creator_id: '{{@$item->creator_id}}',
                                     time_from: '{{$item->time_from}}',
                                     time_to: '{{$item->time_to}}',
@@ -122,7 +122,7 @@
                                 $('#update_type').val(info.type);
                                 $('#update_note').val(info.note).change();
                                 $('#full_name').val(info.full_name).change();
-                                $('#phone').val(hidden_phone == true ? info.phone : info.phone.slice(0, 7) + 'xxx').change();
+                                $('#account_code').val(info.account_code).change();
                                 $('#action').val(info.creator_id).change();
                                 $('.modal.fade').attr('id', 'modal_' + id).change();
                                 $('.delete').data('url', 'schedules/' + id).change();
@@ -172,8 +172,8 @@
                                         <input class="form-control" readonly value="" id="full_name">
                                     </div>
                                     <div class="col-md-4 col-xs-12">
-                                        {!! Form::label('phone', 'Số điện thoại', array('class' => ' required')) !!}
-                                        <input class="form-control" readonly value="" id="phone">
+                                        {!! Form::label('account_code', 'Mã KH', array('class' => ' required')) !!}
+                                        <input class="form-control" readonly value="" id="account_code">
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {!! Form::label('date', 'Ngày hẹn', array('class' => ' required')) !!}

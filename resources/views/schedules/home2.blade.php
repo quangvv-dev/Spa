@@ -95,7 +95,6 @@
 @endsection
 @section('_script')
     <script>
-        var hidden_phone = {{auth()->user()->permission('phone.open') ? 'true' :'false'}};
         $(document).ready(function () {
             $('.page-title').hide();
             $('.breadcrumb').hide();
@@ -137,14 +136,14 @@
                         let categoryText = value.category.name??'';
                         b.push({
                             id: value.id,
-                            title: typeText+': '+categoryText+', ' + value.customer.full_name + ', SĐT: ' + (hidden_phone == true ? value.customer.phone : value.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + value.note,
+                            title: typeText+': '+categoryText+', ' + value.customer.full_name + ', SĐT: ' + value.account_code + ' Lưu ý: ' + value.note,
                             start: value.date + 'T' + value.time_from + ':00',
                             end: value.date + 'T' + value.time_to + ':00',
                             color: col,
                             //data bonus
                             note: value.note,
                             full_name: value.customer.full_name,
-                            phone: value.customer.phone,
+                            account_code: value.customer.account_code,
                             creator_id: value.creator_id,
                             time_from: value.time_from,
                             time_to: value.time_to,
@@ -324,7 +323,7 @@
                     let categoryText = data.category.name??'';
                     b.push({
                         id: data.id,
-                        title: typeText+': '+categoryText+', ' + data.customer.full_name + ', SĐT: ' + (hidden_phone == true ? data.customer.phone : data.customer.phone.slice(0, 7) + 'xxx') + ' Lưu ý: ' + data.note,
+                        title: typeText+': '+categoryText+', ' + data.customer.full_name + ', Mã KH: ' + data.account_code + ' Lưu ý: ' + data.note,
                         description: data.note,
                         start: data.date + 'T' + data.time_from + ':00',
                         end: data.date + 'T' + data.time_to + ':00',
@@ -332,7 +331,7 @@
                         //data bonus
                         note: data.note,
                         full_name: data.customer.full_name,
-                        phone: data.customer.phone,
+                        account_code: data.customer.account_code,
                         creator_id: data.creator_id,
                         time_from: data.time_from,
                         time_to: data.time_to,
