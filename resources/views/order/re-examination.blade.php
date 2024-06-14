@@ -50,6 +50,20 @@
         .mt0 {
             margin-bottom: 0px;
         }
+        .info-detail {
+            display: flex;
+            justify-content: space-between;
+        }
+        tr th {
+            vertical-align: middle !important;
+            text-align: center;
+        }
+        .custom {
+            text-align: center;
+        }
+        .elm div {
+            min-height: 100px;
+        }
     </style>
 
 </head>
@@ -59,21 +73,24 @@
         <div class="address font12">Số 10, Vũ Phạm Hàm, Quận Cầu Giấy, Thành Phố Hà Nội</div>
 
         <div class="title text-center"><h3>PHIẾU TÁI KHÁM</h3></div>
-        {{--            <div class="date-time font12"> </div>--}}
+        <!-- <div class="date-time font12"> </div> -->
         <div class="customer">
             <div class="lesson bold">I/ THÔNG TIN KHÁCH HÀNG</div>
             <div class="info">
-                <div class="row">
-                    <div class="col-lg-6">
+                <div class="info-detail">
+                    <div class="">
                         <span class="bold">Khách hàng: </span>
                         <span>Nguyễn Thị Hồng Vân</span>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="">
                         <span>Năm sinh: </span> 1992
                     </div>
-                    <div class="col-lg-3">
+                    <div class="">
                         <span>Mã KH: </span> KH00183
                     </div>
+
+                </div>
+                <div class="row">
                     <div class="col-lg-12">
                         <span>Địa chỉ: </span> Số 10, Vũ Phạm Hàm, Quận Cầu Giấy, Thành Phố Hà Nội
                     </div>
@@ -105,17 +122,27 @@
                 <th rowspan="2">Người tái khám</th>
                 <th rowspan="2">Khách hàng</th>
             </tr>
-            <tr>
+            <tr class="custom">
                 <td>Hài lòng</td>
                 <td>Không hài lòng</td>
 
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>14/06/2024</td>
-                <td>18/06/2024</td>
-                <td>Tân trang cô bé</td>
+            <tr class="elm">
+                <td>
+                    <div>
+                        14/06/2024
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        18/06/2024
+                    </div>
+                </td>
+                <td>
+                    <div>Tân trang cô bé</div>
+                </td>
 
             </tr>
             </tbody>
