@@ -122,7 +122,6 @@ class StatisticController extends Controller
         $payment_isdebt = clone $payment;
         $payment_years = clone $payment_All;
         $orders = Order::returnRawData($input);
-        $orders2 = clone $orders;
         $order_single = clone $orders;
         $order_multiple = clone $orders;
         $orders2 = clone $orders;
