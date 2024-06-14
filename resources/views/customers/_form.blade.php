@@ -98,13 +98,13 @@
                     @else
                         <input type="hidden" name="branch_id" value="{{$checkRole}}">
                     @endif
-{{--                    <div class="col-xs-12 col-md-12">--}}
-{{--                        <div class="form-group required {{ $errors->has('locale_code') ? 'has-error' : '' }}">--}}
-{{--                            {!! Form::label('locale_id', 'Khách tỉnh',['class'=>'required']) !!}--}}
-{{--                            {!! Form::select('locale_id',$locales, @$customer->locale_id, array('class' => 'form-control select2')) !!}--}}
-{{--                            <span class="help-block">{{ $errors->first('locale_code', ':message') }}</span>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group required {{ $errors->has('locale_code') ? 'has-error' : '' }}">
+                            {!! Form::label('locale_id', 'Khách tỉnh',['class'=>'required']) !!}
+                            {!! Form::select('locale_id',$locales, @$customer->locale_id, array('class' => 'form-control select2')) !!}
+                            <span class="help-block">{{ $errors->first('locale_code', ':message') }}</span>
+                        </div>
+                    </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group">
                             <label for="ctv" style="width: 100%;cursor: pointer;">Cộng tác viên</label>
