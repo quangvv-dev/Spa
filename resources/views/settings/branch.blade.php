@@ -43,7 +43,7 @@
                                             {!! Form::select('location_id', $location, $item->location_id, array('class' => 'form-control location select-gear', 'placeholder' => 'Chọn cụm')) !!}
                                         </td>
                                         <td class="text-center row">
-                                            <input style="max-width: 150px" type="text" class="lat txt-dotted form-control col-6" value="{{$item->lat}}">
+                                            <input  type="text" class="lat txt-dotted form-control col-6" value="{{$item->lat}}">
 {{--                                            <input style="max-width: 150px" type="text" class="long txt-dotted form-control col-6" value="{{$item->long}}">--}}
                                         </td>
                                         <td class="text-center">
