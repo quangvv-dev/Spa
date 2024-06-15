@@ -91,6 +91,8 @@
 
                 if(data.task_status_id != 1){
                     $('.btn-complete').prop('disabled',true);
+                }else {
+                    $('.btn-complete').prop('disabled',false);
                 }
             });
 
