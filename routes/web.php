@@ -191,9 +191,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
     Route::get('order-pdf/{id}', 'OrderController@orderDetailPdf');
     Route::get('wallet-pdf/{id}', 'PaymentWallet\PaymentWalletController@pdf');
     Route::get('contact-pdf/{contact}', 'Contact\ContactController@show');
-    Route::get('re-exam', function (){
-        return view('order.re-examination');
-    });
+    Route::get('re-exam/{order}', 'OrderController@reExamPdf');
 
 
     Route::get('commission/{id}', 'CommissionController@index')->name('commission.index');

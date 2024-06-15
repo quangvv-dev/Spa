@@ -1,0 +1,54 @@
+.font12 {
+    font-size: 10px;
+}
+
+body {
+    font-family: system-ui;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+strong {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+b {
+    font-size: 12px;
+}
+
+h3 {
+    margin: 0;
+}
+
+td {
+    padding: 4px !important;
+    border: none !important;
+}
+
+.table-bordered {
+    border-top: dotted 1px;
+    border-bottom: dotted 1px;
+    border-right: none;
+    border-left: none;
+}
+
+.mt0 {
+    margin-bottom: 0px;
+}
+.info-detail {
+    display: flex;
+    justify-content: space-between;
+}
+tr th {
+    vertical-align: middle !important;
+    text-align: center;
+}
+.custom {
+    text-align: center;
+}
+.elm div {
+    min-height: 100px;
+}

@@ -555,6 +555,10 @@ class OrderController extends Controller
             $payment->price . '&addInfo=' . 'Thanh toan dh ' . $order->code . '&accountName=' . $bank->account_name : '';
         return view('order.order-pdf', compact('order', 'payment', 'linkQr'));
     }
+    public function reExamPdf(Order $order)
+    {
+        return view('order.re-examination', compact('order'));
+    }
 
     public function payment(Request $request, $id)
     {

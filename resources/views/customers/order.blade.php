@@ -43,6 +43,10 @@
                                 class="fas fa-file-invoice-dollar"></i>
                             <span class="tooltiptext">Thanh toán (IN)</span>
                         </a>
+                        <a class="btn tooltip-nav" href="{{ url('re-exam/' . $order->id) }}" target="_blank"><i
+                                class="fas fa-print"></i>
+                            <span class="tooltiptext">Phiếu tái khám</span>
+                        </a>
                     </td>
                     <td class="text-center">{{ @$order->branch->name }}</td>
                     <td class="text-center">{{ date('d/m/Y',strtotime($order->created_at)) }}</td>

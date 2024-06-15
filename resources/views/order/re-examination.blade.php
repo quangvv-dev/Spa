@@ -8,69 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <style>
-        .font12 {
-            font-size: 10px;
-        }
-
-        body {
-            font-family: system-ui;
-        }
-
-        .bold {
-            font-weight: bold;
-        }
-
-        strong {
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        b {
-            font-size: 12px;
-        }
-
-        h3 {
-            margin: 0;
-        }
-
-        td {
-            padding: 4px !important;
-            border: none !important;
-        }
-
-        .table-bordered {
-            border-top: dotted 1px;
-            border-bottom: dotted 1px;
-            border-right: none;
-            border-left: none;
-        }
-
-        .mt0 {
-            margin-bottom: 0px;
-        }
-        .info-detail {
-            display: flex;
-            justify-content: space-between;
-        }
-        tr th {
-            vertical-align: middle !important;
-            text-align: center;
-        }
-        .custom {
-            text-align: center;
-        }
-        .elm div {
-            min-height: 100px;
-        }
-    </style>
-
+    <link href="{{asset('css/print.css')}}" rel="stylesheet" type="text/css">
 </head>
-<div class="invoice">
+<div class="invoice" style="">
     <div class="block-header">
-        <div class="brand">VIỆN THẨM MỸ QUỐC TẾ GTG</div>
-        <div class="address font12">Số 10, Vũ Phạm Hàm, Quận Cầu Giấy, Thành Phố Hà Nội</div>
+        <div class="brand text-right bold">{{@$order->branch->lat??'PHÒNG KHÁM THẨM MỸ THEPYO'}}</div>
+        <div class="address font12 text-right">{{@$order->branch->address}}</div>
 
         <div class="title text-center"><h3>PHIẾU TÁI KHÁM</h3></div>
         <!-- <div class="date-time font12"> </div> -->
@@ -80,19 +23,22 @@
                 <div class="info-detail">
                     <div class="">
                         <span class="bold">Khách hàng: </span>
-                        <span>Nguyễn Thị Hồng Vân</span>
+                        <span>{{$order->customer->full_name}}</span>
                     </div>
                     <div class="">
-                        <span>Năm sinh: </span> 1992
+                        <span>Năm sinh: </span> {{@$order->customer->birthday}}
                     </div>
                     <div class="">
-                        <span>Mã KH: </span> KH00183
+                        <span>Mã KH: </span> {{@$order->customer->account_code}}
                     </div>
 
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <span>Địa chỉ: </span> Số 10, Vũ Phạm Hàm, Quận Cầu Giấy, Thành Phố Hà Nội
+                <div class="info-detail">
+                    <div class="">
+                        <span>Địa chỉ: </span> {{@$order->customer->address}}
+                    </div>
+                    <div class="">
+                        <span>Công nợ: </span> {{@number_format($order->the_rest)}} VNĐ
                     </div>
                 </div>
             </div>
@@ -102,11 +48,19 @@
             <div class="row">
                 <div class="col-lg-7">
                     <span class="bold">EKIP thực hiện: </span>
-                    <span>B.sĩ Nguyền Hồng Tiến , Y tá Trần Văn Minh</span>
+                    <span>
+                        @if(isset($order->supportOrder))
+                            {{!empty($order->supportOrder->doctor)?@$order->supportOrder->doctor->full_name.', ':''}}
+                            {{!empty($order->supportOrder->yTaChinh)?@$order->supportOrder->yTaChinh->full_name.', ':''}}
+                            {{!empty($order->supportOrder->yTaPhu)?@$order->supportOrder->yTaPhu->full_name:''}}
+                        @endif
+                    </span>
                 </div>
                 <div class="col-lg-5">
                     <span>Bác sĩ tư vấn: </span>
-                    B.sĩ Nguyền Hồng Tiến
+                    @if(isset($order->supportOrder))
+                        {{!empty($order->supportOrder->doctor)?@$order->supportOrder->doctor->full_name:''}}
+                    @endif
                 </div>
             </div>
         </div>
@@ -119,8 +73,9 @@
                 <th rowspan="2">Kết quả tái khám</th>
                 <th colspan="2">Mức đáp ứng KH</th>
                 <th rowspan="2">Chỉ định</th>
-                <th rowspan="2">Người tái khám</th>
-                <th rowspan="2">Khách hàng</th>
+                <th rowspan="2">Người tái khám <br><i class="font12 ">(Ký & ghi rõ họ tên)</i></th>
+                <th rowspan="2">Khách hàng <br>
+                    <i class="font12 ">(Ký & ghi rõ họ tên)</i></th>
             </tr>
             <tr class="custom">
                 <td>Hài lòng</td>
@@ -129,27 +84,39 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="elm">
-                <td>
-                    <div>
-                        14/06/2024
-                    </div>
-                </td>
-                <td>
-                    <div>
-                        18/06/2024
-                    </div>
-                </td>
-                <td>
-                    <div>Tân trang cô bé</div>
-                </td>
-
-            </tr>
+            @if($order->orderDetails)
+                @forelse($order->orderDetails as $item)
+                    @if(isset($item->service) && $item->service->type == \App\Constants\StatusCode::SERVICE)
+                        <tr class="elm">
+                            <td>
+                                <div>
+                                    {{now()->format('d/m/Y')}}
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    {{date('d/m/Y',strtotime($order->created_at))}}
+                                </div>
+                            </td>
+                            <td>
+                                <div>{{$item->service->name}}</div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endif
+                @empty
+                @endforelse
+            @endif
             </tbody>
         </table>
     </div>
 </div>
 <script>
-    // window.print();
+    window.print();
 </script>
 </html>
