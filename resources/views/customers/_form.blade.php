@@ -185,15 +185,18 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-12">
-                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">
-                            {!! Form::label('is_gioithieu', 'SĐT khách giới thiệu') !!}
-                            @if(isset($customer))
-                                {!! Form::text('is_gioithieu',isset($customer)? (@$customer->gioithieu->phone.' ('.@$customer->gioithieu->full_name.' )'):null, array('id' => 'is_gioithieu','class' => 'form-control',$customer->is_gioithieu!=0?'readonly':'')) !!}
-                            @else
-                                {!! Form::text('is_gioithieu',null, array('id' => 'is_gioithieu','class' => 'form-control')) !!}
-                            @endif
-                            <span class="help-block">{{ $errors->first('is_gioithieu', ':message') }}</span>
-                        </div>
+                        {!! Form::label('address', 'Địa chỉ') !!}
+                        {!! Form::text('address', null, array('id' => 'address','class' => 'form-control')) !!}
+                        <span class="help-block">{{ $errors->first('address', ':message') }}</span>
+{{--                        <div class="form-group required {{ $errors->has('facebook') ? 'has-error' : '' }}">--}}
+{{--                            {!! Form::label('is_gioithieu', 'SĐT khách giới thiệu') !!}--}}
+{{--                            @if(isset($customer))--}}
+{{--                                {!! Form::text('is_gioithieu',isset($customer)? (@$customer->gioithieu->phone.' ('.@$customer->gioithieu->full_name.' )'):null, array('id' => 'is_gioithieu','class' => 'form-control',$customer->is_gioithieu!=0?'readonly':'')) !!}--}}
+{{--                            @else--}}
+{{--                                {!! Form::text('is_gioithieu',null, array('id' => 'is_gioithieu','class' => 'form-control')) !!}--}}
+{{--                            @endif--}}
+{{--                            <span class="help-block">{{ $errors->first('is_gioithieu', ':message') }}</span>--}}
+{{--                        </div>--}}
                     </div>
                     <div class="col-xs-12 col-md-12">
                         <div class="form-group required {{ $errors->has('avatar') ? 'has-error' : '' }}">
