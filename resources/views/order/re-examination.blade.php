@@ -59,7 +59,8 @@
                 <div class="col-lg-5">
                     <span>Bác sĩ tư vấn: </span>
                     @if(isset($order->supportOrder))
-                        {{!empty($order->supportOrder->doctor)?@$order->supportOrder->doctor->full_name:''}}
+                        {{!empty($order->supportOrder->tuVanChinh)?@$order->supportOrder->tuVanChinh->full_name.', ':''}}
+                        {{!empty($order->supportOrder->tuVanPhu)?@$order->supportOrder->tuVanPhu->full_name:''}}
                     @endif
                 </div>
             </div>
