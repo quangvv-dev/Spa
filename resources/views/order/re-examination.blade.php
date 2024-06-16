@@ -38,7 +38,7 @@
                         <span>Địa chỉ: </span> {{@$order->customer->address}}
                     </div>
                     <div class="">
-                        <span>Công nợ: </span> {{@number_format($order->the_rest)}} VNĐ
+                        <span>Công nợ: </span> {{@number_format($the_rest)}} VNĐ
                     </div>
                 </div>
             </div>

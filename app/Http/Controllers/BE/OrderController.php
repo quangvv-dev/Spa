@@ -557,7 +557,8 @@ class OrderController extends Controller
     }
     public function reExamPdf(Order $order)
     {
-        return view('order.re-examination', compact('order'));
+        $the_rest = Order::where('member_id', $order->member_id)->sum('the_rest');
+        return view('order.re-examination', compact('order','the_rest'));
     }
 
     public function payment(Request $request, $id)
