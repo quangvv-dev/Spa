@@ -87,7 +87,7 @@
                 $('#time_from').val(data.time_from).change();
                 $('#time_to').val(data.time_to).change();
                 $('#description').html(data.description).change();
-                $('.btn-complete').attr('data-id', data.id);
+                $('#currentID').val(data.id);
 
                 if(data.task_status_id != 1){
                     $('.btn-complete').prop('disabled',true);
@@ -97,7 +97,7 @@
             });
 
             $(document).on('click', '.btn-complete', function(e) {
-                let id = $(this).data('id');
+                let id = $('#currentID').val();
                 $.ajax({
                     type: 'POST',
                     url: '/ajax/tasks/update',

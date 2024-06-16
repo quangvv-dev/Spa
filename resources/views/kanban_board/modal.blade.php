@@ -47,6 +47,7 @@
                          data-autoclose="true">
                         {!! Form::label('time_to', 'Giờ hẹn (Tới)', array('class' => ' required')) !!}
                         {!! Form::text('time_to', null, array('class' => 'form-control','id'=>'time_to')) !!}
+                        {!! Form::hidden('currentID', null, array('class' => 'form-control','id'=>'currentID')) !!}
                     </div>
                     <div class="col-md-12 col-xs-12">
 
