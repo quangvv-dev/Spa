@@ -76,7 +76,9 @@
             @if(auth()->user()->permission('customer.changeBranch'))
                 <li class="dropdown_action" data-toggle="modal" data-target="#show-branch-account"><a>Chuyển chi nhánh</a></li>
             @endif
-            <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
+            @if(auth()->user()->permission('customers.delete'))
+                <li class="dropdown_action" id="remove_selected_account"><a>Xóa nhiều</a></li>
+            @endif
             <li class="dropdown_action" id="restore_account"><a>Khôi phục</a></li>
             <li class="dropdown_action" id="permanently_delete_account"><a>Destroy (Huỷ data)</a></li>
 {{--            <li class="dropdown_action" data-toggle="modal" data-target="#show-modal-phanbo"><a>Phân bổ data</a></li>--}}
