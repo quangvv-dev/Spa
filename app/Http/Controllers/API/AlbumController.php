@@ -128,6 +128,7 @@ class AlbumController extends BaseApiController
             $input['customer_id'] = $id;
             $doc = Album::create($input);
         }
+        // xử lý phân quyền album ở đây (hiển thị album cho 1 số phòng ban)
         $data = new AlbumResource($doc);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);

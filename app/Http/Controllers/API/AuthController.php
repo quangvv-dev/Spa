@@ -544,17 +544,17 @@ class AuthController extends BaseApiController
             ],
             [
                 'menu_code' => MenuConstant::BANG_LUONG,
-                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,DepartmentConstant::Y_TA],
                 'name_menu' => 'BẢNG LƯƠNG',
             ],
             [
                 'menu_code' => MenuConstant::CHAM_CONG,
-                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,DepartmentConstant::Y_TA],
                 'name_menu' => 'CHẤM CÔNG',
             ],
             [
                 'menu_code' => MenuConstant::DON_TU,
-                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                'department' => [DepartmentConstant::ADMIN, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,DepartmentConstant::Y_TA],
                 'name_menu' => 'ĐƠN TỪ',
             ],
             [
