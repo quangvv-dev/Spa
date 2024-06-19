@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\DepartmentConstant;
 use App\Constants\ResponseStatusCode;
 use App\Http\Resources\AlbumResource;
 use App\Http\Resources\ChamCong\CustomerResource;
 use App\Models\Album;
 use App\Models\Customer;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -129,6 +131,10 @@ class AlbumController extends BaseApiController
             $doc = Album::create($input);
         }
         // xử lý phân quyền album ở đây (hiển thị album cho 1 số phòng ban)
+        $user = User::find($request->jwtUser->id);
+        if ($user->department_id != DepartmentConstant::KE_TOAN || $user->department_id != DepartmentConstant::ADMIN){
+            return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'Bạn không có quyền xem ảnh');
+        }
         $data = new AlbumResource($doc);
 
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
