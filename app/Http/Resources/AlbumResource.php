@@ -17,8 +17,6 @@ class AlbumResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user = User::find($request->jwtUser->id);
-
         return [
             'customer_id'   => @$this->customer->id,
             'customer_name' => @$this->customer->full_name,
@@ -27,7 +25,7 @@ class AlbumResource extends JsonResource
             'branch_id'     => @$this->branch_id,
             'service_text'  => @$this->service_text,
             'branch'        => @$this->branch->name,
-            'images'        => in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN]) ? @json_decode($this->images) : [],
+            'images'        => @json_decode($this->images)
         ];
     }
 }

@@ -131,11 +131,13 @@ class AlbumController extends BaseApiController
             $doc = Album::create($input);
         }
         // xử lý phân quyền album ở đây (hiển thị album cho 1 số phòng ban)
-        if ($user->department_id != DepartmentConstant::KE_TOAN || $user->department_id != DepartmentConstant::ADMIN){
-            return $this->responseApi(ResponseStatusCode::UNAUTHORIZED, 'Bạn không có quyền xem ảnh');
-        }
-        $data = new AlbumResource($doc);
 
+        $data = new AlbumResource($doc);
+        $user = User::find($request->jwtUser->id);
+        if (in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
+            $data->images =  [];
+            $data->save();
+        }
         return $this->responseApi(ResponseStatusCode::OK, 'SUCCESS', $data);
     }
 
