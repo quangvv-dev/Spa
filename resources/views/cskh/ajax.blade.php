@@ -33,9 +33,9 @@
                 <tr>
                     <td>{{$i+1}}</td>
                     <td>{{$item['full_name']}}</td>
-                    <td>{{number_format($item['answers'] + $item['missed_call'])}}</td>
+                    <td>{{number_format($item['total'])}}</td>
                     <td>{{number_format($item['answers'])}}</td>
-                    <td>{{number_format($item['missed_call'])}}</td>
+                    <td>{{number_format($item['answers'])}}</td>
                     <td>{{number_format(!empty($item['minute'] ? $item['minute']/60 : 0))}}</td>
                     <td>{{number_format($item['task_todo'])}}</td>
                     <td>{{number_format($item['task_done'])}}</td>
@@ -54,9 +54,9 @@
             <tfoot>
             <tr>
                 <th class="bold text-right" colspan="2">Tổng</th>
-                <th class="bold">{{number_format($users->sum('answers') + $users->sum('missed_call'))}}</th>
+                <th class="bold">{{number_format($users->sum('total'))}}</th>
                 <th class="bold">{{number_format($users->sum('answers'))}}</th>
-                <th class="bold">{{number_format($users->sum('missed_call'))}}</th>
+                <th class="bold">{{number_format($users->sum('answers'))}}</th>
                 <th class="bold">{{number_format(!empty($users->sum('minute') ? $users->sum('minute')/60 : 0))}}</th>
                 <th class="bold">{{number_format($users->sum('task_todo'))}}</th>
                 <th class="bold">{{number_format($users->sum('task_done'))}}</th>

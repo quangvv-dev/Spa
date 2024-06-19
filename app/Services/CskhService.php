@@ -132,11 +132,9 @@ class CskhService
                 Functions::yearMonthDay($input['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($input['end_date']) . " 23:59:59",
             ])
-//            ->where('cc.call_status', CallCenter::ANSWERED)
             ->where('users.department_id', DepartmentConstant::CSKH)->where('users.active', StatusCode::ON)
-            ->select('users.id',DB::raw('SUM(cc.answer_time) as minute'))
+            ->select('users.id',DB::raw('SUM(cc.answer_time) as minute'),DB::raw('count(cc.id) as total'))
             ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "ANSWERED" THEN 1 ELSE 0 END) AS answers'))
-            ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "MISSED CALL" THEN 1 ELSE 0 END) AS missed_call'))
             ->groupBy('users.id')->get();
     }
 
