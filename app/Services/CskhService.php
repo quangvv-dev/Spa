@@ -134,7 +134,8 @@ class CskhService
             ])
 //            ->where('cc.call_status', CallCenter::ANSWERED)
             ->where('users.department_id', DepartmentConstant::CSKH)->where('users.active', StatusCode::ON)
-            ->select('users.id',DB::raw('SUM(cc.answer_time) as minute'))
+            ->select('users.id')
+            ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "ANSWERED" THEN cc.answer_time ELSE 0 END) AS minute'))
             ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "ANSWERED" THEN 1 ELSE 0 END) AS answers'))
             ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "MISSED CALL" THEN 1 ELSE 0 END) AS missed_call'))
             ->groupBy('users.id')->get();
