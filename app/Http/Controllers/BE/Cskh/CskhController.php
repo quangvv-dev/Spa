@@ -38,6 +38,7 @@ class CskhController extends Controller
         $call = $this->cskh->getDataCall($input);
 
         $users = $this->cskh->transformData($tasks, $orders, $data, $payments, $call)->sortByDesc('all_payment');
+        dd($users);
         if ($request->ajax()) {
             return view('cskh.ajax', compact('users'));
         }
