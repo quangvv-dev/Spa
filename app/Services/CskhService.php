@@ -134,7 +134,8 @@ class CskhService
             ])
             ->where('cc.call_status', CallCenter::ANSWERED)
             ->where('users.department_id', DepartmentConstant::CSKH)->where('users.active', StatusCode::ON)
-            ->select('users.id', DB::raw('COUNT(cc.id) as total'))
+            ->select('users.id', DB::raw('COUNT(cc.id) as total'),DB::raw('SUM(cc.answer_time) as minute'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "ANSWERED" THEN 1 ELSE 0 END) AS answers'))
             ->groupBy('users.id')->get();
     }
 
@@ -165,6 +166,8 @@ class CskhService
                 'task_failed'    => @$tasks->firstWhere('id', $item->id)->task_failed ?? 0,
                 'task_done'      => @$tasks->firstWhere('id', $item->id)->task_done ?? 0,
                 'call'           => !empty($call) ? @$call->firstWhere('id', $item->id)->total ?? 0 : 0,
+                'answers'        => !empty($call) ? @$call->firstWhere('id', $item->id)->answers ?? 0 : 0,
+                'minute'         => !empty($call) ? @$call->firstWhere('id', $item->id)->minute ?? 0 : 0,
                 'phoneNew'       => @$data->firstWhere('id', $item->id)->phoneNew ?? 0,
                 'phoneReceive'   => @$data->firstWhere('id', $item->id)->phoneReceive ?? 0,
                 'order_upsale'   => @$orders->firstWhere('id', $item->id)->order_upsale ?? 0,
