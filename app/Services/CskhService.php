@@ -164,7 +164,7 @@ class CskhService
                 'task_todo'      => @$tasks->firstWhere('id', $item->id)->task_todo ?? 0,
                 'task_failed'    => @$tasks->firstWhere('id', $item->id)->task_failed ?? 0,
                 'task_done'      => @$tasks->firstWhere('id', $item->id)->task_done ?? 0,
-                'missed_call'           => !empty($call) ? @$call->firstWhere('id', $item->id)->missed_call ?? 0 : 0,
+                'total'           => !empty($call) ? @$call->firstWhere('id', $item->id)->total ?? 0 : 0,
                 'answers'        => !empty($call) ? @$call->firstWhere('id', $item->id)->answers ?? 0 : 0,
                 'minute'         => !empty($call) ? @$call->firstWhere('id', $item->id)->minute ?? 0 : 0,
                 'phoneNew'       => @$data->firstWhere('id', $item->id)->phoneNew ?? 0,
