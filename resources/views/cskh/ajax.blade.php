@@ -36,7 +36,8 @@
                     <td>{{number_format($item['total'])}}</td>
                     <td>{{number_format($item['answers'])}}</td>
                     <td>{{number_format($item['total'] - $item['answers'])}}</td>
-                    <td>{{number_format(!empty($item['minute'] ? round($item['minute']/60) : 0))}}</td>
+{{--                    <td>{{number_format(!empty($item['minute'] ? round($item['minute']/60) : 0))}}</td>--}}
+                    <td>{{number_format($item['minute'])}}</td>
                     <td>{{number_format($item['task_todo'])}}</td>
                     <td>{{number_format($item['task_done'])}}</td>
                     <td>{{number_format($item['task_failed'])}}</td>
@@ -53,22 +54,22 @@
             </tbody>
             <tfoot>
             <tr>
-                <th class="bold text-right" colspan="2">Tổng</th>
-                <th class="bold">{{number_format($users->sum('total'))}}</th>
-                <th class="bold">{{number_format($users->sum('answers'))}}</th>
-                <th class="bold">{{number_format($users->sum('total') - $users->sum('answers'))}}</th>
-                <th class="bold">{{number_format(!empty($users->sum('minute') ? round($users->sum('minute')/60) : 0))}}</th>
-                <th class="bold">{{number_format($users->sum('task_todo'))}}</th>
-                <th class="bold">{{number_format($users->sum('task_done'))}}</th>
-                <th class="bold">{{number_format($users->sum('task_failed'))}}</th>
-                <th class="bold">{{($users->sum('task_todo')+$users->sum('task_done')+$users->sum('task_failed')) > 0?round($users->sum('task_done')/($users->sum('task_todo')+$users->sum('task_done')+$users->sum('task_failed')) * 100,2):0}}%</th>
-                <th class="bold">{{number_format($users->sum('phoneNew'))}}</th>
-                <th class="bold">{{number_format($users->sum('order_new'))}}</th>
-                <th class="bold">{{number_format($users->sum('payment_new'))}}</th>
-                <th class="bold">{{number_format($users->sum('phoneReceive'))}}</th>
-                <th class="bold">{{number_format($users->sum('order_upsale'))}}</th>
-                <th class="bold">{{number_format($users->sum('payment_upsale'))}}</th>
-                <th class="bold">{{number_format($users->sum('all_payment'))}}</th>
+                <td class="bold text-right" colspan="2">Tổng</td>
+                <td class="bold">{{number_format($users->sum('total'))}}</td>
+                <td class="bold">{{number_format($users->sum('answers'))}}</td>
+                <td class="bold">{{number_format($users->sum('total') - $users->sum('answers'))}}</td>
+                <td class="bold">{{number_format(!empty($users->sum('minute') ? round($users->sum('minute')/60) : 0))}}</td>
+                <td class="bold">{{number_format($users->sum('task_todo'))}}</td>
+                <td class="bold">{{number_format($users->sum('task_done'))}}</td>
+                <td class="bold">{{number_format($users->sum('task_failed'))}}</td>
+                <td class="bold">{{($users->sum('task_todo')+$users->sum('task_done')+$users->sum('task_failed')) > 0?round($users->sum('task_done')/($users->sum('task_todo')+$users->sum('task_done')+$users->sum('task_failed')) * 100,2):0}}%</td>
+                <td class="bold">{{number_format($users->sum('phoneNew'))}}</td>
+                <td class="bold">{{number_format($users->sum('order_new'))}}</td>
+                <td class="bold">{{number_format($users->sum('payment_new'))}}</td>
+                <td class="bold">{{number_format($users->sum('phoneReceive'))}}</td>
+                <td class="bold">{{number_format($users->sum('order_upsale'))}}</td>
+                <td class="bold">{{number_format($users->sum('payment_upsale'))}}</td>
+                <td class="bold">{{number_format($users->sum('all_payment'))}}</td>
             </tr>
             </tfoot>
         @endif
