@@ -135,7 +135,7 @@ class CskhService
             ->where('cc.call_status', CallCenter::ANSWERED)
             ->where('users.department_id', DepartmentConstant::CSKH)->where('users.active', StatusCode::ON)
             ->select('users.id', DB::raw('COUNT(cc.id) as total'),DB::raw('SUM(cc.answer_time) as minute'))
-            ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = ANSWERED THEN 1 ELSE 0 END) AS answers'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "ANSWERED" THEN 1 ELSE 0 END) AS answers'))
             ->groupBy('users.id')->get();
     }
 
