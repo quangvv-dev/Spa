@@ -134,7 +134,7 @@ class AlbumController extends BaseApiController
 
         $data = new AlbumResource($doc);
         $user = User::find($request->jwtUser->id);
-        if (in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
+        if (!in_array($user->department_id, [DepartmentConstant::ADMIN, DepartmentConstant::KE_TOAN])){
             $data->images =  [];
             $data->save();
         }
