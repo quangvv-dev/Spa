@@ -37,7 +37,6 @@
                     <td>{{number_format($item['answers'])}}</td>
                     <td>{{number_format($item['total'] - $item['answers'])}}</td>
                     <td>{{number_format(!empty($item['minute'])? round($item['minute']/60) : 0)}}</td>
-                    <td>{{number_format($item['minute'])}}</td>
                     <td>{{number_format($item['task_todo'])}}</td>
                     <td>{{number_format($item['task_done'])}}</td>
                     <td>{{number_format($item['task_failed'])}}</td>
