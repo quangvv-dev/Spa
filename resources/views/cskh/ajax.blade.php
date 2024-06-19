@@ -33,9 +33,11 @@
                 <tr>
                     <td>{{$i+1}}</td>
                     <td>{{$item['full_name']}}</td>
-                    <td>{{number_format($item['call'])}}</td>
+{{--                    <td>{{number_format($item['call'])}}</td>--}}
+                    <td>{{number_format($item['answers'] + $item['missed_call'])}}</td>
                     <td>{{number_format($item['answers'])}}</td>
-                    <td>{{number_format($item['call'] - $item['answers'])}}</td>
+                    <td>{{number_format($item['missed_call'])}}</td>
+{{--                    <td>{{number_format($item['call'] - $item['answers'])}}</td>--}}
                     <td>{{number_format(!empty($item['minute'] ? $item['minute']/60 : 0))}}</td>
                     <td>{{number_format($item['task_todo'])}}</td>
                     <td>{{number_format($item['task_done'])}}</td>

@@ -134,8 +134,9 @@ class CskhService
             ])
             ->where('cc.call_status', CallCenter::ANSWERED)
             ->where('users.department_id', DepartmentConstant::CSKH)->where('users.active', StatusCode::ON)
-            ->select('users.id', DB::raw('COUNT(cc.id) as total'),DB::raw('SUM(cc.answer_time) as minute'))
+            ->select('users.id','cc.answer_time','cc.call_status',DB::raw('SUM(cc.answer_time) as minute'))
             ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "ANSWERED" THEN 1 ELSE 0 END) AS answers'))
+            ->addSelect(\DB::raw('SUM(CASE WHEN cc.call_status = "MISSED CALL" THEN 1 ELSE 0 END) AS missed_call'))
             ->groupBy('users.id')->get();
     }
 
@@ -165,7 +166,7 @@ class CskhService
                 'task_todo'      => @$tasks->firstWhere('id', $item->id)->task_todo ?? 0,
                 'task_failed'    => @$tasks->firstWhere('id', $item->id)->task_failed ?? 0,
                 'task_done'      => @$tasks->firstWhere('id', $item->id)->task_done ?? 0,
-                'call'           => !empty($call) ? @$call->firstWhere('id', $item->id)->total ?? 0 : 0,
+                'missed_call'           => !empty($call) ? @$call->firstWhere('id', $item->id)->missed_call ?? 0 : 0,
                 'answers'        => !empty($call) ? @$call->firstWhere('id', $item->id)->answers ?? 0 : 0,
                 'minute'         => !empty($call) ? @$call->firstWhere('id', $item->id)->minute ?? 0 : 0,
                 'phoneNew'       => @$data->firstWhere('id', $item->id)->phoneNew ?? 0,
