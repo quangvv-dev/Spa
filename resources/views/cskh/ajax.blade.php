@@ -36,7 +36,7 @@
                     <td>{{number_format($item['total'])}}</td>
                     <td>{{number_format($item['answers'])}}</td>
                     <td>{{number_format($item['total'] - $item['answers'])}}</td>
-{{--                    <td>{{number_format(!empty($item['minute'] ? round($item['minute']/60) : 0))}}</td>--}}
+                    <td>{{number_format(!empty($item['minute'])? round($item['minute']/60) : 0)}}</td>
                     <td>{{number_format($item['minute'])}}</td>
                     <td>{{number_format($item['task_todo'])}}</td>
                     <td>{{number_format($item['task_done'])}}</td>
@@ -58,7 +58,7 @@
                 <td class="bold">{{number_format($users->sum('total'))}}</td>
                 <td class="bold">{{number_format($users->sum('answers'))}}</td>
                 <td class="bold">{{number_format($users->sum('total') - $users->sum('answers'))}}</td>
-                <td class="bold">{{number_format(!empty($users->sum('minute') ? round($users->sum('minute')/60) : 0))}}</td>
+                <td class="bold">{{number_format(!empty($users->sum('minute')) ? round($users->sum('minute')/60) : 0)}}</td>
                 <td class="bold">{{number_format($users->sum('task_todo'))}}</td>
                 <td class="bold">{{number_format($users->sum('task_done'))}}</td>
                 <td class="bold">{{number_format($users->sum('task_failed'))}}</td>
