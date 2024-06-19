@@ -51,7 +51,7 @@
                 </tr>
             @endforeach
             </tbody>
-            <tfoot class="text-white">
+            <tfoot>
             <tr>
                 <th class="bold text-right" colspan="2">Tổng</th>
                 <th class="bold">{{number_format($users->sum('answers') + $users->sum('missed_call'))}}</th>
