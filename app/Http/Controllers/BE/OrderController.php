@@ -209,16 +209,22 @@ class OrderController extends Controller
                 $order->is_upsale = 1;
                 $order->cskh_id = $customer->cskh_id;
             }
-            if (!empty($customer->branch->location_id) && empty($customer->cskh_id)) {
-                $position = PositionCskh::firstOrCreate(['location_id' => $customer->branch->location_id]);
-                $old_position = isset($position->position) ? $position->position : 0;
-                $cskh = User::select('id')->where('location_id', $customer->branch->location_id)->where('department_id',
-                    DepartmentConstant::CSKH)->where('active', StatusCode::ON)->pluck('id')->toArray();
-                if (count($cskh) && !empty($position)) {
-                    $position->position = (count($cskh) - 1) <= $old_position ? 0 : $old_position + 1;
-                    $customer->cskh_id = !empty($cskh[$old_position]) ? $cskh[$old_position] : $cskh[0];
-                    $customer->time_move_cskh = now();
-                    $position->save();
+            if (!empty($order->branch->location_id) && empty($customer->cskh_id)) {
+                $user_branch = User::where('department_id', DepartmentConstant::CSKH)->where('active', StatusCode::ON)
+                    ->where('branch_id', $order->branch_id)->first();
+                if (!empty($user_branch)) {
+                    $customer->cskh_id = $user_branch->id;
+                } else {
+                    $position = PositionCskh::firstOrCreate(['location_id' => $customer->branch->location_id]);
+                    $old_position = isset($position->position) ? $position->position : 0;
+                    $cskh = User::select('id')->where('location_id', $customer->branch->location_id)
+                        ->where('department_id', DepartmentConstant::CSKH)->where('active', StatusCode::ON)->pluck('id')->toArray();
+                    if (count($cskh) && !empty($position)) {
+                        $position->position = (count($cskh) - 1) <= $old_position ? 0 : $old_position + 1;
+                        $customer->cskh_id = !empty($cskh[$old_position]) ? $cskh[$old_position] : $cskh[0];
+                        $customer->time_move_cskh = now();
+                        $position->save();
+                    }
                 }
             }
             $customer->save();
