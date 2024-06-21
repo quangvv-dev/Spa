@@ -18,9 +18,6 @@ class ClearUnusedIndexAllV2Table extends Migration
         });
         Schema::table('orders', function (Blueprint $table) {
             $table->index('cskh_id')->change();
-        });
-        Schema::table('orders', function (Blueprint $table) {
-            $table->index('cskh_id')->change();
             $table->index('role_type')->change();
         });
         Schema::table('payment_histories', function (Blueprint $table) {
