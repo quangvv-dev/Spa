@@ -133,7 +133,8 @@
                             // code block
                         }
                         let typeText = value.type == 1?'Lịch mới':(value.type == 2?'Tái khám':'Liệu trình');
-                        let categoryText = value.category.name??'';
+                        let categoryText = value?.category?.name ?? '';
+                        // let categoryText = value.category.name??'';
                         b.push({
                             id: value.id,
                             title: typeText+': '+categoryText+', ' + value.customer.full_name + ', SĐT: ' + value.account_code + ' Lưu ý: ' + value.note,
