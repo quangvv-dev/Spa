@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\FirebaseService;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;

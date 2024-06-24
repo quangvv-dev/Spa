@@ -58,31 +58,48 @@
 <script src="{{asset('assets/js/tableHeadFixer.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/tableToExcel.js')}}"></script>
 
-
 {{--<script type="module">--}}
-    {{--// Import the functions you need from the SDKs you need--}}
-    {{--import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";--}}
-    {{--import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-analytics.js";--}}
-    {{--// TODO: Add SDKs for Firebase products that you want to use--}}
-    {{--// https://firebase.google.com/docs/web/setup#available-libraries--}}
+{{--    // Import the functions you need from the SDKs you need--}}
+{{--    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";--}}
+{{--    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";--}}
+{{--    import {  getDatabase, ref, onValue,remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";--}}
+{{--    // TODO: Add SDKs for Firebase products that you want to use--}}
+{{--    // https://firebase.google.com/docs/web/setup#available-libraries--}}
 
-    {{--// Your web app's Firebase configuration--}}
-    {{--// For Firebase JS SDK v7.20.0 and later, measurementId is optional--}}
-    {{--const firebaseConfig = {--}}
-        {{--apiKey: "AIzaSyDObsXEJVbvmu5RRjCqMPaWHyFIfsh8NDU",--}}
-        {{--authDomain: "spa-super-app.firebaseapp.com",--}}
-        {{--projectId: "spa-super-app",--}}
-        {{--storageBucket: "spa-super-app.appspot.com",--}}
-        {{--messagingSenderId: "74887372305",--}}
-        {{--appId: "1:74887372305:web:eb5e7aff120194ba831bb0",--}}
-        {{--measurementId: "${config.measurementId}"--}}
-    {{--};--}}
-    {{--const server_key = "AIzaSyDObsXEJVbvmu5RRjCqMPaWHyFIfsh8NDU";--}}
+{{--    // Your web app's Firebase configuration--}}
+{{--    // For Firebase JS SDK v7.20.0 and later, measurementId is optional--}}
+{{--    const firebaseConfig = {--}}
+{{--        apiKey: "AIzaSyB1WkOIV-16eKy-t-Hc8_qDvS6AdgHlBqs",--}}
+{{--        authDomain: "gtg-beauty.firebaseapp.com",--}}
+{{--        databaseURL: "https://gtg-beauty-default-rtdb.asia-southeast1.firebasedatabase.app",--}}
+{{--        projectId: "gtg-beauty",--}}
+{{--        storageBucket: "gtg-beauty.appspot.com",--}}
+{{--        messagingSenderId: "347737486208",--}}
+{{--        appId: "1:347737486208:web:ab5edac32d6a5826c18765",--}}
+{{--        measurementId: "G-Q6SKBC05GF"--}}
+{{--    };--}}
 
-    {{--// Initialize Firebase--}}
-    {{--const app = initializeApp(firebaseConfig);--}}
-    {{--const analytics = getAnalytics(app);--}}
+{{--    // Initialize Firebase--}}
+{{--    const app = initializeApp(firebaseConfig);--}}
+{{--    const analytics = getAnalytics(app);--}}
 
+{{--    // Lắng nghe sự kiện thay đổi dữ liệu--}}
+{{--    const database = getDatabase();--}}
+{{--    const dataRef = ref(database, "notification/2");--}}
+{{--    onValue(dataRef, (snapshot) => {--}}
+{{--        const data = snapshot.val();--}}
+{{--        Object.entries(data).reverse().forEach(function([key, value]) {--}}
+{{--            console.log(key + ': ' + value.name);--}}
+{{--            // const dataChild = ref(database, "notification/2/"+key);--}}
+{{--        });--}}
+{{--        // remove(dataChild)--}}
+{{--        //     .then(() => {--}}
+{{--        //         console.log("Bản ghi đã được xóa thành công.");--}}
+{{--        //     })--}}
+{{--        //     .catch((error) => {--}}
+{{--        //         console.error("Xảy ra lỗi khi xóa bản ghi:", error);--}}
+{{--        //     });--}}
+{{--    });--}}
 {{--</script>--}}
 
 <script>

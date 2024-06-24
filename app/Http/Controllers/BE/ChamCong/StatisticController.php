@@ -11,6 +11,7 @@ use App\Models\ChamCong;
 use App\Models\Department;
 use App\Models\HistoryImportSalary;
 use App\Models\Salary;
+use App\Services\FirebaseService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,14 +22,12 @@ use Excel;
 
 class StatisticController extends Controller
 {
-    public function __construct()
+    protected $firebase;
+    protected $database;
+    public function __construct(FirebaseService $firebaseService)
     {
-//        $this->middleware('permission:approval', ['only' => ['index', 'store', 'update', 'destroy']]);
-
         $this->middleware('permission:cham_cong.list', ['only' => ['index']]);
-//        $this->middleware('permission:cham_cong.edit', ['only' => ['editOrder']]);
-//        $this->middleware('permission:cham_cong.add', ['only' => ['createOrder']]);
-//        $this->middleware('permission:cham_cong.delete', ['only' => ['destroy']]);
+        $this->firebase = $firebaseService;
     }
 
     /**
