@@ -3,10 +3,17 @@
 namespace App\Observers;
 
 use App\Models\Order;
+use App\Services\FirebaseService;
 use Illuminate\Support\Facades\Auth;
 
 class OrderObserver
 {
+    public function __construct(FirebaseService $firebaseService)
+    {
+        $this->firebase = $firebaseService;
+
+    }
+
     public function created(Order $order)
     {
         $order->customer->groupComments()->create([
