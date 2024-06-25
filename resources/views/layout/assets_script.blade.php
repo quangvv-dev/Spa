@@ -89,7 +89,7 @@
             let text = value.title + ' <a target="_blank" href="' + value.url + '" >( Click )</a>';
             $.toast({
                 text: text, // Text that is to be shown in the toast
-                heading: 'HỆ THỐNG', // Optional heading to be shown on the toast
+                heading: 'Hệ Thống', // Optional heading to be shown on the toast
                 icon: 'info', // Type of toast icon
                 showHideTransition: 'fade', // fade, slide or plain
                 allowToastClose: true, // Boolean value true or false
