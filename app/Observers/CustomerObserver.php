@@ -14,6 +14,7 @@ use App\Models\Notification;
 use App\Models\RuleOutput;
 use App\Models\SchedulesSms;
 use App\Models\Status;
+use App\Services\FirebaseService;
 use App\Services\TaskService;
 use App\User;
 use Carbon\Carbon;
@@ -23,9 +24,10 @@ class CustomerObserver
 {
     private $taskService;
 
-    public function __construct(TaskService $taskService)
+    public function __construct(TaskService $taskService, FirebaseService $firebaseService)
     {
         $this->taskService = $taskService;
+        $this->firebase = $firebaseService;
     }
 
     /**
@@ -45,17 +47,22 @@ class CustomerObserver
 
         $customer->historyStatus()->create([
             'customer_id' => $customer->id,
-            'status_id' => $customer->status_id,
-            'created_at' => now(),
+            'status_id'   => $customer->status_id,
+            'created_at'  => now(),
         ]);
 
         $customer->groupComments()->create([
             'customer_id' => $customer->id,
-            'branch_id' => $customer->branch_id,
-            'status_id' => $customer->status_id,
-            'user_id' => Auth::user()->id,
-            'messages' => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
+            'branch_id'   => $customer->branch_id,
+            'status_id'   => $customer->status_id,
+            'user_id'     => Auth::user()->id,
+            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
+        $data = [
+            'title' => 'Khách hàng (' . $customer->account_code . ') được phân bổ cho bạn',
+            'url'   => route('customers.show', $customer->id),
+        ];
+        $this->firebase->setupReference('notification/' . $customer->telesales_id, $data);
     }
 
     public function updated(Customer $customer)
@@ -86,17 +93,17 @@ class CustomerObserver
                 }
                 $customer->historyStatus()->create([
                     'customer_id' => $customer->id,
-                    'status_id' => $changedAttributes['status_id'],
-                    'created_at' => now(),
+                    'status_id'   => $changedAttributes['status_id'],
+                    'created_at'  => now(),
                 ]);
             }
             if (!empty($text)) {
                 $customer->groupComments()->create([
                     'customer_id' => $customer->id,
-                    'branch_id' => $customer->branch_id,
-                    'status_id' => $customer->status_id,
-                    'user_id' => Auth::user()->id,
-                    'messages' => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " . $text,
+                    'branch_id'   => $customer->branch_id,
+                    'status_id'   => $customer->status_id,
+                    'user_id'     => Auth::user()->id,
+                    'messages'    => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " . $text,
                 ]);
             }
             if (!empty(@$changedAttributes['status_id']) && !empty(@$oldData['status_id'])) {
@@ -138,42 +145,44 @@ class CustomerObserver
                                     }
                                     $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
                                     $input = [
-                                        'customer_id' => @$customer->id,
-                                        'date_from' => $delay_unit == 'hours'? Carbon::now()->addHours($day)->format('Y-m-d') :Carbon::now()->addDays($day)->format('Y-m-d'),
-                                        'time_from' => '07:00',
-                                        'time_to' => '21:00',
-                                        'code' => 'CSKH',
-                                        'user_id' => $user_id,
-                                        'all_day' => 'on',
-                                        'priority' => 1,
-                                        'branch_id' => @$customer->branch_id,
+                                        'customer_id'     => @$customer->id,
+                                        'date_from'       => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
+                                        'time_from'       => '07:00',
+                                        'time_to'         => '21:00',
+                                        'code'            => 'CSKH',
+                                        'user_id'         => $user_id,
+                                        'all_day'         => 'on',
+                                        'priority'        => 1,
+                                        'branch_id'       => @$customer->branch_id,
                                         'customer_status' => @$customer->status_id,
-                                        'type' => $type,
-                                        'sms_content' => Functions::vi_to_en($sms_content),
-                                        'name' => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",
+                                        'type'            => $type,
+                                        'sms_content'     => Functions::vi_to_en($sms_content),
+                                        'name'            => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",
                                                 $text_category) . ' ,' . @$customer->branch->name,
-                                        'description' => $text_order . "--" . replaceVariable($sms_content,
+                                        'description'     => $text_order . "--" . replaceVariable($sms_content,
                                                 @$customer->full_name, @$customer->phone,
                                                 @$customer->branch->name, @$customer->branch->phone,
                                                 @$customer->branch->address),
                                     ];
 
                                     $task = $this->taskService->create($input);
-                                    $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
-                                        $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
+                                    $follow = User::where('department_id',
+                                        DepartmentConstant::ADMIN)->orWhere(function ($query) {
+                                        $query->where('department_id',
+                                            DepartmentConstant::TELESALES)->where('is_leader',
                                             UserConstant::IS_LEADER);
                                     })->where('active', StatusCode::ON)->get();
                                     $task->users()->attach($follow);
                                     $title = $task->type == NotificationConstant::CALL ? '💬💬💬 Bạn có công việc gọi điện mới !'
                                         : '📅📅📅 Bạn có công việc chăm sóc mới !';
                                     Notification::insert([
-                                        'title' => $title,
-                                        'user_id' => $task->user_id,
-                                        'type' => $task->type,
-                                        'task_id' => $task->id,
-                                        'status' => NotificationConstant::HIDDEN,
+                                        'title'      => $title,
+                                        'user_id'    => $task->user_id,
+                                        'type'       => $task->type,
+                                        'task_id'    => $task->id,
+                                        'status'     => NotificationConstant::HIDDEN,
                                         'created_at' => $task->date_from . ' ' . $task->time_from,
-                                        'data' => json_encode((array)['task_id' => $task->id]),
+                                        'data'       => json_encode((array)['task_id' => $task->id]),
                                     ]);
                                 }
                             }

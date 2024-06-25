@@ -20,7 +20,7 @@ class FirebaseService
         $this->database = $this->factory->createDatabase();
     }
 
-    public function setupReference($url="notification/1",$data=['user_id'=>2,'name'=>'quang'])
+    public function setupReference($url = "notification/1", $data = ['user_id' => 2, 'name' => 'quang'])
     {
         $reference = $this->database->getReference($url);
         $reference->push($data);

@@ -214,7 +214,7 @@
 </div>
 
 <!-- Back to top -->
-<a href="#top" id="back-to-top" style="display: inline;"><i class="fas fa-angle-up"></i></a>
+{{--<a href="#top" id="back-to-top" style="display: inline;"><i class="fas fa-angle-up"></i></a>--}}
 @include('layout.assets_script')
 @yield('_script')
 </body>

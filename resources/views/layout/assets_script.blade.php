@@ -52,55 +52,66 @@
 <!-- User js -->
 
 
-
 <script src="{{asset('js/user.js')}}"></script>
 <script src="{{asset('js/datepicker.js')}}"></script>
 <script src="{{asset('assets/js/tableHeadFixer.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/tableToExcel.js')}}"></script>
+<script type="text/javascript" src="{{'js/jquery.toast.min.js'}}"></script>
 
-{{--<script type="module">--}}
-{{--    // Import the functions you need from the SDKs you need--}}
-{{--    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";--}}
-{{--    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";--}}
-{{--    import {  getDatabase, ref, onValue,remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";--}}
-{{--    // TODO: Add SDKs for Firebase products that you want to use--}}
-{{--    // https://firebase.google.com/docs/web/setup#available-libraries--}}
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {getAnalytics} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    import {getDatabase, ref, onValue, remove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-{{--    // Your web app's Firebase configuration--}}
-{{--    // For Firebase JS SDK v7.20.0 and later, measurementId is optional--}}
-{{--    const firebaseConfig = {--}}
-{{--        apiKey: "AIzaSyB1WkOIV-16eKy-t-Hc8_qDvS6AdgHlBqs",--}}
-{{--        authDomain: "gtg-beauty.firebaseapp.com",--}}
-{{--        databaseURL: "https://gtg-beauty-default-rtdb.asia-southeast1.firebasedatabase.app",--}}
-{{--        projectId: "gtg-beauty",--}}
-{{--        storageBucket: "gtg-beauty.appspot.com",--}}
-{{--        messagingSenderId: "347737486208",--}}
-{{--        appId: "1:347737486208:web:ab5edac32d6a5826c18765",--}}
-{{--        measurementId: "G-Q6SKBC05GF"--}}
-{{--    };--}}
+    const firebaseConfig = {
+        apiKey: "AIzaSyB1WkOIV-16eKy-t-Hc8_qDvS6AdgHlBqs",
+        authDomain: "gtg-beauty.firebaseapp.com",
+        databaseURL: "https://gtg-beauty-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "gtg-beauty",
+        storageBucket: "gtg-beauty.appspot.com",
+        messagingSenderId: "347737486208",
+        appId: "1:347737486208:web:ab5edac32d6a5826c18765",
+        measurementId: "G-Q6SKBC05GF"
+    };
 
-{{--    // Initialize Firebase--}}
-{{--    const app = initializeApp(firebaseConfig);--}}
-{{--    const analytics = getAnalytics(app);--}}
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
 
-{{--    // Lắng nghe sự kiện thay đổi dữ liệu--}}
-{{--    const database = getDatabase();--}}
-{{--    const dataRef = ref(database, "notification/2");--}}
-{{--    onValue(dataRef, (snapshot) => {--}}
-{{--        const data = snapshot.val();--}}
-{{--        Object.entries(data).reverse().forEach(function([key, value]) {--}}
-{{--            console.log(key + ': ' + value.name);--}}
-{{--            // const dataChild = ref(database, "notification/2/"+key);--}}
-{{--        });--}}
-{{--        // remove(dataChild)--}}
-{{--        //     .then(() => {--}}
-{{--        //         console.log("Bản ghi đã được xóa thành công.");--}}
-{{--        //     })--}}
-{{--        //     .catch((error) => {--}}
-{{--        //         console.error("Xảy ra lỗi khi xóa bản ghi:", error);--}}
-{{--        //     });--}}
-{{--    });--}}
-{{--</script>--}}
+    // Lắng nghe sự kiện thay đổi dữ liệu
+    const database = getDatabase();
+    const chanel = "{{'notification/'.auth()->user()->id.'/'}}";
+    const dataRef = ref(database, chanel);
+    onValue(dataRef, (snapshot) => {
+        const data = snapshot.val();
+        Object.entries(data).reverse().forEach(function ([key, value]) {
+            let text = value.title + ' <a target="_blank" href="' + value.url + '" >( Click )</a>';
+            $.toast({
+                text: text, // Text that is to be shown in the toast
+                heading: 'HỆ THỐNG', // Optional heading to be shown on the toast
+                icon: 'info', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                position: 'bottom-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+                loader: true,  // Whether to show loader or not. True by default
+                afterHidden: function () {
+                    remove(ref(database, chanel + key))
+                        .then(() => {
+                            console.log("Bản ghi đã được xóa thành công.");
+                        })
+                        .catch((error) => {
+                            console.error("Xảy ra lỗi khi xóa bản ghi:", error);
+                        });
+                }
+            });
+        });
+
+    });
+</script>
 
 <script>
     $.ajaxSetup({

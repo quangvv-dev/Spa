@@ -56,4 +56,5 @@
     <link href="{{ asset('css/common.css') }}" rel="stylesheet"/>
     <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet"/>
     <link href="{{ asset('assets/css/toggle-switch-custom.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('css/jquery.toast.min.css') }}">
 </head>

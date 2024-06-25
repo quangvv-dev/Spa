@@ -231,9 +231,6 @@ class ScheduleController extends Controller
 
         $docs = $docs->get()->map(function ($item) use ($now) {
             $item->short_des = str_limit($item->note, $limit = 20, $end = '...');
-            $check = Schedule::orderBy('id', 'desc')->where('date', $now)->with('creator')
-                ->where('time_from', $item->time_from)->orWhere('time_to', $item->time_to);
-            $item->count = $check->count();
             return $item;
         });
         $title = 'Danh sách lịch hẹn';
