@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('job:action')->dailyAt('08:00');
         $schedule->command('otp:refresh')->dailyAt('01:00');
         $schedule->command('deleted:Call')->dailyAt('01:00');
+        $schedule->command('notification:firebase')->dailyAt('01:00');
 
         $schedule->command('expired:search')->everyMinute();
         $schedule->command('move_customer:search')->everyMinute();

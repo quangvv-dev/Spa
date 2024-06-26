@@ -80,24 +80,22 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-
-        // Lắng nghe sự kiện thay đổi dữ liệu
-        const database = getDatabase();
-        const chanel = "{{'notification/'.auth()->user()->id.'/'}}";
-        const dataRef = ref(database, chanel);
-        onValue(dataRef, (snapshot) => {
-            const data = snapshot.val();
-            Object.entries(data).reverse().forEach(function ([key, value]) {
-                let text = value.title + ' <a target="_blank" href="' + value.url + '" >( Click )</a>';
-                $.toast({
-                    text: text, // Text that is to be shown in the toast
-                    heading: 'HỆ THỐNG', // Optional heading to be shown on the toast
-                    icon: 'info', // Type of toast icon
-                    showHideTransition: 'fade', // fade, slide or plain
-                    allowToastClose: true, // Boolean value true or false
-                    hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
-                    position: 'bottom-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
-
+    // Lắng nghe sự kiện thay đổi dữ liệu
+    const database = getDatabase();
+    const chanel = "{{'notification/'.auth()->user()->id.'/'}}";
+    const dataRef = ref(database, chanel);
+    onValue(dataRef, (snapshot) => {
+        const data = snapshot.val();
+        Object.entries(data).reverse().forEach(function ([key, value]) {
+            let text = value.title + ' <a target="_blank" href="' + value.url + '" >( Click )</a>';
+            $.toast({
+                text: text, // Text that is to be shown in the toast
+                heading: 'Hệ Thống', // Optional heading to be shown on the toast
+                icon: 'info', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: false, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                position: 'bottom-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
                     textAlign: 'left',  // Text alignment i.e. left, right or center
                     loader: true,  // Whether to show loader or not. True by default
                     afterHidden: function () {

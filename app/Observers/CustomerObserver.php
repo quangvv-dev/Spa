@@ -192,6 +192,13 @@ class CustomerObserver
                     }
                 }
             }
+            if (!empty(@$changedAttributes['cskh_id'])){
+                $data = [
+                    'title' => 'Bạn được phân bổ CSKH (' . $customer->account_code . ')',
+                    'url'   => route('customers.show', $customer->id),
+                ];
+                $this->firebase->setupReference('notification/' . $customer->telesales_id, $data);
+            }
         }
     }
 }
