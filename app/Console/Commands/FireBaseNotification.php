@@ -41,12 +41,15 @@ class  FireBaseNotification extends Command
      */
     public function handle(FirebaseService $firebaseService)
     {
-       $tasks = Task::select('user_id',DB::raw('COUNT(id) as count'))->where('task_status_id', 1)->where('date_from',
+        //Xóa toàn bộ notification ngày hôm trước
+        $firebaseService->removeChildren('notification');
+
+        $tasks = Task::select('user_id', DB::raw('COUNT(id) as count'))->where('task_status_id', 1)->where('date_from',
             now()->format('Y-m-d'))->groupBy('user_id')->get();
-        if (count($tasks)){
-            foreach ($tasks as $task){
+        if (count($tasks)) {
+            foreach ($tasks as $task) {
                 $data = [
-                    'title' => 'Hôm nay bạn có '.$task->count.' công việc CSKH',
+                    'title' => 'Hôm nay bạn có ' . $task->count . ' công việc CSKH',
                     'url'   => route('tasks.index'),
                 ];
                 $firebaseService->setupReference('notification/' . $task->user_id, $data);
