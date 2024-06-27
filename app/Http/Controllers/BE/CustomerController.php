@@ -309,13 +309,13 @@ class CustomerController extends Controller
         $customer = Customer::with('status', 'marketing', 'categories', 'telesale', 'source_customer','historyStatus')->findOrFail($id);
         $curent_branch = Auth::user()->branch_id ? Auth::user()->branch_id : '';
         if (isset($customer) && $customer) {
-            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::Y_TA, DepartmentConstant::DOCTOR])
                 ->where('active', StatusCode::ON)
                 ->when(!empty($curent_branch), function ($q) use ($curent_branch) {
                     $q->where('branch_id', $curent_branch);
                 })->select('full_name', 'id')->pluck('full_name', 'id');
         } else {
-            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS, DepartmentConstant::DOCTOR])
+            $waiters = User::whereIn('department_id', [DepartmentConstant::TECHNICIANS,DepartmentConstant::Y_TA, DepartmentConstant::DOCTOR])
                 ->where('active', StatusCode::ON)->select('full_name', 'id')->pluck('full_name', 'id');
         }
         $location = isset(Auth::user()->branch) ? [0, Auth::user()->branch->location_id] : [0, @$customer->branch->location_id];

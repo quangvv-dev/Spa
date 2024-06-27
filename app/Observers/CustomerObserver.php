@@ -58,11 +58,6 @@ class CustomerObserver
             'user_id'     => Auth::user()->id,
             'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
-        $data = [
-            'title' => 'Khách hàng (' . $customer->account_code . ') được phân bổ cho bạn',
-            'url'   => route('customers.show', $customer->id),
-        ];
-        $this->firebase->setupReference('notification/' . $customer->telesales_id, $data);
     }
 
     public function updated(Customer $customer)
@@ -192,9 +187,16 @@ class CustomerObserver
                     }
                 }
             }
-            if (!empty(@$changedAttributes['cskh_id'])){
+            if (!empty(@$changedAttributes['cskh_id'])) {
                 $data = [
                     'title' => 'Bạn được phân bổ CSKH (' . $customer->account_code . ')',
+                    'url'   => route('customers.show', $customer->id),
+                ];
+                $this->firebase->setupReference('notification/' . $customer->cskh_id, $data);
+            }
+            if (!empty(@$changedAttributes['telesales_id'])) {
+                $data = [
+                    'title' => 'Khách hàng (' . $customer->account_code . ') được phân bổ cho bạn',
                     'url'   => route('customers.show', $customer->id),
                 ];
                 $this->firebase->setupReference('notification/' . $customer->telesales_id, $data);
