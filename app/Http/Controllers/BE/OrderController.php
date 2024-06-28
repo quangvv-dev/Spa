@@ -90,17 +90,18 @@ class OrderController extends Controller
     {
         if (Auth::user()->branch_id) {
             $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id',
-                [DepartmentConstant::TECHNICIANS,
-//               DepartmentConstant::DOCTOR,
+                [
+                    DepartmentConstant::TECHNICIANS,
+                    DepartmentConstant::Y_TA,
                     DepartmentConstant::TU_VAN_VIEN,
                 ])->where(function ($query) {
                 $query->where('branch_id', Auth::user()->branch_id)
                     ->orWhereNull('branch_id');
             })->get();
         } else {
-            $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id', [
+            $customer_support = User::select('id', 'avatar', 'full_name')->whereIn('department_id',  [
                 DepartmentConstant::TECHNICIANS,
-//                DepartmentConstant::DOCTOR,
+                DepartmentConstant::Y_TA,
                 DepartmentConstant::TU_VAN_VIEN,
             ])->where(function ($query) use ($customer) {
                 $query->where('branch_id', $customer->branch_id)
