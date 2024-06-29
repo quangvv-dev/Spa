@@ -215,6 +215,7 @@ Route::group(['middleware' => 'auth', 'namespace' => 'BE'], function () {
         Route::get('products', 'OrderController@reportProduct');
         Route::get('sales', 'SalesController@index')->name('report.sale');
         Route::get('sale-ranking', 'SalesController@ranking')->name('report.saleRanking');
+        Route::get('sale-status', 'SalesController@statusCustomer');
         Route::get('group-sale', 'SalesController@indexGroupCategory')->name('report.groupSale');
         Route::get('commission', 'CommissionController@statistical')->name('report.commission');
         Route::get('hoa-hong-ctv', 'CommissionController@statisticalCTV');

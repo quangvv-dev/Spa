@@ -264,6 +264,7 @@
                                     @if($roleGlobal->permission('report.sale'))
                                         <li><a href="{{url('report/sale-ranking')}}">Bảng xếp hạng</a></li>
                                         <li><a href="{{url('report/sales')}}">Báo cáo doanh thu</a></li>
+                                        <li><a href="{{url('report/sales')}}">Báo cáo phân bổ SĐT</a></li>
                                     @endif
                                     @if($roleGlobal->permission('statistics.taskSchedules'))
                                         <li><a href="{{url('statistics-task')}}">BĐ C.việc & lịch hẹn</a></li>
