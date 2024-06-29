@@ -235,9 +235,6 @@ class SalesController extends Controller
         $type = isset($request->type) ? $request->type : StatusCode::SERVICE;
 
         $branchs = Branch::search()->pluck('name', 'id');
-
-        $location = Branch::getLocation();
-
         $telesales = User::whereIn('role',
             [UserConstant::TP_SALE, UserConstant::TELESALES, UserConstant::WAITER])->pluck('full_name',
             'id')->toArray();
@@ -314,8 +311,8 @@ class SalesController extends Controller
     public function statusCustomer(Request $request)
     {
 
-//        $teams = Team::select('id', 'name')->where('department_id', DepartmentConstant::TELESALES)->pluck('name',
-//            'id')->toArray();
+        $teams = Team::select('id', 'name')->where('department_id', DepartmentConstant::TELESALES)->pluck('name',
+            'id')->toArray();
         if (!$request->start_date) {
             Functions::addSearchDateFormat($request, 'd-m-Y');
         }
@@ -354,7 +351,7 @@ class SalesController extends Controller
         if ($request->ajax()) {
             return view('report_products.sale.ajax_status_sale', compact('status','newData'));
         }
-        return view('report_products.sale.statusSale', compact('status', 'newData'));
+        return view('report_products.sale.statusSale', compact('teams','status', 'newData'));
     }
 
 }
