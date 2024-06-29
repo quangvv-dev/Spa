@@ -347,7 +347,7 @@ class SalesController extends Controller
                 $newData[$s->telesales_id]['status_' . $s->status_id] = $s->total_records;
             }
         }
-        $newData = array_values($newData);
+        $newData = collect($newData);
         if ($request->ajax()) {
             return view('report_products.sale.ajax_status_sale', compact('status','newData'));
         }
