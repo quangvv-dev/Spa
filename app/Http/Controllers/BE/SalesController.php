@@ -319,7 +319,7 @@ class SalesController extends Controller
         $members = Functions::members($request->all());
 
         $params = $request->all();
-        $status = Status::select('id', 'name')->where('type', StatusCode::RELATIONSHIP)->get();
+        $status = Status::select('id', 'name')->where('type', StatusCode::RELATIONSHIP)->orderByDesc('position')->get();
         $data = Customer::join('status as s', 'customers.status_id', 's.id')
             ->join('users as u', 'customers.telesales_id', 'u.id')->where('s.type', StatusCode::RELATIONSHIP)
             ->whereBetween('customers.created_at', [
