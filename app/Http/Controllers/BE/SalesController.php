@@ -326,6 +326,7 @@ class SalesController extends Controller
                 Functions::yearMonthDay($params['start_date']) . " 00:00:00",
                 Functions::yearMonthDay($params['end_date']) . " 23:59:59",
             ])
+            ->where('u.active', StatusCode::ON)
             ->when(count($members), function ($query) use ($members) {
                 $query->whereIn('customers.telesales_id', $members);
             })
