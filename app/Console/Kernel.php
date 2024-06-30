@@ -29,12 +29,13 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:save-zalo-token')->daily();
         $schedule->command('update:customer_status')->daily();
         $schedule->command('notification:schedules_quahan')->daily();
-        $schedule->command('delete:task')->dailyAt('07:00');
-        $schedule->command('sms:revenue')->dailyAt('07:00');
+//        $schedule->command('delete:task')->dailyAt('07:00');
+//        $schedule->command('sms:revenue')->dailyAt('07:00');
         $schedule->command('job:action')->dailyAt('08:00');
-        $schedule->command('otp:refresh')->dailyAt('01:00');
+//        $schedule->command('otp:refresh')->dailyAt('01:00');
         $schedule->command('deleted:Call')->dailyAt('01:00');
         $schedule->command('notification:firebase')->dailyAt('01:00');
+        $schedule->command('tasks:delete-mismatched')->dailyAt('00:30');
 
         $schedule->command('expired:search')->everyMinute();
         $schedule->command('move_customer:search')->everyMinute();
