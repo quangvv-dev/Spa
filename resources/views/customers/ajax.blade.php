@@ -238,6 +238,8 @@
                                 <img width="25" height="25" src="{{asset('assets/images/fb_logo.png')}}">
                             </a>
                         @endif
+                        <br>
+                        <span class="small-tip">({{@$customer->account_code}})</span>
                     </td>
                     <td class="text-center phone-customer {{in_array(3,$user_filter_grid) ? '':'display-none'}}" data-customer-id="{{ $customer->id }}">
                         <a href="callto:{{ $customer->phone }}">{{auth()->user()->permission('phone.open')? $customer->phone: str_limit($customer->phone,7,'xxx') }}
