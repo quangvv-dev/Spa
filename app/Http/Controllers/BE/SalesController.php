@@ -296,9 +296,9 @@ class SalesController extends Controller
             'allTotal' => $users->sum('revenue_total'),
         ]);
         if ($request->ajax()) {
-            return view('report_products.ajax_group', compact('users', 'telesales', 'type', 'location'));
+            return view('report_products.ajax_group', compact('users', 'telesales', 'type'));
         }
-        return view('report_products.group_sale', compact('branchs', 'users', 'telesales', 'type', 'location'));
+        return view('report_products.group_sale', compact('branchs', 'users', 'telesales', 'type'));
     }
 
     public function searchBranch($query, $input)
