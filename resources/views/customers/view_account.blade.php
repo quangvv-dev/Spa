@@ -1041,6 +1041,7 @@
                 format: 'yyyy-mm-dd',
                 autoHide: true,
                 zIndex: 2048,
+                minDate: 0,
             });
             $("#fvalidate").validate({
                 rules: {
