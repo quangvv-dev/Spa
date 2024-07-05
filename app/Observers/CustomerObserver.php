@@ -32,19 +32,19 @@ class CustomerObserver
     public function created(Customer $customer)
     {
         if (!empty($customer->facebook)) {
-            $this->actionJobs($customer);
+            $this->actionJobsCreatedCustomer($customer);
         }
         $customer->historyStatus()->create([
             'customer_id' => $customer->id,
-            'status_id' => $customer->status_id,
-            'created_at' => now(),
+            'status_id'   => $customer->status_id,
+            'created_at'  => now(),
         ]);
         $customer->groupComments()->create([
             'customer_id' => $customer->id,
-            'branch_id' => $customer->branch_id,
-            'status_id' => $customer->status_id,
-            'user_id' => Auth::user()->id,
-            'messages' => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
+            'branch_id'   => $customer->branch_id,
+            'status_id'   => $customer->status_id,
+            'user_id'     => Auth::user()->id,
+            'messages'    => "<span class='bold text-azure'>Tạo mới KH: </span> " . Auth::user()->full_name . " thao tác lúc " . date('H:i d-m-Y'),
         ]);
     }
 
@@ -72,24 +72,25 @@ class CustomerObserver
                 if (!empty($newStatus)) {
                     $customer->historyStatus()->create([
                         'customer_id' => $customer->id,
-                        'status_id' => $customer->status_id,
-                        'created_at' => now(),
+                        'status_id'   => $customer->status_id,
+                        'created_at'  => now(),
                     ]);
+                    $this->actionJobChangeStatus($customer);
                 }
             }
             if (!empty($text)) {
                 $customer->groupComments()->create([
                     'customer_id' => $customer->id,
-                    'branch_id' => $customer->branch_id,
-                    'status_id' => $customer->status_id,
-                    'user_id' => Auth::user()->id,
-                    'messages' => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " . $text,
+                    'branch_id'   => $customer->branch_id,
+                    'status_id'   => $customer->status_id,
+                    'user_id'     => Auth::user()->id,
+                    'messages'    => "<span class='bold text-danger'>Chỉnh sửa thông tin: </span> " . $text,
                 ]);
             }
         }
     }
 
-    protected function actionJobs($customer)
+    protected function actionJobsCreatedCustomer($customer)
     {
         $output = RuleOutput::where('event', 'create_customer')->first();
         $rule = $output->rules;
@@ -110,20 +111,20 @@ class CustomerObserver
                 $delay_unit = $job->configs->delay_unit;
                 $sms_content = $job->configs->sms_content;
                 $input = [
-                    'customer_id' => @$customer->id,
-                    'date_from' => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
-                    'time_from' => '07:00',
-                    'time_to' => '21:00',
-                    'code' => 'Carepage tư vấn qua FB',
-                    'user_id' => $user_id,
-                    'all_day' => 'on',
-                    'priority' => 1,
-                    'branch_id' => @$customer->branch_id,
+                    'customer_id'     => @$customer->id,
+                    'date_from'       => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
+                    'time_from'       => '07:00',
+                    'time_to'         => '21:00',
+                    'code'            => 'Carepage tư vấn qua FB',
+                    'user_id'         => $user_id,
+                    'all_day'         => 'on',
+                    'priority'        => 1,
+                    'branch_id'       => @$customer->branch_id,
                     'customer_status' => @$customer->status_id,
-                    'type' => $type,
-                    'sms_content' => Functions::vi_to_en($sms_content),
-                    'name' => $prefix . @$customer->full_name . ' - ' . @$customer->account_code . @$customer->branch->name,
-                    'description' => replaceVariable($sms_content,
+                    'type'            => $type,
+                    'sms_content'     => Functions::vi_to_en($sms_content),
+                    'name'            => $prefix . @$customer->full_name . ' - ' . @$customer->account_code . @$customer->branch->name,
+                    'description'     => replaceVariable($sms_content,
                         @$customer->full_name, @$customer->phone,
                         @$customer->branch->name, @$customer->branch->phone,
                         @$customer->branch->address),
@@ -132,6 +133,70 @@ class CustomerObserver
                 $task = $this->taskService->create($input);
                 $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
                     $query->where('department_id', DepartmentConstant::CARE_PAGE)->where('is_leader',
+                        UserConstant::IS_LEADER);
+                })->where('active', StatusCode::ON)->get();
+                $task->users()->attach($follow);
+            }
+        }
+    }
+
+    public function actionJobChangeStatus($customer)
+    {
+        $check2 = RuleOutput::where('event', 'change_relation')->first();
+        $rule = $check2->rules;
+        $config = @json_decode(json_decode($rule->configs))->nodeDataArray;
+        $jobs = Functions::checkRuleJob($config);
+
+        if (count($jobs)) {
+            foreach ($jobs as $job) {
+                if (isset($job->configs->type_job) && @$job->configs->type_job == 'cskh') {
+                    $user_id = !empty($customer->cskh_id) ? $customer->cskh_id : 0;
+                    $rule->position = 0;
+                    $rule->save();
+                    $type = StatusCode::CSKH;
+                    $prefix = "CSKH ";
+
+                } else {
+                    $user_id = @$customer->telesales_id;
+                    $type = StatusCode::GOI_LAI;
+                    $prefix = "Gọi lại ";
+                }
+
+                $day = $job->configs->delay_value;
+                $delay_unit = $job->configs->delay_unit;
+                $sms_content = $job->configs->sms_content;
+                $category = @$customer->categories;
+                $text_category = [];
+                if (count($category)) {
+                    foreach ($category as $item) {
+                        $text_category[] = $item->name;
+                    }
+                }
+                $text_order = "Ngày chuyển trạng thái : " . $customer->updated_at;
+                $input = [
+                    'customer_id'     => @$customer->id,
+                    'date_from'       => $delay_unit == 'hours' ? Carbon::now()->addHours($day)->format('Y-m-d') : Carbon::now()->addDays($day)->format('Y-m-d'),
+                    'time_from'       => '07:00',
+                    'time_to'         => '21:00',
+                    'code'            => 'CSKH',
+                    'user_id'         => $user_id,
+                    'all_day'         => 'on',
+                    'priority'        => 1,
+                    'branch_id'       => @$customer->branch_id,
+                    'customer_status' => @$customer->status_id,
+                    'type'            => $type,
+                    'sms_content'     => Functions::vi_to_en($sms_content),
+                    'name'            => $prefix . @$customer->full_name . ' - ' . @$customer->phone . ' - nhóm ' . implode(",",
+                            $text_category) . ' ,' . @$customer->branch->name,
+                    'description'     => $text_order . "--" . replaceVariable($sms_content,
+                            @$customer->full_name, @$customer->phone,
+                            @$customer->branch->name, @$customer->branch->phone,
+                            @$customer->branch->address),
+                ];
+
+                $task = $this->taskService->create($input);
+                $follow = User::where('department_id', DepartmentConstant::ADMIN)->orWhere(function ($query) {
+                    $query->where('department_id', DepartmentConstant::TELESALES)->where('is_leader',
                         UserConstant::IS_LEADER);
                 })->where('active', StatusCode::ON)->get();
                 $task->users()->attach($follow);
